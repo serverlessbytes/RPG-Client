@@ -7,6 +7,11 @@ const actions = {
   LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
   LOGOUT_ERR: 'LOGOUT_ERR',
 
+
+  SIGNUP_BEGIN: 'SIGNUP_BEGIN',
+  SIGNUP_SUCCESS:'SIGNUP_SUCCESS',
+  SIGNUP_ERR :'SIGNUP_ERR',
+
   loginBegin: () => {
     return {
       type: actions.LOGIN_BEGIN,
@@ -46,6 +51,28 @@ const actions = {
       err,
     };
   },
+
+  signUpBegin: () => {
+    return {
+      type: actions.SIGNUP_BEGIN,
+    };
+  },
+
+
+  signUpSuccess: data =>{
+    return{
+      type: actions.SIGNUP_SUCCESS,
+      data
+    };
+  },
+
+  signUpErr: err => {
+    return {
+      type: actions.SIGNUP_ERR,
+      err,
+    };
+  },
+
 };
 
 export default actions;

@@ -5,6 +5,8 @@ import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 const Dashboard = lazy(() => import('../../container/job/JobDashboard'));
 // const Invoice = lazy(() => import('../../container/ecommerce/Invoice'));
 const JobPost = lazy(() => import('../../container/job/JobPost'));
+const JobListTable = lazy(() => import('../../container/job/JobListTable'));
+const AddJobPost = lazy(() => import('../../container/job/AddJobPost'));
 
 const JobRoutes = () => {
   const { path } = useRouteMatch();
@@ -12,7 +14,8 @@ const JobRoutes = () => {
     <Switch>
       <Route exact path={`${path}/dashboard`} component={Dashboard} />
       <Route exact path={`${path}/post`} component={JobPost} />
-      {/* <Route path={`${path}/social`} component={Dashboard} /> */}
+      <Route exact path={`${path}/post/private`} component={JobListTable} />
+      <Route exact path={`${path}/new`} component={AddJobPost} />
     </Switch>
   );
 };

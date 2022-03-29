@@ -12,6 +12,7 @@ import { Popover } from '../../popup/popup';
 import { Dropdown } from '../../dropdown/dropdown';
 import { logOut } from '../../../redux/authentication/actionCreator';
 import Heading from '../../heading/heading';
+import AuthStorage from '../../../helper/AuthStorage';
 
 const AuthInfo = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const AuthInfo = () => {
   const SignOut = e => {
     e.preventDefault();
     dispatch(logOut());
+    AuthStorage.deauthenticateUser()
   };
 
   const userContent = (

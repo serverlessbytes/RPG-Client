@@ -1,15 +1,14 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import FeatherIcon from 'feather-icons-react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Main, FileCardWrapper, BannerCardStyleWrap } from '../styled';
+import { Main} from '../styled';
 import { Button } from '../../components/buttons/buttons';
 import { ShareButtonPageHeader } from '../../components/buttons/share-button/share-button';
 import { ExportButtonPageHeader } from '../../components/buttons/export-button/export-button';
 import { CalendarButtonPageHeader } from '../../components/buttons/calendar-button/calendar-button';
-import { Cards } from '../../components/cards/frame/cards-frame';
 import SampleCardOne from '../../components/cards/sampleCard/SampleCardOne';
 import SampleCardTwo from '../../components/cards/sampleCard/SampleCardTwo';
 import SampleCardThree from '../../components/cards/sampleCard/SampleCardThree';
@@ -19,25 +18,25 @@ import SampleCardSix from '../../components/cards/sampleCard/SampleCardSix';
 import SampleCardSeven from '../../components/cards/sampleCard/SampleCardSeven';
 import { cardOne, cardTwo, cardThree, cardFive, cardSix, cardSeven } from '../../demoData/sampleCards.json';
 
-const actions = (
-  <>
-    <Link to="#">
-      <FeatherIcon size={14} icon="eye" />
-      <span>View</span>
-    </Link>
-    <Link to="#">
-      <FeatherIcon size={14} icon="edit" />
-      <span>Edit</span>
-    </Link>
-    <Link to="#">
-      <FeatherIcon size={14} icon="trash-2" />
-      <span>Delete</span>
-    </Link>
-  </>
-);
+// const actions = (
+//   <>
+//     <Link to="#">
+//       <FeatherIcon size={14} icon="eye" />
+//       <span>View</span>
+//     </Link>
+//     <Link to="#">
+//       <FeatherIcon size={14} icon="edit" />
+//       <span>Edit</span>
+//     </Link>
+//     <Link to="#">
+//       <FeatherIcon size={14} icon="trash-2" />
+//       <span>Delete</span>
+//     </Link>
+//   </>
+// );
 
 const WidgetsCard = () => {
-  const { products, projects, users, team, gallery, contactUsers } = useSelector(state => {
+  const {  } = useSelector(state => {
     return {
       products: state.products.data,
       projects: state.projects.data,
@@ -120,7 +119,6 @@ const WidgetsCard = () => {
               </Col>
             );
           })}
-
         </Row>
       </Main>
     </>

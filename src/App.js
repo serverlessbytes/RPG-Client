@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { hot } from 'react-hot-loader/root';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
@@ -11,6 +11,9 @@ import Auth from './routes/auth';
 import './static/css/style.css';
 import config from './config/config';
 import ProtectedRoute from './components/utilities/protectedRoute';
+import AuthStorage from './helper/AuthStorage';
+import STORAGEKEY from './config/APP/app.config';
+import actions from './redux/authentication/actions';
 
 const { theme } = config;
 
@@ -23,6 +26,10 @@ const ProviderConfig = () => {
       isLoggedIn: state.auth.login,
     };
   });
+  const dispatch = useDispatch()
+  
+
+const { loginSuccess } = actions;
 
   const [path, setPath] = useState(window.location.pathname);
 
@@ -31,9 +38,16 @@ const ProviderConfig = () => {
     if (!unmounted) {
       setPath(window.location.pathname);
     }
+
     // eslint-disable-next-line no-return-assign
     return () => (unmounted = true);
   }, [setPath]);
+
+  useEffect(() => {
+    if (AuthStorage.getToken()) {
+      dispatch(loginSuccess(true));
+    }
+  }, [])
 
   return (
     <ConfigProvider direction={rtl ? 'rtl' : 'ltr'}>

@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import AuthLayout from '../container/profile/authentication/Index';
 
 const Login = lazy(() => import('../container/profile/authentication/overview/SignIn'));
+const Signup = lazy(() => import('../container/profile/authentication/overview/Signup'));
 
 const NotFound = () => {
   return <Redirect to="/" />;
@@ -20,6 +21,7 @@ const FrontendRoutes = () => {
         }
       >
         <Route exact path="/" component={Login} />
+        <Route exact path="/signup" component={Signup} />
         <Route exact path="*" component={NotFound} />
       </Suspense>
     </Switch>

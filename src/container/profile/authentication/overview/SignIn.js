@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,41 +15,49 @@ const SignIn = () => {
   const isLoading = useSelector(state => state.auth.loading);
   const [form] = Form.useForm();
   const [state, setState] = useState({
-    checked: null,
+    checked: false,
   });
 
+
+
   const handleSubmit = () => {
-    dispatch(login());
-    history.push('/admin');
+    console.log("form ==== form", form.getFieldsValue());
+    const data = form.getFieldsValue()
+    const keepSignIn = state.checked
+    dispatch(login(data,keepSignIn));
   };
 
-  const onChange = checked => {
-    setState({ ...state, checked });
+  const onChange = e => {
+    setState({ ...state, checked: e });
   };
 
   return (
     <AuthWrapper>
       <p className="auth-notice">
-        Don&rsquo;t have an account? <NavLink to="#">Sign up now</NavLink>
+        Don&rsquo;t have an account? <NavLink to="/signup">Sign up now</NavLink>
       </p>
       <div className="auth-contents">
         <Form name="login" form={form} onFinish={handleSubmit} layout="vertical">
           <Heading as="h3">
-            Sign in to <span className="color-secondary">Admin</span>
+            Sign in to <span className="color-secondary">Swayam</span>
           </Heading>
           <Form.Item
-            name="username"
-            rules={[{ message: 'Please input your username or Email!', required: true }]}
-            initialValue="name@example.com"
-            label="Username or Email Address"
+            name="email"
+            rules={[{ message: 'Please input your Email!', required: true }]}
+            label="Email Address"
           >
             <Input />
           </Form.Item>
-          <Form.Item name="password" initialValue="123456" label="Password">
+          <Form.Item name="password"
+            rules={[{ message: 'Please input your Password!', required: true }]}
+            label="Password">
             <Input.Password placeholder="Password" />
           </Form.Item>
           <div className="auth-form-action">
-            <Checkbox onChange={onChange}>Keep me logged in</Checkbox>
+            <Checkbox
+              checked={state.checked}
+              onChange={(e) => onChange(e)}
+            >Keep me logged in</Checkbox>
             <NavLink className="forgot-pass-link" to="#">
               Forgot password?
             </NavLink>
@@ -59,7 +67,7 @@ const SignIn = () => {
               {isLoading ? 'Loading...' : 'Sign In'}
             </Button>
           </Form.Item>
-          <p className="form-divider">
+          {/* <p className="form-divider">
             <span>Or</span>
           </p>
           <ul className="social-login">
@@ -79,7 +87,7 @@ const SignIn = () => {
                 <TwitterOutlined />
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </Form>
       </div>
     </AuthWrapper>

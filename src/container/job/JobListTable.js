@@ -5,9 +5,9 @@ import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { Cards } from '../../components/cards/frame/cards-frame';
 
-const JobListTable = () => {
+
+const JobListTable = ({ match }) => {
   const { users } = useSelector(state => {
     return {
       users: state.users,
@@ -114,66 +114,9 @@ const JobListTable = () => {
   const { Option } = Select;
 
   return (
-    <Cards headless>
+    
       <UserTableStyleWrapper>
         <TableWrapper className="table-responsive">
-          <Row gutter={30}>
-            <Col md={6} xs={24} className="mb-25">
-              <Form name="sDash_select" layout="vertical">
-                <Form.Item name="basic-select" label="State">
-                  <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                    <Option value="1">All india</Option>
-                    <Option value="2">Gujrat</Option>
-                    <Option value="3">Bihar</Option>
-                    <Option value="4">Assam</Option>
-                    <Option value="5">Delhi</Option>
-                    <Option value="6">Goa</Option>
-                  </Select>
-                </Form.Item>
-              </Form>
-            </Col>
-            <Col md={6} xs={24} className="mb-25">
-              <Form name="sDash_select" layout="vertical">
-                <Form.Item name="basic-select" label="Employer">
-                  <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                    <Option value="1">All</Option>
-                    <Option value="2"> Manipal Hospital </Option>
-                    <Option value="3"> K.j memorial hospital </Option>
-                    <Option value="4"> Ananat hospital </Option>
-                    <Option value="5"> Rishab Hospital  </Option>
-                    <Option value="6"> Suvidha Hospital </Option>
-                    <Option value="7"> Daksh Foundation </Option>
-                  </Select>
-                </Form.Item>
-              </Form>
-            </Col>
-            <Col md={6} xs={24} className="mb-25">
-              <Form name="sDash_select" layout="vertical">
-                <Form.Item name="basic-select" label="Job Role">
-                  <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                    <Option value="1">All</Option>
-                    <Option value="2"> General Duty Assistant </Option>
-                    <Option value="3"> Nursing </Option>
-                    <Option value="4">  Tipper Truck Driver </Option>
-                    <Option value="5"> Health Executive </Option>
-                    <Option value="6">  Nursing Assistant  </Option>
-                    <Option value="7">  Vaccination Registration Assistant  </Option>
-                  </Select>
-                </Form.Item>
-              </Form>
-            </Col>
-            <Col md={6} xs={24} className="mb-25">
-              <ListButtonSizeWrapper>
-                <Button size="small" type="primary">
-                  Apply
-                </Button>
-                <Button size="small" type="light">
-                  Clear
-                </Button>
-              </ListButtonSizeWrapper>
-            </Col>
-
-          </Row>
           <Table
             rowSelection={rowSelection}
             dataSource={usersTableData}
@@ -186,7 +129,7 @@ const JobListTable = () => {
           />
         </TableWrapper>
       </UserTableStyleWrapper>
-    </Cards>
+    
   );
 };
 

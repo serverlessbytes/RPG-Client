@@ -49,7 +49,7 @@ const OsMap = () => {
                             /> */}
                         </Cards>
                     </Col>
-
+{/* 
                     <Col md={12} xs={24}>
                         <Cards title="Leaflet Custom Icon" size="large">
                             <LeafletMapCustomIcon
@@ -62,7 +62,7 @@ const OsMap = () => {
                                 zoom={12}
                             />
                         </Cards>
-                    </Col>
+                    </Col> */}
 
                     <Col md={12} xs={24}>
                         <Cards title="Leaflet Cluster Map" size="large">
