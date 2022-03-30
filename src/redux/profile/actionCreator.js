@@ -1,13 +1,13 @@
 import actions from './actions';
 import initialState from '../../demoData/friends.json';
+import { ApiGet } from '../../helper/API/ApiData';
 
 const {
   profileFriendsBegin,
   profileFriendsSuccess,
   profileFriendsErr,
-  postDataBegin,
-  postDataSuccess,
-  postDataErr,
+  getProfileDataSuccess
+  
 } = actions;
 
 const profileFriendsChangeStatus = key => {
@@ -90,4 +90,12 @@ const postDelete = (data, key) => {
   };
 };
 
-export { profileFriendsChangeStatus, submitPost, likeUpdate, commentUpdate, postDelete };
+const getProfileData =() => async(dispatch)=>{
+  await ApiGet("user/auth/getUser")
+  .then ((res) => {
+    
+    return dispatch(getProfileDataSuccess(res))
+  })
+}
+
+export { profileFriendsChangeStatus, submitPost, likeUpdate, commentUpdate, postDelete, getProfileData };

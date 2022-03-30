@@ -1,9 +1,10 @@
-import { Button, Col, Input, Row, Form, PageHeader, Select, Radio, Space } from 'antd';
+import { Button, Col, Input, Row, Form, Select, Radio, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import FeatherIcon from 'feather-icons-react';
 import { Main } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { HorizontalFormStyleWrap } from '../forms/overview/Style';
+import { PageHeader } from '../../components/page-headers/page-headers';
 
 const AddJobPost = () => {
 

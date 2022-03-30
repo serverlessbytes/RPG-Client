@@ -24,7 +24,7 @@ const SignIn = () => {
     console.log("form ==== form", form.getFieldsValue());
     const data = form.getFieldsValue()
     const keepSignIn = state.checked
-    dispatch(login(data,keepSignIn));
+    dispatch(login(data, keepSignIn));
   };
 
   const onChange = e => {
@@ -43,7 +43,16 @@ const SignIn = () => {
           </Heading>
           <Form.Item
             name="email"
-            rules={[{ message: 'Please input your Email!', required: true }]}
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid Email!',
+              },
+              {
+                required: true,
+                message: 'Please input your Email!',
+              },
+            ]}
             label="Email Address"
           >
             <Input />

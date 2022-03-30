@@ -8,15 +8,16 @@ const initialState = {
   error: null,
   posts,
   postLoading: false,
+  getProfileData: null,
 };
 
 const {
   PROFILE_FRIENDS_BEGIN,
   PROFILE_FRIENDS_SUCCESS,
   PROFILE_FRIENDS_ERR,
-  POST_DATA_BEGIN,
-  POST_DATA_SUCCESS,
-  POST_DATA_ERR,
+  GET_PROFILE_DATA_BEGIN,
+  GET_PROFILE_DATA_SUCCESS,
+  GET_PROFILE_DATA_ERR,
 } = actions;
 
 const ProfileReducer = (state = initialState, action) => {
@@ -39,18 +40,18 @@ const ProfileReducer = (state = initialState, action) => {
         error: err,
         sLoading: false,
       };
-    case POST_DATA_BEGIN:
+    case GET_PROFILE_DATA_BEGIN:
       return {
         ...state,
         postLoading: true,
       };
-    case POST_DATA_SUCCESS:
+    case GET_PROFILE_DATA_SUCCESS:
       return {
         ...state,
-        posts: data,
+        getProfileData: data,
         postLoading: false,
       };
-    case POST_DATA_ERR:
+    case GET_PROFILE_DATA_ERR:
       return {
         ...state,
         error: err,

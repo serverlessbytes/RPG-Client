@@ -30,6 +30,8 @@ import { axiosCrudReducer, axiosSingleCrudReducer } from './crud/axios/reducers'
 
 import { fsCrudReducer, fsSingleCrudReducer } from './firebase/firestore/reducers';
 import firebaseAuth from './firebase/auth/reducers';
+import ProfileReducer from './profile/reducers';
+import stateReducer from './state/reducers';
 
 const rootReducers = combineReducers({
   fb: firebaseReducer,
@@ -71,6 +73,8 @@ const rootReducers = combineReducers({
   FileManager,
   AxiosCrud: axiosCrudReducer,
   SingleAxiosCrud: axiosSingleCrudReducer,
+  profileReducer:ProfileReducer,
+  state:stateReducer
 });
 
 export default rootReducers;

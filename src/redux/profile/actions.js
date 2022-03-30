@@ -3,9 +3,9 @@ const actions = {
   PROFILE_FRIENDS_SUCCESS: 'PROFILE_FRIENDS_SUCCESS',
   PROFILE_FRIENDS_ERR: 'PROFILE_FRIENDS_ERR',
 
-  POST_DATA_BEGIN: 'POST_DATA_BEGIN',
-  POST_DATA_SUCCESS: 'POST_DATA_SUCCESS',
-  POST_DATA_ERR: 'POST_DATA_ERR',
+  GET_PROFILE_DATA_BEGIN: 'GET_PROFILE_DATA_BEGIN',
+  GET_PROFILE_DATA_SUCCESS: 'GET_PROFILE_DATA_SUCCESS',
+  GET_PROFILE_DATA_ERR: 'GET_PROFILE_DATA_ERR',
 
   profileFriendsBegin: () => {
     return {
@@ -27,22 +27,22 @@ const actions = {
     };
   },
 
-  postDataBegin: () => {
+  getProfileDataBegin: () => {
     return {
-      type: actions.POST_DATA_BEGIN,
+      type: actions.GET_PROFILE_DATA_BEGIN,
     };
   },
 
-  postDataSuccess: data => {
+  getProfileDataSuccess: data => {
     return {
-      type: actions.POST_DATA_SUCCESS,
+      type: actions.GET_PROFILE_DATA_SUCCESS,
       data,
     };
   },
 
-  postDataErr: err => {
+  getProfileDataErr: err => {
     return {
-      type: actions.POST_DATA_ERR,
+      type: actions.GET_PROFILE_DATA_ERR,
       err,
     };
   },

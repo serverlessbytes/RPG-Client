@@ -13,8 +13,13 @@ import { Dropdown } from '../../dropdown/dropdown';
 import { logOut } from '../../../redux/authentication/actionCreator';
 import Heading from '../../heading/heading';
 import AuthStorage from '../../../helper/AuthStorage';
+import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+
+
 
 const AuthInfo = () => {
+
+  const { path } = useRouteMatch();
   const dispatch = useDispatch();
   const [state, setState] = useState({
     flag: 'english',
@@ -39,7 +44,7 @@ const AuthInfo = () => {
         </figure>
         <ul className="user-dropdwon__links">
           <li>
-            <Link to="#">
+            <Link to={`${path}/profile/myprofile`}>
               <FeatherIcon icon="user" /> Profile
             </Link>
           </li>

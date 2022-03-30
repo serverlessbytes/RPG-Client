@@ -33,10 +33,9 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       defaultSelectedKeys={
         !topMenu
           ? [
-              `${
-                mainPathSplit.length === 1 ? 'home' : mainPathSplit.length === 2 ? mainPathSplit[1] : mainPathSplit[2]
-              }`,
-            ]
+            `${mainPathSplit.length === 1 ? 'home' : mainPathSplit.length === 2 ? mainPathSplit[1] : mainPathSplit[2]
+            }`,
+          ]
           : []
       }
       defaultOpenKeys={!topMenu ? [`${mainPathSplit.length > 2 ? mainPathSplit[1] : 'dashboard'}`] : []}
@@ -76,6 +75,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item>
       </SubMenu>
+      <Menu.Item key="state">
+        <NavLink onClick={toggleCollapsed} to={`${path}/state/state`}>
+          State
+        </NavLink>
+      </Menu.Item>
     </Menu>
   );
 };

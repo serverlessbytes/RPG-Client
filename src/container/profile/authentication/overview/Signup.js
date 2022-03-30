@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { FacebookOutlined, TwitterOutlined } from '@ant-design/icons';
 import { AuthWrapper } from './style';
-import {signUp } from '../../../../redux/authentication/actionCreator';
+import { signUp } from '../../../../redux/authentication/actionCreator';
 import { Checkbox } from '../../../../components/checkbox/checkbox';
 import Heading from '../../../../components/heading/heading';
 
@@ -15,42 +15,27 @@ const Signup = () => {
     const dispatch = useDispatch();
     const isLoading = useSelector(state => state.auth.loading);
     const [form] = Form.useForm();
-    const [formError, SetFormError] = useState()
 
-    const signUpdata=useSelector((state)=>state.auth.signup)
+    const signUpdata = useSelector((state) => state.auth.signup)
 
     const handleSubmit = () => {
         console.log("form ==== form", form.getFieldsValue());
         const data = form.getFieldsValue()
         let dt = {
-            email:data.email,
-            name : data.name,
-            password:data.password,
-            phone:data.phone,
+            email: data.email,
+            name: data.name,
+            password: data.password,
+            phone: data.phone,
         }
         dispatch(signUp(dt))
-       
+
     };
 
     useEffect(() => {
-      if(signUpdata && signUpdata.message==="user created"){
-         history.push('/')
-      }
-    }, [signUpdata])
-    
-
-    const validation = () => {
-        let data = form.getFieldsValue()
-        const error = {}
-        let temp = false
-        if (data.password !== data.confirmPassword) {
-            error.confirmPassword = "Password does not matched"
-            temp = true
+        if (signUpdata && signUpdata.message === "user created") {
+            history.push('/')
         }
-        SetFormError(error)
-        return temp
-
-    }
+    }, [signUpdata])
 
     return (
         <>
@@ -73,7 +58,16 @@ const Signup = () => {
                         </Form.Item>
                         <Form.Item
                             name="email"
-                            rules={[{ message: 'Please input your Email!', required: true }]}
+                            rules={[
+                                {
+                                    type: 'email',
+                                    message: 'The input is not valid Email!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Please input your Email!',
+                                },
+                            ]}
                             label="Email Address"
                         >
                             <Input placeholder='Enter Email' />
@@ -84,11 +78,25 @@ const Signup = () => {
                             <Input.Password placeholder="Password" />
                         </Form.Item>
                         <Form.Item name="confirmPassword"
-                            rules={[{ message: 'Please input your Confirm password!', required: true }]}
+                            dependencies={['password']}
+                            hasFeedback
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input your Confirm password!',
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    },
+                                }),
+                            ]}
                             label="Confirm password">
                             <Input.Password placeholder="Confirm password" />
                         </Form.Item>
-                            {formError?.confirmPassword && <span>{formError.confirmPassword}</span>}
                         <Form.Item name="phone"
                             rules={[{ message: 'Please input your Mobile Number!', required: true }]}
                             label="Mobile Number">

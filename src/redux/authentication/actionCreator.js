@@ -66,7 +66,6 @@ const signUp = (body) => async(dispatch)=>{
   await ApiPostNoAuth("user/auth/signup", body)
   .then((res) =>{
     if(res.message === "user created"){
-
       return dispatch(signUpSuccess(res))
     }
   })
