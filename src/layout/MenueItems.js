@@ -76,10 +76,28 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </Menu.Item>
       </SubMenu>
       <Menu.Item key="state">
-        <NavLink onClick={toggleCollapsed} to={`${path}/state/state`}>
+        <NavLink onClick={toggleCollapsed} to={`${path}/state`}>
           State
         </NavLink>
       </Menu.Item>
+      <Menu.Item key="language">
+        <NavLink onClick={toggleCollapsed} to={`${path}/language`}>
+          Language
+        </NavLink>
+      </Menu.Item>
+
+      <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes">
+        <Menu.Item key="scheme">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
+            Govt Schemes
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="addscheme">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme/addscheme`}>
+            Add Govt Schemes
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
     </Menu>
   );
 };

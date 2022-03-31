@@ -6,6 +6,8 @@ import withAdminLayout from '../../layout/withAdminLayout';
 import Job from './job';
 import Profile from './Profile';
 import State from './state';
+import LanguageRoutes from './language';
+import schemes from './schemes';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -23,6 +25,8 @@ const Admin = () => {
         <Route path={`${path}/job`} component={Job} />
         <Route path={`${path}/state`} component={State} />
         <Route path={`${path}/profile`} component={Profile} />
+        <Route path={`${path}/language`} component={LanguageRoutes} />
+        <Route path={`${path}/scheme`} component={schemes} />
       </Suspense>
     </Switch>
   );

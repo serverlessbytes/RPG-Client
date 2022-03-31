@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
 import { Form, Input, Modal, Select } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { postStateData } from '../../redux/state/actionCreator';
+import { getLanguageData } from '../../redux/language/actionCreator';
 
 const State = () => {
 
@@ -14,20 +15,29 @@ const State = () => {
         key: ''
     })
 
-    const dispatch=useDispatch()
 
+    const languageData=useSelector((state)=>state.language.getLanguageData)
+
+    useEffect(() => {
+       
+      console.log("languageData",languageData);
+    }, [languageData])
+    
+
+    const dispatch = useDispatch()
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
         setIsModalVisible(true);
     };
-
+    const { Option } = Select;
     const handleOk = () => {
         const data = form.getFieldsValue()
-        console.log('data', data)
-        dispatch(postStateData(data))
-        // setIsModalVisible(false);
-        
+        let id=data.languageId
+        delete data.languageId
+   
+        dispatch(postStateData(data,id))
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
@@ -35,12 +45,16 @@ const State = () => {
     };
 
     const onChangeHandler = (e) => {
-        console.log("e",e);
+        console.log("e", e);
         // setData({[]
-            
         // })
         // setData({name:})
     }
+
+    useEffect(() => {
+        dispatch(getLanguageData())
+    }, [])
+
     return (
         <>
             <PageHeader
@@ -58,25 +72,33 @@ const State = () => {
 
             <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
                 <Form name="login" form={form} layout="vertical">
-                    {/* <Form.Item> */}
-                        <label htmlFor="name">State</label>
-                        <Form.Item name="name">
+                    <label htmlFor="name">State</label>
+                    <Form.Item name="name">
                         <Input
                             placeholder="Enter State"
                             name="name"
                             defaultValue={data.name}
-                            // onChange={(e)=>{onChangeHandler(e)}}
+                        // onChange={(e)=>{onChangeHandler(e)}}
                         />
-                        </Form.Item>
-                        <label htmlFor="name">Key</label>
-                        <Form.Item name="key">
-                        <Input 
+                    </Form.Item>
+                    <label htmlFor="name">Key</label>
+                    <Form.Item name="key">
+                        <Input
                             placeholder="Enter Key"
                             name="key"
                             defaultValue={data.key}
-                         />
-                         </Form.Item>
-                    {/* </Form.Item> */}
+                        />
+                    </Form.Item>
+                    <Form.Item name="languageId" label="Language">
+                        <Select style={{ height: "50px" }} size="large" defaultValue="Language" className="sDash_fullwidth-select" >
+                        {
+                            languageData && languageData.data.map((item)=>(
+                                <Option value={item.id}> {item.name} </Option>
+                            ))
+                        }
+                            
+                        </Select>
+                    </Form.Item>
                 </Form>
 
             </Modal>

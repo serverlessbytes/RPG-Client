@@ -7,7 +7,7 @@ const State = () => {
     const { path } = useRouteMatch();
     return (
         <Switch>
-            <Route path={`${path}/state`} component={StateComponent} />
+            <Route path={`${path}`} component={StateComponent} />
         </Switch>
     )
 }

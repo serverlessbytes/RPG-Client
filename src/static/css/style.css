@@ -735,9 +735,9 @@ ul {
 
 /* form select */
 
-.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+/* .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
   height: 38px !important;
-}
+} */
 
 .ant-select-single .ant-select-selector .ant-select-selection-item,
 .ant-select-single .ant-select-selector .ant-select-selection-placeholder {
@@ -2677,4 +2677,9 @@ html[dir='rtl'] .ant-menu.ant-menu-vertical .ant-menu-submenu-arrow {
 
 html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
   padding-right: 15px !important;
+}
+
+
+.ant-select-single.ant-select-lg:not(.ant-select-customize-input) .ant-select-selector{
+  height: 50px !important;
 }

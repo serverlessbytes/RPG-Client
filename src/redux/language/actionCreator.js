@@ -1,6 +1,6 @@
 import actions from './actions';
 import products from '../../demoData/cart.json';
-import { ApiPost } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 
 const {
   
@@ -12,7 +12,8 @@ const {
   cartDeleteSuccess,
   cartDeleteErr,
 
-  postStateSuccess,
+  postLanguageSuccess,
+  getLanguageSuccess
 } = actions;
 
 const stateGetData = () => {
@@ -55,12 +56,20 @@ const cartDelete = (id, chartData) => {
   };
 };
 
-const postStateData=(body,id) => async(dispatch)=>{
-  await ApiPost(`state/addState?langId=${id}`, body)
+const postLanguageData=(body) => async(dispatch)=>{
+  await ApiPost("language/addlanguage", body)
   .then((res) =>{
-      return dispatch(postStateSuccess(res))
+      return dispatch(postLanguageSuccess(res))
     
   })
 }
 
-export { stateGetData, cartUpdateQuantity, cartDelete, postStateData };
+const getLanguageData = () => async(dispatch)=>{
+  await ApiGet("language/getLanguage")
+  .then((res) =>{
+      return dispatch(getLanguageSuccess(res))
+    
+  })
+}
+
+export { stateGetData, cartUpdateQuantity, cartDelete, postLanguageData, getLanguageData };

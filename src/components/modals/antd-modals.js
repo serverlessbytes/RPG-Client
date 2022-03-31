@@ -23,7 +23,7 @@ const Modal = props => {
                 Cancel
               </Button>,
               <Button type={type} key="submit" onClick={onOk}>
-                Save Change
+                Save 
               </Button>,
             ]
       }
