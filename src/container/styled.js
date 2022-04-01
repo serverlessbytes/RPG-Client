@@ -262,9 +262,6 @@ const Main = Styled.div`
                 ${({ theme }) => (!theme.rtl ? 'padding-left' : 'padding-right')}: 8px;
             }
         }
-        .ant-select-selection-item{
-            ${({ theme }) => (!theme.rtl ? 'padding-left' : 'padding-right')}: 10px !important;
-        }
         &.ant-select-lg{
             height: 50px;
             line-height: 48px;
@@ -1402,6 +1399,14 @@ const TableWrapper = Styled.div`
                                 }
                               }  
                             }
+                            &.file{
+                                &:hover{
+                                  svg,
+                                  i{
+                                      color: ${({ theme }) => theme['danger-color']};
+                                  }
+                                }  
+                              }
                         }
                     }
                 }
@@ -1505,6 +1510,14 @@ const TableWrapper = Styled.div`
                     &.ant-btn-danger{
                         color: ${({ theme }) => theme['danger-color']};
                         background: ${({ theme }) => theme['danger-color']}10;
+                    }
+                    &.ant-btn-warning{
+                        color: ${({ theme }) => theme['warning-color']};
+                        background: ${({ theme }) => theme['warning-color']}10;
+                    }
+                    &.ant-btn-success{
+                        color: ${({ theme }) => theme['success-color']};
+                        background: ${({ theme }) => theme['success-color']}10;
                     }
                 }
             }

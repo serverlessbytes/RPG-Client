@@ -5,7 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Row, Select } from 'antd';
-import JobListTable from '../job/JobListTable';
+import ActiveSchemesTable from './ActiveSchemesTable';
 
 const Schemes = () => {
 
@@ -95,7 +95,7 @@ const Schemes = () => {
                                     Inactive Schemes
                                 </Button>
                             </Row>
-                            {/* {type === "Active" ? <JobListTable /> : ""} */}
+                             <ActiveSchemesTable type ={type}/>
                         </Col>
                     </Row>
                 </Cards>
