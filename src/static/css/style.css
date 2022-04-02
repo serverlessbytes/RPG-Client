@@ -2708,3 +2708,20 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .hmGcQK .ant-select .ant-select-selection-item{
   padding-left: 0px !important;
 }
+
+.d-flex{
+  display: flex;
+}
+
+.f-d-cloumn{
+  flex-direction: column;
+}
+
+.mb-5{
+  margin-bottom: 5px;
+}
+
+.group{
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
