@@ -1706,6 +1706,16 @@ const ListButtonSizeWrapper = Styled.div`
     align-items: center;
 `;
 
+const ProjectPagination = Styled.div`
+    .ant-pagination{
+        display: flex;
+        justify-content: flex-end;
+        @media only screen and (max-width: 767px) {
+            justify-content: center;
+        }
+    }
+`;
+
 export {
   Main,
   ButtonsGroupWrapper,
@@ -1729,5 +1739,6 @@ export {
   TableWrapper,
   ImportStyleWrap,
   ExportStyleWrap,
-  ListButtonSizeWrapper
+  ListButtonSizeWrapper,
+  ProjectPagination
 };

@@ -97,6 +97,16 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Add Govt Schemes
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="schemecategory">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme/schemecategory`}>
+            Scheme Category
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="benefitstype">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme/benefitstype`}>
+            Benefits Type
+          </NavLink>
+        </Menu.Item>
       </SubMenu>
     </Menu>
   );
