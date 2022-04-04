@@ -1,6 +1,7 @@
-import { Button, Checkbox, Col, Form, Input, Radio, Row, Select, Space } from 'antd';
+import { Checkbox, Col, Form, Input, Radio, Row, Select, Space } from 'antd';
 import React, { useState } from 'react';
 import RichTextEditor from 'react-rte';
+import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
@@ -36,7 +37,7 @@ const AddSchemes = () => {
         setState({ ...state, documentation: value });
     };
 
-    function onCheck() {}
+    function onCheck() { }
 
     return (
         <>
@@ -172,7 +173,16 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Checkbox onChange={onCheck}>Visible to User</Checkbox>
+                    <label htmlFor="visible" className='ml-10'>Visible to User</label>
+                    <Checkbox name="visible" id='visible' onChange={onCheck}></Checkbox>
+                    <div className="sDash_form-action mt-20">
+                        <Button className="btn-signin ml-10" type="primary" size="medium">
+                            Add
+                        </Button>
+                        <Button className="btn-signin" type="light" size="medium">
+                            Cancel
+                        </Button>
+                    </div>
                 </Cards>
             </Main>
         </>
