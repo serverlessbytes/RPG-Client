@@ -49,7 +49,8 @@ const MyProfile = () => {
   }, [data])
 
   const onChangeHandler = (e) => {
-    console.log("e=============", e)
+    setData({...data, [e.target.name]: e.target.value })
+    console.log("e=============", e.target.value)
   }
 
 
@@ -86,7 +87,7 @@ const MyProfile = () => {
                 <Col lg={10}>
                   <label htmlFor="name">User Name</label>
                   <Form.Item>
-                    <Input
+                  <Input
                       name="name"
                       id="name"
                       placeholder="Enter Name"
@@ -102,6 +103,8 @@ const MyProfile = () => {
                     {/* rules={[{ type: 'email' }]}
                     > */}
                     <Input placeholder="Enter Email"
+                    name="email"
+                    onChange={(e) => onChangeHandler(e)}
                       value={data.email} />
                   </Form.Item>
                 </Col>
@@ -111,6 +114,8 @@ const MyProfile = () => {
                   <label htmlFor="phone">Phone Number</label>
                   <Form.Item>
                     <Input placeholder="Enter Phone Number"
+                    name='phone'
+                    onChange={(e) => onChangeHandler(e)}
                       value={data.phone}
                     />
                   </Form.Item>
