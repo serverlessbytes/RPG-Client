@@ -2733,3 +2733,11 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .mt-20{
   margin-top: 20px;
 }
+
+.language .ant-select-single .ant-select-selector .ant-select-selection-item{
+ line-height: 30px !important;
+}
+
+.py-16{
+  padding: 5px 0px;
+}
