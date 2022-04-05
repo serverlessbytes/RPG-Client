@@ -2741,3 +2741,16 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .py-16{
   padding: 5px 0px;
 }
+
+.multiselect .ant-form-item{
+  flex-direction: column;
+}
+
+.multiselect .ant-form-item-label{
+  text-align: left;
+}
+
+.multiselect .ant-form-item-label > label{
+height: 20px;
+padding-bottom: 8px;
+}

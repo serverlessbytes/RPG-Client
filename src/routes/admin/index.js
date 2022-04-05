@@ -8,6 +8,7 @@ import Profile from './Profile';
 import State from './state';
 import LanguageRoutes from './language';
 import schemes from './schemes';
+import Courses from './Courses';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -27,6 +28,7 @@ const Admin = () => {
         <Route path={`${path}/profile`} component={Profile} />
         <Route path={`${path}/language`} component={LanguageRoutes} />
         <Route path={`${path}/scheme`} component={schemes} />
+        <Route path={`${path}/courses`} component={Courses} />
       </Suspense>
     </Switch>
   );

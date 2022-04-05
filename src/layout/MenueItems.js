@@ -7,6 +7,7 @@ import SubMenu from 'antd/lib/menu/SubMenu';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
   const { path } = useRouteMatch();
+  console.log("path pathpathv pathpath path", path);
   const pathName = window.location.pathname;
   const pathArray = pathName.split(path);
   const mainPath = pathArray[1];
@@ -105,6 +106,28 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         <Menu.Item key="benefitstype">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme/benefitstype`}>
             Benefits Type
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+      <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses">
+        <Menu.Item key="courses">
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
+            Swayam Courses
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="partnercourses">
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses/partnercourses`}>
+            Partner Courses
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="coursecategory">
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses/coursecategory`}>
+            Course Category
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="addcourses">
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses/addcourses`}>
+            Add Courses
           </NavLink>
         </Menu.Item>
       </SubMenu>
