@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import React, { Component } from 'react';
-import { Layout, Button, Row, Col } from 'antd';
+import { Layout, Button, Row, Col, Select, Form } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { NavLink, Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -180,7 +180,15 @@ const ThemeLayout = WrappedComponent => {
                   {topMenu && window.innerWidth > 991 ? <TopMenu /> : <HeaderSearch rtl={rtl} darkMode={darkMode} />}
                 </Col>
 
-                <Col lg={6} md={10} sm={0} xs={0}>
+                <Col lg={2} md={10} sm={0} xs={0}>
+                  <Form.Item name="languageId" className='language py-16'>
+                    <Select size="small" defaultValue="Language" className="sDash_fullwidth-select" >
+                      <Option value="1">Hindi</Option>
+                      <Option value="2">English</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col lg={4} md={10} sm={0} xs={0}>
                   {topMenu && window.innerWidth > 991 ? (
                     <TopMenuSearch>
                       <div className="top-right-wrap d-flex">
