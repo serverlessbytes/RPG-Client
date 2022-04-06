@@ -72,4 +72,6 @@ const getLanguageData = () => async(dispatch)=>{
   })
 }
 
+
+
 export { stateGetData, cartUpdateQuantity, cartDelete, postLanguageData, getLanguageData };

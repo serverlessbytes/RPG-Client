@@ -5,6 +5,7 @@ const STORAGEKEY = {
     layoutData: 'layoutData',
     roles: 'roles',
     email: 'email',
+    language: 'language',
     lang: 'i18nextLng'
 };
 

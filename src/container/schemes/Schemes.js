@@ -8,8 +8,14 @@ import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import ActiveSchemesTable from './ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import {  useRouteMatch } from 'react-router-dom';
 
 const Schemes = () => {
+
+    const { path } = useRouteMatch();
+    let history = useHistory();
+
 
     // const { Option } = Select;
     const [key, setKey] = useState("1")
@@ -130,6 +136,10 @@ const Schemes = () => {
     };
 
 
+    const reDirect = () =>{
+        history.push(`${path}/addscheme`);
+    }
+
     return (
         <>
             <PageHeader
@@ -143,7 +153,7 @@ const Schemes = () => {
                         <Button size="small" type="light">
                             Import Schemes
                         </Button>
-                        <Button size="small" type="success">
+                        <Button onClick = {reDirect} size="small" type="success">
                             Create Scheme
                         </Button>
                         <Button size="small" type="warning">

@@ -1,17 +1,22 @@
 /* eslint-disable no-shadow */
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { Layout, Button, Row, Col, Select, Form } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { NavLink, Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ThemeProvider } from 'styled-components';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import propTypes from 'prop-types';
 import MenueItems from './MenueItems';
 import TopMenu from './TopMenu';
 import { Div, SmallScreenAuthInfo, SmallScreenSearch, TopMenuSearch } from './style';
 import HeaderSearch from '../components/header-search/header-search';
 import AuthInfo from '../components/utilities/auth-info/info';
+import axios from 'axios';
+import { ApiGet } from '../helper/API/ApiData';
+import AuthStorage from '../helper/AuthStorage';
+import STORAGEKEY from '../config/APP/app.config';
+// import { ApiGet } from '../../helper/API/ApiData';
 
 const { darkTheme } = require('../config/theme/themeVariables');
 
@@ -22,18 +27,52 @@ const ThemeLayout = WrappedComponent => {
   class LayoutComponent extends Component {
     constructor(props) {
       super(props);
+      const storageLang = AuthStorage.getStorageData(STORAGEKEY.language)
       this.state = {
         collapsed: false,
         hide: true,
         searchHide: true,
         activeSearch: false,
+        langData : [],
+        lang: storageLang ? storageLang : ""
+       //lang:  ""
       };
       this.updateDimensions = this.updateDimensions.bind(this);
     }
-
+     
     componentDidMount() {
+      const ls = localStorage.getItem('language');
+      if(ls){
+        this.setState({...this.state, lang: ls})
+      }
+      console.log("LS",ls);
       window.addEventListener('resize', this.updateDimensions);
       this.updateDimensions();
+      ApiGet(`language/getLanguage`).then((res)=>{
+        this.setState({
+          langData:res.data
+        });
+        console.log("res.data",res.data);
+      })
+      console.log("STATE ==> ",this.state);
+    }
+
+    componentDidUpdate(prevProps,prevState){
+      if( prevState.langData!==this.state.langData){
+        console.log("this.state.langData",this.state.langData)
+        let lang = this.state.langData.find((item)=>item.id === AuthStorage.getStorageData(STORAGEKEY.language))
+        // console.log("getStorageData(STORAGEKEY.language)",AuthStorage.getStorageData(STORAGEKEY.language));
+        console.log("lang",lang);
+        if(lang){
+          this.setState({...this.state,lang:lang.id})
+        }
+      } 
+     
+    }
+
+    componentDidUpdate(){
+      console.log("this.state.",this.state);
+     //console.log("lang.",lang);
     }
 
     componentWillUnmount() {
@@ -45,6 +84,8 @@ const ThemeLayout = WrappedComponent => {
         collapsed: window.innerWidth <= 1200 && true,
       });
     }
+    
+    
 
     render() {
       const { collapsed, hide, searchHide, activeSearch } = this.state;
@@ -65,6 +106,16 @@ const ThemeLayout = WrappedComponent => {
           });
         }
       };
+
+      // componentDidUpdate() {
+      
+      // }
+
+    //   useEffect(() => {
+    //     ApiGet(`language/getLanguage`).then((res)=>{
+    //       console.log("res",res);
+    //     })
+    // }, [])
 
       const onShowHide = () => {
         this.setState({
@@ -87,6 +138,15 @@ const ThemeLayout = WrappedComponent => {
         });
       };
 
+      const handleChange = (e) =>{
+        if(e){
+          AuthStorage.setStorageData(STORAGEKEY.language,e,true)
+          this.setState({lang:e})
+        }
+        console.log("e",e);
+
+      }
+
       const footerStyle = {
         padding: '20px 30px 18px',
         color: 'rgba(0, 0, 0, 0.65)',
@@ -105,6 +165,8 @@ const ThemeLayout = WrappedComponent => {
         [left]: 0,
         zIndex: 998,
       };
+
+
 
       const renderView = ({ style, ...props }) => {
         const customStyle = {
@@ -182,9 +244,10 @@ const ThemeLayout = WrappedComponent => {
 
                 <Col lg={2} md={10} sm={0} xs={0}>
                   <Form.Item name="languageId" className='language py-16'>
-                    <Select size="small" defaultValue="Language" className="sDash_fullwidth-select" >
-                      <Option value="1">Hindi</Option>
-                      <Option value="2">English</Option>
+                    <Select defaultValue={this.state.lang} placeholder="Language" size="small"  onChange = {(e) =>handleChange(e)} className="sDash_fullwidth-select" >
+                      {this.state.langData && this.state.langData.map((items)=>(
+                        <Option value={items.id}>{items.name}</Option>
+                      ))}
                     </Select>
                   </Form.Item>
                 </Col>
