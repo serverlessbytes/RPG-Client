@@ -5,21 +5,28 @@ import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
+// import getSchemecategory from '../../redux/schemes/actionCreator'
+import { useDispatch, useSelector } from 'react-redux';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
+import { addSchemeData, getSchemeBenifits, getSchemecategory } from '../../redux/schemes/actionCreator';
 
 const AddSchemes = () => {
 
-
+    
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
         console.log('radio checked', e.target.value);
         setTypeOfJob(e.target.value)
     }; */
+const dispatch = useDispatch();
+
 
     const { Option } = Select;
 
     const [state, setState] = useState({
-        benefit: RichTextEditor.createEmptyValue(),
-        schemeSummary: RichTextEditor.createEmptyValue(),
+        benifitLine: RichTextEditor.createEmptyValue(),
+        detail: RichTextEditor.createEmptyValue(),
         howToApply: RichTextEditor.createEmptyValue(),
         documentation: RichTextEditor.createEmptyValue(),
         name: '',
@@ -27,7 +34,7 @@ const AddSchemes = () => {
         schemeBenifit: '',
         loCation: '',
         website: '',
-        category: '',
+        type: '',
         benificiary: '',
         grievanceRedress: '',
         elink: '',
@@ -36,19 +43,35 @@ const AddSchemes = () => {
     });
     /*   useEffect(() => { console.log("state.schemename", state.schemename) }, [state.schemename]) */
     /* useEffect(() => { console.log("state.documentation", state.documentation) }, [state.documentation]) */
+     useEffect(()=>{
+       dispatch(getSchemecategory());
+       dispatch(getSchemeBenifits());
+     },[])
 
+     const schemeCategory = useSelector((state)=>state.schemeCategory.schemecatogeryData)
+     useEffect (()=>{
+         console.log("schemeCategory",schemeCategory)
+     },[schemeCategory])
+
+     const SchemeBenifits = useSelector((state)=>state.schemeCategory.schemeBenefitData)
+     useEffect (()=>{
+         console.log("SchemeBenifits",SchemeBenifits)
+     },[SchemeBenifits])
 
     const onChangesEditorBenifit = (value) => {
-        console.log(value.toString('markdown'));
-        setState({ ...state, benefit: value });
+        // console.log(value.toString('markdown'));
+        setState({ ...state, benifitLine: value });
     };
     const onChangesEditorSchemeSummary = (value) => {
-        setState({ ...state, schemeSummary: value });
+        console.log(value.toString('markdown'));
+        setState({ ...state, detail: value });
     };
     const onChangesEditorHowToApply = (value) => {
+        console.log(value.toString('markdown'));
         setState({ ...state, howToApply: value });
     };
     const onChangesEditorDocumentation = (value) => {
+        console.log(value.toString('markdown'));
         setState({ ...state, documentation: value });
     };
 
@@ -101,13 +124,12 @@ const AddSchemes = () => {
         else if (name == "schemeCategory"){
            setState({...state,schemeCategory:e});
         }
-        else if (name == "location"){
-            setState({...state,loCation:e});
+        else if (name == "type"){
+            setState({...state,type:e});
          } 
     }
 
   const  onChangeValue = (e) => {
-        console.log("e.target", e.target);
     
       if (e.target.name === "isActive") {
           setState({
@@ -125,8 +147,27 @@ const AddSchemes = () => {
 
 
     const onSubmit = (e) => {
-        //e.preventDefault();
-        console.log('state', state);
+
+        let data={
+            key:"hello",
+            sequence:0,
+            benifitLine: state.benifitLine.toString('markdown'),
+            detail:state.detail.toString('markdown') ,
+            howToApply: state.howToApply.toString('markdown'),
+            documentation:state.documentation.toString('markdown') ,
+            name:state.name ,
+            locations:[state.loCation],
+            schemeCategory:state.schemeCategory ,
+            schemeBenifit:state.schemeBenifit,
+            website:state.website ,
+            type:state.type,
+            benificiary: state.benificiary,
+            grievanceRedress:state.grievanceRedress ,
+            elink: state.elink,
+            spoc: state.spoc,
+            isActive:state.isActive
+        }
+        dispatch(addSchemeData(data))
     }
 
 
@@ -180,25 +221,30 @@ const AddSchemes = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item name="category" initialValue=" Select a scheme category ">
-                                <Select size="large" className="sDash_fullwidth-select"  name = "schemeCategory" onChange={(e) => selectValue(e,"schemeCategory")}>
-                                    <Option value="1"> COVID Schemes </Option>
-                                    <Option value="2"> Other Schemes </Option>
+                                <Select size="large"  placeholder="Select Category" className="sDash_fullwidth-select"  name = "schemeCategory" onChange={(e) => selectValue(e,"schemeCategory")}>
+                                    {schemeCategory && schemeCategory.map((items) => (
+                                        <Option value={items.id}>{items.name} </Option>
+                                    ))}
+                                    
+                                    {/* <Option value="2"> Other Schemes </Option> */}
                                 </Select>
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="Benefits">Type of Benefits</label>
                             <Form.Item name="Benefits" initialValue="Type of Benefits">
-                                <Select size="large" className="sDash_fullwidth-select" name = "schemeBenifit" onChange={(e) => selectValue(e,"schemeBenifit")}>
-                                    <Option value="1"> COVID Schemes </Option>
-                                    <Option value="2"> Other Schemes </Option>
+                                <Select size="large" placeholder="Select Benefits" className="sDash_fullwidth-select" name = "schemeBenifit" onChange={(e) => selectValue(e,"schemeBenifit")}>
+                                {SchemeBenifits && SchemeBenifits.map((items) => (
+                                        <Option value={items.id}>{items.name} </Option>
+                                    ))}
+                                   
                                 </Select>
                             </Form.Item>
                         </Col>
                     </Row>
                     <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
                     <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name = "benifitLine" value={state.benefit} onChange={onChangesEditorBenifit} />
+                        <RichTextEditor placeholder="Type your message..." name = "benifitLine" value={state.benifitLine} onChange={onChangesEditorBenifit} />
                     </div>
 
                     <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
@@ -208,7 +254,7 @@ const AddSchemes = () => {
 
                     <label htmlFor="SchemeSummary">Scheme Summary</label>
                     <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name = "detail" value={state.schemeSummary} onChange={onChangesEditorSchemeSummary} />
+                        <RichTextEditor placeholder="Type your message..." name = "detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
                     </div>
 
                     <label htmlFor="HowtoApply">How to Apply</label>
@@ -240,9 +286,13 @@ const AddSchemes = () => {
                     </Row>
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
-                            <label htmlFor="Category">Category</label>
+                            <label htmlFor="Category">Type</label>
                             <Form.Item name="Category" >
-                                <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} />
+                            <Select size="large" className="sDash_fullwidth-select" name="type" onChange={(e) => selectValue(e,"type")}>
+                                    <Option value="ONLINE">Online </Option>
+                                    <Option value="OFFLINE">Offline</Option>
+                                </Select>
+                                {/* <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} /> */}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
