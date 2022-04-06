@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 const JobPost = ({ match }) => {
     const { Option } = Select;
     const [type, setType] = useState("Active")
-    const history=useHistory()
+    const history = useHistory()
 
     return (
         <>
@@ -30,14 +30,11 @@ const JobPost = ({ match }) => {
                 title="Job"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        {/* <CalendarButtonPageHeader />
-                        <ExportButtonPageHeader />
-                        <ShareButtonPageHeader /> */}
-                        <Button size="small" onClick={()=>{history.push("new")}} type="primary">
+                        <Button size="small" onClick={() => { history.push("new") }} type="primary">
                             <FeatherIcon icon="plus" size={14} />
                             Add New
                         </Button>
-                    </div>,
+                    </div>
                 ]}
             />
             <Main >

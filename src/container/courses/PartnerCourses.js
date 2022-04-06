@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector } from 'react-redux';
 
@@ -84,6 +84,12 @@ const PartnerCourses = () => {
 
     ];
 
+    const { TabPane } = Tabs;
+
+    const callback = (key) => {
+        //     console.log(key);
+    }
+
     return (
         <>
             <PageHeader
@@ -148,35 +154,64 @@ const PartnerCourses = () => {
                                     </ListButtonSizeWrapper>
                                 </Col>
                             </Row>
-                            <Row className="mb-25">
+                            {/* <Row className="mb-25">
                                 <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
                                     Active Courses
                                 </Button>
                                 <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
                                     Inactive Courses
                                 </Button>
-                            </Row>
-                            <UserTableStyleWrapper>
-                                <TableWrapper className="table-responsive">
+                            </Row> */}
 
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="search" label="">
-                                            <Input placeholder="search" style={{ width: 200 }} />
-                                        </Form.Item>
-                                    </Form>
+                            <Tabs defaultActiveKey="1" onChange={callback}>
+                                <TabPane tab="Active Courses" key="1">
+                                    <UserTableStyleWrapper>
+                                        <TableWrapper className="table-responsive">
 
-                                    <Table
-                                        // rowSelection={rowSelection}
-                                        dataSource={usersTableData}
-                                        columns={usersTableColumns}
-                                        pagination={{
-                                            defaultPageSize: 5,
-                                            total: usersTableData.length,
-                                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                        }}
-                                    />
-                                </TableWrapper>
-                            </UserTableStyleWrapper>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item name="search" label="">
+                                                    <Input placeholder="search" style={{ width: 200 }} />
+                                                </Form.Item>
+                                            </Form>
+
+                                            <Table
+                                                // rowSelection={rowSelection}
+                                                dataSource={usersTableData}
+                                                columns={usersTableColumns}
+                                                pagination={{
+                                                    defaultPageSize: 5,
+                                                    total: usersTableData.length,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                }}
+                                            />
+                                        </TableWrapper>
+                                    </UserTableStyleWrapper>
+                                </TabPane>
+                                <TabPane tab="Inactive Courses" key="2">
+                                    <UserTableStyleWrapper>
+                                        <TableWrapper className="table-responsive">
+
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item name="search" label="">
+                                                    <Input placeholder="search" style={{ width: 200 }} />
+                                                </Form.Item>
+                                            </Form>
+
+                                            <Table
+                                                // rowSelection={rowSelection}
+                                                dataSource={usersTableData}
+                                                columns={usersTableColumns}
+                                                pagination={{
+                                                    defaultPageSize: 5,
+                                                    total: usersTableData.length,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                }}
+                                            />
+                                        </TableWrapper>
+                                    </UserTableStyleWrapper>
+                                </TabPane>
+                            </Tabs>
+
                         </Col>
                     </Row>
                 </Cards>

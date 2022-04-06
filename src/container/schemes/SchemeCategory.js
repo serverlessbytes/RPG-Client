@@ -53,7 +53,7 @@ const SchemeCategory = () => {
 
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
-            Sequence: '7',
+            // Sequence: '7',
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
@@ -78,10 +78,10 @@ const SchemeCategory = () => {
             sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
             sortDirections: ['descend', 'ascend'],
         },
-        {
-            title: 'Sequence',
-            dataIndex: 'Sequence',
-        },
+        // {
+        //     title: 'Sequence',
+        //     dataIndex: 'Sequence',
+        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -148,13 +148,13 @@ const SchemeCategory = () => {
                             name="name"
                         />
                     </Form.Item>
-                    <label htmlFor="name">Sequence</label>
+                    {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
                         <Input
                             placeholder=""
                             name="key"
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
 
             </Modal>

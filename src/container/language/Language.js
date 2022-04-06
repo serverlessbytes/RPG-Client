@@ -12,7 +12,7 @@ const Language = () => {
 
     const [data, setData] = useState({
         name: '',
-        sequence: 0
+        // sequence: 0
     })
     const dispatch =useDispatch()
 
@@ -65,7 +65,7 @@ const Language = () => {
                             defaultValue={data.name}
                         />
                     </Form.Item>
-                    <label htmlFor="name">Sequence</label>
+                    {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="sequence">
                         <Input
                             type="number"
@@ -73,7 +73,7 @@ const Language = () => {
                             name="key"
                             defaultValue={data.sequence}
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
             </Modal>
         </>

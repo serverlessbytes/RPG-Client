@@ -53,7 +53,7 @@ const CourseCategory = () => {
 
         return usersTableData.push({
             Category: 'Agriculture & Fisheries',
-            Sequence: '7',
+            // Sequence: '7',
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
@@ -77,10 +77,10 @@ const CourseCategory = () => {
             dataIndex: 'Category',
             sortDirections: ['descend', 'ascend'],
         },
-        {
-            title: 'Sequence',
-            dataIndex: 'Sequence',
-        },
+        // {
+        //     title: 'Sequence',
+        //     dataIndex: 'Sequence',
+        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -148,13 +148,13 @@ const CourseCategory = () => {
                             name="name"
                         />
                     </Form.Item>
-                    <label htmlFor="name">Sequence</label>
+                    {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
                         <Input
                             placeholder=""
                             name="key"
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
 
             </Modal>

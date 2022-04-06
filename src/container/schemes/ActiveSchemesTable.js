@@ -25,19 +25,19 @@ const ActiveSchemesTable = ({type,...props}) => {
 
             key: id,
             // user: name,
-            Sequence: (
-                <div className="user-info">
-                    <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="basic-select" label="">
-                            <Select className="sDash_fullwidth-select" style={{ width: 80, }} placeholder="1">
-                                <Option value="1">1</Option>
-                                <Option value="2">2</Option>
-                                <Option value="3">639</Option>
-                            </Select>
-                        </Form.Item>
-                    </Form>
-                </div>
-            ),
+            // Sequence: (
+            //     <div className="user-info">
+            //         <Form name="sDash_select" layout="vertical">
+            //             <Form.Item name="basic-select" label="">
+            //                 <Select className="sDash_fullwidth-select" style={{ width: 80, }} placeholder="1">
+            //                     <Option value="1">1</Option>
+            //                     <Option value="2">2</Option>
+            //                     <Option value="3">639</Option>
+            //                 </Select>
+            //             </Form.Item>
+            //         </Form>
+            //     </div>
+            // ),
             SchemeName: 'Mahatma Gandhi National',
             TypeOfBenefits: 'Business Development',
             TargetBeneficiary: "Target Beneficiary",
@@ -67,12 +67,12 @@ const ActiveSchemesTable = ({type,...props}) => {
 
     const usersTableColumns = [
 
-        {
-            title: 'Sequence',
-            dataIndex: 'Sequence',
-            sorter: (a, b) => a.Sequence.length - b.Sequence.length,
-            sortDirections: ['descend', 'ascend'],
-        },
+        // {
+        //     title: 'Sequence',
+        //     dataIndex: 'Sequence',
+        //     sorter: (a, b) => a.Sequence.length - b.Sequence.length,
+        //     sortDirections: ['descend', 'ascend'],
+        // },
         {
             title: 'Scheme Name',
             dataIndex: 'SchemeName',

@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ const SwayamCourses = () => {
 
     const { Option } = Select;
     const [type, setType] = useState("Active")
+    const [key, setKey] = useState("1")
 
     const usersTableData = [];
     const { users } = useSelector(state => {
@@ -37,12 +38,14 @@ const SwayamCourses = () => {
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            <Button className="btn-icon" type="success" to="#" shape="circle">
+
+                            {key === "1" && <> <Button className="btn-icon" type="success" to="#" shape="circle">
                                 <FeatherIcon icon="info" size={16} />
                             </Button>
-                            <Button className="btn-icon" type="info" to="#" shape="circle">
-                                <FeatherIcon icon="edit" size={16} />
-                            </Button>
+                                <Button className="btn-icon" type="info" to="#" shape="circle">
+                                    <FeatherIcon icon="edit" size={16} />
+                                </Button>
+                            </>}
                             <Button className="btn-icon" type="warning" to="#" shape="circle">
                                 <FeatherIcon icon="file" size={16} />
                             </Button>
@@ -85,6 +88,13 @@ const SwayamCourses = () => {
 
     ];
 
+
+    const { TabPane } = Tabs;
+
+    const callback = (key) => {
+        setKey(key)
+        console.log(key);
+    }
     return (
         <>
             <PageHeader
@@ -138,35 +148,54 @@ const SwayamCourses = () => {
                                     </ListButtonSizeWrapper>
                                 </Col>
                             </Row>
-                            <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Courses
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Courses
-                                </Button>
-                            </Row>
-                            <UserTableStyleWrapper>
-                                <TableWrapper className="table-responsive">
+                            <Tabs onChange={callback}>
+                                <TabPane tab="Active Courses" key="1">
+                                    <UserTableStyleWrapper>
+                                        <TableWrapper className="table-responsive">
 
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="search" label="">
-                                            <Input placeholder="search" style={{ width: 200 }} />
-                                        </Form.Item>
-                                    </Form>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item name="search" label="">
+                                                    <Input placeholder="search" style={{ width: 200 }} />
+                                                </Form.Item>
+                                            </Form>
 
-                                    <Table
-                                        // rowSelection={rowSelection}
-                                        dataSource={usersTableData}
-                                        columns={usersTableColumns}
-                                        pagination={{
-                                            defaultPageSize: 5,
-                                            total: usersTableData.length,
-                                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                        }}
-                                    />
-                                </TableWrapper>
-                            </UserTableStyleWrapper>
+                                            <Table
+                                                // rowSelection={rowSelection}
+                                                dataSource={usersTableData}
+                                                columns={usersTableColumns}
+                                                pagination={{
+                                                    defaultPageSize: 5,
+                                                    total: usersTableData.length,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                }}
+                                            />
+                                        </TableWrapper>
+                                    </UserTableStyleWrapper>
+                                </TabPane>
+                                <TabPane tab="Inactive Courses" key="2">
+                                    <UserTableStyleWrapper>
+                                        <TableWrapper className="table-responsive">
+
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item name="search" label="">
+                                                    <Input placeholder="search" style={{ width: 200 }} />
+                                                </Form.Item>
+                                            </Form>
+
+                                            <Table
+                                                // rowSelection={rowSelection}
+                                                dataSource={usersTableData}
+                                                columns={usersTableColumns}
+                                                pagination={{
+                                                    defaultPageSize: 5,
+                                                    total: usersTableData.length,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                }}
+                                            />
+                                        </TableWrapper>
+                                    </UserTableStyleWrapper>
+                                </TabPane>
+                            </Tabs>
                         </Col>
                     </Row>
                 </Cards>

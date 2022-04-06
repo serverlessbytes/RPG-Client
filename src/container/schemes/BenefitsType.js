@@ -15,7 +15,7 @@ const BenefitsType = () => {
     const usersTableData = [];
     const [data, setData] = useState({
         name: '',
-        sequence: 0
+        // sequence: 0
     })
     const dispatch =useDispatch()
 
@@ -68,7 +68,7 @@ const BenefitsType = () => {
 
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
-            Sequence: '7',
+            // Sequence: '7',
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
@@ -93,10 +93,10 @@ const BenefitsType = () => {
             sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
             sortDirections: ['descend', 'ascend'],
         },
-        {
-            title: 'Sequence',
-            dataIndex: 'Sequence',
-        },
+        // {
+        //     title: 'Sequence',
+        //     dataIndex: 'Sequence',
+        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -160,13 +160,13 @@ const BenefitsType = () => {
                             name="name"
                         />
                     </Form.Item>
-                    <label htmlFor="name">Sequence</label>
+                    {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
                         <Input
                             placeholder=""
                             name="key"
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                     {/* <Form.Item name="languageId" label="Language">
                         <Select style={{ height: "50px" }} size="large" defaultValue="Language" className="sDash_fullwidth-select" >
                         {
