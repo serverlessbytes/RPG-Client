@@ -6,11 +6,18 @@ import { ListButtonSizeWrapper, Main } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Row, Select } from 'antd';
 import ActiveSchemesTable from './ActiveSchemesTable';
+import { useHistory } from "react-router-dom";
+import {  useRouteMatch } from 'react-router-dom';
 
 const Schemes = () => {
-
+    const { path } = useRouteMatch();
+    let history = useHistory();
     const { Option } = Select;
     const [type, setType] = useState("Active")
+
+    const reDirect = () =>{
+        history.push(`${path}/addscheme`);
+    }
 
     return (
         <>
@@ -25,7 +32,7 @@ const Schemes = () => {
                         <Button size="small" type="light">
                             Import Schemes
                         </Button>
-                        <Button size="small" type="success">
+                        <Button onClick = {reDirect} size="small" type="success">
                             Create Scheme
                         </Button>
                         <Button size="small" type="warning">
