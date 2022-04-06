@@ -2754,3 +2754,7 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 height: 20px;
 padding-bottom: 8px;
 }
+
+.addpartnercourses .ant-picker{
+  width: 100%;
+}

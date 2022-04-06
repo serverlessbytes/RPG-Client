@@ -7,12 +7,14 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector } from 'react-redux';
+import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 
 const PartnerCourses = () => {
 
     const { Option } = Select;
-    const [type, setType] = useState("Active")
-
+    const history = useHistory()
+    const { path } = useRouteMatch();
+    console.log("===>path<===",path);
     const usersTableData = [];
     const { users } = useSelector(state => {
         return {
@@ -89,6 +91,8 @@ const PartnerCourses = () => {
     const callback = (key) => {
         //     console.log(key);
     }
+    
+
 
     return (
         <>
@@ -97,8 +101,8 @@ const PartnerCourses = () => {
                 title="Partner Courses"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary">
-                            Import Courses
+                        <Button size="small" type="primary" onClick={()=>{history.push(`${path}/addpartnercourses`)}}>
+                            Add Courses
                         </Button>
                     </div>
                 ]}

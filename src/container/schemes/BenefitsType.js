@@ -15,22 +15,21 @@ const BenefitsType = () => {
     const usersTableData = [];
     const [data, setData] = useState({
         name: '',
-        // sequence: 0
-    })
-    const dispatch =useDispatch()
+    });
+    const dispatch =useDispatch();
 
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { users } = useSelector(state => {
         return {
             users: state.users,
         };
     });
-    const languageData=useSelector((state)=>state.language.getLanguageData)
+    const languageData=useSelector((state)=>state.language.getLanguageData);
 
     useEffect(() => {
       console.log("=====>languageData<====",languageData);
-    }, [languageData])
+    }, [languageData]);
     
 
     const showModal = () => {
@@ -64,11 +63,10 @@ const BenefitsType = () => {
     };
 
     users.map(user => {
-        const { id, name, designation, status } = user;
+        const {  } = user;
 
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
-            // Sequence: '7',
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
@@ -93,10 +91,6 @@ const BenefitsType = () => {
             sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
             sortDirections: ['descend', 'ascend'],
         },
-        // {
-        //     title: 'Sequence',
-        //     dataIndex: 'Sequence',
-        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -160,22 +154,6 @@ const BenefitsType = () => {
                             name="name"
                         />
                     </Form.Item>
-                    {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder=""
-                            name="key"
-                        />
-                    </Form.Item> */}
-                    {/* <Form.Item name="languageId" label="Language">
-                        <Select style={{ height: "50px" }} size="large" defaultValue="Language" className="sDash_fullwidth-select" >
-                        {
-                            languageData && languageData.data.map((item)=>(
-                                <Option value={item.id}> {item.name} </Option>
-                            ))
-                        }
-                        </Select>
-                    </Form.Item> */}
                 </Form>
 
             </Modal>

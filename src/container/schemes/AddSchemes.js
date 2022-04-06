@@ -82,8 +82,8 @@ const AddSchemes = () => {
                                 <Input placeholder="Scheme Name" />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row justify="space-between">
+                    {/* </Row>
+                    <Row justify="space-between"> */}
                         <Col lg={11}>
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item name="category" initialValue=" Select a scheme category ">
@@ -157,9 +157,7 @@ const AddSchemes = () => {
                             <Form.Item name="GrievanceRedress">
                                 <Input placeholder="" />
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row justify="space-between">
+                        </Col> 
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item name="E-Link">

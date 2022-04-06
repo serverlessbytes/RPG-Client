@@ -26,6 +26,9 @@ const Main = Styled.div`
     .ant-form-item-control-input .ant-picker {
         padding: ${({ theme }) => (theme.rtl ? '0 0 0 12px' : '0 12px 0 0')} !important;
     }
+    .addpartnercourses .ant-form-item-control-input .ant-picker {
+        padding: ${({ theme }) => (theme.rtl ? '12px' : '12px')} !important;
+    }
 
     /* progressbars */
 
