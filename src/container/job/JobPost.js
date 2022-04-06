@@ -1,28 +1,23 @@
-import React, { Suspense, useState } from 'react';
+import React from 'react';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import PropTypes from 'prop-types';
 import FeatherIcon from 'feather-icons-react';
-// import { Cards } from '../../components/cards/frame/cards-frame';
 import { Button } from '../../components/buttons/buttons';
-import { ShareButtonPageHeader } from '../../components/buttons/share-button/share-button';
-import { ExportButtonPageHeader } from '../../components/buttons/export-button/export-button';
-import { CalendarButtonPageHeader } from '../../components/buttons/calendar-button/calendar-button';
-// import { Badge, Col, Row } from 'antd';
 import { Main } from '../styled';
-import { UL, Content } from '../chat/style';
 import { ListButtonSizeWrapper, TableWrapper } from '../styled';
-import { Col, Form, Row, Badge, Select, Table, Skeleton } from 'antd';
+import { Col, Form, Row, Badge, Select, Tabs } from 'antd';
 import JobListTable from './JobListTable';
-import { NavLink, Route, Switch, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import {useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import Scrollbars from 'react-custom-scrollbars';
-import { useSelector } from 'react-redux';
 
 const JobPost = ({ match }) => {
     const { Option } = Select;
-    const [type, setType] = useState("Active")
-    const history = useHistory()
+    const history = useHistory();
+    const { TabPane } = Tabs;
 
+    const callback = (key) => {
+        //     console.log(key);
+    };
     return (
         <>
             <PageHeader
@@ -97,15 +92,16 @@ const JobPost = ({ match }) => {
                                     </ListButtonSizeWrapper>
                                 </Col>
                             </Row>
-                            <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Jobs
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Jobs
-                                </Button>
-                            </Row>
-                            {type === "Active" ? <JobListTable /> : ""}
+
+                            <Tabs defaultActiveKey="1" onChange={callback}>
+                                <TabPane tab="Active Courses" key="1">
+                                    <JobListTable />
+                                </TabPane>
+                                <TabPane tab="Inactive Courses" key="2">
+                                    <JobListTable />
+                                </TabPane>
+                            </Tabs>
+
                         </Col>
                     </Row>
                 </Cards>

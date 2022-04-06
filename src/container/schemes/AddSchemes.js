@@ -300,9 +300,7 @@ const dispatch = useDispatch();
                             <Form.Item name="GrievanceRedress" >
                                 <Input placeholder="" name ="grievanceRedress" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row justify="space-between">
+                        </Col> 
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item name="E-Link">
