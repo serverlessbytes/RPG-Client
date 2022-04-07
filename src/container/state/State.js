@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
-import { Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Modal, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
+import { Main, TableWrapper } from '../styled';
+import { Cards } from '../../components/cards/frame/cards-frame';
+import { UserTableStyleWrapper } from '../pages/style';
 
 const State = () => {
 
@@ -16,13 +19,28 @@ const State = () => {
     })
 
 
-    const languageData=useSelector((state)=>state.language.getLanguageData)
+    const usersTableData = [];
+    const [languageTableData, setLanguageTableData] = useState([])
+
+    const languageData = useSelector((state) => state.language.getLanguageData)
 
     useEffect(() => {
-       
-      console.log("languageData",languageData);
+        if (languageData && languageData.data) {
+            setLanguageTableData(languageData.data)
+        }
+        console.log("languageData", languageData);
     }, [languageData])
-    
+
+
+
+    const languagesTableColumns = [
+        {
+            title: 'State',
+            dataIndex: 'name',
+            sorter: (a, b) => a.name.length - b.name.length,
+            sortDirections: ['descend', 'ascend'],
+        }
+    ];
 
     const dispatch = useDispatch()
     const [form] = Form.useForm()
@@ -33,10 +51,10 @@ const State = () => {
     const { Option } = Select;
     const handleOk = () => {
         const data = form.getFieldsValue()
-        let id=data.languageId
+        let id = data.languageId
         delete data.languageId
-   
-        dispatch(postStateData(data,id))
+
+        dispatch(postStateData(data, id))
         setIsModalVisible(false);
     };
 
@@ -70,6 +88,21 @@ const State = () => {
                 ]}
             />
 
+            <Main >
+                <Cards headless>
+                    <UserTableStyleWrapper>
+                        <TableWrapper className="table-responsive pb-30">
+                            <Table
+                                // rowSelection={rowSelection}
+                                dataSource={languageTableData}
+                                columns={languagesTableColumns}
+                                pagination={false}
+                            />
+
+                        </TableWrapper>
+                    </UserTableStyleWrapper>
+                </Cards>
+            </Main>
             <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">State</label>
@@ -91,12 +124,12 @@ const State = () => {
                     </Form.Item>
                     <Form.Item name="languageId" label="Language">
                         <Select style={{ height: "50px" }} size="large" defaultValue="Language" className="sDash_fullwidth-select" >
-                        {
-                            languageData && languageData.data.map((item)=>(
-                                <Option value={item.id}> {item.name} </Option>
-                            ))
-                        }
-                            
+                            {
+                                languageData && languageData.data.map((item) => (
+                                    <Option value={item.id}> {item.name} </Option>
+                                ))
+                            }
+
                         </Select>
                     </Form.Item>
                 </Form>
