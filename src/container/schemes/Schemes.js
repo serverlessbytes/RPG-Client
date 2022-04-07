@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -7,19 +7,27 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import ActiveSchemesTable from './ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import {  useRouteMatch } from 'react-router-dom';
+import { getSchemeData } from '../../redux/schemes/actionCreator';
+import moment from 'moment';
 
 const Schemes = () => {
 
     const { path } = useRouteMatch();
     let history = useHistory();
-
+    let dispetch = useDispatch();
+   
 
     // const { Option } = Select;
     const [key, setKey] = useState("1")
+    const [perPage, setPerPage] = useState(10)
+    const [pageNumber, setPageNumber] = useState(1)
 
+    useEffect(()=>{
+        dispetch(getSchemeData(perPage,pageNumber))
+   },[perPage,pageNumber])
     const { TabPane } = Tabs;
 
     const callback = (key) => {
@@ -27,22 +35,24 @@ const Schemes = () => {
         console.log(key);
     }
 
-    const { users } = useSelector(state => {
-        return {
-            users: state.users,
-        };
-    });
-
+    // const { users } = useSelector(state => {
+    //     return {
+    //         users: state.users,
+    //     };
+    // });
+    const users = useSelector((state) => state.schemeCategory.getAllSchemeData)
+    useEffect(() => {
+        console.log("users", users)
+    }, [users])
     const { Option } = Select;
     const usersTableData = [];
 
-    users.map(user => {
-        const { id, name, designation, status } = user;
+   users && users.data.map((item) => {
 
         return usersTableData.push({
 
 
-            key: id,
+            // key: id,
             // user: name,
             // Sequence: (
             //     <div className="user-info">
@@ -57,12 +67,12 @@ const Schemes = () => {
             //         </Form>
             //     </div>
             // ),
-            SchemeName: 'Mahatma Gandhi National',
-            TypeOfBenefits: 'Business Development',
-            TargetBeneficiary: "Target Beneficiary",
-            Website: 'Website',
-            Location: "Location",
-            LastUpdated: 'Last Updated',
+            SchemeName: item.name,
+            TypeOfBenefits: item.schemeBenifit.name,
+            TargetBeneficiary: item.benificiary,
+            Website: item.website,
+            // Location: item.locations,
+            LastUpdated: moment(item.updatedAt).format("DD-MM-YYYY"),
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
@@ -110,12 +120,12 @@ const Schemes = () => {
             title: 'Website',
             dataIndex: 'Website',
         },
-        {
-            title: 'Location',
-            dataIndex: 'Location',
-            sorter: (a, b) => a.status.length - b.status.length,
-            sortDirections: ['descend', 'ascend'],
-        },
+        // {
+        //     title: 'Location',
+        //     dataIndex: 'Location',
+        //     sorter: (a, b) => a.status.length - b.status.length,
+        //     sortDirections: ['descend', 'ascend'],
+        // },
         {
             title: 'Last Updated',
             dataIndex: 'LastUpdated',
@@ -241,9 +251,10 @@ const Schemes = () => {
                                                 dataSource={usersTableData}
                                                 columns={usersTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: 5,
-                                                    total: usersTableData.length,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    defaultPageSize: users?.per_page,
+                                                    total: users?.page_count,
+                                                    showTotal: (total, range) =>`${range[0]}-${range[1]} of ${total} items`,
+                                                    
                                                 }}
                                             />
                                         </TableWrapper>

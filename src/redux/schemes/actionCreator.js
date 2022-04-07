@@ -7,12 +7,20 @@ const {
   getSchemecategorySuccess,
   getSchemecategoryErr,
   getSchemeBenifitsSuccess,
+
   getSchemeBenifitsErr,
   addSchemecategorySuccess,
   addSchemecategoryErr,
   addSchemeSuccess,
   addSchemeErr,
-  
+
+  getstateBegin,
+  getstateSuccess,
+  getstateErr,
+
+  getSchemeSuccess,
+  getSchemenErr,
+
 } = actions;
 
 export const getSchemecategory = () => async (dispatch) => {
@@ -33,6 +41,14 @@ export const addSchemecategory = (body) => async (dispatch) => {
 }
 
 
+export const getState = () => async (dispatch) => {
+  // dispatch(getSchemecategoryBegin())
+  await ApiGet(`state/getState?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    .then((res) => {
+      return dispatch(getstateSuccess(res.data))
+    })
+    .catch((err) => dispatch(getstateErr(err)))
+}
 
 
 export const getSchemeBenifits = () => async (dispatch) => {
@@ -50,4 +66,12 @@ export const addSchemeData = (data) => async (dispatch) => {
       return dispatch(addSchemeSuccess(res))
     })
     .catch((err) => dispatch(addSchemeErr(err)))
+}
+
+export const getSchemeData = (perPage, pageNumber) => async (dispatch) => {
+  await ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
+    .then((res) => {
+      return dispatch(getSchemeSuccess(res.data))
+    })
+    .catch((err) => dispatch(getSchemenErr(err)))
 }

@@ -15,6 +15,14 @@ const actions = {
   ADD_SCHEMEN_SUCCESS:"ADD_SCHEMEN_SUCCESS",
   ADD_SCHEMEN_ERR:"ADD_SCHEMEN_ERR",
 
+  ADD_STATE_BEGINE:"ADD_STATE_BEGINE",
+  ADD_STATE_SUCCESS:"ADD_STATE_SUCCESS",
+  ADD_STATE_ERR:"ADD_STATE_ERR",
+
+  GET_SCHEMEN_BEGINE:"GET_SCHEMEN_BEGINE",
+  GET_SCHEMEN_SUCCESS:"GET_SCHEMEN_SUCCESS",
+  GET_SCHEMEN_ERR:"GET_SCHEMEN_ERR",
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -31,6 +39,26 @@ const actions = {
   getSchemecategoryErr: err => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_ERR,
+      err,
+    };
+  },
+
+  getstateBegin: () => {
+    return {
+      type: actions.ADD_STATE_BEGINE,
+    };
+  },
+
+  getstateSuccess: data => {
+    return {
+      type: actions.ADD_STATE_SUCCESS,
+      data,
+    };
+  },
+
+  getstateErr: err => {
+    return {
+      type: actions.ADD_STATE_ERR,
       err,
     };
   },
@@ -91,6 +119,26 @@ const actions = {
   addSchemeErr: err => {
     return {
       type: actions.ADD_SCHEMEN_ERR,
+      err,
+    };
+  },
+
+  getSchemenBegin: () => { 
+    return {
+      type: actions.GET_SCHEMEN_BEGINE,
+    };
+  },
+
+  getSchemeSuccess: data => {
+    return {
+      type: actions.GET_SCHEMEN_SUCCESS,
+      data,
+    };
+  },
+
+  getSchemenErr: err => {
+    return {
+      type: actions.GET_SCHEMEN_ERR,
       err,
     };
   },
