@@ -8,22 +8,28 @@ const {
   getSchemecategoryErr,
   getSchemeBenifitsSuccess,
   getSchemeBenifitsErr,
+  addSchemecategorySuccess,
+  addSchemecategoryErr,
   addSchemeSuccess,
   addSchemeErr,
   
 } = actions;
 
 export const getSchemecategory = () => async (dispatch) => {
-  // dispatch(getSchemecategoryBegin())
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-      // return dispatch({
-      //   type:gfgfdg,
-      //   payload: res.data
-      // })
-      return dispatch(getSchemecategorySuccess(res.data))
+      return dispatch(getSchemecategorySuccess(res))
     })
     .catch((err) => dispatch(getSchemecategoryErr(err)))
+}
+
+export const addSchemecategory = (body) => async (dispatch) => {
+  await ApiPost(`scheme/addSchemeCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+    .then((res) => {
+      dispatch(addSchemecategorySuccess(res))
+      return dispatch(getSchemecategory())
+    })
+    .catch((err) => dispatch(addSchemecategoryErr(err)))
 }
 
 

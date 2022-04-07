@@ -2,6 +2,10 @@ const actions = {
   GET_SCHEMECATEGOTRY_BEGINE:"GET_SCHEMECATEGOTRY_BEGINE",
   GET_SCHEMECATEGOTRY_SUCCESS:"GET_SCHEMECATEGOTRY_SUCCESS",
   GET_SCHEMECATEGOTRY_ERR:"GET_SCHEMECATEGOTRY_ERR",
+  
+  ADD_SCHEMECATEGOTRY_BEGINE:"ADD_SCHEMECATEGOTRY_BEGINE",
+  ADD_SCHEMECATEGOTRY_SUCCESS:"ADD_SCHEMECATEGOTRY_SUCCESS",
+  ADD_SCHEMECATEGOTRY_ERR:"ADD_SCHEMECATEGOTRY_ERR",
 
   GET_SCHEMENBENIFITS_BEGINE:"GET_SCHEMENBENIFITS_BEGINE",//getSchemeBenifits
   GET_SCHEMENBENIFITS_SUCCESS:"GET_SCHEMENBENIFITS_SUCCESS",
@@ -27,6 +31,26 @@ const actions = {
   getSchemecategoryErr: err => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_ERR,
+      err,
+    };
+  },
+  
+  addSchemecategoryBegin: () => {
+    return {
+      type: actions.ADD_SCHEMECATEGOTRY_BEGINE,
+    };
+  },
+
+  addSchemecategorySuccess: data => {
+    return {
+      type: actions.ADD_SCHEMECATEGOTRY_SUCCESS,
+      data,
+    };
+  },
+
+  addSchemecategoryErr: err => {
+    return {
+      type: actions.ADD_SCHEMECATEGOTRY_ERR,
       err,
     };
   },
