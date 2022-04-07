@@ -31,7 +31,7 @@ const AddSchemes = () => {
         howToApply: RichTextEditor.createEmptyValue(),
         documentation: RichTextEditor.createEmptyValue(),
         name: '',
-        schemeCategory: '',
+        scheme: '',
         schemeBenifit: '',
         locations: '',
         website: '',
@@ -50,12 +50,12 @@ const AddSchemes = () => {
         dispatch(getSchemeBenifits());
     }, [])
 
-    const schemeCategory = useSelector((state) => state.schemeCategory.schemecatogeryData)
+    const scheme = useSelector((state) => state.scheme.schemecatogeryData)
     useEffect(() => {
-        console.log("schemeCategory", schemeCategory)
-    }, [schemeCategory])
+        console.log("scheme", scheme)
+    }, [scheme])
 
-    const SchemeBenifits = useSelector((state) => state.schemeCategory.schemeBenefitData)
+    const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
     useEffect(() => {
         console.log("SchemeBenifits", SchemeBenifits)
     }, [SchemeBenifits])
@@ -82,7 +82,7 @@ const AddSchemes = () => {
            setState({ ...state, schemename: value });
        }; */
     /*   const SchemeCategory = (value) => {
-          setState({ ...state, schemeCategory: value });
+          setState({ ...state, scheme: value });
       }; */
     /*   const TypeOfBenefits = (value) => {
           setState({ ...state, schemeBenifit: value });
@@ -123,8 +123,8 @@ const AddSchemes = () => {
                 schemeBenifit: e
             });
         }
-        else if (name === "schemeCategory") {
-            setState({ ...state, schemeCategory: e });
+        else if (name === "scheme") {
+            setState({ ...state, scheme: e });
         }
         else if (name === "type") {
             setState({ ...state, type: e });
@@ -176,7 +176,7 @@ const AddSchemes = () => {
             name: state.name,
             //locations:[state.loCation],
             locations: state.locations,
-            schemeCategory: state.schemeCategory,
+            scheme: state.scheme,
             schemeBenifit: state.schemeBenifit,
             website: state.website,
             type: state.type,
@@ -240,8 +240,8 @@ const AddSchemes = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item name="category" initialValue=" Select a scheme category ">
-                                <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select" name="schemeCategory" onChange={(e) => selectValue(e, "schemeCategory")}>
-                                    {schemeCategory && schemeCategory.map((items) => (
+                                <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select" name="scheme" onChange={(e) => selectValue(e, "scheme")}>
+                                    {scheme && scheme.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
 

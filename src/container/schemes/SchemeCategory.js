@@ -1,5 +1,5 @@
 import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
@@ -7,29 +7,72 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import ActiveSchemesTable from './ActiveSchemesTable'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSchemecategory, getSchemecategory } from '../../redux/schemes/actionCreator';
+import uuid from 'react-uuid';
 
 const SchemeCategory = () => {
 
 
+    const dispatch = useDispatch()
     const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [schemeTableData, setSchemeCategoryTableData] = useState([]);
     const { users } = useSelector(state => {
         return {
             users: state.users,
         };
     });
 
+    const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
+
+    useEffect(() => {
+        dispatch(getSchemecategory());
+    }, [])
+
+    useEffect(() => {
+        if (schemeData && schemeData.data) {
+            setSchemeCategoryTableData(schemeData.data ? 
+                schemeData.data.map((item) => {
+                    return{
+                        ...item,
+                        action: (
+                            <div className='active-schemes-table'>
+                                <div className="table-actions">
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" onClick = {() =>{console.log('item.id', item.id)}} shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        <Button className="btn-icon" type="danger" to="#" shape="circle">
+                                            <FeatherIcon icon="x-circle" size={16} />
+                                        </Button>
+                                    </>
+                                </div>
+                            </div>
+                        )
+                    }
+                }): [])
+        }
+    },[schemeData])
+
     const showModal = () => {
         setIsModalVisible(true);
     };
 
     const handleCancel = () => {
+        form.resetFields()
         setIsModalVisible(false);
     };
 
     const handleOk = () => {
+        let data = form.getFieldsValue()
+        data = {
+            ...data,
+            key: uuid()
+        }
+        dispatch(addSchemecategory(data))
+        form.resetFields()
         setIsModalVisible(false);
     };
 
@@ -71,10 +114,10 @@ const SchemeCategory = () => {
         });
     });
 
-    const usersTableColumns = [
+    const schemeTableColumns = [
         {
             title: 'Scheme Category',
-            dataIndex: 'Typeofbenefit',
+            dataIndex: 'name',
             sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
             sortDirections: ['descend', 'ascend'],
         },
@@ -117,8 +160,8 @@ const SchemeCategory = () => {
 
                             <Table
                                 // rowSelection={rowSelection}
-                                dataSource={usersTableData}
-                                columns={usersTableColumns}
+                                dataSource={schemeTableData}
+                                columns={schemeTableColumns}
                                 pagination={false}
                             />
 
@@ -139,7 +182,7 @@ const SchemeCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Add Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+         {isModalVisible && <Modal title="Add Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
@@ -157,7 +200,7 @@ const SchemeCategory = () => {
                     </Form.Item> */}
                 </Form>
 
-            </Modal>
+            </Modal>}
         </>
     )
 }

@@ -33,7 +33,7 @@ import firebaseAuth from './firebase/auth/reducers';
 import ProfileReducer from './profile/reducers';
 import stateReducer from './state/reducers';
 import languageReducer from './language/reducers';
-import schemeCatogeryReducer from './schemes/reducers';
+import schemeReducer from './schemes/reducers';
 
 const rootReducers = combineReducers({
   fb: firebaseReducer,
@@ -78,7 +78,7 @@ const rootReducers = combineReducers({
   profileReducer:ProfileReducer,
   state:stateReducer,
   language:languageReducer,
-  schemeCategory:schemeCatogeryReducer
+  scheme:schemeReducer
   
 });
 

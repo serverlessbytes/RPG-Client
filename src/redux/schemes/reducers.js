@@ -5,6 +5,10 @@ const {
   GET_SCHEMECATEGOTRY_SUCCESS,
   GET_SCHEMECATEGOTRY_ERR,
 
+  ADD_SCHEMECATEGOTRY_BEGINE,
+  ADD_SCHEMECATEGOTRY_SUCCESS,
+  ADD_SCHEMECATEGOTRY_ERR,
+
   GET_SCHEMENBENIFITS_BEGINE,
   GET_SCHEMENBENIFITS_SUCCESS,
   GET_SCHEMENBENIFITS_ERR,
@@ -18,12 +22,13 @@ const {
 const initialState = {
   loading: false,
   error: null,
-  schemecatogeryData: null,
+  schemeCatogeryData: null,
+  addSchemeCatogeryData: null,
   schemeBenefitData: null,
   addSchemeData:null
 };
 
-const schemeCatogeryReducer = (state = initialState, action) => {
+const schemeReducer = (state = initialState, action) => {
   const { type, data, err } = action;
   switch (type) {
     case GET_SCHEMECATEGOTRY_BEGINE:
@@ -38,6 +43,24 @@ const schemeCatogeryReducer = (state = initialState, action) => {
         loading: false,
       };
     case GET_SCHEMECATEGOTRY_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_SCHEMECATEGOTRY_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_SCHEMECATEGOTRY_SUCCESS:
+      return {
+        ...state,
+        addSchemeCatogeryData: data,
+        loading: false,
+      };
+    case ADD_SCHEMECATEGOTRY_ERR:
       return {
         ...state,
         error: err,
@@ -92,4 +115,4 @@ const schemeCatogeryReducer = (state = initialState, action) => {
   }
 };
 
-export default schemeCatogeryReducer;
+export default schemeReducer;
