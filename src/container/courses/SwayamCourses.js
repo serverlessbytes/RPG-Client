@@ -8,13 +8,14 @@ import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const SwayamCourses = () => {
 
     const { Option } = Select;
     const [type, setType] = useState("Active")
     const [key, setKey] = useState("1")
-
+    const history = useHistory()
     const usersTableData = [];
     const { users } = useSelector(state => {
         return {
@@ -102,7 +103,7 @@ const SwayamCourses = () => {
                 title="Courses"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary">
+                        <Button size="small" type="primary" onClick={()=>{history.push(`/admin/courses/addcourses`)}}>
                             Create Course
                         </Button>
                     </div>
