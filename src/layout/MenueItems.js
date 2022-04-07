@@ -125,11 +125,6 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Course Category
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="addcourses">
-          <NavLink onClick={toggleCollapsed} to={`${path}/courses/addcourses`}>
-            Add Courses
-          </NavLink>
-        </Menu.Item>
       </SubMenu>
     </Menu>
   );
