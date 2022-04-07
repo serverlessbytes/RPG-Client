@@ -59,7 +59,8 @@ const cartDelete = (id, chartData) => {
 const postLanguageData=(body) => async(dispatch)=>{
   await ApiPost("language/addlanguage", body)
   .then((res) =>{
-      return dispatch(postLanguageSuccess(res))
+      dispatch(postLanguageSuccess(res))
+      return dispatch(getLanguageData())
     
   })
 }
