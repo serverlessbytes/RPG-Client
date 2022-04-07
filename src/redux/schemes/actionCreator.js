@@ -17,6 +17,10 @@ export const getSchemecategory = () => async (dispatch) => {
   // dispatch(getSchemecategoryBegin())
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
+      // return dispatch({
+      //   type:gfgfdg,
+      //   payload: res.data
+      // })
       return dispatch(getSchemecategorySuccess(res.data))
     })
     .catch((err) => dispatch(getSchemecategoryErr(err)))

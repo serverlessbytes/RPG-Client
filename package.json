@@ -53,6 +53,7 @@
     "react-svg": "^14.1.9",
     "react-tagsinput": "^3.19.0",
     "react-tooltip": "^4.2.21",
+    "react-uuid": "^1.0.2",
     "recharts": "^2.1.8",
     "redux": "^4.1.2",
     "redux-firestore": "^1.0.0",
