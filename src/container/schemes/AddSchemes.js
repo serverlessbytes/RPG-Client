@@ -9,7 +9,7 @@ import { Main } from '../styled';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
-import { addSchemeData, getSchemeBenifits, getSchemecategory } from '../../redux/schemes/actionCreator';
+import { addSchemeData, getSchemeBenifits, getSchemecategory, getState } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid'
 
 const AddSchemes = () => {
@@ -48,6 +48,7 @@ const AddSchemes = () => {
     useEffect(() => {
         dispatch(getSchemecategory());
         dispatch(getSchemeBenifits());
+        dispatch(getState());
     }, [])
 
     const schemeCategory = useSelector((state) => state.schemeCategory.schemecatogeryData)
@@ -56,9 +57,10 @@ const AddSchemes = () => {
     }, [schemeCategory])
 
     const SchemeBenifits = useSelector((state) => state.schemeCategory.schemeBenefitData)
+    const State = useSelector((state) => state.schemeCategory.addState)
     useEffect(() => {
-        console.log("SchemeBenifits", SchemeBenifits)
-    }, [SchemeBenifits])
+        console.log("State", State)
+    }, [State])
 
     const onChangesEditorBenifit = (value) => {
         // console.log(value.toString('markdown'));
@@ -117,6 +119,7 @@ const AddSchemes = () => {
       } */
 
     const selectValue = (e, name) => {
+        console.log("e--",e);
         if (name === "schemeBenifit") {
             setState({
                 ...state,
@@ -141,10 +144,10 @@ const AddSchemes = () => {
                 ...state,
                 [e.target.name]: e.target.checked
             });
-        }else if(e.target.name === "sequence"){
-            if(e.target.value > 0){
+        } else if (e.target.name === "sequence") {
+            if (e.target.value > 0) {
                 setState({ ...state, [e.target.name]: e.target.value })
-            }else{
+            } else {
                 setState({ ...state, [e.target.name]: 0 })
             }
         }
@@ -187,7 +190,7 @@ const AddSchemes = () => {
             isActive: state.isActive
         }
         console.log("data", state);
-       dispatch(addSchemeData(data))
+        dispatch(addSchemeData(data))
     }
 
 
@@ -263,7 +266,7 @@ const AddSchemes = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Senquence</label>
                             <Form.Item name="name">
-                                <Input type="number"  placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
+                                <Input type="number" placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -296,9 +299,12 @@ const AddSchemes = () => {
                             <label htmlFor="Location">Location</label>
                             <Form.Item name="Location" initialValue="Select a location">
                                 <Select size="large" className="sDash_fullwidth-select" name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
-                                    <Option value="1"> kerala </Option>
-                                    <Option value="2">Ladakh</Option>
-                                    <Option value="3">Madhya Pradesh</Option>
+                                    {State && State.map((item) => (
+                                        <>
+                                            <Option value={item.id}> {item.name} </Option>
+                                        </>
+                                    ))}
+
                                 </Select>
                             </Form.Item>
                         </Col>

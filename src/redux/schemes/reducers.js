@@ -13,6 +13,15 @@ const {
   ADD_SCHEMEN_SUCCESS,
   ADD_SCHEMEN_ERR,
 
+  ADD_STATE_BEGINE,//getSchemeBenifits
+  ADD_STATE_SUCCESS,
+  ADD_STATE_ERR,
+
+  
+  GET_SCHEMEN_BEGINE,
+  GET_SCHEMEN_SUCCESS,
+  GET_SCHEMEN_ERR,
+
 } = actions;
 
 const initialState = {
@@ -20,7 +29,9 @@ const initialState = {
   error: null,
   schemecatogeryData: null,
   schemeBenefitData: null,
-  addSchemeData:null
+  addSchemeData:null,
+  getAllSchemeData:null,
+  addState:null
 };
 
 const schemeCatogeryReducer = (state = initialState, action) => {
@@ -87,6 +98,50 @@ const schemeCatogeryReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
+      
+      case ADD_STATE_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case ADD_STATE_SUCCESS:
+      return {
+        ...state,
+        error: err,
+        addState: data,
+        loading: false,
+      };
+
+      case ADD_STATE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case GET_SCHEMEN_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case GET_SCHEMEN_SUCCESS:
+      return {
+        ...state,
+        getAllSchemeData: data,
+        loading: false,
+      };
+
+      case GET_SCHEMEN_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
     default:
       return state;
   }
