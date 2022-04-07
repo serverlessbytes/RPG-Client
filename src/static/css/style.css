@@ -1561,7 +1561,9 @@ html[dir='rtl'] .sDash_upload-basic .sDash_upload-browse{
 .table-bordered .ant-table-tbody tr td:last-child {
   text-align: right;
 }
-
+.eMVLll table thead tr th:first-child {
+  text-align: left !important;
+}
 /* Full Width Table */
 
 .full-width-table .ant-card-body {
