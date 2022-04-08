@@ -7,27 +7,52 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import ActiveSchemesTable from './ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import {  useRouteMatch } from 'react-router-dom';
-import { getSchemeData } from '../../redux/schemes/actionCreator';
+import { useRouteMatch } from 'react-router-dom';
+import { editSchemeData, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 
 const Schemes = () => {
 
     const { path } = useRouteMatch();
     let history = useHistory();
-    let dispetch = useDispatch();
-   
+    let dispatch = useDispatch();
+    const users = useSelector((state) => state.scheme.getAllSchemeData)
+
+    const reDirect = () => {
+        history.push(`${path}/addscheme`);
+    }
+
+    const reDirectSchemes = (key) => {
+        history.push(`${path}/addscheme?key=${key}`)
+    }
+
+    const deleteSchemes = (key) => {
+        let userForDelete = users && users.data.find(item => item.key === key)
+        if (userForDelete) {
+            console.log(userForDelete);
+            delete userForDelete.key
+            userForDelete = {
+                ...userForDelete,
+                schemeBenifit: userForDelete.schemeBenifit.id,
+                schemeCategory: userForDelete.schemeCategory.id,
+                isActive: false,
+                isDeleted: true,
+
+            }
+            dispatch(editSchemeData(userForDelete))
+        }
+    }
 
     // const { Option } = Select;
     const [key, setKey] = useState("1")
     const [perPage, setPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(1)
 
-    useEffect(()=>{
-        dispetch(getSchemeData(perPage,pageNumber))
-   },[perPage,pageNumber])
+    useEffect(() => {
+        dispatch(getSchemeData(perPage, pageNumber))
+    }, [perPage, pageNumber])
     const { TabPane } = Tabs;
 
     const callback = (key) => {
@@ -40,33 +65,16 @@ const Schemes = () => {
     //         users: state.users,
     //     };
     // });
-    const users = useSelector((state) => state.scheme.getAllSchemeData)
     useEffect(() => {
         console.log("users", users)
     }, [users])
     const { Option } = Select;
     const usersTableData = [];
 
-   users && users.data.map((item) => {
+    users && users.data.map((item) => {
 
         return usersTableData.push({
 
-
-            // key: id,
-            // user: name,
-            // Sequence: (
-            //     <div className="user-info">
-            //         <Form name="sDash_select" layout="vertical">
-            //             <Form.Item name="basic-select" label="">
-            //                 <Select className="sDash_fullwidth-select" style={{ width: 80, }} placeholder="1">
-            //                     <Option value="1">1</Option>
-            //                     <Option value="2">2</Option>
-            //                     <Option value="3">639</Option>
-            //                 </Select>
-            //             </Form.Item>
-            //         </Form>
-            //     </div>
-            // ),
             SchemeName: item.name,
             TypeOfBenefits: item.schemeBenifit.name,
             TargetBeneficiary: item.benificiary,
@@ -77,10 +85,10 @@ const Schemes = () => {
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            {key === "1" && <Button className="btn-icon" type="info" to="#" shape="circle">
+                            {key === "1" && <Button className="btn-icon" onClick={() => reDirectSchemes(item.key)} type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button>}
-                            <Button className="btn-icon" type="warning" to="#" shape="circle">
+                            <Button className="btn-icon" type="warning" to="#" onClick={() => deleteSchemes(item.key)} shape="circle">
                                 <FeatherIcon icon="file" size={16} />
                             </Button>
                             {key === '1' && <Button className="btn-icon" type="success" to="#" shape="circle">
@@ -146,9 +154,7 @@ const Schemes = () => {
     };
 
 
-    const reDirect = () =>{
-        history.push(`${path}/addscheme`);
-    }
+
 
     return (
         <>
@@ -163,7 +169,7 @@ const Schemes = () => {
                         <Button size="small" type="light">
                             Import Schemes
                         </Button>
-                        <Button onClick = {reDirect} size="small" type="success">
+                        <Button onClick={reDirect} size="small" type="success">
                             Create Scheme
                         </Button>
                         <Button size="small" type="warning">

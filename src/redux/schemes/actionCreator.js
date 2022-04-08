@@ -1,3 +1,4 @@
+import { async } from "@firebase/util";
 import STORAGEKEY from "../../config/APP/app.config";
 import { ApiGet, ApiPatch, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
@@ -24,6 +25,13 @@ const {
 
   getSchemeSuccess,
   getSchemenErr,
+
+  editSchemeSuccess,
+  editSchemeErr,
+
+  getOneSchemenBegin,
+  getOneSchemeSuccess,
+  getOneSchemenErr,
 
 } = actions;
 
@@ -87,4 +95,20 @@ export const getSchemeData = (perPage, pageNumber) => async (dispatch) => {
       return dispatch(getSchemeSuccess(res.data))
     })
     .catch((err) => dispatch(getSchemenErr(err)))
+}
+
+export const getOneSchemeData = (key) => async (dispatch) => { 
+  await ApiGet(`scheme/getOneScheme${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    .then((res) => {
+      return dispatch(getOneSchemeSuccess(res.data))
+    })
+    .catch((err) => dispatch(getOneSchemenErr(err)))
+}
+
+export const editSchemeData = (body) => async (dispatch) => {
+  await ApiPatch(`scheme/editScheme`,body)
+    .then((res) => {
+      return dispatch(editSchemeSuccess(res.data))
+    })
+    .catch((err) => dispatch(editSchemenErr(err)))
 }

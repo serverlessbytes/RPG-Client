@@ -30,6 +30,14 @@ const {
   GET_SCHEMEN_SUCCESS,
   GET_SCHEMEN_ERR,
 
+  GET_ONESCHEME_BEGINE,
+  GET_ONESCHEME_SUCCESS,
+  GET_ONESCHEME_ERR,
+
+  EDIT_SCHEME_BEGINE,
+  EDIT_SCHEME_SUCCESS,
+  EDIT_SCHEME_ERR,
+
 } = actions;
 
 const initialState = {
@@ -40,8 +48,10 @@ const initialState = {
   editSchemeCatogeryData: null,
   schemeBenefitData: null,
   addSchemeData:null,
+  editSchemeData: null,
   getAllSchemeData:null,
-  addState:null
+  addState:null,
+  getOneSchemeData:null
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -182,6 +192,48 @@ const schemeReducer = (state = initialState, action) => {
       };
 
       case GET_SCHEMEN_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case GET_ONESCHEME_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case GET_ONESCHEME_SUCCESS:
+      return {
+        ...state,
+        getOneSchemeData: data,
+        loading: false,
+      };
+
+      case GET_ONESCHEME_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case EDIT_SCHEME_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case EDIT_SCHEME_SUCCESS:
+      return {
+        ...state,
+        editSchemeData: data,
+        loading: false,
+      };
+
+      case EDIT_SCHEME_ERR:
       return {
         ...state,
         error: err,

@@ -9,10 +9,20 @@ import { Main } from '../styled';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
-import { addSchemeData, getSchemeBenifits, getSchemecategory, getState } from '../../redux/schemes/actionCreator';
+import { addSchemeData, editSchemeData, getOneSchemeData, getSchemeBenifits, getSchemecategory, getState } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid'
+import { useHistory, useLocation, useRouteMatch } from 'react-router';
 
 const AddSchemes = () => {
+
+    const { path } = useRouteMatch();
+    let history = useHistory();
+    let location = useLocation();
+    useEffect(() => {
+        console.log("path", path);
+    }, [])
+
+
 
 
     /* const [typeOfJob, setTypeOfJob] = useState("");
@@ -51,6 +61,12 @@ const AddSchemes = () => {
         dispatch(getState());
     }, [])
 
+    useEffect(() => {
+        if (location.search) {
+            dispatch(getOneSchemeData(location.search))
+        }
+    }, [location.search])
+
     const scheme = useSelector((state) => state.scheme.schemecatogeryData)
     useEffect(() => {
         console.log("scheme", scheme)
@@ -58,24 +74,52 @@ const AddSchemes = () => {
 
     const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
     const State = useSelector((state) => state.scheme.addState)
+    const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
+
+    console.log("getOneScHemeData", getOneScHemeData)
+
     useEffect(() => {
-        console.log("State", State)
-    }, [State])
+
+        if (getOneScHemeData) {
+            console.log("getOneScHemeData", getOneScHemeData)
+            setState({
+                ...state,
+                benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
+                detail: RichTextEditor.createValueFromString(getOneScHemeData.detail, 'markdown'),
+                howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
+                documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
+                name: getOneScHemeData.name,
+                schemeCategory: getOneScHemeData.schemeCategory.id,
+                schemeBenifit: getOneScHemeData.schemeBenifit.id,
+                locations: getOneScHemeData.locations.map(item => item.id),
+                website: getOneScHemeData.website,
+                type: getOneScHemeData.type,
+                benificiary: getOneScHemeData.benificiary,
+                grievanceRedress: getOneScHemeData.grievanceRedress,
+                elink: getOneScHemeData.elink,
+                spoc: getOneScHemeData.spoc,
+                isActive: getOneScHemeData.isActive,
+                sequence: getOneScHemeData.sequence,
+            })
+        }
+    }, [getOneScHemeData])
+
+
+    useEffect(() => {
+        console.log("STATE", state);
+    }, [state])
 
     const onChangesEditorBenifit = (value) => {
         // console.log(value.toString('markdown'));
         setState({ ...state, benifitLine: value });
     };
     const onChangesEditorSchemeSummary = (value) => {
-        console.log(value.toString('markdown'));
         setState({ ...state, detail: value });
     };
     const onChangesEditorHowToApply = (value) => {
-        console.log(value.toString('markdown'));
         setState({ ...state, howToApply: value });
     };
     const onChangesEditorDocumentation = (value) => {
-        console.log(value.toString('markdown'));
         setState({ ...state, documentation: value });
     };
 
@@ -119,7 +163,6 @@ const AddSchemes = () => {
       } */
 
     const selectValue = (e, name) => {
-        console.log("e--",e);
         if (name === "schemeBenifit") {
             setState({
                 ...state,
@@ -162,13 +205,8 @@ const AddSchemes = () => {
         }
     }
 
-    useEffect(() => {
-        console.log("state ===", state);
-    }, [state])
 
-
-    const onSubmit = (e) => {
-
+    const onSubmit = () => {
         let data = {
             key: uuid(),
             sequence: parseInt(state.sequence),
@@ -190,7 +228,21 @@ const AddSchemes = () => {
             isActive: state.isActive
         }
         console.log("data", state);
-        dispatch(addSchemeData(data))
+        if (!location.search) {
+            dispatch(addSchemeData(data))
+            history.push(`${path}/scheme`)
+        } else {
+            delete data.key
+            data = {
+                ...data,
+                id: getOneScHemeData.id,
+                isDeleted: false,
+                isPublished: true,
+                isApproved: true
+            }
+            dispatch(editSchemeData(data))
+            history.push(`${path}/scheme`)
+        }
     }
 
 
@@ -233,7 +285,7 @@ const AddSchemes = () => {
                         </Col> */}
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Scheme Name</label>
-                            <Form.Item name="name">
+                            <Form.Item>
                                 <Input placeholder="Scheme Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
@@ -242,9 +294,9 @@ const AddSchemes = () => {
                     <Row justify="space-between"> */}
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="category mb-4">Scheme Category</label>
-                            <Form.Item name="category" initialValue=" Select a scheme category ">
-                                <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select" name="scheme" onChange={(e) => selectValue(e, "scheme")}>
-                                    {scheme && scheme.data?.map((items) => (
+                            <Form.Item initialValue=" Select a scheme category ">
+                                <Select size="large" placeholder="Select Category" value={state.schemeCategory} className="sDash_fullwidth-select" name="schemeCategory" onChange={(e) => selectValue(e, "schemeCategory")}>
+                                    {scheme && scheme.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
 
@@ -254,8 +306,8 @@ const AddSchemes = () => {
                         </Col>
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="Benefits">Type of Benefits</label>
-                            <Form.Item name="Benefits" initialValue="Type of Benefits">
-                                <Select size="large" placeholder="Select Benefits" className="sDash_fullwidth-select" name="schemeBenifit" onChange={(e) => selectValue(e, "schemeBenifit")}>
+                            <Form.Item initialValue="Type of Benefits">
+                                <Select size="large" placeholder="Select Benefits" value={state.schemeBenifit} className="sDash_fullwidth-select" name="schemeBenifit" onChange={(e) => selectValue(e, "schemeBenifit")}>
                                     {SchemeBenifits && SchemeBenifits.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
@@ -265,7 +317,7 @@ const AddSchemes = () => {
                         </Col>
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Senquence</label>
-                            <Form.Item name="name">
+                            <Form.Item>
                                 <Input type="number" placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
@@ -276,8 +328,8 @@ const AddSchemes = () => {
                     </div>
 
                     <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
-                    <Form.Item name="TargetBeneficiary">
-                        <Input.TextArea placeholder="" name='benificiary' onChange={(e) => onChangeValue(e)} />
+                    <Form.Item >
+                        <Input.TextArea placeholder="" value={state.benificiary} name='benificiary' onChange={(e) => onChangeValue(e)} />
                     </Form.Item>
 
                     <label htmlFor="SchemeSummary">Scheme Summary</label>
@@ -297,8 +349,8 @@ const AddSchemes = () => {
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="Location">Location</label>
-                            <Form.Item name="Location" initialValue="Select a location">
-                                <Select size="large" className="sDash_fullwidth-select" name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
+                            <Form.Item initialValue="Select a location">
+                                <Select size="large" className="sDash_fullwidth-select" value={state.locations} name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
                                     {State && State.map((item) => (
                                         <>
                                             <Option value={item.id}> {item.name} </Option>
@@ -310,16 +362,16 @@ const AddSchemes = () => {
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="Website">Website</label>
-                            <Form.Item name="Website">
-                                <Input placeholder="" name="website" onChange={(e) => onChangeValue(e)} />
+                            <Form.Item >
+                                <Input placeholder="" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="Category">Type</label>
-                            <Form.Item name="Category" >
-                                <Select size="large" className="sDash_fullwidth-select" name="type" onChange={(e) => selectValue(e, "type")}>
+                            <Form.Item  >
+                                <Select size="large" className="sDash_fullwidth-select" value={state.type} name="type" onChange={(e) => selectValue(e, "type")}>
                                     <Option value="ONLINE">Online </Option>
                                     <Option value="OFFLINE">Offline</Option>
                                 </Select>
@@ -328,25 +380,25 @@ const AddSchemes = () => {
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
-                            <Form.Item name="GrievanceRedress" >
-                                <Input placeholder="" name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
+                            <Form.Item  >
+                                <Input placeholder="" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
-                            <Form.Item name="E-Link">
-                                <Input placeholder="" name='elink' onChange={(e) => onChangeValue(e)} />
+                            <Form.Item>
+                                <Input placeholder="" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="SPOC">SPOC</label>
-                            <Form.Item name="SPOC">
-                                <Input placeholder="" name='spoc' onChange={(e) => onChangeValue(e)} />
+                            <Form.Item>
+                                <Input placeholder="" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
                             </Form.Item>
                         </Col>
                     </Row>
                     <label htmlFor="visible" className='ml-10'>Visible to User</label>
-                    <Checkbox id='visible' name="isActive" onChange={(e) => onChangeValue(e)} ></Checkbox>
+                    <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
                             Add

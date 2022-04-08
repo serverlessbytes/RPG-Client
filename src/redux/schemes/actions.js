@@ -27,6 +27,14 @@ const actions = {
   GET_SCHEMEN_SUCCESS:"GET_SCHEMEN_SUCCESS",
   GET_SCHEMEN_ERR:"GET_SCHEMEN_ERR",
 
+  GET_ONESCHEME_BEGINE:"GET_ONESCHEME_BEGINE",
+  GET_ONESCHEME_SUCCESS:"GET_ONESCHEME_SUCCESS",
+  GET_ONESCHEME_ERR:"GET_ONESCHEME_ERR",
+
+  EDIT_SCHEME_BEGINE:"EDIT_SCHEME_BEGINE",
+  EDIT_SCHEME_SUCCESS:"EDIT_SCHEME_SUCCESS",
+  EDIT_SCHEME_ERR:"EDIT_SCHEME_ERR",
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -167,5 +175,46 @@ const actions = {
       err,
     };
   },
+
+  getOneSchemenBegin: () => { 
+    return {
+      type: actions.GET_ONESCHEME_BEGINE,
+    };
+  },
+
+  getOneSchemeSuccess: data => {
+    return {
+      type: actions.GET_ONESCHEME_SUCCESS,
+      data,
+    };
+  },
+
+  getOneSchemenErr: err => {
+    return {
+      type: actions.GET_ONESCHEME_ERR,
+      err,
+    };
+  },
+
+  editSchemeBegin: () => { 
+    return {
+      type: actions.EDIT_SCHEME_BEGINE,
+    };
+  },
+
+  editSchemeSuccess: data => {
+    return {
+      type: actions.EDIT_SCHEME_SUCCESS,
+      data,
+    };
+  },
+
+  editSchemeErr: err => {
+    return {
+      type: actions.EDIT_SCHEME_ERR,
+      err,
+    };
+  },
+
 };
 export default actions;
