@@ -40,7 +40,7 @@ const Schemes = () => {
     //         users: state.users,
     //     };
     // });
-    const users = useSelector((state) => state.schemeCategory.getAllSchemeData)
+    const users = useSelector((state) => state.scheme.getAllSchemeData)
     useEffect(() => {
         console.log("users", users)
     }, [users])
@@ -254,7 +254,10 @@ const Schemes = () => {
                                                     defaultPageSize: users?.per_page,
                                                     total: users?.page_count,
                                                     showTotal: (total, range) =>`${range[0]}-${range[1]} of ${total} items`,
-                                                    
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize)
+                                                    }
                                                 }}
                                             />
                                         </TableWrapper>

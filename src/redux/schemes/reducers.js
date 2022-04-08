@@ -9,6 +9,10 @@ const {
   ADD_SCHEMECATEGOTRY_SUCCESS,
   ADD_SCHEMECATEGOTRY_ERR,
 
+  EDIT_SCHEMECATEGOTRY_BEGINE,
+  EDIT_SCHEMECATEGOTRY_SUCCESS,
+  EDIT_SCHEMECATEGOTRY_ERR,
+
   GET_SCHEMENBENIFITS_BEGINE,
   GET_SCHEMENBENIFITS_SUCCESS,
   GET_SCHEMENBENIFITS_ERR,
@@ -33,6 +37,7 @@ const initialState = {
   error: null,
   schemeCatogeryData: null,
   addSchemeCatogeryData: null,
+  editSchemeCatogeryData: null,
   schemeBenefitData: null,
   addSchemeData:null,
   getAllSchemeData:null,
@@ -72,6 +77,24 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
     case ADD_SCHEMECATEGOTRY_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_SCHEMECATEGOTRY_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_SCHEMECATEGOTRY_SUCCESS:
+      return {
+        ...state,
+        editSchemeCatogeryData: data,
+        loading: false,
+      };
+    case EDIT_SCHEMECATEGOTRY_ERR:
       return {
         ...state,
         error: err,

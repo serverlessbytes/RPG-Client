@@ -244,7 +244,7 @@ const AddSchemes = () => {
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item name="category" initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select" name="scheme" onChange={(e) => selectValue(e, "scheme")}>
-                                    {scheme && scheme.map((items) => (
+                                    {scheme && scheme.data?.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
 

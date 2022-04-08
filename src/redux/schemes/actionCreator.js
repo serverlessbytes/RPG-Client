@@ -1,5 +1,5 @@
 import STORAGEKEY from "../../config/APP/app.config";
-import { ApiGet, ApiPost } from "../../helper/API/ApiData";
+import { ApiGet, ApiPatch, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
 import actions from "./actions";
 
@@ -11,6 +11,10 @@ const {
   getSchemeBenifitsErr,
   addSchemecategorySuccess,
   addSchemecategoryErr,
+
+  editSchemecategorySuccess,
+  editSchemecategoryErr,
+  
   addSchemeSuccess,
   addSchemeErr,
 
@@ -38,6 +42,15 @@ export const addSchemecategory = (body) => async (dispatch) => {
       return dispatch(getSchemecategory())
     })
     .catch((err) => dispatch(addSchemecategoryErr(err)))
+}
+
+export const editSchemecategory = (body) => async (dispatch) => {
+  await ApiPatch(`scheme/editSchemeCategory`,body)
+    .then((res) => {
+      dispatch(editSchemecategorySuccess(res))
+      return dispatch(getSchemecategory())
+    })
+    .catch((err) => dispatch(editSchemecategoryErr(err)))
 }
 
 
