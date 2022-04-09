@@ -34,7 +34,7 @@ const {
   getOneSchemenErr,
 
 } = actions;
-
+let per_Page,page_Num 
 export const getSchemecategory = () => async (dispatch) => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
@@ -90,6 +90,8 @@ export const addSchemeData = (data) => async (dispatch) => {
 }
 
 export const getSchemeData = (perPage, pageNumber) => async (dispatch) => {
+  per_Page=perPage;
+  page_Num=pageNumber;
   await ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
     .then((res) => {
       return dispatch(getSchemeSuccess(res.data))
@@ -106,9 +108,12 @@ export const getOneSchemeData = (key) => async (dispatch) => {
 }
 
 export const editSchemeData = (body) => async (dispatch) => {
-  await ApiPatch(`scheme/editScheme`,body)
+  await ApiPost(`scheme/editScheme`,body)
     .then((res) => {
-      return dispatch(editSchemeSuccess(res.data))
+      dispatch(editSchemeSuccess(res.data))
+      if(res.status===200){
+        dispatch(getSchemeData(per_Page,page_Num))
+      }
     })
     .catch((err) => dispatch(editSchemenErr(err)))
 }
