@@ -31,17 +31,19 @@ const Schemes = () => {
     const deleteSchemes = (key) => {
         let userForDelete = users && users.data.find(item => item.key === key)
         if (userForDelete) {
-            console.log(userForDelete);
+            // console.log(userForDelete);
             delete userForDelete.key
+            delete userForDelete.updatedAt
             userForDelete = {
                 ...userForDelete,
                 schemeBenifit: userForDelete.schemeBenifit.id,
                 schemeCategory: userForDelete.schemeCategory.id,
                 isActive: false,
                 isDeleted: true,
-
             }
             dispatch(editSchemeData(userForDelete))
+            // dispatch(getSchemeData(perPage, pageNumber))   
+            //history.push(`/admin/scheme`)
         }
     }
 
@@ -65,9 +67,9 @@ const Schemes = () => {
     //         users: state.users,
     //     };
     // });
-    useEffect(() => {
-        console.log("users", users)
-    }, [users])
+    // useEffect(() => {
+    //     console.log("users", users)
+    // }, [users])
     const { Option } = Select;
     const usersTableData = [];
 

@@ -12,6 +12,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import { addSchemeData, editSchemeData, getOneSchemeData, getSchemeBenifits, getSchemecategory, getState } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid'
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
+import { constants } from 'react-redux-firebase';
 
 const AddSchemes = () => {
 
@@ -41,9 +42,9 @@ const AddSchemes = () => {
         howToApply: RichTextEditor.createEmptyValue(),
         documentation: RichTextEditor.createEmptyValue(),
         name: '',
-        scheme: '',
+        schemeCategory: '',
         schemeBenifit: '',
-        locations: '',
+        locations: [],
         website: '',
         type: '',
         benificiary: '',
@@ -53,6 +54,13 @@ const AddSchemes = () => {
         isActive: '',
         sequence: '',
     });
+    const [error, setError] = useState({})
+
+    // useEffect(() => {
+    //     console.log("benifitLine", state.benifitLine.toString("markdown").length)
+
+    // }, [state.benifitLine])
+
     /*   useEffect(() => { console.log("state.schemename", state.schemename) }, [state.schemename]) */
     /* useEffect(() => { console.log("state.documentation", state.documentation) }, [state.documentation]) */
     useEffect(() => {
@@ -68,20 +76,20 @@ const AddSchemes = () => {
     }, [location.search])
 
     const scheme = useSelector((state) => state.scheme.schemecatogeryData)
-    useEffect(() => {
-        console.log("scheme", scheme)
-    }, [scheme])
+    // useEffect(() => {
+    //     console.log("scheme", scheme)
+    // }, [scheme])
 
     const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
     const State = useSelector((state) => state.scheme.addState)
     const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
 
-    console.log("getOneScHemeData", getOneScHemeData)
+    
 
     useEffect(() => {
 
         if (getOneScHemeData) {
-            console.log("getOneScHemeData", getOneScHemeData)
+            // console.log("getOneScHemeData", getOneScHemeData)
             setState({
                 ...state,
                 benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
@@ -110,7 +118,6 @@ const AddSchemes = () => {
     }, [state])
 
     const onChangesEditorBenifit = (value) => {
-        // console.log(value.toString('markdown'));
         setState({ ...state, benifitLine: value });
     };
     const onChangesEditorSchemeSummary = (value) => {
@@ -169,12 +176,16 @@ const AddSchemes = () => {
                 schemeBenifit: e
             });
         }
-        else if (name === "scheme") {
-            setState({ ...state, scheme: e });
+        else if (name === "schemeCategory") {
+            setState({ ...state, schemeCategory: e });
         }
         else if (name === "type") {
             setState({ ...state, type: e });
         }
+        // else if (name === "locations") {
+        //     setState({ ...state, locations: [...state.locations, e ]});
+        // }
+
         else if (name === "locations") {
             setState({ ...state, locations: e });
         }
@@ -205,8 +216,91 @@ const AddSchemes = () => {
         }
     }
 
+    const validation = () => {
+        // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
+        let error = {}
+        let flage = false
+        if (state.name === "") {
+            error.name = "*Scheme Name is required";
+            flage = true;
+        }
+        if (state.schemeCategory === "") {
+            error.schemeCategory = "*schemeCategory is required";
+            flage = true;
+        }
+        if (state.sequence === "") {
+            error.sequence = "*sequence is required";
+            flage = true;
+        }
+        if (state.schemeBenifit === "") {
+            error.schemeBenifit = "*schemeBenifit is required";
+            flage = true;
+        }
+        if (state.benifitLine.toString("markdown").length <= 2) {
+            error.benifitLine = " *benifitLine is required";
+            flage = true;
+        }
+        if (state.benificiary === "") {
+            error.benificiary = " *benificiary is required";
+            flage = true;
+        }
+        if (state.detail.toString("markdown").length <= 2) {
+            error.detail = "*detail is required";
+            flage = true;
+        }
+        if (state.howToApply.toString("markdown").length <= 2) {
+            error.howToApply = "* howToApply is required";
+            flage = true;
+        }
+        if (state.documentation.toString("markdown").length <= 2) {
+            error.documentation = "*documentation is required";
+            flage = true;
+        }
+        if (state.locations.length < 1) {
+            error.locations = " *locations is required";
+            flage = true;
+        }
+        if (state.website === "") {
+            error.website = " *website is required";
+            flage = true;
+        }
+        if (state.type === "") {
+            error.type = " *type is required";
+            flage = true;
+        }
+        if (state.grievanceRedress === "") {
+            error.grievanceRedress = "*grievanceRedress is required";
+            flage = true;
+        }
+        if (state.elink === "") {
+            error.elink = " *elink is required";
+            flage = true;
+        }
+        if (state.spoc === "") {
+            error.spoc = "*spoc is required";
+            flage = true;
+        }
+        if (state.isActive === "") {
+            error.isActive = " *isActive is required";
+            flage = true;
+        }
+
+
+        setError(error);
+        return flage
+    }
+
 
     const onSubmit = () => {
+
+        if (validation()) {
+            return;
+        }
+        // let errors = validation;
+        // if(state.name.trim()){
+        //   errors.name = "Name is Reqired"
+        // }
+
         let data = {
             key: uuid(),
             sequence: parseInt(state.sequence),
@@ -217,7 +311,7 @@ const AddSchemes = () => {
             name: state.name,
             //locations:[state.loCation],
             locations: state.locations,
-            scheme: state.scheme,
+            schemeCategory: state.schemeCategory,
             schemeBenifit: state.schemeBenifit,
             website: state.website,
             type: state.type,
@@ -230,7 +324,8 @@ const AddSchemes = () => {
         console.log("data", state);
         if (!location.search) {
             dispatch(addSchemeData(data))
-            history.push(`${path}/scheme`)
+            // history.push(`${path}/scheme`)
+            history.push(`/admin/scheme`)
         } else {
             delete data.key
             data = {
@@ -239,9 +334,10 @@ const AddSchemes = () => {
                 isDeleted: false,
                 isPublished: true,
                 isApproved: true
+
             }
             dispatch(editSchemeData(data))
-            history.push(`${path}/scheme`)
+            history.push(`/admin/scheme`)
         }
     }
 
@@ -287,6 +383,9 @@ const AddSchemes = () => {
                             <label htmlFor="name">Scheme Name</label>
                             <Form.Item>
                                 <Input placeholder="Scheme Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
+                                {
+                                    error.name && <span style={{color:"red"}}>{error.name}</span>
+                                }
                             </Form.Item>
                         </Col>
 
@@ -296,12 +395,13 @@ const AddSchemes = () => {
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" value={state.schemeCategory} className="sDash_fullwidth-select" name="schemeCategory" onChange={(e) => selectValue(e, "schemeCategory")}>
-                                    {scheme && scheme.map((items) => (
+                                    {scheme && scheme.data.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
-
-                                    {/* <Option value="2"> Other Schemes </Option> */}
                                 </Select>
+                                {
+                                    error.schemeCategory && <span style={{color:"red"}}>{error.schemeCategory}</span>
+                                }
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24}>
@@ -311,40 +411,50 @@ const AddSchemes = () => {
                                     {SchemeBenifits && SchemeBenifits.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
-
                                 </Select>
+                                {error.schemeBenifit && <span style={{color:"red"}}>{error.schemeBenifit}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Senquence</label>
                             <Form.Item>
                                 <Input type="number" placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
+                                {error.sequence && <span style={{color:"red"}}>{error.sequence}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
-                    <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
-                    <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name="benifitLine" value={state.benifitLine} onChange={onChangesEditorBenifit} />
+                    <div style={{ marginBottom: "20px" }}>
+                        <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
+                        <div className="group" style={{ marginBottom: "0px" }}>
+                            <RichTextEditor placeholder="Type your message..." name="benifitLine" value={state.benifitLine} onChange={onChangesEditorBenifit} />
+                        </div>
+                        {error.benifitLine && <span style={{color:"red"}}>{error.benifitLine}</span>}
                     </div>
-
                     <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
                     <Form.Item >
                         <Input.TextArea placeholder="" value={state.benificiary} name='benificiary' onChange={(e) => onChangeValue(e)} />
+                        {error.benificiary && <span style={{color:"red"}}>{error.benificiary}</span>}
                     </Form.Item>
-
-                    <label htmlFor="SchemeSummary">Scheme Summary</label>
-                    <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name="detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
+                    <div style={{ marginBottom: "20px" }}>
+                        <label htmlFor="SchemeSummary">Scheme Summary</label>
+                        <div className="group" style={{ marginBottom: "0px" }}>
+                            <RichTextEditor placeholder="Type your message..." name="detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
+                        </div>
+                        {error.detail && <span style={{color:"red"}}>{error.detail}</span>}
                     </div>
-
-                    <label htmlFor="HowtoApply">How to Apply</label>
-                    <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name="howToApply" value={state.howToApply} onChange={onChangesEditorHowToApply} />
+                    <div style={{ marginBottom: "20px" }}>
+                        <label htmlFor="HowtoApply">How to Apply</label>
+                        <div className="group" style={{ marginBottom: "0px" }}>
+                            <RichTextEditor placeholder="Type your message..." name="howToApply" value={state.howToApply} onChange={onChangesEditorHowToApply} />
+                        </div>
+                        {error.howToApply && <span style={{color:"red"}}>{error.howToApply}</span>}
                     </div>
-
-                    <label htmlFor="Documentation">Documentation</label>
-                    <div className="group">
-                        <RichTextEditor placeholder="Type your message..." name="documentation" value={state.documentation} onChange={onChangesEditorDocumentation} />
+                    <div style={{ marginBottom: "20px" }}>
+                        <label htmlFor="Documentation">Documentation</label>
+                        <div className="group" style={{ marginBottom: "0px" }}>
+                            <RichTextEditor placeholder="Type your message..." name="documentation" value={state.documentation} onChange={onChangesEditorDocumentation} />
+                        </div>
+                        {error.documentation && <span style={{color:"red"}}>{error.documentation}</span>}
                     </div>
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
@@ -358,12 +468,14 @@ const AddSchemes = () => {
                                     ))}
 
                                 </Select>
+                                {error.locations && <span style={{color:"red"}}>{error.locations}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="Website">Website</label>
                             <Form.Item >
                                 <Input placeholder="" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
+                                {error.website && <span style={{color:"red"}}>{error.website}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -376,29 +488,36 @@ const AddSchemes = () => {
                                     <Option value="OFFLINE">Offline</Option>
                                 </Select>
                                 {/* <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} /> */}
+                                {error.type && <span style={{color:"red"}}>{error.type}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
                             <Form.Item  >
                                 <Input placeholder="" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
+                                {error.grievanceRedress && <span style={{color:"red"}}>{error.grievanceRedress}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item>
                                 <Input placeholder="" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
+                                {error.elink && <span style={{color:"red"}}>{error.elink}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="SPOC">SPOC</label>
                             <Form.Item>
                                 <Input placeholder="" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
+                                {error.spoc && <span style={{color:"red"}}>{error.spoc}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
-                    <label htmlFor="visible" className='ml-10'>Visible to User</label>
-                    <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>
+                    <div >
+                        <label htmlFor="visible" className='ml-10'>Visible to User</label>
+                        <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>
+                    </div>
+                    {error.isActive && <span style={{color:"red"}}>{error.isActive}</span>}
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
                             Add
