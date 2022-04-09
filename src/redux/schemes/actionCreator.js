@@ -53,7 +53,7 @@ export const addSchemecategory = (body) => async (dispatch) => {
 }
 
 export const editSchemecategory = (body) => async (dispatch) => {
-  await ApiPatch(`scheme/editSchemeCategory`,body)
+  await ApiPost(`scheme/editSchemeCategory`,body)
     .then((res) => {
       dispatch(editSchemecategorySuccess(res))
       return dispatch(getSchemecategory())
