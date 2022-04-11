@@ -2,13 +2,13 @@ import actions from './actions';
 
 const {
 
-  POST_BENEFITS_BEGINE,
-  POST_BENEFITS_SUCCESS,
-  POST_BENEFITS_ERR,
+  POST_CATEGORY_BEGINE,
+  POST_CATEGORY_SUCCESS,
+  POST_CATEGORY_ERR,
 
-  GET_BENEFITS_BEGINE,
-  GET_BENEFITS_SUCCESS,
-  GET_BENEFITS_ERR,
+  GET_CATEGORY_BEGINE,
+  GET_CATEGORY_SUCCESS,
+  GET_CATEGORY_ERR,
 
 } = actions;
 
@@ -16,44 +16,43 @@ const initialState = {
   data: null,
   loading: false,
   error: null,
-  postStateData:null,
-  postBenefitsData:null,
-  getBenefitData:null,
+  postcategoryData:null,
+  categoryData:null,
 };
 
-const BenefitsReducer = (state = initialState, action) => {
+const cateGoryReducer = (state = initialState, action) => {
   const { type, data, err } = action;
   switch (type) {
-    case POST_BENEFITS_BEGINE:
+    case POST_CATEGORY_BEGINE:
       return {
         ...state,
         loading: true,
       };
-    case POST_BENEFITS_SUCCESS:
+    case POST_CATEGORY_SUCCESS:
       return {
         ...state,
-        postBenefitsData:data,
+        postcategoryData:data,
         loading: false,
       };
-    case POST_BENEFITS_ERR:
+    case POST_CATEGORY_ERR:
       return {
         ...state,
         error: err,
         loading: false,
       };
       
-      case GET_BENEFITS_BEGINE:
+      case GET_CATEGORY_BEGINE:
       return {
         ...state,
         loading: true,
       };
-    case GET_BENEFITS_SUCCESS:
+    case GET_CATEGORY_SUCCESS:
       return {
         ...state,
-        getBenefitData:data,
+        categoryData:data,
         loading: false,
       };
-    case GET_BENEFITS_ERR:
+    case GET_CATEGORY_ERR:
       return {
         ...state,
         error: err,
@@ -66,4 +65,4 @@ const BenefitsReducer = (state = initialState, action) => {
   }
 };
 
-export default BenefitsReducer;
+export default cateGoryReducer;

@@ -43,26 +43,13 @@ const SchemeCategory = () => {
         }
     }
 
-    const onDelete = (id) => {
-        let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
-        if (dataForEdit) {
-            delete dataForEdit.key
-            dataForEdit = {
-                ...dataForEdit,
-                isActive: false,
-                isDeleted: true
-            }
-            dispatch(editSchemecategory(dataForEdit))
-        }
-    }
-
     useEffect(() => {
         if (schemeData && schemeData.data) {
 
             setSchemeCategoryTableData(schemeData.data ?
                 schemeData.data.map((item) => {
                     return {
-                        ...item,  
+                        ...item,
                         action: (
                             <div className='active-schemes-table'>
                                 <div className="table-actions">
@@ -70,7 +57,7 @@ const SchemeCategory = () => {
                                         <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
-                                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                        <Button className="btn-icon" type="danger" to="#" shape="circle">
                                             <FeatherIcon icon="x-circle" size={16} />
                                         </Button>
                                     </>
@@ -93,21 +80,19 @@ const SchemeCategory = () => {
 
     const handleOk = () => {
         let data = form.getFieldsValue()
-        if (!selectedSchemeCategory) {
+        if(!selectedSchemeCategory) {
             data = {
                 ...data,
                 key: uuid()
             }
             dispatch(addSchemecategory(data))
         } else {
-            delete selectedSchemeCategory.key
             data = {
-                id: selectedSchemeCategory.id,
-                name: data.name,
-                isActive: true,
-                isDeleted: false
+                ...selectedSchemeCategory,
+                ...data,
             }
             dispatch(editSchemecategory(data))
+            console.log('data', data)
         }
         form.resetFields()
         setIsModalVisible(false);

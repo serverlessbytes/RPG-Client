@@ -8,15 +8,20 @@ import { Main, ProjectPagination, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
-import { postBenefitsData } from '../../redux/benefitsType/actionCreator';
+import { editBenefitsData, getBenefitsData, postBenefitsData } from '../../redux/benefitsType/actionCreator';
+import uuid from 'react-uuid';
 
 const BenefitsType = () => {
 
     const usersTableData = [];
-    const [data, setData] = useState({
-        name: '',
-    });
-    const dispatch =useDispatch();
+    //const [form] = Form.useForm()
+    const [dataForEdit, setDataForEdit] = useState(); //foredit
+
+    const getBenefitData = useSelector((state) => state.beneFit.getBenefitsData)
+    useEffect(() => {
+        console.log("=====>getBenefitData<====", getBenefitData);
+    }, [getBenefitData]);
+    const dispatch = useDispatch();
 
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -25,12 +30,39 @@ const BenefitsType = () => {
             users: state.users,
         };
     });
-    const languageData=useSelector((state)=>state.language.getLanguageData);
+    const languageData = useSelector((state) => state.language.getLanguageData);
 
     useEffect(() => {
-      console.log("=====>languageData<====",languageData);
-    }, [languageData]);
-    
+        dispatch(getBenefitsData())
+        console.log("=====>getBenefitsData<====", getBenefitsData);
+    }, []);
+
+    const onDelete = (id) => {
+        let dataForDelete = getBenefitData && getBenefitData.data && getBenefitData.data.find((item) => item.id === id)
+        if (dataForDelete) {
+            delete dataForDelete.key
+            dataForDelete = {
+                ...dataForDelete,
+                isActive: false,
+                isDeleted: true
+            }
+            dispatch(editBenefitsData(dataForDelete))
+        }
+    }
+    const onEdit = (id) => {
+        let dataForEdit = getBenefitData && getBenefitData.data && getBenefitData.data.find((item) => item.id === id)
+        console.log("", dataForEdit);
+        if (dataForEdit) {
+            setDataForEdit(dataForEdit)
+            form.setFieldsValue({
+                ...dataForEdit,
+                name: dataForEdit.name,
+            })
+        }
+        //dispatch(editBenefitsData(dataForEdit))
+        setIsModalVisible(true)
+
+    }
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -41,10 +73,32 @@ const BenefitsType = () => {
     };
 
     const handleOk = () => {
-        const data = form.getFieldValue()
-        console.log("========>data<==========", data);
-        dispatch(postBenefitsData(data))
+        if (dataForEdit) {
+            let data = form.getFieldsValue() //get value from form field
+            //console.log("========>data<==========", data);
+            //delete data.key;
+            data = {
+                ...data, 
+                id: dataForEdit.id, 
+                "isActive": true,
+                "isDeleted": false
+            }
+            dispatch(editBenefitsData(data))
+            console.log("data",data) 
+        }
+        else {
+            let data = form.getFieldsValue()
+            //console.log("========>data<==========", data);
+            data = {
+                ...data,
+                key: uuid()
+            }
+            dispatch(postBenefitsData(data))
+            console.log("data", data)
+        }
+        form.resetFields()
         setIsModalVisible(false);
+        
     };
 
     const [state, setState] = useState({
@@ -62,19 +116,21 @@ const BenefitsType = () => {
         setState({ ...state, current, pageSize });
     };
 
-    users.map(user => {
-        const {  } = user;
+    // users.map(user => {
+    //     const {  } = user;
 
+    //useEffect(() =>{
+    getBenefitData && getBenefitData.data.map((item) => {
         return usersTableData.push({
-            Typeofbenefit: 'Agriculture & Fisheries',
+            Typeofbenefit: item.name,
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            <Button className="btn-icon" type="info" to="#" shape="circle">
+                            <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button>
-                            <Button className="btn-icon" type="danger" to="#" shape="circle">
+                            <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                                 <FeatherIcon icon="x-circle" size={16} />
                             </Button>
                         </>
@@ -83,6 +139,7 @@ const BenefitsType = () => {
             ),
         });
     });
+    // },[getBenefitData])
 
     const usersTableColumns = [
         {
@@ -130,18 +187,18 @@ const BenefitsType = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                        <ProjectPagination>
-                            {usersTableData.length ? (
-                                <Pagination
-                                    onChange={onHandleChange}
-                                    showSizeChanger
-                                    onShowSizeChange={onShowSizeChange}
-                                    pageSize={10}
-                                    defaultCurrent={1}
-                                    total={10}
-                                />
-                            ) : null}
-                        </ProjectPagination>
+                    <ProjectPagination>
+                        {usersTableData.length ? (
+                            <Pagination
+                                onChange={onHandleChange}
+                                showSizeChanger
+                                onShowSizeChange={onShowSizeChange}
+                                pageSize={10}
+                                defaultCurrent={1}
+                                total={10}
+                            />
+                        ) : null}
+                    </ProjectPagination>
                 </Cards>
             </Main>
 

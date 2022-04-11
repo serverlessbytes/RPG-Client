@@ -34,6 +34,9 @@ import ProfileReducer from './profile/reducers';
 import stateReducer from './state/reducers';
 import languageReducer from './language/reducers';
 import schemeReducer from './schemes/reducers';
+import BenefitsReducer from './benefitsType/reducers';
+import cateGoryReducer from './course/reducers';
+
 
 const rootReducers = combineReducers({
   fb: firebaseReducer,
@@ -78,7 +81,9 @@ const rootReducers = combineReducers({
   profileReducer:ProfileReducer,
   state:stateReducer,
   language:languageReducer,
-  scheme:schemeReducer
+  scheme:schemeReducer,
+  beneFit:BenefitsReducer,
+  category:cateGoryReducer,
   
 });
 

@@ -1,17 +1,20 @@
 import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { editCategoryData, getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
+import uuid from 'react-uuid';
+import { editBenefitsData } from '../../redux/benefitsType/actionCreator';
 
 const CourseCategory = () => {
 
-
-
+    const [dataForEdit, setDataForEdit] = useState(); //foredit
+    const dispatch = useDispatch();
     const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -28,11 +31,95 @@ const CourseCategory = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+    const onDelete = (id) => {
+        let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
+        console.log("-----",dataForDelete)
+        if (dataForDelete) {
+            delete dataForDelete.key
+            delete dataForDelete.id     
+            dataForDelete = {
+                ...dataForDelete,
+                categoryId : id,
+                isActive: false,
+                isDeleted: true
+            }
+            dispatch(editCategoryData(dataForDelete))
+        }
+    }
+
+    const onEdit = (id) => {
+        let dataForEdit = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
+        console.log("", dataForEdit);
+        if (dataForEdit) {
+            setDataForEdit(dataForEdit)
+            form.setFieldsValue({
+                ...dataForEdit,
+                name: dataForEdit.name,
+            })
+        }
+        // dispatch(editBenefitsData(dataForEdit))
+        setIsModalVisible(true)
+
+    }
 
     const handleOk = () => {
-        setIsModalVisible(false);
-    };
+        let data = form.getFieldsValue()
+        if(dataForEdit){
+            let data = form.getFieldsValue() //get value from form field
+                    //console.log("========>data<==========", data);
+                    delete data.key;
 
+                    data = {
+                        
+                        ...data, 
+                        id: dataForEdit.id, 
+                        "isActive": true,
+                        "isDeleted": false
+                    }
+                    dispatch(editBenefitsData(data))
+                    console.log("data",data) 
+        }
+        else{
+            console.log("========>data<==========", data);
+            data = {
+                ...data,
+                key: uuid()
+            }
+            console.log("dataaaaaaaaaa", data)
+            dispatch(postCategoryData(data))
+    
+            setIsModalVisible(false);
+        }
+   
+    };
+    // const handleOk = () => {
+    //     if (dataForEdit) {
+    //         let data = form.getFieldsValue() //get value from form field
+    //         //console.log("========>data<==========", data);
+    //         //delete data.key;
+    //         data = {
+    //             ...data, 
+    //             id: dataForEdit.id, 
+    //             "isActive": true,
+    //             "isDeleted": false
+    //         }
+    //         dispatch(editBenefitsData(data))
+    //         console.log("data",data) 
+    //     }
+    //     else {
+    //         let data = form.getFieldsValue()
+    //         //console.log("========>data<==========", data);
+    //         data = {
+    //             ...data,
+    //             key: uuid()
+    //         }
+    //         dispatch(postBenefitsData(data))
+    //         console.log("data", data)
+    //     }
+    //     form.resetFields()
+    //     setIsModalVisible(false);
+
+    // };
     const [state, setState] = useState({
         projects: usersTableData,
         current: 0,
@@ -48,20 +135,30 @@ const CourseCategory = () => {
         setState({ ...state, current, pageSize });
     };
 
-    users.map(user => {
-        const { id, name, designation, status } = user;
+    useEffect(() => {
+        dispatch(getCategoryData())
+        // console.log("getCategoryData",getCategoryData); 
+    }, [])
+
+    const getcategoryData = useSelector((state) => state.category.categoryData)
+    useEffect(() => {
+        console.log("getcategoryData", getcategoryData);
+    }, [getcategoryData])
+
+    getcategoryData && getcategoryData.data.map((item) => {
+        // const { id, name, designation, status } = user;
 
         return usersTableData.push({
-            Category: 'Agriculture & Fisheries',
+            Category: item.name,
             // Sequence: '7',
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            <Button className="btn-icon" type="info" to="#" shape="circle">
+                            <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button>
-                            <Button className="btn-icon" type="danger" to="#" shape="circle">
+                            <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                                 <FeatherIcon icon="x-circle" size={16} />
                             </Button>
                         </>
@@ -93,7 +190,7 @@ const CourseCategory = () => {
 
     return (
         <>
-             <PageHeader
+            <PageHeader
                 ghost
                 title="Course Category"
                 buttons={[
