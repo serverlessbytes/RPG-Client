@@ -15,6 +15,10 @@ const actions = {
   POST_STATE_SUCCESS:"POST_STATE_SUCCESS",
   POST_STATE_ERR:"POST_STATE_ERR",
 
+  GET_STATE_BEGINE:"GET_STATE_BEGINE",
+  GET_STATE_SUCCESS:"GET_STATE_SUCCESS",
+  GET_STATE_ERR:"GET_STATE_ERR",
+
   postStateBegin: () => {
     return {
       type: actions.POST_STATE_BEGINE,
@@ -74,6 +78,26 @@ const actions = {
       err,
     };
   },
+  getStateBegin: () => {
+    return {
+      type: actions.GET_STATE_BEGINE,
+    };
+  },
+
+  getStateSuccess: data => {
+    return {
+      type: actions.GET_STATE_SUCCESS,
+      data,
+    };
+  },
+
+  getStateErr: err => {
+    return {
+      type: actions.GET_STATE_ERR,
+      err,
+    };
+  },
+
 };
 
 export default actions;

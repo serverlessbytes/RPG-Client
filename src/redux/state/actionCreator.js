@@ -1,6 +1,8 @@
 import actions from './actions';
 import products from '../../demoData/cart.json';
-import { ApiPost } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const {
   
@@ -13,9 +15,11 @@ const {
   cartDeleteErr,
 
   postStateSuccess,
+  getStateSuccess,
+  
 } = actions;
 
-const stateGetData = () => {
+export const stateGetData = () => {
   return async dispatch => {
     try {
       dispatch(cartDataBegin());
@@ -26,7 +30,7 @@ const stateGetData = () => {
   };
 };
 
-const cartUpdateQuantity = (id, quantity, cartData) => {
+export const cartUpdateQuantity = (id, quantity, cartData) => {
   return async dispatch => {
     try {
       dispatch(cartUpdateBegin());
@@ -41,7 +45,7 @@ const cartUpdateQuantity = (id, quantity, cartData) => {
   };
 };
 
-const cartDelete = (id, chartData) => {
+export const cartDelete = (id, chartData) => {
   return async dispatch => {
     try {
       dispatch(cartDeleteBegin());
@@ -55,12 +59,20 @@ const cartDelete = (id, chartData) => {
   };
 };
 
-const postStateData=(body,id) => async(dispatch)=>{
-  await ApiPost(`state/addState?langId=${id}`, body)
+export const postStateData=(body) => async(dispatch)=>{
+  await ApiPost(`state/addState?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
   .then((res) =>{
-      return dispatch(postStateSuccess(res))
-    
+       dispatch(postStateSuccess(res))
+      return dispatch(getStateData())
   })
 }
 
-export { stateGetData, cartUpdateQuantity, cartDelete, postStateData };
+export const getStateData=() => async(dispatch)=>{
+  await ApiGet(`state/getState?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  .then((res) =>{
+          return dispatch(getStateSuccess(res)) 
+  })
+}
+
+
+//export { stateGetData, cartUpdateQuantity, cartDelete, postStateData };

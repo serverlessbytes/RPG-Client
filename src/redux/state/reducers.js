@@ -17,13 +17,18 @@ const {
   POST_STATE_SUCCESS,
   POST_STATE_ERR,
 
+  GET_STATE_BEGINE,
+  GET_STATE_SUCCESS,
+  GET_STATE_ERR,
+
 } = actions;
 
 const initialState = {
   data: null,
   loading: false,
   error: null,
-  postStateData:null
+  postStateData:null,
+  getStateData:null,
 };
 
 const stateReducer = (state = initialState, action) => {
@@ -80,7 +85,23 @@ const stateReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
-      
+      case GET_STATE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_STATE_SUCCESS:
+      return {
+        ...state,
+        getStateData:data,
+        loading: false,
+      };
+    case GET_STATE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
     default:
       return state;
   }

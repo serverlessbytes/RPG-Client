@@ -5,14 +5,15 @@ import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
 import { Form, Input, Modal, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { postStateData } from '../../redux/state/actionCreator';
+import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
+import uuid from 'react-uuid';
 
 const State = () => {
-
+    const dispatch = useDispatch()
     const [data, setData] = useState({
         name: '',
         key: ''
@@ -20,19 +21,26 @@ const State = () => {
 
 
     const usersTableData = [];
-    const [languageTableData, setLanguageTableData] = useState([])
+    //const [languageTableData, setLanguageTableData] = useState([])
+    const [stateTableData, setstateTableData] = useState([])
 
-    const languageData = useSelector((state) => state.language.getLanguageData)
+    // const languageData = useSelector((state) => state.language.getLanguageData)
+
+    // useEffect(() => {
+    //     if (languageData && languageData.data) {
+    //         setLanguageTableData(languageData.data)
+    //     }
+    //     console.log("languageData", languageData);
+    // }, [languageData])
+
+     const stateData = useSelector((state) => state.state.getStateData)
+     
 
     useEffect(() => {
-        if (languageData && languageData.data) {
-            setLanguageTableData(languageData.data)
+        if (stateData && stateData.data) {
+            setstateTableData(stateData.data)
         }
-        console.log("languageData", languageData);
-    }, [languageData])
-
-
-
+    }, [stateData])
     const languagesTableColumns = [
         {
             title: 'State',
@@ -42,7 +50,7 @@ const State = () => {
         }
     ];
 
-    const dispatch = useDispatch()
+
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
@@ -50,28 +58,21 @@ const State = () => {
     };
     const { Option } = Select;
     const handleOk = () => {
-        const data = form.getFieldsValue()
-        let id = data.languageId
-        delete data.languageId
-
-        dispatch(postStateData(data, id))
+        let stateData = form.getFieldsValue()
+        stateData = {
+            ...stateData,
+            key: uuid()
+        }
+        dispatch(postStateData(stateData))
         setIsModalVisible(false);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-
-    const onChangeHandler = (e) => {
-        console.log("e", e);
-        // setData({[]
-        // })
-        // setData({name:})
-    }
-
     useEffect(() => {
-        dispatch(getLanguageData())
-    }, [])
+        dispatch(getStateData())
+    }, []);
 
     return (
         <>
@@ -93,8 +94,8 @@ const State = () => {
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
-                                // rowSelection={rowSelection}
-                                dataSource={languageTableData}
+                                //rowSelection={rowSelection}
+                                dataSource={stateTableData}
                                 columns={languagesTableColumns}
                                 pagination={false}
                             />
@@ -114,7 +115,7 @@ const State = () => {
                         // onChange={(e)=>{onChangeHandler(e)}}
                         />
                     </Form.Item>
-                    <label htmlFor="name">Key</label>
+                    {/* <label htmlFor="name">Key</label>
                     <Form.Item name="key">
                         <Input
                             placeholder="Enter Key"
@@ -131,7 +132,7 @@ const State = () => {
                             }
 
                         </Select>
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
 
             </Modal>

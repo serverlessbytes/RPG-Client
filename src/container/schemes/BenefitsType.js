@@ -17,7 +17,7 @@ const BenefitsType = () => {
     //const [form] = Form.useForm()
     const [dataForEdit, setDataForEdit] = useState(); //foredit
 
-    const getBenefitData = useSelector((state) => state.beneFit.getBenefitsData)
+    const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
     useEffect(() => {
         console.log("=====>getBenefitData<====", getBenefitData);
     }, [getBenefitData]);
@@ -121,6 +121,7 @@ const BenefitsType = () => {
 
     //useEffect(() =>{
     getBenefitData && getBenefitData.data.map((item) => {
+        console.log("---",getBenefitData.data)
         return usersTableData.push({
             Typeofbenefit: item.name,
             action: (
@@ -139,7 +140,7 @@ const BenefitsType = () => {
             ),
         });
     });
-    // },[getBenefitData])
+     //},[getBenefitData])
 
     const usersTableColumns = [
         {

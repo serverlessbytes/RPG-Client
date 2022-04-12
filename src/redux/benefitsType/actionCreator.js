@@ -18,8 +18,8 @@ export const postBenefitsData = (body) => async (dispatch) => {
     })
 }
 
-export const getBenefitsData = (body) => async (dispatch) => {
-  await ApiGet(`scheme/getSchemeBenifits?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+export const getBenefitsData = () => async (dispatch) => {
+  await ApiGet(`scheme/getSchemeBenifits?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(getBenefitsSuccess(res))
     })

@@ -8,6 +8,8 @@ const {
   postCategorySuccess,
   getcategorySuccess,
   editCategorySuccess,
+
+  addPartnerCourseSuccess,
 } = actions;
 
 
@@ -34,5 +36,14 @@ export const editCategoryData = (body) => async (dispatch) => {
       }
     })
 }
+
+export const addPartnerCourse = (body) => async (dispatch) => {
+  await ApiPost(`course/addPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    .then((res) => {
+      return dispatch(addPartnerCourseSuccess(res))
+    })
+}
+
+
 
 

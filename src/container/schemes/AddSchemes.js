@@ -296,10 +296,7 @@ const AddSchemes = () => {
         if (validation()) {
             return;
         }
-        // let errors = validation;
-        // if(state.name.trim()){
-        //   errors.name = "Name is Reqired"
-        // }
+      
 
         let data = {
             key: uuid(),
