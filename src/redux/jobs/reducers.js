@@ -13,6 +13,18 @@ const {
   EDIT_JOBCATEGOTRY_SUCCESS,
   EDIT_JOBCATEGOTRY_ERR,
 
+  GET_JOBROLE_BEGINE,
+  GET_JOBROLE_SUCCESS,
+  GET_JOBROLE_ERR,
+
+  ADD_JOBROLE_BEGINE,
+  ADD_JOBROLE_SUCCESS,
+  ADD_JOBROLE_ERR,
+
+  EDIT_JOBROLE_BEGINE,
+  EDIT_JOBROLE_SUCCESS,
+  EDIT_JOBROLE_ERR
+
 } = actions;
 
 const initialState = {
@@ -21,6 +33,9 @@ const initialState = {
   jobCatogeryData: null,
   addJobCatogeryData: null,
   editJobCatogeryData: null,
+  jobRoleData: [],
+  addJobRoleData: null,
+  editJobRoleData: null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -74,6 +89,61 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
     case EDIT_JOBCATEGOTRY_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+
+      case GET_JOBROLE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_JOBROLE_SUCCESS:
+      return {
+        ...state,
+        jobRoleData: data.data,
+        loading: false,
+      };
+    case GET_JOBROLE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_JOBROLE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_JOBROLE_SUCCESS:
+      return {
+        ...state,
+        addJobRoleData: data,
+        loading: false,
+      };
+    case ADD_JOBROLE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_JOBROLE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_JOBROLE_SUCCESS:
+      return {
+        ...state,
+        editJobRoleData: data,
+        loading: false,
+      };
+    case EDIT_JOBROLE_ERR:
       return {
         ...state,
         error: err,

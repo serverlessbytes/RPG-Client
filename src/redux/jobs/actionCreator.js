@@ -13,6 +13,15 @@ const {
 
   editJobcategorySuccess,
   editJobcategoryErr,
+
+  getJobroleSuccess,
+  getJobroleErr,
+
+  addJobroleSuccess,
+  addJobroleErr,
+
+  editJobroleSuccess,
+  editJobroleErr
   
 } = actions;
 
@@ -40,6 +49,33 @@ export const editJobcategory = (body) => async (dispatch) => {
       return dispatch(getJobcategory())
     })
     .catch((err) => dispatch(editJobcategoryErr(err)))
+}
+
+
+export const getJobroles = () => async (dispatch) => {
+  await ApiGet(`job/getRoles?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    .then((res) => {
+      return dispatch(getJobroleSuccess(res))
+    })
+    .catch((err) => dispatch(getJobroleErr(err)))
+}
+
+export const addJobrole = (body) => async (dispatch) => {
+  await ApiPost(`job/addRole?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+    .then((res) => {
+      dispatch(addJobroleSuccess(res))
+      return dispatch(getJobroles())
+    })
+    .catch((err) => dispatch(addJobroleErr(err)))
+}
+
+export const editJobrole = (body) => async (dispatch) => {
+  await ApiPost(`job/editRole`,body)
+    .then((res) => {
+      dispatch(editJobroleSuccess(res))
+      return dispatch(getJobroles())
+    })
+    .catch((err) => dispatch(editJobroleErr(err)))
 }
 
 

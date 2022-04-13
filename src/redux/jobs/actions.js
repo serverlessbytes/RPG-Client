@@ -10,6 +10,18 @@ const actions = {
     EDIT_JOBCATEGOTRY_BEGINE:"EDIT_JOBCATEGOTRY_BEGINE",
     EDIT_JOBCATEGOTRY_SUCCESS:"EDIT_JOBCATEGOTRY_SUCCESS",
     EDIT_JOBCATEGOTRY_ERR:"EDIT_JOBCATEGOTRY_ERR",
+
+    GET_JOBROLE_BEGINE:"GET_JOBROLE_BEGINE",
+    GET_JOBROLE_SUCCESS:"GET_JOBROLE_SUCCESS",
+    GET_JOBROLE_ERR:"GET_JOBROLE_ERR",
+    
+    ADD_JOBROLE_BEGINE:"ADD_JOBROLE_BEGINE",
+    ADD_JOBROLE_SUCCESS:"ADD_JOBROLE_SUCCESS",
+    ADD_JOBROLE_ERR:"ADD_JOBROLE_ERR",
+    
+    EDIT_JOBROLE_BEGINE:"EDIT_JOBROLE_BEGINE",
+    EDIT_JOBROLE_SUCCESS:"EDIT_JOBROLE_SUCCESS",
+    EDIT_JOBROLE_ERR:"EDIT_JOBROLE_ERR",
    
     getJobcategoryBegin: () => {
       return {
@@ -31,7 +43,6 @@ const actions = {
       };
     },
   
-    
     addJobcategoryBegin: () => {
       return {
         type: actions.ADD_JOBCATEGOTRY_BEGINE,
@@ -69,6 +80,68 @@ const actions = {
     editJobcategoryErr: err => {
       return {
         type: actions.EDIT_JOBCATEGOTRY_ERR,
+        err,
+      };
+    },
+    
+
+    getJobroleBegin: () => {
+      return {
+        type: actions.GET_JOBROLE_BEGINE,
+      };
+    },
+  
+    getJobroleSuccess: data => {
+      return {
+        type: actions.GET_JOBROLE_SUCCESS,
+        data,
+      };
+    },
+  
+    getJobroleErr: err => {
+      return {
+        type: actions.GET_JOBROLE_ERR,
+        err,
+      };
+    },
+  
+    addJobroleBegin: () => {
+      return {
+        type: actions.ADD_JOBROLE_BEGINE,
+      };
+    },
+  
+    addJobroleSuccess: data => {
+      return {
+        type: actions.ADD_JOBROLE_SUCCESS,
+        data,
+      };
+    },
+  
+    addJobroleErr: err => {
+      return {
+        type: actions.ADD_JOBROLE_ERR,
+        err,
+      };
+    },
+    
+    
+    editJobroleBegin: () => {
+      return {
+        type: actions.EDIT_JOBROLE_BEGINE,
+      };
+    },
+  
+    editJobroleSuccess: data => {
+      return {
+        type: actions.EDIT_JOBROLE_SUCCESS,
+        data,
+      };
+    },
+  
+    editJobroleErr: err => {
+      return {
+        type: actions.EDIT_JOBROLE_ERR,
         err,
       };
     },
