@@ -1,21 +1,49 @@
 import { Col, Form, Input, Radio, Row, Select, Space, TimePicker } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { Button } from '../../components/buttons/buttons'
 import { Cards } from '../../components/cards/frame/cards-frame'
 import { PageHeader } from '../../components/page-headers/page-headers'
 import { Main } from '../styled'
-import { useHistory, useRouteMatch} from 'react-router-dom/cjs/react-router-dom.min';
-import { set } from 'js-cookie';
+import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import uuid from 'react-uuid';
-import { addPartnerCourse } from '../../redux/course/actionCreator';
-import { useDispatch } from 'react-redux';
-//import {AddPartnerCourse} from "../../redux/course/actionCreator";
+import { addPartnerCourse, editoneCoursefilter } from '../../redux/course/actionCreator';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
+import { useLocation } from 'react-router';
 
 const AddPartnerCourses = () => {
-   //let dispatch = useDispatch();
-   let dispatch = useDispatch();
-   const [error, setError] = useState({}) // for valadation
+    const { path } = useRouteMatch();
+    let location = useLocation();
+    let dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log("location", location.search.split('=')[1]);
+
+        if (location.search) {
+            dispatch(editoneCoursefilter(location.search.split('=')[1]));
+        }
+    }, [location.search])
+
+    const editOneFilterData = useSelector((state) => state.category.editFilterData)
+
+    let catdata = useSelector((state) => state.category.categoryData)
+
+    useEffect(() => {
+        console.log("editOneFilterData =============", editOneFilterData)
+        // if (editOneFilterData) {
+        //     //   setState({
+        //     //       ...state,
+        //     //       editOneFilterData.data
+        //     //   })
+        // }
+    }, [editOneFilterData])
+
+    useEffect(() => {
+        dispatch(getCategoryData());
+    }, [])
+
+    const [error, setError] = useState({}) // for valadation
     const [state, setState] = useState({
         name: "",
         organiZation: "",
@@ -29,7 +57,7 @@ const AddPartnerCourses = () => {
         pincode: "",
         locations: "",
         sequence: "",
-        time: "",
+        duration: "",
         cateGory: "",
         state: "",
         district: "",
@@ -88,8 +116,8 @@ const AddPartnerCourses = () => {
             error.sequence = "*sequence is required";
             flage = true;
         }
-        if (state.time === "") {
-            error.time = "*Time is required";
+        if (state.duration === "") {
+            error.duration = "*Time is required";
             flage = true;
         }
         if (state.cateGory === "") {
@@ -112,7 +140,7 @@ const AddPartnerCourses = () => {
             error.Certification = "*Certification is required";
             flage = true;
         }
-        
+
         setError(error);
         return flage
     }
@@ -124,8 +152,8 @@ const AddPartnerCourses = () => {
             key: uuid(),
             name: state.name,
             detail: state.detail,
-            duration: state.time,
-            categoryId: state.cateGory,
+            duration: state.duration,
+            categoryId: state.cateGory.id,
             certificationBody: state.certificationBody,
             certification: state.Certification,
             organization: state.organiZation,
@@ -139,7 +167,7 @@ const AddPartnerCourses = () => {
             pincode: state.pincode,
             location: state.locations,
             sequence: parseInt(state.sequence),
-            mode : state.mode,
+            mode: state.mode,
         }
         dispatch(addPartnerCourse(data));
     }
@@ -165,15 +193,15 @@ const AddPartnerCourses = () => {
         if (name === "cateGory") {
             setState({ ...state, cateGory: e })
         }
-        else if (name === "time") {
-            setState({ ...state, time: moment(e).format("hh:mm:ss") })
+        else if (name === "duration") {
+            setState({ ...state, duration: moment(e).format("hh:mm:ss") })
         }
-        else if (name == "state") {
-            setState({ ...state, state: e })
-        }
-        else if (name == "district") {
-            setState({ ...state, district: e })
-        }
+        // else if (name == "state") {
+        //     setState({ ...state, state: e })
+        // }
+        // else if (name == "district") {
+        //     setState({ ...state, district: e })
+        // }
         else if (name === "mode") {
             setState({ ...state, mode: e })
         }
@@ -191,7 +219,6 @@ const AddPartnerCourses = () => {
     const { Option } = Select;
     // const [typeOfJob, setTypeOfJob] = useState("");
     const history = useHistory();
-    const { path } = useRouteMatch();
     // const onChange = e => {
     //     console.log('radio checked', e.target.value);
     //     setTypeOfJob(e.target.value)
@@ -210,152 +237,155 @@ const AddPartnerCourses = () => {
                         <Col lg={11}>
                             <label htmlFor="name">Name</label>
                             <Form.Item name="name">
-                                <Input placeholder="Name" name="name" onChange={(e) => onChangevalue(e)} />
+                                <Input placeholder="Name" value={state.name} name="name" onChange={(e) => onChangevalue(e)} />
                                 {
-                                    error.name && <span style={{color:"red"}}>{error.name}</span>
+                                    error.name && <span style={{ color: "red" }}>{error.name}</span>
                                 }
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="addpartnercourses">
                             <label htmlFor="category mb-4">Time</label>
                             <Form.Item name="input-time" initialValue={moment('00:00:00', 'HH:mm:ss')}>
-                                <TimePicker name="time" onChange={(e) => onSelect(e, "time")} />
+                                <TimePicker name="duration" value={state.duration} onChange={(e) => onSelect(e, "duration")} />
                                 {
-                                    error.time && <span style={{color:"red"}}>{error.time}</span>
+                                    error.duration && <span style={{ color: "red" }}>{error.duration}</span>
                                 }
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="categoryId">CategoryId</label>
                             <Form.Item name="categoryId">
-                                <Select size="large" placeholder="Select categoryId" className="sDash_fullwidth-select" name="cateGory" onChange={(e) => onSelect(e, "cateGory")} >
-                                    <Option value="1"> COVID Schemes </Option>
-                                    <Option value="2"> Other Schemes </Option>
+                                <Select value={state.cateGory} size="large" placeholder="Select categoryId" className="sDash_fullwidth-select" name="cateGory" onChange={(e) => onSelect(e, "cateGory")} >
+                                    {catdata && catdata.data.map((items) => (
+                                        <Option value={items.id}>{items.name} </Option>
+                                    ))}
                                 </Select>
-                                {error.cateGory && <span style={{color:"red"}}>{error.cateGory}</span>}
+                                {error.cateGory && <span style={{ color: "red" }}>{error.cateGory}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="organization">Organization</label>
                             <Form.Item name="organization">
-                                <Input placeholder="organization" name="organiZation" onChange={(e) => onChangevalue(e)} />
+                                <Input placeholder="organization" name="organiZation" value={state.organiZation} onChange={(e) => onChangevalue(e)} />
                                 {
-                                    error.organiZation && <span style={{color:"red"}}>{error.organiZation}</span>
+                                    error.organiZation && <span style={{ color: "red" }}>{error.organiZation}</span>
                                 }
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="detail">Detail</label>
                             <Form.Item  >
-                                <TextArea name="detail" onChange={(e) => onChangevalue(e)} />
-                                {error.detail && <span style={{color:"red"}}>{error.detail}</span>}
+                                <TextArea name="detail"  value={state.detail} onChange={(e) => onChangevalue(e)} />
+                                {error.detail && <span style={{ color: "red" }}>{error.detail}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="certification">Certification Body</label>
                             <Form.Item >
-                                <TextArea name="certificationBody" onChange={(e) => onChangevalue(e)} />
-                                {error.certificationBody && <span style={{color:"red"}}>{error.certificationBody}</span>}
+                                <TextArea  value={state.certificationBody} name="certificationBody" onChange={(e) => onChangevalue(e)} />
+                                {error.certificationBody && <span style={{ color: "red" }}>{error.certificationBody}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="eligibility">Eligibility</label>
                             <Form.Item name="eligibility">
-                                <Input placeholder="eligibility" name='eligiBility' onChange={(e) => onChangevalue(e)} />
-                                {error.eligiBility && <span style={{color:"red"}}>{error.eligiBility}</span>}
+                                <Input  value={state.eligiBility}  placeholder="eligibility" name='eligiBility' onChange={(e) => onChangevalue(e)} />
+                                {error.eligiBility && <span style={{ color: "red" }}>{error.eligiBility}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="component">Component</label>
                             <Form.Item name="component">
-                                <Input placeholder="component" name="component" onChange={(e) => onChangevalue(e)} />
-                                {error.component && <span style={{color:"red"}}>{error.component}</span>}
+                                <Input value={state.component} placeholder="component" name="component" onChange={(e) => onChangevalue(e)} />
+                                {error.component && <span style={{ color: "red" }}>{error.component}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="contactpersonname">Contact Person Name</label>
                             <Form.Item name="contactpersonname">
-                                <Input placeholder="contactpersonname" name='contactpersonname' onChange={(e) => onChangevalue(e)} />
-                                {error.contactpersonname && <span style={{color:"red"}}>{error.contactpersonname}</span>}
+                                <Input value={state.contactpersonname} placeholder="contactpersonname" name='contactpersonname' onChange={(e) => onChangevalue(e)} />
+                                {error.contactpersonname && <span style={{ color: "red" }}>{error.contactpersonname}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="contactpersonemail">Contact Person Email</label>
                             <Form.Item name="contactpersonemail">
-                                <Input placeholder="contactpersonemail" name='contactpersonemail' onChange={(e) => onChangevalue(e)} />
-                                {error.contactpersonemail && <span style={{color:"red"}}>{error.contactpersonemail}</span>}
+                                <Input value={state.contactpersonemail}  placeholder="contactpersonemail" name='contactpersonemail' onChange={(e) => onChangevalue(e)} />
+                                {error.contactpersonemail && <span style={{ color: "red" }}>{error.contactpersonemail}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="contactpersonphone">Contact Person Phone</label>
                             <Form.Item name="contactpersonphone">
-                                <Input placeholder="contactpersonphone" name="contactpersonphone" onChange={(e) => onChangevalue(e)} />
-                                {error.contactpersonphone && <span style={{color:"red"}}>{error.contactpersonphone}</span>}
+                                <Input value={state.contactpersonphone}  placeholder="contactpersonphone" name="contactpersonphone" onChange={(e) => onChangevalue(e)} />
+                                {error.contactpersonphone && <span style={{ color: "red" }}>{error.contactpersonphone}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="state">State</label>
                             <Form.Item name="state">
-                                <Select size="large" placeholder="Select State" className="sDash_fullwidth-select" name="state" onChange={(e) => onSelect(e, "state")}>
+                                {/* <Select size="large" placeholder="Select State" className="sDash_fullwidth-select" name="state" onChange={(e) => onSelect(e, "state")}>
                                     <Option value="1"> Andaman and Nicobar Islands </Option>
                                     <Option value="2"> Andra Pradesh </Option>
-                                </Select>
-                                {error.state && <span style={{color:"red"}}>{error.state}</span>}
+                                </Select> */}
+                                <Input value={state.state}  placeholder="State" name="state" onChange={(e) => onChangevalue(e)} />
+                                {error.state && <span style={{ color: "red" }}>{error.state}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="district">District</label>
                             <Form.Item name="district">
-                                <Select size="large" placeholder="Select District" className="sDash_fullwidth-select" name="district" onChange={(e) => onSelect(e, "district")}>
+                                {/* <Select size="large" placeholder="Select District" className="sDash_fullwidth-select" name="district" onChange={(e) => onSelect(e, "district")}>
                                     <Option value="1">surat</Option>
                                     <Option value="2">bhavnagar</Option>
-                                </Select>
-                                {error.district && <span style={{color:"red"}}>{error.district}</span>}
+                                </Select> */}
+                                <Input value={state.district} placeholder="District" name="district" onChange={(e) => onChangevalue(e)} />
+                                {error.district && <span style={{ color: "red" }}>{error.district}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="pincode">pincode</label>
                             <Form.Item name="pincode">
-                                <Input placeholder="pincode" name='pincode' onChange={(e) => onChangevalue(e)} />
-                                {error.pincode && <span style={{color:"red"}}>{error.pincode}</span>}
+                                <Input value={state.pincode} placeholder="pincode" name='pincode' onChange={(e) => onChangevalue(e)} />
+                                {error.pincode && <span style={{ color: "red" }}>{error.pincode}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="location">location</label>
                             <Form.Item name="location">
-                                <Input placeholder="location" name='locations' onChange={(e) => onChangevalue(e)} />
-                                {error.locations && <span style={{color:"red"}}>{error.locations}</span>}
+                                <Input value={state.locations} placeholder="location" name='locations' onChange={(e) => onChangevalue(e)} />
+                                {error.locations && <span style={{ color: "red" }}>{error.locations}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="mode">Mode</label>
                             <Form.Item name="mode">
-                                <Select size="large" placeholder="Select Mode" className="sDash_fullwidth-select" name="mode" onChange={(e) => onSelect(e, "mode")} >
+                                <Select value={state.mode} size="large" placeholder="Select Mode" className="sDash_fullwidth-select" name="mode" onChange={(e) => onSelect(e, "mode")} >
                                     <Option value="ONLINE">ONLINE</Option>
                                     <Option value="OFFLINE">OFFLINE</Option>
                                 </Select>
-                                {error.mode && <span style={{color:"red"}}>{error.mode}</span>}
+                                {error.mode && <span style={{ color: "red" }}>{error.mode}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="location">sequence  </label>
                             <Form.Item name="location">
-                                <Input placeholder="location" type="number" name='sequence' onChange={(e) => onSelect(e,"sequence")} />
-                                {error.sequence && <span style={{color:"red"}}>{error.sequence}</span>}
+                                <Input value={state.sequence}  placeholder="location" type="number" name='sequence' onChange={(e) => onSelect(e, "sequence")} />
+                                {error.sequence && <span style={{ color: "red" }}>{error.sequence}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="name" className='mb-5'>Certification</label>
-                            <Radio.Group name="Certification" onChange={(e) => onChangevalue(e)} >
+                            <Radio.Group name="Certification"  value={state.Certification}  onChange={(e) => onChangevalue(e)} >
                                 <Space direction="vertical">
                                     <Row>
                                         <Radio checked={state.Certification === true} value={true}>Yes</Radio>
                                         <Radio checked={state.Certification === false} value={false}>No</Radio>
                                     </Row>
                                 </Space>
-                              
+
                             </Radio.Group>
-                            {error.Certification && <span style={{color:"red"}}>{error.Certification}</span>}
+                            {error.Certification && <span style={{ color: "red" }}>{error.Certification}</span>}
                         </Col>
                     </Row>
                     <div className="sDash_form-action mt-20">

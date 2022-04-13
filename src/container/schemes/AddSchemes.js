@@ -280,12 +280,6 @@ const AddSchemes = () => {
             error.spoc = "*spoc is required";
             flage = true;
         }
-        if (state.isActive === "") {
-            error.isActive = " *isActive is required";
-            flage = true;
-        }
-
-
         setError(error);
         return flage
     }
@@ -514,7 +508,7 @@ const AddSchemes = () => {
                         <label htmlFor="visible" className='ml-10'>Visible to User</label>
                         <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>
                     </div>
-                    {error.isActive && <span style={{color:"red"}}>{error.isActive}</span>}
+                    
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
                             Add

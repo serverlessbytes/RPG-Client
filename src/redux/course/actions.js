@@ -1,21 +1,28 @@
 const actions = {
 
-  POST_CATEGORY_BEGINE:"POST_CATEGORY_BEGINE",
-  POST_CATEGORY_SUCCESS:"POST_CATEGORY_SUCCESS",
-  POST_CATEGORY_ERR:"POST_CATEGORY_ERR",
+  POST_CATEGORY_BEGINE: "POST_CATEGORY_BEGINE",
+  POST_CATEGORY_SUCCESS: "POST_CATEGORY_SUCCESS",
+  POST_CATEGORY_ERR: "POST_CATEGORY_ERR",
 
-  GET_CATEGORY_BEGINE:"GET_CATEGORY_BEGINE",
-  GET_CATEGORY_SUCCESS:"GET_CATEGORY_SUCCESS",
-  GET_CATEGORY_ERR:"GET_CATEGORY_ERR",
+  GET_CATEGORY_BEGINE: "GET_CATEGORY_BEGINE",
+  GET_CATEGORY_SUCCESS: "GET_CATEGORY_SUCCESS",
+  GET_CATEGORY_ERR: "GET_CATEGORY_ERR",
 
-  EDIT_CATEGORY_BEGINE:"EDIT_CATEGORY_BEGINE", //editCategorySuccess
-  EDIT_CATEGORY_SUCCESS:"EDIT_CATEGORY_SUCCESS",//addPartnerCourseSuccess
-  EDIT_CATEGORY_ERR:"EDIT_CATEGORY_ERR",
+  EDIT_CATEGORY_BEGINE: "EDIT_CATEGORY_BEGINE", //editCategorySuccess
+  EDIT_CATEGORY_SUCCESS: "EDIT_CATEGORY_SUCCESS",//addPartnerCourseSuccess
+  EDIT_CATEGORY_ERR: "EDIT_CATEGORY_ERR",
 
-  POST_PARTNERCOURSE_BEGINE:"POST_PARTNERCOURSE_BEGINE", 
-  POST_PARTNERCOURSE_SUCCESS:"POST_PARTNERCOURSE_SUCCESS",//
-  POST_PARTNERCOURSE_ERR:"POST_PARTNERCOURSE_ERR",
+  POST_PARTNERCOURSE_BEGINE: "POST_PARTNERCOURSE_BEGINE",
+  POST_PARTNERCOURSE_SUCCESS: "POST_PARTNERCOURSE_SUCCESS",//
+  POST_PARTNERCOURSE_ERR: "POST_PARTNERCOURSE_ERR",
 
+  GET_COURSEFILTER_BEGINE: "GET_COURSEFILTER_BEGINE",
+  GET_COURSEFILTER_SUCCESS: "GET_COURSEFILTER_SUCCESS",
+  GET_COURSEFILTER_ERR: "GET_COURSEFILTER_ERR",
+
+  EDIT_COURSEFILTER_BEGINE: "EDIT_COURSEFILTER_BEGINE",
+  EDIT_COURSEFILTER_SUCCESS: "EDIT_COURSEFILTER_SUCCESS",
+  EDIT_COURSEFILTER_ERR: "EDIT_COURSEFILTER_ERR",
 
   postBenefitsBegin: () => {
     return {
@@ -69,7 +76,7 @@ const actions = {
     };
   },
 
-editcategoryErr: err => {
+  editcategoryErr: err => {
     return {
       type: actions.EDIT_CATEGORY_ERR,
       err,
@@ -89,13 +96,53 @@ editcategoryErr: err => {
     };
   },
 
-editcategoryErr: err => {
+  editcategoryErr: err => {
     return {
       type: actions.POST_PARTNERCOURSE_ERR,
       err,
     };
   },
-  
+
+  getCourseFilterBegin: () => {
+    return {
+      type: actions.GET_COURSEFILTER_BEGINE,
+    };
+  },
+
+  getCoursefilterSuccess: data => {
+    return {
+      type: actions.GET_COURSEFILTER_SUCCESS,
+      data,
+    };
+  },
+
+  getCoursefilterErr: err => {
+    return {
+      type: actions.GET_COURSEFILTER_ERR,
+      err,
+    };
+  },
+  editCourseFilterBegin: () => {
+    return {
+      type: actions.EDIT_COURSEFILTER_BEGINE,
+    };
+  },
+
+  editCoursefilterSuccess: data => {
+    console.log("v ============= data =============== data",data);
+    return {
+      type: actions.EDIT_COURSEFILTER_SUCCESS,
+      data,
+    };
+  },
+
+  editCoursefilterErr: err => {
+    return {
+      type: actions.EDIT_COURSEFILTER_ERR,
+      err,
+    };
+  },
+
 };
 
 export default actions;

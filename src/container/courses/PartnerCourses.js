@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -6,54 +6,96 @@ import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+import { getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
 
 const PartnerCourses = () => {
 
+    const courseData = useSelector((state) => state.category.courseFilterData)
     const { Option } = Select;
     const history = useHistory()
+    let dispatch = useDispatch()
     const { path } = useRouteMatch();
-    console.log("===>path<===",path);
+
+    let catdata = useSelector((state) => state.category.categoryData)
+    //useEffect(() => { console.log("catdata", catdata) }, [catdata])
+    useEffect(() => {
+        dispatch(getCategoryData());
+    }, [])
+
+    //console.log("===>path<===", path);
     const usersTableData = [];
-    const { users } = useSelector(state => {
-        return {
-            users: state.users,
-        };
-    });
+   const [usertable,setUsertable] =useState([]) //set data
+    // const { users } = useSelector(state => {
+    //     return {
+    //         users: state.users,
+    //     };
+    // });
+    const [state, setState] = useState({
+        category: "",
+        mode: "",
+    })
+    const [perPage, setPerPage] = useState(10)   //paganation
+    const [pageNumber, setPageNumber] = useState(1) //paganation
 
-    users.map(user => {
+    const onChangehandle = (e, name) => {
+        if (name == "category") {
+            setState({ ...state, category: e })
+        }
+        else if (name == "mode") {
+            setState({ ...state, mode: e })
+        }
+    }
+    const onEdit = (id) =>{
+        history.push(`${path}/addpartnercourses?id=${id}`)
+    }
 
-        const { id, name, designation, status } = user;
-        return usersTableData.push({
-
-
-            key: id,
-            CourseName: 'GENERAL DUTY ASSISTANT',
-            CourseCategory: 'स्वास्थ्य सेवा',
-            State: "महाराष्ट्र",
-            CourseType: 'Offline',
-            Language: "	Hindi",
-            action: (
-                <div className='active-schemes-table'>
-                    <div className="table-actions">
-                        <>
-                            <Button className="btn-icon" type="success" to="#" shape="circle">
-                                <FeatherIcon icon="info" size={16} />
-                            </Button>
-                            {/* <Button className="btn-icon" type="info" to="#" shape="circle">
+    useEffect(() => {
+        console.log(courseData);
+        if (courseData && courseData.data) {
+            setUsertable(courseData.data?.data?.map((item) => {
+               
+                // const { id, name, designation, status } = user;
+                console.log("item.name",item.key);
+                return {
+                    //key: id,
+                   
+                    CourseName: item.name,
+                    CourseCategory: item.courseCategory.name,
+                    //State: item.state,
+                    CourseType: item.mode,
+                    // Language: "Hindi",
+                    action: (
+                        <div className='active-schemes-table'>
+                            <div className="table-actions">
+                                <>
+                                    <Button className="btn-icon" type="success"  to="#" shape="circle">
+                                        <FeatherIcon icon="info" size={16} />
+                                    </Button>
+                                    {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button> */}
-                            <Button className="btn-icon" type="warning" to="#" shape="circle">
-                                <FeatherIcon icon="file" size={16} />
-                            </Button>
-                        </>
-                    </div>
-                </div>
-            ),
-        });
-    });
+                                    <Button className="btn-icon" onClick = {()=>onEdit(item.id)} type="warning" to="#" shape="circle">
+                                        <FeatherIcon icon="file" size={16} />
+                                    </Button>
+                                </>
+                            </div>
+                        </div>
+                    ),
+                };
+                
+            }))
+        }
 
+    }, [courseData])
+
+    //useEffect(()=>{console.log("--------->>",courseData)},[courseData])
+    const Submit = () => {
+        console.log("--------->>", courseData)
+        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode))
+    }
+  
     const usersTableColumns = [
 
         {
@@ -65,19 +107,19 @@ const PartnerCourses = () => {
             title: 'Course Category',
             dataIndex: 'CourseCategory',
         },
-        {
-            title: 'State',
-            dataIndex: 'State',
-        },
+        // {
+        //     title: 'State',
+        //     dataIndex: 'State',
+        // },
         {
             title: 'Course Type',
             dataIndex: 'CourseType',
         },
-        {
-            title: 'Language',
-            dataIndex: 'Language',
-            sortDirections: ['descend', 'ascend'],
-        },
+        // {
+        //     title: 'Language',
+        //     dataIndex: 'Language',
+        //     sortDirections: ['descend', 'ascend'],
+        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -91,7 +133,7 @@ const PartnerCourses = () => {
     const callback = (key) => {
         //     console.log(key);
     }
-    
+
 
 
     return (
@@ -101,7 +143,7 @@ const PartnerCourses = () => {
                 title="Partner Courses"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary" onClick={()=>{history.push(`${path}/addpartnercourses`)}}>
+                        <Button size="small" type="primary" onClick={() => { history.push(`${path}/addpartnercourses`) }}>
                             Add Courses
                         </Button>
                     </div>
@@ -116,11 +158,11 @@ const PartnerCourses = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="Course Category">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select Category">
-                                                <Option value="1">All Category</Option>
-                                                <Option value="2">Healthcare</Option>
-                                                <Option value="3">Retail</Option>
-                                                <Option value="4">Driving</Option>
+                                            <Select size="large" className="sDash_fullwidth-select" name="category"  placeholder="Select Category" onChange={(e) => onChangehandle(e, "category")}>
+                                                {/* <Option value="1">All Category</Option> */}
+                                                {catdata && catdata.data.map((items) => (
+                                                    <Option value={items.id}>{items.name} </Option>
+                                                ))}
                                             </Select>
                                         </Form.Item>
                                     </Form>
@@ -138,18 +180,17 @@ const PartnerCourses = () => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Course Type">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select Course Type">
-                                                <Option value="1">All</Option>
-                                                <Option value="2">Online</Option>
-                                                <Option value="3">Offline</Option>
+                                        <Form.Item name="basic-select" label="Mode">
+                                            <Select size="large" className="sDash_fullwidth-select" name="mode"   onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
+                                                <Option value="ONLINE">Online</Option>
+                                                <Option value="OFFLINE">Offline</Option>
                                             </Select>
                                         </Form.Item>
                                     </Form>
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary">
+                                        <Button size="small" type="primary" onClick={(e) => Submit(e)}>
                                             Apply
                                         </Button>
                                         <Button size="small" type="light">
@@ -180,7 +221,7 @@ const PartnerCourses = () => {
 
                                             <Table
                                                 // rowSelection={rowSelection}
-                                                dataSource={usersTableData}
+                                                dataSource={usertable}
                                                 columns={usersTableColumns}
                                                 pagination={{
                                                     defaultPageSize: 5,
@@ -203,7 +244,7 @@ const PartnerCourses = () => {
 
                                             <Table
                                                 // rowSelection={rowSelection}
-                                                dataSource={usersTableData}
+                                                dataSource={usertable}
                                                 columns={usersTableColumns}
                                                 pagination={{
                                                     defaultPageSize: 5,
