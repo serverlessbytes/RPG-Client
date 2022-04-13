@@ -9,6 +9,7 @@ import State from './state';
 import LanguageRoutes from './language';
 import schemes from './schemes';
 import Courses from './Courses';
+import district from './district';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -25,6 +26,7 @@ const Admin = () => {
         <Route path={path} component={Dashboard} />
         <Route path={`${path}/job`} component={Job} />
         <Route path={`${path}/state`} component={State} />
+        <Route path={`${path}/district`} component={district} />
         <Route path={`${path}/profile`} component={Profile} />
         <Route path={`${path}/language`} component={LanguageRoutes} />
         <Route path={`${path}/scheme`} component={schemes} />

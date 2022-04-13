@@ -23,7 +23,7 @@ const CourseCategory = () => {
             users: state.users,
         };
     });
-
+ 
     const showModal = () => {
         setIsModalVisible(true);
     };

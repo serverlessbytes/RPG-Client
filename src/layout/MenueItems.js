@@ -81,6 +81,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           State
         </NavLink>
       </Menu.Item>
+      <Menu.Item key="district">
+        <NavLink onClick={toggleCollapsed} to={`${path}/district`}>
+          District
+        </NavLink>
+      </Menu.Item>
       <Menu.Item key="language">
         <NavLink onClick={toggleCollapsed} to={`${path}/language`}>
           Language

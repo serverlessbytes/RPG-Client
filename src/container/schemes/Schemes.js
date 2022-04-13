@@ -244,7 +244,7 @@ const Schemes = () => {
                              <ActiveSchemesTable type ={type}/> */}
 
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Courses" key="1">
+                                <TabPane tab="Active Schemes" key="1">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -271,7 +271,7 @@ const Schemes = () => {
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Inactive Courses" key="2">
+                                <TabPane tab="Inactive Schemes" key="2">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
