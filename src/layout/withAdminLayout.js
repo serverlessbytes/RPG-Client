@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import React, { Component, useEffect } from 'react';
+import React, { Component, createElement, useEffect } from 'react';
 import { Layout, Button, Row, Col, Select, Form } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { NavLink, Link } from 'react-router-dom';
@@ -33,46 +33,40 @@ const ThemeLayout = WrappedComponent => {
         hide: true,
         searchHide: true,
         activeSearch: false,
-        langData : [],
+        langData: [],
         lang: storageLang ? storageLang : ""
-       //lang:  ""
+        //lang:  ""
       };
       this.updateDimensions = this.updateDimensions.bind(this);
     }
-     
+
     componentDidMount() {
       const ls = localStorage.getItem('language');
-      if(ls){
-        this.setState({...this.state, lang: ls})
+      if (ls) {
+        this.setState({ ...this.state, lang: ls })
       }
-      console.log("LS",ls);
       window.addEventListener('resize', this.updateDimensions);
       this.updateDimensions();
-      ApiGet(`language/getLanguage`).then((res)=>{
+      ApiGet(`language/getLanguage`).then((res) => {
         this.setState({
-          langData:res.data
+          langData: res.data
         });
-        console.log("res.data",res.data);
-      })
-      console.log("STATE ==> ",this.state);
-    }
-
-    componentDidUpdate(prevProps,prevState){
-      if( prevState.langData!==this.state.langData){
-        console.log("this.state.langData",this.state.langData)
-        let lang = this.state.langData.find((item)=>item.id === AuthStorage.getStorageData(STORAGEKEY.language))
-        // console.log("getStorageData(STORAGEKEY.language)",AuthStorage.getStorageData(STORAGEKEY.language));
-        console.log("lang",lang);
-        if(lang){
-          this.setState({...this.state,lang:lang.id})
+        if (!ls) {
+          this.setState({ ...this.state, lang: res.data[0].id })
+          AuthStorage.setStorageData(STORAGEKEY.language, res.data[0].id, true)
         }
-      } 
-     
+      })
     }
 
-    componentDidUpdate(){
-      //console.log("this.state.",this.state);
-     //console.log("lang.",lang);
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.langData !== this.state.langData) {
+        let lang = this.state.langData.find((item) => item.id === AuthStorage.getStorageData(STORAGEKEY.language))
+        // console.log("getStorageData(STORAGEKEY.language)",AuthStorage.getStorageData(STORAGEKEY.language));
+        if (lang) {
+          this.setState({ ...this.state, lang: lang.id })
+        }
+      }
+
     }
 
     componentWillUnmount() {
@@ -84,8 +78,8 @@ const ThemeLayout = WrappedComponent => {
         collapsed: window.innerWidth <= 1200 && true,
       });
     }
-    
-    
+
+
 
     render() {
       const { collapsed, hide, searchHide, activeSearch } = this.state;
@@ -106,16 +100,6 @@ const ThemeLayout = WrappedComponent => {
           });
         }
       };
-
-      // componentDidUpdate() {
-      
-      // }
-
-    //   useEffect(() => {
-    //     ApiGet(`language/getLanguage`).then((res)=>{
-    //       console.log("res",res);
-    //     })
-    // }, [])
 
       const onShowHide = () => {
         this.setState({
@@ -138,13 +122,12 @@ const ThemeLayout = WrappedComponent => {
         });
       };
 
-      const handleChange = (e) =>{
-        if(e){
-          AuthStorage.setStorageData(STORAGEKEY.language,e,true)
-          this.setState({lang:e})
+      const handleChange = (e) => {
+        if (e) {
+          AuthStorage.setStorageData(STORAGEKEY.language, e, true)
+          this.setState({ lang: e })
+          window.location.reload(false);
         }
-        console.log("e",e);
-
       }
 
       const footerStyle = {
@@ -244,8 +227,8 @@ const ThemeLayout = WrappedComponent => {
 
                 <Col lg={2} md={10} sm={0} xs={0}>
                   <Form.Item name="languageId" className='language py-16'>
-                    <Select defaultValue={this.state.lang} placeholder="Language" size="small"  onChange = {(e) =>handleChange(e)} className="sDash_fullwidth-select" >
-                      {this.state.langData && this.state.langData.map((items)=>(
+                    <Select defaultValue={this.state.lang} placeholder="Language" size="small" onChange={(e) => handleChange(e)} className="sDash_fullwidth-select" >
+                      {this.state.langData && this.state.langData.map((items) => (
                         <Option value={items.id}>{items.name}</Option>
                       ))}
                     </Select>

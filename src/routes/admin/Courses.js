@@ -10,7 +10,6 @@ const AddCourses = lazy(() => import('../../container/courses/AddCourses'));
 
 const Courses = () => {
     const { path } = useRouteMatch();
-    console.log("path ============",path);
     return (
         <Switch>
             <Route exact path={`${path}`} component={SwayamCourses} />

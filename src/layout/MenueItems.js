@@ -7,7 +7,6 @@ import SubMenu from 'antd/lib/menu/SubMenu';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
   const { path } = useRouteMatch();
-  console.log("path pathpathv pathpath path", path);
   const pathName = window.location.pathname;
   const pathArray = pathName.split(path);
   const mainPath = pathArray[1];
