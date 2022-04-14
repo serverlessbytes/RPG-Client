@@ -86,15 +86,16 @@ const PartnerCourses = () => {
                         <div className='active-schemes-table'>
                             <div className="table-actions">
                                 <>
-                                    <Button className="btn-icon" type="success"  to="#" shape="circle">
-                                        <FeatherIcon icon="info" size={16} />
+                                    <Button className="btn-icon" onClick = {()=>onEdit(item.id)} type="info" to="#" shape="circle">
+                                        <FeatherIcon icon="edit" size={16} />
                                     </Button>
+
+                                    {/* <Button className="btn-icon" type="danger"  to="#" shape="circle">
+                                        <FeatherIcon icon="x-circle" size={16} />
+                                    </Button> */}
                                     {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button> */}
-                                    <Button className="btn-icon" onClick = {()=>onEdit(item.id)} type="warning" to="#" shape="circle">
-                                        <FeatherIcon icon="file" size={16} />
-                                    </Button>
                                 </>
                             </div>
                         </div>
@@ -207,9 +208,9 @@ const PartnerCourses = () => {
                                         <Button size="small" type="primary" onClick={(e) => Submit(e)}>
                                             Apply
                                         </Button>
-                                        <Button size="small" type="light">
+                                        {/* <Button size="small" type="light">
                                             Clear
-                                        </Button>
+                                        </Button> */}
                                     </ListButtonSizeWrapper>
                                 </Col>
                             </Row>
@@ -246,7 +247,7 @@ const PartnerCourses = () => {
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Inactive Courses" key="2">
+                                {/* <TabPane tab="Inactive Courses" key="2">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -268,7 +269,7 @@ const PartnerCourses = () => {
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                </TabPane>
+                                </TabPane> */}
                             </Tabs>
 
                         </Col>

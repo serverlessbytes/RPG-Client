@@ -24,6 +24,10 @@ const actions = {
   EDIT_COURSEFILTER_SUCCESS: "EDIT_COURSEFILTER_SUCCESS",
   EDIT_COURSEFILTER_ERR: "EDIT_COURSEFILTER_ERR",
 
+  EDIT_PARTNER_COURSE_BEGINE: "EDIT_PARTNER_COURSE_BEGINE",
+  EDIT_PARTNER_COURSE_SUCCESS: "EDIT_PARTNER_COURSE_SUCCESS",
+  EDIT_PARTNER_COURSE_ERR: "EDIT_PARTNER_COURSE_ERR",
+
   postBenefitsBegin: () => {
     return {
       type: actions.POST_CATEGORY_BEGINE,
@@ -129,7 +133,6 @@ const actions = {
   },
 
   editCoursefilterSuccess: data => {
-    console.log("v ============= data =============== data",data);
     return {
       type: actions.EDIT_COURSEFILTER_SUCCESS,
       data,
@@ -142,7 +145,28 @@ const actions = {
       err,
     };
   },
+  editPartnerCourseBegin: () => {
+    return {
+      type: actions.EDIT_PARTNER_COURSE_BEGINE,
+    };
+  },
+
+  editPartnerCourseSuccess: data => {
+    return {
+      type: actions.EDIT_PARTNER_COURSE_SUCCESS,
+      data,
+    };
+  },
+
+  editPartnerCourseErr: err => {
+    return {
+      type: actions.EDIT_PARTNER_COURSE_ERR,
+      err,
+    };
+  },
 
 };
+
+
 
 export default actions;

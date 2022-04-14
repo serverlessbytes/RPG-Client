@@ -20,6 +20,7 @@ const JobRole = () => {
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [jobRolesTableData, setJobRolesTableData] = useState([]);
     const [selectedJobRole, setSelectedJobCategory] = useState();
+    const [isDisabled, setIsDisabled] = useState(true);
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -28,13 +29,18 @@ const JobRole = () => {
 
     const jobData = useSelector((state) => state.job.jobcatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
-    console.log(jobData)
-    console.log('jobRoles' , jobRolesData)
 
     useEffect(() => {
         dispatch(getJobcategory());
         dispatch(getJobroles());
     }, [])
+
+    useEffect(() => {
+      if(!isModalVisible){
+        setIsDisabled(true)
+      }
+    }, [isModalVisible])
+    
 
     const onEdit = (id) => {
         let dataForEdit = jobRolesData  && jobRolesData.find((item) => item.id === id)
@@ -44,6 +50,7 @@ const JobRole = () => {
                 name: dataForEdit.name
             })
             setIsModalVisible(true);
+            setIsDisabled(false);
         }
     }
 
@@ -81,9 +88,9 @@ const JobRole = () => {
                                 <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                                     <FeatherIcon icon="edit" size={16} />
                                 </Button>
-                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                                     <FeatherIcon icon="x-circle" size={16} />
-                                </Button>
+                                </Button> */}
                             </>
                         </div>
                     </div>
@@ -115,14 +122,14 @@ const JobRole = () => {
         } else {
             delete selectedJobRole.key
             data = {
-                id: selectedJobRole.id,
+                jobId: selectedJobRole.id,
                 name: data.name,
                 isActive: true,
                 isDeleted: false
             }
             dispatch(editJobrole(data))
         }
-        form.resetFields()
+        // form.resetFields()
         setIsModalVisible(false);
     };
 
@@ -185,7 +192,7 @@ const JobRole = () => {
 
                             <Table
                                 // rowSelection={rowSelection}
-                                dataSource={jobRolesData}
+                                dataSource={jobRolesTableData}
                                 columns={jobTableColumns}
                                 pagination={true}
                             />
@@ -209,18 +216,18 @@ const JobRole = () => {
 
             {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
                 <Form name="login" form={form} layout="vertical">
-                <Form.Item initialValue="Select a job category " name="jobCategoryId">
+                {isDisabled && <Form.Item initialValue="Select a job category " name="jobCategoryId">
                                 <Select size="large" placeholder="Select Category"  className="sDash_fullwidth-select">
                                     {jobData?.data && jobData?.data?.map((items) => (
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
                                 </Select>
-                            </Form.Item>
+                            </Form.Item>}
                     <label htmlFor="name">Type of role</label>
                     <Form.Item name="name">
                         <Input
                             placeholder=""
-                            name="name"
+                            // name="name"
                         />
                     </Form.Item>
                     {/* <label htmlFor="name">Sequence</label>

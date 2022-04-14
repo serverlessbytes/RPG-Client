@@ -18,6 +18,10 @@ const {
   EDIT_COURSEFILTER_SUCCESS,
   EDIT_COURSEFILTER_ERR,
 
+  EDIT_PARTNER_COURSE_BEGINE,
+  EDIT_PARTNER_COURSE_SUCCESS,
+  EDIT_PARTNER_COURSE_ERR,
+
 } = actions;
 
 const initialState = {
@@ -28,6 +32,7 @@ const initialState = {
   categoryData: null,
   courseFilterData: null,
   editFilterData: null,
+  editPartnerCourseData:null
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -99,6 +104,23 @@ const cateGoryReducer = (state = initialState, action) => {
         loading: false,
       };
     case EDIT_COURSEFILTER_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+      case EDIT_PARTNER_COURSE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_PARTNER_COURSE_SUCCESS:
+      return {
+        ...state,
+        editPartnerCourseData: data,
+        loading: false,
+      };
+    case EDIT_PARTNER_COURSE_ERR:
       return {
         ...state,
         error: err,

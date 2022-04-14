@@ -165,18 +165,18 @@ const Schemes = () => {
                 title="Schemes"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="link">
+                        {/* <Button size="small" type="link">
                             Export Schemes
                         </Button>
                         <Button size="small" type="light">
                             Import Schemes
-                        </Button>
+                        </Button> */}
                         <Button onClick={reDirect} size="small" type="success">
                             Create Scheme
                         </Button>
-                        <Button size="small" type="warning">
+                        {/* <Button size="small" type="warning">
                             Deactivate All Schemes
-                        </Button>
+                        </Button> */}
                     </div>
                 ]}
             />
@@ -184,7 +184,7 @@ const Schemes = () => {
                 <Cards headless>
                     <Row gutter={15}>
                         <Col xs={24}>
-                            <Row gutter={30}>
+                            {/* <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="Language">
@@ -232,7 +232,7 @@ const Schemes = () => {
                                         </Button>
                                     </ListButtonSizeWrapper>
                                 </Col>
-                            </Row>
+                            </Row> */}
                             {/* <Row className="mb-25">
                                 <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
                                     Active Schemes
@@ -271,7 +271,7 @@ const Schemes = () => {
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Inactive Schemes" key="2">
+                                {/* <TabPane tab="Inactive Schemes" key="2">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -293,7 +293,7 @@ const Schemes = () => {
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                </TabPane>
+                                </TabPane> */}
                             </Tabs>
                         </Col>
                     </Row>

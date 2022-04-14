@@ -513,7 +513,9 @@ const AddSchemes = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
                             Add
                         </Button>
-                        <Button className="btn-signin" type="light" size="medium">
+                        <Button className="btn-signin" type="light" size="medium"
+                            onClick={() => history.push(`/admin/scheme`)}
+                        >
                             Cancel
                         </Button>
                     </div>

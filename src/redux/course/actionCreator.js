@@ -13,6 +13,7 @@ const {
 
   getCoursefilterSuccess,
   editCoursefilterSuccess,
+  editPartnerCourseSuccess
 } = actions;
 
 
@@ -54,13 +55,21 @@ export const getCoursefilter = (categoryId,perPage,pageNumber,mode) => async (di
     })
 }
 
-export const editoneCoursefilter = (id) => async (dispatch) => {
+export const getOneCoursefilter = (id) => async (dispatch) => {
   await ApiGet(`course/getCourse/${id}?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-      console.log("res ================== res",res);
       return dispatch(editCoursefilterSuccess(res))
     })
 }
+
+export const editPartnerCoursefilter = (data) => async (dispatch) => {
+  await ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      return dispatch(editPartnerCourseSuccess(res))
+    })
+}
+
+
 
 
 
