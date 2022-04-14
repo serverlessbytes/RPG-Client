@@ -48,7 +48,8 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </NavLink>
       </Menu.Item>
 
-      <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs">
+      {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
+      <SubMenu key="dashboard" title="Jobs">
         <Menu.Item key="job">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/dashboard`}>
             Jobs Dashboards
@@ -91,7 +92,8 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </NavLink>
       </Menu.Item>
 
-      <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes">
+      {/* <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes"> */}
+      <SubMenu key="schemes" title="Schemes">
         <Menu.Item key="scheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
             Govt Schemes
@@ -113,7 +115,8 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item>
       </SubMenu>
-      <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses">
+      {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
+      <SubMenu key="courses" title="Courses">
         <Menu.Item key="courses">
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
