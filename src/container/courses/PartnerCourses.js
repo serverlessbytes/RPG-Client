@@ -18,13 +18,32 @@ const PartnerCourses = () => {
     let dispatch = useDispatch()
     const { path } = useRouteMatch();
 
+    const [state, setState] = useState({
+        category: "",
+        mode: "ONLINE",
+    })
+    const [activeCoursetog,setActiveCourseTog]=useState(true)
+
     let catdata = useSelector((state) => state.category.categoryData)
     //useEffect(() => { console.log("catdata", catdata) }, [catdata])
     useEffect(() => {
         dispatch(getCategoryData());
     }, [])
 
-    //console.log("===>path<===", path);
+    useEffect(() => {
+      if(catdata && catdata.data && catdata.data.length>0){
+        setState({ ...state, category: catdata.data[0].id})
+      }
+    }, [catdata])
+
+    useEffect(() => {
+      if(state && activeCoursetog){
+        Submit()
+      }
+    }, [state])
+    
+
+
     const usersTableData = [];
    const [usertable,setUsertable] =useState([]) //set data
     // const { users } = useSelector(state => {
@@ -32,14 +51,12 @@ const PartnerCourses = () => {
     //         users: state.users,
     //     };
     // });
-    const [state, setState] = useState({
-        category: "",
-        mode: "",
-    })
+   
     const [perPage, setPerPage] = useState(10)   //paganation
     const [pageNumber, setPageNumber] = useState(1) //paganation
 
     const onChangehandle = (e, name) => {
+        setActiveCourseTog(false)
         if (name == "category") {
             setState({ ...state, category: e })
         }
@@ -52,12 +69,11 @@ const PartnerCourses = () => {
     }
 
     useEffect(() => {
-        console.log(courseData);
+        
         if (courseData && courseData.data) {
             setUsertable(courseData.data?.data?.map((item) => {
                
                 // const { id, name, designation, status } = user;
-                console.log("item.name",item.key);
                 return {
                     //key: id,
                    
@@ -92,7 +108,6 @@ const PartnerCourses = () => {
 
     //useEffect(()=>{console.log("--------->>",courseData)},[courseData])
     const Submit = () => {
-        console.log("--------->>", courseData)
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode))
     }
   
@@ -157,9 +172,8 @@ const PartnerCourses = () => {
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Course Category">
-                                            <Select size="large" className="sDash_fullwidth-select" name="category"  placeholder="Select Category" onChange={(e) => onChangehandle(e, "category")}>
-                                                {/* <Option value="1">All Category</Option> */}
+                                        <Form.Item  label="Course Category">
+                                            <Select size="large" className="sDash_fullwidth-select" name="category" value={state.category}  placeholder="Select Category" onChange={(e) => onChangehandle(e, "category")}>
                                                 {catdata && catdata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}
@@ -167,7 +181,7 @@ const PartnerCourses = () => {
                                         </Form.Item>
                                     </Form>
                                 </Col>
-                                <Col md={6} xs={24} className="mb-25">
+                                {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="State">
                                             <Select size="large" className="sDash_fullwidth-select" placeholder="Select State">
@@ -177,11 +191,11 @@ const PartnerCourses = () => {
                                             </Select>
                                         </Form.Item>
                                     </Form>
-                                </Col>
+                                </Col> */}
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Mode">
-                                            <Select size="large" className="sDash_fullwidth-select" name="mode"   onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
+                                        <Form.Item  label="Mode">
+                                            <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode}  onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
                                                 <Option value="ONLINE">Online</Option>
                                                 <Option value="OFFLINE">Offline</Option>
                                             </Select>

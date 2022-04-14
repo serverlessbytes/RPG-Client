@@ -30,13 +30,10 @@ const AddPartnerCourses = () => {
     let catdata = useSelector((state) => state.category.categoryData)
 
     useEffect(() => {
-        console.log("editOneFilterData =============", editOneFilterData)
-        // if (editOneFilterData) {
-        //     //   setState({
-        //     //       ...state,
-        //     //       editOneFilterData.data
-        //     //   })
-        // }
+        
+        if (editOneFilterData) {
+          console.log("editOneFilterData",editOneFilterData);
+        }
     }, [editOneFilterData])
 
     useEffect(() => {
