@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { editPartnerCoursefilter, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
 
 const PartnerCourses = () => {
 
@@ -25,7 +25,6 @@ const PartnerCourses = () => {
     const [activeCoursetog,setActiveCourseTog]=useState(true)
 
     let catdata = useSelector((state) => state.category.categoryData)
-    //useEffect(() => { console.log("catdata", catdata) }, [catdata])
     useEffect(() => {
         dispatch(getCategoryData());
     }, [])
@@ -68,6 +67,31 @@ const PartnerCourses = () => {
         history.push(`${path}/addpartnercourses?id=${id}`)
     }
 
+    const onDelete=(id)=>{
+        let activeCourseDelete=courseData && courseData.data && courseData.data.data.find((item)=>item.id===id)
+        let certification=activeCourseDelete.certificate
+        let categoryId=activeCourseDelete.courseCategory.id
+        
+        if(activeCourseDelete){
+            delete activeCourseDelete.id
+            delete activeCourseDelete.certificate
+            delete activeCourseDelete.jobTypes
+            delete activeCourseDelete.courseCategory
+            
+            activeCourseDelete={
+                ...activeCourseDelete,
+                isActive: false,
+                isDeleted: true,
+                courseId: id,
+                categoryId: categoryId,
+                certification: certification
+
+            }
+            dispatch(editPartnerCoursefilter(activeCourseDelete,state.category, perPage, pageNumber, state.mode))
+        }
+    }
+
+
     useEffect(() => {
         
         if (courseData && courseData.data) {
@@ -90,9 +114,9 @@ const PartnerCourses = () => {
                                         <FeatherIcon icon="edit" size={16} />
                                     </Button>
 
-                                    {/* <Button className="btn-icon" type="danger"  to="#" shape="circle">
+                                    <Button className="btn-icon" type="danger" onClick={()=>onDelete(item.id)}  to="#" shape="circle">
                                         <FeatherIcon icon="x-circle" size={16} />
-                                    </Button> */}
+                                    </Button>
                                     {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button> */}

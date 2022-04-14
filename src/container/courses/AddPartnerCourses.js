@@ -77,7 +77,7 @@ useEffect(() => {
   
 
   useEffect(() => {
-    if (editOneFilterData && editOneFilterData.data) {
+    if (editOneFilterData && editOneFilterData.data && id) {
       setState({
         ...state,
         key:editOneFilterData.data.key,
@@ -190,7 +190,7 @@ useEffect(() => {
       key: uuid(),
       name: state.name,
       detail: state.detail,
-      duration: state.duration,
+      duration: moment(state.duration).format('hh:mm:ss'),
       categoryId: state.cateGory,
       certificationBody: state.certificationBody,
       certification: state.Certification,
@@ -227,7 +227,7 @@ useEffect(() => {
         pincode: state.pincode,
         location: state.locations,
         sequence: parseInt(state.sequence),
-        duration: state.duration,
+        duration: moment(state.duration).format('hh:mm:ss'),
         categoryId: state.cateGory,
         state: state.state,
         district: state.district,
@@ -236,8 +236,6 @@ useEffect(() => {
         isActive:true,
         isDeleted:false
     }
-
-    console.log("keyyyyyyyyy",data)
     dispatch(editPartnerCoursefilter(data));
   }
 
@@ -262,7 +260,8 @@ useEffect(() => {
     if (name === 'cateGory') {
       setState({ ...state, cateGory: e });
     } else if (name === 'duration') {
-      setState({ ...state, duration: moment(e).format('hh:mm:ss') });
+        console.log("e----------",e);
+      setState({ ...state, duration: e });
     }
     // else if (name == "state") {
     //     setState({ ...state, state: e })
@@ -306,7 +305,9 @@ useEffect(() => {
             </Col>
             <Col lg={11} className="addpartnercourses">
               <label htmlFor="category mb-4">Time</label>
-              <Form.Item name="input-time" initialValue={moment('00:00:00', 'HH:mm:ss')}>
+              <Form.Item  
+              initialValue={moment('00:00:00', 'HH:mm:ss')}
+              >
                 <TimePicker name="duration" value={state.duration} onChange={e => onSelect(e, 'duration')} />
                 {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
               </Form.Item>
@@ -436,14 +437,14 @@ useEffect(() => {
               </Form.Item>
             </Col>
             <Col lg={11}>
-              <label htmlFor="pincode">pincode</label>
+              <label htmlFor="pincode">Pincode</label>
               <Form.Item name="pincode">
                 <Input value={state.pincode} placeholder="pincode" name="pincode" onChange={e => onChangevalue(e)} />
                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
               </Form.Item>
             </Col>
             <Col lg={11}>
-              <label htmlFor="location">location</label>
+              <label htmlFor="location">Location</label>
               <Form.Item name="location">
                 <Input
                   value={state.locations}
@@ -472,7 +473,7 @@ useEffect(() => {
               </Form.Item>
             </Col>
             <Col lg={11}>
-              <label htmlFor="location">sequence </label>
+              <label htmlFor="location">Sequence </label>
               <Form.Item name="location">
                 <Input
                   value={state.sequence}
