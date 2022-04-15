@@ -6,13 +6,19 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
 import moment from 'moment';
-import { addSwayamCourse, getCategoryData } from '../../redux/course/actionCreator';
+import { addSwayamCourse, editSwayamCourse, getCategoryData, getOneCoursefilter } from '../../redux/course/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobcategory } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const AddCourses = () => {
 
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('id')
+
+    const history =useHistory()
+    
     const dispatch=useDispatch()
 
     const { Option } = Select;
@@ -27,12 +33,47 @@ const AddCourses = () => {
         certification:'',
         sequence:'',
         mode:'',
+        key:''
     });
     const [error, setError] = useState({});
 
     const categoryData = useSelector(state => state.category.categoryData);
-    const jobCategoryData=useSelector(state=>state.job.jobCatogeryData)
+    const jobCategoryData=useSelector(state=> state.job.jobCatogeryData);
+    const editOneSwayamCourseData=useSelector(state=> state.category.editFilterData)
 
+
+useEffect(() => {
+ if(editOneSwayamCourseData && editOneSwayamCourseData.data){
+    setState({
+        ...state,
+        detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.detail, 'markdown'),
+        name:editOneSwayamCourseData.data.name,
+        categoryId:editOneSwayamCourseData.data.courseCategory.id,
+        // duration: moment(editOneSwayamCourseData.data,'HH:mm:ss'),
+        jobCategoryIds:editOneSwayamCourseData.data.jobTypes.map((item)=>item.id),
+        certification:editOneSwayamCourseData.data.certificate,
+        sequence:editOneSwayamCourseData.data.sequence,
+        mode:editOneSwayamCourseData.data.mode,
+        key:editOneSwayamCourseData.data.key
+    })
+ }
+}, [editOneSwayamCourseData])
+
+
+   
+
+    useEffect(() => {
+      if(id){
+          dispatch(getOneCoursefilter(id))
+      }
+    }, [id])
+    
+
+    useEffect(() => {
+        dispatch(getCategoryData());
+        dispatch(getJobcategory())
+    }, [])
+    
 
     const onChange = (e,name) => {
         if(name==="categoryId"){
@@ -53,12 +94,6 @@ const AddCourses = () => {
             setState({ ...state, [e.target.name]: e.target.value })
         }
     };
-
-    useEffect(() => {
-        dispatch(getCategoryData());
-        dispatch(getJobcategory())
-    }, [])
-    
 
     const onChangesEditorDetail = (e,name) => {
       setState({ ...state, [name]: e })
@@ -121,6 +156,27 @@ const AddCourses = () => {
             mode:state.mode,
         }
         dispatch(addSwayamCourse(data))
+    }
+
+    const onEdit=()=>{
+        if(validation()){
+            return
+        }
+        let data={
+            key:state.key,
+            courseId:id,
+            detail:state.detail.toString("markdown"),
+            name:state.name,
+            categoryId:state.categoryId,
+            duration:moment(state.duration).format('hh:mm:ss'),
+            jobCategoryIds:state.jobCategoryIds,
+            certification:state.certification,
+            sequence:parseInt(state.sequence),
+            mode:state.mode,
+            isActive:true,
+            isDeleted:false
+        }
+        dispatch(editSwayamCourse(data))
     }
 
     const { TabPane } = Tabs;
@@ -238,10 +294,12 @@ const AddCourses = () => {
                                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
                             </div>
                             <div className="sDash_form-action mt-20">
-                                <Button className="btn-signin ml-10" onClick={() => onSubmit()} type="primary" size="medium">
+                                {id?<Button className="btn-signin ml-10" onClick={() => onEdit()} type="primary" size="medium">
+                                    Edit
+                                </Button>:<Button className="btn-signin ml-10" onClick={() => onSubmit()} type="primary" size="medium">
                                     Submit
-                                </Button>
-                                <Button className="btn-signin" type="light" size="medium">
+                                </Button>}
+                                <Button className="btn-signin" type="light" size="medium" onClick={()=>history.push('/admin/courses')}>
                                     Cancel
                                 </Button>
                             </div>
