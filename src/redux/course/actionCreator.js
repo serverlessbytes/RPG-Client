@@ -8,14 +8,12 @@ const {
   postCategorySuccess,
   getcategorySuccess,
   editCategorySuccess,
-
   addPartnerCourseSuccess,
-
   getCoursefilterSuccess,
   editCoursefilterSuccess,
   editPartnerCourseSuccess,
-
-  addSwayamPartnerCourseSuccess
+  addSwayamPartnerCourseSuccess,
+  editSwayamPartnerCourseSuccess
 } = actions;
 
 
@@ -80,10 +78,10 @@ export const addSwayamCourse = (data) => async (dispatch) => {
     })
 }
 
-export const getSwayamCourse = (data) => async (dispatch) => {
-  await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+export const editSwayamCourse = (data) => async (dispatch) => {
+  await ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
     .then((res) => {
-      return dispatch(addSwayamPartnerCourseSuccess(res))
+      return dispatch(editSwayamPartnerCourseSuccess(res))
     })
 }
 
