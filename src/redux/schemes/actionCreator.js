@@ -89,10 +89,10 @@ export const addSchemeData = (data) => async (dispatch) => {
     .catch((err) => dispatch(addSchemeErr(err)))
 }
 
-export const getSchemeData = (perPage, pageNumber) => async (dispatch) => {
+export const getSchemeData = (perPage, pageNumber,status) => async (dispatch) => {
   per_Page=perPage;
   page_Num=pageNumber;
-  await ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
+  await ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`)
     .then((res) => {
       return dispatch(getSchemeSuccess(res.data))
     })

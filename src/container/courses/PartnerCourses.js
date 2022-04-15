@@ -22,7 +22,7 @@ const PartnerCourses = () => {
         category: "",
         mode: "ONLINE",
     })
-    const [activeCoursetog,setActiveCourseTog]=useState(true)
+    const [activeCoursetog, setActiveCourseTog] = useState(true)
 
     let catdata = useSelector((state) => state.category.categoryData)
     useEffect(() => {
@@ -30,29 +30,28 @@ const PartnerCourses = () => {
     }, [])
 
     useEffect(() => {
-      if(catdata && catdata.data && catdata.data.length>0){
-        setState({ ...state, category: catdata.data[0].id})
-      }
+        if (catdata && catdata.data && catdata.data.length > 0) {
+            setState({ ...state, category: catdata.data[0].id })
+        }
     }, [catdata])
 
     useEffect(() => {
-      if(state && activeCoursetog){
-        Submit()
-      }
+        if (state && activeCoursetog) {
+            Submit()
+        }
     }, [state])
-    
-
 
     const usersTableData = [];
-   const [usertable,setUsertable] =useState([]) //set data
+    const [usertable, setUsertable] = useState([]) //set data
     // const { users } = useSelector(state => {
     //     return {
     //         users: state.users,
     //     };
     // });
-   
-    const [perPage, setPerPage] = useState(10)   //paganation
-    const [pageNumber, setPageNumber] = useState(1) //paganation
+
+    const [perPage, setPerPage] = useState(2)   
+    const [pageNumber, setPageNumber] = useState(1)
+    const [status, setStatus] = useState("active")
 
     const onChangehandle = (e, name) => {
         setActiveCourseTog(false)
@@ -63,22 +62,22 @@ const PartnerCourses = () => {
             setState({ ...state, mode: e })
         }
     }
-    const onEdit = (id) =>{
+    const onEdit = (id) => {
         history.push(`${path}/addpartnercourses?id=${id}`)
     }
 
-    const onDelete=(id)=>{
-        let activeCourseDelete=courseData && courseData.data && courseData.data.data.find((item)=>item.id===id)
-        let certification=activeCourseDelete.certificate
-        let categoryId=activeCourseDelete.courseCategory.id
-        
-        if(activeCourseDelete){
+    const onDelete = (id) => {
+        let activeCourseDelete = courseData && courseData.data && courseData.data.data.find((item) => item.id === id)
+        let certification = activeCourseDelete.certificate
+        let categoryId = activeCourseDelete.courseCategory.id
+
+        if (activeCourseDelete) {
             delete activeCourseDelete.id
             delete activeCourseDelete.certificate
             delete activeCourseDelete.jobTypes
             delete activeCourseDelete.courseCategory
-            
-            activeCourseDelete={
+
+            activeCourseDelete = {
                 ...activeCourseDelete,
                 isActive: false,
                 isDeleted: true,
@@ -87,20 +86,20 @@ const PartnerCourses = () => {
                 certification: certification
 
             }
-            dispatch(editPartnerCoursefilter(activeCourseDelete,state.category, perPage, pageNumber, state.mode))
+            dispatch(editPartnerCoursefilter(activeCourseDelete, state.category, perPage, pageNumber, state.mode))
         }
     }
 
 
     useEffect(() => {
-        
+
         if (courseData && courseData.data) {
             setUsertable(courseData.data?.data?.map((item) => {
-               
+
                 // const { id, name, designation, status } = user;
                 return {
                     //key: id,
-                   
+
                     CourseName: item.name,
                     CourseCategory: item.courseCategory.name,
                     //State: item.state,
@@ -110,11 +109,11 @@ const PartnerCourses = () => {
                         <div className='active-schemes-table'>
                             <div className="table-actions">
                                 <>
-                                    <Button className="btn-icon" onClick = {()=>onEdit(item.id)} type="info" to="#" shape="circle">
+                                    <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
                                         <FeatherIcon icon="edit" size={16} />
                                     </Button>
 
-                                    <Button className="btn-icon" type="danger" onClick={()=>onDelete(item.id)}  to="#" shape="circle">
+                                    <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                                         <FeatherIcon icon="x-circle" size={16} />
                                     </Button>
                                     {/* <Button className="btn-icon" type="info" to="#" shape="circle">
@@ -125,7 +124,7 @@ const PartnerCourses = () => {
                         </div>
                     ),
                 };
-                
+
             }))
         }
 
@@ -133,9 +132,9 @@ const PartnerCourses = () => {
 
     //useEffect(()=>{console.log("--------->>",courseData)},[courseData])
     const Submit = () => {
-        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode))
+        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status))
     }
-  
+
     const usersTableColumns = [
 
         {
@@ -171,10 +170,9 @@ const PartnerCourses = () => {
     const { TabPane } = Tabs;
 
     const callback = (key) => {
-        //     console.log(key);
+        setStatus(key)
+        console.log(key);
     }
-
-
 
     return (
         <>
@@ -189,7 +187,6 @@ const PartnerCourses = () => {
                     </div>
                 ]}
             />
-
             <Main >
                 <Cards headless>
                     <Row gutter={15}>
@@ -197,8 +194,8 @@ const PartnerCourses = () => {
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item  label="Course Category">
-                                            <Select size="large" className="sDash_fullwidth-select" name="category" value={state.category}  placeholder="Select Category" onChange={(e) => onChangehandle(e, "category")}>
+                                        <Form.Item label="Course Category">
+                                            <Select size="large" className="sDash_fullwidth-select" name="category" value={state.category} placeholder="Select Category" onChange={(e) => onChangehandle(e, "category")}>
                                                 {catdata && catdata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}
@@ -219,8 +216,8 @@ const PartnerCourses = () => {
                                 </Col> */}
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item  label="Mode">
-                                            <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode}  onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
+                                        <Form.Item label="Mode">
+                                            <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode} onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
                                                 <Option value="ONLINE">Online</Option>
                                                 <Option value="OFFLINE">Offline</Option>
                                             </Select>
@@ -248,7 +245,7 @@ const PartnerCourses = () => {
                             </Row> */}
 
                             <Tabs defaultActiveKey="1" onChange={callback}>
-                                <TabPane tab="Active Courses" key="1">
+                                <TabPane tab="Active Courses" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -263,15 +260,23 @@ const PartnerCourses = () => {
                                                 dataSource={usertable}
                                                 columns={usersTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: 5,
-                                                    total: usersTableData.length,
+                                                    // defaultPageSize: courseData?.per_page,
+                                                    defaultPageSize: courseData?.per_page,
+                                                    total: courseData?.page_number,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize)
+                                                     }
+                                                    // defaultPageSize: 5,
+                                                    // total: usersTableData.length,
+                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                {/* <TabPane tab="Inactive Courses" key="2">
+                                <TabPane tab="Inactive Courses" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -289,11 +294,18 @@ const PartnerCourses = () => {
                                                     defaultPageSize: 5,
                                                     total: usersTableData.length,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    // defaultPageSize: courseData?.perPage,
+                                                    // total: courseData?.pageNumber,
+                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    // onChange: (page, pageSize) => {
+                                                    //     setPageNumber(page);
+                                                    //     setPerPage(pageSize)
+                                                    //  }
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                </TabPane> */}
+                                </TabPane>
                             </Tabs>
 
                         </Col>

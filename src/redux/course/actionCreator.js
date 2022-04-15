@@ -25,8 +25,8 @@ export const postCategoryData = (body) => async (dispatch) => {
     })
 }
 
-export const getCategoryData = (body) => async (dispatch) => {
-  await ApiGet(`course/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+export const getCategoryData = () => async (dispatch) => {
+  await ApiGet(`course/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(getcategorySuccess(res))
     })
@@ -37,7 +37,7 @@ export const editCategoryData = (body) => async (dispatch) => {
     .then((res) => {
       dispatch(editCategorySuccess(res))
       if (res.status === 200) {
-        dispatch(getCategoryData(body))
+        dispatch(getCategoryData())
       }
     })
 }
@@ -45,11 +45,12 @@ export const editCategoryData = (body) => async (dispatch) => {
 export const addPartnerCourse = (body) => async (dispatch) => {
   await ApiPost(`course/addPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
-      return dispatch(addPartnerCourseSuccess(res))
+     return  dispatch(addPartnerCourseSuccess(res))
+     //return dispatch(getCoursefilter(categoryId,perPage,pageNumber,mode,inactive))
     })
 }
-export const getCoursefilter = (categoryId,perPage,pageNumber,mode) => async (dispatch) => {
-  await ApiGet(`course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&categoryId=${categoryId}&per_page=${perPage}&page_number=${pageNumber}&mode=${mode}`)
+export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => async (dispatch) => {
+  await ApiGet(`course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&categoryId=${categoryId}&per_page=${perPage}&page_number=${pageNumber}&mode=${mode}&status=${inactive}`)
     .then((res) => {
       return dispatch(getCoursefilterSuccess(res))
     })

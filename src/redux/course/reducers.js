@@ -22,6 +22,12 @@ const {
   EDIT_PARTNER_COURSE_SUCCESS,
   EDIT_PARTNER_COURSE_ERR,
 
+  POST_PARTNERCOURSE_BEGINE,
+  POST_PARTNERCOURSE_SUCCESS,
+  POST_PARTNERCOURSE_ERR,
+
+
+
 } = actions;
 
 const initialState = {
@@ -32,7 +38,8 @@ const initialState = {
   categoryData: null,
   courseFilterData: null,
   editFilterData: null,
-  editPartnerCourseData:null
+  editPartnerCourseData:null,
+  postPartnerCourseData:null,
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -126,6 +133,24 @@ const cateGoryReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
+  
+      case POST_PARTNERCOURSE_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case POST_PARTNERCOURSE_SUCCESS:
+        return {
+          ...state,
+          postPartnerCourseData: data,
+          loading: false,
+        };
+      case POST_PARTNERCOURSE_ERR:
+        return {
+          ...state,
+          error: err,
+          loading: false,
+        };
 
     default:
       return state;

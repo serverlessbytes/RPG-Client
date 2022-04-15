@@ -5,7 +5,6 @@ import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
-import ActiveSchemesTable from './ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
@@ -31,7 +30,6 @@ const Schemes = () => {
     const deleteSchemes = (key) => {
         let userForDelete = users && users.data.find(item => item.key === key)
         if (userForDelete) {
-            // console.log(userForDelete);
             delete userForDelete.key
             delete userForDelete.updatedAt
             userForDelete = {
@@ -42,58 +40,45 @@ const Schemes = () => {
                 isDeleted: true,
             }
             dispatch(editSchemeData(userForDelete))
-            // dispatch(getSchemeData(perPage, pageNumber))   
-            //history.push(`/admin/scheme`)
         }
     }
 
-    // const { Option } = Select;
-    const [key, setKey] = useState("1")
+    const [status, setStatus] = useState("active")
     const [perPage, setPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
-        dispatch(getSchemeData(perPage, pageNumber))
-    }, [perPage, pageNumber])
+        dispatch(getSchemeData(perPage, pageNumber, status))
+    }, [perPage, pageNumber, status])
     const { TabPane } = Tabs;
 
     const callback = (key) => {
-        setKey(key)
-        console.log(key);
+        setStatus(key)
     }
 
-    // const { users } = useSelector(state => {
-    //     return {
-    //         users: state.users,
-    //     };
-    // });
-    // useEffect(() => {
-    //     console.log("users", users)
-    // }, [users])
     const { Option } = Select;
     const usersTableData = [];
 
     users && users.data.map((item) => {
-
+        console.log(item.key);
         return usersTableData.push({
 
             SchemeName: item.name,
             TypeOfBenefits: item.schemeBenifit.name,
             TargetBeneficiary: item.benificiary,
             Website: item.website,
-            // Location: item.locations,
             LastUpdated: moment(item.updatedAt).format("DD-MM-YYYY"),
             action: (
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            {key === "1" && <Button className="btn-icon" onClick={() => reDirectSchemes(item.key)} type="info" to="#" shape="circle">
+                            {status === "" && <Button className="btn-icon" onClick={() => reDirectSchemes(item.key)} type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button>}
                             <Button className="btn-icon" type="warning" to="#" onClick={() => deleteSchemes(item.key)} shape="circle">
                                 <FeatherIcon icon="file" size={16} />
                             </Button>
-                            {key === '1' && <Button className="btn-icon" type="success" to="#" shape="circle">
+                            {status === "" && <Button className="btn-icon" type="success" to="#" shape="circle">
                                 <FeatherIcon icon="star" size={16} />
                             </Button>}
                         </>
@@ -164,7 +149,7 @@ const Schemes = () => {
                 ghost
                 title="Schemes"
                 buttons={[
-                    <div key="1" className="page-header-actions">
+                    <div className="page-header-actions">
                         {/* <Button size="small" type="link">
                             Export Schemes
                         </Button>
@@ -244,7 +229,7 @@ const Schemes = () => {
                              <ActiveSchemesTable type ={type}/> */}
 
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Schemes" key="1">
+                                <TabPane tab="Active Schemes" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -261,7 +246,7 @@ const Schemes = () => {
                                                 pagination={{
                                                     defaultPageSize: users?.per_page,
                                                     total: users?.page_count,
-                                                    showTotal: (total, range) =>`${range[0]}-${range[1]} of ${total} items`,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize)
@@ -271,7 +256,7 @@ const Schemes = () => {
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                {/* <TabPane tab="Inactive Schemes" key="2">
+                                <TabPane tab="Inactive Schemes" key='inactive'>
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -286,14 +271,21 @@ const Schemes = () => {
                                                 dataSource={usersTableData}
                                                 columns={usersTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: 5,
-                                                    total: usersTableData.length,
+                                                    defaultPageSize: users?.per_page,
+                                                    total:users?.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize)
+                                                    }
+                                                    // defaultPageSize: 5,
+                                                    // total: usersTableData.length,
+                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                </TabPane> */}
+                                </TabPane>
                             </Tabs>
                         </Col>
                     </Row>
