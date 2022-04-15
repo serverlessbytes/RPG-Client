@@ -26,6 +26,9 @@ const {
   POST_PARTNERCOURSE_SUCCESS,
   POST_PARTNERCOURSE_ERR,
 
+  ADD_SWAYAM_COURSE_BEGINE,
+  ADD_SWAYAM_COURSE_SUCCESS,
+  ADD_SWAYAM_COURSE_ERR,
 
 
 } = actions;
@@ -40,11 +43,11 @@ const initialState = {
   editFilterData: null,
   editPartnerCourseData:null,
   postPartnerCourseData:null,
+  addSwayamCourseData:null
 };
 
 const cateGoryReducer = (state = initialState, action) => {
-  const { type, data, err } = action;
-  console.log("data ============ data", data);
+  const { type, data, err } = action
   switch (type) {
     case POST_CATEGORY_BEGINE:
       return {
@@ -116,7 +119,7 @@ const cateGoryReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
-      case EDIT_PARTNER_COURSE_BEGINE:
+    case EDIT_PARTNER_COURSE_BEGINE:
       return {
         ...state,
         loading: true,
@@ -146,6 +149,24 @@ const cateGoryReducer = (state = initialState, action) => {
           loading: false,
         };
       case POST_PARTNERCOURSE_ERR:
+        return {
+          ...state,
+          error: err,
+          loading: false,
+        };
+
+        case ADD_SWAYAM_COURSE_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_SWAYAM_COURSE_SUCCESS:
+        return {
+          ...state,
+          addSwayamCourseData: data,
+          loading: false,
+        };
+      case ADD_SWAYAM_COURSE_ERR:
         return {
           ...state,
           error: err,
