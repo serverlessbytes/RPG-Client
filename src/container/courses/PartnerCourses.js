@@ -89,17 +89,13 @@ const PartnerCourses = () => {
             dispatch(editPartnerCoursefilter(activeCourseDelete, state.category, perPage, pageNumber, state.mode))
         }
     }
-
-
+ 
     useEffect(() => {
-
         if (courseData && courseData.data) {
             setUsertable(courseData.data?.data?.map((item) => {
-
                 // const { id, name, designation, status } = user;
                 return {
                     //key: id,
-
                     CourseName: item.name,
                     CourseCategory: item.courseCategory.name,
                     //State: item.state,
@@ -129,12 +125,12 @@ const PartnerCourses = () => {
         }
 
     }, [courseData])
-
-    //useEffect(()=>{console.log("--------->>",courseData)},[courseData])
     const Submit = () => {
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status))
     }
-
+    useEffect(()=>{
+        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status)
+        )},[state.category, perPage, pageNumber, state.mode, status]) //paganation
     const usersTableColumns = [
 
         {
@@ -261,8 +257,9 @@ const PartnerCourses = () => {
                                                 columns={usersTableColumns}
                                                 pagination={{
                                                     // defaultPageSize: courseData?.per_page,
-                                                    defaultPageSize: courseData?.per_page,
-                                                    total: courseData?.page_number,
+                                                    // defaultPageSize: courseData?.data.per_page, 
+                                                    defaultPageSize: courseData?.data.per_page, 
+                                                    total: courseData?.data.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);

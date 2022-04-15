@@ -60,7 +60,7 @@ const Schemes = () => {
     const usersTableData = [];
 
     users && users.data.map((item) => {
-        console.log(item.key);
+       // console.log(item.key);
         return usersTableData.push({
 
             SchemeName: item.name,

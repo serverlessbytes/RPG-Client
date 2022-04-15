@@ -22,18 +22,12 @@ const AddSchemes = () => {
     useEffect(() => {
         console.log("path", path);
     }, [])
-
-
-
-
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
         console.log('radio checked', e.target.value);
         setTypeOfJob(e.target.value)
     }; */
     const dispatch = useDispatch();
-
-
     const { Option } = Select;
 
     const [state, setState] = useState({
@@ -56,19 +50,11 @@ const AddSchemes = () => {
     });
     const [error, setError] = useState({})
 
-    // useEffect(() => {
-    //     console.log("benifitLine", state.benifitLine.toString("markdown").length)
-
-    // }, [state.benifitLine])
-
-    /*   useEffect(() => { console.log("state.schemename", state.schemename) }, [state.schemename]) */
-    /* useEffect(() => { console.log("state.documentation", state.documentation) }, [state.documentation]) */
     useEffect(() => {
         dispatch(getSchemecategory());
         dispatch(getSchemeBenifits());
         dispatch(getState());
     }, [])
-
     useEffect(() => {
         if (location.search) {
             dispatch(getOneSchemeData(location.search))
@@ -76,18 +62,11 @@ const AddSchemes = () => {
     }, [location.search])
 
     const scheme = useSelector((state) => state.scheme.schemecatogeryData)
-    // useEffect(() => {
-    //     console.log("scheme", scheme)
-    // }, [scheme])
-
     const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
     const State = useSelector((state) => state.scheme.addState)
     const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
 
-    
-
     useEffect(() => {
-
         if (getOneScHemeData) {
             // console.log("getOneScHemeData", getOneScHemeData)
             setState({
@@ -290,7 +269,7 @@ const AddSchemes = () => {
         if (validation()) {
             return;
         }
-      
+
 
         let data = {
             key: uuid(),
@@ -375,7 +354,7 @@ const AddSchemes = () => {
                             <Form.Item>
                                 <Input placeholder="Scheme Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
                                 {
-                                    error.name && <span style={{color:"red"}}>{error.name}</span>
+                                    error.name && <span style={{ color: "red" }}>{error.name}</span>
                                 }
                             </Form.Item>
                         </Col>
@@ -391,7 +370,7 @@ const AddSchemes = () => {
                                     ))}
                                 </Select>
                                 {
-                                    error.schemeCategory && <span style={{color:"red"}}>{error.schemeCategory}</span>
+                                    error.schemeCategory && <span style={{ color: "red" }}>{error.schemeCategory}</span>
                                 }
                             </Form.Item>
                         </Col>
@@ -403,14 +382,14 @@ const AddSchemes = () => {
                                         <Option value={items.id}>{items.name} </Option>
                                     ))}
                                 </Select>
-                                {error.schemeBenifit && <span style={{color:"red"}}>{error.schemeBenifit}</span>}
+                                {error.schemeBenifit && <span style={{ color: "red" }}>{error.schemeBenifit}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Senquence</label>
                             <Form.Item>
                                 <Input type="number" placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
-                                {error.sequence && <span style={{color:"red"}}>{error.sequence}</span>}
+                                {error.sequence && <span style={{ color: "red" }}>{error.sequence}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -419,33 +398,33 @@ const AddSchemes = () => {
                         <div className="group" style={{ marginBottom: "0px" }}>
                             <RichTextEditor placeholder="Type your message..." name="benifitLine" value={state.benifitLine} onChange={onChangesEditorBenifit} />
                         </div>
-                        {error.benifitLine && <span style={{color:"red"}}>{error.benifitLine}</span>}
+                        {error.benifitLine && <span style={{ color: "red" }}>{error.benifitLine}</span>}
                     </div>
                     <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
                     <Form.Item >
                         <Input.TextArea placeholder="" value={state.benificiary} name='benificiary' onChange={(e) => onChangeValue(e)} />
-                        {error.benificiary && <span style={{color:"red"}}>{error.benificiary}</span>}
+                        {error.benificiary && <span style={{ color: "red" }}>{error.benificiary}</span>}
                     </Form.Item>
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="SchemeSummary">Scheme Summary</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
                             <RichTextEditor placeholder="Type your message..." name="detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
                         </div>
-                        {error.detail && <span style={{color:"red"}}>{error.detail}</span>}
+                        {error.detail && <span style={{ color: "red" }}>{error.detail}</span>}
                     </div>
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="HowtoApply">How to Apply</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
                             <RichTextEditor placeholder="Type your message..." name="howToApply" value={state.howToApply} onChange={onChangesEditorHowToApply} />
                         </div>
-                        {error.howToApply && <span style={{color:"red"}}>{error.howToApply}</span>}
+                        {error.howToApply && <span style={{ color: "red" }}>{error.howToApply}</span>}
                     </div>
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="Documentation">Documentation</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
                             <RichTextEditor placeholder="Type your message..." name="documentation" value={state.documentation} onChange={onChangesEditorDocumentation} />
                         </div>
-                        {error.documentation && <span style={{color:"red"}}>{error.documentation}</span>}
+                        {error.documentation && <span style={{ color: "red" }}>{error.documentation}</span>}
                     </div>
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
@@ -459,14 +438,14 @@ const AddSchemes = () => {
                                     ))}
 
                                 </Select>
-                                {error.locations && <span style={{color:"red"}}>{error.locations}</span>}
+                                {error.locations && <span style={{ color: "red" }}>{error.locations}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="Website">Website</label>
                             <Form.Item >
                                 <Input placeholder="" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
-                                {error.website && <span style={{color:"red"}}>{error.website}</span>}
+                                {error.website && <span style={{ color: "red" }}>{error.website}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -479,28 +458,28 @@ const AddSchemes = () => {
                                     <Option value="OFFLINE">Offline</Option>
                                 </Select>
                                 {/* <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} /> */}
-                                {error.type && <span style={{color:"red"}}>{error.type}</span>}
+                                {error.type && <span style={{ color: "red" }}>{error.type}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
                             <Form.Item  >
                                 <Input placeholder="" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
-                                {error.grievanceRedress && <span style={{color:"red"}}>{error.grievanceRedress}</span>}
+                                {error.grievanceRedress && <span style={{ color: "red" }}>{error.grievanceRedress}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item>
                                 <Input placeholder="" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
-                                {error.elink && <span style={{color:"red"}}>{error.elink}</span>}
+                                {error.elink && <span style={{ color: "red" }}>{error.elink}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="SPOC">SPOC</label>
                             <Form.Item>
                                 <Input placeholder="" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
-                                {error.spoc && <span style={{color:"red"}}>{error.spoc}</span>}
+                                {error.spoc && <span style={{ color: "red" }}>{error.spoc}</span>}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -508,14 +487,14 @@ const AddSchemes = () => {
                         <label htmlFor="visible" className='ml-10'>Visible to User</label>
                         <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>
                     </div>
-                    
+
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
                             Add
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
                             onClick={() => history.push(`/admin/scheme`)}
-                        >
+                            >
                             Cancel
                         </Button>
                     </div>
