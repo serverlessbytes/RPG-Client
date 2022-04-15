@@ -70,9 +70,7 @@ const[editPartnerCourseID,setEditPartnerCourseID]=useState()
     }
   }, [location.search])
 
-useEffect(() => {
-  console.log("editPartnerCourseID",editPartnerCourseID);
-}, [editPartnerCourseID])
+
 
   
 

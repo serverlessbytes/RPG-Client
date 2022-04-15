@@ -49,7 +49,7 @@ const jobReducer = (state = initialState, action) => {
     case GET_JOBCATEGOTRY_SUCCESS:
       return {
         ...state,
-        jobcatogeryData: data,
+        jobCatogeryData: data,
         loading: false,
       };
     case GET_JOBCATEGOTRY_ERR:

@@ -13,7 +13,9 @@ const {
 
   getCoursefilterSuccess,
   editCoursefilterSuccess,
-  editPartnerCourseSuccess
+  editPartnerCourseSuccess,
+
+  addSwayamPartnerCourseSuccess
 } = actions;
 
 
@@ -69,6 +71,22 @@ export const editPartnerCoursefilter = (data,categoryId,perPage,pageNumber,mode)
       return dispatch(editPartnerCourseSuccess(res))
     })
 }
+
+export const addSwayamCourse = (data) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      return dispatch(addSwayamPartnerCourseSuccess(res))
+    })
+}
+
+export const getSwayamCourse = (data) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      return dispatch(addSwayamPartnerCourseSuccess(res))
+    })
+}
+
+
 
 
 
