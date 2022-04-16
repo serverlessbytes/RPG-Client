@@ -231,6 +231,7 @@ const AddPartnerCourses = () => {
             isDeleted: false
         }
         dispatch(editPartnerCoursefilter(data));
+        history.push(`/admin/courses/partnercourses`);
     }
 
     // const onChangevalue = (e) => {

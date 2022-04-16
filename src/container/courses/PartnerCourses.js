@@ -105,13 +105,13 @@ const PartnerCourses = () => {
                         <div className='active-schemes-table'>
                             <div className="table-actions">
                                 <>
-                                    <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
+                                    {status === "active" &&<Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
                                         <FeatherIcon icon="edit" size={16} />
-                                    </Button>
+                                    </Button>}
 
-                                    <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+                                    {status === "active" &&<Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                                         <FeatherIcon icon="x-circle" size={16} />
-                                    </Button>
+                                    </Button>}
                                     {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button> */}
@@ -131,8 +131,9 @@ const PartnerCourses = () => {
     useEffect(()=>{
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status)
         )},[state.category, perPage, pageNumber, state.mode, status]) //paganation
+        
     const usersTableColumns = [
-
+        
         {
             title: 'Course Name',
             dataIndex: 'CourseName',
@@ -254,7 +255,7 @@ const PartnerCourses = () => {
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={usertable}
-                                                columns={usersTableColumns}
+                                                columns={ usersTableColumns}
                                                 pagination={{
                                                     // defaultPageSize: courseData?.per_page,
                                                     // defaultPageSize: courseData?.data.per_page, 
@@ -286,18 +287,18 @@ const PartnerCourses = () => {
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={usertable}
-                                                columns={usersTableColumns}
+                                                columns={usersTableColumns.filter(item=>item.title !== "Actions") }
                                                 pagination={{
-                                                    defaultPageSize: 5,
-                                                    total: usersTableData.length,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    // defaultPageSize: courseData?.perPage,
-                                                    // total: courseData?.pageNumber,
+                                                    // defaultPageSize: 5,
+                                                    // total: usersTableData.length,
                                                     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    // onChange: (page, pageSize) => {
-                                                    //     setPageNumber(page);
-                                                    //     setPerPage(pageSize)
-                                                    //  }
+                                                    defaultPageSize: courseData?.data.per_page, 
+                                                    total: courseData?.data.page_count,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize)
+                                                     }
                                                 }}
                                             />
                                         </TableWrapper>

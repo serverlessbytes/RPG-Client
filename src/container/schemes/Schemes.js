@@ -269,7 +269,7 @@ const Schemes = () => {
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={usersTableData}
-                                                columns={usersTableColumns}
+                                                columns={usersTableColumns.filter(item=>item.title !== "Actions") }
                                                 pagination={{
                                                     defaultPageSize: users?.per_page,
                                                     total:users?.page_count,

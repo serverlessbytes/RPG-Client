@@ -30,7 +30,7 @@ const actions = {
     },
   
     getJobcategorySuccess: data => {
-      console.log("getJobcategorySuccess=====data",data);
+      //console.log("getJobcategorySuccess=====data",data);
       return {
         type: actions.GET_JOBCATEGOTRY_SUCCESS,
         data,

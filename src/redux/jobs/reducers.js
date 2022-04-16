@@ -33,7 +33,7 @@ const initialState = {
   jobCatogeryData: null,
   addJobCatogeryData: null,
   editJobCatogeryData: null,
-  jobRoleData: [],
+  jobRoleData: null,
   addJobRoleData: null,
   editJobRoleData: null,
 };
@@ -47,6 +47,7 @@ const jobReducer = (state = initialState, action) => {
         loading: true,
       };
     case GET_JOBCATEGOTRY_SUCCESS:
+     // console.log("datareducer",data)
       return {
         ...state,
         jobCatogeryData: data,
