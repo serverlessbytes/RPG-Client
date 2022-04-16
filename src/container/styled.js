@@ -1467,6 +1467,7 @@ const TableWrapper = Styled.div`
                     }
                     &:last-child{
                         border-radius: ${({ theme }) => (!theme.rtl ? '0 10px 10px 0' : '10px 0 0 10px')} !important;
+                        text-align: ${({ theme }) => (theme.rtl ? 'left' : 'right')};
                     }
                     span{
                         display: block;

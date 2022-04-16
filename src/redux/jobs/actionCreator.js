@@ -28,6 +28,7 @@ const {
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
+      //console.log("log",res);
       return dispatch(getJobcategorySuccess(res))
     })
     .catch((err) => dispatch(getJobcategoryErr(err)))

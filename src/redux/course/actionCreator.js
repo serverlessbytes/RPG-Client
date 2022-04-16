@@ -66,7 +66,7 @@ export const getOneCoursefilter = (id) => async (dispatch) => {
 export const editPartnerCoursefilter = (data,categoryId,perPage,pageNumber,mode) => async (dispatch) => {
   await ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
     .then((res) => {
-      getCoursefilter(categoryId,perPage,pageNumber,mode)
+      getCoursefilter(categoryId,perPage,pageNumber,mode,inactive)
       return dispatch(editPartnerCourseSuccess(res))
     })
 }

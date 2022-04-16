@@ -25,11 +25,14 @@ const JobCategory = () => {
         };
     });
 
-    const jobData = useSelector((state) => state.job.jobcatogeryData)
+    const jobData = useSelector((state) => state.job.jobCatogeryData)
 
     useEffect(() => {
-        dispatch(getJobcategory());
+        dispatch(getJobcategory()); 
     }, [])
+    useEffect(() =>{
+        console.log("jobDatajobData",jobData)
+    },[jobData])
 
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
@@ -57,9 +60,10 @@ const JobCategory = () => {
 
     useEffect(() => {
         if (jobData && jobData.data) {
-
-            setJobCategoryTableData(jobData.data ?
+            console.log("-----",jobData)
+            setJobCategoryTableData(jobData.data?
                 jobData.data.map((item) => {
+                  
                     return {
                         ...item,  
                         action: (
