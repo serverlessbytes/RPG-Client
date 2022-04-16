@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { hot } from 'react-hot-loader/root';
 import { Provider, useDispatch, useSelector } from 'react-redux';
@@ -14,10 +14,12 @@ import ProtectedRoute from './components/utilities/protectedRoute';
 import AuthStorage from './helper/AuthStorage';
 import STORAGEKEY from './config/APP/app.config';
 import actions from './redux/authentication/actions';
+import { useHistory } from "react-router-dom";
+import { RouterContext, RouterProvider } from './utility/routerContext';
 
 const { theme } = config;
 
-const ProviderConfig = () => {
+const ProviderConfig = ({ basename }) => {
   const { rtl, isLoggedIn, topMenu, darkMode } = useSelector(state => {
     return {
       darkMode: state.ChangeLayoutMode.data,
@@ -26,10 +28,11 @@ const ProviderConfig = () => {
       isLoggedIn: state.auth.login,
     };
   });
+  const history = useHistory();
+  const route = useContext(RouterContext);
   const dispatch = useDispatch()
-  
 
-const { loginSuccess } = actions;
+  const { loginSuccess } = actions;
 
   const [path, setPath] = useState(window.location.pathname);
 
@@ -49,24 +52,38 @@ const { loginSuccess } = actions;
     }
   }, [])
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) {
+        if (route.from === "/") {
+          history.push("/admin");
+        } else {
+          history.push(route.from);
+        }
+      }
+    }
+  }, [isLoggedIn])
+
   return (
     <ConfigProvider direction={rtl ? 'rtl' : 'ltr'}>
       <ThemeProvider theme={{ ...theme, rtl, topMenu, darkMode }}>
-        <Router basename={process.env.PUBLIC_URL}>
-          {!isLoggedIn ? <Route path="/" component={Auth} /> : <ProtectedRoute path="/admin" component={Admin} />}
-          {isLoggedIn && (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) && (
+        {!isLoggedIn ? <Route path="/" component={Auth} /> : <ProtectedRoute path="/admin" component={Admin} />}
+        {/* {isLoggedIn && (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) && (
             <Redirect to="/admin" />
-          )}
-        </Router>
+          )} */}
       </ThemeProvider>
-    </ConfigProvider>
+    </ConfigProvider >
   );
 };
 
 function App() {
   return (
     <Provider store={store}>
-      <ProviderConfig />
+      <Router basename={process.env.PUBLIC_URL}>
+        <RouterProvider>
+          <ProviderConfig basename={process.env.PUBLIC_URL} />
+        </RouterProvider>
+      </Router>
     </Provider>
   );
 }
