@@ -13,7 +13,9 @@ const {
   editCoursefilterSuccess,
   editPartnerCourseSuccess,
   addSwayamPartnerCourseSuccess,
-  editSwayamPartnerCourseSuccess
+  editSwayamPartnerCourseSuccess,
+  addSwayamCourseModuleSuccess,
+  getSwayamCourseModuleSuccess
 } = actions;
 
 
@@ -84,6 +86,30 @@ export const editSwayamCourse = (data) => async (dispatch) => {
       return dispatch(editSwayamPartnerCourseSuccess(res))
     })
 }
+
+export const addSwayamCourseModule = (data) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourseModule?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      return dispatch(addSwayamCourseModuleSuccess(res))
+    })
+}
+
+
+export const getSwayamCourseModule = (id) => async (dispatch) => {
+  await ApiGet(`course/getSwayamCourseModules?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&courseId=${id}`)
+    .then((res) => {
+      return dispatch(getSwayamCourseModuleSuccess(res))
+    })
+}
+
+// export const editSwayamCourseModule = (id) => async (dispatch) => {
+//   await ApiGet(`course/editSwayamCourseModules?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+//     .then((res) => {
+//       return dispatch(getSwayamCourseModuleSuccess(res))
+//     })
+// }
+
+
 
 
 

@@ -254,7 +254,6 @@ const AddPartnerCourses = () => {
         if (name === 'cateGory') {
             setState({ ...state, cateGory: e });
         } else if (name === 'duration') {
-            console.log("e----------", e);
             setState({ ...state, duration: e });
         }
         // else if (name == "state") {

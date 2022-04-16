@@ -36,6 +36,14 @@ const actions = {
   EDIT_SWAYAM_COURSE_SUCCESS:"EDIT_SWAYAM_COURSE_SUCCESS",
   EDIT_SWAYAM_COURSE_ERR:"EDIT_SWAYAM_COURSE_ERR",
 
+  ADD_SWAYAM_COURSE_MODULE_BEGINE:"ADD_SWAYAM_COURSE_MODULE_BEGINE",
+  ADD_SWAYAM_COURSE_MODULE_SUCCESS:"ADD_SWAYAM_COURSE_MODULE_SUCCESS",
+  ADD_SWAYAM_COURSE_MODULE_ERR:"ADD_SWAYAM_COURSE_MODULE_ERR",
+
+  GET_SWAYAM_COURSE_MODULE_BEGINE:"GET_SWAYAM_COURSE_MODULE_BEGINE",
+  GET_SWAYAM_COURSE_MODULE_SUCCESS:"GET_SWAYAM_COURSE_MODULE_SUCCESS",
+  GET_SWAYAM_COURSE_MODULE_ERR:"GET_SWAYAM_COURSE_MODULE_ERR",
+
   postBenefitsBegin: () => {
     return {
       type: actions.POST_CATEGORY_BEGINE,
@@ -209,6 +217,46 @@ const actions = {
   editSwayamPartnerCourseErr: err => {
     return {
       type: actions.EDIT_SWAYAM_COURSE_ERR,
+      err,
+    };
+  },
+
+  addSwayamCourseModuleBegin: () => {
+    return {
+      type: actions.ADD_SWAYAM_COURSE_MODULE_BEGINE,
+    };
+  },
+
+  addSwayamCourseModuleSuccess: data => {
+    return {
+      type: actions.ADD_SWAYAM_COURSE_MODULE_SUCCESS,
+      data,
+    };
+  },
+
+  addSwayamCourseModuleErr: err => {
+    return {
+      type: actions.ADD_SWAYAM_COURSE_MODULE_ERR,
+      err,
+    };
+  },
+
+  getSwayamCourseModuleBegin: () => {
+    return {
+      type: actions.GET_SWAYAM_COURSE_MODULE_BEGINE,
+    };
+  },
+
+  getSwayamCourseModuleSuccess: data => {
+    return {
+      type: actions.GET_SWAYAM_COURSE_MODULE_SUCCESS,
+      data,
+    };
+  },
+
+  getSwayamCourseModuleErr: err => {
+    return {
+      type: actions.GET_SWAYAM_COURSE_MODULE_ERR,
       err,
     };
   },

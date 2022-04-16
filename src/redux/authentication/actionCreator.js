@@ -1,10 +1,10 @@
 import Cookies from 'js-cookie';
 import STORAGEKEY from '../../config/APP/app.config';
-import { ApiPostNoAuth } from '../../helper/API/ApiData';
+import { ApiGet, ApiPostNoAuth } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import actions from './actions';
 
-const { loginBegin, loginSuccess, loginErr, logoutBegin, logoutSuccess, logoutErr,signUpErr, signUpSuccess, signUpBegin } = actions;
+const { loginBegin, loginSuccess, loginErr, logoutBegin, logoutSuccess, logoutErr,signUpErr, signUpSuccess, signUpBegin,getUserSuccess } = actions;
 
 // const login = () => {
 //   return async dispatch => {
@@ -69,10 +69,19 @@ const signUp = (body) => async(dispatch)=>{
       return dispatch(signUpSuccess(res))
     }
   })
+};
+
+const getUser = () => async(dispatch)=>{
+  await ApiGet("user/auth/getUser")
+  .then((res) =>{
+      return dispatch(getUserSuccess(res))
+  })
 }
 
 
 
 
 
-export { login, logOut, signUp };
+
+
+export { login, logOut, signUp, getUser};

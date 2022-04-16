@@ -33,7 +33,7 @@ const SwayamCourses = () => {
             mode: "BOTH",
         }
     )
-    const [perPage, setPerPage] = useState(2)   
+    const [perPage, setPerPage] = useState(10)   
     const [pageNumber, setPageNumber] = useState(1)
     const [status, setStatus] = useState("active")
     const [usertable, setUsertable] = useState([]) 
@@ -116,7 +116,6 @@ const SwayamCourses = () => {
 
         if (courseData && courseData.data) {
             setUsertable(courseData.data?.data?.map((item) => {
-                console.log("moment(item.duration).format('hh:mm')",moment(item.duration).format('hh:mm'));
                 // const { id, name, designation, status } = user;
                 return {
                     //key: id,

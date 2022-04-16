@@ -7,10 +7,13 @@ const actions = {
   LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
   LOGOUT_ERR: 'LOGOUT_ERR',
 
-
   SIGNUP_BEGIN: 'SIGNUP_BEGIN',
   SIGNUP_SUCCESS:'SIGNUP_SUCCESS',
   SIGNUP_ERR :'SIGNUP_ERR',
+
+  GET_USER_BEGIN:'GET_USER_BEGIN',
+  GET_USER_SUCCESS:'GET_USER_SUCCESS',
+  GET_USER_ERR:'GET_USER_ERR',
 
   loginBegin: () => {
     return {
@@ -69,6 +72,27 @@ const actions = {
   signUpErr: err => {
     return {
       type: actions.SIGNUP_ERR,
+      err,
+    };
+  },
+
+  getUserBegin: () => {
+    return {
+      type: actions.GET_USER_BEGIN,
+    };
+  },
+
+
+  getUserSuccess: data =>{
+    return{
+      type: actions.GET_USER_SUCCESS,
+      data
+    };
+  },
+
+  getUserErr: err => {
+    return {
+      type: actions.GET_USER_ERR,
       err,
     };
   },
