@@ -42,6 +42,10 @@ const {
   GET_SWAYAM_COURSE_MODULE_SUCCESS,
   GET_SWAYAM_COURSE_MODULE_ERR,
 
+  EDIT_SWAYAM_COURSE_MODULE_BEGINE,
+  EDIT_SWAYAM_COURSE_MODULE_SUCCESS,
+  EDIT_SWAYAM_COURSE_MODULE_ERR,
+
 
 } = actions;
 
@@ -59,6 +63,7 @@ const initialState = {
   editSwayamCourseData:null,
   addSwayamCourseModuleData:null,
   getSwayamCourseModuleData:null,
+  editSwayamCourseModuleData:null,
 
 };
 
@@ -224,7 +229,7 @@ const cateGoryReducer = (state = initialState, action) => {
             loading: false,
           };
 
-          case GET_SWAYAM_COURSE_MODULE_BEGINE:
+        case GET_SWAYAM_COURSE_MODULE_BEGINE:
           return {
             ...state,
             loading: true,
@@ -242,6 +247,23 @@ const cateGoryReducer = (state = initialState, action) => {
             loading: false,
           };
 
+          case EDIT_SWAYAM_COURSE_MODULE_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+          case EDIT_SWAYAM_COURSE_MODULE_SUCCESS:
+            return {
+              ...state,
+              editSwayamCourseModuleData: data,
+              loading: false,
+            };
+          case EDIT_SWAYAM_COURSE_MODULE_ERR:
+            return {
+              ...state,
+              error: err,
+              loading: false,
+            };
     default:
       return state;
   }

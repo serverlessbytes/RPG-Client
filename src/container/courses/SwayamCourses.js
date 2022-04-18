@@ -9,7 +9,7 @@ import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { editSwayamCourse, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
 import moment from 'moment';
 
 const SwayamCourses = () => {
@@ -39,9 +39,6 @@ const SwayamCourses = () => {
     const [usertable, setUsertable] = useState([]) 
     
 
-  
-
-
     useEffect(() => {
         dispatch(getCategoryData());
     }, [])
@@ -51,6 +48,15 @@ const SwayamCourses = () => {
             setData({ ...data, category: categoryData.data[0].id })
         }
     }, [categoryData])
+
+    useEffect(() => {
+        if(status && data.category){
+            dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode,status))
+        }
+      }, [status])
+
+    
+      
 
     useEffect(() => {
         if (data.category && activeCoursetog) {
@@ -71,6 +77,27 @@ const SwayamCourses = () => {
 
     const onEdit = (id) => {
         history.push(`${path}/addcourses?id=${id}`)
+    }
+
+    const onDelete=(id)=>{
+        const singleData=courseData.data.data.find((item)=>item.id===id) 
+        if(singleData){
+            let dt = {
+                key: singleData.key,
+                courseId: id,
+                detail: singleData.detail,
+                name: singleData.name,
+                categoryId: singleData.courseCategory.id,
+                duration: singleData.duration,
+                jobCategoryIds: singleData.jobTypes.map((item)=>item.id),
+                certification: singleData.certificate,
+                sequence: parseInt(singleData.sequence),
+                mode: singleData.mode,
+                isActive: false,
+                isDeleted: true,
+              };
+              dispatch(editSwayamCourse(dt))
+        }
     }
 
     const Submit = () => {

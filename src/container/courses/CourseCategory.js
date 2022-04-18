@@ -49,7 +49,7 @@ const CourseCategory = () => {
 
     const onEdit = (id) => {
         let dataForEdit = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        console.log("", dataForEdit);
+        
         if (dataForEdit) {
             setDataForEdit(dataForEdit)
             form.setFieldsValue({

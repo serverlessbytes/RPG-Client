@@ -10,6 +10,7 @@ import {
   addSwayamCourse,
   addSwayamCourseModule,
   editSwayamCourse,
+  editSwayamCourseModule,
   getCategoryData,
   getOneCoursefilter,
   getSwayamCourseModule,
@@ -61,24 +62,28 @@ const AddCourses = () => {
       sequence: '',
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
-      createdByUser: userData?.data?.id || '',
-      modifiedByUser: userData?.data?.id || '',
+      createdByUser:'',
+      modifiedByUser:'',
     },
   ]);
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [removeData, setRemoveData] = useState();
+  const [selectKey, setSelectKey] = useState();
+  const [moduleError,setModuleError]=useState([]);
 
   useEffect(() => {
     if(getSwayamCourseData && getSwayamCourseData.data && id){
-        console.log("getSwayamCourseData",getSwayamCourseData)
         setModuleState(getSwayamCourseData.data.map((item)=>{
             return{
                 name: item.name,
                 detail: item.detail,
-                duration: moment(item.duration,'HH:mm:ss'),
+                duration: moment(item.duration),
                 videoUrl: item.videoUrl,
-                sequence: item.sequence
+                sequence: item.sequence,
+                key: item.key,
+                moduleId: item.id,
+                isActive:true,
+                isDeleted:false
             }
         }))
     }
@@ -86,7 +91,8 @@ const AddCourses = () => {
   
 
   useEffect(() => {
-    if (userData && 'data' in userData) {
+    if (userData && userData.data && userData.data.id && !id) {
+      // setModuleState([{...moduleState,createdByUser:userData.data.id,modifiedByUser:userData.data.id}])
       (moduleState[0].createdByUser = userData.data.id), (moduleState[0].modifiedByUser = userData.data.id);
     }
   }, [userData]);
@@ -146,6 +152,13 @@ const AddCourses = () => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if(moduleError){
+      console.log("moduleError",moduleError);
+    }
+  }, [moduleError])
+  
+
   const onChange = (e, name) => {
     if (name === 'categoryId') {
       setState({ ...state, [name]: e });
@@ -175,41 +188,74 @@ const AddCourses = () => {
     let error = {};
     let flage = false;
     if (state.name === '') {
-      error.name = '*Course name is required';
+      error.name = 'Course name is required';
       flage = true;
     }
     if (state.categoryId === '') {
-      error.categoryId = '*Course category is required';
+      error.categoryId = 'Course category is required';
       flage = true;
     }
     if (state.detail.toString('markdown').length <= 2) {
-      error.detail = '*Detail is required';
+      error.detail = 'Detail is required';
       flage = true;
     }
     if (state.duration === '') {
-      error.duration = '*Course duration body is required';
+      error.duration = 'Course duration body is required';
       flage = true;
     }
     if (state.jobCategoryIds === '') {
-      error.jobCategoryIds = '*Job Category is required';
+      error.jobCategoryIds = 'Job Category is required';
       flage = true;
     }
     if (state.sequence === '') {
-      error.sequence = '*Senquence is required';
+      error.sequence = 'Senquence is required';
       flage = true;
     }
     if (state.certification === '') {
-      error.certification = '*Certification name is required';
+      error.certification = 'Certification name is required';
       flage = true;
     }
     if (state.mode === '') {
-      error.mode = '*Mode name is required';
+      error.mode = 'Mode name is required';
       flage = true;
     }
 
     setError(error);
     return flage;
   };
+
+  const moduleValidation=()=>{
+
+    let flage=false;
+    const error={}
+    if(moduleState.length){
+      moduleState.map((item,i)=>{
+        if(item.name===""){
+          error[`name${i+1}`]="Please enter module name";
+          flage=true
+        }
+        if(item.videoUrl===""){
+          error[`videoUrl${i+1}`]="Please enter video url";
+          flage=true
+        }
+        if(item.duration===""){
+          error[`duration${i+1}`]="Please enter module duration";
+          flage=true
+        }
+        if(item.sequence===""){
+          error[`sequence${i+1}`]="Please enter sequence";
+          flage=true
+        }
+        if(item.detail===""){
+          error[`detail${i+1}`]="Please enter module detail";
+          flage=true
+        }
+      })
+    }
+    setModuleError(error)
+    return flage
+  
+  }
 
   const onSubmit = () => {
     if (validation()) {
@@ -251,7 +297,6 @@ const AddCourses = () => {
   };
 
   const addData = () => {
-    console.log('moduleState', typeof moduleState);
     let val = [...moduleState];
     val.push({
       key: uuid(),
@@ -289,14 +334,23 @@ const AddCourses = () => {
   };
 
   const onModuleSubmit = () => {
-
     dispatch(addSwayamCourseModule(moduleState))
   };
+
+
+  const onModuleEdit=()=>{
+    if(moduleValidation()){
+      return
+    }
+   
+    // console.log("moduleState",moduleState) 
+    dispatch(editSwayamCourseModule(moduleState[selectKey]))
+  }
 
   const onRemoveData = () => {
     if (moduleState.length > 1) {
       let val = [...moduleState];
-      val.splice(removeData, 1);
+      val.splice(selectKey, 1);
       setModuleState(val);
     }
   };
@@ -307,7 +361,7 @@ const AddCourses = () => {
   //         console.log(key);
   // }
   const moduleCallback = key => {
-    setRemoveData(key);
+    setSelectKey(key);
   };
 
   return (
@@ -518,6 +572,7 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'name')}
                               placeholder="Name of the Module"
                             />
+                            {moduleError && moduleError[`name${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`name${i + 1}`]}</label>}
                           </Form.Item>
                         </Col>
                         <Col lg={11}>
@@ -529,6 +584,7 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'videoUrl')}
                               value={item.videoUrl}
                             />
+                            {moduleError && moduleError[`videoUrl${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`videoUrl${i + 1}`]}</label>}
                           </Form.Item>
                         </Col>
                         <Col lg={11} className="addpartnercourses">
@@ -540,6 +596,7 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'duration')}
                               initialValue={moment('00:00:00', 'HH:mm:ss')}
                             />
+                            {moduleError && moduleError[`duration${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`duration${i + 1}`]}</label>}
                           </Form.Item>
                         </Col>
                         <Col lg={11}>
@@ -552,12 +609,14 @@ const AddCourses = () => {
                               value={item.sequence}
                               type="number"
                             />
+                            {moduleError && moduleError[`sequence${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`sequence${i + 1}`]}</label>}
                           </Form.Item>
                         </Col>
                         <Col lg={24}>
                           <label htmlFor="detail">Module Detail</label>
                           <Form.Item>
                             <TextArea name="detail" onChange={e => moduleChange(e, i, 'detail')} value={item.detail} />
+                            {moduleError && moduleError[`detail${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`detail${i + 1}`]}</label>}
                           </Form.Item>
                         </Col>
                       </Row>
@@ -637,23 +696,30 @@ const AddCourses = () => {
                                 </TabPane> */}
               </Tabs>
               <div className="sDash_form-action mt-20">
-                <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => addData()}>
+               {!id &&  <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => addData()}>
                   Add
-                </Button>
-                <Button className="btn-signin" type="light" size="medium" onClick={() => onRemoveData()}>
-                  Delete
-                </Button>
+                </Button>}
+                
               </div>
               <div className="sDash_form-action mt-20">
-                <Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
-                  Up date
+                {id?<Button className="btn-signin ml-10" onClick={() => onModuleEdit()} type="primary" size="medium">
+                  Edit
+                </Button>:<Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
+                  Submit
+                </Button>}
+                <Button className="btn-signin ml-10" type="danger" size="medium" onClick={() => onRemoveData()}>
+                  Delete
                 </Button>
-                <Button className="btn-signin" type="light" size="medium">
+                <Button className="btn-signin ml-10" type="light" size="medium" onClick={()=>history.push('/admin/courses')} >
                   Cancel
                 </Button>
+                
               </div>
             </TabPane>
-            <TabPane tab="Q&A" key="3">
+
+             {/* ************Dont'delete this****************** */}
+
+            {/* <TabPane tab="Q&A" key="3">
               <PageHeader
                 ghost
                 title="Q&A Details"
@@ -739,7 +805,7 @@ const AddCourses = () => {
                   Cancel
                 </Button>
               </div>
-            </TabPane>
+            </TabPane> */}
           </Tabs>
         </Cards>
       </Main>
