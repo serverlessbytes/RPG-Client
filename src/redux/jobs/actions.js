@@ -22,6 +22,22 @@ const actions = {
     EDIT_JOBROLE_BEGINE:"EDIT_JOBROLE_BEGINE",
     EDIT_JOBROLE_SUCCESS:"EDIT_JOBROLE_SUCCESS",
     EDIT_JOBROLE_ERR:"EDIT_JOBROLE_ERR",
+
+    ADD_JOBPOST_BEGINE:"ADD_JOBPOST_BEGINE",
+    ADD_JOBPOST_SUCCESS:"ADD_JOBPOST_SUCCESS",
+    ADD_JOBPOST_ERR:"ADD_JOBPOST_ERR",
+
+    GET_JOBPOST_BEGINE:"GET_JOBPOST_BEGINE",
+    GET_JOBPOST_SUCCESS:"GET_JOBPOST_SUCCESS",
+    GET_JOBPOST_ERR:"GET_JOBPOST_ERR",
+
+    EDIT_JOBPOST_BEGINE:"EDIT_JOBPOST_BEGINE",
+    EDIT_JOBPOST_SUCCESS:"EDIT_JOBPOST_SUCCESS",
+    EDIT_JOBPOST_ERR:"EDIT_JOBPOST_ERR",
+
+    GETONE_JOBPOST_BEGINE:"GETONE_JOBPOST_BEGINE",
+    GETONE_JOBPOST_SUCCESS:"GETONE_JOBPOST_SUCCESS",
+    GETONE_JOBPOST_ERR:"GETONE_JOBPOST_ERR",
    
     getJobcategoryBegin: () => {
       return {
@@ -146,7 +162,86 @@ const actions = {
         err,
       };
     },
+
+    addJobPostBegin: () => {
+      return {
+        type: actions.ADD_JOBPOST_BEGINE,
+      };
+    },
+  
+    addJobPostSuccess: data => {
+      return {
+        type: actions.ADD_JOBPOST_SUCCESS,
+        data,
+      };
+    },
+  
+    addJobPostErr: err => {
+      return {
+        type: actions.ADD_JOBPOST_ERR,
+        err,
+      };
+    },
+
+    getJobPostBegin: () => {
+      return {
+        type: actions.GET_JOBPOST_BEGINE,
+      };
+    },
+  
+    getJobPostSuccess: data => {
+      return {
+        type: actions.GET_JOBPOST_SUCCESS,
+        data,
+      };
+    },
+  
+    getJobPostErr: err => {
+      return {
+        type: actions.GET_JOBPOST_ERR,
+        err,
+      };
+    },
     
+    editJobPostBegin: () => {
+      return {
+        type: actions.EDIT_JOBPOST_BEGINE,
+      };
+    },
+  
+    editJobPostSuccess: data => {
+      return {
+        type: actions.EDIT_JOBPOST_SUCCESS,
+        data,
+      };
+    },
+  
+    editJobPostErr: err => {
+      return {
+        type: actions.EDIT_JOBPOST_ERR,
+        err,
+      };
+    },
+
+    getoneJobPostBegin: () => {
+      return {
+        type: actions.GETONE_JOBPOST_BEGINE,
+      };
+    },
+  
+    getoneJobPostSuccess: data => {
+      return {
+        type: actions.GETONE_JOBPOST_SUCCESS,
+        data,
+      };
+    },
+  
+    getoneJobPostErr: err => {
+      return {
+        type: actions.GETONE_JOBPOST_ERR,
+        err,
+      };
+    },
   
   };
   export default actions;

@@ -23,7 +23,19 @@ const {
 
   EDIT_JOBROLE_BEGINE,
   EDIT_JOBROLE_SUCCESS,
-  EDIT_JOBROLE_ERR
+  EDIT_JOBROLE_ERR,
+
+  ADD_JOBPOST_BEGINE,
+  ADD_JOBPOST_SUCCESS,
+  ADD_JOBPOST_ERR,
+
+  GET_JOBPOST_BEGINE,
+  GET_JOBPOST_SUCCESS,
+  GET_JOBPOST_ERR,
+
+  GETONE_JOBPOST_BEGINE,
+  GETONE_JOBPOST_SUCCESS,
+  GETONE_JOBPOST_ERR,
 
 } = actions;
 
@@ -36,6 +48,9 @@ const initialState = {
   jobRoleData: null,
   addJobRoleData: null,
   editJobRoleData: null,
+  addJobPostData : null,
+  getJobPostData : null,
+  getOneJobPostData : null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -47,7 +62,7 @@ const jobReducer = (state = initialState, action) => {
         loading: true,
       };
     case GET_JOBCATEGOTRY_SUCCESS:
-     // console.log("datareducer",data)
+      // console.log("datareducer",data)
       return {
         ...state,
         jobCatogeryData: data,
@@ -97,7 +112,7 @@ const jobReducer = (state = initialState, action) => {
       };
 
 
-      case GET_JOBROLE_BEGINE:
+    case GET_JOBROLE_BEGINE:
       return {
         ...state,
         loading: true,
@@ -151,7 +166,61 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
 
-    
+      case ADD_JOBPOST_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_JOBPOST_SUCCESS:
+        return {
+          ...state,
+          addJobPostData: data,
+          loading: false,
+        };
+      case ADD_JOBPOST_ERR:
+        return {
+          ...state,
+          error: err,
+          loading: false,
+        };
+
+        case GET_JOBPOST_BEGINE:
+          return {
+            ...state,
+            loading: true,
+          };
+        case GET_JOBPOST_SUCCESS:
+          return {
+            ...state,
+            getJobPostData: data,
+            loading: false,
+          };
+        case GET_JOBPOST_ERR:
+          return {
+            ...state,
+            error: err,
+            loading: false,
+          };
+
+          case GETONE_JOBPOST_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+          case GETONE_JOBPOST_SUCCESS:
+            return {
+              ...state,
+              getOneJobPostData: data,
+              loading: false,
+            };
+          case GETONE_JOBPOST_ERR:
+            return {
+              ...state,
+              error: err,
+              loading: false,
+            };
+
+
     default:
       return state;
   }
