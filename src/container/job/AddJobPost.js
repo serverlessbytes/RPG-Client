@@ -1,6 +1,5 @@
 import { Button, Col, Input, Row, Form, Select, Radio, Space, DatePicker, TimePicker } from 'antd';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import FeatherIcon from 'feather-icons-react';
 import { Main } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { HorizontalFormStyleWrap } from '../forms/overview/Style';
@@ -8,10 +7,8 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { addJobPost, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
+import { addJobPost, editJobPost, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
-import { getOneSchemeData } from '../../redux/schemes/actionCreator';
-
 
 const AddJobPost = () => {
     let history = useHistory();
@@ -19,6 +16,7 @@ const AddJobPost = () => {
     let location = useLocation();
     const { Option } = Select;
     const { TextArea } = Input;
+    const [editJobsID, seteditJobsID] = useState()
     // function onchange(date, dateString) { //for date    
     //     console.log(date, dateString);
     // }
@@ -31,6 +29,7 @@ const AddJobPost = () => {
 
     let jobData = useSelector((state) => state.job.jobCatogeryData) //job category
     let jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
+
     useEffect(() => {
         dispatch(getJobcategory()) //dispatch job category
     }, [])
@@ -40,17 +39,15 @@ const AddJobPost = () => {
     }, [])
 
     useEffect(() => {
-        console.log("location.search",location.search);
+        console.log("location.search", location.search);
         if (location.search.split("=")[1]) {
+            seteditJobsID(location.search.split("=")[1])
             dispatch(getoneJobPost(location.search.split("=")[1]))
         }
     }, [location.search])
     const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
     const [error, setError] = useState({}); // for valadation
 
-    // useEffect(() => {
-    //     console.log("jobRolData", jobRolData)
-    // }, [jobRolData])
     const [state, setState] = useState({
         salary: "",
         benifits: "",
@@ -61,7 +58,7 @@ const AddJobPost = () => {
         pincode: "",
         description: "",
         vacancies: "",
-        req_experience: "",
+        reqExperience: "",
         requirements: "",
         jobCategoryId: "",
         isActive: true,
@@ -73,39 +70,41 @@ const AddJobPost = () => {
         startDate: "",
         endDate: "",
         jobRoleId: "",
-     });
-//   useEffect(()=>{
-//     if(getOneJobPostData){
-//         setState({
-//             ...state,
-//             salary:getOneJobPostData.salary,
-//             benifits:getOneJobPostData.benifits ,
-//             name:getOneJobPostData.name ,
-//             state:getOneJobPostData.state,
-//             district:getOneJobPostData.district ,
-//             town:getOneJobPostData.town ,
-//             pincode:getOneJobPostData.pincode ,
-//             description:getOneJobPostData.description ,
-//             vacancies:getOneJobPostData.vacancies ,
-//             reqExperience:getOneJobPostData. ,
-//             requirements: ,
-//             jobCategoryId: ,
-//             isActive: true,
-//             shifts: ,
-//             email: ,
-//             phone: ,
-//             type: ,
-//             extraType: ,
-//             startDate: ,
-//             endDate: "",
-//             jobRoleId: "",
-//         })
-//     }
-//   },[getOneJobPostData])
-   
+        key: "",
+    });
+
+    useEffect(() => {
+        if (getOneJobPostData) {
+            console.log("getOneJobPostData", getOneJobPostData)
+            setState({
+                ...state,
+                key: getOneJobPostData.data.key,
+                salary: getOneJobPostData.data.salary,
+                benifits: getOneJobPostData.data.benifits,
+                name: getOneJobPostData.data.name,
+                state: getOneJobPostData.data.state,
+                district: getOneJobPostData.data.district,
+                town: getOneJobPostData.data.town,
+                pincode: getOneJobPostData.data.pincode,
+                description: getOneJobPostData.data.description,
+                vacancies: getOneJobPostData.data.vacancies,
+                reqExperience: getOneJobPostData.data.reqExperience,
+                requirements: getOneJobPostData.data.requirements,
+                jobCategoryId: getOneJobPostData.data.jobType.id,
+                isActive: true,
+                shifts: getOneJobPostData.data.shifts,
+                email: getOneJobPostData.data.email,
+                phone: getOneJobPostData.data.phone,
+                type: getOneJobPostData.data.type,
+                extraType: getOneJobPostData.data.extraType,
+                startDate: moment(getOneJobPostData.data.startDate),
+                endDate: moment(getOneJobPostData.data.endDate),
+                jobRoleId: getOneJobPostData.data.jobRole.id,
+            })
+        }
+    }, [getOneJobPostData])
 
     const validation = () => {
-        // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
         let error = {};
         let flage = false;
         if (state.salary === '') {
@@ -194,24 +193,23 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = e => {
-        // console.log("-----",e.target.name)
         setState({ ...state, [e.target.name]: e.target.value });
     }
 
     const onChnageHandle = (e, name) => {
         console.log("name", name);
         console.log("e", e);
-        if (name === "jobCategoryId") { //jobRoleId
+        if (name === "jobCategoryId") { 
             setState({ ...state, jobCategoryId: e })
         }
-        else if (name === "jobRoleId") {   
+        else if (name === "jobRoleId") {
             setState({ ...state, jobRoleId: e })
         }
-        else if (name === "shifts") {   
+        else if (name === "shifts") {
             setState({ ...state, shifts: e })
         }
         else if (name === "startDate") {
-            console.log("timeeewee",moment.utc(e).format()) 
+            console.log("timeeewee", moment.utc(e).format())
             setState({ ...state, startDate: e })
         }
         else if (name === "endDate") {
@@ -229,51 +227,74 @@ const AddJobPost = () => {
         if (validation()) {
             return;
         }
-       
-        let data =  {
-            key : uuid(),
-            name : state.name,
-            state : state.state,
-            district : state.district,
-            town : state.town,
-            pincode : state.pincode,
-            description : state.description,
-            vacancies : parseInt(state.vacancies),
-            req_experience : state.req_experience,
-            salary : state.salary,
-            benifits : state.benifits,
-            requirements : state.requirements,
-            type : state.type,
-            extraType : state.extraType,
+        let data = {
+            key: uuid(),
+            name: state.name,
+            state: state.state,
+            district: state.district,
+            town: state.town,
+            pincode: state.pincode,
+            description: state.description,
+            vacancies: parseInt(state.vacancies),
+            reqExperience: state.reqExperience,
+            salary: state.salary,
+            benifits: state.benifits,
+            requirements: state.requirements,
+            type: state.type,
+            extraType: state.extraType,
             isActive: true,
-            shifts : state.shifts,
-            email : state.email,
-            phone : state.phone,
-            startDate : moment.utc(state.startDate).format(),
-            endDate : moment.utc(state.endDate).format(),
-           // moment('2019-11-03T05:00:00.000Z').utc().format('MM/DD/YYYY')
-            //endDate :  moment(state.endDate).format('DD-MM-YYYY hh:mm:ss'),
-            jobRoleId : state.jobRoleId,
-            jobCategoryId : state.jobCategoryId,
-        }
+            shifts: state.shifts,
+            email: state.email,
+            phone: state.phone,
+            startDate: moment.utc(state.startDate).format(),
+            endDate: moment.utc(state.endDate).format(),
+            jobRoleId: state.jobRoleId,
+            jobCategoryId: state.jobCategoryId,
+        };
         dispatch(addJobPost(data))
-        //history.push(`job/post`);
-        console.log("----", data)
-      
+        history.push(`/admin/job/post`);
+    };
+    const onEdit = () => {
+        let data = {
+            id: editJobsID,
+            name: state.name,
+            state: state.state,
+            district: state.district,
+            town: state.town,
+            pincode: state.pincode,
+            description: state.description,
+            vacancies: parseInt(state.vacancies),
+            reqExperience: state.reqExperience,
+            salary: state.salary,
+            benifits: state.benifits,
+            requirements: state.requirements,
+            type: state.type,
+            extraType: state.extraType,
+            isActive: true,
+            shifts: state.shifts,
+            email: state.email,
+            phone: state.phone,
+            startDate: moment.utc(state.startDate).format(),
+            endDate: moment.utc(state.endDate).format(),
+            jobRoleId: state.jobRoleId,
+            jobCategoryId: state.jobCategoryId,
+        }
+        dispatch(editJobPost(data));
+        history.push(`/admin/job/post`);
     }
 
     return (
         <>
             <PageHeader
                 title="Add Job Post"
-                buttons={[
-                    <div key="1" className="page-header-actions">
-                        <Button size="small" onClick={() => { }} type="primary">
-                            <FeatherIcon icon="plus" size={14} />
-                            Add New
-                        </Button>
-                    </div>,
-                ]}
+            // buttons={[
+            //     <div key="1" className="page-header-actions">
+            //         <Button size="small" onClick={() => { }} type="primary">
+            //             <FeatherIcon icon="plus" size={14} />
+            //             Add New
+            //         </Button>
+            //     </div>,
+            // ]}
             />
             <Main >
                 <HorizontalFormStyleWrap>
@@ -287,7 +308,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="jobCategoryId" initialValue="Select a job Category" >
-                                                <Select size="large" className="sDash_fullwidth-select" name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} defaultValue="Select Job">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} defaultValue="Select Job">
                                                     {jobData && jobData.data.map((items) => (
                                                         <Option value={items.id}>{items.name} </Option>
                                                     ))}
@@ -319,7 +340,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="Selectajobrole" initialValue="Select a job role">
-                                                <Select size="large" className="sDash_fullwidth-select" name="jobRoleId" onChange={(e) => onChnageHandle(e, "jobRoleId")} defaultValue="Select Job Role">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRoleId} name="jobRoleId" onChange={(e) => onChnageHandle(e, "jobRoleId")} defaultValue="Select Job Role">
                                                     {jobRolData && jobRolData.map((items) => (
                                                         <Option value={items.id}>{items.name} </Option>
                                                     ))}
@@ -336,7 +357,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="AnyotherBenefitsE" initialValue="">
-                                                <Input placeholder="Benefits" name="benifits" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Benefits" value={state.benifits} name="benifits" onChange={e => onChangeValue(e)} />
                                                 {error.benifits && <span style={{ color: 'red' }}>{error.benifits}</span>}
                                             </Form.Item>
                                         </Col>
@@ -351,7 +372,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="name" initialValue="">
-                                                <Input placeholder="Enter Employer Name" name='name' onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="Enter Employer Name" value={state.name} name='name' onChange={(e) => onChangeValue(e)} />
                                                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                                             </Form.Item>
                                         </Col>
@@ -364,7 +385,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="vacancies" initialValue="">
-                                                <Input type="number" placeholder="vacancies" name='vacancies' onChange={(e) => onChnageHandle(e)} />
+                                                <Input type="number" placeholder="vacancies" value={state.vacancies} name='vacancies' onChange={(e) => onChnageHandle(e)} />
                                                 {error.vacancies && <span style={{ color: 'red' }}>{error.vacancies}</span>}
                                             </Form.Item>
                                         </Col>
@@ -379,7 +400,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="state">
-                                                <Input placeholder="State" name="state" onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="State" value={state.state} name="state" onChange={(e) => onChangeValue(e)} />
                                                 {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                                             </Form.Item>
                                         </Col>
@@ -391,7 +412,7 @@ const AddJobPost = () => {
                                             <label htmlFor="name">Type of Job</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Radio.Group name="type" onChange={(e) => onChangeValue(e)}>
+                                            <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
                                                 <Space direction="vertical">
                                                     <Row>
                                                         <Radio checked={state.type === true} value={"PARTTIME"}>Part-time</Radio>
@@ -412,7 +433,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="district" >
-                                                <Input placeholder="District" name="district" onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="District" value={state.district} name="district" onChange={(e) => onChangeValue(e)} />
                                                 {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                                             </Form.Item>
                                         </Col>
@@ -425,7 +446,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="phone">
-                                                <Input placeholder="Phone" name="phone" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Phone" value={state.phone} name="phone" onChange={e => onChangeValue(e)} />
                                                 {error.phone && <span style={{ color: 'red' }}>{error.phone}</span>}
                                             </Form.Item>
                                         </Col>
@@ -440,7 +461,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="TownVillage" initialValue="">
-                                                <Input placeholder="Enter Town / Village" name="town" onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="Enter Town / Village" value={state.town} name="town" onChange={(e) => onChangeValue(e)} />
                                                 {error.town && <span style={{ color: 'red' }}>{error.town}</span>}
                                             </Form.Item>
                                         </Col>
@@ -453,7 +474,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="email">
-                                                <Input placeholder="Email" name="email" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Email" value={state.email} name="email" onChange={e => onChangeValue(e)} />
                                                 {error.email && <span style={{ color: 'red' }}>{error.email}</span>}
                                             </Form.Item>
                                         </Col>
@@ -469,7 +490,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="pincode">
-                                                <Input placeholder="pincode" name="pincode" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="pincode" value={state.pincode} name="pincode" onChange={e => onChangeValue(e)} />
                                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                                             </Form.Item>
                                         </Col>
@@ -483,7 +504,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="description">
-                                                <TextArea placeholder='Description' name="description" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Description' value={state.description} name="description" onChange={e => onChangeValue(e)} />
                                                 {error.description && <span style={{ color: 'red' }}>{error.description}</span>}
                                             </Form.Item>
                                         </Col>
@@ -498,10 +519,10 @@ const AddJobPost = () => {
                                             <label htmlFor="shifts">Shift</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="shifts" initialValue ="Select Shift">
+                                            <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.locations} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} mode="multiple">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} mode="multiple">
                                                     <Option value={"DAY"}> Day </Option>
                                                     <Option value={"NIGHT"}> Night </Option>
                                                 </Select>
@@ -517,9 +538,9 @@ const AddJobPost = () => {
                                             <label htmlFor="req_experience">Requried Experience</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="req_experience">
-                                                <Input placeholder="Requried Experience" name="req_experience" onChange={e => onChangeValue(e)} />
-                                                {error.req_experience && <span style={{ color: 'red' }}>{error.req_experience}</span>}
+                                            <Form.Item name="reqExperience">
+                                                <Input placeholder="Requried Experience" value={state.reqExperience} name="reqExperience" onChange={e => onChangeValue(e)} />
+                                                {error.reqExperience && <span style={{ color: 'red' }}>{error.reqExperience}</span>}
                                             </Form.Item>
                                         </Col>
                                     </Row>
@@ -533,20 +554,9 @@ const AddJobPost = () => {
                                             <label htmlFor="startdata">Start Date</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item initialValue={moment('00/00/0000', 'dd/mm/yyyy HH:mm:ss' )} name="startdata">
-                                                {/* <DatePicker
-                                                defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
-                                                   disabledDate={this.disabledStartDate}
-                                                    showTime
-                                                    format="YYYY-MM-DD HH:mm:ss"
-                                                    value={startValue}
-                                                   placeholder="Start"
-                                                    onChange={this.onStartChange}
-                                                    onOpenChange={this.handleStartOpenChange}
-                                                   style={{ margin: '5px' }}
-                                                /> */}
+                                            <Form.Item name="startdata">
                                                 <Space direction="vertical">
-                                                    <DatePicker name="startDate"  onChange={(e) => onChnageHandle(e, "startDate")} />
+                                                    <DatePicker name="startDate" value={state.startDate} onChange={(e) => onChnageHandle(e, "startDate")} />
                                                     {error.startDate && <span style={{ color: 'red' }}>{error.startDate}</span>}
                                                 </Space>
                                             </Form.Item>
@@ -561,7 +571,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="requirements">
-                                                <TextArea placeholder='Requirements' name="requirements" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Requirements' value={state.requirements} name="requirements" onChange={e => onChangeValue(e)} />
                                                 {error.requirements && <span style={{ color: 'red' }}>{error.requirements}</span>}
                                             </Form.Item>
                                         </Col>
@@ -577,19 +587,8 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="endDate">
-                                                {/* <DatePicker
-                                                defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
-                                                   disabledDate={this.disabledStartDate}
-                                                    showTime
-                                                    format="YYYY-MM-DD HH:mm:ss"
-                                                    value={startValue}
-                                                   placeholder="Start"
-                                                    onChange={this.onStartChange}
-                                                    onOpenChange={this.handleStartOpenChange}
-                                                   style={{ margin: '5px' }}
-                                                /> */}
                                                 <Space direction="vertical">
-                                                    <DatePicker name="endDate" onChange={(e) => onChnageHandle(e, "endDate")} />
+                                                    <DatePicker name="endDate" value={state.endDate} onChange={(e) => onChnageHandle(e, "endDate")} />
                                                     {error.endDate && <span style={{ color: 'red' }}>{error.endDate}</span>}
                                                 </Space>
                                             </Form.Item>
@@ -604,7 +603,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="isactive">
-                                                <Radio.Group name="extraType" onChange={(e) => onChangeValue(e)}  >
+                                                <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
                                                     <Space direction="vertical">
                                                         <Row>
                                                             <Radio checked={state.extraType === true} value={"CONTRACTUAL"}>
@@ -613,8 +612,6 @@ const AddJobPost = () => {
                                                             <Radio checked={state.extraType === true} value={"ONROLL"}>
                                                                 OnRoll
                                                             </Radio>
-                                                            {/* <Radio value={true}>Yes</Radio>
-                                                            <Radio value={false}>No</Radio> */}
                                                         </Row>
                                                     </Space>
 
@@ -628,9 +625,13 @@ const AddJobPost = () => {
 
                         </Form>
                         <div className="sDash_form-action mt-20">
-                            <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                Submit
-                            </Button>
+                            {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
+                                Edit </Button> :
+                                <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
+                                    Submit
+                                </Button>
+                            }
+
                             <Button
                                 className="btn-signin"
                                 type="light"

@@ -9,8 +9,9 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
+import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 
 const Schemes = () => {
 
@@ -18,6 +19,41 @@ const Schemes = () => {
     let history = useHistory();
     let dispatch = useDispatch();
     const users = useSelector((state) => state.scheme.getAllSchemeData)
+
+    const [schemeBenefits, setSchemeBenefits] = useState("");
+    const [schemeCategory, setSchemeCategory] = useState("");
+
+    const onChnageValue = (e, name) => {
+        if (name === 'category') {
+            setSchemeCategory({ ...schemeCategory,category:e })
+        }
+        else if (name === 'benefits') {
+            setSchemeBenefits({ ...schemeBenefits,benefit:e })
+        }
+    }
+
+    useEffect(() => {
+        console.log("schemeBenefits",schemeBenefits);
+    }, [schemeBenefits])
+
+    useEffect(() => {
+        console.log("schemeCategory",schemeCategory);
+    }, [schemeBenefits])
+
+    useEffect(() => {
+        dispatch(getSchemecategory());
+    }, [])
+
+    useEffect(() => {
+        dispatch(getBenefitsData())
+    }, []);
+    
+    const onApply = () => {
+        dispatch(getSchemeData(perPage, pageNumber, status,schemeBenefits.benefit,schemeCategory.category))
+    }
+    const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
+
+    const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
 
     const reDirect = () => {
         history.push(`${path}/addscheme`);
@@ -48,8 +84,8 @@ const Schemes = () => {
     const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
-        dispatch(getSchemeData(perPage, pageNumber, status))
-    }, [perPage, pageNumber, status])
+        dispatch(getSchemeData(perPage, pageNumber, status)) //for listing
+    }, [perPage, pageNumber,status])
     const { TabPane } = Tabs;
 
     const callback = (key) => {
@@ -60,7 +96,7 @@ const Schemes = () => {
     const usersTableData = [];
 
     users && users.data.map((item) => {
-       // console.log(item.key);
+        // console.log(item.key);
         return usersTableData.push({
 
             SchemeName: item.name,
@@ -72,9 +108,9 @@ const Schemes = () => {
                 <div className='active-schemes-table'>
                     <div className="table-actions">
                         <>
-                            {status === "" && <Button className="btn-icon" onClick={() => reDirectSchemes(item.key)} type="info" to="#" shape="circle">
+                            <Button className="btn-icon" onClick={() => reDirectSchemes(item.key)} type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
-                            </Button>}
+                            </Button>
                             <Button className="btn-icon" type="warning" to="#" onClick={() => deleteSchemes(item.key)} shape="circle">
                                 <FeatherIcon icon="file" size={16} />
                             </Button>
@@ -169,31 +205,30 @@ const Schemes = () => {
                 <Cards headless>
                     <Row gutter={15}>
                         <Col xs={24}>
-                            {/* <Row gutter={30}>
+                            <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Language">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                                                <Option value="1">All </Option>
-                                                <Option value="2">Einglish</Option>
-                                                <Option value="3">Hindi</Option>
+                                        <Form.Item name="basic-select" label="Scheme Category">
+                                            <Select size="large" className="sDash_fullwidth-select" name="category" onChange={(e) => onChnageValue(e, "category")} placeholder="Select">
+                                                {schemeData && schemeData.data?.map((items) => (
+                                                    <Option value={items.id}>{items.name} </Option>
+                                                ))}
                                             </Select>
                                         </Form.Item>
                                     </Form>
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Type of Benefits">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                                                <Option value="1">All</Option>
-                                                <Option value="2">  Food, Shelter & Financial aid </Option>
-                                                <Option value="3"> Education & Training </Option>
-                                                <Option value="4">  Agriculture & Fisheries </Option>
+                                        <Form.Item name="basic-select" label="Scheme Benefits">
+                                            <Select size="large" className="sDash_fullwidth-select" name="benefits" onChange={(e) => onChnageValue(e, "benefits")} placeholder="Select">
+                                                {getBenefitData && getBenefitData.data?.map((items) => (
+                                                    <Option value={items.id}>{items.name} </Option>
+                                                ))}
                                             </Select>
                                         </Form.Item>
                                     </Form>
                                 </Col>
-                                <Col md={6} xs={24} className="mb-25">
+                                {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="Location">
                                             <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
@@ -206,18 +241,15 @@ const Schemes = () => {
                                             </Select>
                                         </Form.Item>
                                     </Form>
-                                </Col>
+                                </Col> */}
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary">
+                                        <Button size="small" type="primary" onClick = {(e) => onApply(e)}>
                                             Apply
-                                        </Button>
-                                        <Button size="small" type="light">
-                                            Clear
                                         </Button>
                                     </ListButtonSizeWrapper>
                                 </Col>
-                            </Row> */}
+                            </Row>
                             {/* <Row className="mb-25">
                                 <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
                                     Active Schemes
@@ -269,10 +301,10 @@ const Schemes = () => {
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={usersTableData}
-                                                columns={usersTableColumns.filter(item=>item.title !== "Actions") }
+                                                columns={usersTableColumns.filter(item => item.title !== "Actions")}
                                                 pagination={{
                                                     defaultPageSize: users?.per_page,
-                                                    total:users?.page_count,
+                                                    total: users?.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);

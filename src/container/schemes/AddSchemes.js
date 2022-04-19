@@ -47,6 +47,8 @@ const AddSchemes = () => {
         spoc: '',
         isActive: '',
         sequence: '',
+        videoUrl:'',
+        thumbnail:'',
     });
     const [error, setError] = useState({})
 
@@ -68,7 +70,7 @@ const AddSchemes = () => {
 
     useEffect(() => {
         if (getOneScHemeData) {
-            // console.log("getOneScHemeData", getOneScHemeData)
+            console.log("getOneScHemeData", getOneScHemeData)
             setState({
                 ...state,
                 benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
@@ -87,6 +89,8 @@ const AddSchemes = () => {
                 spoc: getOneScHemeData.spoc,
                 isActive: getOneScHemeData.isActive,
                 sequence: getOneScHemeData.sequence,
+                videoUrl:getOneScHemeData.videoUrl,
+                thumbnail:getOneScHemeData.thumbnail,
             })
         }
     }, [getOneScHemeData])
@@ -259,18 +263,23 @@ const AddSchemes = () => {
             error.spoc = "*spoc is required";
             flage = true;
         }
+        if (state.videoUrl === "") {
+            error.videoUrl = "*VideoUrl is required";
+            flage = true;
+        }
+        if (state.thumbnail === "") {
+            error.thumbnail = "*ThumbNail is required";
+            flage = true;
+        }
         setError(error);
         return flage
     }
 
 
     const onSubmit = () => {
-
         if (validation()) {
             return;
         }
-
-
         let data = {
             key: uuid(),
             sequence: parseInt(state.sequence),
@@ -279,7 +288,6 @@ const AddSchemes = () => {
             howToApply: state.howToApply.toString('markdown'),
             documentation: state.documentation.toString('markdown'),
             name: state.name,
-            //locations:[state.loCation],
             locations: state.locations,
             schemeCategory: state.schemeCategory,
             schemeBenifit: state.schemeBenifit,
@@ -289,7 +297,10 @@ const AddSchemes = () => {
             grievanceRedress: state.grievanceRedress,
             elink: state.elink,
             spoc: state.spoc,
-            isActive: state.isActive
+            isActive: state.isActive,
+            videoUrl:state.videoUrl,
+            thumbnail:state.thumbnail,
+
         }
         console.log("data", state);
         if (!location.search) {
@@ -483,6 +494,24 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
                     </Row>
+
+                    <Row justify="space-between">
+                        <Col lg={11} className="d-flex f-d-cloumn">
+                        <label htmlFor="videoUrl">VideoUrl</label>
+                            <Form.Item >
+                                <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={(e) => onChangeValue(e)} />
+                                {error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>}
+                            </Form.Item>
+                        </Col>
+                        <Col lg={11}>
+                            <label htmlFor="thumbnail">ThumbNail</label>
+                            <Form.Item >
+                                <Input placeholder="ThumbNail" value={state.thumbnail} name="thumbnail" onChange={(e) => onChangeValue(e)} />
+                                {error.thumbnail && <span style={{ color: "red" }}>{error.thumbnail}</span>}
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
                     <div >
                         <label htmlFor="visible" className='ml-10'>Visible to User</label>
                         <Checkbox id='visible' name="isActive" checked={state.isActive} onChange={(e) => onChangeValue(e)} ></Checkbox>

@@ -38,6 +38,11 @@ const actions = {
     GETONE_JOBPOST_BEGINE:"GETONE_JOBPOST_BEGINE",
     GETONE_JOBPOST_SUCCESS:"GETONE_JOBPOST_SUCCESS",
     GETONE_JOBPOST_ERR:"GETONE_JOBPOST_ERR",
+
+    GET_JOBSFILTER_BEGINE:"GET_JOBSFILTER_BEGINE",
+    GET_JOBSFILTER_SUCCESS:"GET_JOBSFILTER_SUCCESS",
+    GET_JOBSFILTER_ERR:"GET_JOBSFILTER_ERR", 
+    
    
     getJobcategoryBegin: () => {
       return {
@@ -239,6 +244,26 @@ const actions = {
     getoneJobPostErr: err => {
       return {
         type: actions.GETONE_JOBPOST_ERR,
+        err,
+      };
+    },
+
+    getJobsFilterForMainBegin: () => {
+      return {
+        type: actions.GET_JOBSFILTER_BEGINE,
+      };
+    },
+  
+    getJobsFilterForMainSuccess: data => {
+      return {
+        type: actions.GET_JOBSFILTER_SUCCESS,
+        data,
+      };
+    },
+  
+    getJobsFilterForMainErr: err => {
+      return {
+        type: actions.GET_JOBSFILTER_ERR,
         err,
       };
     },
