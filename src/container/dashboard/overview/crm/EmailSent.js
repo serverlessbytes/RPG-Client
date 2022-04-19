@@ -81,10 +81,10 @@ const EmailSent = ({dnone, emailSendTitle}) => {
               <Spin />
             </div>
           ) : (
-            <div className="sent-emial-chart">
-              <ChartjsDonut labels={datasets} datasets={datasets} height={180} />
+            <div className="sent-emial-chart" style={{paddingTop:"32px"}}>
+              <ChartjsDonut labels={datasets} datasets={datasets} height={230} />
 
-              <div className="sent-emial-data">
+              <div className="sent-emial-data" style={{marginTop:"62px"}}>
                 {datasets.map((item, key) => {
                   const { data } = item;
                   return (

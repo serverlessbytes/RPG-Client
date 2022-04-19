@@ -20,17 +20,6 @@ const Dashboard = () => {
       <PageHeader
         ghost
         title="Dashbord"
-      // buttons={[
-      //   <div key="6" className="page-header-actions">
-      //     <CalendarButtonPageHeader key="1" />
-      //     <ExportButtonPageHeader key="2" />
-      //     <ShareButtonPageHeader key="3" />
-      //     <Button size="small" key="4" type="primary">
-      //       <FeatherIcon icon="plus" size={14} />
-      //       Add New
-      //     </Button>
-      //   </div>,
-      // ]}
       />
       <Main>
         <Row gutter={25}>
@@ -39,15 +28,71 @@ const Dashboard = () => {
               <EChartCard>
                 <div className="card-chunk">
                   <CardBarChart2>
-                    <Heading as="h1">7,461</Heading>
+                    <Heading as="h1">5,000</Heading>
                     <span>No.of registration</span>
-                    <p>
+                    {/* <p>
                       <span className="growth-upward">
-                        {/* <FeatherIcon icon="arrow-up" /> */}
                         25%
                       </span>
                       <span>Since last week</span>
-                    </p>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">40</Heading>
+                    <span>No.of employers</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">40</Heading>
+                    <span>No.of partners</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">20</Heading>
+                    <span>No.of courses</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
                   </CardBarChart2>
                 </div>
 
@@ -56,7 +101,47 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row gutter={25}>
-          <Col xxl={8} xs={24}>
+          <Col xxl={12} xs={24}>
+            <Row gutter={25}>
+              <Col xxl={12} md={12} sm={12} xs={24}>
+                <Cards headless>
+                  <EChartCard>
+                    <div className="card-chunk">
+                      <CardBarChart2>
+                        <Heading as="h1">100</Heading>
+                        <span>No.of courses</span>
+                        {/* <p>
+                          <span className="growth-upward">
+                            25%
+                          </span>
+                          <span>Since last week</span>
+                        </p> */}
+                      </CardBarChart2>
+                    </div>
+
+                  </EChartCard>
+                </Cards>
+              </Col>
+              <Col xxl={12} md={12} sm={12} xs={24}>
+                <Cards headless>
+                  <EChartCard>
+                    <div className="card-chunk">
+                      <CardBarChart2>
+                        <Heading as="h1">10,000</Heading>
+                        <span>No.of courses</span>
+                        {/* <p>
+                          <span className="growth-upward">
+                            25%
+                          </span>
+                          <span>Since last week</span>
+                        </p> */}
+                      </CardBarChart2>
+                    </div>
+
+                  </EChartCard>
+                </Cards>
+              </Col>
+            </Row>
             <Suspense
               fallback={
                 <Cards headless>
@@ -64,10 +149,10 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <ClosedDeals dnone={'d-none'} title={'Page views schemes Graph'} />
+              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} />
             </Suspense>
           </Col>
-          <Col xxl={8} xs={24}>
+          <Col xxl={12} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
@@ -75,9 +160,11 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes Graph'} />
+              <ClosedDeals dnone={'d-none'} title={'Page views courses'} />
             </Suspense>
           </Col>
+        </Row>
+        <Row gutter={25}>
           <Col xxl={8} xs={24}>
             <Suspense
               fallback={
@@ -89,7 +176,30 @@ const Dashboard = () => {
               <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 10 Jobs viewes'} />
             </Suspense>
           </Col>
+          <Col xxl={8} xs={24}>
+            <Suspense
+              fallback={
+                <Cards headless>
+                  <Skeleton active />
+                </Cards>
+              }
+            >
+              <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 5 courses viewes'} />
+            </Suspense>
+          </Col>
+          <Col xxl={8} xs={24}>
+            <Suspense
+              fallback={
+                <Cards headless>
+                  <Skeleton active />
+                </Cards>
+              }
+            >
+              <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 10 schemes'} />
+            </Suspense>
+          </Col>
         </Row>
+
       </Main>
     </>
   );
