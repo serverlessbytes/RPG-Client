@@ -36,7 +36,7 @@ const PartnerCourses = () => {
     }, [catdata])
 
     useEffect(() => {
-        if (state && activeCoursetog) {
+        if (state && state.category && activeCoursetog ) {
             Submit()
         }
     }, [state])
@@ -125,12 +125,16 @@ const PartnerCourses = () => {
         }
 
     }, [courseData])
+    
     const Submit = () => {
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status))
     }
     useEffect(()=>{
-        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status)
-        )},[state.category, perPage, pageNumber, state.mode, status]) //paganation
+    
+
+            dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status)
+            )
+        },[state.category, perPage, pageNumber, state.mode, status]) //paganation
         
     const usersTableColumns = [
         
