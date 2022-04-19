@@ -28,10 +28,10 @@ const SwayamCourses = () => {
     const [data,setData]=useState(
         {
             category: "",
-            mode: "",
+            mode: "BOTH",
         }
     )
-    const [perPage, setPerPage] = useState(20)   
+    const [perPage, setPerPage] = useState(25)   
     const [pageNumber, setPageNumber] = useState(1)
     const [status, setStatus] = useState("active")
     const [usertable, setUsertable] = useState([]) 

@@ -48,7 +48,7 @@ const AddCourses = () => {
     jobCategoryIds: [],
     certification: '',
     sequence: '',
-    mode: 'BOTH',
+    mode: '',
     key: '',
     thumbnail:'',
   });
