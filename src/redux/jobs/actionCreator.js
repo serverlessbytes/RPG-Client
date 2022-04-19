@@ -34,6 +34,9 @@ const {
 
   getoneJobPostSuccess,
   getoneJobPostErr,
+
+  getJobsFilterForMainSuccess,
+  getJobsFilterForMainErr,
 } = actions;
 
 export const getJobcategory = () => async (dispatch) => {
@@ -94,6 +97,7 @@ export const addJobPost = (body) => async (dispatch) => {
   await ApiPost(`job/add?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
     .then((res) => {
       return dispatch(addJobPostSuccess(res))
+      //return dispatch(getJobPost(perPage,pageNumber))
     })
     .catch((err) => dispatch(addJobPostErr(err)))
 }
@@ -112,6 +116,7 @@ export const editJobPost = (data) => async (dispatch) => {
   await ApiPost(`job/update?jobId=${id}`,data)
     .then((res) => {
       return dispatch(editJobPostSuccess(res))
+            
     })
     .catch((err) => dispatch(editJobPostErr(err)))
 }
@@ -123,3 +128,12 @@ export const getoneJobPost = (data) => async (dispatch) => {
     })
     .catch((err) => dispatch(getoneJobPostErr(err)))
 }
+
+export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole) => async (dispatch) => {
+  await ApiPost(`job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&state=${state}&type=${type}&jobRole=${jobRole}`)
+    .then((res) => {
+      return dispatch(getJobsFilterForMainSuccess(res))
+    })
+    .catch((err) => dispatch(getJobsFilterForMainErr(err)))
+}
+

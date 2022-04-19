@@ -15,7 +15,7 @@ const {
 
   editSchemecategorySuccess,
   editSchemecategoryErr,
-  
+
   addSchemeSuccess,
   addSchemeErr,
 
@@ -34,7 +34,7 @@ const {
   getOneSchemenErr,
 
 } = actions;
-let per_Page,page_Num 
+let per_Page, page_Num
 export const getSchemecategory = () => async (dispatch) => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
@@ -44,7 +44,7 @@ export const getSchemecategory = () => async (dispatch) => {
 }
 
 export const addSchemecategory = (body) => async (dispatch) => {
-  await ApiPost(`scheme/addSchemeCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+  await ApiPost(`scheme/addSchemeCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
       dispatch(addSchemecategorySuccess(res))
       return dispatch(getSchemecategory())
@@ -53,7 +53,7 @@ export const addSchemecategory = (body) => async (dispatch) => {
 }
 
 export const editSchemecategory = (body) => async (dispatch) => {
-  await ApiPost(`scheme/editSchemeCategory`,body)
+  await ApiPost(`scheme/editSchemeCategory`, body)
     .then((res) => {
       dispatch(editSchemecategorySuccess(res))
       return dispatch(getSchemecategory())
@@ -82,24 +82,29 @@ export const getSchemeBenifits = () => async (dispatch) => {
 }
 
 export const addSchemeData = (data) => async (dispatch) => {
-  await ApiPost(`scheme/addScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+  await ApiPost(`scheme/addScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSchemeSuccess(res))
     })
     .catch((err) => dispatch(addSchemeErr(err)))
 }
 
-export const getSchemeData = (perPage, pageNumber,status) => async (dispatch) => {
-  per_Page=perPage;
-  page_Num=pageNumber;
-  await ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`)
-    .then((res) => {
-      return dispatch(getSchemeSuccess(res.data))
-    })
+export const getSchemeData = (perPage, pageNumber, status, schemeBenifit, schemeCategory) => async (dispatch) => {
+  per_Page = perPage;
+  page_Num = pageNumber;
+  let apiData
+  if (schemeCategory && schemeBenifit) {
+    apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`)
+  } else {
+    apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`)
+  }
+  apiData.then((res) => {
+    return dispatch(getSchemeSuccess(res.data))
+  })
     .catch((err) => dispatch(getSchemenErr(err)))
 }
 
-export const getOneSchemeData = (key) => async (dispatch) => { 
+export const getOneSchemeData = (key) => async (dispatch) => {
   await ApiGet(`scheme/getOneScheme${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(getOneSchemeSuccess(res.data))
@@ -108,11 +113,11 @@ export const getOneSchemeData = (key) => async (dispatch) => {
 }
 
 export const editSchemeData = (body) => async (dispatch) => {
-  await ApiPost(`scheme/editScheme`,body)
+  await ApiPost(`scheme/editScheme`, body)
     .then((res) => {
       dispatch(editSchemeSuccess(res.data))
-      if(res.status===200){
-        dispatch(getSchemeData(per_Page,page_Num))
+      if (res.status === 200) {
+        dispatch(getSchemeData(per_Page, page_Num))
       }
     })
     .catch((err) => dispatch(editSchemenErr(err)))

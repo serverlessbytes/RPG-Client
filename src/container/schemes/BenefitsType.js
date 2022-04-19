@@ -19,7 +19,6 @@ const BenefitsType = () => {
 
     const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
     useEffect(() => {
-        console.log("=====>getBenefitData<====", getBenefitData);
     }, [getBenefitData]);
     const dispatch = useDispatch();
 
@@ -34,7 +33,6 @@ const BenefitsType = () => {
 
     useEffect(() => {
         dispatch(getBenefitsData())
-        console.log("=====>getBenefitsData<====", getBenefitsData);
     }, []);
 
     const onDelete = (id) => {
@@ -51,7 +49,6 @@ const BenefitsType = () => {
     }
     const onEdit = (id) => {
         let dataForEdit = getBenefitData && getBenefitData.data && getBenefitData.data.find((item) => item.id === id)
-        console.log("", dataForEdit);
         if (dataForEdit) {
             setDataForEdit(dataForEdit)
             form.setFieldsValue({

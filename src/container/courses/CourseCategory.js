@@ -33,7 +33,7 @@ const CourseCategory = () => {
     };
     const onDelete = (id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        console.log("-----",dataForDelete)
+        //console.log("-----",dataForDelete)
         if (dataForDelete) {
             delete dataForDelete.key
             delete dataForDelete.id     
@@ -80,12 +80,12 @@ const CourseCategory = () => {
                     console.log("data",data) 
         }
         else{
-            console.log("========>data<==========", data);
+            //console.log("========>data<==========", data);
             data = {
                 ...data,
                 key: uuid()
             }
-            console.log("dataaaaaaaaaa", data)
+           // console.log("dataaaaaaaaaa", data)
             dispatch(postCategoryData(data))
     
             setIsModalVisible(false);
