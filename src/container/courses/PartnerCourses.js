@@ -20,7 +20,7 @@ const PartnerCourses = () => {
 
     const [state, setState] = useState({
         category: "",
-        mode: "ONLINE",
+        mode: "PARTNER",
     })
     const [activeCoursetog, setActiveCourseTog] = useState(true)
 
@@ -211,7 +211,7 @@ const PartnerCourses = () => {
                                         </Form.Item>
                                     </Form>
                                 </Col> */}
-                                <Col md={6} xs={24} className="mb-25">
+                                {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item label="Mode">
                                             <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode} onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
@@ -220,7 +220,7 @@ const PartnerCourses = () => {
                                             </Select>
                                         </Form.Item>
                                     </Form>
-                                </Col>
+                                </Col> */}
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
                                         <Button size="small" type="primary" onClick={(e) => Submit(e)}>

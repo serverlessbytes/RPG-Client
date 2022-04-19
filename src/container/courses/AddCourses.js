@@ -48,8 +48,9 @@ const AddCourses = () => {
     jobCategoryIds: [],
     certification: '',
     sequence: '',
-    mode: '',
+    mode: 'BOTH',
     key: '',
+    thumbnail:'',
   });
 
   const [moduleState, setModuleState] = useState([
@@ -68,7 +69,7 @@ const AddCourses = () => {
   ]);
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [selectKey, setSelectKey] = useState();
+  const [selectKey, setSelectKey] = useState(0);
   const [moduleError,setModuleError]=useState([]);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const AddCourses = () => {
             return{
                 name: item.name,
                 detail: item.detail,
-                duration: moment(item.duration),
+                duration: moment(item.duration,"HH:mm:ss"),
                 videoUrl: item.videoUrl,
                 sequence: item.sequence,
                 key: item.key,
@@ -115,12 +116,13 @@ const AddCourses = () => {
         detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.detail, 'markdown'),
         name: editOneSwayamCourseData.data.name,
         categoryId: editOneSwayamCourseData.data.courseCategory.id,
-        // duration: editOneSwayamCourseData.data,
+        duration: moment(editOneSwayamCourseData.data.duration,"HH:mm:ss") ,
         jobCategoryIds: editOneSwayamCourseData.data.jobTypes.map(item => item.id),
         certification: editOneSwayamCourseData.data.certificate,
         sequence: editOneSwayamCourseData.data.sequence,
         mode: editOneSwayamCourseData.data.mode,
         key: editOneSwayamCourseData.data.key,
+        thumbnail:editOneSwayamCourseData.data.thumbnail
       });
     }
   }, [editOneSwayamCourseData]);
@@ -146,19 +148,7 @@ const AddCourses = () => {
     dispatch(getUser());
   }, []);
 
-  useEffect(() => {
-    if (userData) {
-      console.log('userData', userData);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    if(moduleError){
-      console.log("moduleError",moduleError);
-    }
-  }, [moduleError])
   
-
   const onChange = (e, name) => {
     if (name === 'categoryId') {
       setState({ ...state, [name]: e });
@@ -219,6 +209,10 @@ const AddCourses = () => {
       error.mode = 'Mode name is required';
       flage = true;
     }
+    if (state.thumbnail === '') {
+      error.mode = 'Thumbnail is required';
+      flage = true;
+    }
 
     setError(error);
     return flage;
@@ -266,11 +260,12 @@ const AddCourses = () => {
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
-      duration: moment(state.duration).format('hh:mm:ss'),
+      duration: moment(state.duration).format("HH:mm:ss"),
       jobCategoryIds: state.jobCategoryIds,
       certification: state.certification,
       sequence: parseInt(state.sequence),
       mode: state.mode,
+      thumbnail: state.thumbnail
     };
     dispatch(addSwayamCourse(data));
   };
@@ -285,14 +280,16 @@ const AddCourses = () => {
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
-      duration: moment(state.duration).format('hh:mm:ss'),
+      duration: moment(state.duration).format('HH:mm:ss'),
       jobCategoryIds: state.jobCategoryIds,
       certification: state.certification,
       sequence: parseInt(state.sequence),
       mode: state.mode,
+      thumbnail: state.thumbnail,
       isActive: true,
       isDeleted: false,
     };
+    console.log("data",data)
     dispatch(editSwayamCourse(data));
   };
 
@@ -334,6 +331,9 @@ const AddCourses = () => {
   };
 
   const onModuleSubmit = () => {
+    if(moduleValidation()){
+      return
+    }
     dispatch(addSwayamCourseModule(moduleState))
   };
 
@@ -342,9 +342,20 @@ const AddCourses = () => {
     if(moduleValidation()){
       return
     }
-   
-    // console.log("moduleState",moduleState) 
-    dispatch(editSwayamCourseModule(moduleState[selectKey]))
+
+    const data=moduleState[selectKey]
+    const editData={
+      name: data.name,
+      detail: data.detail,
+      duration: moment(data.duration).format("HH:mm:s"),
+      videoUrl: data.videoUrl,
+      sequence: data.sequence,
+      key: data.key,
+      moduleId: data.moduleId,
+      isActive:true,
+      isDeleted:false
+  }
+    dispatch(editSwayamCourseModule(editData))
   }
 
   const onRemoveData = () => {
@@ -357,9 +368,7 @@ const AddCourses = () => {
 
   const { TabPane } = Tabs;
 
-  // const callback = (key) => {
-  //         console.log(key);
-  // }
+
   const moduleCallback = key => {
     setSelectKey(key);
   };
@@ -482,6 +491,21 @@ const AddCourses = () => {
                       }}
                       name="sequence"
                       placeholder="Enter Senquence"
+                    />
+                  </Form.Item>
+                  {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
+                </Col>
+                <Col lg={11}>
+                  <label htmlFor="name">Thumbnail</label>
+                  <Form.Item>
+                    <Input
+                      type="string"
+                      value={state.thumbnail}
+                      onChange={e => {
+                        onChange(e, 'thumbnail');
+                      }}
+                      name="thumbnail"
+                      placeholder="Enter thumbnail"
                     />
                   </Form.Item>
                   {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
