@@ -8,7 +8,7 @@ import { Cards } from '../../../../components/cards/frame/cards-frame';
 import { ChartjsBarChartTransparent } from '../../../../components/charts/chartjs';
 import { closeDealFilterData, closeDealGetData } from '../../../../redux/chartContent/actionCreator';
 
-const ClosedDeals = () => {
+const ClosedDeals = ({dnone,title}) => {
   const dispatch = useDispatch();
   const { closeDealState, cdIsLoading } = useSelector(state => {
     return {
@@ -63,7 +63,7 @@ const ClosedDeals = () => {
       {closeDealState !== null && (
         <Cards
           isbutton={
-            <div className="card-nav">
+            <div className={`card-nav ${dnone}`}>
               <ul>
                 <li className={state.closeDealTabActive === 'week' ? 'active' : 'deactivate'}>
                   <Link onClick={() => handleActiveChangeYoutube('week')} to="#">
@@ -83,7 +83,7 @@ const ClosedDeals = () => {
               </ul>
             </div>
           }
-          title="Closed Deals Performance"
+          title={title}
           size="large"
         >
           {cdIsLoading ? (

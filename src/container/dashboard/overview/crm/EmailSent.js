@@ -7,7 +7,7 @@ import { ChartjsDonut } from '../../../../components/charts/chartjs';
 import { deviceGetData, deviceFilterData } from '../../../../redux/chartContent/actionCreator';
 import { Cards } from '../../../../components/cards/frame/cards-frame';
 
-const EmailSent = () => {
+const EmailSent = ({dnone, emailSendTitle}) => {
   const dispatch = useDispatch();
   const { deviceState, dvIsLoading } = useSelector(state => {
     return {
@@ -48,7 +48,7 @@ const EmailSent = () => {
       {deviceState !== null && (
         <Cards
           isbutton={
-            <div className="card-nav">
+            <div className={`card-nav ${dnone}`}>
               <ul>
                 <li className={state.device === 'today' ? 'active' : 'deactivate'}>
                   <Link onClick={() => handleActiveChangeDevice('today')} to="#">
@@ -73,7 +73,7 @@ const EmailSent = () => {
               </ul>
             </div>
           }
-          title="Email Sent"
+          title={emailSendTitle}
           size="large"
         >
           {dvIsLoading ? (
@@ -92,9 +92,9 @@ const EmailSent = () => {
                       {data.map((value, index) => {
                         return (
                           <div className="sent-emial-item" key={value}>
-                            <div className={`sent-emial-icon icon-${types[index]}`}>
+                            {/* <div className={`sent-emial-icon icon-${types[index]}`}>
                               <img src={require(`../../../../static/img/icon/${icons[index]}.svg`)} alt="" />
-                            </div>
+                            </div> */}
                             <div className="sent-emial-content">
                               <h4>
                                 <strong>{value}</strong>

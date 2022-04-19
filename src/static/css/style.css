@@ -2760,3 +2760,8 @@ padding-bottom: 8px;
 .addpartnercourses .ant-picker{
   width: 100%;
 }
+
+
+.d-none{
+  display: none !important;
+}

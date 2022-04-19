@@ -5,7 +5,7 @@ import { Table } from 'antd';
 import { topSaleGetData, topSaleFilterData } from '../../../../redux/chartContent/actionCreator';
 import { Cards } from '../../../../components/cards/frame/cards-frame';
 
-const SalesLeaderBoard = () => {
+const  SalesLeaderBoard = ({dnone, tableheader}) => {
   const dispatch = useDispatch();
   const { topSaleState } = useSelector(state => {
     return {
@@ -64,7 +64,7 @@ const SalesLeaderBoard = () => {
     <div className="full-width-table">
       <Cards
         isbutton={
-          <div className="card-nav">
+          <div className={`card-nav ${dnone}`}>
             <ul>
               <li className={state.products === 'today' ? 'active' : 'deactivate'}>
                 <Link onClick={() => handleActiveChangeProducts('today')} to="#">
@@ -89,7 +89,7 @@ const SalesLeaderBoard = () => {
             </ul>
           </div>
         }
-        title="Sales Leaderboard"
+        title={tableheader}
         size="large"
         bodypadding="0px"
       >
