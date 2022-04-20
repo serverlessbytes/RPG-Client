@@ -33,7 +33,6 @@ const CourseCategory = () => {
     };
     const onDelete = (id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        console.log("-----",dataForDelete)
         if (dataForDelete) {
             delete dataForDelete.key
             delete dataForDelete.id     
@@ -65,8 +64,7 @@ const CourseCategory = () => {
     const handleOk = () => {
         let data = form.getFieldsValue()
         if(dataForEdit){
-            let data = form.getFieldsValue() //get value from form field
-                    //console.log("========>data<==========", data);
+            let data = form.getFieldsValue()
                     delete data.key;
 
                     data = {
@@ -77,15 +75,12 @@ const CourseCategory = () => {
                         "isDeleted": false
                     }
                     dispatch(editBenefitsData(data))
-                    console.log("data",data) 
         }
         else{
-            console.log("========>data<==========", data);
             data = {
                 ...data,
                 key: uuid()
             }
-            console.log("dataaaaaaaaaa", data)
             dispatch(postCategoryData(data))
     
             setIsModalVisible(false);

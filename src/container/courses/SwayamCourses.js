@@ -18,8 +18,6 @@ const SwayamCourses = () => {
 
     const dispatch=useDispatch()
     const { Option } = Select;
-    const [type, setType] = useState("Active")
-    const [key, setKey] = useState("1")
     const history = useHistory()
     const usersTableData = [];
     const { path } = useRouteMatch();
@@ -33,7 +31,7 @@ const SwayamCourses = () => {
             mode: "BOTH",
         }
     )
-    const [perPage, setPerPage] = useState(10)   
+    const [perPage, setPerPage] = useState(25)   
     const [pageNumber, setPageNumber] = useState(1)
     const [status, setStatus] = useState("active")
     const [usertable, setUsertable] = useState([]) 

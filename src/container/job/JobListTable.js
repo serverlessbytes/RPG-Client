@@ -5,14 +5,16 @@ import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { editJobPost, getJobPost } from '../../redux/jobs/actionCreator';
-import Item from 'antd/lib/list/Item';
+import { editJobPost, getJobPost, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router';
 
 
-const JobListTable = ({ match }) => {
+const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPost
+
   const { path } = useRouteMatch();
-  console.log("pathh",path)
+  console.log("pathh", state)
+  console.log("type", type)
+  console.log("jobRole", jobRole)
   let history = useHistory();
   let dispatch = useDispatch()
   const { users } = useSelector(state => {
@@ -23,66 +25,54 @@ const JobListTable = ({ match }) => {
 
   const usersTableData = [];
   const [usertable, setUsertable] = useState([]) //set data
-  const [perPage, setPerPage] = useState(2)
+  const [perPage, setPerPage] = useState(5) // forpagination
   const [pageNumber, setPageNumber] = useState(1)
 
   const courseData = useSelector((state) => state.job.getJobPostData)
+  const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
+  const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
 
   const onDelete = (id) => {
     let courseDataDelete = courseData && courseData.data && courseData.data.data.find((item) => item.id === id)
-    console.log("44444444", courseDataDelete)
-    if (courseDataDelete) {
 
-        courseDataDelete = {
-          ...courseDataDelete,
-          isActive: false,
-          // isDeleted: true,
-          id: courseDataDelete.id,
-          jobRoleId: courseDataDelete.jobRole.id,
-          jobCategoryId: courseDataDelete.jobType.id,
-        }
+    if (courseDataDelete) {
+      courseDataDelete = {
+        ...courseDataDelete,
+        isActive: false,
+        id: courseDataDelete.id,
+        jobRoleId: courseDataDelete.jobRole.id,
+        jobCategoryId: courseDataDelete.jobType.id,
+      }
     }
     delete courseDataDelete.jobRole,
-    delete courseDataDelete.jobType,
-    delete courseDataDelete.key,
-    delete courseDataDelete.hiredNumber,
+      delete courseDataDelete.jobType,
+      delete courseDataDelete.key,
+      delete courseDataDelete.hiredNumber,
       dispatch((editJobPost(courseDataDelete)))
   }
-
+  useEffect(() => {
+    if (editJobPostData && editJobPostData.status === 200) {  //
+      dispatch(getJobPost(perPage, pageNumber))
+    }
+  }, [editJobPostData])
   const onEdit = (id) => {
     history.push(`/admin/job/new?id=${id}`)
   }
 
-
   useEffect(() => {
-    console.log("77777", courseData)
-  }, [courseData])
+    if (apply) {
+      dispatch(getJobsFilterForMain(perPage, pageNumber, state.state, type.type, jobRole.jobRole))
+    }
+  }, [perPage, pageNumber, state, type, jobRole, apply])
 
   useEffect(() => {
     dispatch(getJobPost(perPage, pageNumber))
   }, [perPage, pageNumber])
 
   useEffect(() => {
-    if (courseData && courseData.data) {
-      setUsertable(courseData.data?.data?.map(item => {
-        //const { id, name, designation, status } = user;
-
+    if (apply) {
+      setUsertable(getJobFilterData.data?.data?.map(item => {
         return ({
-          //key: id,
-          //user: name,
-          // user: (
-          //   <div className="user-info">
-          //     <figure>
-          //       <img style={{ width: '40px' }} src={require(`../../../${img}`)} alt="" />
-          //     </figure>
-          //     <figcaption>
-          //       <Heading className="user-name" as="h6">
-          //         {name}
-          //       </Heading>
-          //       <span className="user-designation">San Francisco, CA</span>
-          //     </figcaption>
-          //   </div>
-          // ),
           user: item.name,
           email: item.email,
           company: item.description,
@@ -92,10 +82,7 @@ const JobListTable = ({ match }) => {
           action: (
             <div className="table-actions">
               <>
-                {/* <Button className="btn-icon" type="primary" to="#" shape="circle">
-                  <FeatherIcon icon="eye" size={16} />
-                </Button> */}
-                <Button className="btn-icon" type="info" to="#" onClick = {() => onEdit(item.id)} shape="circle">
+                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                   <FeatherIcon icon="edit" size={16} />
                 </Button>
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
@@ -106,10 +93,33 @@ const JobListTable = ({ match }) => {
           ),
         });
       })
-
       )
     }
-  }, [courseData])
+    else if (courseData && courseData.data) {
+      setUsertable(courseData.data?.data?.map(item => {
+        return ({
+          user: item.name,
+          email: item.email,
+          company: item.description,
+          position: item.jobRole.name,
+          joinDate: item.startDate,
+          // status: status,
+          action: (
+            <div className="table-actions">
+              <>
+                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                  <FeatherIcon icon="edit" size={16} />
+                </Button>
+                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                  <FeatherIcon icon="trash-2" size={16} />
+                </Button>
+              </>
+            </div>
+          ),
+        });
+      }))
+    }
+  }, [getJobFilterData, courseData])
 
 
   const usersTableColumns = [
@@ -142,14 +152,14 @@ const JobListTable = ({ match }) => {
       dataIndex: 'joinDate',
       // key: 'joinDate',
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      // key: 'status',
-      // onFilter: (value, status) => status.name.indexOf(value) === 0,
-      sorter: (a, b) => a.status.length - b.status.length,
-      sortDirections: ['descend', 'ascend'],
-    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   // key: 'status',
+    //   // onFilter: (value, status) => status.name.indexOf(value) === 0,
+    //   sorter: (a, b) => a.status.length - b.status.length,
+    //   sortDirections: ['descend', 'ascend'],
+    // },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -176,9 +186,16 @@ const JobListTable = ({ match }) => {
           dataSource={usertable}
           columns={usersTableColumns}
           pagination={{
-            defaultPageSize: 5,
-            total: usersTableData.length,
+            // defaultPageSize: 10,
+            // total: usersTableData.length,
+            // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            defaultPageSize: courseData?.data.per_page,
+            total: courseData?.data.page_count,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+            onChange: (page, pageSize) => {
+              setPageNumber(page);
+              setPerPage(pageSize)
+            }
           }}
         />
       </TableWrapper>

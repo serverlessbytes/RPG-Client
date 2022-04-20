@@ -42,14 +42,13 @@ const AddPartnerCourses = () => {
         cateGory: '',
         state: '',
         district: '',
-        mode: '',
+        mode: 'PARTNER',
         Certification: '',
-        key: ''
+        key: '',
+        thumbnail:''
     });
 
-    useEffect(() => {
-        console.log("state ============= state", state);
-    }, [state])
+
 
     const [editPartnerCourseID, setEditPartnerCourseID] = useState()
 
@@ -92,6 +91,7 @@ const AddPartnerCourses = () => {
                 district: editOneFilterData.data.district,
                 mode: editOneFilterData.data.mode,
                 Certification: editOneFilterData.data.certificate,
+                thumbnail: editOneFilterData.data.thumbnail
             });
         }
     }, [editOneFilterData]);
@@ -170,6 +170,9 @@ const AddPartnerCourses = () => {
         if (state.Certification === '') {
             error.Certification = '*Certification is required';
             flage = true;
+        }if (state.thumbnail === '') {
+            error.thumbnail = '*Thumbnail is required';
+            flage = true;
         }
 
         setError(error);
@@ -199,6 +202,7 @@ const AddPartnerCourses = () => {
             location: state.locations,
             sequence: parseInt(state.sequence),
             mode: state.mode,
+            thumbnail: state.thumbnail
         };
         dispatch(addPartnerCourse(data));
         history.push(`/admin/courses/partnercourses`);
@@ -227,6 +231,7 @@ const AddPartnerCourses = () => {
             district: state.district,
             mode: state.mode,
             certification: state.Certification,
+            thumbnail:state.thumbnail,
             isActive: true,
             isDeleted: false
         }
@@ -273,7 +278,7 @@ const AddPartnerCourses = () => {
             }
         }
     };
-    console.log('sttaeee', state);
+   
 
     const { Option } = Select;
     // const [typeOfJob, setTypeOfJob] = useState("");
@@ -449,7 +454,7 @@ const AddPartnerCourses = () => {
                                 {error.locations && <span style={{ color: 'red' }}>{error.locations}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        {/* <Col lg={11}>
                             <label htmlFor="mode">Mode</label>
                             <Form.Item name="mode">
                                 <Select
@@ -465,7 +470,7 @@ const AddPartnerCourses = () => {
                                 </Select>
                                 {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                             </Form.Item>
-                        </Col>
+                        </Col> */}
                         <Col lg={11}>
                             <label htmlFor="location">Sequence </label>
                             <Form.Item name="location">
@@ -477,6 +482,19 @@ const AddPartnerCourses = () => {
                                     onChange={e => onSelect(e, 'sequence')}
                                 />
                                 {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
+                            </Form.Item>
+                        </Col>
+                        <Col lg={11}>
+                            <label htmlFor="location">Thumbnail</label>
+                            <Form.Item >
+                                <Input
+                                    value={state.thumbnail}
+                                    placeholder="Enter thumbnail"
+                                    type="text"
+                                    name="thumbnail"
+                                    onChange={e => onChangevalue(e, 'thumbnail')}
+                                />
+                                {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
