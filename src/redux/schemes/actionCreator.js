@@ -105,7 +105,7 @@ export const getSchemeData = (perPage, pageNumber, status, schemeBenifit, scheme
 }
 
 export const getOneSchemeData = (key) => async (dispatch) => {
-  await ApiGet(`scheme/getOneScheme${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  await ApiGet(`scheme/getOneScheme?key=${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(getOneSchemeSuccess(res.data))
     })

@@ -9,11 +9,12 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getOneSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
+import { constants } from 'redux-firestore';
 
 const Schemes = () => {
   const { path } = useRouteMatch();
@@ -25,6 +26,18 @@ const Schemes = () => {
   const [schemeCategory, setSchemeCategory] = useState('');
   const [viewModal, setViewModal] = useState(false);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
+
+  const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
+  const schemeData = useSelector(state => state.scheme.schemecatogeryData);
+  const getOneScheme=useSelector((state) => state.scheme.getOneSchemeData);
+
+  useEffect(() => {
+    if(getOneScheme){
+      console.log("getOneScheme",getOneScheme);
+    }
+  }, [getOneScheme])
+  
+
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -53,9 +66,7 @@ const Schemes = () => {
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeBenefits.benefit, schemeCategory.category));
   };
-  const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
 
-  const schemeData = useSelector(state => state.scheme.schemecatogeryData);
 
   const reDirect = () => {
     history.push(`${path}/addscheme`);
@@ -81,37 +92,12 @@ const Schemes = () => {
     }
   };
 
-  // const showModal = type => {
-  //     setState({
-  //         visible: true,
-  //         modalType: type,
-  //     });
-  // };
-
-  // const showColorModal = type => {
-  //     setState({
-  //         colorModal: true,
-  //         modalType: type,
-  //     });
-  // };
-
-  // const handleOk = () => {
-  //     setState({
-  //         visible: false,
-  //         colorModal: false,
-  //     });
-  // };
-
-  // const handleCancel = () => {
-  //     setState({
-  //         visible: false,
-  //         colorModal: false,
-  //     });
-  // };
 
   const [status, setStatus] = useState('active');
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
+  const { Option } = Select;
+  const usersTableData = [];
 
   useEffect(() => {
     dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
@@ -120,10 +106,16 @@ const Schemes = () => {
 
   const callback = key => {
     setStatus(key);
+    
   };
 
-  const { Option } = Select;
-  const usersTableData = [];
+  const viewSchemesdata=(key)=>{
+      dispatch(getOneSchemeData(key))
+  
+    setViewModal(true)
+  }
+
+
 
   users &&
     users.data.map(item => {
@@ -156,7 +148,7 @@ const Schemes = () => {
                 >
                   <FeatherIcon icon="file" size={16} />
                 </Button>
-                <Button className="btn-icon" to="#" type="success" onClick={() => setViewModal(true)} shape="circle">
+                <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
                   <FeatherIcon icon="eye" size={16} />
                 </Button>
                 {status === '' && (
@@ -372,7 +364,7 @@ const Schemes = () => {
         </Cards>
       </Main>
 
-      {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} />}
+      {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
     </>
   );
 };

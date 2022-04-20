@@ -9,10 +9,9 @@ import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editSwayamCourse, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { editSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import moment from 'moment';
-import ViewModal from '../schemes/ViewModal';
-import ViewPartnerCourse from './ViewPartnerCourse';
+import ViewSwayamCourse from './ViewSwayamCourse';
 
 const SwayamCourses = () => {
   const dispatch = useDispatch();
@@ -33,6 +32,15 @@ const SwayamCourses = () => {
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
+
+  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
+
+  useEffect(() => {
+    if(oneSwayamCourseData){
+        console.log("oneSwayamCourseData",oneSwayamCourseData);
+    }
+  }, [oneSwayamCourseData])
+  
 
   useEffect(() => {
     dispatch(getCategoryData());
@@ -94,38 +102,11 @@ const SwayamCourses = () => {
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
   };
 
-  // users.map(user => {
+  const viewSwayamCoursedata=(key)=>{
+    dispatch(getOneCoursefilter(key))
+    setViewModal(true)
+}
 
-  //     const { id, name, designation, status } = user;
-  //     return usersTableData.push({
-
-  //         key: id,
-  //         CourseName: 'Customer Interaction - Asking Right Questions',
-  //         CourseCategory: 'Construction',
-  //         CourseDuration: "	01:50",
-  //         Certification: 'No',
-  //         Location: "English",
-  //         action: (
-  //             <div className='active-schemes-table'>
-  //                 <div className="table-actions">
-  //                     <>
-
-  //                         {key === "1" && <> <Button className="btn-icon" type="success" to="#" shape="circle">
-  //                             <FeatherIcon icon="info" size={16} />
-  //                         </Button>
-  //                             <Button className="btn-icon" type="info" to="#" shape="circle">
-  //                                 <FeatherIcon icon="edit" size={16} />
-  //                             </Button>
-  //                         </>}
-  //                         <Button className="btn-icon" type="warning" to="#" shape="circle">
-  //                             <FeatherIcon icon="file" size={16} />
-  //                         </Button>
-  //                     </>
-  //                 </div>
-  //             </div>
-  //         ),
-  //     });
-  // });
 
   useEffect(() => {
     if (courseData && courseData.data) {
@@ -154,7 +135,7 @@ const SwayamCourses = () => {
                     <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                       <FeatherIcon icon="x-circle" size={16} />
                     </Button>
-                    <Button className="btn-icon" type="success" onClick={() => setViewModal(true)} shape="circle">
+                    <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
                       <FeatherIcon icon="eye" size={16} />
                     </Button>
                   </>
@@ -326,7 +307,7 @@ const SwayamCourses = () => {
         </Cards>
       </Main>
 
-      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} />}
+      {viewModal && <ViewSwayamCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={oneSwayamCourseData?.data}/>}
     </>
   );
 };

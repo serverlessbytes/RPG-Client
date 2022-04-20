@@ -16,12 +16,12 @@ import { constants } from 'react-redux-firebase';
 
 const AddSchemes = () => {
 
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('key');
+
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
-    useEffect(() => {
-        console.log("path", path);
-    }, [])
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
         console.log('radio checked', e.target.value);
@@ -58,10 +58,10 @@ const AddSchemes = () => {
         dispatch(getState());
     }, [])
     useEffect(() => {
-        if (location.search) {
-            dispatch(getOneSchemeData(location.search))
+        if (id) {
+            dispatch(getOneSchemeData(id))
         }
-    }, [location.search])
+    }, [id])
 
     const scheme = useSelector((state) => state.scheme.schemecatogeryData)
     const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)

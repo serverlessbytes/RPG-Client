@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editPartnerCoursefilter, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { editPartnerCoursefilter, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 
 const PartnerCourses = () => {
@@ -25,9 +25,11 @@ const PartnerCourses = () => {
   const [activeCoursetog, setActiveCourseTog] = useState(true);
 
   let catdata = useSelector(state => state.category.categoryData);
+  const onePartnerCourseData=useSelector(state => state.category.editFilterData)
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
+
 
   useEffect(() => {
     if (catdata && catdata.data && catdata.data.length > 0) {
@@ -64,6 +66,11 @@ const PartnerCourses = () => {
   const onEdit = id => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
+
+  const viewPartnerCoursedata=(key)=>{
+    dispatch(getOneCoursefilter(key))
+    setViewModal(true)
+}
 
   const onDelete = id => {
     let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
@@ -121,7 +128,7 @@ const PartnerCourses = () => {
                         <FeatherIcon icon="x-circle" size={16} />
                       </Button>
                     )}
-                    <Button className="btn-icon" type="success" onClick={() => setViewModal(true)} shape="circle">
+                    <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
                       <FeatherIcon icon="eye" size={16} />
                     </Button>
                     {/* <Button className="btn-icon" type="info" to="#" shape="circle">
@@ -328,7 +335,7 @@ const PartnerCourses = () => {
           </Row>
         </Cards>
       </Main>
-      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} />}
+      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={onePartnerCourseData && onePartnerCourseData.data ? onePartnerCourseData.data:'' } />}
     </>
   );
 };
