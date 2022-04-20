@@ -12,6 +12,8 @@ import { useRouteMatch } from 'react-router-dom';
 import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
+import { Modal } from '../../components/modals/antd-modals';
+import ViewModal from './ViewModal';
 
 const Schemes = () => {
 
@@ -22,22 +24,24 @@ const Schemes = () => {
 
     const [schemeBenefits, setSchemeBenefits] = useState("");
     const [schemeCategory, setSchemeCategory] = useState("");
+    const [viewModal, setViewModal] = useState(false)
+    // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
 
     const onChnageValue = (e, name) => {
         if (name === 'category') {
-            setSchemeCategory({ ...schemeCategory,category:e })
+            setSchemeCategory({ ...schemeCategory, category: e })
         }
         else if (name === 'benefits') {
-            setSchemeBenefits({ ...schemeBenefits,benefit:e })
+            setSchemeBenefits({ ...schemeBenefits, benefit: e })
         }
     }
 
     useEffect(() => {
-        console.log("schemeBenefits",schemeBenefits);
+        console.log("schemeBenefits", schemeBenefits);
     }, [schemeBenefits])
 
     useEffect(() => {
-        console.log("schemeCategory",schemeCategory);
+        console.log("schemeCategory", schemeCategory);
     }, [schemeBenefits])
 
     useEffect(() => {
@@ -47,9 +51,9 @@ const Schemes = () => {
     useEffect(() => {
         dispatch(getBenefitsData())
     }, []);
-    
+
     const onApply = () => {
-        dispatch(getSchemeData(perPage, pageNumber, status,schemeBenefits.benefit,schemeCategory.category))
+        dispatch(getSchemeData(perPage, pageNumber, status, schemeBenefits.benefit, schemeCategory.category))
     }
     const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
 
@@ -79,13 +83,41 @@ const Schemes = () => {
         }
     }
 
+    // const showModal = type => {
+    //     setState({
+    //         visible: true,
+    //         modalType: type,
+    //     });
+    // };
+
+    // const showColorModal = type => {
+    //     setState({
+    //         colorModal: true,
+    //         modalType: type,
+    //     });
+    // };
+
+    // const handleOk = () => {
+    //     setState({
+    //         visible: false,
+    //         colorModal: false,
+    //     });
+    // };
+
+    // const handleCancel = () => {
+    //     setState({
+    //         visible: false,
+    //         colorModal: false,
+    //     });
+    // };
+
     const [status, setStatus] = useState("active")
     const [perPage, setPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
         dispatch(getSchemeData(perPage, pageNumber, status)) //for listing
-    }, [perPage, pageNumber,status])
+    }, [perPage, pageNumber, status])
     const { TabPane } = Tabs;
 
     const callback = (key) => {
@@ -114,9 +146,19 @@ const Schemes = () => {
                             <Button className="btn-icon" type="warning" to="#" onClick={() => deleteSchemes(item.key)} shape="circle">
                                 <FeatherIcon icon="file" size={16} />
                             </Button>
+                            <Button className="btn-icon" to="#" type="success" onClick={() => setViewModal(true)} shape="circle">
+                                <FeatherIcon icon="eye" size={16} />
+                            </Button>
                             {status === "" && <Button className="btn-icon" type="success" to="#" shape="circle">
                                 <FeatherIcon icon="star" size={16} />
                             </Button>}
+
+                            { <ViewModal
+                                viewModal={viewModal}
+                                type="primary"
+                                setViewModal={setViewModal}
+                            />}
+
                         </>
                     </div>
                 </div>
@@ -244,7 +286,7 @@ const Schemes = () => {
                                 </Col> */}
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" onClick = {(e) => onApply(e)}>
+                                        <Button size="small" type="primary" onClick={(e) => onApply(e)}>
                                             Apply
                                         </Button>
                                     </ListButtonSizeWrapper>
