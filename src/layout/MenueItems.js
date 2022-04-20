@@ -133,6 +133,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item>
       </SubMenu>
+      <Menu.Item key="user">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
+            User
+          </NavLink>
+        </Menu.Item>
     </Menu>
   );
 };

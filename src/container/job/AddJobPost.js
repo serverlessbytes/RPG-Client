@@ -9,6 +9,8 @@ import { useHistory, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobPost, editJobPost, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
+import actions from "../../redux/jobs/actions";
+
 
 const AddJobPost = () => {
     let history = useHistory();
@@ -17,6 +19,10 @@ const AddJobPost = () => {
     const { Option } = Select;
     const { TextArea } = Input;
     const [editJobsID, seteditJobsID] = useState()
+
+    const {
+        getoneJobPostSuccess, // foe edit
+    } = actions;
     // function onchange(date, dateString) { //for date    
     //     console.log(date, dateString);
     // }
@@ -39,7 +45,7 @@ const AddJobPost = () => {
     }, [])
 
     useEffect(() => {
-        console.log("location.search", location.search);
+        //console.log("location.search", location.search);
         if (location.search.split("=")[1]) {
             seteditJobsID(location.search.split("=")[1])
             dispatch(getoneJobPost(location.search.split("=")[1]))
@@ -62,7 +68,7 @@ const AddJobPost = () => {
         requirements: "",
         jobCategoryId: "",
         isActive: true,
-        shifts: "",
+        shifts: [],
         email: "",
         phone: "",
         type: "",
@@ -74,7 +80,7 @@ const AddJobPost = () => {
     });
 
     useEffect(() => {
-        if (getOneJobPostData) {
+        if (getOneJobPostData && getOneJobPostData.data)  {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
@@ -193,14 +199,15 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = e => {
+      
         setState({ ...state, [e.target.name]: e.target.value });
     }
-
+useEffect(()=>{console.log("state",state)},[state])
     const onChnageHandle = (e, name) => {
         console.log("name", name);
         console.log("e", e);
-        if (name === "jobCategoryId") { 
-            setState({ ...state, jobCategoryId: e })
+        if (name === "jobCategoryId") {
+            setState({ ...state, jobCategoryId: e })    
         }
         else if (name === "jobRoleId") {
             setState({ ...state, jobRoleId: e })
@@ -252,7 +259,7 @@ const AddJobPost = () => {
             jobCategoryId: state.jobCategoryId,
         };
         dispatch(addJobPost(data))
-        history.push(`/admin/job/post`);
+        onCancel()
     };
     const onEdit = () => {
         let data = {
@@ -280,9 +287,13 @@ const AddJobPost = () => {
             jobCategoryId: state.jobCategoryId,
         }
         dispatch(editJobPost(data));
-        history.push(`/admin/job/post`);
+        onCancel()
     }
+    const onCancel = () => {
+        dispatch(getoneJobPostSuccess([]))
+        history.push(`/admin/job/post`);
 
+    }
     return (
         <>
             <PageHeader
@@ -636,9 +647,10 @@ const AddJobPost = () => {
                                 className="btn-signin"
                                 type="light"
                                 size="medium"
-                                onClick={() => {
-                                    history.push(`/admin/job/post`);
-                                }}
+                                // onClick={() => {
+                                //     history.push(`/admin/job/post`);
+                                // }}
+                                onClick={() => onCancel()}
                             >
                                 Cancel
                             </Button>

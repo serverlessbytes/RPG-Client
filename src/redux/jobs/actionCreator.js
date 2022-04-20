@@ -96,6 +96,7 @@ export const editJobrole = (body) => async (dispatch) => {
 export const addJobPost = (body) => async (dispatch) => {
   await ApiPost(`job/add?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
     .then((res) => {
+      //console.log("res",res)
       return dispatch(addJobPostSuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })
@@ -105,6 +106,7 @@ export const addJobPost = (body) => async (dispatch) => {
 export const getJobPost = (perPage,pageNumber) => async (dispatch) => {
   await ApiPost(`job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
     .then((res) => {
+      //console.log("res",res)
       return dispatch(getJobPostSuccess(res))
     })
     .catch((err) => dispatch(getJobPostErr(err)))
