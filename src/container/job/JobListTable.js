@@ -7,6 +7,7 @@ import { ListButtonSizeWrapper, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
 import { editJobPost, getJobPost, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router';
+import ViewJobPost from './ViewJobPost';
 
 
 const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPost
@@ -31,7 +32,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
   const courseData = useSelector((state) => state.job.getJobPostData)
   const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
   const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
-
+  const [viewModal, setViewModal] = useState(false);
   const onDelete = (id) => {
     let courseDataDelete = courseData && courseData.data && courseData.data.data.find((item) => item.id === id)
 
@@ -88,6 +89,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                   <FeatherIcon icon="trash-2" size={16} />
                 </Button>
+                
               </>
             </div>
           ),
@@ -113,6 +115,9 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                   <FeatherIcon icon="trash-2" size={16} />
                 </Button>
+                <Button className="btn-icon" type="success" onClick={() => setViewModal(true)} shape="circle">
+                      <FeatherIcon icon="eye" size={16} />
+                    </Button>
               </>
             </div>
           ),
@@ -178,7 +183,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
   const { Option } = Select;
 
   return (
-
+<>
     <UserTableStyleWrapper>
       <TableWrapper className="table-responsive">
         <Table
@@ -200,7 +205,8 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
         />
       </TableWrapper>
     </UserTableStyleWrapper>
-
+     {viewModal && <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} />}
+     </>
   );
 };
 
