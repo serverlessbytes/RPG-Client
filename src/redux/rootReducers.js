@@ -37,6 +37,7 @@ import schemeReducer from './schemes/reducers';
 import BenefitsReducer from './benefitsType/reducers';
 import cateGoryReducer from './course/reducers';
 import jobReducer from './jobs/reducers';
+import dashboardReducer from './dashboard/reducers';
 
 
 const rootReducers = combineReducers({
@@ -86,6 +87,7 @@ const rootReducers = combineReducers({
   beneFit:BenefitsReducer,
   category:cateGoryReducer,
   job: jobReducer,
+  dashboard:dashboardReducer,
 });
 
 export default rootReducers;
