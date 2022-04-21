@@ -14,8 +14,9 @@ import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { editProfile, getAllUser } from '../../redux/users/actionCreator';
 
-const User = () => {
 
+const User = () => {
+  
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch();
@@ -29,13 +30,23 @@ const User = () => {
     }
     const [perPage, setPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(1)
-    const [userType, setUserType] = useState('USER')
+    const [userType, setUserType] = useState("USER")
+
+    useEffect(()=>{
+        console.log("userType",userType)
+    },[userType])
 
     const selectValue = (e, name) => {
+        //console.log("eeeee",e)
         if (name === 'userType') {
             setUserType(e)
         }
     }
+    useEffect(() => {
+        if (status) {
+          dispatch(getAllUser(perPage, pageNumber, status, userType));
+        }
+      }, [status]);
 
     const onApply = () => {
         dispatch(getAllUser(perPage, pageNumber, status, userType))
@@ -190,9 +201,9 @@ const User = () => {
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Users Type">
-                                            <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select" value={userType} name="userType" onChange={(e) => selectValue(e, "userType")}>
-                                                <option value={"USER"}>USER</option>
+                                        <Form.Item  label="Users Type">
+                                            <Select size="large" placeholder="Select Category"  className="sDash_fullwidth-select" value={userType} name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                                <option selected value={"USER"}>USER</option>
                                                 <option value={"PARTNER"}>PARTNER</option>
                                                 <option value={"EMPLOYER"}>EMPLOYER</option>
                                                 <option value={"ADMIN"}>ADMIN</option>
