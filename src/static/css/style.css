@@ -2765,3 +2765,14 @@ padding-bottom: 8px;
 .d-none{
   display: none !important;
 }
+
+.thambail{
+  display: flex;
+  justify-content: center;
+}
+
+.thambail img{
+  height: 300px;
+  width: auto;
+  border-radius: 10px;
+}
