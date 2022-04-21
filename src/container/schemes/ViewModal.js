@@ -24,11 +24,11 @@ const ViewModal = ({ viewModal, type, setViewModal, data }) => {
             >
                 <Row gutter={10}>
                     <Col lg={12}>
-                        <label style={{fontWeight:'bold'}}>VideoUrl:</label>
+                        {/* <label style={{fontWeight:'bold'}}>VideoUrl:</label> */}
                         <iframe width="100%" height="345" src={data?.videoUrl}></iframe>
                     </Col>
                     <Col lg={12}>
-                        <label style={{fontWeight:'bold'}}>Thumbnail:</label>
+                        {/* <label style={{fontWeight:'bold'}}>Thumbnail:</label> */}
                         <img width="100%" height="345" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg"
                         // {data?.thumbnail}
                         />
