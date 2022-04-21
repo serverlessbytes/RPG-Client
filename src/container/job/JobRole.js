@@ -27,7 +27,7 @@ const JobRole = () => {
         };
     });
 
-    const jobData = useSelector((state) => state.job.jobcatogeryData)
+    const jobData = useSelector((state) => state.job.jobCatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
 
     useEffect(() => {

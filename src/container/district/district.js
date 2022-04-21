@@ -3,44 +3,61 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
-import { Form, Input, Modal, Select, Table } from 'antd';
+import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
-import { Main, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
+import { getDistrictData, postDistrictData } from '../../redux/district/actionCreator';
 
-const State = () => {
+const district = () => {
     const dispatch = useDispatch()
-    const [data, setData] = useState({
+    const [state, setState] = useState({
         name: '',
-        key: ''
+        stateId: ''
     })
+    const [statedata, setStateData] = useState('');
+    const onstatedata = (e, name) => {
+        if (name === "state") {
+            setStateData({ ...statedata, state: e })
+        }
+    }
 
-
+    const onChangeHandler = (e) => {
+        setState({ ...state, [e.target.name]: e.target.value })
+    }
+       const onChnageValue = (e,name) => {
+             if(name ==="stateId"){
+              setState({...state,stateId:e})
+             }
+       }    
+    const diStrict = useSelector((state) => state.district.getDistrictData) // district
+    // useEffect(() => {
+    //     if (diStrict && diStrict.data && diStrict.data.length > 0) {
+    //         setState({ ...state, stateId: diStrict.data[1].id });
+    //     }
+    // }, [diStrict]);
     const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
     const [stateTableData, setstateTableData] = useState([])
 
-    // const languageData = useSelector((state) => state.language.getLanguageData)
+    useEffect(() => { console.log("diStrict", diStrict) }, [diStrict])
     const stateData = useSelector((state) => state.state.getStateData)
     useEffect(() => {
-        if (stateData && stateData.data) {
-            setstateTableData(stateData.data)
+        if (diStrict && diStrict.data) {
+            setstateTableData(diStrict.data)
         }
         console.log("stateData", stateData);
-    }, [stateData])
+    }, [diStrict])
 
-    
-     
-
-    useEffect(() => {
-        if (stateData && stateData.data) {
-            setstateTableData(stateData.data)
-        }
-    }, [stateData])
+    // useEffect(() => {
+    //     if (stateData && stateData.data) {
+    //         setstateTableData(stateData.data)
+    //     }
+    // }, [stateData])
     const languagesTableColumns = [
         {
             title: 'District',
@@ -49,8 +66,9 @@ const State = () => {
             sortDirections: ['descend', 'ascend'],
         }
     ];
-
-
+    const onApply = () => {
+        dispatch(getDistrictData(statedata.state))
+    }
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
@@ -58,12 +76,18 @@ const State = () => {
     };
     const { Option } = Select;
     const handleOk = () => {
-        let stateData = form.getFieldsValue()
-        stateData = {
-            ...stateData,
-            key: uuid()
+        // let stateData = form.getFieldsValue()
+        // stateData = {
+        //     ...stateData,
+        //     key: uuid()
+        // }
+        let data = {
+            name: state.name,
+            stateId: state.stateId,
+            key: uuid(),
         }
-        dispatch(postStateData(stateData))
+        console.log("datat", data)
+        dispatch(postDistrictData(data))
         setIsModalVisible(false);
     };
 
@@ -91,6 +115,40 @@ const State = () => {
 
             <Main >
                 <Cards headless>
+
+
+                    <Row gutter={30}>
+
+                        <Col md={6} xs={24} className="mb-25">
+                            <Form name="sDash_select" layout="vertical">
+                                <Form.Item name="basic-select" label="District">
+                                    <Select
+                                        size="large"
+                                        className="sDash_fullwidth-select"
+                                        name="state"
+                                        placeholder="Select"
+                                        onChange={(e) => onstatedata(e, "state")}
+                                    >
+                                        {
+                                            stateData && stateData.data.map((item) => (
+                                                <Option value={item.id}> {item.name} </Option>
+                                            ))
+                                        }
+                                    </Select>
+                                </Form.Item>
+                            </Form>
+                        </Col>
+                        <Col md={6} xs={24} className="mb-25">
+                            <ListButtonSizeWrapper>
+                                <Button size="small" type="primary" onClick={e => onApply(e)}>
+                                    Apply
+                                </Button>
+                            </ListButtonSizeWrapper>
+                        </Col>
+                    </Row>
+
+
+
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
@@ -111,8 +169,8 @@ const State = () => {
                         <Input
                             placeholder="Enter District"
                             name="name"
-                            defaultValue={data.name}
-                        // onChange={(e)=>{onChangeHandler(e)}}
+                            //defaultValue={data.name}
+                            onChange={(e) => { onChangeHandler(e) }}
                         />
                     </Form.Item>
                     {/* <label htmlFor="name">Key</label>
@@ -123,8 +181,8 @@ const State = () => {
                             defaultValue={data.key}
                         />
                     </Form.Item> */}
-                    <Form.Item name="languageId" label="District">
-                        <Select style={{ height: "50px" }} size="large" defaultValue="District" className="sDash_fullwidth-select" >
+                    <Form.Item name="languageId" label="State">
+                        <Select style={{ height: "50px" }} size="large" defaultValue="State" name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} className="sDash_fullwidth-select" >
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>
@@ -140,4 +198,4 @@ const State = () => {
     )
 }
 
-export default State
+export default district

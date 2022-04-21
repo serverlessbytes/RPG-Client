@@ -20,17 +20,17 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
           visible={viewModal}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={'768px'}
+          width={'991px'}
         >
           <Row gutter={10}>
-            <Col lg={12}>
-              <span><label style={{ fontWeight: 'bold' }} >Course Details:</label> {data?.detail}</span><br />
-            </Col>
-            <Col lg={12}>
-              <label style={{ fontWeight: 'bold' }}>Thumbnail:</label>
-              <img width="100%" height="245" src={data?.thumbnail}
-              // {data?.thumbnail}
-              />
+            <Col lg={24}>
+              <div className='label' style={{ fontWeight: 'bold', textAlign: "center" }}>
+                {/* <label >Thumbnail:</label> */}
+              </div>
+              <div className='thambail'>
+                <img width="100%" height="245" src={data?.thumbnail}
+                // {data?.thumbnail}
+                /></div>
             </Col>
 
             <Col lg={8}>
@@ -40,7 +40,7 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
               <span><label className='' style={{ fontWeight: 'bold' }} >Scheme Duration:</label> {data?.duration}</span><br />
             </Col>
             <Col lg={8}>
-              <span> <label className='' style={{ fontWeight: 'bold' }} >Job Category</label>{data?.jobTypes && data?.jobTypes.map((item, i) => (
+              <span> <label className='' style={{ fontWeight: 'bold' }} >Job Category:</label> {data?.jobTypes && data?.jobTypes.map((item, i) => (
                 <span>{item.name}</span>
               ))}</span>
             </Col>
@@ -57,6 +57,9 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
 
             <Col lg={8}>
               <span> <label className='' style={{ fontWeight: 'bold' }} >Certification:</label> {data?.certificate === true ? "Yes" : "No"}</span><br />
+            </Col>
+            <Col lg={8}>
+              <span><label style={{ fontWeight: 'bold' }} >Course Details:</label> {data?.detail}</span><br />
             </Col>
 
           </Row>
