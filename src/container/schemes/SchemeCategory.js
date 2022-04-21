@@ -128,7 +128,7 @@ const SchemeCategory = () => {
         setState({ ...state, current, pageSize });
     };
 
-    users.map(user => {
+    users?.data?.map(user => {
         const { id, name, designation, status } = user;
 
         return usersTableData.push({
