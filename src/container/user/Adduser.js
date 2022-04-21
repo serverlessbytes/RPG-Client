@@ -1,22 +1,18 @@
 import { Checkbox, Col, Form, Input, Radio, Row, Select, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import RichTextEditor from 'react-rte';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
 // import getSchemecategory from '../../redux/schemes/actionCreator'
 import { useDispatch, useSelector } from 'react-redux';
-import AuthStorage from '../../helper/AuthStorage';
-import STORAGEKEY from '../../config/APP/app.config';
-import { addSchemeData, editSchemeData, getOneSchemeData, getSchemeBenifits, getSchemecategory, getState } from '../../redux/schemes/actionCreator';
-import uuid from 'react-uuid'
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
-import { constants } from 'react-redux-firebase';
 import { addUserSignup, editProfile, getOneUser } from '../../redux/users/actionCreator';
+import actions from "../../redux/users/actions";
 
 const Adduser = () => {
-
+    const {
+        getOneUserSuccess, // foe edit
+    } = actions;
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
@@ -98,6 +94,20 @@ const Adduser = () => {
             error.password = "Password is required";
             flage = true;
         }
+        if (!state.phone.match('[0-9]{10}')){
+            error.phone = "Phone 10 digit is required";
+            flage = true;
+        }
+
+        //  if (state.phone === "") {
+        //     if( !(state.phone.match('[0-9]{10}')) ){
+        //         error.phone = "Phone num is required";
+        //    }else{
+        //     error.phone = "Phone is required";
+        //    }
+            
+        //     flage = true;
+        // }
         if (state.userType === "") {
             error.userType = "UserType is required";
             flage = true;
@@ -118,7 +128,8 @@ const Adduser = () => {
             password: state.password,
             phone: state.phone,
             userType: state.userType,
-            avatar: state.avatar ?? 'any',
+            //avatar: state.avatar ?? 'any',
+            //avatar: state.avatar,
         }
         console.log("data", state);
 
@@ -133,12 +144,18 @@ const Adduser = () => {
                 id: location.search.split('=')[1],
                 isDeleted: false,
                 isActive: true,
+                avatar:"dfd",
                 //isApproved: true
 
             }
             dispatch(editProfile(data))
             history.push(`/admin/user`)
         }
+    }
+    const oncancel = () => {
+        dispatch(getOneUserSuccess([])) // for a data balnk
+        history.push(`/admin/user`)
+
     }
 
     return (
@@ -218,7 +235,7 @@ const Adduser = () => {
                             <Form.Item>
                                 <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
                                 {
-                                    error.name && <span style={{ color: "red" }}>{error.name}</span>
+                                    error.phone && <span style={{ color: "red" }}>{error.phone}</span>
                                 }
                             </Form.Item>
                         </Col>
@@ -254,7 +271,8 @@ const Adduser = () => {
                             Add
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
-                            onClick={() => history.push(`/admin/user`)}
+                           // onClick={() => history.push(`/admin/user`)}
+                           onClick={(e) => oncancel(e)}
                         >
                             Cancel
                         </Button>
