@@ -19,7 +19,7 @@ const district = () => {
         name: '',
         stateId: ''
     })
-    const [statedata, setStateData] = useState('');
+
     const onstatedata = (e, name) => {
         if (name === "state") {
             setStateData({ ...statedata, state: e })
@@ -33,19 +33,22 @@ const district = () => {
              if(name ==="stateId"){
               setState({...state,stateId:e})
              }
-       }    
+       }  
+
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
-    // useEffect(() => {
-    //     if (diStrict && diStrict.data && diStrict.data.length > 0) {
-    //         setState({ ...state, stateId: diStrict.data[1].id });
-    //     }
-    // }, [diStrict]);
-    const usersTableData = [];
+    const stateData = useSelector((state) => state.state.getStateData) //state
+    const [statedata, setStateData] = useState();
+    useEffect(() => {
+        if (stateData && stateData.data) {
+            setStateData(stateData.data[0].id );
+            //console.log("stateData+++",stateData.data[0].id)
+        }
+    }, [stateData]);
+    
+    //const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
     const [stateTableData, setstateTableData] = useState([])
-
-    useEffect(() => { console.log("diStrict", diStrict) }, [diStrict])
-    const stateData = useSelector((state) => state.state.getStateData)
+   
     useEffect(() => {
         if (diStrict && diStrict.data) {
             setstateTableData(diStrict.data)
@@ -53,11 +56,6 @@ const district = () => {
         console.log("stateData", stateData);
     }, [diStrict])
 
-    // useEffect(() => {
-    //     if (stateData && stateData.data) {
-    //         setstateTableData(stateData.data)
-    //     }
-    // }, [stateData])
     const languagesTableColumns = [
         {
             title: 'District',
@@ -66,9 +64,16 @@ const district = () => {
             sortDirections: ['descend', 'ascend'],
         }
     ];
+    
     const onApply = () => {
         dispatch(getDistrictData(statedata.state))
     }
+    useEffect(()=>{
+        console.log("statedatause",statedata);
+    },[statedata])
+    useEffect(()=>{
+        dispatch(getDistrictData(statedata))
+    },[statedata])
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
@@ -121,11 +126,12 @@ const district = () => {
 
                         <Col md={6} xs={24} className="mb-25">
                             <Form name="sDash_select" layout="vertical">
-                                <Form.Item name="basic-select" label="District">
+                                <Form.Item name="basic-select" label="State">
                                     <Select
                                         size="large"
                                         className="sDash_fullwidth-select"
                                         name="state"
+                                        value={statedata}
                                         placeholder="Select"
                                         onChange={(e) => onstatedata(e, "state")}
                                     >

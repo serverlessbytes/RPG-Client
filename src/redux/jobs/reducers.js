@@ -45,6 +45,10 @@ const {
   EDIT_JOBPOST_SUCCESS,
   EDIT_JOBPOST_ERR,
 
+  GET_EMPLOYERDATA_BEGINE,
+  GET_EMPLOYERDATA_SUCCESS,
+  GET_EMPLOYERDATA_ERR,
+
 } = actions;
 
 const initialState = {
@@ -61,6 +65,7 @@ const initialState = {
   getOneJobPostData: null,
   getJobFilterData:null,
   editJobPostData:null,
+  getEmployerData:null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -265,6 +270,25 @@ const jobReducer = (state = initialState, action) => {
             error: err,
             loading: false,
           };
+
+          case GET_EMPLOYERDATA_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+          case GET_EMPLOYERDATA_SUCCESS:
+            return {
+              ...state,
+              getEmployerData: data,
+              loading: false,
+            };
+          case GET_EMPLOYERDATA_ERR:
+            return {
+              ...state,
+              error: err,
+              loading: false,
+            };
+    
   
 
 

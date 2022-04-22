@@ -7,9 +7,12 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { addJobPost, editJobPost, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
+import { addJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
 import actions from "../../redux/jobs/actions";
+import { getStateData } from '../../redux/state/actionCreator';
+import { getDistrictData } from '../../redux/district/actionCreator';
+import RichTextEditor from 'react-rte';
 
 
 const AddJobPost = () => {
@@ -35,14 +38,11 @@ const AddJobPost = () => {
 
     let jobData = useSelector((state) => state.job.jobCatogeryData) //job category
     let jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
+    let stateData = useSelector((state) => state.state.getStateData) //state
+    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
+    let getEmployerdata = useSelector((state) => state.job.getEmployerData)
 
-    useEffect(() => {
-        dispatch(getJobcategory()) //dispatch job category
-    }, [])
-
-    useEffect(() => {
-        dispatch(getJobroles()) //dispatch job rol
-    }, [])
+    useEffect(() => { console.log("getEmployerData", getEmployerdata) }, [getEmployerdata])
 
     useEffect(() => {
         //console.log("location.search", location.search);
@@ -56,7 +56,7 @@ const AddJobPost = () => {
 
     const [state, setState] = useState({
         salary: "",
-        benifits: "",
+        benifits: RichTextEditor.createEmptyValue(),
         name: "",
         state: "",
         district: "",
@@ -78,18 +78,36 @@ const AddJobPost = () => {
         jobRoleId: "",
         key: "",
     });
+    useEffect(() => {
+        dispatch(getJobcategory()) //dispatch job category
+    }, [])
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData.data)  {
+        dispatch(getJobroles()) //dispatch job rol
+    }, [])
+
+    useEffect(() => {
+        dispatch(getStateData()) //dipatch state 
+    }, []);
+
+    useEffect(() => {
+        dispatch(getEmployerData()) //dipatch getEmployerData
+    }, []);
+
+
+
+    useEffect(() => {
+        if (getOneJobPostData && getOneJobPostData.data) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
                 key: getOneJobPostData.data.key,
                 salary: getOneJobPostData.data.salary,
-                benifits: getOneJobPostData.data.benifits,
+                benifits: RichTextEditor.createValueFromString(getOneJobPostData.data.benifits, 'markdown'),
+                //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
                 name: getOneJobPostData.data.name,
-                state: getOneJobPostData.data.state,
-                district: getOneJobPostData.data.district,
+                state: getOneJobPostData.data.state.id,
+                district: getOneJobPostData.data.district.id,
                 town: getOneJobPostData.data.town,
                 pincode: getOneJobPostData.data.pincode,
                 description: getOneJobPostData.data.description,
@@ -122,7 +140,7 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.jobCategoryId === '') {
-            error.jobCategoryId = '*JobCategoryId is required';
+            error.jobCategoryId = 'JobCategoryId is required';
             flage = true;
         }
         if (state.jobRoleId === '') {
@@ -199,15 +217,15 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = e => {
-      
+
         setState({ ...state, [e.target.name]: e.target.value });
     }
-useEffect(()=>{console.log("state",state)},[state])
+    useEffect(() => { console.log("state", state) }, [state])
     const onChnageHandle = (e, name) => {
         console.log("name", name);
         console.log("e", e);
         if (name === "jobCategoryId") {
-            setState({ ...state, jobCategoryId: e })    
+            setState({ ...state, jobCategoryId: e })
         }
         else if (name === "jobRoleId") {
             setState({ ...state, jobRoleId: e })
@@ -222,6 +240,15 @@ useEffect(()=>{console.log("state",state)},[state])
         else if (name === "endDate") {
             setState({ ...state, endDate: e })
         }
+        else if (name === "state") {
+            setState({ ...state, state: e })
+        }
+        else if (name === "district") {
+            setState({ ...state, district: e })
+        }
+        else if (name === "name") {
+            setState({ ...state, name: e })
+        }
         else if (e.target.name === "vacancies") {
             if (e.target.value > 0) {
                 setState({ ...state, [e.target.name]: e.target.value })
@@ -230,6 +257,13 @@ useEffect(()=>{console.log("state",state)},[state])
             }
         }
     }
+
+    const onChangesEditorBenifit = (value) => {
+        setState({ ...state, benifits: value });
+    };
+    useEffect(() => {
+        dispatch(getDistrictData(state.state)) //dipatch district
+    }, [state.state]);
     const onSubmit = (e) => {
         if (validation()) {
             return;
@@ -245,7 +279,7 @@ useEffect(()=>{console.log("state",state)},[state])
             vacancies: parseInt(state.vacancies),
             reqExperience: state.reqExperience,
             salary: state.salary,
-            benifits: state.benifits,
+            benifits: state.benifits.toString('markdown'),
             requirements: state.requirements,
             type: state.type,
             extraType: state.extraType,
@@ -273,7 +307,7 @@ useEffect(()=>{console.log("state",state)},[state])
             vacancies: parseInt(state.vacancies),
             reqExperience: state.reqExperience,
             salary: state.salary,
-            benifits: state.benifits,
+            benifits: state.benifits.toString('markdown'),
             requirements: state.requirements,
             type: state.type,
             extraType: state.extraType,
@@ -312,20 +346,23 @@ useEffect(()=>{console.log("state",state)},[state])
                     <Cards headless>
                         <Form name="horizontal-form" layout="horizontal">
                             <Row justify="space-between">
+
                                 <Col lg={11}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="jobCategoryId">Type of job post</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="jobCategoryId" initialValue="Select a job Category" >
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} defaultValue="Select Job">
-                                                    {jobData && jobData.data.map((items) => (
-                                                        <Option value={items.id}>{items.name} </Option>
-                                                    ))}
-                                                </Select>
-                                                {error.jobCategoryId && <span style={{ color: 'red' }}>{error.jobCategoryId}</span>}
-                                            </Form.Item>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item name="basic-select" >
+                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary " value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} >
+                                                        {jobData && jobData.data.map((items) => (
+                                                            <Option value={items.id}>{items.name} </Option>
+                                                        ))}
+                                                    </Select>
+                                                    {error.jobCategoryId && <span style={{ color: 'red' }}>{error.jobCategoryId}</span>}
+                                                </Form.Item>
+                                            </Form>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -361,18 +398,25 @@ useEffect(()=>{console.log("state",state)},[state])
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
-                                    <Row align="middle" justify="space-between">
-                                        <Col lg={8} md={9} xs={24}>
+                                <Col lg={24}>
+                                    {/* <Row align="middle" justify="space-between">
+                                        <Col lg={4} md={9} xs={24}>
                                             <label htmlFor="benifits">Benefits</label>
                                         </Col>
-                                        <Col lg={16} md={15} xs={24}>
+                                        <Col lg={20} md={15} xs={24}>
                                             <Form.Item name="AnyotherBenefitsE" initialValue="">
-                                                <Input placeholder="Benefits" value={state.benifits} name="benifits" onChange={e => onChangeValue(e)} />
+                                                <RichTextEditor placeholder="Benefits" name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
                                                 {error.benifits && <span style={{ color: 'red' }}>{error.benifits}</span>}
                                             </Form.Item>
                                         </Col>
-                                    </Row>
+                                    </Row> */}
+                                    <div style={{ marginBottom: "20px" }}>
+                                        <label htmlFor="Documentation">Benefits</label>
+                                        <div className="group" style={{ marginBottom: "0px" }}>
+                                            <RichTextEditor placeholder="Type your message..." name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
+                                        </div>
+                                        {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
+                                    </div>
                                 </Col>
                             </Row>
                             <Row justify="space-between">
@@ -383,7 +427,13 @@ useEffect(()=>{console.log("state",state)},[state])
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="name" initialValue="">
-                                                <Input placeholder="Enter Employer Name" value={state.name} name='name' onChange={(e) => onChangeValue(e)} />
+                                                {/* <Input placeholder="Enter Employer Name" value={state.name} name='name' onChange={(e) => onChangeValue(e)} /> */}
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.name} name="name" onChange={(e) => onChnageHandle(e, "name")} defaultValue="Select Job Role">
+                                                    {getEmployerdata && getEmployerdata.data && getEmployerdata.data?.data.map((items) => (
+                                                        <Option value={items.id}>{items.name} </Option>
+                                                    ))}
+
+                                                </Select>
                                                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                                             </Form.Item>
                                         </Col>
@@ -411,7 +461,21 @@ useEffect(()=>{console.log("state",state)},[state])
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="state">
-                                                <Input placeholder="State" value={state.state} name="state" onChange={(e) => onChangeValue(e)} />
+                                                {/* <Input placeholder="State" value={state.state} name="state" onChange={(e) => onChangeValue(e)} /> */}
+                                                <Select
+                                                    size="large"
+                                                    className="sDash_fullwidth-select"
+                                                    name="state"
+                                                    value={state.state}
+                                                    placeholder="Select State"
+                                                    onChange={(e) => onChnageHandle(e, "state")}
+                                                >
+                                                    {
+                                                        stateData && stateData.data.map((item) => (
+                                                            <Option value={item.id}> {item.name} </Option>
+                                                        ))
+                                                    }
+                                                </Select>
                                                 {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                                             </Form.Item>
                                         </Col>
@@ -444,7 +508,21 @@ useEffect(()=>{console.log("state",state)},[state])
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="district" >
-                                                <Input placeholder="District" value={state.district} name="district" onChange={(e) => onChangeValue(e)} />
+                                                {/* <Input placeholder="District" value={state.district} name="district" onChange={(e) => onChangeValue(e)} /> */}
+                                                <Select
+                                                    size="large"
+                                                    className="sDash_fullwidth-select"
+                                                    name="district"
+                                                    value={state.district}
+                                                    placeholder="Select District"
+                                                    onChange={(e) => onChnageHandle(e, "district")}
+                                                >
+                                                    {
+                                                        diStrictdata && diStrictdata.data.map((item) => (
+                                                            <Option value={item.id}> {item.name} </Option>
+                                                        ))
+                                                    }
+                                                </Select>
                                                 {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                                             </Form.Item>
                                         </Col>
@@ -559,7 +637,7 @@ useEffect(()=>{console.log("state",state)},[state])
                             </Row>
 
                             <Row justify="space-between">
-                                <Col lg={11}>
+                                <Col lg={11} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="startdata">Start Date</label>
@@ -574,7 +652,6 @@ useEffect(()=>{console.log("state",state)},[state])
                                         </Col>
                                     </Row>
                                 </Col>
-
                                 <Col lg={11}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
@@ -591,7 +668,7 @@ useEffect(()=>{console.log("state",state)},[state])
                             </Row>
 
                             <Row justify="space-between">
-                                <Col lg={11}>
+                                <Col lg={11} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="enddate">End Date</label>
@@ -633,6 +710,14 @@ useEffect(()=>{console.log("state",state)},[state])
                                     </Row>
                                 </Col>
                             </Row>
+
+                            {/* <div style={{ marginBottom: "20px" }}>
+                                <label htmlFor="benifits">Benefit 1-Line</label>
+                                <div className="group" style={{ marginBottom: "0px" }}>
+                                    <RichTextEditor placeholder="Type your message..." name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
+                                </div>
+                                {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
+                            </div> */}
 
                         </Form>
                         <div className="sDash_form-action mt-20">

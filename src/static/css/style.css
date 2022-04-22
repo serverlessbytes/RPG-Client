@@ -2775,3 +2775,7 @@ padding-bottom: 8px;
   width: auto;
   border-radius: 10px;
 }
+
+.ant-space-vertical{
+  width: 100% !important; 
+}
