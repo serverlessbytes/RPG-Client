@@ -42,6 +42,10 @@ const actions = {
     GET_JOBSFILTER_BEGINE:"GET_JOBSFILTER_BEGINE",
     GET_JOBSFILTER_SUCCESS:"GET_JOBSFILTER_SUCCESS",
     GET_JOBSFILTER_ERR:"GET_JOBSFILTER_ERR", 
+
+    GET_EMPLOYERDATA_BEGINE:"GET_EMPLOYERDATA_BEGINE",
+    GET_EMPLOYERDATA_SUCCESS:"GET_EMPLOYERDATA_SUCCESS",
+    GET_EMPLOYERDATA_ERR:"GET_EMPLOYERDATA_ERR",
     
    
     getJobcategoryBegin: () => {
@@ -265,6 +269,26 @@ const actions = {
     getJobsFilterForMainErr: err => {
       return {
         type: actions.GET_JOBSFILTER_ERR,
+        err,
+      };
+    },
+
+    getEmployerDataBegin: () => {
+      return {
+        type: actions.GET_EMPLOYERDATA_BEGINE,
+      };
+    },
+  
+    getEmployerDataSuccess: data => {
+      return {
+        type: actions.GET_EMPLOYERDATA_SUCCESS,
+        data,
+      };
+    },
+  
+    getEmployerDataErr: err => {
+      return {
+        type: actions.GET_EMPLOYERDATA_ERR,
         err,
       };
     },

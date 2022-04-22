@@ -219,10 +219,10 @@ const Schemes = () => {
         title="Schemes"
         buttons={[
           <div className="page-header-actions">
-            {/* <Button size="small" type="link">
+            <Button size="small" type="link">
                             Export Schemes
                         </Button>
-                        <Button size="small" type="light">
+                        {/* <Button size="small" type="light">
                             Import Schemes
                         </Button> */}
             <Button onClick={reDirect} size="small" type="success">

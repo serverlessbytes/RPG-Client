@@ -104,7 +104,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
     else if (courseData && courseData.data) {
       setUsertable(courseData.data?.data?.map(item => {
         return ({
-          user: item.name,
+          user: item.name?.name,
           email: item.email,
           company: item.description,
           position: item.jobRole.name,

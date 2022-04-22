@@ -37,6 +37,10 @@ const {
 
   getJobsFilterForMainSuccess,
   getJobsFilterForMainErr,
+
+  getEmployerDataSuccess,
+  getEmployerDataErr,
+
 } = actions;
 
 export const getJobcategory = () => async (dispatch) => {
@@ -139,3 +143,10 @@ export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole) => a
     .catch((err) => dispatch(getJobsFilterForMainErr(err)))
 }
 
+export const getEmployerData = () => async (dispatch) => {
+  await ApiGet(`user/auth/allUsers?type=EMPLOYER`)
+    .then((res) => {
+      return dispatch(getEmployerDataSuccess(res))
+    })
+    .catch((err) => dispatch(getEmployerDataErr(err)))
+}

@@ -17,7 +17,7 @@ const PartnerCourses = () => {
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
-  const [viewModal, setViewModal] = useState(false);  
+  const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState({
     category: '',
     mode: 'PARTNER',
@@ -25,7 +25,7 @@ const PartnerCourses = () => {
   const [activeCoursetog, setActiveCourseTog] = useState(true);
 
   let catdata = useSelector(state => state.category.categoryData);
-  const onePartnerCourseData=useSelector(state => state.category.editFilterData)
+  const onePartnerCourseData = useSelector(state => state.category.editFilterData)
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
@@ -67,10 +67,10 @@ const PartnerCourses = () => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
 
-  const viewPartnerCoursedata=(key)=>{
+  const viewPartnerCoursedata = (key) => {
     dispatch(getOneCoursefilter(key))
     setViewModal(true)
-}
+  }
 
   const onDelete = id => {
     let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
@@ -204,6 +204,9 @@ const PartnerCourses = () => {
             >
               Add Courses
             </Button>
+            <Button size="small" type="link">
+              Export Courrses
+            </Button>
           </div>,
         ]}
       />
@@ -335,7 +338,7 @@ const PartnerCourses = () => {
           </Row>
         </Cards>
       </Main>
-      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={onePartnerCourseData && onePartnerCourseData.data ? onePartnerCourseData.data:'' } />}
+      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={onePartnerCourseData && onePartnerCourseData.data ? onePartnerCourseData.data : ''} />}
     </>
   );
 };

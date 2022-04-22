@@ -36,11 +36,11 @@ const SwayamCourses = () => {
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
 
   useEffect(() => {
-    if(oneSwayamCourseData){
-        console.log("oneSwayamCourseData",oneSwayamCourseData);
+    if (oneSwayamCourseData) {
+      console.log("oneSwayamCourseData", oneSwayamCourseData);
     }
   }, [oneSwayamCourseData])
-  
+
 
   useEffect(() => {
     dispatch(getCategoryData());
@@ -102,10 +102,10 @@ const SwayamCourses = () => {
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
   };
 
-  const viewSwayamCoursedata=(key)=>{
+  const viewSwayamCoursedata = (key) => {
     dispatch(getOneCoursefilter(key))
     setViewModal(true)
-}
+  }
 
 
   useEffect(() => {
@@ -199,6 +199,9 @@ const SwayamCourses = () => {
               }}
             >
               Create Course
+            </Button>
+            <Button size="small" type="link">
+              Export Course
             </Button>
           </div>,
         ]}
@@ -307,7 +310,7 @@ const SwayamCourses = () => {
         </Cards>
       </Main>
 
-      {viewModal && <ViewSwayamCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={oneSwayamCourseData?.data}/>}
+      {viewModal && <ViewSwayamCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={oneSwayamCourseData?.data} />}
     </>
   );
 };

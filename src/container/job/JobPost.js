@@ -12,6 +12,7 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { getJobroles } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import e from 'cors';
+import { getStateData } from '../../redux/state/actionCreator';
 
 const JobPost = ({ match }) => {
     const { Option } = Select;
@@ -19,7 +20,7 @@ const JobPost = ({ match }) => {
     const history = useHistory();
     const { TabPane } = Tabs;
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
-
+    let stateData = useSelector((state) => state.state.getStateData) //state
     useEffect(() => {
         console.log("jobRolesData", jobRolesData)
     }, [jobRolesData])
@@ -27,6 +28,9 @@ const JobPost = ({ match }) => {
     useEffect(() => {
         dispatch(getJobroles());
     }, [])
+    useEffect(() => {
+        dispatch(getStateData()) //dipatch state 
+    }, []);
     const callback = (key) => {
         //     console.log(key);
     };
@@ -34,15 +38,16 @@ const JobPost = ({ match }) => {
     const [type,setType] = useState("")
     const [jobRole,setJobRole] = useState("")
     const [apply,setApply] = useState(false)
-    const onChangeHandle = (e) => {
-        setState({ ...state, [e.target.name]: e.target.value })
-    }
+  
     const onChangevalue = (e, name) => {
         if (name === "type") {
             setType({ ...type, type: e })
         }
         else if (name === "jobRole") {
             setJobRole({ ...jobRole, jobRole: e })
+        }
+        else if (name === "state") {
+            setState({ ...jobRole, state: e })
         }
     
     }
@@ -88,7 +93,21 @@ const JobPost = ({ match }) => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="State">
-                                            <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} />
+                                            {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
+                                            <Select
+                                                    size="large"
+                                                    className="sDash_fullwidth-select"
+                                                    name="state"
+                                                    value={state.state}
+                                                    placeholder="Select State"
+                                                    onChange={(e) => onChangevalue(e, "state")}
+                                                >
+                                                    {
+                                                        stateData && stateData.data.map((item) => (
+                                                            <Option value={item.id}> {item.name} </Option>
+                                                        ))
+                                                    }
+                                                </Select>
                                         </Form.Item>
                                     </Form>
                                 </Col>
