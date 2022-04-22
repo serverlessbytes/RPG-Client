@@ -26,9 +26,9 @@ const {
   GET_TOP_TEN_SCHEMES_DATA_SUCCESS,
   GET_TOP_TEN_SCHEMES_DATA_ERR,
 
-  GET_TOP_TEN_JOB_DATA_BEGIN,
-  GET_TOP_TEN_JOB_DATA_SUCCESS,
-  GET_TOP_TEN_JOB_DATA_ERR,
+  GET_TOP_TEN_JOBS_DATA_BEGIN,
+  GET_TOP_TEN_JOBS_DATA_SUCCESS,
+  GET_TOP_TEN_JOBS_DATA_ERR,
 
 } = actions;
 
@@ -107,18 +107,18 @@ const dashboardReducer = (state = initialState, action) => {
           loading: false,
         };
 
-      case GET_TOP_TEN_JOB_DATA_BEGIN:
+      case GET_TOP_TEN_JOBS_DATA_BEGIN:
           return {
             ...state,
             loading: true,
           };
-      case GET_TOP_TEN_JOB_DATA_SUCCESS:
+      case GET_TOP_TEN_JOBS_DATA_SUCCESS:
           return {
             ...state,
             topTenJobData:data,
             loading: false,
           };
-      case GET_TOP_TEN_JOB_DATA_ERR:
+      case GET_TOP_TEN_JOBS_DATA_ERR:
           return {
             ...state,
             error: err,

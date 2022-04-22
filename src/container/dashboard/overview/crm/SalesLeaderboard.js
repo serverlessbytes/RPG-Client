@@ -5,7 +5,7 @@ import { Table } from 'antd';
 import { topSaleGetData, topSaleFilterData } from '../../../../redux/chartContent/actionCreator';
 import { Cards } from '../../../../components/cards/frame/cards-frame';
 
-const  SalesLeaderBoard = ({dnone, tableheader}) => {
+const  SalesLeaderBoard = ({dnone, tableheader,columns,data}) => {
   const dispatch = useDispatch();
   const { topSaleState } = useSelector(state => {
     return {
@@ -94,7 +94,7 @@ const  SalesLeaderBoard = ({dnone, tableheader}) => {
         bodypadding="0px"
       >
         <div className="table-bordered leaderboard-table table-responsive">
-          <Table columns={sellingColumns} dataSource={sellingData} pagination={false} />
+          <Table columns={columns} dataSource={data} pagination={false} />
         </div>
       </Cards>
     </div>
