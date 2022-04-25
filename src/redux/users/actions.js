@@ -13,7 +13,11 @@ const actions = {
 
     GET_ONEUSER_BEGINE:"GET_ONEUSER_BEGINE",
     GET_ONEUSER_SUCCESS:"GET_ONEUSER_SUCCESS",
-    GET_ONEUSER_ERR:"GET_ONEUSER_ERR",  
+    GET_ONEUSER_ERR:"GET_ONEUSER_ERR", 
+    
+    GET_ALLUSERS_BEGINE:"GET_ALLUSERS_BEGINE",
+    GET_ALLUSERS_SUCCESS:"GET_ALLUSERS_SUCCESS",
+    GET_ALLUSERS_ERR:"GET_ALLUSERS_ERR",
 
   
     getSchemecategoryBegin: () => {
@@ -92,6 +96,26 @@ const actions = {
       getOneUserErr: err => {
         return {
           type: actions.GET_ONEUSER_ERR,
+          err,
+        };
+      },
+
+      allUserBegin: () => {
+        return {
+          type: actions.GET_ALLUSERS_BEGINE,
+        };
+      },
+    
+      allUserSuccess: data => {
+        return {
+          type: actions.GET_ALLUSERS_SUCCESS,
+          data,
+        };
+      },
+    
+      allUserErr: err => {
+        return {
+          type: actions.GET_ALLUSERS_ERR,
           err,
         };
       },

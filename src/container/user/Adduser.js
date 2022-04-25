@@ -1,4 +1,5 @@
 import { Checkbox, Col, Form, Input, Radio, Row, Select, Space } from 'antd';
+import { PageHeader } from '../../components/page-headers/page-headers'
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -95,7 +96,7 @@ const Adduser = () => {
             flage = true;
         }
         if (!state.phone.match('[0-9]{10}')){
-            error.phone = "Phone 10 digit is required";
+            error.phone = "Phone is required";
             flage = true;
         }
 
@@ -160,6 +161,17 @@ const Adduser = () => {
 
     return (
         <>
+          <PageHeader
+                title="Add User"
+            // buttons={[
+            //     <div key="1" className="page-header-actions">
+            //         <Button size="small" onClick={() => { }} type="primary">
+            //             <FeatherIcon icon="plus" size={14} />
+            //             Add New
+            //         </Button>
+            //     </div>,
+            // ]}
+            />
             <Main >
                 <Cards headless>
                     <Row justify="space-between">
@@ -177,7 +189,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item>
-                                <Input placeholder="Scheme Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="User Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
                                 {
                                     error.name && <span style={{ color: "red" }}>{error.name}</span>
                                 }
@@ -190,6 +202,7 @@ const Adduser = () => {
                             <label htmlFor="category mb-4">User Type</label>
                             <Form.Item initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" value={state.userType} className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                    <option value={""}>Select User</option>
                                     <option value={"USER"}>USER</option>
                                     <option value={"PARTNER"}>PARTNER</option>
                                     <option value={"EMPLOYER"}>EMPLOYER</option>
@@ -213,7 +226,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="password">Password</label>
                             <Form.Item>
-                                <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="Password" onChange={(e) => onChangeValue(e)} />
                                 {error.password && <span style={{ color: "red" }}>{error.password}</span>}
                             </Form.Item>
                         </Col>
@@ -233,7 +246,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="phone">Phone</label>
                             <Form.Item>
-                                <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Phone" value={state.phone} name="Phone" onChange={(e) => onChangeValue(e)} />
                                 {
                                     error.phone && <span style={{ color: "red" }}>{error.phone}</span>
                                 }
@@ -253,7 +266,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="phone">Avatar</label>
                             <Form.Item>
-                                <Input placeholder="avatar" name="avatar" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Avatar" name="avatar" onChange={(e) => onChangeValue(e)} />
                                 {/* {
                                     error.avatar && <span style={{ color: "red" }}>{error.avatar}</span>
                                 } */}

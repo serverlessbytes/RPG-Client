@@ -17,6 +17,9 @@ const {
     getOneUserSuccess,
     getOneUserErr,
 
+    allUserSuccess,
+    allUserErr,
+
 } = actions;
 
 let Status;
@@ -36,7 +39,12 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
     per_page=perpage;
     page_num=pagenumber;
     Type=type;
-    await ApiGet(`user/auth/getAllUsers?per_page=${perpage}&page_number=${pagenumber}&status=${status}&type=${type}`)
+
+    let api
+    api = type === "" ? `user/auth/getAllUsers?per_page=${perpage}&page_number=${pagenumber}&status=${status}` 
+                      : `user/auth/getAllUsers?per_page=${perpage}&page_number=${pagenumber}&status=${status}&type=${type}` 
+
+    await ApiGet(api)
       .then((res) => {
         return dispatch(getAllUserSuccess(res))
       })
@@ -64,6 +72,13 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
         return dispatch(getOneUserSuccess(res))
       })
       .catch((err) => dispatch(getOneUserErr(err)))
+  }
+  export const allUser = (data) => async (dispatch) => {   
+    await ApiGet(`user/auth/allUsers${data ? "?type=" + data :''}`)
+      .then((res) => {
+        return dispatch(allUserSuccess(res))
+      })
+      .catch((err) => dispatch(allUserErr(err)))
   }
 
 // export const getOneSchemeData = (key) => async (dispatch) => {

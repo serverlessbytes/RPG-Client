@@ -33,6 +33,9 @@ const {
   getOneSchemeSuccess,
   getOneSchemenErr,
 
+  getAllSchemesSuccess,
+  getAllSchemesErr,
+
 } = actions;
 let per_Page, page_Num
 export const getSchemecategory = () => async (dispatch) => {
@@ -111,12 +114,19 @@ export const getOneSchemeData = (key) => async (dispatch) => {
     })
     .catch((err) => dispatch(getOneSchemenErr(err)))
 }
+export const getAllSchemes = () => async (dispatch) => {
+  await ApiGet(`scheme/allSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    .then((res) => {
+      return dispatch(getAllSchemesSuccess(res))
+    })
+    .catch((err) => dispatch(getAllSchemesErr(err)))
+}
 
 export const editSchemeData = (body) => async (dispatch) => {
   await ApiPost(`scheme/editScheme`, body)
     .then((res) => {
       dispatch(editSchemeSuccess(res.data))
-      if (res.status === 200) {
+      if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
         dispatch(getSchemeData(per_Page, page_Num))
       }
     })

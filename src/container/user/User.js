@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -12,17 +12,24 @@ import { useRouteMatch } from 'react-router-dom';
 import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
-import { editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { CSVLink } from 'react-csv';
+import { ApiGet } from '../../helper/API/ApiData';
 
 
 const User = () => {
-  
+
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch();
+    const CSVLinkRef = useRef(null)
+
     const [usertable, setUsertable] = useState([]) //set data
+    const [state, setState] = useState([]) //set data for export
+    const [state2, setState2] = useState([]) //set data
 
-
+    const getAllUsers = useSelector((state) => state.users.getAllUser)
+    let alluser = useSelector((state) => state.users.allUser)
 
     const [status, setStatus] = useState("active")
     const callback = (key) => {
@@ -30,35 +37,43 @@ const User = () => {
     }
     const [perPage, setPerPage] = useState(10)
     const [pageNumber, setPageNumber] = useState(1)
-    const [userType, setUserType] = useState("USER")
+    const [userType, setUserType] = useState("")
 
-    useEffect(()=>{
-        console.log("userType",userType)
-    },[userType])
+    useEffect(() => {
+        console.log("userType", userType)
+    }, [userType])
+
+    useEffect(() => {
+        if (state.length) {
+            CSVLinkRef?.current?.link.click()  // 
+        }
+        console.log("state", state);
+    }, [state])
+
+    useEffect(() => {
+        console.log("state2", state2);
+    }, [state2])
 
     const selectValue = (e, name) => {
-        //console.log("eeeee",e)
         if (name === 'userType') {
             setUserType(e)
         }
     }
     useEffect(() => {
         if (status) {
-          dispatch(getAllUser(perPage, pageNumber, status, userType));
+            dispatch(getAllUser(perPage, pageNumber, status, userType));
         }
-      }, [status]);
+    }, [perPage, pageNumber, status]);
 
     const onApply = () => {
         dispatch(getAllUser(perPage, pageNumber, status, userType))
     }
 
+    const onClear = () => {
+        //console.log("-------", e)
+        setUserType("", 'userType')
+    }
 
-     const getAllUsers = useSelector((state) => state.users.getAllUser)
-
-     useEffect(() => {
-        console.log("status", status);
-    }, [status])
-    // const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
 
     const reDirect = () => {
         history.push(`${path}/adduser`);
@@ -68,22 +83,31 @@ const User = () => {
         history.push(`${path}/adduser?id=${id}`)
     }
 
+    //setState({...state,alluser}) // all user
+
+    useEffect(() => {
+        if (alluser?.data?.data) {
+            setState(alluser.data.data)  //set a state for export word
+
+        }
+    }, [alluser])
+
     const onDelete = (id) => {
-        let userForDelete = getAllUsers && getAllUsers.data&&getAllUsers.data.data.find(item => item.id === id)
-        
+        let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id)
+
         if (userForDelete) {
             //delete userForDelete.key
             //delete userForDelete.updatedAt
             //delete userForDelete.avatar,
             userForDelete = {
                 ...userForDelete,
-               
-                id :userForDelete.id,
+
+                id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar:"dfd",
+                avatar: "dfd",
             }
-            console.log("userForDelete",userForDelete)
+            console.log("userForDelete", userForDelete)
             dispatch(editProfile(userForDelete))
         }
     }
@@ -94,33 +118,35 @@ const User = () => {
 
     useEffect(() => {
         if (getAllUsers && getAllUsers.data) {
-            console.log("getAllUsers",getAllUsers)
-          setUsertable(getAllUsers.data?.data?.map(item => {
-             
-            return ({
-              name: item.name,
-              email: item.email,
-              phone: item.phone,
-              userType: item.userType,
-              avatar : "",
-              action: (
-                <div className="table-actions">
-                  <>
-                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                      <FeatherIcon icon="edit" size={16} />
-                    </Button>
-                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                      <FeatherIcon icon="trash-2" size={16} />
-                    </Button>
-                  </>
-                </div>
-              ),
-            });
-          })
-          )
+            console.log("getAllUsers", getAllUsers)
+            setUsertable(getAllUsers.data?.data?.map(item => {
+
+                return ({
+                    name: item.name,
+                    email: item.email,
+                    phone: item.phone,
+                    userType: item.userType,
+                    avatar: "",
+                    action: (
+                        <div className="table-actions">
+                            <>
+                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                    <FeatherIcon icon="edit" size={16} />
+                                </Button>
+                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                    <FeatherIcon icon="trash-2" size={16} />
+                                </Button>
+                            </>
+                        </div>
+                    ),
+                });
+            })
+            )
         }
-      }, [getAllUsers])
-      useEffect(()=>{ console.log("usertable",usertable)},[usertable])
+    }, [getAllUsers])
+    useEffect(() => {
+        console.log("usertable", usertable)
+    }, [usertable])
     const usersTableColumns = [
 
         // {
@@ -172,6 +198,15 @@ const User = () => {
         }),
     };
 
+    const exPortuser = () => {
+        dispatch(allUser(userType))
+    }
+    const allexPortuser = () => {
+        ApiGet(`user/auth/allUsers`).then((res) => {
+            setState(res?.data?.data)
+        })
+    }
+
     return (
         <>
             <PageHeader
@@ -186,11 +221,23 @@ const User = () => {
                         Import Schemes
                     </Button> */}
                         <Button onClick={reDirect} size="small" type="success">
-                            Create Scheme
+                            Create User
                         </Button>
+                        <Button onClick={exPortuser} size="small" type="link">
+                            Export User
+                        </Button>
+                        <Button onClick={allexPortuser} size="small" type="link">
+                            Export All User
+                        </Button>
+                        {/* <CSVLink data={state}
+                            style={{ opacity: 0 }}
+                            ref={CSVLinkRef}
+                            filename='' headers={headers}>
+                        </CSVLink> */}
+                        <CSVLink data={state} ref={CSVLinkRef} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
                         {/* <Button size="small" type="warning">
-                        Deactivate All Schemes
-                    </Button> */}
+                            Deactivate All Schemes
+                        </Button> */}
                     </div>
                 ]}
             />
@@ -201,9 +248,10 @@ const User = () => {
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item  label="Users Type">
-                                            <Select size="large" placeholder="Select Category"  className="sDash_fullwidth-select" value={userType} name="userType" onChange={(e) => selectValue(e, "userType")}>
-                                                <option selected value={"USER"}>USER</option>
+                                        <Form.Item label="Users Type">
+                                            <Select size="large" value={userType} placeholder="Select" className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                                <option value={""}>Select User</option>
+                                                <option value={"USER"}>USER</option>
                                                 <option value={"PARTNER"}>PARTNER</option>
                                                 <option value={"EMPLOYER"}>EMPLOYER</option>
                                                 <option value={"ADMIN"}>ADMIN</option>
@@ -217,21 +265,25 @@ const User = () => {
                                         <Button size="small" type="primary" onClick={(e) => onApply(e)}>
                                             Apply
                                         </Button>
+                                        <Button size="small" type="light" onClick={() => onClear()} >
+                                            Clear
+                                        </Button>
                                     </ListButtonSizeWrapper>
                                 </Col>
+
                             </Row>
                             {/* <Row className="mb-25">
-                            <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                Active Schemes
-                            </Button>
-                            <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                Inactive Schemes
-                            </Button>
-                        </Row>
-                         <ActiveSchemesTable type ={type}/> */}
+                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
+                                    Active Schemes
+                                </Button>
+                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
+                                    Inactive Schemes
+                                </Button>
+                            </Row> */}
+                            {/* <ActiveSchemesTable type={type} /> */}
 
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Schemes" key="active">
+                                <TabPane tab="Active Users" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -246,8 +298,8 @@ const User = () => {
                                                 dataSource={usertable}
                                                 columns={usersTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.per_page,
-                                                    total: getAllUsers?.page_count,
+                                                    defaultPageSize: getAllUsers?.data.data.per_page,
+                                                    total: getAllUsers?.data.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
@@ -258,7 +310,7 @@ const User = () => {
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Inactive Schemes" key='inactive'>
+                                <TabPane tab="Inactive Users" key='inactive'>
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
 
@@ -273,8 +325,8 @@ const User = () => {
                                                 dataSource={usertable}
                                                 columns={usersTableColumns.filter(item => item.title !== "Actions")}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.per_page,
-                                                    total: getAllUsers?.page_count,
+                                                    defaultPageSize: getAllUsers?.data.data.per_page,
+                                                    total: getAllUsers?.data.data.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);

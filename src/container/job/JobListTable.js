@@ -13,9 +13,9 @@ import ViewJobPost from './ViewJobPost';
 const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPost
 
   const { path } = useRouteMatch();
-  console.log("pathh", state)
-  console.log("type", type)
-  console.log("jobRole", jobRole)
+  // console.log("pathh", state)
+  // console.log("type", type)
+  // console.log("jobRole", jobRole)
   let history = useHistory();
   let dispatch = useDispatch()
   const { users } = useSelector(state => {
