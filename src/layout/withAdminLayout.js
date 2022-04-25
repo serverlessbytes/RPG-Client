@@ -222,7 +222,9 @@ const ThemeLayout = WrappedComponent => {
                 </Col>
 
                 <Col lg={!topMenu ? 14 : 15} md={8} sm={0} xs={0}>
-                  {topMenu && window.innerWidth > 991 ? <TopMenu /> : <HeaderSearch rtl={rtl} darkMode={darkMode} />}
+                  {topMenu && window.innerWidth > 991 ? <TopMenu /> :
+                  <HeaderSearch rtl={rtl} darkMode={darkMode} 
+                  />}
                 </Col>
 
                 <Col lg={2} md={10} sm={0} xs={0}>
@@ -234,7 +236,7 @@ const ThemeLayout = WrappedComponent => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col lg={4} md={10} sm={0} xs={0}>
+                <Col lg={1} md={1} sm={0} xs={0}>
                   {topMenu && window.innerWidth > 991 ? (
                     <TopMenuSearch>
                       <div className="top-right-wrap d-flex">
@@ -263,7 +265,7 @@ const ThemeLayout = WrappedComponent => {
                     <AuthInfo />
                   )}
                 </Col>
-
+                      
                 <Col md={0} sm={18} xs={12}>
                   <>
                     <div className="mobile-action">

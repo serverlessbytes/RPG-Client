@@ -171,13 +171,13 @@ const MessageBox = () => {
 
   return (
     <div className="message">
-      <Popover placement="bottomLeft" content={content} action="click">
+      {/* <Popover placement="bottomLeft" content={content} action="click">
         <Badge dot offset={[-8, -5]}>
           <Link to="#" className="head-example">
             <FeatherIcon icon="mail" size={20} />
           </Link>
         </Badge>
-      </Popover>
+      </Popover> */}
     </div>
   );
 };

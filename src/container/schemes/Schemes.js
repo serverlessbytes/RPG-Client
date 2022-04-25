@@ -24,8 +24,10 @@ const Schemes = () => {
   const CSVLinkRef = useRef(null)
   const users = useSelector(state => state.scheme.getAllSchemeData);
 
-  const [schemeBenefits, setSchemeBenefits] = useState('');
-  const [schemeCategory, setSchemeCategory] = useState('');
+  const [schemeCategory, setSchemeCategory] = useState({
+    category:'',
+    benefit:''
+  });
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
@@ -43,17 +45,9 @@ const Schemes = () => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
-      setSchemeBenefits({ ...schemeBenefits, benefit: e });
+      setSchemeCategory({ ...schemeCategory, benefit: e });
     }
   };
-
-  useEffect(() => {
-    console.log('schemeBenefits', schemeBenefits);
-  }, [schemeBenefits]);
-
-  useEffect(() => {
-    console.log('schemeCategory', schemeCategory);
-  }, [schemeBenefits]);
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -64,7 +58,7 @@ const Schemes = () => {
   }, []);
 
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeBenefits.benefit, schemeCategory.category));
+      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit, schemeCategory.category));
   };
   const header = [
     { label: "id", key: "id" },
