@@ -102,6 +102,10 @@ const SwayamCourses = () => {
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
   };
 
+  const clearFilter=()=>{
+    setData({category:''})
+  }
+
   const viewSwayamCoursedata = (key) => {
     dispatch(getOneCoursefilter(key))
     setViewModal(true)
@@ -253,7 +257,7 @@ const SwayamCourses = () => {
                     <Button size="small" type="primary" onClick={() => Submit()}>
                       Apply
                     </Button>
-                    <Button size="small" type="light">
+                    <Button size="small" type="light" onClick={()=>clearFilter()}>
                       Clear
                     </Button>
                   </ListButtonSizeWrapper>

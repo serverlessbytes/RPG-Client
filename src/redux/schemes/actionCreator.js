@@ -95,6 +95,10 @@ export const getSchemeData = (perPage, pageNumber, status, schemeBenifit, scheme
   let apiData
   if (schemeCategory && schemeBenifit) {
     apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`)
+  }else if(schemeCategory && schemeBenifit==='') {
+    apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeCategory=${schemeCategory}`)
+  }else if(schemeCategory==='' && schemeBenifit){
+    apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}`)
   } else {
     apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`)
   }

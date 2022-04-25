@@ -40,7 +40,7 @@ const district = () => {
     const [statedata, setStateData] = useState();
     useEffect(() => {
         if (stateData && stateData.data) {
-            setStateData(stateData.data[0].id );
+            setStateData(stateData?.data[0]?.id );
             //console.log("stateData+++",stateData.data[0].id)
         }
     }, [stateData]);

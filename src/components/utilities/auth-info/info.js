@@ -105,21 +105,11 @@ const AuthInfo = () => {
   );
 
   return (
+    <>
     <InfoWraper>
-      <Message />
-      <Notification />
-
-      <Settings />
-      <Support />
-      <div className="nav-author">
-        <Dropdown placement="bottomRight" content={country} trigger="click">
-          <Link to="#" className="head-example">
-            <img src={require(`../../../static/img/flag/${flag}.png`)} alt="" />
-          </Link>
-        </Dropdown>
-      </div>
-
-      <div className="nav-author">
+     <div 
+     className="nav-author"
+     >
         <Popover placement="bottomRight" content={userContent} action="click">
           <Link to="#" className="head-example">
             <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" />
@@ -127,6 +117,29 @@ const AuthInfo = () => {
         </Popover>
       </div>
     </InfoWraper>
+    </>
+    // <InfoWraper>
+    //   {/* <Message /> */}
+    //   {/* <Notification /> */}
+
+    //   {/* <Settings /> */}
+    //   {/* <Support /> */}
+    //   <div className="nav-author">
+    //     <Dropdown placement="bottomRight" content={country} trigger="click">
+    //       <Link to="#" className="head-example">
+    //         <img src={require(`../../../static/img/flag/${flag}.png`)} alt="" />
+    //       </Link>
+    //     </Dropdown>
+    //   </div>
+
+    //   <div className="nav-author">
+    //     <Popover placement="bottomRight" content={userContent} action="click">
+    //       <Link to="#" className="head-example">
+    //         <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" />
+    //       </Link>
+    //     </Popover>
+    //   </div>
+    // </InfoWraper>
   );
 };
 

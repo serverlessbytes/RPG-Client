@@ -171,86 +171,7 @@ const Dashboard = () => {
         title="Dashbord"
       />
       <Main>
-        <h3>Courses</h3>
-        <Row gutter={25}>
-          <Col xxl={6} md={12} sm={12} xs={24}>
-            <Cards headless>
-              <EChartCard>
-                <div className="card-chunk">
-                  <CardBarChart2>
-                    <Heading as="h1">{coursesData?.data?.all_courses}</Heading>
-                    <span>No.of total courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
-                  </CardBarChart2>
-                </div>
-
-              </EChartCard>
-            </Cards>
-          </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
-            <Cards headless>
-              <EChartCard>
-                <div className="card-chunk">
-                  <CardBarChart2>
-                    <Heading as="h1">{coursesData?.data?.online_coueses}</Heading>
-                    <span>No.of online courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
-                  </CardBarChart2>
-                </div>
-
-              </EChartCard>
-            </Cards>
-          </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
-            <Cards headless>
-              <EChartCard>
-                <div className="card-chunk">
-                  <CardBarChart2>
-                    <Heading as="h1">{coursesData?.data?.offline_courses}</Heading>
-                    <span>No.of offline courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
-                  </CardBarChart2>
-                </div>
-
-              </EChartCard>
-            </Cards>
-          </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
-            <Cards headless>
-              <EChartCard>
-                <div className="card-chunk">
-                  <CardBarChart2>
-                    <Heading as="h1">{coursesData?.data?.partner_courses}</Heading>
-                    <span>No.of partner courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
-                  </CardBarChart2>
-                </div>
-
-              </EChartCard>
-            </Cards>
-          </Col>
-        </Row>
-        <h3>Users</h3>
+      <h3>Users</h3>
         <Row gutter={25}>
           <Col xxl={6} md={12} sm={12} xs={24}>
             <Cards headless>
@@ -348,9 +269,89 @@ const Dashboard = () => {
             </Cards>
           </Col>
         </Row>
+        <h3>Courses</h3>
+        <Row gutter={25}>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">{coursesData?.data?.all_courses}</Heading>
+                    <span>No.of total courses</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">{coursesData?.data?.online_coueses}</Heading>
+                    <span>No.of online courses</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">{coursesData?.data?.offline_courses}</Heading>
+                    <span>No.of offline courses</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+          <Col xxl={6} md={12} sm={12} xs={24}>
+            <Cards headless>
+              <EChartCard>
+                <div className="card-chunk">
+                  <CardBarChart2>
+                    <Heading as="h1">{coursesData?.data?.partner_courses}</Heading>
+                    <span>No.of partner courses</span>
+                    {/* <p>
+                      <span className="growth-upward">
+                        25%
+                      </span>
+                      <span>Since last week</span>
+                    </p> */}
+                  </CardBarChart2>
+                </div>
+
+              </EChartCard>
+            </Cards>
+          </Col>
+        </Row>
+        
         <Row gutter={25}>
           <Col xxl={12} xs={24}>
-            <Row gutter={25}>
+            {/* <Row gutter={25}>
               <Col xxl={12} md={12} sm={12} xs={24}>
                 <Cards headless>
                   <EChartCard>
@@ -358,12 +359,7 @@ const Dashboard = () => {
                       <CardBarChart2>
                         <Heading as="h1">100</Heading>
                         <span>No.of courses</span>
-                        {/* <p>
-                          <span className="growth-upward">
-                            25%
-                          </span>
-                          <span>Since last week</span>
-                        </p> */}
+                        
                       </CardBarChart2>
                     </div>
 
@@ -377,19 +373,13 @@ const Dashboard = () => {
                       <CardBarChart2>
                         <Heading as="h1">10,000</Heading>
                         <span>No.of courses</span>
-                        {/* <p>
-                          <span className="growth-upward">
-                            25%
-                          </span>
-                          <span>Since last week</span>
-                        </p> */}
                       </CardBarChart2>
                     </div>
 
                   </EChartCard>
                 </Cards>
               </Col>
-            </Row>
+            </Row> */}
             <Suspense
               fallback={
                 <Cards headless>

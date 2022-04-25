@@ -22,20 +22,16 @@ const Schemes = () => {
   let dispatch = useDispatch();
   const users = useSelector(state => state.scheme.getAllSchemeData);
 
-  const [schemeBenefits, setSchemeBenefits] = useState('');
-  const [schemeCategory, setSchemeCategory] = useState('');
+  const [schemeCategory, setSchemeCategory] = useState({
+    category:'',
+    benefit:''
+  });
   const [viewModal, setViewModal] = useState(false);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
 
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme=useSelector((state) => state.scheme.getOneSchemeData);
-
-  useEffect(() => {
-    if(getOneScheme){
-      console.log("getOneScheme",getOneScheme);
-    }
-  }, [getOneScheme])
   
 
 
@@ -43,17 +39,9 @@ const Schemes = () => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
-      setSchemeBenefits({ ...schemeBenefits, benefit: e });
+      setSchemeCategory({ ...schemeCategory, benefit: e });
     }
   };
-
-  useEffect(() => {
-    console.log('schemeBenefits', schemeBenefits);
-  }, [schemeBenefits]);
-
-  useEffect(() => {
-    console.log('schemeCategory', schemeCategory);
-  }, [schemeBenefits]);
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -64,7 +52,7 @@ const Schemes = () => {
   }, []);
 
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeBenefits.benefit, schemeCategory.category));
+      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit, schemeCategory.category));
   };
 
 
