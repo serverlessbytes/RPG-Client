@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editPartnerCoursefilter, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
+import { editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 
 const PartnerCourses = () => {
@@ -17,15 +17,21 @@ const PartnerCourses = () => {
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
+  const CSVLinkRef = useRef(null);
+
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState({
     category: '',
     mode: 'PARTNER',
   });
+  const[data,setData] = useState('');
+  const [usertable, setUsertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
 
   let catdata = useSelector(state => state.category.categoryData);
+  const allCategortData = useSelector(state => state.category.getAllCourse); //export
   const onePartnerCourseData = useSelector(state => state.category.editFilterData)
+
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
@@ -44,7 +50,7 @@ const PartnerCourses = () => {
   }, [state]);
 
   const usersTableData = [];
-  const [usertable, setUsertable] = useState([]); //set data
+
   // const { users } = useSelector(state => {
   //     return {
   //         users: state.users,
@@ -188,6 +194,12 @@ const PartnerCourses = () => {
     console.log(key);
   };
 
+  const onePartnercourseData = () => {
+    dispatch(getallSwayamCourse(state.mode))
+  }
+  const onAllPartnerCourse = () => {
+  }
+
   return (
     <>
       <PageHeader
@@ -204,8 +216,12 @@ const PartnerCourses = () => {
             >
               Add Courses
             </Button>
-            <Button size="small" type="link">
+            <Button size="small" type="link" onClick={()=>{onePartnercourseData()}}>
               Export Courrses
+            </Button>
+            {/* <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink> */}
+            <Button size="small" type="link" onClick={() => onAllPartnerCourse()}>
+              Export All Course
             </Button>
           </div>,
         ]}

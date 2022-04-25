@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -9,14 +9,19 @@ import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
+import { editSwayamCourse, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import moment from 'moment';
 import ViewSwayamCourse from './ViewSwayamCourse';
+import { CSVLink } from 'react-csv';
+import { ApiGet } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const SwayamCourses = () => {
   const dispatch = useDispatch();
   const { Option } = Select;
   const history = useHistory();
+  const CSVLinkRef = useRef(null)
   const usersTableData = [];
   const { path } = useRouteMatch();
   const [activeCoursetog, setActiveCourseTog] = useState(true);
@@ -32,14 +37,58 @@ const SwayamCourses = () => {
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
+  const [state, setState] = useState('');
 
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
+  const allCategortData = useSelector(state => state.category.getAllCourse);
+
+  const header = [
+    { label: "id", key: "id" },
+    { label: "name", key: "name" },
+    { label: "certificate", key: "certificate" },
+    // { label: "certificationBody", key: "certificationBody" },
+    // { label: "component", key: "component" },
+    // { label: "contactPersonEmail", key: "contactPersonEmail" },
+    // { label: "contactPersonName", key: "contactPersonName" },
+    // { label: "contactPersonPhone", key: "contactPersonPhone" },
+    { label: "createdAt", key: "createdAt" },
+    { label: "detail", key: "detail" },
+    // { label: "district", key: "district" },
+    { label: "duration", key: "duration" },
+    // { label: "eligibility", key: "eligibility" },
+    { label: "key", key: "key" },
+    { label: "mode", key: "mode" },
+    // { label: "organization", key: "organization" },
+    // { label: "pincode", key: "pincode" },
+    { label: "sequence", key: "sequence" },
+    // { label: "state", key: "state" },
+    { label: "thumbnail", key: "thumbnail" },
+    { label: "viewCount", key: "viewCount" },
+    // { label: "schemeCategory", key: "schemeCategory" },
+    // { label: "benifitLine", key: "benifitLine" },
+
+  ];
+  useEffect(() => {
+    if (state.length) {
+      CSVLinkRef?.current?.link.click()  // for export
+    }
+    console.log("state", state);
+  }, [state])
 
   useEffect(() => {
-    if (oneSwayamCourseData) {
-      console.log("oneSwayamCourseData", oneSwayamCourseData);
+    if (allCategortData?.data?.data) { //set a state for export word
+      setState(allCategortData.data.data.map((item) => {
+        return {
+          ...item,
+          // courseCategory: item?.courseCategory?.name,
+          // jobTypes: item?.jobTypes?.name,
+          schemeCategory: item?.schemeCategory?.name,
+          benifitLine: item.benifitLine,
+        }
+      })
+      )
     }
-  }, [oneSwayamCourseData])
+  }, [allCategortData])
 
 
   useEffect(() => {
@@ -107,7 +156,16 @@ const SwayamCourses = () => {
     setViewModal(true)
   }
 
+  const onExportCourse = () => {
+    dispatch(getallSwayamCourse(data.mode))
+  }
 
+const onAllExportCourse = () => {
+  ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res)=>{
+    console.log("ressss",res)
+         setState(res?.data?.data)
+  })
+}
   useEffect(() => {
     if (courseData && courseData.data) {
       setUsertable(
@@ -200,8 +258,12 @@ const SwayamCourses = () => {
             >
               Create Course
             </Button>
-            <Button size="small" type="link">
+            <Button size="small" onClick={() => onExportCourse()} type="link">
               Export Course
+            </Button>
+            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
+            <Button size="small" type="link" onClick={() => onAllExportCourse()}>
+              Export All Course
             </Button>
           </div>,
         ]}

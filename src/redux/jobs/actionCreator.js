@@ -41,6 +41,9 @@ const {
   getEmployerDataSuccess,
   getEmployerDataErr,
 
+  allJobsSuccess,
+  allJobsErr,
+
 } = actions;
 
 export const getJobcategory = () => async (dispatch) => {
@@ -150,3 +153,14 @@ export const getEmployerData = () => async (dispatch) => {
     })
     .catch((err) => dispatch(getEmployerDataErr(err)))
 }
+
+export const allJobs = (type) => async (dispatch) => {
+  await ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&type=${type}`)
+    .then((res) => {
+      //console.log("res",res)
+      return dispatch(allJobsSuccess(res))
+    })
+    .catch((err) => dispatch(allJobsErr(err)))
+}
+
+

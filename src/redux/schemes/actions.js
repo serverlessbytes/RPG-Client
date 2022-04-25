@@ -35,6 +35,10 @@ const actions = {
   EDIT_SCHEME_SUCCESS:"EDIT_SCHEME_SUCCESS",
   EDIT_SCHEME_ERR:"EDIT_SCHEME_ERR",
 
+  GET_ALLSCHEMES_BEGINE:"GET_ALLSCHEMES_BEGINE",
+  GET_ALLSCHEMES_SUCCESS:"GET_ALLSCHEMES_SUCCESS",
+  GET_ALLSCHEMES_ERR:"GET_ALLSCHEMES_ERR",
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -212,6 +216,26 @@ const actions = {
   editSchemeErr: err => {
     return {
       type: actions.EDIT_SCHEME_ERR,
+      err,
+    };
+  },
+
+  getAllSchemeBegin: () => { 
+    return {
+      type: actions.GET_ALLSCHEMES_BEGINE,
+    };
+  },
+
+  getAllSchemesSuccess: data => {
+    return {
+      type: actions.GET_ALLSCHEMES_SUCCESS,
+      data,
+    };
+  },
+
+  getAllSchemesErr: err => {
+    return {
+      type: actions.GET_ALLSCHEMES_ERR,
       err,
     };
   },

@@ -1564,6 +1564,11 @@ html[dir='rtl'] .sDash_upload-basic .sDash_upload-browse{
 table thead tr th:first-child {
   text-align: left !important;
 }
+
+.cjkinL table tbody tr td:last-child{
+  text-align: left !important;
+}
+
 /* Full Width Table */
 
 .full-width-table .ant-card-body {

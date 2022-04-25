@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
@@ -9,35 +9,35 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getOneSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
 import { constants } from 'redux-firestore';
+import { CSVLink } from 'react-csv';
 
 const Schemes = () => {
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
+  const CSVLinkRef = useRef(null)
   const users = useSelector(state => state.scheme.getAllSchemeData);
 
   const [schemeBenefits, setSchemeBenefits] = useState('');
   const [schemeCategory, setSchemeCategory] = useState('');
   const [viewModal, setViewModal] = useState(false);
+  const [state, setState] = useState('') //for export
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
 
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
-  const getOneScheme=useSelector((state) => state.scheme.getOneSchemeData);
+  const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
+  const allschemeData = useSelector(state => state.scheme.allSchemeData); // export
 
   useEffect(() => {
-    if(getOneScheme){
-      console.log("getOneScheme",getOneScheme);
-    }
-  }, [getOneScheme])
-  
-
+    console.log("allschemeData", allschemeData);
+  }, [allschemeData])
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -66,6 +66,56 @@ const Schemes = () => {
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeBenefits.benefit, schemeCategory.category));
   };
+  const header = [
+    { label: "id", key: "id" },
+    { label: "name", key: "name" },
+    { label: "locations", key: "locations" },
+    { label: "schemeBenifit", key: "schemeBenifit" },
+    { label: "schemeCategory", key: "schemeCategory" },
+    { label: "benificiary", key: "benificiary" },
+    { label: "benifitLine", key: "benifitLine" },
+    { label: "createdAt", key: "createdAt" },
+    { label: "detail", key: "detail" },
+    { label: "documentation", key: "documentation" },
+    { label: "elink", key: "elink" },
+    { label: "grievanceRedress", key: "grievanceRedress" },
+    { label: "howToApply", key: "howToApply" },
+    { label: "isActive", key: "isActive" },
+    { label: "isApproved", key: "isApproved" },
+    { label: "isActive", key: "isActive" },
+    { label: "isApproved", key: "isApproved" },
+    { label: "key", key: "key" },
+    { label: "sequence", key: "sequence" },
+    { label: "spoc", key: "spoc" },
+    { label: "requirements", key: "requirements" },
+    { label: "thumbnail", key: "thumbnail" },
+    { label: "updatedAt", key: "updatedAt" },
+    { label: "videoUrl", key: "videoUrl" },
+    { label: "viewCount", key: "viewCount" },
+    { label: "website", key: "website" },
+
+  ];
+  useEffect(() => {
+    if (allschemeData?.data?.data) { //set a state for export word
+      setState(allschemeData.data.data.map((item) => {
+        return {
+          ...item,
+          locations: item?.locations?.name,
+          schemeBenifit: item?.schemeBenifit?.name,
+          schemeCategory: item?.schemeCategory?.name,
+          benifitLine: item.benifitLine,
+        }
+      })
+      )
+    }
+  }, [allschemeData])
+
+  useEffect(() => {
+    if (state.length) {
+      CSVLinkRef?.current?.link.click()  // for export
+    }
+    console.log("state", state);
+  }, [state])
 
 
   const reDirect = () => {
@@ -106,16 +156,18 @@ const Schemes = () => {
 
   const callback = key => {
     setStatus(key);
-    
+
   };
 
-  const viewSchemesdata=(key)=>{
-      dispatch(getOneSchemeData(key))
-  
+  const viewSchemesdata = (key) => {
+    dispatch(getOneSchemeData(key))
+
     setViewModal(true)
   }
 
-
+  const onExportschemes = () => {
+    dispatch(getAllSchemes());
+  }
 
   users &&
     users.data.map(item => {
@@ -219,10 +271,14 @@ const Schemes = () => {
         title="Schemes"
         buttons={[
           <div className="page-header-actions">
-            <Button size="small" type="link">
-                            Export Schemes
-                        </Button>
-                        {/* <Button size="small" type="light">
+            <Button size="small" onClick={() => onExportschemes()} type="link">
+              Export Schemes
+            </Button>
+            <Button  size="small" type="link">
+              Export All Scheme
+            </Button>
+            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
+            {/* <Button size="small" type="light">
                             Import Schemes
                         </Button> */}
             <Button onClick={reDirect} size="small" type="success">

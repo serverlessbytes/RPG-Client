@@ -38,6 +38,10 @@ const {
   EDIT_SCHEME_SUCCESS,
   EDIT_SCHEME_ERR,
 
+  GET_ALLSCHEMES_BEGINE,
+  GET_ALLSCHEMES_SUCCESS,
+  GET_ALLSCHEMES_ERR,
+
 } = actions;
 
 const initialState = {
@@ -51,7 +55,8 @@ const initialState = {
   editSchemeData: null,
   getAllSchemeData:null,
   addState:null,
-  getOneSchemeData:null
+  getOneSchemeData:null,
+  allSchemeData:null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -239,6 +244,27 @@ const schemeReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
+
+      case GET_ALLSCHEMES_BEGINE:
+        return {
+          ...state,
+          error: err,
+          loading: false,
+        };
+  
+        case GET_ALLSCHEMES_SUCCESS:
+        return {
+          ...state,
+          allSchemeData: data,
+          loading: false,
+        };
+  
+        case GET_ALLSCHEMES_ERR:
+        return {
+          ...state,
+          error: err,
+          loading: false,
+        };
 
     default:
       return state;

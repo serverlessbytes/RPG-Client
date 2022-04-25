@@ -48,6 +48,10 @@ const actions = {
   EDIT_SWAYAM_COURSE_MODULE_SUCCESS:"EDIT_SWAYAM_COURSE_MODULE_SUCCESS",
   EDIT_SWAYAM_COURSE_MODULE_ERR:"EDIT_SWAYAM_COURSE_MODULE_ERR",
 
+  GET_ALLSWAYAM_COURSE_BEGINE: "GET_ALLSWAYAM_COURSE_BEGINE",
+  GET_ALLSWAYAM_COURSE_SUCCESS: "GET_ALLSWAYAM_COURSE_SUCCESS",
+  GET_ALLSWAYAM_COURSE_ERR: "GET_ALLSWAYAM_COURSE_ERR",
+
   postBenefitsBegin: () => {
     return {
       type: actions.POST_CATEGORY_BEGINE,
@@ -281,6 +285,26 @@ const actions = {
   editSwayamCourseModuleErr: err => {
     return {
       type: actions.EDIT_SWAYAM_COURSE_MODULE_ERR,
+      err,
+    };
+  },
+
+  getallSwayamCourseBegin: () => {
+    return {
+      type: actions.GET_ALLSWAYAM_COURSE_BEGINE,
+    };
+  },
+
+  getallSwayamCourseSuccess: data => {
+    return {
+      type: actions.GET_ALLSWAYAM_COURSE_SUCCESS,
+      data,
+    };
+  },
+
+  getallSwayamCourseErr: err => {
+    return {
+      type: actions.GET_ALLSWAYAM_COURSE_ERR,
       err,
     };
   },

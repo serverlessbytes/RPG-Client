@@ -16,7 +16,8 @@ const {
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleSuccess,
   getSwayamCourseModuleSuccess,
-  editSwayamCourseModuleSuccess
+  editSwayamCourseModuleSuccess,
+  getallSwayamCourseSuccess,
 } = actions;
 
 
@@ -107,6 +108,13 @@ export const editSwayamCourseModule = (data) => async (dispatch) => {
   await ApiPost(`course/editSwayamCourseModules?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
     .then((res) => {
       return dispatch(editSwayamCourseModuleSuccess(res))
+    })
+}
+
+export const getallSwayamCourse = (mode) => async (dispatch) => {
+  await ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&mode=${mode}`)
+    .then((res) => {
+      return dispatch(getallSwayamCourseSuccess(res))
     })
 }
 
