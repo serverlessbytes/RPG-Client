@@ -25,8 +25,8 @@ const Schemes = () => {
   const users = useSelector(state => state.scheme.getAllSchemeData);
 
   const [schemeCategory, setSchemeCategory] = useState({
-    category:'',
-    benefit:''
+    category: '',
+    benefit: ''
   });
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
@@ -58,7 +58,7 @@ const Schemes = () => {
   }, []);
 
   const onApply = () => {
-      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit, schemeCategory.category));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -161,6 +161,11 @@ const Schemes = () => {
 
   const onExportschemes = () => {
     dispatch(getAllSchemes());
+  }
+
+  const clearFilter = () => {
+    setSchemeCategory({ category: "" })
+    setSchemeCategory({ benefit: "" })
   }
 
   users &&
@@ -268,7 +273,7 @@ const Schemes = () => {
             <Button size="small" onClick={() => onExportschemes()} type="link">
               Export Schemes
             </Button>
-            <Button  size="small" type="link">
+            <Button size="small" type="link">
               Export All Scheme
             </Button>
             <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
@@ -278,6 +283,7 @@ const Schemes = () => {
             <Button onClick={reDirect} size="small" type="success">
               Create Scheme
             </Button>
+
             {/* <Button size="small" type="warning">
                             Deactivate All Schemes
                         </Button> */}
@@ -290,30 +296,34 @@ const Schemes = () => {
             <Col xs={24}>
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
-                  <Form name="sDash_select" layout="vertical">
-                    <Form.Item name="basic-select" label="Scheme Category">
+                  <Form  layout="vertical">
+                    <Form.Item  label="Scheme Category">
                       <Select
                         size="large"
                         className="sDash_fullwidth-select"
                         name="category"
+                        value={schemeCategory.category}
                         onChange={e => onChnageValue(e, 'category')}
-                        placeholder="Select"
+                        placeholder="Select Scheme Category"
                       >
+                        <Option value="">Select Scheme Category</Option>
                         {schemeData && schemeData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
-                  <Form name="sDash_select" layout="vertical">
-                    <Form.Item name="basic-select" label="Scheme Benefits">
+                  <Form layout="vertical">
+                    <Form.Item label="Scheme Benefits">
                       <Select
                         size="large"
                         className="sDash_fullwidth-select"
+                        value={schemeCategory.benefit}
                         name="benefits"
                         onChange={e => onChnageValue(e, 'benefits')}
-                        placeholder="Select"
+                        placeholder="Select Scheme Benefits"
                       >
+                        <Option value="">Select Scheme Benefits</Option>
                         {getBenefitData &&
                           getBenefitData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
@@ -338,6 +348,9 @@ const Schemes = () => {
                   <ListButtonSizeWrapper>
                     <Button size="small" type="primary" onClick={e => onApply(e)}>
                       Apply
+                    </Button>
+                    <Button size="small" type="light" onClick={() => clearFilter()}>
+                      Clear
                     </Button>
                   </ListButtonSizeWrapper>
                 </Col>

@@ -29,26 +29,27 @@ const district = () => {
     const onChangeHandler = (e) => {
         setState({ ...state, [e.target.name]: e.target.value })
     }
-       const onChnageValue = (e,name) => {
-             if(name ==="stateId"){
-              setState({...state,stateId:e})
-             }
-       }  
+    const onChnageValue = (e, name) => {
+        if (name === "stateId") {
+            setState({ ...state, stateId: e })
+        }
+    }
 
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
     const [statedata, setStateData] = useState();
+
     useEffect(() => {
         if (stateData && stateData.data) {
-            setStateData(stateData?.data[0]?.id );
+            setStateData(stateData?.data[0]?.id);
             //console.log("stateData+++",stateData.data[0].id)
         }
     }, [stateData]);
-    
+
     //const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
     const [stateTableData, setstateTableData] = useState([])
-   
+
     useEffect(() => {
         if (diStrict && diStrict.data) {
             setstateTableData(diStrict.data)
@@ -64,16 +65,22 @@ const district = () => {
             sortDirections: ['descend', 'ascend'],
         }
     ];
-    
+
     const onApply = () => {
-        dispatch(getDistrictData(statedata.state))
+        dispatch(getDistrictData(statedata.state ? statedata.state : ""))
     }
-    useEffect(()=>{
-        console.log("statedatause",statedata);
-    },[statedata])
-    useEffect(()=>{
-        dispatch(getDistrictData(statedata))
-    },[statedata])
+    const clearFilter = () => {
+        console.log("state",state)
+        setState({stateId:""})
+    }
+
+    useEffect(() => {
+    }, [statedata])
+
+    // useEffect(() => {
+    //     dispatch(getDistrictData(statedata))
+    // }, [statedata])
+
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const showModal = () => {
@@ -125,16 +132,17 @@ const district = () => {
                     <Row gutter={30}>
 
                         <Col md={6} xs={24} className="mb-25">
-                            <Form name="sDash_select" layout="vertical">
+                            <Form  layout="vertical">
                                 <Form.Item name="basic-select" label="State">
                                     <Select
                                         size="large"
                                         className="sDash_fullwidth-select"
                                         name="state"
-                                        value={statedata}
-                                        placeholder="Select"
+                                        value={state.stateId}
+                                        placeholder="Select State"
                                         onChange={(e) => onstatedata(e, "state")}
                                     >
+                                        <Option value="">Select State</Option>
                                         {
                                             stateData && stateData.data.map((item) => (
                                                 <Option value={item.id}> {item.name} </Option>
@@ -148,6 +156,9 @@ const district = () => {
                             <ListButtonSizeWrapper>
                                 <Button size="small" type="primary" onClick={e => onApply(e)}>
                                     Apply
+                                </Button>
+                                <Button size="small" type="light" onClick={() => clearFilter()}>
+                                    Clear
                                 </Button>
                             </ListButtonSizeWrapper>
                         </Col>
@@ -187,8 +198,8 @@ const district = () => {
                             defaultValue={data.key}
                         />
                     </Form.Item> */}
-                    <Form.Item name="languageId" label="State">
-                        <Select style={{ height: "50px" }} size="large" defaultValue="State" name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} className="sDash_fullwidth-select" >
+                    <Form.Item  label="State">
+                        <Select className="sDash_fullwidth-select" style={{ height: "50px" }} size="large" value={state}  name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>

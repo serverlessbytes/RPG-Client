@@ -139,7 +139,18 @@ export const getoneJobPost = (data) => async (dispatch) => {
 }
 
 export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole) => async (dispatch) => {
-  await ApiPost(`job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&state=${state}&type=${type}&jobRole=${jobRole}`)
+  let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
+  if(state) {
+    URL = URL.concat(`&state=${state}`)
+  }
+  if(type) {
+    URL = URL.concat(`&type=${type}`)
+  }
+  if(jobRole) {
+    URL = URL.concat(`&jobRole=${jobRole}`)
+  }
+
+  await ApiPost(URL)
     .then((res) => {
       return dispatch(getJobsFilterForMainSuccess(res))
     })
@@ -161,6 +172,14 @@ export const allJobs = (type) => async (dispatch) => {
       return dispatch(allJobsSuccess(res))
     })
     .catch((err) => dispatch(allJobsErr(err)))
+}
+
+export const jobApproved = (id,body) => async (dispatch) => {
+  await ApiPost(`job/updateIsApproved?jobId=${id}`,body)
+    .then((res) => {
+    
+    })
+    .catch((err) => console.log("Error",err))
 }
 
 

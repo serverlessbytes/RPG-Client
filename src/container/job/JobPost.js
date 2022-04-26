@@ -25,7 +25,6 @@ const JobPost = ({ match }) => {
     const { TabPane } = Tabs;
     const CSVLinkRef = useRef(null)
 
-
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const allJobsData = useSelector((state) => state.job.allJobs)
     let stateData = useSelector((state) => state.state.getStateData) //state
@@ -51,7 +50,7 @@ const JobPost = ({ match }) => {
 
     const onChangevalue = (e, name) => {
         if (name === "type") {
-            setType({ ...type, type: e })
+            setType({...type,type:e})
         }
         else if (name === "jobRole") {
             setJobRole({ ...jobRole, jobRole: e })
@@ -66,49 +65,55 @@ const JobPost = ({ match }) => {
         if (stateJob.length) {
             CSVLinkRef?.current?.link.click()  // 
         }
-        
+
     }, [stateJob])
 
+    useEffect(() => {
+        console.log("type", type);
+    }, [type])
+
+
     const header = [
-        {label:"id",key:"id"},
-        {label:"name",key:"name"},
-        {label:"jobRole",key:"jobRole"},
-        {label:"district",key:"district"},
-        {label:"jobType",key:"jobType"},
-        {label:"shifts",key:"shifts"},
-        {label:"state",key:"state"},
-        {label:"benifits",key:"benifits"},
-        {label:"createdAt",key:"createdAt"},
-        {label:"description",key:"description"},
-        {label:"email",key:"email"},
-        {label:"endDate",key:"endDate"},
-        {label:"state",key:"state"},
-        {label:"extraType",key:"extraType"},
-        {label:"hiredNumber",key:"hiredNumber"},
-        {label:"isActive",key:"isActive"},
-        {label:"isApproved",key:"isApproved"},
-        {label:"key",key:"key"},
-        {label:"phone",key:"phone"},
-        {label:"reqExperience",key:"reqExperience"},
-        {label:"requirements",key:"requirements"},
-        {label:"salary",key:"salary"},
-        {label:"startDate",key:"startDate"},
-        {label:"town",key:"town"},
-        {label:"type",key:"type"},
-        {label:"vacancies",key:"vacancies"},
-        {label:"viewCount",key:"viewCount"},
-        {label:"updatedAt",key:"updatedAt"},
+        { label: "id", key: "id" },
+        { label: "name", key: "name" },
+        { label: "jobRole", key: "jobRole" },
+        { label: "district", key: "district" },
+        { label: "jobType", key: "jobType" },
+        { label: "shifts", key: "shifts" },
+        { label: "state", key: "state" },
+        { label: "benifits", key: "benifits" },
+        { label: "createdAt", key: "createdAt" },
+        { label: "description", key: "description" },
+        { label: "email", key: "email" },
+        { label: "endDate", key: "endDate" },
+        { label: "state", key: "state" },
+        { label: "extraType", key: "extraType" },
+        { label: "hiredNumber", key: "hiredNumber" },
+        { label: "isActive", key: "isActive" },
+        { label: "isApproved", key: "isApproved" },
+        { label: "key", key: "key" },
+        { label: "phone", key: "phone" },
+        { label: "reqExperience", key: "reqExperience" },
+        { label: "requirements", key: "requirements" },
+        { label: "salary", key: "salary" },
+        { label: "startDate", key: "startDate" },
+        { label: "town", key: "town" },
+        { label: "type", key: "type" },
+        { label: "vacancies", key: "vacancies" },
+        { label: "viewCount", key: "viewCount" },
+        { label: "updatedAt", key: "updatedAt" },
     ];
+
     useEffect(() => {
         if (allJobsData?.data?.data) {
-            setStateJob(allJobsData?.data?.data.map((item) =>{
+            setStateJob(allJobsData?.data?.data.map((item) => {
                 return {
                     ...item,
                     jobRole: item?.jobRole?.name,
-                    district : item?.district?.name,
-                    jobType : item?.jobType?.name,
-                    shifts : item.shifts[0],
-                    state : item.state?.name
+                    district: item?.district?.name,
+                    jobType: item?.jobType?.name,
+                    shifts: item.shifts[0],
+                    state: item.state?.name
                 }
             }))  //set a state
         }
@@ -119,23 +124,25 @@ const JobPost = ({ match }) => {
         //CSVLinkRef?.current?.link.click()
     };
     const allexPortJobs = () => {
-        ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res)=>{  
-            console.log("resres",res)
-            setStateJob(res?.data?.data.map((item) =>{
+        ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
+            console.log("resres", res)
+            setStateJob(res?.data?.data.map((item) => {
                 return {
                     ...item,
                     jobRole: item?.jobRole?.name,
-                    district : item?.district?.name,
-                    jobType : item?.jobType?.name,
-                    shifts : item.shifts[0],
-                    state : item.state?.name
+                    district: item?.district?.name,
+                    jobType: item?.jobType?.name,
+                    shifts: item.shifts[0],
+                    state: item.state?.name
                 }
             }))
         });
     }
 
     const onClear = () => {
-        setType("", 'type')
+        setType({type:""})
+        setJobRole({jobRole:""})
+        setState({state:""})
     }
 
     useEffect(() => {
@@ -171,9 +178,9 @@ const JobPost = ({ match }) => {
                         <Col xs={24}>
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Type">
-                                            <Select size="large" value={type.type} className="sDash_fullwidth-select" name="type" placeholder="Select" onChange={(e) => onChangevalue(e, "type")}>
+                                    <Form  layout="vertical">
+                                        <Form.Item label="Type">
+                                            <Select size="large" value={type.type} className="sDash_fullwidth-select" name="type" placeholder="Select Type" onChange={(e) => onChangevalue(e, "type")}>
                                                 <Option value="">Select Type</Option>
                                                 <Option value="PARTTIME">Part-Time</Option>
                                                 <Option value="FULLTIME">Full-time</Option>
@@ -183,7 +190,7 @@ const JobPost = ({ match }) => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="State">
+                                        <Form.Item  label="State">
                                             {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
                                             <Select
                                                 size="large"
@@ -193,6 +200,7 @@ const JobPost = ({ match }) => {
                                                 placeholder="Select State"
                                                 onChange={(e) => onChangevalue(e, "state")}
                                             >
+                                                   <Option value="">Select State</Option>
                                                 {
                                                     stateData && stateData.data.map((item) => (
                                                         <Option value={item.id}> {item.name} </Option>
@@ -203,9 +211,10 @@ const JobPost = ({ match }) => {
                                     </Form>
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Job Role">
-                                            <Select size="large" className="sDash_fullwidth-select" name="jobRole" placeholder="Select" onChange={(e) => onChangevalue(e, "jobRole")}>
+                                    <Form  layout="vertical">
+                                        <Form.Item  label="Job Role">
+                                            <Select size="large" value={jobRole.jobRole} className="sDash_fullwidth-select" name="jobRole" placeholder="Select Job Role" onChange={(e) => onChangevalue(e, "jobRole")}>
+                                            <Option value="">Select Job Role</Option>
                                                 {jobRolesData && jobRolesData.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}
@@ -218,7 +227,7 @@ const JobPost = ({ match }) => {
                                         <Button size="small" type="primary" name="submit" onClick={(e) => setApply(true)}>
                                             Apply
                                         </Button>
-                                        <Button size="small" type="light" onClick={(e) => onClear(e)}>
+                                        <Button size="small" type="light" onClick={() => onClear()}>
                                             Clear
                                         </Button>
                                     </ListButtonSizeWrapper>
