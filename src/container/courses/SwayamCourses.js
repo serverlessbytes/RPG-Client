@@ -265,7 +265,7 @@ const onAllExportCourse = () => {
             <Button size="small" onClick={() => onExportCourse()} type="link">
               Export Course
             </Button>
-            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
+            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="SwayamCourse.csv" style={{ opacity: 0 }}></CSVLink>
             <Button size="small" type="link" onClick={() => onAllExportCourse()}>
               Export All Course
             </Button>
@@ -278,7 +278,7 @@ const onAllExportCourse = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                <Col md={6} xs={24} className="mb-25">
+                {/* <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Category">
                       <Select
@@ -295,7 +295,7 @@ const onAllExportCourse = () => {
                       </Select>
                     </Form.Item>
                   </Form>
-                </Col>
+                </Col> */}
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -304,9 +304,10 @@ const onAllExportCourse = () => {
                         className="sDash_fullwidth-select"
                         name="mode"
                         value={data.mode}
-                        placeholder="Select Language"
+                        placeholder="Select Mode"
                         onChange={e => onChangehandle(e, 'mode')}
                       >
+                        <Option value="">Select Mode</Option> 
                         <Option value="BOTH">Both</Option>
                         <Option value="ONLINE">Online</Option>
                         <Option value="OFFLINE">Offline</Option>

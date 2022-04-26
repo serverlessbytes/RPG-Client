@@ -30,6 +30,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
   const [pageNumber, setPageNumber] = useState(1)
 
   const courseData = useSelector((state) => state.job.getJobPostData)
+  useEffect(()=>{console.log("courseData========",courseData)},[courseData])
   const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
   const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData) 

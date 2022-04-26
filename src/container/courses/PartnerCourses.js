@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
+import { CSVLink } from 'react-csv';
 
 const PartnerCourses = () => {
   const courseData = useSelector(state => state.category.courseFilterData);
@@ -20,17 +21,70 @@ const PartnerCourses = () => {
   const CSVLinkRef = useRef(null);
 
   const [viewModal, setViewModal] = useState(false);
-  const [state, setState] = useState({
+  const [state, setState] = useState({ //
     category: '',
     mode: 'PARTNER',
   });
-  const[data,setData] = useState('');
+
+  const [data, setData] = useState([]);
   const [usertable, setUsertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
+
+  useEffect(() => {
+    if (data.length) {
+      CSVLinkRef?.current?.link.click()  // 
+    }
+    console.log("state", state);
+  }, [data])
 
   let catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
   const onePartnerCourseData = useSelector(state => state.category.editFilterData)
+
+  const header = [
+    { label: "id", key: "id" },
+    { label: "name", key: "name" },
+    { label: "location", key: "location" },
+    { label: "contactPersonEmail", key: "contactPersonEmail" },
+    { label: "contactPersonName", key: "contactPersonName" },
+    { label: "contactPersonPhone", key: "contactPersonPhone" },
+    { label: "district", key: "district" },
+    { label: "createdAt", key: "createdAt" },
+    { label: "detail", key: "detail" },
+    { label: "duration", key: "duration" },
+    //{ label: "elink", key: "elink" },
+    { label: "eligibility", key: "eligibility" },
+    //{ label: "howToApply", key: "howToApply" },
+    { label: "isActive", key: "isActive" },
+    { label: "isApproved", key: "isApproved" },
+    { label: "isDeleted", key: "isDeleted" },
+    { label: "key", key: "key" },
+    { label: "mode", key: "mode" },
+    { label: "organization", key: "organization" },
+    { label: "pincode", key: "pincode" },
+    { label: "thumbnail", key: "thumbnail" },
+    { label: "sequence", key: "sequence" },
+   // { label: "videoUrl", key: "videoUrl" },
+    { label: "certificationBody", key: "certificationBody" },
+    { label: "certificate", key: "certificate" },
+    { label: "component", key: "component" },
+
+  ];
+  useEffect(() => {
+    if (allCategortData?.data?.data) { //set a state for export word
+      setData(allCategortData.data.data.map((item) => {
+        console.log("item", item)
+        return {
+          ...item,
+          courseCategory: item?.courseCategory?.name,
+          jobTypes: item?.jobTypes?.name,
+          // schemeCategory: item?.schemeCategory?.name,
+          // benifitLine: item.benifitLine,
+        }
+      })
+      )
+    }
+  }, [allCategortData])
 
   useEffect(() => {
     dispatch(getCategoryData());
@@ -57,7 +111,7 @@ const PartnerCourses = () => {
   //     };
   // });
 
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
 
@@ -154,7 +208,7 @@ const PartnerCourses = () => {
     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
   };
   useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode? state.mode : "", status));
   }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
 
   const usersTableColumns = [
@@ -216,13 +270,13 @@ const PartnerCourses = () => {
             >
               Add Courses
             </Button>
-            <Button size="small" type="link" onClick={()=>{onePartnercourseData()}}>
+            <Button size="small" type="link" onClick={() => { onePartnercourseData() }}>
               Export Courrses
             </Button>
-            {/* <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink> */}
-            <Button size="small" type="link" onClick={() => onAllPartnerCourse()}>
+            <CSVLink data={data} ref={CSVLinkRef} headers={header} filename="Partner.csv" style={{ opacity: 0 }}></CSVLink>
+            {/* <Button size="small" type="link" onClick={() => onAllPartnerCourse()}>
               Export All Course
-            </Button>
+            </Button> */}
           </div>,
         ]}
       />
@@ -231,7 +285,7 @@ const PartnerCourses = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                <Col md={6} xs={24} className="mb-25">
+                {/* <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Category">
                       <Select
@@ -246,7 +300,7 @@ const PartnerCourses = () => {
                       </Select>
                     </Form.Item>
                   </Form>
-                </Col>
+                </Col> */}
                 {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="State">
@@ -270,9 +324,9 @@ const PartnerCourses = () => {
                                 </Col> */}
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={e => Submit(e)}>
+                    {/* <Button size="small" type="primary" onClick={e => Submit(e)}>
                       Apply
-                    </Button>
+                    </Button> */}
                     {/* <Button size="small" type="light">
                                             Clear
                                         </Button> */}
@@ -292,11 +346,11 @@ const PartnerCourses = () => {
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      <Form name="sDash_select" layout="vertical">
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}
