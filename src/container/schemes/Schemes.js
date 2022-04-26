@@ -276,7 +276,7 @@ const Schemes = () => {
             <Button  size="small" type="info">
               Export All Scheme
             </Button>
-            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
+            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
             {/* <Button size="small" type="light">
                             Import Schemes
                         </Button> */}

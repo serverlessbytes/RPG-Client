@@ -385,6 +385,7 @@ const AddSchemes = () => {
                                 }
                             </Form.Item>
                         </Col>
+
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="Benefits">Type of Benefits</label>
                             <Form.Item initialValue="Type of Benefits">
@@ -396,13 +397,15 @@ const AddSchemes = () => {
                                 {error.schemeBenifit && <span style={{ color: "red" }}>{error.schemeBenifit}</span>}
                             </Form.Item>
                         </Col>
+
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="name">Senquence</label>
                             <Form.Item>
-                                <Input type="number" placeholder="Scheme Name" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
+                                <Input type="number" placeholder="Senquence" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
                                 {error.sequence && <span style={{ color: "red" }}>{error.sequence}</span>}
                             </Form.Item>
                         </Col>
+
                     </Row>
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
@@ -411,32 +414,37 @@ const AddSchemes = () => {
                         </div>
                         {error.benifitLine && <span style={{ color: "red" }}>{error.benifitLine}</span>}
                     </div>
+
                     <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
                     <Form.Item >
-                        <Input.TextArea placeholder="" value={state.benificiary} name='benificiary' onChange={(e) => onChangeValue(e)} />
+                        <Input.TextArea placeholder="Target Beneficiary" value={state.benificiary} name='benificiary' onChange={(e) => onChangeValue(e)} />
                         {error.benificiary && <span style={{ color: "red" }}>{error.benificiary}</span>}
                     </Form.Item>
+
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="SchemeSummary">Scheme Summary</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
-                            <RichTextEditor placeholder="Type your message..." name="detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
+                            <RichTextEditor placeholder="Scheme Summary" name="detail" value={state.detail} onChange={onChangesEditorSchemeSummary} />
                         </div>
                         {error.detail && <span style={{ color: "red" }}>{error.detail}</span>}
                     </div>
+
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="HowtoApply">How to Apply</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
-                            <RichTextEditor placeholder="Type your message..." name="howToApply" value={state.howToApply} onChange={onChangesEditorHowToApply} />
+                            <RichTextEditor placeholder="How to Apply" name="howToApply" value={state.howToApply} onChange={onChangesEditorHowToApply} />
                         </div>
                         {error.howToApply && <span style={{ color: "red" }}>{error.howToApply}</span>}
                     </div>
+
                     <div style={{ marginBottom: "20px" }}>
                         <label htmlFor="Documentation">Documentation</label>
                         <div className="group" style={{ marginBottom: "0px" }}>
-                            <RichTextEditor placeholder="Type your message..." name="documentation" value={state.documentation} onChange={onChangesEditorDocumentation} />
+                            <RichTextEditor placeholder="Documentation" name="documentation" value={state.documentation} onChange={onChangesEditorDocumentation} />
                         </div>
                         {error.documentation && <span style={{ color: "red" }}>{error.documentation}</span>}
                     </div>
+
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="Location">Location</label>
@@ -452,19 +460,21 @@ const AddSchemes = () => {
                                 {error.locations && <span style={{ color: "red" }}>{error.locations}</span>}
                             </Form.Item>
                         </Col>
+
                         <Col lg={11}>
                             <label htmlFor="Website">Website</label>
                             <Form.Item >
-                                <Input placeholder="" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Website" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
                                 {error.website && <span style={{ color: "red" }}>{error.website}</span>}
                             </Form.Item>
                         </Col>
+
                     </Row>
                     <Row justify="space-between">
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="Category">Type</label>
                             <Form.Item  >
-                                <Select size="large" className="sDash_fullwidth-select" value={state.type} name="type" onChange={(e) => selectValue(e, "type")}>
+                                <Select size="large" placeholder="Select Type" className="sDash_fullwidth-select" value={state.type} name="type" onChange={(e) => selectValue(e, "type")}>
                                     <Option value="ONLINE">Online </Option>
                                     <Option value="OFFLINE">Offline</Option>
                                 </Select>
@@ -475,21 +485,21 @@ const AddSchemes = () => {
                         <Col lg={11}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
                             <Form.Item  >
-                                <Input placeholder="" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Grievance Redress" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
                                 {error.grievanceRedress && <span style={{ color: "red" }}>{error.grievanceRedress}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item>
-                                <Input placeholder="" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="E Link" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
                                 {error.elink && <span style={{ color: "red" }}>{error.elink}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="SPOC">SPOC</label>
                             <Form.Item>
-                                <Input placeholder="" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="SPOC" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
                                 {error.spoc && <span style={{ color: "red" }}>{error.spoc}</span>}
                             </Form.Item>
                         </Col>
