@@ -97,7 +97,7 @@ const AddJobPost = () => {
 
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData.data) {
+        if (getOneJobPostData && getOneJobPostData.data  ) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
@@ -105,9 +105,9 @@ const AddJobPost = () => {
                 salary: getOneJobPostData.data.salary,
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData.data.name,
-                state: getOneJobPostData.data.state.id,
-                district: getOneJobPostData.data.district.id,
+                name: getOneJobPostData?.data?.name?.id,
+                state: getOneJobPostData?.data?.state?.id,
+                district: getOneJobPostData?.data?.district?.id,
                 town: getOneJobPostData.data.town,
                 pincode: getOneJobPostData.data.pincode,
                 description: getOneJobPostData.data.description,

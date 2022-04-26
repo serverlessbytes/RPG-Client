@@ -61,7 +61,7 @@ const Dashboard = () => {
     if(topTenJobsData && topTenJobsData.data && topTenJobsData.data.data){
       setTenJobData(topTenJobsData.data.data.map((item)=>{
         return{
-          name:item.name,
+          name:item?.name?.name,
           type:item.type,
           extraType:item.extraType,
           start_date:moment(item.startDate).format("YYYY:MM:DD"),
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
   const jobColumns = [
     {
-      title: 'Job Name',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
     },

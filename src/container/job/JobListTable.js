@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Form, Row, Select, Table } from 'antd';
+import { Col, Form, Row, Select, Switch, Table } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost } from '../../redux/jobs/actionCreator';
+import { editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost, jobApproved } from '../../redux/jobs/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router';
 import ViewJobPost from './ViewJobPost';
+import moment from 'moment';
+import { ApiPost } from '../../helper/API/ApiData';
 
 
-const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPost
+const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from JobPost
 
   const { path } = useRouteMatch();
   // console.log("pathh", state)
@@ -28,17 +30,22 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
   const [usertable, setUsertable] = useState([]) //set data
   const [perPage, setPerPage] = useState(5) // forpagination
   const [pageNumber, setPageNumber] = useState(1)
+  const [approved,setApproved]=useState()
 
-  const courseData = useSelector((state) => state.job.getJobPostData)
+  const jobData = useSelector((state) => state.job.getJobPostData)
   const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
   const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData) 
 
 
+  useEffect(()=>{
+    console.log("jobData",jobData);
+  })
+
   
   const [viewModal, setViewModal] = useState(false);
   const onDelete = (id) => {
-    let courseDataDelete = courseData && courseData.data && courseData.data.data.find((item) => item.id === id)
+    let courseDataDelete = jobData && jobData.data && jobData.data.data.find((item) => item.id === id)
 
     if (courseDataDelete) {
       courseDataDelete = {
@@ -60,19 +67,47 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
       dispatch(getJobPost(perPage, pageNumber))
     }
   }, [editJobPostData])
+
+
   const onEdit = (id) => {
     history.push(`/admin/job/new?id=${id}`)
   }
 
+
   useEffect(() => {
     if (apply) {
-      dispatch(getJobsFilterForMain(perPage, pageNumber, state.state, type.type, jobRole.jobRole))
+      dispatch(getJobsFilterForMain(perPage, pageNumber, state.state? state.state:"", type.type?type.type:"", jobRole.jobRole?jobRole.jobRole:""))
     }
   }, [perPage, pageNumber, state, type, jobRole, apply])
 
   useEffect(() => {
     dispatch(getJobPost(perPage, pageNumber))
   }, [perPage, pageNumber])
+
+
+
+  const onChange=(e)=>{
+    // setApproved(e)
+  }
+
+  useEffect(() => {
+    console.log("approved",approved);
+  }, [approved])
+
+
+  const onApproved=(id,isAp)=>{
+    console.log("usertable ===",usertable);
+    let data={
+      isApproved:!isAp
+    }
+    ApiPost(`job/updateIsApproved?jobId=${id}`,data)
+    .then((res) => {
+      dispatch(getJobsFilterForMain(perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
+    })
+    .catch((err) => console.log("Error",err))
+  }
+  
+
 
   useEffect(() => {
     if (apply) {
@@ -82,7 +117,14 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
           email: item.email,
           company: item.description,
           position: item.jobRole.name,
-          joinDate: item.startDate,
+          joinDate: moment(item.startDate).format('YYYY:mm:dd') ,
+          approved:(
+            <>
+              <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
+              <Switch checked={item.isApproved} ></Switch>
+              </div>
+            </>
+          ),
           // status: status,
           action: (
             <div className="table-actions">
@@ -93,7 +135,9 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                   <FeatherIcon icon="trash-2" size={16} />
                 </Button>
-                
+                <Button className="btn-icon" type="success" onClick={() =>viewJobdata(item.id) } shape="circle">
+                      <FeatherIcon icon="eye" size={16} />
+                </Button>
               </>
             </div>
           ),
@@ -101,15 +145,25 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
       })
       )
     }
-    else if (courseData && courseData.data) {
-      setUsertable(courseData.data?.data?.map(item => {
+    else if (jobData && jobData.data) {
+      console.log("jobData",jobData)
+      let newJobData={...jobData}
+      console.log("newJobData",newJobData)
+      setUsertable(newJobData.data?.data?.map(item => {
         return ({
           user: item.name?.name,
           email: item.email,
           company: item.description,
           position: item.jobRole.name,
-          joinDate: item.startDate,
-          // status: status,
+          joinDate: moment(item.startDate).format('DD-MM-YYYY') ,
+          approved:(
+          <>
+            <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
+            <Switch checked={item.isApproved} ></Switch>
+            </div>
+          </>
+        ),
+
           action: (
             <div className="table-actions">
               <>
@@ -128,7 +182,7 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
         });
       }))
     }
-  }, [getJobFilterData, courseData])
+  }, [getJobFilterData, jobData])
 
   const viewJobdata=(key)=>{
     dispatch(getoneJobPost(key))
@@ -167,14 +221,10 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
       dataIndex: 'joinDate',
       // key: 'joinDate',
     },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   // key: 'status',
-    //   // onFilter: (value, status) => status.name.indexOf(value) === 0,
-    //   sorter: (a, b) => a.status.length - b.status.length,
-    //   sortDirections: ['descend', 'ascend'],
-    // },
+    {
+      title:'Approved',
+      dataIndex:'approved',
+    },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -204,8 +254,8 @@ const JobListTable = ({ state, type, jobRole, apply }) => { // props from JobPos
             // defaultPageSize: 10,
             // total: usersTableData.length,
             // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            defaultPageSize: courseData?.data.per_page,
-            total: courseData?.data.page_count,
+            defaultPageSize: jobData?.data.per_page,
+            total: jobData?.data.page_count,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
             onChange: (page, pageSize) => {
               setPageNumber(page);
