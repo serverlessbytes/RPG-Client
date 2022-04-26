@@ -69,7 +69,7 @@ const Language = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            <FeatherIcon icon="plus" size={14} />
+                            {/* <FeatherIcon icon="plus" size={14} /> */}
                             Add Language
                         </Button>
                     </div>

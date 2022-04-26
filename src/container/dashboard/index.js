@@ -387,7 +387,7 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} />
+              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} setHeight={"height635"} />
             </Suspense>
           </Col>
           <Col xxl={12} xs={24}>

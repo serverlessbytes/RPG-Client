@@ -207,6 +207,13 @@ const PartnerCourses = () => {
         title="Partner Courses"
         buttons={[
           <div key="1" className="page-header-actions">
+            <Button size="small" type="info" onClick={()=>{onePartnercourseData()}}>
+              Export Courrses
+            </Button>
+            {/* <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink> */}
+            <Button size="small" type="info" onClick={() => onAllPartnerCourse()}>
+              Export All Course
+            </Button>
             <Button
               size="small"
               type="primary"
@@ -215,13 +222,6 @@ const PartnerCourses = () => {
               }}
             >
               Add Courses
-            </Button>
-            <Button size="small" type="link" onClick={()=>{onePartnercourseData()}}>
-              Export Courrses
-            </Button>
-            {/* <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink> */}
-            <Button size="small" type="link" onClick={() => onAllPartnerCourse()}>
-              Export All Course
             </Button>
           </div>,
         ]}
