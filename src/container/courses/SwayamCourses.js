@@ -46,28 +46,16 @@ const SwayamCourses = () => {
     { label: "id", key: "id" },
     { label: "name", key: "name" },
     { label: "certificate", key: "certificate" },
-    // { label: "certificationBody", key: "certificationBody" },
-    // { label: "component", key: "component" },
-    // { label: "contactPersonEmail", key: "contactPersonEmail" },
-    // { label: "contactPersonName", key: "contactPersonName" },
-    // { label: "contactPersonPhone", key: "contactPersonPhone" },
     { label: "createdAt", key: "createdAt" },
     { label: "detail", key: "detail" },
-    // { label: "district", key: "district" },
     { label: "duration", key: "duration" },
-    // { label: "eligibility", key: "eligibility" },
     { label: "key", key: "key" },
     { label: "mode", key: "mode" },
-    // { label: "organization", key: "organization" },
-    // { label: "pincode", key: "pincode" },
     { label: "sequence", key: "sequence" },
-    // { label: "state", key: "state" },
     { label: "thumbnail", key: "thumbnail" },
     { label: "viewCount", key: "viewCount" },
-    // { label: "schemeCategory", key: "schemeCategory" },
-    // { label: "benifitLine", key: "benifitLine" },
-
   ];
+  
   useEffect(() => {
     if (state.length) {
       CSVLinkRef?.current?.link.click()  // for export
@@ -162,6 +150,7 @@ const SwayamCourses = () => {
 
   const onExportCourse = () => {
     dispatch(getallSwayamCourse(data.mode))
+    // CSVLinkRef?.current?.link.click() 
   }
 
   const onAllExportCourse = () => {

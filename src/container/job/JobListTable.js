@@ -39,8 +39,8 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
 
 
   useEffect(()=>{
-    console.log("jobData",jobData);
-  })
+    console.log("jobData=========",jobData);
+  },[jobData])
 
   
   const [viewModal, setViewModal] = useState(false);

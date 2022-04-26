@@ -15,6 +15,13 @@ import { getDistrictData, postDistrictData } from '../../redux/district/actionCr
 
 const district = () => {
     const dispatch = useDispatch()
+
+    
+    const diStrict = useSelector((state) => state.district.getDistrictData) // district
+    const stateData = useSelector((state) => state.state.getStateData) //state
+
+    const [stateTableData, setstateTableData] = useState([])
+    const [statedata, setStateData] = useState("");
     const [state, setState] = useState({
         name: '',
         stateId: ''
@@ -22,7 +29,7 @@ const district = () => {
 
     const onstatedata = (e, name) => {
         if (name === "state") {
-            setStateData({ ...statedata, state: e })
+            setStateData(e)
         }
     }
 
@@ -35,20 +42,19 @@ const district = () => {
         }
     }
 
-    const diStrict = useSelector((state) => state.district.getDistrictData) // district
-    const stateData = useSelector((state) => state.state.getStateData) //state
-    const [statedata, setStateData] = useState();
-
     useEffect(() => {
         if (stateData && stateData.data) {
-            setStateData(stateData?.data[0]?.id);
-            //console.log("stateData+++",stateData.data[0].id)
+            setStateData(stateData?.data[0]?.id)
+            console.log("stateData",stateData?.data[0]?.id)
+
         }
     }, [stateData]);
 
+    useEffect(() => { console.log("statedata=========", statedata) }, [statedata])
+
     //const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
-    const [stateTableData, setstateTableData] = useState([])
+  
 
     useEffect(() => {
         if (diStrict && diStrict.data) {
@@ -67,19 +73,15 @@ const district = () => {
     ];
 
     const onApply = () => {
-        dispatch(getDistrictData(statedata.state ? statedata.state : ""))
+        dispatch(getDistrictData(statedata ? statedata : ""))
     }
     const clearFilter = () => {
-        console.log("state",state)
-        setState({stateId:""})
+        setStateData({ statedata: "" })
     }
 
     useEffect(() => {
+        dispatch(getDistrictData(statedata))
     }, [statedata])
-
-    // useEffect(() => {
-    //     dispatch(getDistrictData(statedata))
-    // }, [statedata])
 
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -132,13 +134,13 @@ const district = () => {
                     <Row gutter={30}>
 
                         <Col md={6} xs={24} className="mb-25">
-                            <Form  layout="vertical">
-                                <Form.Item name="basic-select" label="State">
+                            <Form name="sDash_select" layout="vertical">
+                                <Form.Item  label="State" >
                                     <Select
                                         size="large"
                                         className="sDash_fullwidth-select"
                                         name="state"
-                                        value={state.stateId}
+                                        value={statedata}
                                         placeholder="Select State"
                                         onChange={(e) => onstatedata(e, "state")}
                                     >
@@ -198,8 +200,9 @@ const district = () => {
                             defaultValue={data.key}
                         />
                     </Form.Item> */}
-                    <Form.Item  label="State">
-                        <Select className="sDash_fullwidth-select" style={{ height: "50px" }} size="large" value={state}  name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
+                    <Form.Item label="State">
+                        <Select placeholder="Select State" className="sDash_fullwidth-select" style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
+                            <Option value="" >Select State</Option>
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>

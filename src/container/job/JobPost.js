@@ -106,14 +106,16 @@ const JobPost = ({ match }) => {
 
     useEffect(() => {
         if (allJobsData?.data?.data) {
+            console.log("allJobsData",allJobsData)
             setStateJob(allJobsData?.data?.data.map((item) => {
                 return {
                     ...item,
                     jobRole: item?.jobRole?.name,
                     district: item?.district?.name,
                     jobType: item?.jobType?.name,
-                    shifts: item.shifts[0],
-                    state: item.state?.name
+                    shifts: item?.shifts[0],
+                    state: item?.state?.name,
+                    name:item?.name?.name,
                 }
             }))  //set a state
         }
@@ -133,7 +135,8 @@ const JobPost = ({ match }) => {
                     district: item?.district?.name,
                     jobType: item?.jobType?.name,
                     shifts: item.shifts[0],
-                    state: item.state?.name
+                    state: item.state?.name,
+                    name:item?.name?.name,
                 }
             }))
         });
