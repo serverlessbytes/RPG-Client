@@ -15,7 +15,7 @@ const UserCards = ({ user }) => {
       <div className="card user-card">
         <Cards headless>
           <figure>
-            <img src={img} alt="" />
+            <img src={img} alt="" width='100px' height='100px'/>
           </figure>
           <figcaption>
             <div className="card__content">

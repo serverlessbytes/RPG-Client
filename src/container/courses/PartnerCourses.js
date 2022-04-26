@@ -4,13 +4,16 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs,Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
+import { ApiPost } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const PartnerCourses = () => {
   const courseData = useSelector(state => state.category.courseFilterData);
@@ -155,6 +158,19 @@ const PartnerCourses = () => {
     }
   };
 
+  const onApproved=(id,isAp,key)=>{
+    let data={
+      courseId:id,
+      key:key,
+      isApproved:!isAp
+    }
+    console.log("data",data);
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
+    })
+  }
+
   useEffect(() => {
     if (courseData && courseData.data) {
       setUsertable(
@@ -166,6 +182,13 @@ const PartnerCourses = () => {
             CourseCategory: item.courseCategory.name,
             //State: item.state,
             CourseType: item.mode,
+            approved:(
+              <>
+                <div onClick={()=>onApproved(item.id,item.isApproved,item.key)}>
+                <Switch checked={item.isApproved}></Switch>
+                </div>
+              </>
+            ),
             // Language: "Hindi",
             action: (
               <div className="active-schemes-table">
@@ -208,7 +231,9 @@ const PartnerCourses = () => {
     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
   };
   useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode? state.mode : "", status));
+    if(state.category){
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode? state.mode : "", status));
+    }
   }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
 
   const usersTableColumns = [
@@ -234,6 +259,10 @@ const PartnerCourses = () => {
     //     dataIndex: 'Language',
     //     sortDirections: ['descend', 'ascend'],
     // },
+    {
+      title:'Approved',
+      dataIndex:'approved',
+    },
     {
       title: 'Actions',
       dataIndex: 'action',

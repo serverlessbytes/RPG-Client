@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs,Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
 import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
+import { ApiPost } from '../../helper/API/ApiData';
 
 const Schemes = () => {
   const { path } = useRouteMatch();
@@ -168,6 +169,18 @@ const Schemes = () => {
     setSchemeCategory({ benefit: "" })
   }
 
+  const onApproved=(id,isAp)=>{
+    let data={
+      id:id,
+      isApproved:!isAp
+    }
+    ApiPost(`scheme/updateIsApproved`,data)
+    .then((res) => {
+      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
+    })
+    .catch((err) => console.log("Error",err))
+  }
+
   users &&
     users.data.map(item => {
       // console.log(item.key);
@@ -177,6 +190,13 @@ const Schemes = () => {
         TargetBeneficiary: item.benificiary,
         Website: item.website,
         LastUpdated: moment(item.updatedAt).format('DD-MM-YYYY'),
+        approved:(
+          <>
+            <div onClick={()=>onApproved(item.id,item.isApproved)}>
+            <Switch checked={item.isApproved} ></Switch>
+            </div>
+          </>
+        ),
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
@@ -215,12 +235,7 @@ const Schemes = () => {
     });
 
   const usersTableColumns = [
-    // {
-    //     title: 'Sequence',
-    //     dataIndex: 'Sequence',
-    //     sorter: (a, b) => a.Sequence.length - b.Sequence.length,
-    //     sortDirections: ['descend', 'ascend'],
-    // },
+   
     {
       title: 'Scheme Name',
       dataIndex: 'SchemeName',
@@ -239,15 +254,13 @@ const Schemes = () => {
       title: 'Website',
       dataIndex: 'Website',
     },
-    // {
-    //     title: 'Location',
-    //     dataIndex: 'Location',
-    //     sorter: (a, b) => a.status.length - b.status.length,
-    //     sortDirections: ['descend', 'ascend'],
-    // },
     {
       title: 'Last Updated',
       dataIndex: 'LastUpdated',
+    },
+    {
+      title:'Approved',
+      dataIndex:'approved',
     },
     {
       title: 'Actions',

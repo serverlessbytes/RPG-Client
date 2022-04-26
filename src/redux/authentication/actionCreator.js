@@ -1,10 +1,22 @@
 import Cookies from 'js-cookie';
 import STORAGEKEY from '../../config/APP/app.config';
-import { ApiGet, ApiPostNoAuth } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost, ApiPostNoAuth } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import actions from './actions';
 
-const { loginBegin, loginSuccess, loginErr, logoutBegin, logoutSuccess, logoutErr,signUpErr, signUpSuccess, signUpBegin,getUserSuccess } = actions;
+const { 
+  loginBegin, 
+  loginSuccess, 
+  loginErr, 
+  logoutBegin, 
+  logoutSuccess, 
+  logoutErr,
+  signUpErr, 
+  signUpSuccess, 
+  signUpBegin,
+  getUserSuccess,
+  editProfileSuccess
+ } = actions;
 
 // const login = () => {
 //   return async dispatch => {
@@ -79,9 +91,12 @@ const getUser = () => async(dispatch)=>{
 }
 
 
+const editUser = (body,id) => async(dispatch)=>{
+  await ApiPost(`user/auth/editProfile?id=${id}`,body)
+  .then((res) =>{
+      return dispatch(editProfileSuccess(res))
+  })
+}
 
 
-
-
-
-export { login, logOut, signUp, getUser};
+export { login, logOut, signUp, getUser, editUser};

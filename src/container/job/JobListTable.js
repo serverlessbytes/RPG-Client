@@ -75,9 +75,9 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
 
 
   useEffect(() => {
-    if (apply) {
+    // if (apply) {
       dispatch(getJobsFilterForMain(perPage, pageNumber, state.state? state.state:"", type.type?type.type:"", jobRole.jobRole?jobRole.jobRole:""))
-    }
+    // }
   }, [perPage, pageNumber, state, type, jobRole, apply])
 
   useEffect(() => {
@@ -110,8 +110,8 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
 
 
   useEffect(() => {
-    if (apply) {
-      setUsertable(getJobFilterData.data?.data?.map(item => {
+    // if (apply) {
+      setUsertable(getJobFilterData?.data?.data?.map(item => {
         return ({
           user: item.name,
           email: item.email,
@@ -145,44 +145,45 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
       })
       )
     }
-    else if (jobData && jobData.data) {
-      console.log("jobData",jobData)
-      let newJobData={...jobData}
-      console.log("newJobData",newJobData)
-      setUsertable(newJobData.data?.data?.map(item => {
-        return ({
-          user: item.name?.name,
-          email: item.email,
-          company: item.description,
-          position: item.jobRole.name,
-          joinDate: moment(item.startDate).format('DD-MM-YYYY') ,
-          approved:(
-          <>
-            <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
-            <Switch checked={item.isApproved} ></Switch>
-            </div>
-          </>
-        ),
+    // else if (jobData && jobData.data) {
+    //   console.log("jobData",jobData)
+    //   let newJobData={...jobData}
+    //   console.log("newJobData",newJobData)
+    //   setUsertable(newJobData.data?.data?.map(item => {
+    //     return ({
+    //       user: item.name?.name,
+    //       email: item.email,
+    //       company: item.description,
+    //       position: item.jobRole.name,
+    //       joinDate: moment(item.startDate).format('DD-MM-YYYY') ,
+    //       approved:(
+    //       <>
+    //         <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
+    //         <Switch checked={item.isApproved} ></Switch>
+    //         </div>
+    //       </>
+    //     ),
 
-          action: (
-            <div className="table-actions">
-              <>
-                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                  <FeatherIcon icon="edit" size={16} />
-                </Button>
-                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                  <FeatherIcon icon="trash-2" size={16} />
-                </Button>
-                <Button className="btn-icon" type="success" onClick={() =>viewJobdata(item.id) } shape="circle">
-                      <FeatherIcon icon="eye" size={16} />
-                    </Button>
-              </>
-            </div>
-          ),
-        });
-      }))
-    }
-  }, [getJobFilterData, jobData])
+    //       action: (
+    //         <div className="table-actions">
+    //           <>
+    //             <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+    //               <FeatherIcon icon="edit" size={16} />
+    //             </Button>
+    //             <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+    //               <FeatherIcon icon="trash-2" size={16} />
+    //             </Button>
+    //             <Button className="btn-icon" type="success" onClick={() =>viewJobdata(item.id) } shape="circle">
+    //                   <FeatherIcon icon="eye" size={16} />
+    //                 </Button>
+    //           </>
+    //         </div>
+    //       ),
+    //     });
+    //   }))
+    // }
+  // }
+  , [getJobFilterData])
 
   const viewJobdata=(key)=>{
     dispatch(getoneJobPost(key))

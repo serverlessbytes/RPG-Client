@@ -15,6 +15,10 @@ const actions = {
   GET_USER_SUCCESS:'GET_USER_SUCCESS',
   GET_USER_ERR:'GET_USER_ERR',
 
+  EDIT_PROFILE_BEGIN:'EDIT_PROFILE_BEGIN',
+  EDIT_PROFILE_SUCCESS:'EDIT_PROFILE_SUCCESS',
+  EDIT_PROFILE_ERR:'EDIT_PROFILE_ERR',
+
   loginBegin: () => {
     return {
       type: actions.LOGIN_BEGIN,
@@ -93,6 +97,27 @@ const actions = {
   getUserErr: err => {
     return {
       type: actions.GET_USER_ERR,
+      err,
+    };
+  },
+
+  editProfileBegin: () => {
+    return {
+      type: actions.EDIT_PROFILE_BEGIN,
+    };
+  },
+
+
+  editProfileSuccess: data =>{
+    return{
+      type: actions.EDIT_PROFILE_SUCCESS,
+      data
+    };
+  },
+
+  editProfileErr: err => {
+    return {
+      type: actions.EDIT_PROFILE_ERR,
       err,
     };
   },

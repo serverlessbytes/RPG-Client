@@ -440,6 +440,9 @@ const UserCard = Styled.div`
         }
       }
     }
+    img{
+      width:100px !important;
+    }
   }
   .card{
     position: relative;

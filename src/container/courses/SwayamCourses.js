@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ import { editSwayamCourse, getallSwayamCourse, getCategoryData, getCoursefilter,
 import moment from 'moment';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 
@@ -170,6 +170,19 @@ const SwayamCourses = () => {
       setState(res?.data?.data)
     })
   }
+
+  const onApproved=(id,isAp,key)=>{
+    let data={
+      courseId:id,
+      key:key,
+      isApproved:!isAp
+    }
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
+    .then((res) => {
+      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    })
+  }
+
   useEffect(() => {
     if (courseData && courseData.data) {
       setUsertable(
@@ -182,6 +195,13 @@ const SwayamCourses = () => {
             CourseCategory: item.courseCategory.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
+            approved:(
+              <>
+                <div onClick={()=>onApproved(item.id,item.isApproved,item.key)}>
+                <Switch checked={item.isApproved}></Switch>
+                </div>
+              </>
+            ),
             // CourseDuration:item.
             //State: item.state,
             // CourseType: item.mode,
@@ -233,6 +253,10 @@ const SwayamCourses = () => {
     //     dataIndex: 'Location',
     //     sortDirections: ['descend', 'ascend'],
     // },
+    {
+      title:'Approved',
+      dataIndex:'approved',
+    },
     {
       title: 'Actions',
       dataIndex: 'action',

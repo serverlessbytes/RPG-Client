@@ -1,18 +1,18 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import { Row, Col, Skeleton, Select, Form, Input } from 'antd';
+import { Row, Col, Skeleton, Select, Form, Input,Button } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { NavLink, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { SettingWrapper } from './overview/style';
 import { PageHeader } from '../../../components/page-headers/page-headers';
 import { Main } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
-import { Button } from '../../../components/buttons/buttons';
 import { ShareButtonPageHeader } from '../../../components/buttons/share-button/share-button';
 import { ExportButtonPageHeader } from '../../../components/buttons/export-button/export-button';
 import { CalendarButtonPageHeader } from '../../../components/buttons/calendar-button/calendar-button';
 import UserCards from './overview/UserCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfileData } from '../../../redux/profile/actionCreator';
+import { editUser } from '../../../redux/authentication/actionCreator';
 
 
 const MyProfile = () => {
@@ -24,8 +24,10 @@ const MyProfile = () => {
     name: '',
     email: '',
     phone: '',
-    avatar: ''
+    avatar: '',
   })
+
+  const [id,setId]=useState()
 
 
   useEffect(() => {
@@ -40,6 +42,7 @@ const MyProfile = () => {
         phone: userData.data.phone,
         avatar: userData.data.avatar,
       })
+      setId(userData.data.id)
     }
   }, [userData])
 
@@ -50,12 +53,21 @@ const MyProfile = () => {
 
   const onChangeHandler = (e) => {
     setData({...data, [e.target.name]: e.target.value })
-    console.log("e=============", e.target.value)
   }
+  useEffect(() => {
+    if(data){
+      console.log(data.avatar);
+    }
+  }, [data])
+  
 
 
-  const handleSubmit = () => {
+  const editProfile = () => {
+    data.isActive=true
+    data.isDeleted=false
 
+    console.log('data',data)
+    dispatch(editUser(data,id))
   }
 
   return (
@@ -78,7 +90,7 @@ const MyProfile = () => {
           <Row gutter={25} justify="between">
             <Col xxl={6} lg={8} md={10} xs={24}>
               <UserCards
-                user={{ name: 'Duran Clyton', img: '../../../../user.png' }}
+                user={{ name: `${data.name}`, img: `${data.avatar ? data.avatar : '../../../../user.png'}`  }}
               />
             </Col>
             <Col xxl={18} lg={16} md={14} xs={24}>
@@ -109,7 +121,7 @@ const MyProfile = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row justify="space-around">
+              <Row align="middle" justify="space-around">
                 <Col lg={10}>
                   <label htmlFor="phone">Phone Number</label>
                   <Form.Item>
@@ -121,10 +133,20 @@ const MyProfile = () => {
                   </Form.Item>
                 </Col>
                 <Col lg={10}>
+                  <label htmlFor="email">Avatar</label>
+                  <Form.Item>
+                    {/* rules={[{ type: 'email' }]}
+                    > */}
+                    <Input placeholder="Enter avatar"
+                    name="avatar"
+                    onChange={(e) => onChangeHandler(e)}
+                      value={data.avatar} />
+                  </Form.Item>
                 </Col>
               </Row>
               {/* </Form> */}
             </Col>
+            <Button onClick={()=>editProfile()}>Update Profile</Button>
           </Row>
         </Cards>
       </Main>
