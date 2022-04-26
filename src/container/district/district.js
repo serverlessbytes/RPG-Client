@@ -118,7 +118,7 @@ const district = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            <FeatherIcon icon="plus" size={14} />
+                            {/* <FeatherIcon icon="plus" size={14} /> */}
                             Add District
                         </Button>
                     </div>

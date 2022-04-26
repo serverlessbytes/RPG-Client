@@ -270,18 +270,18 @@ const Schemes = () => {
         title="Schemes"
         buttons={[
           <div className="page-header-actions">
-            <Button size="small" onClick={() => onExportschemes()} type="link">
+            <Button size="small" onClick={() => onExportschemes()} type="info">
               Export Schemes
             </Button>
-            <Button size="small" type="link">
+            <Button  size="small" type="info">
               Export All Scheme
             </Button>
             <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
             {/* <Button size="small" type="light">
                             Import Schemes
                         </Button> */}
-            <Button onClick={reDirect} size="small" type="success">
-              Create Scheme
+            <Button onClick={reDirect} size="small" type="primary">
+              Add Scheme
             </Button>
 
             {/* <Button size="small" type="warning">

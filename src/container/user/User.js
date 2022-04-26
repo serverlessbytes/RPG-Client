@@ -220,14 +220,14 @@ const User = () => {
                     <Button size="small" type="light">
                         Import Schemes
                     </Button> */}
-                        <Button onClick={reDirect} size="small" type="success">
-                            Create User
-                        </Button>
-                        <Button onClick={exPortuser} size="small" type="link">
+                        <Button onClick={exPortuser} size="small" type="info">
                             Export User
                         </Button>
-                        <Button onClick={allexPortuser} size="small" type="link">
+                        <Button onClick={allexPortuser} size="small" type="info">
                             Export All User
+                        </Button>
+                        <Button onClick={reDirect} size="small" type="primary">
+                            Add User
                         </Button>
                         {/* <CSVLink data={state}
                             style={{ opacity: 0 }}

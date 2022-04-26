@@ -2784,3 +2784,7 @@ padding-bottom: 8px;
 .ant-space-vertical{
   width: 100% !important; 
 }
+
+.mb-0{
+  margin-bottom: 0px !important;
+}

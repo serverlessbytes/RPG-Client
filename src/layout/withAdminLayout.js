@@ -203,7 +203,7 @@ const ThemeLayout = WrappedComponent => {
                 [!rtl ? 'left' : 'right']: 0,
               }}
             >
-              <Row>
+              <Row style={{justifyContent:"space-between"}}>
                 <Col lg={!topMenu ? 4 : 3} sm={6} xs={12} className="align-center-v navbar-brand">
                   {!topMenu || window.innerWidth <= 991 ? (
                     <Button type="link" onClick={toggleCollapsed}>
@@ -221,51 +221,54 @@ const ThemeLayout = WrappedComponent => {
                   </Link>
                 </Col>
 
-                <Col lg={!topMenu ? 14 : 15} md={8} sm={0} xs={0}>
+                {/* <Col lg={!topMenu ? 14 : 15} md={8} sm={0} xs={0}>
                   {topMenu && window.innerWidth > 991 ? <TopMenu /> :
                   <HeaderSearch rtl={rtl} darkMode={darkMode} 
                   />}
-                </Col>
+                </Col> */}
 
-                <Col lg={2} md={10} sm={0} xs={0}>
-                  <Form.Item name="languageId" className='language py-16'>
-                    <Select defaultValue={this.state.lang} placeholder="Language" size="small" onChange={(e) => handleChange(e)} className="sDash_fullwidth-select" >
-                      {this.state.langData && this.state.langData.map((items) => (
-                        <Option value={items.id}>{items.name}</Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col lg={1} md={1} sm={0} xs={0}>
-                  {topMenu && window.innerWidth > 991 ? (
-                    <TopMenuSearch>
-                      <div className="top-right-wrap d-flex">
-                        <Link
-                          className={`${activeSearch ? 'search-toggle active' : 'search-toggle'}`}
-                          onClick={() => {
-                            toggleSearch();
-                          }}
-                          to="#"
-                        >
-                          <FeatherIcon icon="search" />
-                          <FeatherIcon icon="x" />
-                        </Link>
-                        <div className={`${activeSearch ? 'topMenu-search-form show' : 'topMenu-search-form'}`}>
-                          <form action="">
-                            <span className="search-icon">
+                <Col lg={18}>
+                  <Row style={{justifyContent:"flex-end", alignItems: "center"}}>
+                    <Col lg={2} md={10} sm={0} xs={0}>
+                      <Form.Item name="languageId" className='language py-16 mb-0'>
+                        <Select defaultValue={this.state.lang} placeholder="Language" size="small" onChange={(e) => handleChange(e)} className="sDash_fullwidth-select" >
+                          {this.state.langData && this.state.langData.map((items) => (
+                            <Option value={items.id}>{items.name}</Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col lg={1} md={1} sm={0} xs={0}>
+                      {topMenu && window.innerWidth > 991 ? (
+                        <TopMenuSearch>
+                          <div className="top-right-wrap d-flex">
+                            <Link
+                              className={`${activeSearch ? 'search-toggle active' : 'search-toggle'}`}
+                              onClick={() => {
+                                toggleSearch();
+                              }}
+                              to="#"
+                            >
                               <FeatherIcon icon="search" />
-                            </span>
-                            <input type="text" name="search" />
-                          </form>
-                        </div>
+                              <FeatherIcon icon="x" />
+                            </Link>
+                            <div className={`${activeSearch ? 'topMenu-search-form show' : 'topMenu-search-form'}`}>
+                              <form action="">
+                                <span className="search-icon">
+                                  <FeatherIcon icon="search" />
+                                </span>
+                                <input type="text" name="search" />
+                              </form>
+                            </div>
+                            <AuthInfo />
+                          </div>
+                        </TopMenuSearch>
+                      ) : (
                         <AuthInfo />
-                      </div>
-                    </TopMenuSearch>
-                  ) : (
-                    <AuthInfo />
-                  )}
+                      )}
+                    </Col>
+                  </Row>
                 </Col>
-                      
                 <Col md={0} sm={18} xs={12}>
                   <>
                     <div className="mobile-action">

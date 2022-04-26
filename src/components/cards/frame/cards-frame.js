@@ -20,6 +20,7 @@ const Cards = props => {
     headStyle,
     border,
     bodypadding,
+    cardHeight,
   } = props;
   return (
     <>
@@ -43,6 +44,7 @@ const Cards = props => {
             </>
           }
           style={{ width: '100%' }}
+          className={cardHeight}
         >
           {children}
         </CardFrame>

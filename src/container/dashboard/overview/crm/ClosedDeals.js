@@ -174,7 +174,7 @@ const ClosedDeals = ({dnone,title}) => {
                     ],
                   },
                 }}
-                height={window.innerWidth <= 575 ? 200 : 178}
+                height={window.innerWidth <= 575 ? 200 : 120}
               />
               <ul className="deals-list">
                 {closeDealDatasets &&

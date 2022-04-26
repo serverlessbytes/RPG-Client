@@ -151,8 +151,8 @@ const SwayamCourses = () => {
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
   };
 
-  const clearFilter=()=>{
-    setData({category:''})
+  const clearFilter = () => {
+    setData({ category: '' })
   }
 
   const viewSwayamCoursedata = (key) => {
@@ -164,12 +164,12 @@ const SwayamCourses = () => {
     dispatch(getallSwayamCourse(data.mode))
   }
 
-const onAllExportCourse = () => {
-  ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res)=>{
-    console.log("ressss",res)
-         setState(res?.data?.data)
-  })
-}
+  const onAllExportCourse = () => {
+    ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
+      console.log("ressss", res)
+      setState(res?.data?.data)
+    })
+  }
   useEffect(() => {
     if (courseData && courseData.data) {
       setUsertable(
@@ -253,6 +253,14 @@ const onAllExportCourse = () => {
         title="Courses"
         buttons={[
           <div key="1" className="page-header-actions">
+
+            <Button size="small" onClick={() => onExportCourse()} type="info">
+              Export Course
+            </Button>
+            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="SwayamCourse.csv" style={{ opacity: 0 }}></CSVLink>
+            <Button size="small" type="info" onClick={() => onAllExportCourse()}>
+              Export All Course
+            </Button>
             <Button
               size="small"
               type="primary"
@@ -260,16 +268,9 @@ const onAllExportCourse = () => {
                 history.push(`/admin/courses/addcourses`);
               }}
             >
-              Create Course
+              Add Course
             </Button>
-            <Button size="small" onClick={() => onExportCourse()} type="link">
-              Export Course
-            </Button>
-            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="SwayamCourse.csv" style={{ opacity: 0 }}></CSVLink>
-            <Button size="small" type="link" onClick={() => onAllExportCourse()}>
-              Export All Course
-            </Button>
-          </div>,
+          </div>
         ]}
       />
 
@@ -307,7 +308,7 @@ const onAllExportCourse = () => {
                         placeholder="Select Mode"
                         onChange={e => onChangehandle(e, 'mode')}
                       >
-                        <Option value="">Select Mode</Option> 
+                        <Option value="">Select Mode</Option>
                         <Option value="BOTH">Both</Option>
                         <Option value="ONLINE">Online</Option>
                         <Option value="OFFLINE">Offline</Option>
@@ -320,7 +321,7 @@ const onAllExportCourse = () => {
                     <Button size="small" type="primary" onClick={() => Submit()}>
                       Apply
                     </Button>
-                    <Button size="small" type="light" onClick={()=>clearFilter()}>
+                    <Button size="small" type="light" onClick={() => clearFilter()}>
                       Clear
                     </Button>
                   </ListButtonSizeWrapper>

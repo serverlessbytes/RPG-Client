@@ -158,15 +158,15 @@ const JobPost = ({ match }) => {
                 title="Job"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" onClick={() => { history.push("new") }} type="primary">
-                            <FeatherIcon icon="plus" size={14} />
-                            Add New
-                        </Button>
-                        <Button size="small" onClick={() => onExportJobs()} type="link">
+                        
+                        <Button size="small" onClick={() => onExportJobs()} type="info">
                             Export Jobs
                         </Button>
-                        <Button onClick={allexPortJobs} size="small" type="link">
+                        <Button onClick={allexPortJobs} size="small" type="info">
                             Export All Jobs
+                        </Button>
+                        <Button size="small" onClick={() => { history.push("new") }} type="primary">
+                            Add Post
                         </Button>
                         <CSVLink headers={header} data={stateJob} ref={CSVLinkRef} filename="Job.csv" style={{ opacity: 0 }}></CSVLink>
                     </div>
