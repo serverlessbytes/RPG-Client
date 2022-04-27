@@ -66,6 +66,7 @@ const BenefitsType = () => {
     };
 
     const handleCancel = () => {
+        form.resetFields();
         setIsModalVisible(false);
     };
 
@@ -118,7 +119,6 @@ const BenefitsType = () => {
 
     //useEffect(() =>{
     getBenefitData && getBenefitData.data.map((item) => {
-        console.log("---",getBenefitData.data)
         return usersTableData.push({
             Typeofbenefit: item.name,
             action: (

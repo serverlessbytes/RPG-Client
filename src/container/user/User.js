@@ -71,7 +71,8 @@ const User = () => {
 
     const onClear = () => {
         //console.log("-------", e)
-        setUserType("", 'userType')
+        setUserType("", 'userType');
+        dispatch(getAllUser(perPage, pageNumber, status, ""))
     }
 
 

@@ -32,11 +32,12 @@ const SwayamCourses = () => {
   const [activeCoursetog, setActiveCourseTog] = useState(true);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
-useEffect(()=>{console.log("courseData",courseData)},[courseData])
+
   const [data, setData] = useState({
     category: '',
     mode: '',
   });
+  
   const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
@@ -107,7 +108,7 @@ useEffect(()=>{console.log("courseData",courseData)},[courseData])
     if (status && data.category) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     }
-  }, [status,perPage,pageNumber]);
+  }, [status, perPage, pageNumber]);
 
   useEffect(() => {
     if (data.category && activeCoursetog) {
@@ -230,8 +231,8 @@ useEffect(()=>{console.log("courseData",courseData)},[courseData])
                       <FeatherIcon icon="x-circle" size={16} />
                     </Button> */}
                     <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                    <FeatherIcon icon="trash-2" size={16} />
-                                </Button>
+                      <FeatherIcon icon="trash-2" size={16} />
+                    </Button>
                     <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
                       <FeatherIcon icon="eye" size={16} />
                     </Button>

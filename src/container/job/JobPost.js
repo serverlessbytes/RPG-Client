@@ -17,8 +17,10 @@ import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import actions from '../../redux/jobs/actions';
 
 const JobPost = ({ match }) => {
+    const {allJobsSuccess} = actions;
     const { Option } = Select;
     const dispatch = useDispatch();
     const history = useHistory();
@@ -69,9 +71,11 @@ const JobPost = ({ match }) => {
             CSVLinkRef?.current?.link.click()  // 
         }
 
-    }, [stateJob])
+    }, [stateJob]) //
 
-
+    useEffect(() => {
+       dispatch(allJobsSuccess(null))
+    }, [])
 
 
     const header = [

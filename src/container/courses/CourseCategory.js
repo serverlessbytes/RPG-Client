@@ -9,7 +9,6 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCategoryData, getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
 import uuid from 'react-uuid';
-import { editBenefitsData } from '../../redux/benefitsType/actionCreator';
 
 const CourseCategory = () => {
 
@@ -29,6 +28,7 @@ const CourseCategory = () => {
     };
 
     const handleCancel = () => {
+        form.resetFields(); // for blank field
         setIsModalVisible(false);
     };
     const onDelete = (id) => {
@@ -48,7 +48,8 @@ const CourseCategory = () => {
 
     const onEdit = (id) => {
         let dataForEdit = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        
+        // useEffect(()=>{},[dataForEdit])
+        // console.log("dataForEdit",dataForEdit)
         if (dataForEdit) {
             setDataForEdit(dataForEdit)
             form.setFieldsValue({
@@ -58,7 +59,7 @@ const CourseCategory = () => {
         }
         // dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
-
+       
     }
 
     const handleOk = () => {
@@ -70,11 +71,12 @@ const CourseCategory = () => {
                     data = {
                         
                         ...data, 
-                        id: dataForEdit.id, 
+                        categoryId: dataForEdit.id, 
                         "isActive": true,
                         "isDeleted": false
                     }
-                    dispatch(editBenefitsData(data))
+                    dispatch(editCategoryData(data))
+                    handleCancel()
         }
         else{
             data = {
@@ -82,7 +84,6 @@ const CourseCategory = () => {
                 key: uuid()
             }
             dispatch(postCategoryData(data))
-    
             setIsModalVisible(false);
         }
    

@@ -83,8 +83,11 @@ export const getOneCoursefilter = (id) => async (dispatch) => {
 export const editPartnerCoursefilter = (data,categoryId,perPage,pageNumber,mode,status) => async (dispatch) => {
   await ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
     .then((res) => {
-      // getCoursefilter(categoryId,perPage,pageNumber,mode)
-      return dispatch(editPartnerCourseSuccess(res))
+      //getCoursefilter(categoryId,perPage,pageNumber,mode)
+       dispatch(editPartnerCourseSuccess(res.data))
+      if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
+        dispatch(getCoursefilter(category,per_page, page_number,Mode,Inactive))
+      }
     })
 }
 

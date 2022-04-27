@@ -98,6 +98,7 @@ const actions = {
   },
 
   editCategorySuccess: data => {
+    //console.log("datata",data);
     return {
       type: actions.EDIT_CATEGORY_SUCCESS,
       data,
@@ -296,6 +297,7 @@ const actions = {
   },
 
   getallSwayamCourseSuccess: data => {
+    console.log("data",data);
     return {
       type: actions.GET_ALLSWAYAM_COURSE_SUCCESS,
       data,

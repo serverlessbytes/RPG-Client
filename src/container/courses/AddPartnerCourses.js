@@ -11,6 +11,8 @@ import { addPartnerCourse, editPartnerCoursefilter, getOneCoursefilter } from '.
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
 import { useLocation } from 'react-router';
+import { getStateData } from '../../redux/state/actionCreator';
+import { getDistrictData } from '../../redux/district/actionCreator';
 
 const AddPartnerCourses = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -21,9 +23,12 @@ const AddPartnerCourses = () => {
     let dispatch = useDispatch();
 
     const editOneFilterData = useSelector(state => state.category.editFilterData);
+    const stateData = useSelector((state) => state.state.getStateData);
+    const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
+    const catdata = useSelector(state => state.category.categoryData);
 
-    let catdata = useSelector(state => state.category.categoryData);
-
+    useEffect(()=>{console.log("stateData",stateData)},[stateData])
+    useEffect(()=>{console.log("diStrictdata",diStrictdata)},[diStrictdata])
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
         name: '',
@@ -45,7 +50,7 @@ const AddPartnerCourses = () => {
         mode: 'PARTNER',
         Certification: '',
         key: '',
-        thumbnail:''
+        thumbnail: ''
     });
 
 
@@ -56,7 +61,14 @@ const AddPartnerCourses = () => {
         dispatch(getCategoryData());
     }, []);
 
-   useEffect(() => {
+    useEffect(() => {
+        dispatch(getStateData()) //dipatch state 
+    }, []);
+
+    useEffect(() => {
+        dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
+    }, [state.state]);
+    useEffect(() => {
 
         if (location.search) {
             dispatch(getOneCoursefilter(location.search.split('=')[1]));
@@ -170,7 +182,7 @@ const AddPartnerCourses = () => {
         if (state.Certification === '') {
             error.Certification = '*Certification is required';
             flage = true;
-        }if (state.thumbnail === '') {
+        } if (state.thumbnail === '') {
             error.thumbnail = '*Thumbnail is required';
             flage = true;
         }
@@ -231,7 +243,7 @@ const AddPartnerCourses = () => {
             district: state.district,
             mode: state.mode,
             certification: state.Certification,
-            thumbnail:state.thumbnail,
+            thumbnail: state.thumbnail,
             isActive: true,
             isDeleted: false
         }
@@ -262,12 +274,12 @@ const AddPartnerCourses = () => {
         } else if (name === 'duration') {
             setState({ ...state, duration: e });
         }
-        // else if (name == "state") {
-        //     setState({ ...state, state: e })
-        // }
-        // else if (name == "district") {
-        //     setState({ ...state, district: e })
-        // }
+        else if (name == "state") {
+            setState({ ...state, state: e })
+        }
+        else if (name == "district") {
+            setState({ ...state, district: e })
+        }
         else if (name === 'mode') {
             setState({ ...state, mode: e });
         } else if (name === 'sequence') {
@@ -278,11 +290,11 @@ const AddPartnerCourses = () => {
             }
         }
     };
-   
+
 
     const { Option } = Select;
     // const [typeOfJob, setTypeOfJob] = useState("");
-   
+
     // const onChange = e => {
     //     console.log('radio checked', e.target.value);
     //     setTypeOfJob(e.target.value)
@@ -416,22 +428,42 @@ const AddPartnerCourses = () => {
                         <Col lg={11}>
                             <label htmlFor="state">State</label>
                             <Form.Item name="state">
-                                {/* <Select size="large" placeholder="Select State" className="sDash_fullwidth-select" name="state" onChange={(e) => onSelect(e, "state")}>
-                                    <Option value="1"> Andaman and Nicobar Islands </Option>
-                                    <Option value="2"> Andra Pradesh </Option>
-                                </Select> */}
-                                <Input value={state.state} placeholder="State" name="state" onChange={e => onChangevalue(e)} />
+                                <Select
+                                    size="large"
+                                    className="sDash_fullwidth-select"
+                                    name="state"
+                                    value={state.state}
+                                    placeholder="Select State"
+                                    onChange={(e) => onSelect(e, "state")}
+                                >
+                                    {
+                                        stateData && stateData.data.map((item) => (
+                                            <Option value={item.id}> {item.name} </Option>
+                                        ))
+                                    }
+                                </Select>
+                                {/* <Input value={state.state} placeholder="State" name="state" onChange={e => onChangevalue(e)} /> */}
                                 {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11}>
                             <label htmlFor="district">District</label>
                             <Form.Item name="district">
-                                {/* <Select size="large" placeholder="Select District" className="sDash_fullwidth-select" name="district" onChange={(e) => onSelect(e, "district")}>
-                                    <Option value="1">surat</Option>
-                                    <Option value="2">bhavnagar</Option>
-                                </Select> */}
-                                <Input value={state.district} placeholder="District" name="district" onChange={e => onChangevalue(e)} />
+                                <Select
+                                    size="large"
+                                    className="sDash_fullwidth-select"
+                                    name="district"
+                                    value={state.district}
+                                    placeholder="Select District"
+                                    onChange={(e) => onSelect(e, "district")}
+                                >
+                                    {
+                                        diStrictdata && diStrictdata.data.map((item) => (
+                                            <Option value={item.id}> {item.name} </Option>
+                                        ))
+                                    }
+                                </Select>
+                                {/* <Input value={state.district} placeholder="District" name="district" onChange={e => onChangevalue(e)} /> */}
                                 {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                             </Form.Item>
                         </Col>

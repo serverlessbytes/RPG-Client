@@ -20,6 +20,7 @@ const PartnerCourses = () => {
   const {
     getallSwayamCourseSuccess,
   } = actions;
+
   const courseData = useSelector(state => state.category.courseFilterData);
   const { Option } = Select;
   const history = useHistory();
@@ -44,12 +45,12 @@ const PartnerCourses = () => {
     console.log("state", state);
   }, [data])
 
-  // useEffect(() => {
-  //   return(()=>{
-  //     // setState([])
-  //     dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
-  //   })
-  // }, [])
+  useEffect(() => {
+    return(()=>{
+      // setState([])
+      dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
+    })
+  }, [])
 
   let catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export

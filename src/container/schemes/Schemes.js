@@ -17,8 +17,10 @@ import ViewModal from './ViewModal';
 import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
 import { ApiPost } from '../../helper/API/ApiData';
+import actions from '../../redux/schemes/actions';
 
 const Schemes = () => {
+  const {getAllSchemesSuccess} = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -77,12 +79,9 @@ const Schemes = () => {
     { label: "howToApply", key: "howToApply" },
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
-    { label: "isActive", key: "isActive" },
-    { label: "isApproved", key: "isApproved" },
     { label: "key", key: "key" },
     { label: "sequence", key: "sequence" },
     { label: "spoc", key: "spoc" },
-    { label: "requirements", key: "requirements" },
     { label: "thumbnail", key: "thumbnail" },
     { label: "updatedAt", key: "updatedAt" },
     { label: "videoUrl", key: "videoUrl" },
@@ -95,7 +94,7 @@ const Schemes = () => {
       setState(allschemeData.data.data.map((item) => {
         return {
           ...item,
-          locations: item?.locations?.name,
+          locations: item?.locations?.map(item=>item.name),
           schemeBenifit: item?.schemeBenifit?.name,
           schemeCategory: item?.schemeCategory?.name,
           benifitLine: item.benifitLine,
@@ -112,7 +111,11 @@ const Schemes = () => {
     console.log("state", state);
   }, [state])
 
-
+  useEffect(() => {
+    return (() => {
+      dispatch(getAllSchemesSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
+    })
+  }, [])
   const reDirect = () => {
     history.push(`${path}/addscheme`);
   };
@@ -126,6 +129,8 @@ const Schemes = () => {
     if (userForDelete) {
       delete userForDelete.key;
       delete userForDelete.updatedAt;
+      delete userForDelete.viewCount;
+      delete userForDelete.createdAt;
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,
