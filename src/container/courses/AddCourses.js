@@ -268,6 +268,7 @@ const AddCourses = () => {
       thumbnail: state.thumbnail
     };
     dispatch(addSwayamCourse(data));
+    history.push('/admin/courses');
   };
 
   const onEdit = () => {
@@ -291,6 +292,7 @@ const AddCourses = () => {
     };
     console.log("data",data)
     dispatch(editSwayamCourse(data));
+    history.push('/admin/courses');
   };
 
   const addData = () => {
@@ -356,6 +358,8 @@ const AddCourses = () => {
       isDeleted:false
   }
     dispatch(editSwayamCourseModule(editData))
+   // history.push(`/admin/courses`);
+   
   }
 
   const onRemoveData = () => {

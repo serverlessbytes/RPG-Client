@@ -14,8 +14,12 @@ import { CSVLink } from 'react-csv';
 import { ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import actions from '../../redux/course/actions';
 
 const PartnerCourses = () => {
+  const {
+    getallSwayamCourseSuccess,
+  } = actions;
   const courseData = useSelector(state => state.category.courseFilterData);
   const { Option } = Select;
   const history = useHistory();
@@ -40,6 +44,13 @@ const PartnerCourses = () => {
     console.log("state", state);
   }, [data])
 
+  // useEffect(() => {
+  //   return(()=>{
+  //     // setState([])
+  //     dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
+  //   })
+  // }, [])
+
   let catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
   const onePartnerCourseData = useSelector(state => state.category.editFilterData)
@@ -55,9 +66,7 @@ const PartnerCourses = () => {
     { label: "createdAt", key: "createdAt" },
     { label: "detail", key: "detail" },
     { label: "duration", key: "duration" },
-    //{ label: "elink", key: "elink" },
     { label: "eligibility", key: "eligibility" },
-    //{ label: "howToApply", key: "howToApply" },
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
     { label: "isDeleted", key: "isDeleted" },
@@ -67,16 +76,13 @@ const PartnerCourses = () => {
     { label: "pincode", key: "pincode" },
     { label: "thumbnail", key: "thumbnail" },
     { label: "sequence", key: "sequence" },
-   // { label: "videoUrl", key: "videoUrl" },
     { label: "certificationBody", key: "certificationBody" },
     { label: "certificate", key: "certificate" },
     { label: "component", key: "component" },
-
   ];
   useEffect(() => {
     if (allCategortData?.data?.data) { //set a state for export word
       setData(allCategortData.data.data.map((item) => {
-        console.log("item", item)
         return {
           ...item,
           courseCategory: item?.courseCategory?.name,
@@ -145,6 +151,9 @@ const PartnerCourses = () => {
       delete activeCourseDelete.certificate;
       delete activeCourseDelete.jobTypes;
       delete activeCourseDelete.courseCategory;
+      delete activeCourseDelete.viewCount;
+      delete activeCourseDelete.isApproved;
+      delete activeCourseDelete.createdAt;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -208,7 +217,7 @@ const PartnerCourses = () => {
                         to="#"
                         shape="circle"
                       >
-                        <FeatherIcon icon="x-circle" size={16} />
+                      <FeatherIcon icon="trash-2" size={16} />
                       </Button>
                     )}
                     <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
@@ -280,8 +289,8 @@ const PartnerCourses = () => {
   const onePartnercourseData = () => {
     dispatch(getallSwayamCourse(state.mode))
   }
-  const onAllPartnerCourse = () => {
-  }
+  // const onAllPartnerCourse = () => {
+  // }
 
   return (
     <>
@@ -291,7 +300,7 @@ const PartnerCourses = () => {
         buttons={[
           <div key="1" className="page-header-actions">
             <Button size="small" type="info" onClick={()=>{onePartnercourseData()}}>
-              Export Courrses
+              Export Courses
             </Button>
             <CSVLink data={data} ref={CSVLinkRef} headers={header} filename="Partner.csv" style={{ opacity: 0 }}></CSVLink>
             {/* <Button size="small" type="info" onClick={() => onAllPartnerCourse()}>

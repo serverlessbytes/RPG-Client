@@ -16,6 +16,11 @@ import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import actions from '../../redux/course/actions';
+
+const {
+  getallSwayamCourseSuccess,
+} = actions;
 
 const SwayamCourses = () => {
   const dispatch = useDispatch();
@@ -27,12 +32,12 @@ const SwayamCourses = () => {
   const [activeCoursetog, setActiveCourseTog] = useState(true);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
-
+useEffect(()=>{console.log("courseData",courseData)},[courseData])
   const [data, setData] = useState({
     category: '',
-    mode: 'BOTH',
+    mode: '',
   });
-  const [perPage, setPerPage] = useState(25);
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
@@ -55,7 +60,7 @@ const SwayamCourses = () => {
     { label: "thumbnail", key: "thumbnail" },
     { label: "viewCount", key: "viewCount" },
   ];
-  
+
   useEffect(() => {
     if (state.length) {
       CSVLinkRef?.current?.link.click()  // for export
@@ -64,7 +69,16 @@ const SwayamCourses = () => {
   }, [state])
 
   useEffect(() => {
-    if (allCategortData?.data?.data) { //set a state for export word
+    return (() => {
+      // setState([])
+      dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
+    })
+  }, [])
+
+
+
+  useEffect(() => {
+    if (allCategortData?.data?.data) { //set a state for export excel
       setState(allCategortData.data.data.map((item) => {
         return {
           ...item,
@@ -93,7 +107,7 @@ const SwayamCourses = () => {
     if (status && data.category) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     }
-  }, [status]);
+  }, [status,perPage,pageNumber]);
 
   useEffect(() => {
     if (data.category && activeCoursetog) {
@@ -110,6 +124,8 @@ const SwayamCourses = () => {
     }
   };
 
+  useEffect(() => { console.log("dataaaa", data) }, [data])
+
   const onEdit = id => {
     history.push(`${path}/addcourses?id=${id}`);
   };
@@ -121,6 +137,7 @@ const SwayamCourses = () => {
         key: singleData.key,
         courseId: id,
         detail: singleData.detail,
+        thumbnail: singleData.thumbnail,
         name: singleData.name,
         categoryId: singleData.courseCategory.id,
         duration: singleData.duration,
@@ -136,11 +153,12 @@ const SwayamCourses = () => {
   };
 
   const Submit = () => {
-    dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    dispatch(getCoursefilter(data.category ? data.category : "", perPage, pageNumber, data.mode ? data.mode : "", status));
   };
 
   const clearFilter = () => {
     setData({ category: '' })
+    dispatch(getCoursefilter("", perPage, pageNumber, "", status));
   }
 
   const viewSwayamCoursedata = (key) => {
@@ -150,6 +168,11 @@ const SwayamCourses = () => {
 
   const onExportCourse = () => {
     dispatch(getallSwayamCourse(data.mode))
+    // if (state.length > 0) {
+    //   setTimeout(() => {
+    //     CSVLinkRef?.current?.link.click()
+    //   });
+    // }
     // CSVLinkRef?.current?.link.click() 
   }
 
@@ -160,16 +183,16 @@ const SwayamCourses = () => {
     })
   }
 
-  const onApproved=(id,isAp,key)=>{
-    let data={
-      courseId:id,
-      key:key,
-      isApproved:!isAp
+  const onApproved = (id, isAp, key) => {
+    let data = {
+      courseId: id,
+      key: key,
+      isApproved: !isAp
     }
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
-    .then((res) => {
-      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-    })
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+      .then((res) => {
+        dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+      })
   }
 
   useEffect(() => {
@@ -184,10 +207,10 @@ const SwayamCourses = () => {
             CourseCategory: item.courseCategory.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
-            approved:(
+            approved: (
               <>
-                <div onClick={()=>onApproved(item.id,item.isApproved,item.key)}>
-                <Switch checked={item.isApproved}></Switch>
+                <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+                  <Switch checked={item.isApproved}></Switch>
                 </div>
               </>
             ),
@@ -203,9 +226,12 @@ const SwayamCourses = () => {
                       <FeatherIcon icon="edit" size={16} />
                     </Button>
 
-                    <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+                    {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                       <FeatherIcon icon="x-circle" size={16} />
-                    </Button>
+                    </Button> */}
+                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                    <FeatherIcon icon="trash-2" size={16} />
+                                </Button>
                     <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
                       <FeatherIcon icon="eye" size={16} />
                     </Button>
@@ -243,8 +269,8 @@ const SwayamCourses = () => {
     //     sortDirections: ['descend', 'ascend'],
     // },
     {
-      title:'Approved',
-      dataIndex:'approved',
+      title: 'Approved',
+      dataIndex: 'approved',
     },
     {
       title: 'Actions',
@@ -292,7 +318,7 @@ const SwayamCourses = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                {/* <Col md={6} xs={24} className="mb-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Category">
                       <Select
@@ -300,16 +326,17 @@ const SwayamCourses = () => {
                         size="large"
                         className="sDash_fullwidth-select"
                         value={data.category}
-                        placeholder="Select"
+                        placeholder="Select Category"
                         onChange={e => onChangehandle(e, 'category')}
                       >
+                        <Option value="">Select Category</Option>
                         {categoryData &&
                           categoryData.data &&
                           categoryData.data.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
-                </Col> */}
+                </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -354,11 +381,24 @@ const SwayamCourses = () => {
                         // rowSelection={rowSelection}
                         dataSource={usertable}
                         columns={usersTableColumns}
+                        // pagination={{
+                        //   defaultPageSize: 15,
+                        //   total: usersTableData.length,
+                        //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        // }}
                         pagination={{
-                          defaultPageSize: 5,
-                          total: usersTableData.length,
+                          defaultPageSize: courseData?.data.per_page,
+                          total: courseData?.data.page_count,
                           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          onChange: (page, pageSize) => {
+                            setPageNumber(page);
+                            setPerPage(pageSize)
+                          }
+                          // defaultPageSize: 5,
+                          // total: usersTableData.length,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
+
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
@@ -376,10 +416,22 @@ const SwayamCourses = () => {
                         // rowSelection={rowSelection}
                         dataSource={usertable}
                         columns={usersTableColumns}
+                        // pagination={{
+                        //   defaultPageSize: 15,
+                        //   total: usersTableData.length,
+                        //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        // }}
                         pagination={{
-                          defaultPageSize: 5,
-                          total: usersTableData.length,
+                          defaultPageSize: courseData?.data.per_page,
+                          total: courseData?.data.page_count,
                           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          onChange: (page, pageSize) => {
+                            setPageNumber(page);
+                            setPerPage(pageSize)
+                          }
+                          // defaultPageSize: 5,
+                          // total: usersTableData.length,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
                       />
                     </TableWrapper>
