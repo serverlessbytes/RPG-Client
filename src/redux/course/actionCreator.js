@@ -20,7 +20,7 @@ const {
   getallSwayamCourseSuccess,
 } = actions;
 
-
+let page_number,per_page,category,Inactive,Mode;
 export const postCategoryData = (body) => async (dispatch) => {
   await ApiPost(`course/addCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
@@ -54,7 +54,20 @@ export const addPartnerCourse = (body) => async (dispatch) => {
     })
 }
 export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => async (dispatch) => {
-  await ApiGet(`course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&categoryId=${categoryId}&per_page=${perPage}&page_number=${pageNumber}&mode=${mode}&status=${inactive}`)
+  category = categoryId;
+  per_page = perPage;
+  page_number = pageNumber;
+  Mode=mode;
+  Inactive = inactive;
+
+  let URL = `course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${inactive}`
+  if(categoryId){
+    URL = URL.concat(`&categoryId=${categoryId}`)
+  }
+  if(mode){
+    URL = URL.concat(`&mode=${mode}`)
+  }
+  await ApiGet(URL)
     .then((res) => {
       return dispatch(getCoursefilterSuccess(res))
     })
@@ -85,7 +98,11 @@ export const addSwayamCourse = (data) => async (dispatch) => {
 export const editSwayamCourse = (data) => async (dispatch) => {
   await ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
     .then((res) => {
-      return dispatch(editSwayamPartnerCourseSuccess(res))
+      console.log("ressssss",res)
+       dispatch(editSwayamPartnerCourseSuccess(res.data))
+      if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
+        dispatch(getCoursefilter(category,per_page, page_number,Mode,Inactive))
+      }
     })
 }
 
