@@ -38,7 +38,7 @@ const AddCourses = () => {
   const editOneSwayamCourseData = useSelector(state => state.category.editFilterData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
   const userData = useSelector(state => state.auth.getUserData);
-  const getSwayamCourseData =useSelector(state=>state.category.getSwayamCourseModuleData)
+  const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
 
   const [state, setState] = useState({
     detail: RichTextEditor.createEmptyValue(),
@@ -50,7 +50,7 @@ const AddCourses = () => {
     sequence: '',
     mode: '',
     key: '',
-    thumbnail:'',
+    thumbnail: '',
   });
 
   const [moduleState, setModuleState] = useState([
@@ -63,33 +63,35 @@ const AddCourses = () => {
       sequence: '',
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
-      createdByUser:'',
-      modifiedByUser:'',
+      createdByUser: '',
+      modifiedByUser: '',
     },
   ]);
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
   const [selectKey, setSelectKey] = useState(0);
-  const [moduleError,setModuleError]=useState([]);
+  const [moduleError, setModuleError] = useState([]);
+  const [defaultSelect, setDefaultSelect] = useState('1');
 
   useEffect(() => {
-    if(getSwayamCourseData && getSwayamCourseData.data && id){
-        setModuleState(getSwayamCourseData.data.map((item)=>{
-            return{
-                name: item.name,
-                detail: item.detail,
-                duration: moment(item.duration,"HH:mm:ss"),
-                videoUrl: item.videoUrl,
-                sequence: item.sequence,
-                key: item.key,
-                moduleId: item.id,
-                isActive:true,
-                isDeleted:false
-            }
-        }))
+    if (getSwayamCourseData && getSwayamCourseData.data && id) {
+      setModuleState(
+        getSwayamCourseData.data.map(item => {
+          return {
+            name: item.name,
+            detail: item.detail,
+            duration: moment(item.duration, 'HH:mm:ss'),
+            videoUrl: item.videoUrl,
+            sequence: item.sequence,
+            key: item.key,
+            moduleId: item.id,
+            isActive: true,
+            isDeleted: false,
+          };
+        }),
+      );
     }
-  }, [getSwayamCourseData])
-  
+  }, [getSwayamCourseData]);
 
   useEffect(() => {
     if (userData && userData.data && userData.data.id && !id) {
@@ -100,14 +102,9 @@ const AddCourses = () => {
 
   useEffect(() => {
     if (addSwayamCourseData && 'data' in addSwayamCourseData) {
-      (moduleState[0].course = addSwayamCourseData.data.id);
+      moduleState[0].course = addSwayamCourseData.data.id;
     }
   }, [addSwayamCourseData]);
-
-
-  useEffect(() => {
-    console.log('moduleState', moduleState);
-  }, [moduleState]);
 
   useEffect(() => {
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && id) {
@@ -116,13 +113,13 @@ const AddCourses = () => {
         detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.detail, 'markdown'),
         name: editOneSwayamCourseData.data.name,
         categoryId: editOneSwayamCourseData.data.courseCategory.id,
-        duration: moment(editOneSwayamCourseData.data.duration,"HH:mm:ss") ,
+        duration: moment(editOneSwayamCourseData.data.duration, 'HH:mm:ss'),
         jobCategoryIds: editOneSwayamCourseData.data.jobTypes.map(item => item.id),
         certification: editOneSwayamCourseData.data.certificate,
         sequence: editOneSwayamCourseData.data.sequence,
         mode: editOneSwayamCourseData.data.mode,
         key: editOneSwayamCourseData.data.key,
-        thumbnail:editOneSwayamCourseData.data.thumbnail
+        thumbnail: editOneSwayamCourseData.data.thumbnail,
       });
     }
   }, [editOneSwayamCourseData]);
@@ -131,14 +128,14 @@ const AddCourses = () => {
     if (id) {
       dispatch(getOneCoursefilter(id));
       setSwyamModuleId(false);
-      dispatch(getSwayamCourseModule(id))
-      
+      dispatch(getSwayamCourseModule(id));
     }
   }, [id]);
 
   useEffect(() => {
     if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
       setSwyamModuleId(false);
+      setDefaultSelect('2');
     }
   }, [addSwayamCourseData]);
 
@@ -148,7 +145,6 @@ const AddCourses = () => {
     dispatch(getUser());
   }, []);
 
-  
   const onChange = (e, name) => {
     if (name === 'categoryId') {
       setState({ ...state, [name]: e });
@@ -218,38 +214,36 @@ const AddCourses = () => {
     return flage;
   };
 
-  const moduleValidation=()=>{
-
-    let flage=false;
-    const error={}
-    if(moduleState.length){
-      moduleState.map((item,i)=>{
-        if(item.name===""){
-          error[`name${i+1}`]="Please enter module name";
-          flage=true
+  const moduleValidation = () => {
+    let flage = false;
+    const error = {};
+    if (moduleState.length) {
+      moduleState.map((item, i) => {
+        if (item.name === '') {
+          error[`name${i + 1}`] = 'Please enter module name';
+          flage = true;
         }
-        if(item.videoUrl===""){
-          error[`videoUrl${i+1}`]="Please enter video url";
-          flage=true
+        if (item.videoUrl === '') {
+          error[`videoUrl${i + 1}`] = 'Please enter video url';
+          flage = true;
         }
-        if(item.duration===""){
-          error[`duration${i+1}`]="Please enter module duration";
-          flage=true
+        if (item.duration === '') {
+          error[`duration${i + 1}`] = 'Please enter module duration';
+          flage = true;
         }
-        if(item.sequence===""){
-          error[`sequence${i+1}`]="Please enter sequence";
-          flage=true
+        if (item.sequence === '') {
+          error[`sequence${i + 1}`] = 'Please enter sequence';
+          flage = true;
         }
-        if(item.detail===""){
-          error[`detail${i+1}`]="Please enter module detail";
-          flage=true
+        if (item.detail === '') {
+          error[`detail${i + 1}`] = 'Please enter module detail';
+          flage = true;
         }
-      })
+      });
     }
-    setModuleError(error)
-    return flage
-  
-  }
+    setModuleError(error);
+    return flage;
+  };
 
   const onSubmit = () => {
     if (validation()) {
@@ -260,15 +254,15 @@ const AddCourses = () => {
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
-      duration: moment(state.duration).format("HH:mm:ss"),
+      duration: moment(state.duration).format('HH:mm:ss'),
       jobCategoryIds: state.jobCategoryIds,
       certification: state.certification,
       sequence: parseInt(state.sequence),
       mode: state.mode,
-      thumbnail: state.thumbnail
+      thumbnail: state.thumbnail,
     };
     dispatch(addSwayamCourse(data));
-    history.push('/admin/courses');
+    // history.push('/admin/courses');
   };
 
   const onEdit = () => {
@@ -290,9 +284,9 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-    console.log("data",data)
+    console.log('data', data);
     dispatch(editSwayamCourse(data));
-    history.push('/admin/courses');
+    // history.push('/admin/courses');
   };
 
   const addData = () => {
@@ -303,7 +297,7 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      sequence: '',
+      sequence: null,
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: userData && userData.data && userData.data.id,
@@ -317,64 +311,103 @@ const AddCourses = () => {
     if (name === 'name') {
       value[i].name = e.target.value;
       setModuleState(value);
-    }else if(name==="videoUrl"){
-        value[i].videoUrl=e.target.value;
-        setModuleState(value);
-    }else if(name==="duration"){
-        value[i].duration=e;
-        setModuleState(value);
-    }else if(name==="sequence"){
-        value[i].sequence=e.target.value;
-        setModuleState(value);
-    }else if(name==="detail"){
-        value[i].detail=e.target.value;
-        setModuleState(value);
+    } else if (name === 'videoUrl') {
+      value[i].videoUrl = e.target.value;
+      setModuleState(value);
+    } else if (name === 'duration') {
+      value[i].duration = e;
+      setModuleState(value);
+    } else if (name === 'sequence') {
+      value[i].sequence = e.target.value;
+      setModuleState(value);
+    } else if (name === 'detail') {
+      value[i].detail = e.target.value;
+      setModuleState(value);
     }
   };
 
   const onModuleSubmit = () => {
-    if(moduleValidation()){
-      return
+    if (moduleValidation()) {
+      return;
     }
-    dispatch(addSwayamCourseModule(moduleState))
+
+    const newData = moduleState
+      .filter(item => !item.moduleId)
+      .map(item => {
+        return {
+          key: item.key,
+          name: item.name,
+          detail: item.detail,
+          duration: moment(item.duration).format('HH:mm:ss'),
+          videoUrl: item.videoUrl,
+          sequence: parseInt(item.sequence),
+          course: item.course,
+          language: item.language,
+          createdByUser: item.createdByUser,
+          modifiedByUser: item.modifiedByUser,
+        };
+      });
+    dispatch(addSwayamCourseModule(newData));
   };
 
-
-  const onModuleEdit=()=>{
-    if(moduleValidation()){
-      return
+  const onModuleEdit = () => {
+    if (moduleValidation()) {
+      return;
     }
 
-    const data=moduleState[selectKey]
-    const editData={
+    const data = moduleState[selectKey];
+    const editData = {
       name: data.name,
       detail: data.detail,
-      duration: moment(data.duration).format("HH:mm:s"),
+      duration: moment(data.duration).format('HH:mm:s'),
       videoUrl: data.videoUrl,
       sequence: data.sequence,
       key: data.key,
       moduleId: data.moduleId,
-      isActive:true,
-      isDeleted:false
-  }
-    dispatch(editSwayamCourseModule(editData))
-   // history.push(`/admin/courses`);
-   
-  }
+      isActive: true,
+      isDeleted: false,
+    };
+    dispatch(editSwayamCourseModule(editData));
+    // history.push(`/admin/courses`);
+  };
 
   const onRemoveData = () => {
+    console.log("selectKey ===",selectKey);
     if (moduleState.length > 1) {
+      if (id) {
+        const data = moduleState[selectKey];
+        const deleteData = {
+          name: data.name,
+          detail: data.detail,
+          duration: moment(data.duration).format('HH:mm:s'),
+          videoUrl: data.videoUrl,
+          sequence: data.sequence,
+          key: data.key,
+          moduleId: data.moduleId,
+          isActive: false,
+          isDeleted: true,
+        };
+        dispatch(editSwayamCourseModule(deleteData));
+        // let val = [...moduleState];
+        // val.splice(selectKey, 1);
+        // setModuleState(val);
+      }
+      // else{
       let val = [...moduleState];
       val.splice(selectKey, 1);
+      setSelectKey(val.length - 1);
       setModuleState(val);
+      // }
     }
   };
 
   const { TabPane } = Tabs;
 
-
   const moduleCallback = key => {
     setSelectKey(key);
+  };
+  const callback = key => {
+    setDefaultSelect(key);
   };
 
   return (
@@ -382,7 +415,7 @@ const AddCourses = () => {
       <PageHeader ghost title="Add Scheme" />
       <Main>
         <Cards headless>
-          <Tabs defaultActiveKey="1">
+          <Tabs activeKey={defaultSelect} onChange={callback}>
             <TabPane tab="Course Details" key="1">
               <Row justify="space-between">
                 {/* <Col lg={11} className="d-flex f-d-cloumn">
@@ -600,7 +633,9 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'name')}
                               placeholder="Name of the Module"
                             />
-                            {moduleError && moduleError[`name${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`name${i + 1}`]}</label>}
+                            {moduleError && moduleError[`name${i + 1}`] && (
+                              <label style={{ color: 'red' }}>{moduleError[`name${i + 1}`]}</label>
+                            )}
                           </Form.Item>
                         </Col>
                         <Col lg={11}>
@@ -612,7 +647,9 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'videoUrl')}
                               value={item.videoUrl}
                             />
-                            {moduleError && moduleError[`videoUrl${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`videoUrl${i + 1}`]}</label>}
+                            {moduleError && moduleError[`videoUrl${i + 1}`] && (
+                              <label style={{ color: 'red' }}>{moduleError[`videoUrl${i + 1}`]}</label>
+                            )}
                           </Form.Item>
                         </Col>
                         <Col lg={11} className="addpartnercourses">
@@ -624,7 +661,9 @@ const AddCourses = () => {
                               onChange={e => moduleChange(e, i, 'duration')}
                               initialValue={moment('00:00:00', 'HH:mm:ss')}
                             />
-                            {moduleError && moduleError[`duration${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`duration${i + 1}`]}</label>}
+                            {moduleError && moduleError[`duration${i + 1}`] && (
+                              <label style={{ color: 'red' }}>{moduleError[`duration${i + 1}`]}</label>
+                            )}
                           </Form.Item>
                         </Col>
                         <Col lg={11}>
@@ -637,15 +676,39 @@ const AddCourses = () => {
                               value={item.sequence}
                               type="number"
                             />
-                            {moduleError && moduleError[`sequence${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`sequence${i + 1}`]}</label>}
+                            {moduleError && moduleError[`sequence${i + 1}`] && (
+                              <label style={{ color: 'red' }}>{moduleError[`sequence${i + 1}`]}</label>
+                            )}
                           </Form.Item>
                         </Col>
                         <Col lg={24}>
                           <label htmlFor="detail">Module Detail</label>
                           <Form.Item>
                             <TextArea name="detail" onChange={e => moduleChange(e, i, 'detail')} value={item.detail} />
-                            {moduleError && moduleError[`detail${i + 1}`] && <label style={{ color: "red" }}>{moduleError[`detail${i + 1}`]}</label>}
+                            {moduleError && moduleError[`detail${i + 1}`] && (
+                              <label style={{ color: 'red' }}>{moduleError[`detail${i + 1}`]}</label>
+                            )}
                           </Form.Item>
+                        </Col>
+                        <Col lg={24}>
+                          {id && (
+                            <Button
+                              className="btn-signin ml-10"
+                              onClick={() => onModuleEdit()}
+                              type="primary"
+                              size="medium"
+                            >
+                              Edit
+                            </Button>
+                          )}
+                          <Button
+                            className="btn-signin ml-10"
+                            type="danger"
+                            size="medium"
+                            onClick={() => onRemoveData()}
+                          >
+                            Delete
+                          </Button>
                         </Col>
                       </Row>
                     </TabPane>
@@ -724,28 +787,31 @@ const AddCourses = () => {
                                 </TabPane> */}
               </Tabs>
               <div className="sDash_form-action mt-20">
-               {!id &&  <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => addData()}>
-                  Add
-                </Button>}
-                
-              </div>
-              <div className="sDash_form-action mt-20">
-                {id?<Button className="btn-signin ml-10" onClick={() => onModuleEdit()} type="primary" size="medium">
+                {/* {id && getSwayamCourseData && getSwayamCourseData.data && getSwayamCourseData.data.length>0 ?<Button className="btn-signin ml-10" onClick={() => onModuleEdit()} type="primary" size="medium">
                   Edit
                 </Button>:<Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
                   Submit
-                </Button>}
-                <Button className="btn-signin ml-10" type="danger" size="medium" onClick={() => onRemoveData()}>
-                  Delete
+                </Button>} */}
+                {
+                  <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => addData()}>
+                    Add
+                  </Button>
+                }
+                <Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
+                  Submit
                 </Button>
-                <Button className="btn-signin ml-10" type="light" size="medium" onClick={()=>history.push('/admin/courses')} >
+                <Button
+                  className="btn-signin ml-10"
+                  type="light"
+                  size="medium"
+                  onClick={() => history.push('/admin/courses')}
+                >
                   Cancel
                 </Button>
-                
               </div>
             </TabPane>
 
-             {/* ************Dont'delete this****************** */}
+            {/* ************Dont'delete this****************** */}
 
             {/* <TabPane tab="Q&A" key="3">
               <PageHeader
