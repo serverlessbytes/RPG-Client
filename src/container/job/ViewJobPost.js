@@ -36,20 +36,20 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
               <span><label style={{ fontWeight: 'bold' }} >Benefits:</label> {data?.benifits}</span><br />
             </Col>
             <Col lg={8}>
-              <span><label style={{ fontWeight: 'bold' }} >Name of the Employer:</label> {data?.name}</span><br />
+              <span><label style={{ fontWeight: 'bold' }} >Name of the Employer:</label> {data?.name?.name}</span><br />
             </Col>
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Vacancies:</label> {data?.vacancies}</span><br />
             </Col>
 
             <Col lg={8}>
-              <span><label style={{ fontWeight: 'bold' }} >State:</label> {data?.state}</span><br />
+              <span><label style={{ fontWeight: 'bold' }} >State:</label> {data?.state?.name}</span><br />
             </Col>
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Type of Job:</label> {data?.type}</span><br />
             </Col>
             <Col lg={8}>
-              <span><label style={{ fontWeight: 'bold' }} >District:</label> {data?.district}</span><br />
+              <span><label style={{ fontWeight: 'bold' }} >District:</label> {data?.district?.name}</span><br />
             </Col>
 
             <Col lg={8}>

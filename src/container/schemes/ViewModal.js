@@ -29,7 +29,7 @@ const ViewModal = ({ viewModal, type, setViewModal, data }) => {
                     </Col>
                     <Col lg={12}>
                         {/* <label style={{fontWeight:'bold'}}>Thumbnail:</label> */}
-                        <img width="100%" height="345" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg"
+                        <img width="100%" height="345" src={data?.thumbnail}
                         // {data?.thumbnail}
                         />
                     </Col>

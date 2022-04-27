@@ -165,8 +165,8 @@ const Schemes = () => {
   }
 
   const clearFilter = () => {
-    setSchemeCategory({ category: "" })
-    setSchemeCategory({ benefit: "" })
+    setSchemeCategory({ category: "", benefit: "" })
+    dispatch(getSchemeData(perPage, pageNumber, status));
   }
 
   const onApproved=(id,isAp)=>{
@@ -217,7 +217,7 @@ const Schemes = () => {
                   onClick={() => deleteSchemes(item.key)}
                   shape="circle"
                 >
-                  <FeatherIcon icon="file" size={16} />
+                   <FeatherIcon icon="trash-2" size={16} />
                 </Button>
                 <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
                   <FeatherIcon icon="eye" size={16} />

@@ -38,15 +38,14 @@ const JobPost = ({ match }) => {
     // }, [jobRolesData])
 
 
-    const callback = (key) => {
-        //     console.log(key);
-    };
+    
 
     const [stateJob, setStateJob] = useState([]) //set data for job 
     const [state, setState] = useState("")
     const [type, setType] = useState("")
     const [jobRole, setJobRole] = useState("")
     const [apply, setApply] = useState(false)
+    const [status, setStatus] = useState('active');
 
     const onChangevalue = (e, name) => {
         if (name === "type") {
@@ -60,17 +59,19 @@ const JobPost = ({ match }) => {
         }
     }
 
+    const callback = key => {
+        setStatus(key);
+    
+      };
+
     useEffect(() => {
-        console.log("stateJob", stateJob);
         if (stateJob.length) {
             CSVLinkRef?.current?.link.click()  // 
         }
 
     }, [stateJob])
 
-    useEffect(() => {
-        console.log("type", type);
-    }, [type])
+
 
 
     const header = [
@@ -146,6 +147,7 @@ const JobPost = ({ match }) => {
         setType({type:""})
         setJobRole({jobRole:""})
         setState({state:""})
+        setApply(!apply)
     }
 
     useEffect(() => {
@@ -227,7 +229,7 @@ const JobPost = ({ match }) => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" name="submit" onClick={(e) => setApply(true)}>
+                                        <Button size="small" type="primary" name="submit" onClick={(e) => setApply(!apply)}>
                                             Apply
                                         </Button>
                                         <Button size="small" type="light" onClick={() => onClear()}>
@@ -238,11 +240,11 @@ const JobPost = ({ match }) => {
                             </Row>
 
                             <Tabs defaultActiveKey="1" onChange={callback}>
-                                <TabPane tab="Active Jobs" key="1">
-                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} />
+                                <TabPane tab="Active Jobs" key="active">
+                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status} />
                                 </TabPane>
-                                <TabPane tab="Inactive Jobs" key="2">
-                                    <JobListTable />
+                                <TabPane tab="Inactive Jobs" key="inactive">
+                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status}/>
                                 </TabPane>
                             </Tabs>
 

@@ -69,7 +69,7 @@ const AddSchemes = () => {
     const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
 
     useEffect(() => {
-        if (getOneScHemeData) {
+        if (getOneScHemeData && id) {
             console.log("getOneScHemeData", getOneScHemeData)
             setState({
                 ...state,
@@ -529,7 +529,7 @@ const AddSchemes = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                            Add
+                            {id?"Edit":"Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
                             onClick={() => history.push(`/admin/scheme`)}

@@ -138,7 +138,7 @@ export const getoneJobPost = (data) => async (dispatch) => {
     .catch((err) => dispatch(getoneJobPostErr(err)))
 }
 
-export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole) => async (dispatch) => {
+export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole,status) => async (dispatch) => {
   let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if(state) {
     URL = URL.concat(`&state=${state}`)
@@ -148,6 +148,9 @@ export const getJobsFilterForMain = (perPage,pageNumber,state,type,jobRole) => a
   }
   if(jobRole) {
     URL = URL.concat(`&jobRole=${jobRole}`)
+  }
+  if(status){
+    URL = URL.concat(`&status=${status}`)
   }
 
   await ApiPost(URL)

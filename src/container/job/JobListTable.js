@@ -12,7 +12,7 @@ import moment from 'moment';
 import { ApiPost } from '../../helper/API/ApiData';
 
 
-const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from JobPost
+const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // props from JobPost
 
   const { path } = useRouteMatch();
   // console.log("pathh", state)
@@ -38,30 +38,50 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData) 
 
 
-  useEffect(()=>{
-    console.log("jobData=========",jobData);
-  },[jobData])
-
   
   const [viewModal, setViewModal] = useState(false);
+
+  useEffect(() => {
+    if(jobData){
+      console.log("jobData",jobData);
+    }
+  }, [jobData])
+  
+
+
   const onDelete = (id) => {
     let courseDataDelete = jobData && jobData.data && jobData.data.data.find((item) => item.id === id)
-
     if (courseDataDelete) {
-      courseDataDelete = {
-        ...courseDataDelete,
-        isActive: false,
-        id: courseDataDelete.id,
-        jobRoleId: courseDataDelete.jobRole.id,
-        jobCategoryId: courseDataDelete.jobType.id,
+      let data={
+        name : courseDataDelete.name.id,
+        state : courseDataDelete.state.id,
+        district : courseDataDelete.district.id,
+        town : courseDataDelete.town,
+        pincode : courseDataDelete.pincode,
+        description : courseDataDelete.description,
+        vacancies : courseDataDelete.vacancies,
+        reqExperience : courseDataDelete.reqExperience,
+        salary : courseDataDelete.salary,
+        benifits : courseDataDelete.benifits,
+        requirements : courseDataDelete.requirements,
+        type : courseDataDelete.type,
+        isActive : false,
+        extraType : courseDataDelete.extraType,
+        shifts : courseDataDelete.shifts,
+        email : courseDataDelete.email,
+        phone : courseDataDelete.phone,
+        startDate : courseDataDelete.startDate,
+        endDate : courseDataDelete.endDate,
+        jobRoleId : courseDataDelete.jobRole.id,
+        jobCategoryId : courseDataDelete.jobType.id,
+        id:id,
       }
+      dispatch((editJobPost(data)))
     }
-    delete courseDataDelete.jobRole,
-      delete courseDataDelete.jobType,
-      delete courseDataDelete.key,
-      delete courseDataDelete.hiredNumber,
-      dispatch((editJobPost(courseDataDelete)))
+
+      
   }
+  
   useEffect(() => {
     if (editJobPostData && editJobPostData.status === 200) {  //
       dispatch(getJobPost(perPage, pageNumber))
@@ -75,10 +95,8 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
 
 
   useEffect(() => {
-    // if (apply) {
-      dispatch(getJobsFilterForMain(perPage, pageNumber, state.state? state.state:"", type.type?type.type:"", jobRole.jobRole?jobRole.jobRole:""))
-    // }
-  }, [perPage, pageNumber, state, type, jobRole, apply])
+      dispatch(getJobsFilterForMain(perPage, pageNumber, state?.state? state?.state:"", type?.type ? type?.type : "", jobRole?.jobRole ? jobRole?.jobRole : "",status))
+  }, [perPage, pageNumber, apply,status])
 
   useEffect(() => {
     dispatch(getJobPost(perPage, pageNumber))
@@ -86,13 +104,9 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
 
 
 
-  const onChange=(e)=>{
-    // setApproved(e)
-  }
 
-  useEffect(() => {
-    console.log("approved",approved);
-  }, [approved])
+
+
 
 
   const onApproved=(id,isAp)=>{
@@ -113,11 +127,11 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
     // if (apply) {
       setUsertable(getJobFilterData?.data?.data?.map(item => {
         return ({
-          user: item.name,
+          user: item?.name?.name,
           email: item.email,
           company: item.description,
           position: item.jobRole.name,
-          joinDate: moment(item.startDate).format('YYYY:mm:dd') ,
+          joinDate: moment(item.startDate).format('DD-MM-YYYY') ,
           approved:(
             <>
               <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
@@ -197,7 +211,7 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
       title: 'User',
       dataIndex: 'user',
       // key: 'user',
-      sorter: (a, b) => a.user.length - b.user.length,
+      sorter: (a, b) => a?.user?.length - b?.user?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -255,8 +269,8 @@ const JobListTable = ({ state, type, jobRole, apply,clear }) => { // props from 
             // defaultPageSize: 10,
             // total: usersTableData.length,
             // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-            defaultPageSize: jobData?.data.per_page,
-            total: jobData?.data.page_count,
+            defaultPageSize: getJobFilterData?.data.per_page,
+            total: getJobFilterData?.data.page_count,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
             onChange: (page, pageSize) => {
               setPageNumber(page);
