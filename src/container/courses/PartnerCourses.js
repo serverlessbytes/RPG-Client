@@ -151,6 +151,9 @@ const PartnerCourses = () => {
       delete activeCourseDelete.certificate;
       delete activeCourseDelete.jobTypes;
       delete activeCourseDelete.courseCategory;
+      delete activeCourseDelete.viewCount;
+      delete activeCourseDelete.isApproved;
+      delete activeCourseDelete.createdAt;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -214,7 +217,7 @@ const PartnerCourses = () => {
                         to="#"
                         shape="circle"
                       >
-                        <FeatherIcon icon="x-circle" size={16} />
+                      <FeatherIcon icon="trash-2" size={16} />
                       </Button>
                     )}
                     <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
