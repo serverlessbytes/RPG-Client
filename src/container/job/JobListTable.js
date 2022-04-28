@@ -31,26 +31,22 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
   const [perPage, setPerPage] = useState(5) // forpagination
   const [pageNumber, setPageNumber] = useState(1)
   const [approved,setApproved]=useState()
+  const [viewModal, setViewModal] = useState(false);
 
   const jobData = useSelector((state) => state.job.getJobPostData)
   const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
   const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData) 
 
-
+  // useEffect(() => {
+  //   if(getJobFilterData){
+  //     console.log("getJobFilterData",getJobFilterData);
+  //   }
+  // }, [getJobFilterData])
   
-  const [viewModal, setViewModal] = useState(false);
-
-  useEffect(() => {
-    if(jobData){
-      console.log("jobData",jobData);
-    }
-  }, [jobData])
-  
-
-
   const onDelete = (id) => {
-    let courseDataDelete = jobData && jobData.data && jobData.data.data.find((item) => item.id === id)
+    let courseDataDelete = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find((item) => item.id === id)
+    console.log("courseDataDelete",courseDataDelete)
     if (courseDataDelete) {
       let data={
         name : courseDataDelete.name.id,
@@ -77,20 +73,49 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
         id:id,
       }
       dispatch((editJobPost(data)))
-    }
-
-      
+    } 
   }
   
-  useEffect(() => {
-    if (editJobPostData && editJobPostData.status === 200) {  //
-      dispatch(getJobPost(perPage, pageNumber))
-    }
-  }, [editJobPostData])
-
+  // useEffect(() => {
+  //   if (editJobPostData && editJobPostData.status === 200) {  //getJobFilterData
+  //     dispatch(getJobPost(perPage, pageNumber))
+  //   }
+  // }, [editJobPostData])
 
   const onEdit = (id) => {
     history.push(`/admin/job/new?id=${id}`)
+  }
+ 
+  const onRestore = (id) => {
+    let jobsData = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data.data.find((item) => item.id === id)
+        console.log("jobsdataInactive",jobsData);
+        if (jobsData) {
+          let data={
+            name : jobsData.name.id,
+            state : jobsData.state.id,
+            district : jobsData.district.id,
+            town : jobsData.town,
+            pincode : jobsData.pincode,
+            description : jobsData.description,
+            vacancies : jobsData.vacancies,
+            reqExperience : jobsData.reqExperience,
+            salary : jobsData.salary,
+            benifits : jobsData.benifits,
+            requirements : jobsData.requirements,
+            type : jobsData.type,
+            isActive : true,
+            extraType : jobsData.extraType,
+            shifts : jobsData.shifts,
+            email : jobsData.email,
+            phone : jobsData.phone,
+            startDate : jobsData.startDate,
+            endDate : jobsData.endDate,
+            jobRoleId : jobsData.jobRole.id,
+            jobCategoryId : jobsData.jobType.id,
+            id:id,
+          }
+            dispatch((editJobPost(data)))
+        } 
   }
 
 
@@ -102,14 +127,10 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
     dispatch(getJobPost(perPage, pageNumber))
   }, [perPage, pageNumber])
 
-
-
-
-
-
-
-
   const onApproved=(id,isAp)=>{
+    if(status !== "active"){
+      return
+    }
     console.log("usertable ===",usertable);
     let data={
       isApproved:!isAp
@@ -121,8 +142,6 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
     .catch((err) => console.log("Error",err))
   }
   
-
-
   useEffect(() => {
     // if (apply) {
       setUsertable(getJobFilterData?.data?.data?.map(item => {
@@ -135,15 +154,16 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
           approved:(
             <>
               <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
-              <Switch checked={item.isApproved} ></Switch>
+              <Switch checked={item.isApproved} disabled = {status === "active" ? false : true} ></Switch>
               </div>
             </>
           ),
           // status: status,
           action: (
             <div className="table-actions">
-              <>
-                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+               {status === "active"?
+               <>
+               <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                   <FeatherIcon icon="edit" size={16} />
                 </Button>
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
@@ -152,7 +172,9 @@ const JobListTable = ({ state, type, jobRole, apply,clear,status }) => { // prop
                 <Button className="btn-icon" type="success" onClick={() =>viewJobdata(item.id) } shape="circle">
                       <FeatherIcon icon="eye" size={16} />
                 </Button>
-              </>
+                </>:<Button className="btn-icon" type="success" onClick={() =>onRestore(item.id) } shape="circle">
+                      <FeatherIcon icon="rotate-ccw" size={16} />
+                </Button>} 
             </div>
           ),
         });

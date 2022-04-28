@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs,Switch } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
@@ -46,7 +46,7 @@ const PartnerCourses = () => {
   }, [data])
 
   useEffect(() => {
-    return(()=>{
+    return (() => {
       // setState([])
       dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
     })
@@ -168,17 +168,46 @@ const PartnerCourses = () => {
     }
   };
 
-  const onApproved=(id,isAp,key)=>{
-    let data={
-      courseId:id,
-      key:key,
-      isApproved:!isAp
+  const onActive = (id) => { //for inactive toactive data
+    let activedata = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
+    let certification = activedata.certificate;
+    let categoryId = activedata.courseCategory.id;
+
+    if (activedata) {
+      delete activedata.id;
+      delete activedata.certificate;
+      delete activedata.jobTypes;
+      delete activedata.courseCategory;
+      delete activedata.viewCount;
+      delete activedata.isApproved;
+      delete activedata.createdAt;
+
+      activedata = {
+        ...activedata,
+        isActive: true,
+        isDeleted: false,
+        courseId: id,
+        categoryId: categoryId,
+        certification: certification,
+      };
+      dispatch(editPartnerCoursefilter(activedata));
     }
-    console.log("data",data);
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,data)
-    .then((res) => {
-      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
-    })
+  }
+
+  const onApproved = (id, isAp, key) => {
+    if(status !== "active"){
+      return
+    }
+    let data = {
+      courseId: id,
+      key: key,
+      isApproved: !isAp
+    }
+    console.log("data", data);
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+      .then((res) => {
+        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
+      })
   }
 
   useEffect(() => {
@@ -192,10 +221,10 @@ const PartnerCourses = () => {
             CourseCategory: item.courseCategory.name,
             //State: item.state,
             CourseType: item.mode,
-            approved:(
+            approved: (
               <>
-                <div onClick={()=>onApproved(item.id,item.isApproved,item.key)}>
-                <Switch checked={item.isApproved}></Switch>
+                <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+                  <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
                 </div>
               </>
             ),
@@ -203,14 +232,12 @@ const PartnerCourses = () => {
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
-                  <>
-                    {status === 'active' && (
+
+                  {status === 'active' ?
+                    <>
                       <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
                         <FeatherIcon icon="edit" size={16} />
                       </Button>
-                    )}
-
-                    {status === 'active' && (
                       <Button
                         className="btn-icon"
                         type="danger"
@@ -218,16 +245,21 @@ const PartnerCourses = () => {
                         to="#"
                         shape="circle"
                       >
-                      <FeatherIcon icon="trash-2" size={16} />
+                        <FeatherIcon icon="trash-2" size={16} />
                       </Button>
-                    )}
-                    <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
-                      <FeatherIcon icon="eye" size={16} />
+                      <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
+                        <FeatherIcon icon="eye" size={16} />
+                      </Button>
+                    </>
+                    :
+                    <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
+                      <FeatherIcon icon="rotate-ccw" size={16} />
                     </Button>
-                    {/* <Button className="btn-icon" type="info" to="#" shape="circle">
+                  }
+
+                  {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
                             </Button> */}
-                  </>
                 </div>
               </div>
             ),
@@ -241,8 +273,8 @@ const PartnerCourses = () => {
     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
   };
   useEffect(() => {
-    if(state.category){
-      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode? state.mode : "", status));
+    if (state.category) {
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
     }
   }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
 
@@ -270,8 +302,8 @@ const PartnerCourses = () => {
     //     sortDirections: ['descend', 'ascend'],
     // },
     {
-      title:'Approved',
-      dataIndex:'approved',
+      title: 'Approved',
+      dataIndex: 'approved',
     },
     {
       title: 'Actions',
@@ -300,7 +332,7 @@ const PartnerCourses = () => {
         title="Partner Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            <Button size="small" type="info" onClick={()=>{onePartnercourseData()}}>
+            <Button size="small" type="info" onClick={() => { onePartnercourseData() }}>
               Export Courses
             </Button>
             <CSVLink data={data} ref={CSVLinkRef} headers={header} filename="Partner.csv" style={{ opacity: 0 }}></CSVLink>
@@ -425,7 +457,8 @@ const PartnerCourses = () => {
                       <Table
                         // rowSelection={rowSelection}
                         dataSource={usertable}
-                        columns={usersTableColumns.filter(item => item.title !== 'Actions')}
+                        // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
+                        columns={usersTableColumns}
                         pagination={{
                           // defaultPageSize: 5,
                           // total: usersTableData.length,

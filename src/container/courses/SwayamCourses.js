@@ -37,8 +37,8 @@ const SwayamCourses = () => {
     category: '',
     mode: '',
   });
-  
-  const [perPage, setPerPage] = useState(5);
+
+  const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
@@ -153,6 +153,30 @@ const SwayamCourses = () => {
     }
   };
 
+  const onActive = (id) => {
+    const activeCourse = courseData.data.data.find(item => item.id === id);
+    console.log("activeCourse",activeCourse)
+    if (activeCourse) {
+      let dt = {
+        key: activeCourse.key,
+        courseId:activeCourse.id,
+        detail: activeCourse.detail,
+        thumbnail: activeCourse.thumbnail,
+        name: activeCourse.name,
+        categoryId: activeCourse.courseCategory.id,
+        duration: activeCourse.duration,
+        jobCategoryIds: activeCourse.jobTypes.map(item => item.id),
+        certification: activeCourse.certificate,
+        sequence: parseInt(activeCourse.sequence),
+        mode: activeCourse.mode,
+        isActive: true,
+        isDeleted: false,
+      };
+      console.log("dt",dt)
+      dispatch(editSwayamCourse(dt));
+    }
+  }
+
   const Submit = () => {
     dispatch(getCoursefilter(data.category ? data.category : "", perPage, pageNumber, data.mode ? data.mode : "", status));
   };
@@ -185,6 +209,9 @@ const SwayamCourses = () => {
   }
 
   const onApproved = (id, isAp, key) => {
+    if(status !== "active"){
+      return
+    }
     let data = {
       courseId: id,
       key: key,
@@ -210,8 +237,16 @@ const SwayamCourses = () => {
             Certification: item.certificate ? 'Yes' : 'No',
             approved: (
               <>
+              {/* {
+                status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+                <Switch checked={item.isApproved}></Switch>
+              </div> :
+               <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+               <Switch checked={false}></Switch>
+             </div>
+              } */}
                 <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved}></Switch>
+                  <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
                 </div>
               </>
             ),
@@ -222,21 +257,30 @@ const SwayamCourses = () => {
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
-                  <>
-                    <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
-                      <FeatherIcon icon="edit" size={16} />
-                    </Button>
 
-                    {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+                  {
+                    status === "active" ?
+                      <>
+                        <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
+                          <FeatherIcon icon="edit" size={16} />
+                        </Button>
+
+                        {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                       <FeatherIcon icon="x-circle" size={16} />
                     </Button> */}
-                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                      <FeatherIcon icon="trash-2" size={16} />
-                    </Button>
-                    <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
-                      <FeatherIcon icon="eye" size={16} />
-                    </Button>
-                  </>
+                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                          <FeatherIcon icon="trash-2" size={16} />
+                        </Button>
+                        <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
+                          <FeatherIcon icon="eye" size={16} />
+                        </Button>
+                      </>
+                      : <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
+                        <FeatherIcon icon="rotate-ccw" size={16} />
+                      </Button>
+                  }
+
+
                 </div>
               </div>
             ),

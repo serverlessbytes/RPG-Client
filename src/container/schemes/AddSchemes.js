@@ -18,7 +18,7 @@ const AddSchemes = () => {
 
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('key');
-
+    
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();

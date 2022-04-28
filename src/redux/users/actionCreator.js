@@ -52,7 +52,6 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
   }
 
   export const editProfile = (data) => async (dispatch) => {
-    console.log("datatat",data)
       let id = data.id
       delete data.id
       delete data.userType

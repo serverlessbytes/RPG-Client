@@ -14,11 +14,18 @@ const Adduser = () => {
     const {
         getOneUserSuccess, // foe edit
     } = actions;
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('id')
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
+
     useEffect(() => {
-        console.log("location", location.search.split('=')[1]);
+        console.log("location", location);
+    }, [])
+
+    useEffect(() => {
+        console.log("id", id);
     }, [])
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
@@ -226,7 +233,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="password">Password</label>
                             <Form.Item>
-                                <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="Password" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
                                 {error.password && <span style={{ color: "red" }}>{error.password}</span>}
                             </Form.Item>
                         </Col>
@@ -246,7 +253,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24}>
                             <label htmlFor="phone">Phone</label>
                             <Form.Item>
-                                <Input placeholder="Phone" value={state.phone} name="Phone" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
                                 {
                                     error.phone && <span style={{ color: "red" }}>{error.phone}</span>
                                 }
@@ -281,7 +288,7 @@ const Adduser = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                            Add
+                        {id?"Edit":"Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
                            // onClick={() => history.push(`/admin/user`)}

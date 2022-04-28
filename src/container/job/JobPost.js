@@ -39,9 +39,6 @@ const JobPost = ({ match }) => {
     //     console.log("jobRolesData", jobRolesData)
     // }, [jobRolesData])
 
-
-    
-
     const [stateJob, setStateJob] = useState([]) //set data for job 
     const [state, setState] = useState("")
     const [type, setType] = useState("")
@@ -60,10 +57,8 @@ const JobPost = ({ match }) => {
             setState({ ...jobRole, state: e })
         }
     }
-
     const callback = key => {
         setStatus(key);
-    
       };
 
     useEffect(() => {
@@ -175,7 +170,7 @@ const JobPost = ({ match }) => {
                             Export All Jobs
                         </Button>
                         <Button size="small" onClick={() => { history.push("new") }} type="primary">
-                            Add Post
+                            Add JobPost
                         </Button>
                         <CSVLink headers={header} data={stateJob} ref={CSVLinkRef} filename="Job.csv" style={{ opacity: 0 }}></CSVLink>
                     </div>

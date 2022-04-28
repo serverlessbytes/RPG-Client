@@ -286,7 +286,7 @@ const AddCourses = () => {
     };
     console.log('data', data);
     dispatch(editSwayamCourse(data));
-    // history.push('/admin/courses');
+    history.push('/admin/courses');
   };
 
   const addData = () => {
@@ -412,7 +412,7 @@ const AddCourses = () => {
 
   return (
     <>
-      <PageHeader ghost title="Add Scheme" />
+      <PageHeader ghost title="Add Swayam Courses" />
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>

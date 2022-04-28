@@ -33,6 +33,9 @@ const Schemes = () => {
   });
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
+  const [status, setStatus] = useState('active');
+  const [perPage, setPerPage] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
 
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
@@ -142,10 +145,37 @@ const Schemes = () => {
     }
   };
 
-
-  const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1);
+  const onRestore = (key) => {
+    let userForactive = users && users.data.find(item => item.key === key);
+    console.log("userForactive",userForactive)
+       let data = {
+        id:userForactive.id,
+        sequence:userForactive.sequence ,
+        name: userForactive.name,
+        schemeCategory:userForactive.schemeCategory.id,
+        schemeBenifit:userForactive.schemeBenifit.id,
+        benifitLine: userForactive.benifitLine,
+        benificiary: userForactive.benificiary,
+        locations:userForactive.locations,
+        detail: userForactive.detail,
+        howToApply: userForactive.howToApply,
+        documentation: userForactive.documentation,
+        thumbnail:userForactive.thumbnail,
+        videoUrl: userForactive.videoUrl,
+        website:userForactive.website,
+        type: userForactive.type,
+        elink: userForactive.elink,
+        grievanceRedress: userForactive.grievanceRedress,
+        spoc: userForactive.spoc,
+        isActive: true,
+        isDeleted: false,
+        isPublished: true,
+        isApproved: true,
+        //key:key,
+       }
+       console.log("data",data)
+       dispatch(editSchemeData(data));
+  }
   const { Option } = Select;
   const usersTableData = [];
 
@@ -156,7 +186,6 @@ const Schemes = () => {
 
   const callback = key => {
     setStatus(key);
-
   };
 
   const viewSchemesdata = (key) => {
@@ -175,6 +204,9 @@ const Schemes = () => {
   }
 
   const onApproved=(id,isAp)=>{
+    if(status !== "active"){
+      return
+    }
     let data={
       id:id,
       isApproved:!isAp
@@ -198,15 +230,18 @@ const Schemes = () => {
         approved:(
           <>
             <div onClick={()=>onApproved(item.id,item.isApproved)}>
-            <Switch checked={item.isApproved} ></Switch>
+            <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
             </div>
           </>
         ),
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
-              <>
-                <Button
+              
+              {
+                status === "active" ?
+                <>
+                  <Button
                   className="btn-icon"
                   onClick={() => reDirectSchemes(item.key)}
                   type="info"
@@ -227,12 +262,23 @@ const Schemes = () => {
                 <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
                   <FeatherIcon icon="eye" size={16} />
                 </Button>
+                </>:  <Button
+                  className="btn-icon"
+                  type="warning"
+                  to="#"
+                  onClick={() => onRestore(item.key)}
+                  shape="circle"
+                >
+                   <FeatherIcon icon="rotate-ccw" size={16} />
+                </Button>
+              }
                 {status === '' && (
                   <Button className="btn-icon" type="success" to="#" shape="circle">
                     <FeatherIcon icon="star" size={16} />
                   </Button>
                 )}
-              </>
+                
+              
             </div>
           </div>
         ),
@@ -422,7 +468,8 @@ const Schemes = () => {
                       <Table
                         // rowSelection={rowSelection}
                         dataSource={usersTableData}
-                        columns={usersTableColumns.filter(item => item.title !== 'Actions')}
+                        // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
+                        columns={usersTableColumns}
                         pagination={{
                           defaultPageSize: users?.per_page,
                           total: users?.page_count,
