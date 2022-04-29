@@ -498,11 +498,14 @@ const Div = Styled.div`
         }
         &.ant-layout-sider-collapsed{
             padding: 15px 0px 55px !important;
+            min-width:0px !important;
+            max-width:0px !important;
+            width:0px !important;
             .sidebar-nav-title{
                 display: none;
             }
             & + .atbd-main-layout{
-                ${({ theme }) => (!theme.rtl ? 'margin-left' : 'margin-right')}: 80px;
+                ${({ theme }) => (!theme.rtl ? 'margin-left' : 'margin-right')}: 0px;
             }
             .ant-menu-item{
                 color: #333;

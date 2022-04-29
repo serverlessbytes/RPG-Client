@@ -227,9 +227,9 @@ const ThemeLayout = WrappedComponent => {
                   />}
                 </Col> */}
 
-                <Col lg={18}>
-                  <Row style={{justifyContent:"flex-end", alignItems: "center"}}>
-                    <Col lg={2} md={10} sm={0} xs={0}>
+                <Col lg={18} md={18}>
+                  <Row style={{justifyContent:"flex-end", alignItems: "center", display:`${window.innerWidth < 768 ? "none" : "flex" }`}}>
+                    <Col xxl={2} xl={3} lg={3} md={4}>
                       <Form.Item name="languageId" className='language py-16 mb-0'>
                         <Select defaultValue={this.state.lang} placeholder="Language" size="small" onChange={(e) => handleChange(e)} className="sDash_fullwidth-select" >
                           {this.state.langData && this.state.langData.map((items) => (
@@ -238,7 +238,7 @@ const ThemeLayout = WrappedComponent => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col lg={1} md={1} sm={0} xs={0}>
+                    <Col xxl={1} xl={2} lg={2} md={3}>
                       {topMenu && window.innerWidth > 991 ? (
                         <TopMenuSearch>
                           <div className="top-right-wrap d-flex">
