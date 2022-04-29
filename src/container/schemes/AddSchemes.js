@@ -52,6 +52,11 @@ const AddSchemes = () => {
     });
     const [error, setError] = useState({})
 
+    const scheme = useSelector((state) => state.scheme.schemecatogeryData)
+    const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
+    const State = useSelector((state) => state.scheme.addState)
+    const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
+
     useEffect(() => {
         dispatch(getSchemecategory());
         dispatch(getSchemeBenifits());
@@ -62,11 +67,6 @@ const AddSchemes = () => {
             dispatch(getOneSchemeData(id))
         }
     }, [id])
-
-    const scheme = useSelector((state) => state.scheme.schemecatogeryData)
-    const SchemeBenifits = useSelector((state) => state.scheme.schemeBenefitData)
-    const State = useSelector((state) => state.scheme.addState)
-    const getOneScHemeData = useSelector((state) => state.scheme.getOneSchemeData)
 
     useEffect(() => {
         if (getOneScHemeData && id) {

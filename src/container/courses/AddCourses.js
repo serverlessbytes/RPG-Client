@@ -348,6 +348,8 @@ const AddCourses = () => {
         };
       });
     dispatch(addSwayamCourseModule(newData));
+    history.push('/admin/courses')
+
   };
 
   const onModuleEdit = () => {
@@ -373,7 +375,7 @@ const AddCourses = () => {
 
   const onRemoveData = () => {
     console.log("selectKey ===",selectKey);
-    if (moduleState.length > 1) {
+    // if (moduleState.length > 1) {
       if (id) {
         const data = moduleState[selectKey];
         const deleteData = {
@@ -398,7 +400,7 @@ const AddCourses = () => {
       setSelectKey(val.length - 1);
       setModuleState(val);
       // }
-    }
+    // }
   };
 
   const { TabPane } = Tabs;
@@ -605,7 +607,7 @@ const AddCourses = () => {
                   </Button>
                 ) : (
                   <Button className="btn-signin ml-10" onClick={() => onSubmit()} type="primary" size="medium">
-                    Submit
+                    Add
                   </Button>
                 )}
                 <Button

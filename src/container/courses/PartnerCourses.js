@@ -22,6 +22,7 @@ const PartnerCourses = () => {
   } = actions;
 
   const courseData = useSelector(state => state.category.courseFilterData);
+  useEffect(()=>{console.log("courseData",courseData)},[courseData])
   const { Option } = Select;
   const history = useHistory();
   let dispatch = useDispatch();
@@ -37,6 +38,13 @@ const PartnerCourses = () => {
   const [data, setData] = useState([]);
   const [usertable, setUsertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
+  const [perPage, setPerPage] = useState(5);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [status, setStatus] = useState('active');
+
+  const catdata = useSelector(state => state.category.categoryData);
+  const allCategortData = useSelector(state => state.category.getAllCourse); //export
+  const onePartnerCourseData = useSelector(state => state.category.editFilterData)
 
   useEffect(() => {
     if (data.length) {
@@ -51,10 +59,6 @@ const PartnerCourses = () => {
       dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
     })
   }, [])
-
-  let catdata = useSelector(state => state.category.categoryData);
-  const allCategortData = useSelector(state => state.category.getAllCourse); //export
-  const onePartnerCourseData = useSelector(state => state.category.editFilterData)
 
   const header = [
     { label: "id", key: "id" },
@@ -114,16 +118,6 @@ const PartnerCourses = () => {
   }, [state]);
 
   const usersTableData = [];
-
-  // const { users } = useSelector(state => {
-  //     return {
-  //         users: state.users,
-  //     };
-  // });
-
-  const [perPage, setPerPage] = useState(5);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [status, setStatus] = useState('active');
 
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
@@ -276,7 +270,8 @@ const PartnerCourses = () => {
     if (state.category) {
       dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
     }
-  }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
+    //dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status))
+  }, [state.category, perPage, pageNumber, state.mode, status]); //paganation 
 
   const usersTableColumns = [
     {
@@ -316,6 +311,7 @@ const PartnerCourses = () => {
 
   const callback = key => {
     setStatus(key);
+    setPageNumber(1)
     console.log(key);
   };
 

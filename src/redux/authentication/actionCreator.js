@@ -35,7 +35,8 @@ const {
 const login = (body,keepSignIn) => async (dispatch) => {
   await ApiPostNoAuth("user/auth/login", body)
     .then((res) => {
-      if (res.message === "user logged") {
+      console.log("res  === ",res);
+      if (res.message === "user logged"){
         if(keepSignIn) {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data, true)
         } else {

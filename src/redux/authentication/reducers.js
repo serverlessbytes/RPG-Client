@@ -10,6 +10,7 @@ EDIT_PROFILE_ERR,
 
 const initState = {
   login: Cookies.get('logedIn'),
+  //login:null,
   loading: false,
   error: null,
   signup:null,

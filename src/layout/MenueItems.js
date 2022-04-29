@@ -52,7 +52,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       <SubMenu key="job" title="Jobs">
         <Menu.Item key="dashboard">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/dashboard`}>
-            Jobs Dashboards
+            Jobs Dashboard
           </NavLink>
         </Menu.Item>
         <Menu.Item key="post">

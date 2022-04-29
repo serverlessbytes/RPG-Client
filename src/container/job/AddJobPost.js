@@ -724,7 +724,7 @@ const AddJobPost = () => {
                             {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                    Submit
+                                    Add
                                 </Button>
                             }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,9 @@ import { AuthWrapper } from './style';
 import { login } from '../../../../redux/authentication/actionCreator';
 import { Checkbox } from '../../../../components/checkbox/checkbox';
 import Heading from '../../../../components/heading/heading';
+import { TestimonialStyleWrapper } from '../../../pages/style';
+import { toast } from 'react-toastify';
+import AuthStorage from '../../../../helper/AuthStorage';
 
 const SignIn = () => {
   const history = useHistory();
@@ -17,8 +20,6 @@ const SignIn = () => {
   const [state, setState] = useState({
     checked: false,
   });
-
-
 
   const handleSubmit = () => {
     console.log("form ==== form", form.getFieldsValue());

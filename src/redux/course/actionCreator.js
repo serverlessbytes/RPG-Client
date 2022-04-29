@@ -54,10 +54,11 @@ export const addPartnerCourse = (body) => async (dispatch) => {
     })
 }
 export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => async (dispatch) => {
+  //console.log("categoryId",categoryId)
   category = categoryId;
   per_page = perPage;
   page_number = pageNumber;
-  Mode=mode;
+  Mode = mode;
   Inactive = inactive;
 
   let URL = `course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${inactive}`
@@ -76,7 +77,8 @@ export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => 
 export const getOneCoursefilter = (id) => async (dispatch) => {
   await ApiGet(`course/getCourse/${id}?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-      return dispatch(editCoursefilterSuccess(res))
+      return 
+      (editCoursefilterSuccess(res))
     })
 }
 
