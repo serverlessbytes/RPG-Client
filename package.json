@@ -64,7 +64,7 @@
     "swiper": "^7.4.1",
     "xlsx": "^0.17.4"
   },
-  "homepage":"http://cpanel.digiprojer.in/",
+  "homepage": "http://cpanel.digiprojer.in/",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired --max-old-space-size=4096 build",
