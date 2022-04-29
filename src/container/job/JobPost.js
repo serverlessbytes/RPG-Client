@@ -162,7 +162,6 @@ const JobPost = ({ match }) => {
                 title="Job"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        
                         <Button size="small" onClick={() => onExportJobs()} type="info">
                             Export Jobs
                         </Button>
@@ -181,7 +180,7 @@ const JobPost = ({ match }) => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Row gutter={30}>
-                                <Col md={6} xs={24} className="mb-25">
+                                <Col md={6} xs={24} className="mb-mb-25">
                                     <Form  layout="vertical">
                                         <Form.Item label="Type">
                                             <Select size="large" value={type.type} className="sDash_fullwidth-select" name="type" placeholder="Select Type" onChange={(e) => onChangevalue(e, "type")}>
@@ -192,7 +191,7 @@ const JobPost = ({ match }) => {
                                         </Form.Item>
                                     </Form>
                                 </Col>
-                                <Col md={6} xs={24} className="mb-25">
+                                <Col md={6} xs={24} className="mb-md-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item  label="State">
                                             {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
@@ -214,7 +213,7 @@ const JobPost = ({ match }) => {
                                         </Form.Item>
                                     </Form>
                                 </Col>
-                                <Col md={6} xs={24} className="mb-25">
+                                <Col md={6} xs={24} className="mb-md-25">
                                     <Form  layout="vertical">
                                         <Form.Item  label="Job Role">
                                             <Select size="large" value={jobRole.jobRole} className="sDash_fullwidth-select" name="jobRole" placeholder="Select Job Role" onChange={(e) => onChangevalue(e, "jobRole")}>

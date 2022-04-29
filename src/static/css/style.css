@@ -1557,21 +1557,14 @@ html[dir='rtl'] .sDash_upload-basic .sDash_upload-browse{
   padding: 16px 25px;
 }
 
-.table-bordered .ant-table-thead tr th:last-child,
-.table-bordered .ant-table-tbody tr td:last-child {
-  text-align: right;
-}
-.table-bordered .ant-table-thead tr th:first-child,
-.table-bordered .ant-table-tbody tr td:first-child {
-  text-align: right;
-}
 table thead tr th:first-child {
   text-align: left !important;
 }
 
-.cjkinL table tbody tr td:last-child{
+.ant-table-row .ant-table-cell{
   text-align: left !important;
 }
+
 
 /* Full Width Table */
 

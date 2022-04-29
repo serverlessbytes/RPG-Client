@@ -133,7 +133,7 @@ const district = () => {
 
                     <Row gutter={30}>
 
-                        <Col md={6} xs={24} className="mb-25">
+                        <Col md={6} xs={24} className="mb-md-25">
                             <Form name="sDash_select" layout="vertical">
                                 <Form.Item  label="State" >
                                     <Select
