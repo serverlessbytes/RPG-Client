@@ -107,6 +107,7 @@ export const getSchemeData = (perPage, pageNumber, status, schemeBenifit, scheme
     apiData = ApiGet(`scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`)
   }
   apiData.then((res) => {
+    //console.log("res====",res)
     return dispatch(getSchemeSuccess(res.data))
   })
     .catch((err) => dispatch(getSchemenErr(err)))

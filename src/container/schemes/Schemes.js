@@ -25,7 +25,9 @@ const Schemes = () => {
   let history = useHistory();
   let dispatch = useDispatch();
   const CSVLinkRef = useRef(null)
-  const users = useSelector(state => state.scheme.getAllSchemeData);
+  const { Option } = Select;
+  const usersTableData = [];
+
 
   const [schemeCategory, setSchemeCategory] = useState({
     category: '',
@@ -37,7 +39,8 @@ const Schemes = () => {
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
-
+  
+  const users = useSelector(state => state.scheme.getAllSchemeData);
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
@@ -176,8 +179,6 @@ const Schemes = () => {
        console.log("data",data)
        dispatch(editSchemeData(data));
   }
-  const { Option } = Select;
-  const usersTableData = [];
 
   useEffect(() => {
     dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
@@ -186,11 +187,11 @@ const Schemes = () => {
 
   const callback = key => {
     setStatus(key);
+    setPageNumber(1)
   };
 
   const viewSchemesdata = (key) => {
     dispatch(getOneSchemeData(key))
-
     setViewModal(true)
   }
 

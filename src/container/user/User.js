@@ -23,22 +23,25 @@ const User = () => {
     let history = useHistory();
     let dispatch = useDispatch();
     const CSVLinkRef = useRef(null)
+    const { Option } = Select;
+    const usersTableData = [];
 
     const [usertable, setUsertable] = useState([]) //set data
     const [state, setState] = useState([]) //set data for export
     const [state2, setState2] = useState([]) //set data
-
-    const getAllUsers = useSelector((state) => state.users.getAllUser)
-    let alluser = useSelector((state) => state.users.allUser)
-
     const [status, setStatus] = useState("active")
-    const callback = (key) => {
-        setStatus(key)
-    }
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(5)
     const [pageNumber, setPageNumber] = useState(1)
     const [userType, setUserType] = useState("")
 
+    const getAllUsers = useSelector((state) => state.users.getAllUser)
+    let alluser = useSelector((state) => state.users.allUser)
+ 
+    const callback = (key) => {
+        setStatus(key)
+        setPageNumber(1)
+    }
+  
     useEffect(() => {
         console.log("userType", userType)
     }, [userType])
@@ -128,9 +131,6 @@ const User = () => {
          dispatch(editProfile(data))
     }
     const { TabPane } = Tabs;
-
-    const { Option } = Select;
-    const usersTableData = [];
 
     useEffect(() => {
         if (getAllUsers && getAllUsers.data) {
@@ -316,7 +316,7 @@ const User = () => {
                                                 dataSource={usertable}
                                                 columns={usersTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
+                                                    defaultPageSize: getAllUsers?.data.per_page,
                                                     total: getAllUsers?.data.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
@@ -344,8 +344,8 @@ const User = () => {
                                                 // columns={usersTableColumns.filter(item => item.title !== "Actions")}
                                                 columns={usersTableColumns} 
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
-                                                    total: getAllUsers?.data.data.page_count,
+                                                    defaultPageSize: getAllUsers?.data.per_page,
+                                                    total: getAllUsers?.data.page_count,
                                                     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);

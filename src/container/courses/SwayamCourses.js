@@ -33,11 +33,10 @@ const SwayamCourses = () => {
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
 
-  const [data, setData] = useState({
+  const [data,setData] = useState({
     category: '',
     mode: '',
   });
-
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
@@ -98,15 +97,18 @@ const SwayamCourses = () => {
     dispatch(getCategoryData());
   }, []);
 
-  useEffect(() => {
-    if (categoryData && categoryData.data && categoryData.data.length > 0) {
-      setData({ ...data, category: categoryData.data[0].id });
-    }
-  }, [categoryData]);
+  // useEffect(() => {
+  //   if (categoryData && categoryData.data && categoryData.data.length > 0) {
+  //     setData({ ...data, category: categoryData.data[0].id });
+  //   }
+  // }, [categoryData]);
 
   useEffect(() => {
     if (status && data.category) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    }
+    else{
+      Submit()
     }
   }, [status, perPage, pageNumber]);
 
@@ -178,6 +180,8 @@ const SwayamCourses = () => {
   }
 
   const Submit = () => {
+    console.log("category",data.category)
+    console.log("status",status)
     dispatch(getCoursefilter(data.category ? data.category : "", perPage, pageNumber, data.mode ? data.mode : "", status));
   };
 
