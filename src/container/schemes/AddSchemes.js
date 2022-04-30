@@ -360,7 +360,7 @@ const AddSchemes = () => {
                                 </Space>
                             </Radio.Group>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Scheme Name</label>
                             <Form.Item>
                                 <Input placeholder="Scheme Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
@@ -372,7 +372,7 @@ const AddSchemes = () => {
 
                         {/* </Row>
                     <Row justify="space-between"> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="category mb-4">Scheme Category</label>
                             <Form.Item initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" value={state.schemeCategory} className="sDash_fullwidth-select" name="schemeCategory" onChange={(e) => selectValue(e, "schemeCategory")}>
@@ -386,7 +386,7 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="Benefits">Type of Benefits</label>
                             <Form.Item initialValue="Type of Benefits">
                                 <Select size="large" placeholder="Select Benefits" value={state.schemeBenifit} className="sDash_fullwidth-select" name="schemeBenifit" onChange={(e) => selectValue(e, "schemeBenifit")}>
@@ -398,7 +398,7 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Senquence</label>
                             <Form.Item>
                                 <Input type="number" placeholder="Senquence" value={state.sequence} name="sequence" onChange={(e) => onChangeValue(e)} />
@@ -446,7 +446,7 @@ const AddSchemes = () => {
                     </div>
 
                     <Row justify="space-between">
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="Location">Location</label>
                             <Form.Item initialValue="Select a location">
                                 <Select size="large" className="sDash_fullwidth-select" value={state.locations} name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
@@ -461,7 +461,7 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="Website">Website</label>
                             <Form.Item >
                                 <Input placeholder="Website" value={state.website} name="website" onChange={(e) => onChangeValue(e)} />
@@ -469,9 +469,9 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
 
-                    </Row>
-                    <Row justify="space-between">
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                    {/* </Row>
+                    <Row justify="space-between"> */}
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="Category">Type</label>
                             <Form.Item  >
                                 <Select size="large" placeholder="Select Type" className="sDash_fullwidth-select" value={state.type} name="type" onChange={(e) => selectValue(e, "type")}>
@@ -482,38 +482,38 @@ const AddSchemes = () => {
                                 {error.type && <span style={{ color: "red" }}>{error.type}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
                             <Form.Item  >
                                 <Input placeholder="Grievance Redress" value={state.grievanceRedress} name="grievanceRedress" onChange={(e) => onChangeValue(e)} />
                                 {error.grievanceRedress && <span style={{ color: "red" }}>{error.grievanceRedress}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="E-Link">E Link</label>
                             <Form.Item>
                                 <Input placeholder="E Link" name='elink' value={state.elink} onChange={(e) => onChangeValue(e)} />
                                 {error.elink && <span style={{ color: "red" }}>{error.elink}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="SPOC">SPOC</label>
                             <Form.Item>
                                 <Input placeholder="SPOC" name='spoc' value={state.spoc} onChange={(e) => onChangeValue(e)} />
                                 {error.spoc && <span style={{ color: "red" }}>{error.spoc}</span>}
                             </Form.Item>
                         </Col>
-                    </Row>
+                    {/* </Row>
 
-                    <Row justify="space-between">
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                    <Row justify="space-between"> */}
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                         <label htmlFor="videoUrl">VideoUrl</label>
                             <Form.Item >
                                 <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={(e) => onChangeValue(e)} />
                                 {error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="thumbnail">ThumbNail</label>
                             <Form.Item >
                                 <Input placeholder="ThumbNail" value={state.thumbnail} name="thumbnail" onChange={(e) => onChangeValue(e)} />

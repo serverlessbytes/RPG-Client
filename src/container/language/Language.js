@@ -3,7 +3,7 @@ import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Modal } from '../../components/modals/antd-modals';
-import { Form, Input, Table } from 'antd';
+import { Form, Input, Pagination, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLanguageData, postLanguageData } from '../../redux/language/actionCreator';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
@@ -95,6 +95,18 @@ const Language = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
+                    <ProjectPagination>
+
+                        <Pagination
+                            onChange={() => { }}
+                            showSizeChanger
+                            onShowSizeChange={() => { }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={10}
+                        />
+
+                    </ProjectPagination>
                 </Cards>
             </Main>
 

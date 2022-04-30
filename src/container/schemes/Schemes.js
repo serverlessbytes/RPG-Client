@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs,Switch } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
 
 const Schemes = () => {
-  const {getAllSchemesSuccess} = actions;
+  const { getAllSchemesSuccess } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -67,7 +67,7 @@ const Schemes = () => {
   }, []);
 
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -100,7 +100,7 @@ const Schemes = () => {
       setState(allschemeData.data.data.map((item) => {
         return {
           ...item,
-          locations: item?.locations?.map(item=>item.name),
+          locations: item?.locations?.map(item => item.name),
           schemeBenifit: item?.schemeBenifit?.name,
           schemeCategory: item?.schemeCategory?.name,
           benifitLine: item.benifitLine,
@@ -150,34 +150,34 @@ const Schemes = () => {
 
   const onRestore = (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
-    console.log("userForactive",userForactive)
-       let data = {
-        id:userForactive.id,
-        sequence:userForactive.sequence ,
-        name: userForactive.name,
-        schemeCategory:userForactive.schemeCategory.id,
-        schemeBenifit:userForactive.schemeBenifit.id,
-        benifitLine: userForactive.benifitLine,
-        benificiary: userForactive.benificiary,
-        locations:userForactive.locations,
-        detail: userForactive.detail,
-        howToApply: userForactive.howToApply,
-        documentation: userForactive.documentation,
-        thumbnail:userForactive.thumbnail,
-        videoUrl: userForactive.videoUrl,
-        website:userForactive.website,
-        type: userForactive.type,
-        elink: userForactive.elink,
-        grievanceRedress: userForactive.grievanceRedress,
-        spoc: userForactive.spoc,
-        isActive: true,
-        isDeleted: false,
-        isPublished: true,
-        isApproved: true,
-        //key:key,
-       }
-       console.log("data",data)
-       dispatch(editSchemeData(data));
+    console.log("userForactive", userForactive)
+    let data = {
+      id: userForactive.id,
+      sequence: userForactive.sequence,
+      name: userForactive.name,
+      schemeCategory: userForactive.schemeCategory.id,
+      schemeBenifit: userForactive.schemeBenifit.id,
+      benifitLine: userForactive.benifitLine,
+      benificiary: userForactive.benificiary,
+      locations: userForactive.locations,
+      detail: userForactive.detail,
+      howToApply: userForactive.howToApply,
+      documentation: userForactive.documentation,
+      thumbnail: userForactive.thumbnail,
+      videoUrl: userForactive.videoUrl,
+      website: userForactive.website,
+      type: userForactive.type,
+      elink: userForactive.elink,
+      grievanceRedress: userForactive.grievanceRedress,
+      spoc: userForactive.spoc,
+      isActive: true,
+      isDeleted: false,
+      isPublished: true,
+      isApproved: true,
+      //key:key,
+    }
+    console.log("data", data)
+    dispatch(editSchemeData(data));
   }
 
   useEffect(() => {
@@ -204,19 +204,19 @@ const Schemes = () => {
     dispatch(getSchemeData(perPage, pageNumber, status));
   }
 
-  const onApproved=(id,isAp)=>{
-    if(status !== "active"){
+  const onApproved = (id, isAp) => {
+    if (status !== "active") {
       return
     }
-    let data={
-      id:id,
-      isApproved:!isAp
+    let data = {
+      id: id,
+      isApproved: !isAp
     }
-    ApiPost(`scheme/updateIsApproved`,data)
-    .then((res) => {
-      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
-    })
-    .catch((err) => console.log("Error",err))
+    ApiPost(`scheme/updateIsApproved`, data)
+      .then((res) => {
+        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+      })
+      .catch((err) => console.log("Error", err))
   }
 
   users &&
@@ -228,58 +228,58 @@ const Schemes = () => {
         TargetBeneficiary: item.benificiary,
         Website: item.website,
         LastUpdated: moment(item.updatedAt).format('DD-MM-YYYY'),
-        approved:(
+        approved: (
           <>
-            <div onClick={()=>onApproved(item.id,item.isApproved)}>
-            <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
+            <div onClick={() => onApproved(item.id, item.isApproved)}>
+              <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
             </div>
           </>
         ),
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
-              
+
               {
                 status === "active" ?
-                <>
-                  <Button
-                  className="btn-icon"
-                  onClick={() => reDirectSchemes(item.key)}
-                  type="info"
-                  to="#"
-                  shape="circle"
-                >
-                  <FeatherIcon icon="edit" size={16} />
-                </Button>
-                <Button
-                  className="btn-icon"
-                  type="warning"
-                  to="#"
-                  onClick={() => deleteSchemes(item.key)}
-                  shape="circle"
-                >
-                   <FeatherIcon icon="trash-2" size={16} />
-                </Button>
-                <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
-                  <FeatherIcon icon="eye" size={16} />
-                </Button>
-                </>:  <Button
-                  className="btn-icon"
-                  type="warning"
-                  to="#"
-                  onClick={() => onRestore(item.key)}
-                  shape="circle"
-                >
-                   <FeatherIcon icon="rotate-ccw" size={16} />
-                </Button>
-              }
-                {status === '' && (
-                  <Button className="btn-icon" type="success" to="#" shape="circle">
-                    <FeatherIcon icon="star" size={16} />
+                  <>
+                    <Button
+                      className="btn-icon"
+                      onClick={() => reDirectSchemes(item.key)}
+                      type="info"
+                      to="#"
+                      shape="circle"
+                    >
+                      <FeatherIcon icon="edit" size={16} />
+                    </Button>
+                    <Button
+                      className="btn-icon"
+                      type="warning"
+                      to="#"
+                      onClick={() => deleteSchemes(item.key)}
+                      shape="circle"
+                    >
+                      <FeatherIcon icon="trash-2" size={16} />
+                    </Button>
+                    <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
+                      <FeatherIcon icon="eye" size={16} />
+                    </Button>
+                  </> : <Button
+                    className="btn-icon"
+                    type="warning"
+                    to="#"
+                    onClick={() => onRestore(item.key)}
+                    shape="circle"
+                  >
+                    <FeatherIcon icon="rotate-ccw" size={16} />
                   </Button>
-                )}
-                
-              
+              }
+              {status === '' && (
+                <Button className="btn-icon" type="success" to="#" shape="circle">
+                  <FeatherIcon icon="star" size={16} />
+                </Button>
+              )}
+
+
             </div>
           </div>
         ),
@@ -287,7 +287,7 @@ const Schemes = () => {
     });
 
   const usersTableColumns = [
-   
+
     {
       title: 'Scheme Name',
       dataIndex: 'SchemeName',
@@ -311,8 +311,8 @@ const Schemes = () => {
       dataIndex: 'LastUpdated',
     },
     {
-      title:'Approved',
-      dataIndex:'approved',
+      title: 'Approved',
+      dataIndex: 'approved',
     },
     {
       title: 'Actions',
@@ -338,7 +338,7 @@ const Schemes = () => {
             <Button size="small" onClick={() => onExportschemes()} type="info">
               Export Schemes
             </Button>
-            <Button  size="small" type="info">
+            <Button size="small" type="info">
               Export All Scheme
             </Button>
             <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
@@ -361,8 +361,8 @@ const Schemes = () => {
             <Col xs={24}>
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
-                  <Form  layout="vertical">
-                    <Form.Item  label="Scheme Category">
+                  <Form layout="vertical">
+                    <Form.Item label="Scheme Category">
                       <Select
                         size="large"
                         className="sDash_fullwidth-select"
@@ -433,7 +433,7 @@ const Schemes = () => {
               <Tabs onChange={callback}>
                 <TabPane tab="Active Schemes" key="active">
                   <UserTableStyleWrapper>
-                    <TableWrapper className="table-responsive">
+                    <TableWrapper className="table-responsive pb-30">
                       <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
@@ -444,18 +444,20 @@ const Schemes = () => {
                         // rowSelection={rowSelection}
                         dataSource={usersTableData}
                         columns={usersTableColumns}
-                        pagination={{
-                          defaultPageSize: users?.per_page,
-                          total: users?.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                          onChange: (page, pageSize) => {
-                            setPageNumber(page);
-                            setPerPage(pageSize);
-                          },
-                        }}
+                        pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
+                  <ProjectPagination>
+                    <Pagination
+                      onChange={() => { }}
+                      showSizeChanger
+                      onShowSizeChange={() => { }}
+                      pageSize={10}
+                      defaultCurrent={1}
+                      total={10}
+                    />
+                  </ProjectPagination>
                 </TabPane>
                 <TabPane tab="Inactive Schemes" key="inactive">
                   <UserTableStyleWrapper>

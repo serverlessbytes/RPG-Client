@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Form, Row, Select, Switch, Table } from 'antd';
+import { Col, Form, Pagination, Row, Select, Switch, Table } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
-import { ListButtonSizeWrapper, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, ProjectPagination, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
 import { editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost, jobApproved } from '../../redux/jobs/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router';
@@ -271,7 +271,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
   return (
     <>
       <UserTableStyleWrapper>
-        <TableWrapper className="table-responsive">
+        <TableWrapper className="table-responsive pb-30">
           <Table
             rowSelection={rowSelection}
             dataSource={usertable}

@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination } from 'antd';
 import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
@@ -419,7 +419,7 @@ const SwayamCourses = () => {
               <Tabs onChange={callback}>
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
-                    <TableWrapper className="table-responsive">
+                    <TableWrapper className="table-responsive pb-30">
                       <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
@@ -435,22 +435,21 @@ const SwayamCourses = () => {
                         //   total: usersTableData.length,
                         //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         // }}
-                        pagination={{
-                          defaultPageSize: courseData?.data.per_page,
-                          total: courseData?.data.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                          onChange: (page, pageSize) => {
-                            setPageNumber(page);
-                            setPerPage(pageSize)
-                          }
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                        }}
+                        pagination={false}
 
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
+                  <ProjectPagination>
+                    <Pagination
+                      onChange={() => { }}
+                      showSizeChanger
+                      onShowSizeChange={() => { }}
+                      pageSize={10}
+                      defaultCurrent={1}
+                      total={10}
+                    />
+                  </ProjectPagination>
                 </TabPane>
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
@@ -470,21 +469,20 @@ const SwayamCourses = () => {
                         //   total: usersTableData.length,
                         //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         // }}
-                        pagination={{
-                          defaultPageSize: courseData?.data.per_page,
-                          total: courseData?.data.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                          onChange: (page, pageSize) => {
-                            setPageNumber(page);
-                            setPerPage(pageSize)
-                          }
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                        }}
+                        pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
+                  <ProjectPagination>
+                    <Pagination
+                      onChange={() => { }}
+                      showSizeChanger
+                      onShowSizeChange={() => { }}
+                      pageSize={10}
+                      defaultCurrent={1}
+                      total={10}
+                    />
+                  </ProjectPagination>
                 </TabPane>
               </Tabs>
             </Col>

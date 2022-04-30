@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
-import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Modal, Pagination, Row, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
-import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
@@ -16,7 +16,7 @@ import { getDistrictData, postDistrictData } from '../../redux/district/actionCr
 const district = () => {
     const dispatch = useDispatch()
 
-    
+
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
 
@@ -45,7 +45,7 @@ const district = () => {
     useEffect(() => {
         if (stateData && stateData.data) {
             setStateData(stateData?.data[0]?.id)
-            console.log("stateData",stateData?.data[0]?.id)
+            console.log("stateData", stateData?.data[0]?.id)
 
         }
     }, [stateData]);
@@ -54,7 +54,7 @@ const district = () => {
 
     //const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
-  
+
 
     useEffect(() => {
         if (diStrict && diStrict.data) {
@@ -135,7 +135,7 @@ const district = () => {
 
                         <Col md={6} xs={24} className="mb-md-25">
                             <Form name="sDash_select" layout="vertical">
-                                <Form.Item  label="State" >
+                                <Form.Item label="State" >
                                     <Select
                                         size="large"
                                         className="sDash_fullwidth-select"
@@ -179,6 +179,18 @@ const district = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
+                    <ProjectPagination>
+
+                        <Pagination
+                            onChange={() => { }}
+                            showSizeChanger
+                            onShowSizeChange={() => { }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={10}
+                        />
+
+                    </ProjectPagination>
                 </Cards>
             </Main>
             <Modal title="Enter District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>

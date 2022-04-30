@@ -193,7 +193,7 @@ const Adduser = () => {
                                 </Space>
                             </Radio.Group>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item>
                                 <Input placeholder="User Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
@@ -205,7 +205,7 @@ const Adduser = () => {
 
                         {/* </Row>
                     <Row justify="space-between"> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="category mb-4">User Type</label>
                             <Form.Item initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" value={state.userType} className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
@@ -221,7 +221,7 @@ const Adduser = () => {
                                 }
                             </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="email">Email</label>
                             <Form.Item>
                                 <Input placeholder="Email" value={state.email} name="email" onChange={(e) => onChangeValue(e)} />
@@ -230,7 +230,7 @@ const Adduser = () => {
                                 }
                             </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="password">Password</label>
                             <Form.Item>
                                 <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
@@ -250,7 +250,7 @@ const Adduser = () => {
                                 </Space>
                             </Radio.Group>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Phone</label>
                             <Form.Item>
                                 <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
@@ -270,7 +270,7 @@ const Adduser = () => {
                             </Form.Item>
                         </Col> */}
 
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Avatar</label>
                             <Form.Item>
                                 <Input placeholder="Avatar" name="avatar" onChange={(e) => onChangeValue(e)} />

@@ -2761,6 +2761,7 @@ padding-bottom: 8px;
 
 .addpartnercourses .ant-picker{
   width: 100%;
+  min-width: unset !important;
 }
 
 .d-none{

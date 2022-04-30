@@ -430,7 +430,7 @@ const AddCourses = () => {
                                         </Form.Item>
                                     </Form>
                                 </Col> */}
-                <Col lg={11}>
+                <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Name of the Course</label>
                   <Form.Item>
                     <Input
@@ -444,7 +444,7 @@ const AddCourses = () => {
                     {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                   </Form.Item>
                 </Col>
-                <Col lg={11}>
+                <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item name="basic-select" label="Course Category">
                       <Select
@@ -469,7 +469,7 @@ const AddCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col lg={11} className="addpartnercourses">
+                <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Duration">
                       <TimePicker
@@ -496,7 +496,7 @@ const AddCourses = () => {
                                         </Form.Item>
                                     </Form>
                                 </Col> */}
-                <Col lg={11} className="multiselect">
+                <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
                   <Form.Item label="Job Category">
                     <Select
                       size="large"
@@ -519,7 +519,7 @@ const AddCourses = () => {
                     {error.jobCategoryIds && <span style={{ color: 'red' }}>{error.jobCategoryIds}</span>}
                   </Form.Item>
                 </Col>
-                <Col lg={11}>
+                <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Senquence</label>
                   <Form.Item>
                     <Input
@@ -534,7 +534,7 @@ const AddCourses = () => {
                   </Form.Item>
                   {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                 </Col>
-                <Col lg={11}>
+                <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>
                     <Input
@@ -549,7 +549,7 @@ const AddCourses = () => {
                   </Form.Item>
                   {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                 </Col>
-                <Col lg={11}>
+                <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
                       <Select
@@ -570,7 +570,7 @@ const AddCourses = () => {
                     {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                   </Form>
                 </Col>
-                <Col lg={11} className="d-flex f-d-cloumn">
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
                     Certification
                   </label>
@@ -626,7 +626,7 @@ const AddCourses = () => {
                   moduleState.map((item, i) => (
                     <TabPane tab={`Module ${i + 1}`} key={`${i}`}>
                       <Row justify="space-between">
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="name">Name of the Module</label>
                           <Form.Item>
                             <Input
@@ -640,7 +640,7 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="videourl">Video URL</label>
                           <Form.Item>
                             <Input
@@ -654,7 +654,7 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        <Col lg={11} className="addpartnercourses">
+                        <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                           <label htmlFor="moduleduration">Module Duration</label>
                           <Form.Item>
                             <TimePicker
@@ -668,7 +668,7 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="sequence">Sequence</label>
                           <Form.Item>
                             <Input
