@@ -15,10 +15,13 @@ import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { CSVLink } from 'react-csv';
 import { ApiGet } from '../../helper/API/ApiData';
+import actions from '../../redux/users/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const User = () => {
-
+    const {addUserSignupSuccess,editProfileSuccess} = actions;
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch();
@@ -35,17 +38,51 @@ const User = () => {
     const [userType, setUserType] = useState("")
 
     const getAllUsers = useSelector((state) => state.users.getAllUser)
-    let alluser = useSelector((state) => state.users.allUser)
+    const alluser = useSelector((state) => state.users.allUser)
+    const addUserSignupData = useSelector((state) => state.users.addUserSignupData)
+    const userSignupErr = useSelector((state) => state.users.userSignupErr)
+    const editProfileData = useSelector((state) => state.users.editProfileData)
+    const editProfileErr = useSelector((state) => state.users.editProfileErr)
+
+    useEffect(() => {
+        console.log("editProfileData", editProfileData);
+    }, [editProfileData])
+
+    useEffect(() => {
+        if (addUserSignupData && addUserSignupData.message === "user created") {
+            dispatch(addUserSignupSuccess(null))
+            toast.success("User Add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addUserSignupData])
  
+    useEffect(()=>{
+        if(userSignupErr){ 
+          toast.error("Something Wrong")
+        }
+      },[userSignupErr])
+
+      useEffect(() => {
+        if (editProfileData && editProfileData.message === "user updated") {
+            dispatch(editProfileSuccess(null))
+            toast.success("User Updated successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editProfileData])
+
+    useEffect(()=>{
+        if(editProfileErr){ 
+          toast.error("Something Wrong")
+        }
+      },[editProfileErr])
+
     const callback = (key) => {
         setStatus(key)
         setPageNumber(1)
     }
   
-    useEffect(() => {
-        console.log("userType", userType)
-    }, [userType])
-
     useEffect(() => {
         if (state.length) {
             CSVLinkRef?.current?.link.click()  // 
@@ -134,7 +171,7 @@ const User = () => {
 
     useEffect(() => {
         if (getAllUsers && getAllUsers.data) {
-            console.log("getAllUsers", getAllUsers)
+            // console.log("getAllUsers", getAllUsers)
             setUsertable(getAllUsers.data?.data?.map(item => {
 
                 return ({

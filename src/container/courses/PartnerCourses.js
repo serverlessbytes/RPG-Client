@@ -15,14 +15,18 @@ import { ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PartnerCourses = () => {
   const {
-    getallSwayamCourseSuccess,
+    getallSwayamCourseSuccess,addSwayamPartnerCourseSuccess,
   } = actions;
 
   const courseData = useSelector(state => state.category.courseFilterData);
+
   useEffect(()=>{console.log("courseData",courseData)},[courseData])
+  
   const { Option } = Select;
   const history = useHistory();
   let dispatch = useDispatch();
@@ -38,13 +42,16 @@ const PartnerCourses = () => {
   const [data, setData] = useState([]);
   const [usertable, setUsertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
 
   const catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
   const onePartnerCourseData = useSelector(state => state.category.editFilterData)
+  const postPartnerCourseData = useSelector(state => state.category.postPartnerCourseData)
+  const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr)
+  const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData)
 
   useEffect(() => {
     if (data.length) {
@@ -59,6 +66,36 @@ const PartnerCourses = () => {
       dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
     })
   }, [])
+
+  useEffect(()=>{console.log("editPartnerCourseData",editPartnerCourseData)},[editPartnerCourseData])
+
+  useEffect(() => {
+    if (postPartnerCourseData && postPartnerCourseData.message === 'Course created successfully..') {
+        //dispatch(addSwayamPartnerCourseSuccess(null))
+        toast.success("Course Add successful");
+        //toastAssetsAdd(true)
+        //onHide()
+    }
+}, [postPartnerCourseData])
+
+useEffect(()=>{
+  if(postPartnerCourseDataerr){ 
+    toast.error("Something Wrong")
+  }
+},[postPartnerCourseDataerr])
+
+useEffect(() => {
+  if (editPartnerCourseData && editPartnerCourseData.isActive  === false) {
+      //dispatch(editSwayamPartnerCourseSuccess(null))
+      toast.success("Partner Course Delete successful");
+      //toastAssetsAdd(true)
+      //onHide()
+  }
+  else if(editPartnerCourseData && editPartnerCourseData.isActive  === true){
+   // dispatch(editSwayamPartnerCourseSuccess(null))
+    toast.success("Partner Course Update successful");
+  }
+}, [editPartnerCourseData])
 
   const header = [
     { label: "id", key: "id" },
@@ -200,6 +237,11 @@ const PartnerCourses = () => {
     console.log("data", data);
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
+        console.log("res",res)
+        if(res.status === 200)
+        {
+          toast.success("Approved successful");
+        }
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
       })
   }
@@ -393,8 +435,8 @@ const PartnerCourses = () => {
                   <ListButtonSizeWrapper>
                     {/* <Button size="small" type="primary" onClick={e => Submit(e)}>
                       Apply
-                    </Button> */}
-                    {/* <Button size="small" type="light">
+                    </Button>
+                    <Button size="small" type="light">
                                             Clear
                                         </Button> */}
                   </ListButtonSizeWrapper>

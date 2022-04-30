@@ -24,15 +24,19 @@ import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 
 const AddCourses = () => {
+
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
-
   const history = useHistory();
   const { Option } = Select;
   const { TextArea } = Input;
-
   const dispatch = useDispatch();
 
+  const [error, setError] = useState({});
+  const [swyamModuleId, setSwyamModuleId] = useState(true);
+  const [selectKey, setSelectKey] = useState(0);
+  const [moduleError, setModuleError] = useState([]);
+  const [defaultSelect, setDefaultSelect] = useState('1');
   const categoryData = useSelector(state => state.category.categoryData);
   const jobCategoryData = useSelector(state => state.job.jobCatogeryData);
   const editOneSwayamCourseData = useSelector(state => state.category.editFilterData);
@@ -67,11 +71,8 @@ const AddCourses = () => {
       modifiedByUser: '',
     },
   ]);
-  const [error, setError] = useState({});
-  const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [selectKey, setSelectKey] = useState(0);
-  const [moduleError, setModuleError] = useState([]);
-  const [defaultSelect, setDefaultSelect] = useState('1');
+
+  
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -107,6 +108,7 @@ const AddCourses = () => {
   }, [addSwayamCourseData]);
 
   useEffect(() => {
+    console.log("editOneSwayamCourseData",editOneSwayamCourseData);
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && id) {
       setState({
         ...state,
@@ -374,32 +376,32 @@ const AddCourses = () => {
   };
 
   const onRemoveData = () => {
-    console.log("selectKey ===",selectKey);
+    console.log("selectKey ===", selectKey);
     // if (moduleState.length > 1) {
-      if (id) {
-        const data = moduleState[selectKey];
-        const deleteData = {
-          name: data.name,
-          detail: data.detail,
-          duration: moment(data.duration).format('HH:mm:s'),
-          videoUrl: data.videoUrl,
-          sequence: data.sequence,
-          key: data.key,
-          moduleId: data.moduleId,
-          isActive: false,
-          isDeleted: true,
-        };
-        dispatch(editSwayamCourseModule(deleteData));
-        // let val = [...moduleState];
-        // val.splice(selectKey, 1);
-        // setModuleState(val);
-      }
-      // else{
-      let val = [...moduleState];
-      val.splice(selectKey, 1);
-      setSelectKey(val.length - 1);
-      setModuleState(val);
-      // }
+    if (id) {
+      const data = moduleState[selectKey];
+      const deleteData = {
+        name: data.name,
+        detail: data.detail,
+        duration: moment(data.duration).format('HH:mm:s'),
+        videoUrl: data.videoUrl,
+        sequence: data.sequence,
+        key: data.key,
+        moduleId: data.moduleId,
+        isActive: false,
+        isDeleted: true,
+      };
+      dispatch(editSwayamCourseModule(deleteData));
+      // let val = [...moduleState];
+      // val.splice(selectKey, 1);
+      // setModuleState(val);
+    }
+    // else{
+    let val = [...moduleState];
+    val.splice(selectKey, 1);
+    setSelectKey(val.length - 1);
+    setModuleState(val);
+    // }
     // }
   };
 

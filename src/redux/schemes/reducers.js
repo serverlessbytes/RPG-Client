@@ -52,7 +52,9 @@ const initialState = {
   editSchemeCatogeryData: null,
   schemeBenefitData: null,
   addSchemeData:null,
+  addSchemeErr:null,
   editSchemeData: null,
+  editSchemeErr:null,
   getAllSchemeData:null,
   addState:null,
   getOneSchemeData:null,
@@ -156,7 +158,7 @@ const schemeReducer = (state = initialState, action) => {
       case ADD_SCHEMEN_ERR:
       return {
         ...state,
-        error: err,
+        addSchemeErr: err,
         loading: false,
       };
       
@@ -241,7 +243,7 @@ const schemeReducer = (state = initialState, action) => {
       case EDIT_SCHEME_ERR:
       return {
         ...state,
-        error: err,
+        editSchemeErr: err,
         loading: false,
       };
 

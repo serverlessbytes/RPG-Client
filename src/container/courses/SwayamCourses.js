@@ -17,9 +17,13 @@ import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const {
   getallSwayamCourseSuccess,
+  addSwayamPartnerCourseSuccess,
+  editSwayamPartnerCourseSuccess,
 } = actions;
 
 const SwayamCourses = () => {
@@ -32,6 +36,10 @@ const SwayamCourses = () => {
   const [activeCoursetog, setActiveCourseTog] = useState(true);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
+  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
+  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
+  const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
+  const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
 
   const [data,setData] = useState({
     category: '',
@@ -75,7 +83,48 @@ const SwayamCourses = () => {
     })
   }, [])
 
+useEffect(()=>{
+  console.log("editSwayamCourseData",editSwayamCourseData)
+},[editSwayamCourseData])
 
+useEffect(() => {
+  if (addSwayamCourseData && addSwayamCourseData.message  === 'Course Created Successfully') {
+      dispatch(addSwayamPartnerCourseSuccess(null))
+      // dispatch(getJobsFilterForMainSuccess(null))
+      toast.success("Swayam Course Add successful");
+      //toastAssetsAdd(true)
+      //onHide()
+  }
+  // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+  //   dispatch(editSchemeSuccess(null))
+  //   toast.success("Jobs Update successful");
+  // }
+}, [addSwayamCourseData])
+
+useEffect(()=>{
+  if(addSwayamCourseDataErr){ 
+    toast.error("Something Wrong")
+  }
+},[addSwayamCourseDataErr])
+
+useEffect(() => {
+  if (editSwayamCourseData && editSwayamCourseData.isActive  === false) {
+      dispatch(editSwayamPartnerCourseSuccess(null))
+      toast.success("Swayam Course Delete successful");
+      //toastAssetsAdd(true)
+      //onHide()
+  }
+  else if(editSwayamCourseData && editSwayamCourseData.isActive  === true){
+    dispatch(editSwayamPartnerCourseSuccess(null))
+    toast.success("Swayam Course Update successful");
+  }
+}, [editSwayamCourseData])
+
+useEffect(()=>{
+  if(editSwayamCourseErr){ 
+    toast.error("Something Wrong")
+  }
+},[editSwayamCourseErr])
 
   useEffect(() => {
     if (allCategortData?.data?.data) { //set a state for export excel
@@ -223,6 +272,11 @@ const SwayamCourses = () => {
     }
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
+        console.log("res",res)
+        if(res.status === 200)
+        {
+          toast.success("Approved successful");
+        }
         dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
       })
   }

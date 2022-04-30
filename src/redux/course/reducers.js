@@ -63,8 +63,11 @@ const initialState = {
   editFilterData: null,
   editPartnerCourseData:null,
   postPartnerCourseData:null,
+  postPartnerCourseDataerr:null,
   addSwayamCourseData:null,
+  addSwayamCourseDataErr:null,
   editSwayamCourseData:null,
+  editSwayamCourseErr:null,
   addSwayamCourseModuleData:null,
   getSwayamCourseModuleData:null,
   editSwayamCourseModuleData:null,
@@ -176,7 +179,7 @@ const cateGoryReducer = (state = initialState, action) => {
       case POST_PARTNERCOURSE_ERR:
         return {
           ...state,
-          error: err,
+          postPartnerCourseDataerr: err,
           loading: false,
         };
       case ADD_SWAYAM_COURSE_BEGINE:
@@ -193,7 +196,7 @@ const cateGoryReducer = (state = initialState, action) => {
       case ADD_SWAYAM_COURSE_ERR:
         return {
           ...state,
-          error: err,
+          addSwayamCourseDataErr: err,
           loading: false,
         };
 
@@ -211,7 +214,7 @@ const cateGoryReducer = (state = initialState, action) => {
         case EDIT_SWAYAM_COURSE_ERR:
           return {
             ...state,
-            error: err,
+            editSwayamCourseErr: err,
             loading: false,
           };
 

@@ -29,6 +29,7 @@ let Type;
 export const addUserSignup = (data) => async (dispatch) => {
   await ApiPost(`user/auth/signup`, data)
     .then((res) => {
+      //console.log("res",res)
       return dispatch(addUserSignupSuccess(res))
     })
     .catch((err) => dispatch(addUserSignupErr(err)))

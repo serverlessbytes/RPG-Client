@@ -9,6 +9,7 @@ import store from './redux/store';
 import Admin from './routes/admin';
 import Auth from './routes/auth';
 import './static/css/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 import config from './config/config';
 import ProtectedRoute from './components/utilities/protectedRoute';
 import AuthStorage from './helper/AuthStorage';
@@ -16,6 +17,8 @@ import STORAGEKEY from './config/APP/app.config';
 import actions from './redux/authentication/actions';
 import { useHistory } from "react-router-dom";
 import { RouterContext, RouterProvider } from './utility/routerContext';
+import { ToastContainer } from "react-toastify";
+import { toast } from 'react-toastify';
 
 const { theme } = config;
 
@@ -28,6 +31,8 @@ const ProviderConfig = ({ basename }) => {
       isLoggedIn: state.auth.login,
     };
   });
+
+  //useEffect(()=>{"isLoggedIn",isLoggedIn},[isLoggedIn])
   const history = useHistory();
   const route = useContext(RouterContext);
   const dispatch = useDispatch()
@@ -46,6 +51,15 @@ const ProviderConfig = ({ basename }) => {
     return () => (unmounted = true);
   }, [setPath]);
 
+  useEffect(()=>{
+  if(isLoggedIn === true){
+    toast.success("Login successful");
+  }
+  // else{
+  //   toast.error("Login Unsuccessful !");
+  // }
+  },[isLoggedIn])
+
   useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));
@@ -56,6 +70,7 @@ const ProviderConfig = ({ basename }) => {
     if (isLoggedIn) {
       if (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) {
         if (route.from === "/") {
+          // toast.success("Login successful");
           history.push("/admin");
         } else {
           history.push(route.from);
@@ -78,7 +93,9 @@ const ProviderConfig = ({ basename }) => {
 
 function App() {
   return (
+    
     <Provider store={store}>
+       <ToastContainer />
       <Router basename={process.env.PUBLIC_URL}>
         <RouterProvider>
           <ProviderConfig basename={process.env.PUBLIC_URL} />

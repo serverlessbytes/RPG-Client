@@ -41,8 +41,9 @@ const AddJobPost = () => {
     let stateData = useSelector((state) => state.state.getStateData) //state
     const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
     let getEmployerdata = useSelector((state) => state.job.getEmployerData)
+    // const addJobPostData = useSelector((state) => state.job.addJobPostData)
 
-    useEffect(() => { console.log("getEmployerData", getEmployerdata) }, [getEmployerdata])
+    // useEffect(() => { console.log("addJobPostData", addJobPostData) }, [addJobPostData])
 
     useEffect(() => {
         //console.log("location.search", location.search);
@@ -175,8 +176,8 @@ const AddJobPost = () => {
             error.description = 'Description is required';
             flage = true;
         }
-        if (state.req_experience === '') {
-            error.req_experience = 'Experience is required';
+        if (state.reqExperience === '') {
+            error.reqExperience = 'Experience is required';
             flage = true;
         }
         if (state.requirements === '') {
