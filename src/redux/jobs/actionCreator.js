@@ -125,7 +125,7 @@ export const editJobPost = (data) => async (dispatch) => {
   await ApiPost(`job/update?jobId=${id}`,data)
     .then((res) => {
       dispatch(editJobPostSuccess(res))
-      console.log("ress---",res)
+      // console.log("ress---",res)
       if(res.status === 200){
          dispatch(getJobsFilterForMain(per_page,page_num,State,Type,jobrole,Status))
       }

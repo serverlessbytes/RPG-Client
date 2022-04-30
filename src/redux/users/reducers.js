@@ -17,7 +17,9 @@ const {
   GET_ALLUSERS_SUCCESS,
   GET_ALLUSERS_ERR,
 
- 
+  EDIT_PROFILE_BEGINE,
+  EDIT_PROFILE_SUCCESS,
+  EDIT_PROFILE_ERR,
 
 } = actions;
 
@@ -25,9 +27,12 @@ const initialState = {
   loading: false,
   error: null,
   addUserSignupData: null,
+  userSignupErr: null,
   getAllUser: null,
   getOneUser: null,
   allUser: null,
+  editProfileData:null,
+  editProfileErr:null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -47,7 +52,7 @@ const userReducer = (state = initialState, action) => {
     case ADD_USERSIGNUP_ERR:
       return {
         ...state,
-        error: err,
+        userSignupErr: err,
         loading: false,
       };
 
@@ -105,7 +110,25 @@ const userReducer = (state = initialState, action) => {
         loading: false,
       };
 
-   
+      case EDIT_PROFILE_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case EDIT_PROFILE_SUCCESS:
+        return {
+          ...state,
+          editProfileData: data,
+          loading: false,
+        };
+      case EDIT_PROFILE_ERR:
+        return {
+          ...state,
+          editProfileErr: err,
+          loading: false,
+        };
+
+
 
 
 

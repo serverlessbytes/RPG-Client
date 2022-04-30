@@ -243,7 +243,7 @@ const actions = {
     },
   
     getoneJobPostSuccess: data => {
-      console.log("dataa",data)
+      // console.log("dataa",data)
       return {
         type: actions.GETONE_JOBPOST_SUCCESS,
         data,

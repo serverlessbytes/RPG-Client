@@ -18,6 +18,7 @@ const {
   getSwayamCourseModuleSuccess,
   editSwayamCourseModuleSuccess,
   getallSwayamCourseSuccess,
+  addSwayamPartnerCourseErr,
 } = actions;
 
 let page_number,per_page,category,Inactive,Mode;
@@ -77,8 +78,7 @@ export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => 
 export const getOneCoursefilter = (id) => async (dispatch) => {
   await ApiGet(`course/getCourse/${id}?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-      return 
-      (editCoursefilterSuccess(res))
+      return dispatch(editCoursefilterSuccess(res))
     })
 }
 
@@ -98,6 +98,7 @@ export const addSwayamCourse = (data) => async (dispatch) => {
     .then((res) => {
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })
+    .catch((err) => dispatch(addSwayamPartnerCourseErr(err)))
 }
 
 export const editSwayamCourse = (data) => async (dispatch) => {

@@ -10,10 +10,15 @@ import { useHistory, useRouteMatch } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
 import { ApiPost } from '../../helper/API/ApiData';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import actions from '../../redux/jobs/actions';
 
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // props from JobPost
-
+  const {
+    addJobPostSuccess,editJobPostSuccess,getJobsFilterForMainSuccess
+  } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch()
@@ -32,8 +37,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
 
   const jobData = useSelector((state) => state.job.getJobPostData)
   const getJobFilterData = useSelector((state) => state.job.getJobFilterData) //for filter
-  const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch from redux 
+  const editJobPostData = useSelector((state) => state.job.editJobPostData) // fetch for tostify from reducer for edit/delete
+  const addJobPostErr = useSelector((state) => state.job.addJobPostErr) //fetch for tostify from reducer for jobposterror
+  const editJobPostErr = useSelector((state) => state.job.editJobPostErr) //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)
+  const addJobPostData = useSelector((state) => state.job.addJobPostData) //fetch for tostify from reducer 
+
+  useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])//
 
   const onDelete = (id) => {
     let courseDataDelete = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find((item) => item.id === id)
@@ -114,6 +124,41 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
   }, [perPage, pageNumber, apply, status])
 
   useEffect(() => {
+    if (addJobPostData && addJobPostData.message === "Jobs added successfully.") {
+        dispatch(addJobPostSuccess(null))
+        toast.success("Jobs Add successful");
+        //toastAssetsAdd(true)
+        //onHide()
+    }
+}, [addJobPostData])
+
+useEffect(()=>{
+  if(addJobPostErr){ 
+    toast.error("Something Wrong")
+  }
+},[addJobPostErr])
+
+useEffect(()=>{
+  if(editJobPostErr){ 
+    toast.error("Something Wrong")
+  }
+},[editJobPostErr])
+
+useEffect(() => {
+  if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
+      dispatch(editJobPostSuccess(null))
+      //dispatch(getJobsFilterForMainSuccess(null))
+      toast.success("Jobs Delete successful");
+      //toastAssetsAdd(true)
+      //onHide()
+  }
+  else if(editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true){
+    dispatch(editJobPostSuccess(null))
+    toast.success("Jobs Update successful");
+  }
+}, [editJobPostData])
+
+  useEffect(() => {
     dispatch(getJobPost(perPage, pageNumber))
   }, [perPage, pageNumber])
 
@@ -126,9 +171,20 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
     }
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then((res) => {
+        //console.log("res",res)
+        if(res.data.isApproved === true)
+        {
+          toast.success("Approved successful");
+        }
+        else if(res.data.isApproved === false){
+          toast.success("Approved Un-successful");
+        }
         dispatch(getJobsFilterForMain(perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
       })
       .catch((err) => console.log("Error", err))
+      // if(err){ 
+      //   toast.error("Something Wrong")
+      // }
   }
 
   useEffect(() => {

@@ -18,9 +18,11 @@ import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
 import { ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Schemes = () => {
-  const {getAllSchemesSuccess} = actions;
+  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess} = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -44,12 +46,16 @@ const Schemes = () => {
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
-  const allschemeData = useSelector(state => state.scheme.allSchemeData); // export
+  const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
+  const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
+  const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
+  const editSchemeErr = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
+  const addSchemeErr = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastify
 
   useEffect(() => {
-    console.log("allschemeData", allschemeData);
-  }, [allschemeData])
-
+    console.log("dataScheme", editSchemedata);
+  },[editSchemedata])
+  
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
@@ -65,6 +71,41 @@ const Schemes = () => {
   useEffect(() => {
     dispatch(getBenefitsData());
   }, []);
+
+  useEffect(() => {
+    if (editSchemedata && editSchemedata.message  === 'Scheme updated successfully.') {
+        dispatch(editSchemeSuccess(null))
+        //dispatch(getJobsFilterForMainSuccess(null))
+        toast.success("Jobs Update successful");
+        //toastAssetsAdd(true)
+        //onHide()
+    }
+    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+    //   dispatch(editSchemeSuccess(null))
+    //   toast.success("Jobs Update successful");
+    // }
+  }, [editSchemedata])
+
+  useEffect(() => {
+    if (addSchemeData && addSchemeData.message === "Scheme added successfully.") {
+        dispatch(addSchemeSuccess(null))
+        toast.success("Scheme Add successful");
+        //toastAssetsAdd(true)
+        //onHide()
+    }
+}, [addSchemeData])
+
+useEffect(()=>{
+  if(editSchemeErr){ 
+    toast.error("Something Wrong")
+  }
+},[editSchemeErr])
+
+useEffect(()=>{
+  if(addSchemeErr){ 
+    toast.error("Something Wrong")
+  }
+},[addSchemeErr])
 
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
@@ -96,7 +137,7 @@ const Schemes = () => {
 
   ];
   useEffect(() => {
-    if (allschemeData?.data?.data) { //set a state for export word
+    if (allschemeData?.data?.data) { //set a state for export excel
       setState(allschemeData.data.data.map((item) => {
         return {
           ...item,
@@ -214,6 +255,14 @@ const Schemes = () => {
     }
     ApiPost(`scheme/updateIsApproved`,data)
     .then((res) => {
+      console.log("res",res)
+      if(res.status === 200)
+      {
+        toast.success("Approved successful");
+      }
+      // else if(res.data.isApproved === false){
+      //   toast.success("Approved Un-successful");
+      // }
       dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
     })
     .catch((err) => console.log("Error",err))

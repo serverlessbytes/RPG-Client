@@ -131,10 +131,11 @@ export const getAllSchemes = () => async (dispatch) => {
 export const editSchemeData = (body) => async (dispatch) => {
   await ApiPost(`scheme/editScheme`, body)
     .then((res) => {
-      dispatch(editSchemeSuccess(res.data))
+      dispatch(editSchemeSuccess(res))
+      console.log("res",res)
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
         dispatch(getSchemeData(per_Page, page_Num,Status))
       }
     })
-    .catch((err) => dispatch(editSchemenErr(err)))
+    .catch((err) =>dispatch(editSchemeErr(err)))
 }
