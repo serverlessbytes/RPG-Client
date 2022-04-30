@@ -318,18 +318,18 @@ const User = () => {
                                                 pagination={{
                                                     defaultPageSize: getAllUsers?.data.per_page,
                                                     total: getAllUsers?.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize)
                                                     }
                                                 }}
-                                                size="middle"
+                                                // size="middle"
                                                 // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                    <ProjectPagination>
+                                    {/* <ProjectPagination>
                                         <Pagination
                                             onChange={() => { }}
                                             showSizeChanger
@@ -338,7 +338,7 @@ const User = () => {
                                             defaultCurrent={1}
                                             total={10}
                                         />
-                                    </ProjectPagination>
+                                    </ProjectPagination> */}
                                 </TabPane>
                                 <TabPane tab="Inactive Users" key='inactive'>
                                     <UserTableStyleWrapper>
@@ -358,7 +358,7 @@ const User = () => {
                                                 pagination={{
                                                     defaultPageSize: getAllUsers?.data.per_page,
                                                     total: getAllUsers?.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize)
@@ -367,12 +367,12 @@ const User = () => {
                                                     // total: usersTableData.length,
                                                     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                 }}
-                                                size="middle"
+                                                // size="middle"
                                                 // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                    <ProjectPagination>
+                                    {/* <ProjectPagination>
                                         <Pagination
                                             onChange={() => { }}
                                             showSizeChanger
@@ -381,7 +381,7 @@ const User = () => {
                                             defaultCurrent={1}
                                             total={10}
                                         />
-                                    </ProjectPagination>
+                                    </ProjectPagination> */}
                                 </TabPane>
                             </Tabs>
                         </Col>

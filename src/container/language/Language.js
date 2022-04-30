@@ -95,7 +95,7 @@ const Language = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
 
                         <Pagination
                             onChange={() => { }}
@@ -106,7 +106,7 @@ const Language = () => {
                             total={10}
                         />
 
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

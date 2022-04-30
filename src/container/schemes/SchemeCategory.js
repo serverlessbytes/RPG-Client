@@ -199,7 +199,7 @@ const SchemeCategory = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {schemeCategoryTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -210,7 +210,7 @@ const SchemeCategory = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

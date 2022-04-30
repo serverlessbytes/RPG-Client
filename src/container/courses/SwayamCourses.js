@@ -37,7 +37,7 @@ const SwayamCourses = () => {
     category: '',
     mode: '',
   });
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
@@ -435,12 +435,24 @@ const SwayamCourses = () => {
                         //   total: usersTableData.length,
                         //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         // }}
-                        pagination={false}
+                        pagination={{
+                          defaultPageSize: courseData?.data.per_page,
+                          total: courseData?.data.page_count,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          onChange: (page, pageSize) => {
+                            setPageNumber(page);
+                            setPerPage(pageSize)
+                          }
+                          // defaultPageSize: 5,
+                          // total: usersTableData.length,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        }}
+                        // pagination={false}
 
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  <ProjectPagination>
+                  {/* <ProjectPagination>
                     <Pagination
                       onChange={() => { }}
                       showSizeChanger
@@ -449,7 +461,7 @@ const SwayamCourses = () => {
                       defaultCurrent={1}
                       total={10}
                     />
-                  </ProjectPagination>
+                  </ProjectPagination> */}
                 </TabPane>
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
@@ -469,11 +481,24 @@ const SwayamCourses = () => {
                         //   total: usersTableData.length,
                         //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         // }}
-                        pagination={false}
+                        pagination={{
+                          defaultPageSize: courseData?.data.per_page,
+                          total: courseData?.data.page_count,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          onChange: (page, pageSize) => {
+                            setPageNumber(page);
+                            setPerPage(pageSize)
+                          }
+                          // defaultPageSize: 5,
+                          // total: usersTableData.length,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        }}
+                        
+                        // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  <ProjectPagination>
+                  {/* <ProjectPagination>
                     <Pagination
                       onChange={() => { }}
                       showSizeChanger
@@ -482,7 +507,7 @@ const SwayamCourses = () => {
                       defaultCurrent={1}
                       total={10}
                     />
-                  </ProjectPagination>
+                  </ProjectPagination> */}
                 </TabPane>
               </Tabs>
             </Col>

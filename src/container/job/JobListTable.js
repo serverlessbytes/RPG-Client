@@ -282,15 +282,28 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
               // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               defaultPageSize: getJobFilterData?.data.per_page,
               total: getJobFilterData?.data.page_count,
-              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+              // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               onChange: (page, pageSize) => {
                 setPageNumber(page);
                 setPerPage(pageSize)
               }
             }}
+            // pagination={false}
           />
         </TableWrapper>
       </UserTableStyleWrapper>
+      {/* <ProjectPagination>
+        
+          <Pagination
+            onChange={()=>{}}
+            showSizeChanger
+            onShowSizeChange={()=>{}}
+            pageSize={10}
+            defaultCurrent={1}
+            total={10}
+          />
+       
+      </ProjectPagination> */}
       {viewModal && <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneJobPostData?.data} />}
     </>
   );

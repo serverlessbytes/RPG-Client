@@ -101,7 +101,7 @@ const State = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
 
                         <Pagination
                             onChange={() => { }}
@@ -112,7 +112,7 @@ const State = () => {
                             total={10}
                         />
 
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
             <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>

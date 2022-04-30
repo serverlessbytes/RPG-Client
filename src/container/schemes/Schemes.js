@@ -36,7 +36,7 @@ const Schemes = () => {
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
   const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   
@@ -444,11 +444,23 @@ const Schemes = () => {
                         // rowSelection={rowSelection}
                         dataSource={usersTableData}
                         columns={usersTableColumns}
-                        pagination={false}
+                        // pagination={false}
+                        pagination={{
+                          defaultPageSize: users?.per_page,
+                          total: users?.page_count,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          onChange: (page, pageSize) => {
+                            setPageNumber(page);
+                            setPerPage(pageSize);
+                          },
+                          // defaultPageSize: 5,
+                          // total: usersTableData.length,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        }}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  <ProjectPagination>
+                  {/* <ProjectPagination>
                     <Pagination
                       onChange={() => { }}
                       showSizeChanger
@@ -457,7 +469,7 @@ const Schemes = () => {
                       defaultCurrent={1}
                       total={10}
                     />
-                  </ProjectPagination>
+                  </ProjectPagination> */}
                 </TabPane>
                 <TabPane tab="Inactive Schemes" key="inactive">
                   <UserTableStyleWrapper>
@@ -476,7 +488,7 @@ const Schemes = () => {
                         pagination={{
                           defaultPageSize: users?.per_page,
                           total: users?.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);

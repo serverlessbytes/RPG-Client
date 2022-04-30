@@ -185,7 +185,7 @@ const BenefitsType = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {usersTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -196,7 +196,7 @@ const BenefitsType = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

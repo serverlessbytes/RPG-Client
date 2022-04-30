@@ -428,7 +428,7 @@ const PartnerCourses = () => {
                           // defaultPageSize: courseData?.data.per_page,
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
@@ -461,7 +461,7 @@ const PartnerCourses = () => {
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);

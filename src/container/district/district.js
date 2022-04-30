@@ -179,7 +179,7 @@ const district = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
 
                         <Pagination
                             onChange={() => { }}
@@ -190,7 +190,7 @@ const district = () => {
                             total={10}
                         />
 
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
             <Modal title="Enter District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>

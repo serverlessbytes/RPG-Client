@@ -198,11 +198,23 @@ const JobCategory = () => {
                                 dataSource={jobCategoryTableData}
                                 columns={jobTableColumns}
                                 pagination={false}
+                                // pagination={{
+                                //     defaultPageSize: users?.per_page,
+                                //     total: users?.page_count,
+                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                //     onChange: (page, pageSize) => {
+                                //       setPageNumber(page);
+                                //       setPerPage(pageSize);
+                                //     },
+                                //     // defaultPageSize: 5,
+                                //     // total: usersTableData.length,
+                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                //   }}
                             />
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {jobCategoryTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -213,7 +225,7 @@ const JobCategory = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
