@@ -346,8 +346,7 @@ const AddJobPost = () => {
                     <Cards headless>
                         <Form name="horizontal-form" layout="horizontal">
                             <Row justify="space-between">
-
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="jobCategoryId">Type of job post</label>
@@ -366,7 +365,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="salary">Monthly Salary Offered</label>
@@ -379,9 +378,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Job Role</label>
@@ -398,7 +397,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={24}>
+                                <Col lg={24} md={24} sm={24} xs={24}>
                                     {/* <Row align="middle" justify="space-between">
                                         <Col lg={4} md={9} xs={24}>
                                             <label htmlFor="benifits">Benefits</label>
@@ -418,9 +417,9 @@ const AddJobPost = () => {
                                         {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
                                     </div>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Name of the Employer</label>
@@ -439,7 +438,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="vacancies">Vacancies</label>
@@ -452,9 +451,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="state">State</label>
@@ -481,7 +480,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Type of Job</label>
@@ -499,9 +498,9 @@ const AddJobPost = () => {
                                         {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="district">District</label>
@@ -528,7 +527,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="phone">Phone</label>
@@ -541,9 +540,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Town / Village</label>
@@ -556,7 +555,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="email">Email</label>
@@ -569,10 +568,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="pincode">Pincode</label>
@@ -586,7 +584,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="description">Description</label>
@@ -599,10 +597,10 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
+                            {/* </Row>
 
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="shifts">Shift</label>
@@ -621,7 +619,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="req_experience">Requried Experience</label>
@@ -634,10 +632,10 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
+                            {/* </Row>
 
-                            <Row justify="space-between">
-                                <Col lg={11} className="addpartnercourses">
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="startdata">Start Date</label>
@@ -652,7 +650,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="requirements">Requirements</label>
@@ -665,10 +663,10 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
+                            {/* </Row>
 
-                            <Row justify="space-between">
-                                <Col lg={11} className="addpartnercourses">
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="enddate">End Date</label>
@@ -684,7 +682,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="isactive">Type Of Field</label>

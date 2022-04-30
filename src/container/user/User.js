@@ -2,9 +2,9 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
+import { Col, Form, Input, Pagination, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
@@ -114,18 +114,18 @@ const User = () => {
     }
 
     const onActive = (id) => {
-     let  users = getAllUsers && getAllUsers.data && getAllUsers.data.data.find((item)=>item.id === id)
-         let data= {
-            avatar :users.avatar,
-            email :users.email,
-            id:id,
-            isActive:true,
-            isDeleted:false,
-            name:users.name,
-            phone:users.phone,
-            userType:users.userType,
-         }
-         dispatch(editProfile(data))
+        let users = getAllUsers && getAllUsers.data && getAllUsers.data.data.find((item) => item.id === id)
+        let data = {
+            avatar: users.avatar,
+            email: users.email,
+            id: id,
+            isActive: true,
+            isDeleted: false,
+            name: users.name,
+            phone: users.phone,
+            userType: users.userType,
+        }
+        dispatch(editProfile(data))
     }
     const { TabPane } = Tabs;
 
@@ -147,18 +147,18 @@ const User = () => {
                         <div className="table-actions">
                             {
                                 status === "active" ?
-                                <>
-                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                    <FeatherIcon icon="edit" size={16} />
-                                </Button>
-                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                    <FeatherIcon icon="trash-2" size={16} />
-                                </Button>
-                            </>:<Button className="btn-icon" type="danger" to="#" onClick={() => onActive(item.id)} shape="circle">
-                                    <FeatherIcon icon="rotate-ccw" size={16} />
-                                </Button>
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                            <FeatherIcon icon="trash-2" size={16} />
+                                        </Button>
+                                    </> : <Button className="btn-icon" type="danger" to="#" onClick={() => onActive(item.id)} shape="circle">
+                                        <FeatherIcon icon="rotate-ccw" size={16} />
+                                    </Button>
                             }
-                            
+
                         </div>
                     ),
                 });
@@ -242,7 +242,7 @@ const User = () => {
                     <Button size="small" type="light">
                         Import Schemes
                     </Button> */}
-                        
+
                         <Button onClick={exPortuser} size="small" type="info">
                             Export User
                         </Button>
@@ -315,18 +315,21 @@ const User = () => {
                                                 // rowSelection={rowSelection}
                                                 dataSource={usertable}
                                                 columns={usersTableColumns}
-                                                pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
-                                                    total: getAllUsers?.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    onChange: (page, pageSize) => {
-                                                        setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
-                                                }}
+                                                size="middle"
+                                                pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
+                                    <ProjectPagination>
+                                        <Pagination
+                                            onChange={() => { }}
+                                            showSizeChanger
+                                            onShowSizeChange={() => { }}
+                                            pageSize={10}
+                                            defaultCurrent={1}
+                                            total={10}
+                                        />
+                                    </ProjectPagination>
                                 </TabPane>
                                 <TabPane tab="Inactive Users" key='inactive'>
                                     <UserTableStyleWrapper>
@@ -342,22 +345,21 @@ const User = () => {
                                                 // rowSelection={rowSelection}
                                                 dataSource={usertable}
                                                 // columns={usersTableColumns.filter(item => item.title !== "Actions")}
-                                                columns={usersTableColumns} 
-                                                pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
-                                                    total: getAllUsers?.data.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    onChange: (page, pageSize) => {
-                                                        setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                }}
+                                                columns={usersTableColumns}
+                                                pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
+                                    <ProjectPagination>
+                                        <Pagination
+                                            onChange={() => { }}
+                                            showSizeChanger
+                                            onShowSizeChange={() => { }}
+                                            pageSize={10}
+                                            defaultCurrent={1}
+                                            total={10}
+                                        />
+                                    </ProjectPagination>
                                 </TabPane>
                             </Tabs>
                         </Col>

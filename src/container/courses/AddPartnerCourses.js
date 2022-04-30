@@ -307,14 +307,14 @@ const AddPartnerCourses = () => {
             <Main>
                 <Cards headless>
                     <Row justify="space-between">
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item name="name">
                                 <Input placeholder="Name" value={state.name} name="name" onChange={e => onChangevalue(e)} />
                                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11} className="addpartnercourses">
+                        <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                             <label htmlFor="category mb-4">Time</label>
                             <Form.Item
                                 initialValue={moment('00:00:00', 'HH:mm:ss')}
@@ -323,7 +323,7 @@ const AddPartnerCourses = () => {
                                 {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="categoryId">CategoryId</label>
                             <Form.Item name="categoryId">
                                 <Select
@@ -339,7 +339,7 @@ const AddPartnerCourses = () => {
                                 {error.cateGory && <span style={{ color: 'red' }}>{error.cateGory}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="organization">Organization</label>
                             <Form.Item name="organization">
                                 <Input
@@ -351,21 +351,21 @@ const AddPartnerCourses = () => {
                                 {error.organiZation && <span style={{ color: 'red' }}>{error.organiZation}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="detail">Detail</label>
                             <Form.Item>
                                 <TextArea name="detail" value={state.detail} onChange={e => onChangevalue(e)} />
                                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="certification">Certification Body</label>
                             <Form.Item>
                                 <TextArea value={state.certificationBody} name="certificationBody" onChange={e => onChangevalue(e)} />
                                 {error.certificationBody && <span style={{ color: 'red' }}>{error.certificationBody}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="eligibility">Eligibility</label>
                             <Form.Item name="eligibility">
                                 <Input
@@ -377,7 +377,7 @@ const AddPartnerCourses = () => {
                                 {error.eligiBility && <span style={{ color: 'red' }}>{error.eligiBility}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="component">Component</label>
                             <Form.Item name="component">
                                 <Input
@@ -389,7 +389,7 @@ const AddPartnerCourses = () => {
                                 {error.component && <span style={{ color: 'red' }}>{error.component}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonname">Contact Person Name</label>
                             <Form.Item name="contactpersonname">
                                 <Input
@@ -401,7 +401,7 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonname && <span style={{ color: 'red' }}>{error.contactpersonname}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonemail">Contact Person Email</label>
                             <Form.Item name="contactpersonemail">
                                 <Input
@@ -413,7 +413,7 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonemail && <span style={{ color: 'red' }}>{error.contactpersonemail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonphone">Contact Person Phone</label>
                             <Form.Item name="contactpersonphone">
                                 <Input
@@ -425,7 +425,7 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonphone && <span style={{ color: 'red' }}>{error.contactpersonphone}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="state">State</label>
                             <Form.Item name="state">
                                 <Select
@@ -446,7 +446,7 @@ const AddPartnerCourses = () => {
                                 {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="district">District</label>
                             <Form.Item name="district">
                                 <Select
@@ -467,14 +467,14 @@ const AddPartnerCourses = () => {
                                 {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="pincode">Pincode</label>
                             <Form.Item name="pincode">
                                 <Input value={state.pincode} placeholder="pincode" name="pincode" onChange={e => onChangevalue(e)} />
                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Location</label>
                             <Form.Item name="location">
                                 <Input
@@ -503,7 +503,7 @@ const AddPartnerCourses = () => {
                                 {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                             </Form.Item>
                         </Col> */}
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Sequence </label>
                             <Form.Item name="location">
                                 <Input
@@ -516,7 +516,7 @@ const AddPartnerCourses = () => {
                                 {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Thumbnail</label>
                             <Form.Item >
                                 <Input
@@ -529,7 +529,7 @@ const AddPartnerCourses = () => {
                                 {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="name" className="mb-5">
                                 Certification
                             </label>

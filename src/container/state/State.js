@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
-import { Form, Input, Modal, Select, Table } from 'antd';
+import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
-import { Main, TableWrapper } from '../styled';
+import { Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
@@ -33,8 +33,8 @@ const State = () => {
     //     console.log("languageData", languageData);
     // }, [languageData])
 
-     const stateData = useSelector((state) => state.state.getStateData)
-     
+    const stateData = useSelector((state) => state.state.getStateData)
+
 
     useEffect(() => {
         if (stateData && stateData.data) {
@@ -101,6 +101,18 @@ const State = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
+                    <ProjectPagination>
+
+                        <Pagination
+                            onChange={() => { }}
+                            showSizeChanger
+                            onShowSizeChange={() => { }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={10}
+                        />
+
+                    </ProjectPagination>
                 </Cards>
             </Main>
             <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
