@@ -27,7 +27,8 @@ const initialState = {
   data: null,
   loading: false,
   error: null,
-  postStateData:null,
+  LanguageError:null,
+  postLanguageData:null,
   getLanguageData:null
 };
 
@@ -42,13 +43,13 @@ const languageReducer = (state = initialState, action) => {
     case POST_LANGUAGE_SUCCESS:
       return {
         ...state,
-        postStateData:data,
+        postLanguageData:data,
         loading: false,
       };
     case POST_LANGUAGE_ERR:
       return {
         ...state,
-        error: err,
+        LanguageError: err,
         loading: false,
       };
     case GET_LANGUAGE_BEGINE:

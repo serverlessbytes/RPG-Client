@@ -23,7 +23,10 @@ import 'react-toastify/dist/ReactToastify.css';
 const {
   getallSwayamCourseSuccess,
   addSwayamPartnerCourseSuccess,
+  addSwayamPartnerCourseErr,
   editSwayamPartnerCourseSuccess,
+  addSwayamCourseModuleErr,
+  addSwayamCourseModuleSuccess,
 } = actions;
 
 const SwayamCourses = () => {
@@ -34,12 +37,15 @@ const SwayamCourses = () => {
   const usersTableData = [];
   const { path } = useRouteMatch();
   const [activeCoursetog, setActiveCourseTog] = useState(true);
+
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
   const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
   const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
   const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
+  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
 
   const [data,setData] = useState({
     category: '',
@@ -88,10 +94,9 @@ const SwayamCourses = () => {
     })
   }, [])
 
-
 useEffect(() => {
-  if (addSwayamCourseData && addSwayamCourseData.message  === 'Course Created Successfully') {
-      dispatch(addSwayamPartnerCourseSuccess(null))
+  if (addSwayamCourseModuleData && addSwayamCourseModuleData.status  === 200) {
+      dispatch(addSwayamCourseModuleSuccess(null))
       // dispatch(getJobsFilterForMainSuccess(null))
       toast.success("Swayam Course Add successful");
       //toastAssetsAdd(true)
@@ -101,13 +106,14 @@ useEffect(() => {
   //   dispatch(editSchemeSuccess(null))
   //   toast.success("Jobs Update successful");
   // }
-}, [addSwayamCourseData])
+}, [addSwayamCourseModuleData])
 
 useEffect(()=>{
-  if(addSwayamCourseDataErr){ 
+  if(addSwayamCourseModuleError){ 
+    dispatch(addSwayamCourseModuleErr(null))
     toast.error("Something Wrong")
   }
-},[addSwayamCourseDataErr])
+},[addSwayamCourseModuleError])
 
 useEffect(() => {
   if (editSwayamCourseData && editSwayamCourseData.isActive  === false) {

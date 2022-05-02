@@ -13,7 +13,8 @@ const {
   cartDeleteErr,
 
   postLanguageSuccess,
-  getLanguageSuccess
+  getLanguageSuccess,
+  postLanguageDataErr,
 } = actions;
 
 const stateGetData = () => {
@@ -61,8 +62,8 @@ const postLanguageData=(body) => async(dispatch)=>{
   .then((res) =>{
       dispatch(postLanguageSuccess(res))
       return dispatch(getLanguageData())
-    
   })
+  .catch((err) => dispatch(postLanguageDataErr(err)))
 }
 
 const getLanguageData = () => async(dispatch)=>{

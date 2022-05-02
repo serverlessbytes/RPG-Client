@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Schemes = () => {
-  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess} = actions;
+  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess,editSchemeErr,addSchemeErr} = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -50,13 +50,9 @@ const Schemes = () => {
   const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
   const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
   const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
-  const editSchemeErr = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
-  const addSchemeErr = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastify
+  const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
+  const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastify
 
-  useEffect(() => {
-    console.log("users", users);
-  },[users])
-  
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
@@ -74,10 +70,11 @@ const Schemes = () => {
   }, []);
 
   useEffect(() => {
-    if (editSchemedata && editSchemedata.message  === 'Scheme updated successfully.') {
+    if (editSchemedata && editSchemedata.status === 200) {
         dispatch(editSchemeSuccess(null))
         //dispatch(getJobsFilterForMainSuccess(null))
-        toast.success("Jobs Update successful");
+        toast.success("Scheme Update successful");
+
         //toastAssetsAdd(true)
         //onHide()
     }
@@ -88,7 +85,7 @@ const Schemes = () => {
   }, [editSchemedata])
 
   useEffect(() => {
-    if (addSchemeData && addSchemeData.message === "Scheme added successfully.") {
+    if (addSchemeData && addSchemeData.status === 200) {
         dispatch(addSchemeSuccess(null))
         toast.success("Scheme Add successful");
         //toastAssetsAdd(true)
@@ -97,16 +94,18 @@ const Schemes = () => {
 }, [addSchemeData])
 
 useEffect(()=>{
-  if(editSchemeErr){ 
+  if(editSchemeError){ 
+    dispatch(editSchemeErr(null))
     toast.error("Something Wrong")
   }
-},[editSchemeErr])
+},[editSchemeError])
 
 useEffect(()=>{
-  if(addSchemeErr){ 
+  if(addSchemeError){ 
+    dispatch(addSchemeErr(null))
     toast.error("Something Wrong")
   }
-},[addSchemeErr])
+},[addSchemeError])
 
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));

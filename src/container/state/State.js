@@ -11,8 +11,14 @@ import { Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
+import actions from '../../redux/state/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const State = () => {
+    const {
+        postStateSuccess,postStateErr
+      } = actions;
     const dispatch = useDispatch()
     const [data, setData] = useState({
         name: '',
@@ -33,8 +39,31 @@ const State = () => {
     //     console.log("languageData", languageData);
     // }, [languageData])
 
-    const stateData = useSelector((state) => state.state.getStateData)
+     const stateData = useSelector((state) => state.state.getStateData)
+     const postStatedata = useSelector((state) => state.state.postStateData)
+     const postStateError = useSelector((state) => state.state.postStateErr)
+     
+     useEffect(()=>{console.log("postStatedata",postStatedata)},[postStatedata])
 
+     useEffect(() => {
+        if (postStatedata && postStatedata.status  === 200) {
+            dispatch(postStateSuccess(null))
+            toast.success("State Add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+        // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+        //   dispatch(editSchemeSuccess(null))
+        //   toast.success("Jobs Update successful");
+        // }
+      }, [postStatedata])
+      
+      useEffect(()=>{
+        if(postStateError){ 
+            dispatch(postStateErr(null))
+          toast.error("Something Wrong")
+        }
+      },[postStateError])
 
     useEffect(() => {
         if (stateData && stateData.data) {

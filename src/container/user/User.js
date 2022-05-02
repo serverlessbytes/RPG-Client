@@ -21,7 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const User = () => {
-    const {addUserSignupSuccess,editProfileSuccess} = actions;
+    const {addUserSignupSuccess,editProfileSuccess,addUserSignupErr,editProfileErr} = actions;
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch();
@@ -41,16 +41,16 @@ const User = () => {
     const getAllUsers = useSelector((state) => state.users.getAllUser)
     const alluser = useSelector((state) => state.users.allUser)
     const addUserSignupData = useSelector((state) => state.users.addUserSignupData)
-    const userSignupErr = useSelector((state) => state.users.userSignupErr)
+    const userSignupError = useSelector((state) => state.users.userSignupErr)
     const editProfileData = useSelector((state) => state.users.editProfileData)
-    const editProfileErr = useSelector((state) => state.users.editProfileErr)
+    const editProfileError = useSelector((state) => state.users.editProfileErr)
 
     useEffect(() => {
-        console.log("editProfileData", editProfileData);
-    }, [editProfileData])
+        console.log("addUserSignupData", addUserSignupData);
+    }, [addUserSignupData])
 
     useEffect(() => {
-        if (addUserSignupData && addUserSignupData.message === "user created") {
+        if (addUserSignupData && addUserSignupData.status === 200) {
             dispatch(addUserSignupSuccess(null))
             toast.success("User Add successful");
             //toastAssetsAdd(true)
@@ -59,13 +59,14 @@ const User = () => {
     }, [addUserSignupData])
  
     useEffect(()=>{
-        if(userSignupErr){ 
+        if(userSignupError){ 
+          dispatch(addUserSignupErr(null))
           toast.error("Something Wrong")
         }
-      },[userSignupErr])
+      },[userSignupError])
 
       useEffect(() => {
-        if (editProfileData && editProfileData.message === "user updated") {
+        if (editProfileData && editProfileData.status === 200) {
             dispatch(editProfileSuccess(null))
             toast.success("User Updated successful");
             //toastAssetsAdd(true)
@@ -74,10 +75,11 @@ const User = () => {
     }, [editProfileData])
 
     useEffect(()=>{
-        if(editProfileErr){ 
+        if(editProfileError){ 
+          dispatch(editProfileErr(null))
           toast.error("Something Wrong")
         }
-      },[editProfileErr])
+      },[editProfileError])
 
     const callback = (key) => {
         setStatus(key)

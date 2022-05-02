@@ -9,8 +9,16 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCategoryData, getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
 import uuid from 'react-uuid';
+import actions from '../../redux/course/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CourseCategory = () => {
+    const {
+        postCategorySuccess,
+        postCategoryDataErr,
+        editCategorySuccess,
+      } = actions;
 
     const [dataForEdit, setDataForEdit] = useState(); //foredit
     const dispatch = useDispatch();
@@ -22,7 +30,38 @@ const CourseCategory = () => {
             users: state.users,
         };
     });
+
+    const postcategorydata = useSelector((state) => state.category.postcategoryData)
+    const editcategoryData = useSelector((state) => state.category.editcategoryData)
+    // const postStateError = useSelector((state) => state.category.postStateErr)
  
+
+    useEffect(() => {
+       if (postcategorydata && postcategorydata.status  === 200) {
+           dispatch(postCategorySuccess(null))
+           toast.success("Category Add successful");
+           //toastAssetsAdd(true)
+           //onHide()
+       }
+       // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+       //   dispatch(editSchemeSuccess(null))
+       //   toast.success("Jobs Update successful");
+       // }
+    }, [postcategorydata])
+
+    useEffect(() => {
+       if (editcategoryData && editcategoryData.status  === 200) {
+           dispatch(editCategorySuccess(null))
+           toast.success("Category updated successful");
+           //toastAssetsAdd(true)
+           //onHide()
+       }
+       // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+       //   dispatch(editSchemeSuccess(null))
+       //   toast.success("Jobs Update successful");
+       // }
+    }, [editcategoryData])
+    
     const showModal = () => {
         setIsModalVisible(true);
     };

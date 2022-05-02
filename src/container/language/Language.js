@@ -8,15 +8,26 @@ import { getLanguageData, postLanguageData } from '../../redux/language/actionCr
 import { Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
+import actions from '../../redux/language/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Language = () => {
+    const {
+        postLanguageSuccess,postLanguageDataErr,
+      } = actions;
     const [languageTableData, setLanguageTableData] = useState([])
     const [addLanguageData, setAddLanguageData] = useState({
         name: '',
         sequence: 0
     })
     const languageData = useSelector((state) => state.language.getLanguageData);
+    const postLanguagedata = useSelector((state) => state.language.postLanguageData);
+    const LanguageError = useSelector((state) => state.language.LanguageError);
 
+    useEffect(() => {
+       console.log("postLanguagedata",postLanguagedata)
+    }, [postLanguagedata])
 
     const dispatch = useDispatch()
 
@@ -29,6 +40,19 @@ const Language = () => {
         }
     }, [languageData])
 
+    useEffect(() => {
+        if (postLanguagedata && postLanguagedata.status  ===  200) {
+            dispatch(postLanguageSuccess(null))
+            toast.success("Language Add successful");
+        }
+      }, [postLanguagedata])
+
+      useEffect(()=>{
+        if(LanguageError){ 
+            dispatch(postLanguageDataErr(null))
+          toast.error("Something Wrong")
+        }
+      },[LanguageError])
 
     useEffect(() => {
         dispatch(getLanguageData())

@@ -58,14 +58,6 @@ const ProviderConfig = ({ basename }) => {
     }
   }, [loginData])
   
-
-  // useEffect(()=>{
-  // if(isLoggedIn === true){
-  //   toast.success("Login successful");
-  // }
- 
-  // },[isLoggedIn])
-
   useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));

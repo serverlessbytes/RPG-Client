@@ -10,6 +10,10 @@ const {
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_ERR,
 
+  EDIT_CATEGORY_BEGINE, 
+  EDIT_CATEGORY_SUCCESS,
+  EDIT_CATEGORY_ERR,
+
   GET_COURSEFILTER_BEGINE,
   GET_COURSEFILTER_SUCCESS,
   GET_COURSEFILTER_ERR,
@@ -58,10 +62,12 @@ const initialState = {
   loading: false,
   error: null,
   postcategoryData: null,
+  editcategoryData: null,
   categoryData: null,
   courseFilterData: null,
   editFilterData: null,
   editPartnerCourseData:null,
+  editPartnerCourseError:null,
   postPartnerCourseData:null,
   postPartnerCourseDataerr:null,
   addSwayamCourseData:null,
@@ -70,6 +76,7 @@ const initialState = {
   editSwayamCourseErr:null,
   addSwayamCourseModuleData:null,
   getSwayamCourseModuleData:null,
+  addSwayamCourseModuleError:null,
   editSwayamCourseModuleData:null,
   getAllCourse:null,
 };
@@ -89,6 +96,24 @@ const cateGoryReducer = (state = initialState, action) => {
         loading: false,
       };
     case POST_CATEGORY_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_CATEGORY_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        editcategoryData: data,
+        loading: false,
+      };
+    case EDIT_CATEGORY_ERR:
       return {
         ...state,
         error: err,
@@ -161,7 +186,7 @@ const cateGoryReducer = (state = initialState, action) => {
     case EDIT_PARTNER_COURSE_ERR:
       return {
         ...state,
-        error: err,
+        editPartnerCourseError: err,
         loading: false,
       };
   
@@ -232,7 +257,7 @@ const cateGoryReducer = (state = initialState, action) => {
         case ADD_SWAYAM_COURSE_MODULE_ERR:
           return {
             ...state,
-            error: err,
+            addSwayamCourseModuleError: err,
             loading: false,
           };
 

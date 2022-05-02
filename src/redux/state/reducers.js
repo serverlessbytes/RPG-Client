@@ -28,6 +28,7 @@ const initialState = {
   loading: false,
   error: null,
   postStateData:null,
+  postStateErr:null,
   getStateData:null,
 };
 
@@ -48,7 +49,7 @@ const stateReducer = (state = initialState, action) => {
     case POST_STATE_ERR:
       return {
         ...state,
-        error: err,
+        postStateErr: err,
         loading: false,
       };
     case CART_UPDATE_BEGIN:
