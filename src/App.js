@@ -51,15 +51,6 @@ const ProviderConfig = ({ basename }) => {
     return () => (unmounted = true);
   }, [setPath]);
 
-  useEffect(()=>{
-  if(isLoggedIn === true){
-    toast.success("Login successful");
-  }
-  // else{
-  //   toast.error("Login Unsuccessful !");
-  // }
-  },[isLoggedIn])
-
   useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));

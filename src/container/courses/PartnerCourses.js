@@ -20,13 +20,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const PartnerCourses = () => {
   const {
-    getallSwayamCourseSuccess,addSwayamPartnerCourseSuccess,
+    addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr,
   } = actions;
 
   const courseData = useSelector(state => state.category.courseFilterData);
 
-  useEffect(()=>{console.log("courseData",courseData)},[courseData])
-  
+  useEffect(() => { console.log("courseData", courseData) }, [courseData])
+
   const { Option } = Select;
   const history = useHistory();
   let dispatch = useDispatch();
@@ -52,6 +52,7 @@ const PartnerCourses = () => {
   const postPartnerCourseData = useSelector(state => state.category.postPartnerCourseData)
   const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr)
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData)
+  const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError)
 
   useEffect(() => {
     if (data.length) {
@@ -67,35 +68,39 @@ const PartnerCourses = () => {
     })
   }, [])
 
-  useEffect(()=>{console.log("editPartnerCourseData",editPartnerCourseData)},[editPartnerCourseData])
+  useEffect(() => { console.log("postPartnerCourseData", postPartnerCourseData) }, [postPartnerCourseData])
 
   useEffect(() => {
-    if (postPartnerCourseData && postPartnerCourseData.message === 'Course created successfully..') {
-        //dispatch(addSwayamPartnerCourseSuccess(null))
-        toast.success("Course Add successful");
-        //toastAssetsAdd(true)
-        //onHide()
+    if (postPartnerCourseData && postPartnerCourseData.status === 200) {
+      dispatch(addPartnerCourseSuccess(null))
+      toast.success("Partner Course Add successful");
     }
-}, [postPartnerCourseData])
+  }, [postPartnerCourseData])
 
-useEffect(()=>{
-  if(postPartnerCourseDataerr){ 
-    toast.error("Something Wrong")
-  }
-},[postPartnerCourseDataerr])
+  useEffect(() => {
+    if (postPartnerCourseDataerr) {
+      dispatch(addPartnerCourseErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [postPartnerCourseDataerr])
 
-useEffect(() => {
-  if (editPartnerCourseData && editPartnerCourseData.isActive  === false) {
-      //dispatch(editSwayamPartnerCourseSuccess(null))
+  useEffect(() => {
+    if (editPartnerCourseData && editPartnerCourseData.isActive === false) {
+      dispatch(editPartnerCourseSuccess(null))
       toast.success("Partner Course Delete successful");
-      //toastAssetsAdd(true)
-      //onHide()
-  }
-  else if(editPartnerCourseData && editPartnerCourseData.isActive  === true){
-   // dispatch(editSwayamPartnerCourseSuccess(null))
-    toast.success("Partner Course Update successful");
-  }
-}, [editPartnerCourseData])
+    }
+    else if (editPartnerCourseData && editPartnerCourseData.isActive === true) {
+      dispatch(editPartnerCourseSuccess(null))
+      toast.success("Partner Course Update successful");
+    }
+  }, [editPartnerCourseData])
+
+  useEffect(() => {
+    if (editPartnerCourseError) {
+      dispatch(editPartnerCourseErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [editPartnerCourseError])
 
   const header = [
     { label: "id", key: "id" },
@@ -226,7 +231,7 @@ useEffect(() => {
   }
 
   const onApproved = (id, isAp, key) => {
-    if(status !== "active"){
+    if (status !== "active") {
       return
     }
     let data = {
@@ -237,9 +242,8 @@ useEffect(() => {
     console.log("data", data);
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
-        console.log("res",res)
-        if(res.status === 200)
-        {
+        console.log("res", res)
+        if (res.status === 200) {
           toast.success("Approved successful");
         }
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
@@ -260,7 +264,7 @@ useEffect(() => {
             approved: (
               <>
                 <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
+                  <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
                 </div>
               </>
             ),

@@ -52,7 +52,7 @@ const actions = {
   GET_ALLSWAYAM_COURSE_SUCCESS: "GET_ALLSWAYAM_COURSE_SUCCESS",
   GET_ALLSWAYAM_COURSE_ERR: "GET_ALLSWAYAM_COURSE_ERR",
 
-  postBenefitsBegin: () => {
+  postCategoryBegin: () => {
     return {
       type: actions.POST_CATEGORY_BEGINE,
     };
@@ -65,7 +65,7 @@ const actions = {
     };
   },
 
-  postBenefitsErr: err => {
+  postCategoryDataErr: err => {
     return {
       type: actions.POST_CATEGORY_ERR,
       err,
@@ -112,7 +112,7 @@ const actions = {
     };
   },
 
-  editcategoryBegin: () => {
+  addPartnerCourseBegin: () => {
     return {
       type: actions.POST_PARTNERCOURSE_BEGINE,
     };
@@ -125,7 +125,7 @@ const actions = {
     };
   },
 
-  editcategoryErr: err => {
+  addPartnerCourseErr: err => {
     return {
       type: actions.POST_PARTNERCOURSE_ERR,
       err,

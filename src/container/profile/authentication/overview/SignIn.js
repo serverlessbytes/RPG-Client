@@ -16,6 +16,7 @@ const SignIn = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.auth.loading);
+  const isLoggedIn = useSelector(state => state.auth.login);
   const [form] = Form.useForm();
   const [state, setState] = useState({
     checked: false,

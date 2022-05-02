@@ -6,15 +6,19 @@ import STORAGEKEY from '../../config/APP/app.config';
 const {
 
   postCategorySuccess,
+  postCategoryDataErr,
   getcategorySuccess,
   editCategorySuccess,
   addPartnerCourseSuccess,
+  addPartnerCourseErr,
   getCoursefilterSuccess,
   editCoursefilterSuccess,
   editPartnerCourseSuccess,
+  editPartnerCourseErr,
   addSwayamPartnerCourseSuccess,
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleSuccess,
+  addSwayamCourseModuleErr,
   getSwayamCourseModuleSuccess,
   editSwayamCourseModuleSuccess,
   getallSwayamCourseSuccess,
@@ -28,6 +32,7 @@ export const postCategoryData = (body) => async (dispatch) => {
        dispatch(postCategorySuccess(res))
        return dispatch(getCategoryData(body)) 
     })
+    .catch((err) => dispatch(postCategoryDataErr(err)))
 }
 
 export const getCategoryData = () => async (dispatch) => {
@@ -53,6 +58,7 @@ export const addPartnerCourse = (body) => async (dispatch) => {
      return  dispatch(addPartnerCourseSuccess(res))
      //return dispatch(getCoursefilter(categoryId,perPage,pageNumber,mode,inactive))
     })
+    .catch((err) => dispatch(addPartnerCourseErr(err)))
 }
 export const getCoursefilter = (categoryId,perPage,pageNumber,mode,inactive) => async (dispatch) => {
   //console.log("categoryId",categoryId)
@@ -91,6 +97,7 @@ export const editPartnerCoursefilter = (data,categoryId,perPage,pageNumber,mode,
         dispatch(getCoursefilter(category,per_page, page_number,Mode,Inactive))
       }
     })
+    .catch((err) => dispatch(editPartnerCourseErr(err)))
 }
 
 export const addSwayamCourse = (data) => async (dispatch) => {
@@ -117,6 +124,7 @@ export const addSwayamCourseModule = (data) => async (dispatch) => {
     .then((res) => {
       return dispatch(addSwayamCourseModuleSuccess(res))
     })
+    .catch((err) => dispatch(addSwayamCourseModuleErr(err)))
 }
 
 

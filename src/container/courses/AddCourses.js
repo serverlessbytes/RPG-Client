@@ -22,6 +22,9 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { getUser } from '../../redux/authentication/actionCreator';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import actions from '../../redux/course/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddCourses = () => {
 
@@ -32,6 +35,11 @@ const AddCourses = () => {
   const { TextArea } = Input;
   const dispatch = useDispatch();
 
+  const {
+    addSwayamPartnerCourseSuccess,
+    addSwayamPartnerCourseErr,
+  } = actions;
+
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
   const [selectKey, setSelectKey] = useState(0);
@@ -40,9 +48,10 @@ const AddCourses = () => {
   const categoryData = useSelector(state => state.category.categoryData);
   const jobCategoryData = useSelector(state => state.job.jobCatogeryData);
   const editOneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
   const userData = useSelector(state => state.auth.getUserData);
   const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
+  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
+  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
 
   const [state, setState] = useState({
     detail: RichTextEditor.createEmptyValue(),
@@ -72,7 +81,28 @@ const AddCourses = () => {
     },
   ]);
 
+  useEffect (()=>{
+    return(()=>{dispatch(addSwayamPartnerCourseSuccess(null))} //for clear a Modules
+    )
+  },[])
   
+useEffect(() => {
+  if (addSwayamCourseData && addSwayamCourseData.status  === 200) {
+    toast.success("Swayam Course Modules Add successful");
+       dispatch(addSwayamPartnerCourseSuccess(null))
+  }
+  // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+  //   dispatch(editSchemeSuccess(null))
+  //   toast.success("Jobs Update successful");
+  // }
+}, [addSwayamCourseData])
+
+useEffect(()=>{
+  if(addSwayamCourseDataErr){ 
+    dispatch(addSwayamPartnerCourseErr())
+    toast.error("Something Wrong")
+  }
+},[addSwayamCourseDataErr])
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -137,6 +167,7 @@ const AddCourses = () => {
   useEffect(() => {
     if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
       setSwyamModuleId(false);
+      //toast.success("Swayam Course Add successful");
       setDefaultSelect('2');
     }
   }, [addSwayamCourseData]);

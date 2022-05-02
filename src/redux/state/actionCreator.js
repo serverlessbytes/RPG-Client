@@ -15,6 +15,7 @@ const {
   cartDeleteErr,
 
   postStateSuccess,
+  postStateErr,
   getStateSuccess,
   
 } = actions;
@@ -65,6 +66,7 @@ export const postStateData=(body) => async(dispatch)=>{
        dispatch(postStateSuccess(res))
       return dispatch(getStateData())
   })
+  .catch((err) => dispatch(postStateErr(err)))
 }
 
 export const getStateData=() => async(dispatch)=>{

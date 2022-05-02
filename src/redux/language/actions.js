@@ -32,7 +32,7 @@ const actions = {
     };
   },
 
-  postLanguageErr: err => {
+  postLanguageDataErr: err => {
     return {
       type: actions.POST_LANGUAGE_ERR,
       err,

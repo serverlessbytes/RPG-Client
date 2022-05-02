@@ -18,6 +18,7 @@ const initialState = {
   loading: false,
   error: null,
   postDistrictData:null,
+  postDistrictDataErr:null,
   getDistrictData:null,
 };
 
@@ -38,7 +39,7 @@ const districtReducer = (state = initialState, action) => {
     case POST_DISTRICT_ERR:
       return {
         ...state,
-        error: err,
+        postDistrictDataErr: err,
         loading: false,
       };
     

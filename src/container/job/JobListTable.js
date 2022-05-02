@@ -17,7 +17,7 @@ import actions from '../../redux/jobs/actions';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // props from JobPost
   const {
-    addJobPostSuccess,editJobPostSuccess,getJobsFilterForMainSuccess
+    addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess
   } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
@@ -43,7 +43,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)
   const addJobPostData = useSelector((state) => state.job.addJobPostData) //fetch for tostify from reducer 
 
-  useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])//
+  // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])//
 
   const onDelete = (id) => {
     let courseDataDelete = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find((item) => item.id === id)
@@ -89,7 +89,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
 
   const onRestore = (id) => {
     let jobsData = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data.data.find((item) => item.id === id)
-    console.log("jobsdataInactive", jobsData);
+    //console.log("jobsdataInactive", jobsData);
     if (jobsData) {
       let data = {
         name: jobsData.name.id,
@@ -125,38 +125,39 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // pr
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === "Jobs added successfully.") {
-        dispatch(addJobPostSuccess(null))
-        toast.success("Jobs Add successful");
-        //toastAssetsAdd(true)
-        //onHide()
+      dispatch(addJobPostSuccess(null))
+      toast.success("Jobs Add successful");
+      //toastAssetsAdd(true)
+      //onHide()
     }
-}, [addJobPostData])
+  }, [addJobPostData])
 
-useEffect(()=>{
-  if(addJobPostErr){ 
-    toast.error("Something Wrong")
-  }
-},[addJobPostErr])
+  useEffect(() => {
+    if (addJobPostErr) {
+      toast.error("Something Wrong")
+    }
+  }, [addJobPostErr])
 
-useEffect(()=>{
-  if(editJobPostErr){ 
-    toast.error("Something Wrong")
-  }
-},[editJobPostErr])
+  useEffect(() => {
+    if (editJobPostErr) {
+      toast.error("Something Wrong")
+    }
+  }, [editJobPostErr])
 
-useEffect(() => {
-  if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
+  useEffect(() => {
+    console.log("editJobPostData",editJobPostData)
+    if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
       dispatch(editJobPostSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
       toast.success("Jobs Delete successful");
       //toastAssetsAdd(true)
       //onHide()
-  }
-  else if(editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true){
-    dispatch(editJobPostSuccess(null))
-    toast.success("Jobs Update successful");
-  }
-}, [editJobPostData])
+    }
+    else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
+      dispatch(editJobPostSuccess(null))
+      toast.success("Jobs Update successful");
+    }
+  }, [editJobPostData])
 
   useEffect(() => {
     dispatch(getJobPost(perPage, pageNumber))
@@ -172,19 +173,21 @@ useEffect(() => {
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then((res) => {
         //console.log("res",res)
-        if(res.data.isApproved === true)
-        {
+        if (res.data.isApproved === true) {
+          
           toast.success("Approved successful");
+          //dispatch(getJobsFilterForMainSuccess(null))
         }
-        else if(res.data.isApproved === false){
+        else if (res.data.isApproved === false) {
           toast.success("Approved Un-successful");
         }
-        dispatch(getJobsFilterForMain(perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
+        dispatch( (perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
       })
-      .catch((err) => console.log("Error", err))
-      // if(err){ 
-      //   toast.error("Something Wrong")
-      // }
+      .catch((err) => {
+        if (err) {
+          toast.error("Something Wrong")
+        }
+      })
   }
 
   useEffect(() => {
@@ -218,8 +221,8 @@ useEffect(() => {
                   <FeatherIcon icon="eye" size={16} />
                 </Button>
               </>
-               : 
-               <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
+              :
+              <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
                 <FeatherIcon icon="rotate-ccw" size={16} />
               </Button>}
           </div>

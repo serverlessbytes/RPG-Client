@@ -12,13 +12,15 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
 import { getDistrictData, postDistrictData } from '../../redux/district/actionCreator';
+import actions from '../../redux/district/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const district = () => {
     const dispatch = useDispatch()
-
-    
-    const diStrict = useSelector((state) => state.district.getDistrictData) // district
-    const stateData = useSelector((state) => state.state.getStateData) //state
+    const {
+        postDistrictSuccess, postDistrictErr,
+    } = actions;
 
     const [stateTableData, setstateTableData] = useState([])
     const [statedata, setStateData] = useState("");
@@ -26,6 +28,13 @@ const district = () => {
         name: '',
         stateId: ''
     })
+
+    const diStrict = useSelector((state) => state.district.getDistrictData) // district
+    const stateData = useSelector((state) => state.state.getStateData) //state
+    const postDistrictdataa = useSelector((state) => state.district.postDistrictData) //state
+    const postDistrictDataError = useSelector((state) => state.district.getStateData) //state
+
+    useEffect(() => { console.log("postDistrictdataa", postDistrictdataa) }, [postDistrictdataa])
 
     const onstatedata = (e, name) => {
         if (name === "state") {
@@ -42,19 +51,35 @@ const district = () => {
         }
     }
 
+
+    useEffect(() => {
+        if (postDistrictdataa && postDistrictdataa.status === 200) {
+            dispatch(postDistrictSuccess(null))
+            // dispatch(getJobsFilterForMainSuccess(null))
+            toast.success("District Add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [postDistrictdataa])
+
+    useEffect(() => {
+        if (postDistrictDataError) {
+            dispatch(postDistrictErr(null))
+            toast.error("Something Wrong")
+        }
+    }, [postDistrictDataError])
+
     useEffect(() => {
         if (stateData && stateData.data) {
             setStateData(stateData?.data[0]?.id)
-            console.log("stateData",stateData?.data[0]?.id)
+            console.log("stateData", stateData?.data[0]?.id)
 
         }
     }, [stateData]);
 
-    useEffect(() => { console.log("statedata=========", statedata) }, [statedata])
-
     //const usersTableData = [];
     //const [languageTableData, setLanguageTableData] = useState([])
-  
+
 
     useEffect(() => {
         if (diStrict && diStrict.data) {
@@ -135,7 +160,7 @@ const district = () => {
 
                         <Col md={6} xs={24} className="mb-25">
                             <Form name="sDash_select" layout="vertical">
-                                <Form.Item  label="State" >
+                                <Form.Item label="State" >
                                     <Select
                                         size="large"
                                         className="sDash_fullwidth-select"
