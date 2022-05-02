@@ -9,10 +9,14 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobcategory, editJobcategory, getJobcategory } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
-
+import { toast } from 'react-toastify';
+import actions from '../../redux/jobs/actions';
 const JobCategory = () => {
+    const {editJobcategorySuccess} = actions;
 
 
+    const jobData = useSelector((state) => state.job.jobCatogeryData)
+    const editJobCatogeryData = useSelector((state) => state.job.editJobCatogeryData)
     const dispatch = useDispatch()
     const usersTableData = [];
     const [form] = Form.useForm()
@@ -25,8 +29,20 @@ const JobCategory = () => {
         };
     });
 
-    const jobData = useSelector((state) => state.job.jobCatogeryData)
-
+    useEffect(() => {
+        console.log('editJobCatogeryData', editJobCatogeryData)
+        if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
+            dispatch(editJobcategorySuccess(null))
+            toast.success("job Category updated successfully.");
+            //toastAssetsAdd(true)
+            //onHide()
+        }else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
+            dispatch(editJobcategorySuccess(null))
+            toast.success("job Category deleted successfully.");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editJobCatogeryData])  
     useEffect(() => {
         dispatch(getJobcategory());
     }, [])

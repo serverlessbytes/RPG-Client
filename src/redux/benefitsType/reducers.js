@@ -10,6 +10,10 @@ const {
   GET_BENEFITS_SUCCESS,
   GET_BENEFITS_ERR,
 
+  EDIT_BENEFITS_BEGINE,
+  EDIT_BENEFITS_SUCCESS,
+  EDIT_BENEFITS_ERR,
+
 } = actions;
 
 const initialState = {
@@ -19,6 +23,7 @@ const initialState = {
   postStateData:null,
   postBenefitsData:null,
   getBenefitData:null,
+  editBenefitData:null,
 };
 
 const BenefitsReducer = (state = initialState, action) => {
@@ -54,6 +59,24 @@ const BenefitsReducer = (state = initialState, action) => {
         loading: false,
       };
     case GET_BENEFITS_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+      
+      case EDIT_BENEFITS_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_BENEFITS_SUCCESS:
+      return {
+        ...state,
+        editBenefitData:data,
+        loading: false,
+      };
+    case EDIT_BENEFITS_ERR:
       return {
         ...state,
         error: err,
