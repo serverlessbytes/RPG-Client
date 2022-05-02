@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { Modal } from '../../components/modals/antd-modals';
-import { Form, Input, Pagination, Table } from 'antd';
+import { Form, Input, Modal, Pagination, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLanguageData, postLanguageData } from '../../redux/language/actionCreator';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
@@ -116,7 +115,8 @@ const Language = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
-                    title="Add language"
+                    title="Language"
+                    okText="Add"
                 >
                     <Form name="language" form={form} layout="vertical">
                         <label htmlFor="name">Language</label>
@@ -136,15 +136,7 @@ const Language = () => {
                                 defaultValue={addLanguageData.sequence}
                             />
                         </Form.Item>
-                        {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="sequence">
-                        <Input
-                            type="number"
-                            placeholder="Enter Sequence"
-                            name="key"
-                            defaultValue={data.sequence}
-                        />
-                    </Form.Item> */}
+                        
                     </Form>
                 </Modal>}
         </>

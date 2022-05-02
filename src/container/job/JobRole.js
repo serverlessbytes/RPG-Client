@@ -36,14 +36,14 @@ const JobRole = () => {
     }, [])
 
     useEffect(() => {
-      if(!isModalVisible){
-        setIsDisabled(true)
-      }
+        if (!isModalVisible) {
+            setIsDisabled(true)
+        }
     }, [isModalVisible])
-    
+
 
     const onEdit = (id) => {
-        let dataForEdit = jobRolesData  && jobRolesData.find((item) => item.id === id)
+        let dataForEdit = jobRolesData && jobRolesData.find((item) => item.id === id)
         if (dataForEdit) {
             setSelectedJobCategory(dataForEdit)
             form.setFieldsValue({
@@ -68,37 +68,37 @@ const JobRole = () => {
     }
 
     useEffect(() => {
-     if(jobData && jobData.Data){
-      setJobCategoryTableData(jobData.Data)
-     }
+        if (jobData && jobData.Data) {
+            setJobCategoryTableData(jobData.Data)
+        }
     }, [])
-    
+
 
     useEffect(() => {
-      if (jobRolesData && jobRolesData.length > 0) {
+        if (jobRolesData && jobRolesData.length > 0) {
 
-          setJobRolesTableData(jobRolesData.length > 0 ?
-            jobRolesData.map((item) => {
-                  return {
-                      ...item,  
-                      action: (
-                        <div className='active-jobs-table'>
-                        <div className="table-actions">
-                            <>
-                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                    <FeatherIcon icon="edit" size={16} />
-                                </Button>
-                                {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+            setJobRolesTableData(jobRolesData.length > 0 ?
+                jobRolesData.map((item) => {
+                    return {
+                        ...item,
+                        action: (
+                            <div className='active-jobs-table'>
+                                <div className="table-actions">
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                                     <FeatherIcon icon="x-circle" size={16} />
                                 </Button> */}
-                            </>
-                        </div>
-                    </div>
-                      )
-                  }
-              }) : [])
-      }
-  }, [jobRolesData])
+                                    </>
+                                </div>
+                            </div>
+                        )
+                    }
+                }) : [])
+        }
+    }, [jobRolesData])
 
 
     const showModal = () => {
@@ -153,7 +153,7 @@ const JobRole = () => {
         {
             title: 'Job Roles',
             dataIndex: 'name',
-            
+
             sorter: (a, b) => a.name.length - b.name.length,
             sortDirections: ['descend', 'ascend'],
         },
@@ -195,18 +195,18 @@ const JobRole = () => {
                                 dataSource={jobRolesTableData}
                                 columns={jobTableColumns}
                                 pagination={false}
-                                // pagination={{
-                                //     defaultPageSize: users?.per_page,
-                                //     total: users?.page_count,
-                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                //     onChange: (page, pageSize) => {
-                                //       setPageNumber(page);
-                                //       setPerPage(pageSize);
-                                //     },
-                                //     // defaultPageSize: 5,
-                                //     // total: usersTableData.length,
-                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                //   }}
+                            // pagination={{
+                            //     defaultPageSize: users?.per_page,
+                            //     total: users?.page_count,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //     onChange: (page, pageSize) => {
+                            //       setPageNumber(page);
+                            //       setPerPage(pageSize);
+                            //     },
+                            //     // defaultPageSize: 5,
+                            //     // total: usersTableData.length,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //   }}
                             />
 
                         </TableWrapper>
@@ -226,29 +226,23 @@ const JobRole = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            {isModalVisible && <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
-                {isDisabled && <Form.Item initialValue="Select a job category " name="jobCategoryId">
-                                <Select size="large" placeholder="Select Category"  className="sDash_fullwidth-select">
-                                    {jobData?.data && jobData?.data?.map((items) => (
-                                        <Option value={items.id}>{items.name} </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>}
-                    <label htmlFor="name">Type of role</label>
+                    <label>Job category</label>
+                    {isDisabled && <Form.Item initialValue="Select a job category " name="jobCategoryId">
+                        <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select">
+                            {jobData?.data && jobData?.data?.map((items) => (
+                                <Option value={items.id}>{items.name} </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>}
+                    <label htmlFor="name">Job role name</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder=""
-                            // name="name"
+                            placeholder="Enter job role name"
+                        // name="name"
                         />
                     </Form.Item>
-                    {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder=""
-                            name="key"
-                        />
-                    </Form.Item> */}
                 </Form>
 
             </Modal>}

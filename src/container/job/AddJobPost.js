@@ -98,7 +98,7 @@ const AddJobPost = () => {
 
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData.data  ) {
+        if (getOneJobPostData && getOneJobPostData.data) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
@@ -141,11 +141,11 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.jobCategoryId === '') {
-            error.jobCategoryId = 'JobCategoryId is required';
+            error.jobCategoryId = 'Job Category is required';
             flage = true;
         }
         if (state.jobRoleId === '') {
-            error.jobRoleId = 'JobRoleId is required';
+            error.jobRoleId = 'Job Role is required';
             flage = true;
         }
         if (state.name === '') {
@@ -169,7 +169,7 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.pincode === '') {
-            error.pincode = 'pincode is required';
+            error.pincode = 'Pincode is required';
             flage = true;
         }
         if (state.description === '') {
@@ -184,7 +184,7 @@ const AddJobPost = () => {
             error.requirements = 'Requirements is required';
             flage = true;
         }
-        if (state.shifts === '') {
+        if (state.shifts.length <= 0) {
             error.shifts = 'Shifts is required';
             flage = true;
         }
@@ -201,11 +201,11 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.startDate === '') {
-            error.startDate = 'StartDate is required';
+            error.startDate = 'Start date is required';
             flage = true;
         }
         if (state.endDate === '') {
-            error.endDate = 'EndDate is required';
+            error.endDate = 'End date is required';
             flage = true;
         }
         if (state.extraType === '') {
@@ -313,7 +313,7 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
-            shifts: state.shifts,
+            shift: state.shift,
             email: state.email,
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
@@ -379,7 +379,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -418,7 +418,7 @@ const AddJobPost = () => {
                                         {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
                                     </div>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -452,7 +452,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -481,7 +481,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11} md={11} sm={24} xs={24}>
+                                {/* <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Type of Job</label>
@@ -498,8 +498,8 @@ const AddJobPost = () => {
                                         </Col>
                                         {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                     </Row>
-                                </Col>
-                            {/* </Row>
+                                </Col> */}
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -541,7 +541,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -569,7 +569,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
@@ -585,7 +585,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11} md={11} sm={24} xs={24}>
+                                {/* <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="description">Description</label>
@@ -597,8 +597,8 @@ const AddJobPost = () => {
                                             </Form.Item>
                                         </Col>
                                     </Row>
-                                </Col>
-                            {/* </Row>
+                                </Col> */}
+                                {/* </Row>
 
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
@@ -633,7 +633,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            {/* </Row>
+                                {/* </Row>
 
                             <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
@@ -651,22 +651,6 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11} md={11} sm={24} xs={24}>
-                                    <Row align="middle" justify="space-between">
-                                        <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="requirements">Requirements</label>
-                                        </Col>
-                                        <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="requirements">
-                                                <TextArea placeholder='Requirements' value={state.requirements} name="requirements" onChange={e => onChangeValue(e)} />
-                                                {error.requirements && <span style={{ color: 'red' }}>{error.requirements}</span>}
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            {/* </Row>
-
-                            <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -686,25 +670,75 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="description">Description</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="description">
+                                                <TextArea placeholder='Description' value={state.description} name="description" onChange={e => onChangeValue(e)} />
+                                                {error.description && <span style={{ color: 'red' }}>{error.description}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="requirements">Requirements</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="requirements">
+                                                <TextArea placeholder='Requirements' value={state.requirements} name="requirements" onChange={e => onChangeValue(e)} />
+                                                {error.requirements && <span style={{ color: 'red' }}>{error.requirements}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                {/* </Row>
+
+                            <Row justify="space-between"> */}
+
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="name">Type of Job</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="isactive" style={{marginBottom:"0px"}}>
+                                                <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
+                                                    <Space direction="vertical">
+                                                        <Row>
+                                                            <Radio checked={state.type === true} value={"PARTTIME"}  style={{marginBottom:"0px"}}>Part-time</Radio>
+                                                            <Radio checked={state.type === true} value={"FULLTIME"}  style={{marginBottom:"0px"}}>Full-time</Radio>
+                                                        </Row>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Form.Item>
+                                        {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="isactive">Type Of Field</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="isactive">
+                                            <Form.Item name="isactive" style={{marginBottom:"0px"}}>
                                                 <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
                                                     <Space direction="vertical">
                                                         <Row>
-                                                            <Radio checked={state.extraType === true} value={"CONTRACTUAL"}>
+                                                            <Radio checked={state.extraType === true} value={"CONTRACTUAL"} style={{marginBottom:"0px"}}>
                                                                 Contractual
                                                             </Radio>
-                                                            <Radio checked={state.extraType === true} value={"ONROLL"}>
+                                                            <Radio checked={state.extraType === true} value={"ONROLL"} style={{marginBottom:"0px"}}>
                                                                 OnRoll
                                                             </Radio>
                                                         </Row>
                                                     </Space>
 
                                                 </Radio.Group>
-                                                {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
                                             </Form.Item>
+                                                {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
                                         </Col>
                                     </Row>
                                 </Col>

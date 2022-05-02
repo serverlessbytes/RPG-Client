@@ -28,11 +28,11 @@ const JobCategory = () => {
     const jobData = useSelector((state) => state.job.jobCatogeryData)
 
     useEffect(() => {
-        dispatch(getJobcategory()); 
+        dispatch(getJobcategory());
     }, [])
-    useEffect(() =>{
-        console.log("jobDatajobData",jobData)
-    },[jobData])
+    useEffect(() => {
+        console.log("jobDatajobData", jobData)
+    }, [jobData])
 
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
@@ -60,12 +60,12 @@ const JobCategory = () => {
 
     useEffect(() => {
         if (jobData && jobData.data) {
-            console.log("-----",jobData)
-            setJobCategoryTableData(jobData.data?
+            console.log("-----", jobData)
+            setJobCategoryTableData(jobData.data ?
                 jobData.data.map((item) => {
-                  
+
                     return {
-                        ...item,  
+                        ...item,
                         action: (
                             <div className='active-jobs-table'>
                                 <div className="table-actions">
@@ -198,18 +198,18 @@ const JobCategory = () => {
                                 dataSource={jobCategoryTableData}
                                 columns={jobTableColumns}
                                 pagination={false}
-                                // pagination={{
-                                //     defaultPageSize: users?.per_page,
-                                //     total: users?.page_count,
-                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                //     onChange: (page, pageSize) => {
-                                //       setPageNumber(page);
-                                //       setPerPage(pageSize);
-                                //     },
-                                //     // defaultPageSize: 5,
-                                //     // total: usersTableData.length,
-                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                //   }}
+                            // pagination={{
+                            //     defaultPageSize: users?.per_page,
+                            //     total: users?.page_count,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //     onChange: (page, pageSize) => {
+                            //       setPageNumber(page);
+                            //       setPerPage(pageSize);
+                            //     },
+                            //     // defaultPageSize: 5,
+                            //     // total: usersTableData.length,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //   }}
                             />
 
                         </TableWrapper>
@@ -229,14 +229,17 @@ const JobCategory = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            {isModalVisible && <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+                okText="Add">
+
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder=""
+                            placeholder="Job Category"
                             name="name"
                         />
+
                     </Form.Item>
                     {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">

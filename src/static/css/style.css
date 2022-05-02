@@ -753,6 +753,10 @@ ul {
   width: 100%;
 }
 
+.select-option-typ-placeholder{
+  color: #c9bfc3 !important;
+}
+
 /* Nasted Comments Styles */
 
 .nested-comment-wrapper .comment-title {

@@ -18,7 +18,7 @@ const AddSchemes = () => {
 
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('key');
-    
+
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
@@ -47,8 +47,8 @@ const AddSchemes = () => {
         spoc: '',
         isActive: '',
         sequence: '',
-        videoUrl:'',
-        thumbnail:'',
+        videoUrl: '',
+        thumbnail: '',
     });
     const [error, setError] = useState({})
 
@@ -89,8 +89,8 @@ const AddSchemes = () => {
                 spoc: getOneScHemeData.spoc,
                 isActive: getOneScHemeData.isActive,
                 sequence: getOneScHemeData.sequence,
-                videoUrl:getOneScHemeData.videoUrl,
-                thumbnail:getOneScHemeData.thumbnail,
+                videoUrl: getOneScHemeData.videoUrl,
+                thumbnail: getOneScHemeData.thumbnail,
             })
         }
     }, [getOneScHemeData])
@@ -298,8 +298,8 @@ const AddSchemes = () => {
             elink: state.elink,
             spoc: state.spoc,
             isActive: state.isActive,
-            videoUrl:state.videoUrl,
-            thumbnail:state.thumbnail,
+            videoUrl: state.videoUrl,
+            thumbnail: state.thumbnail,
 
         }
         console.log("data", state);
@@ -449,7 +449,7 @@ const AddSchemes = () => {
                         <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="Location">Location</label>
                             <Form.Item initialValue="Select a location">
-                                <Select size="large" className="sDash_fullwidth-select" value={state.locations} name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
+                                <Select size="large" placeholder="Location" className="sDash_fullwidth-select" value={state.locations} name="locations" onChange={(e) => selectValue(e, "locations")} mode="multiple">
                                     {State && State.map((item) => (
                                         <>
                                             <Option value={item.id}> {item.name} </Option>
@@ -469,18 +469,19 @@ const AddSchemes = () => {
                             </Form.Item>
                         </Col>
 
-                    {/* </Row>
-                    <Row justify="space-between"> */}
-                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-                            <label htmlFor="Category">Type</label>
-                            <Form.Item  >
-                                <Select size="large" placeholder="Select Type" className="sDash_fullwidth-select" value={state.type} name="type" onChange={(e) => selectValue(e, "type")}>
-                                    <Option value="ONLINE">Online </Option>
-                                    <Option value="OFFLINE">Offline</Option>
-                                </Select>
-                                {/* <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} /> */}
-                                {error.type && <span style={{ color: "red" }}>{error.type}</span>}
-                            </Form.Item>
+
+                        <Col lg={11} md={11} sm={24} xs={24} className="mb-mb-25">
+                            <Form layout="vertical">
+                                <Form.Item label="Type">
+                                    <Select size="large" className={state.type ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} value={state.type} name="type" placeholder="Select Type" onChange={(e) => selectValue(e, "type")}>
+                                    <Option value="">Select Type</Option>
+                                        <Option value="ONLINE">Online </Option>
+                                        <Option value="OFFLINE">Offline</Option>
+                                    </Select>
+                                    {/* <Input placeholder="" name='category' onChange={(e) => onChangeValue(e)} /> */}
+                                    {error.type && <span style={{ color: "red" }}>{error.type}</span>}
+                                </Form.Item>
+                            </Form>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="GrievanceRedress">Grievance Redress</label>
@@ -503,11 +504,11 @@ const AddSchemes = () => {
                                 {error.spoc && <span style={{ color: "red" }}>{error.spoc}</span>}
                             </Form.Item>
                         </Col>
-                    {/* </Row>
+                        {/* </Row>
 
                     <Row justify="space-between"> */}
                         <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-                        <label htmlFor="videoUrl">VideoUrl</label>
+                            <label htmlFor="videoUrl">VideoUrl</label>
                             <Form.Item >
                                 <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={(e) => onChangeValue(e)} />
                                 {error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>}
@@ -529,11 +530,11 @@ const AddSchemes = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                            {id?"Edit":"Add"}
+                            {id ? "Edit" : "Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
                             onClick={() => history.push(`/admin/scheme`)}
-                            >
+                        >
                             Cancel
                         </Button>
                     </div>

@@ -232,7 +232,7 @@ const CourseCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Add Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">

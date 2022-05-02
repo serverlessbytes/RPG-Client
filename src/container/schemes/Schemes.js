@@ -438,7 +438,7 @@ useEffect(()=>{
                     <Form.Item label="Scheme Category">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                         className={schemeCategory.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         name="category"
                         value={schemeCategory.category}
                         onChange={e => onChnageValue(e, 'category')}
@@ -455,7 +455,7 @@ useEffect(()=>{
                     <Form.Item label="Scheme Benefits">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                         className={schemeCategory.benefit ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         value={schemeCategory.benefit}
                         name="benefits"
                         onChange={e => onChnageValue(e, 'benefits')}

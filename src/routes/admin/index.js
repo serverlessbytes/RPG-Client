@@ -11,6 +11,7 @@ import schemes from './schemes';
 import Courses from './Courses';
 import district from './district';
  import user from './user'; 
+import Testimonial from './Testimonial';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -32,6 +33,7 @@ const Admin = () => {
         <Route path={`${path}/language`} component={LanguageRoutes} />
         <Route path={`${path}/scheme`} component={schemes} />
         <Route path={`${path}/courses`} component={Courses} />
+        <Route path={`${path}/testimonial`} component={Testimonial} />
         <Route path={`${path}/user`} component={user} />
       </Suspense>
     </Switch>
