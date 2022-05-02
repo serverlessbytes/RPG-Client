@@ -36,6 +36,7 @@ const ProviderConfig = ({ basename }) => {
   const history = useHistory();
   const route = useContext(RouterContext);
   const dispatch = useDispatch()
+  const loginData=useSelector(state=>state.auth.login)
 
   const { loginSuccess } = actions;
 
@@ -51,14 +52,19 @@ const ProviderConfig = ({ basename }) => {
     return () => (unmounted = true);
   }, [setPath]);
 
-  useEffect(()=>{
-  if(isLoggedIn === true){
-    toast.success("Login successful");
-  }
-  // else{
-  //   toast.error("Login Unsuccessful !");
+  useEffect(() => {
+    if(loginData && loginData.data){
+      toast.success("Login successful");
+    }
+  }, [loginData])
+  
+
+  // useEffect(()=>{
+  // if(isLoggedIn === true){
+  //   toast.success("Login successful");
   // }
-  },[isLoggedIn])
+ 
+  // },[isLoggedIn])
 
   useEffect(() => {
     if (AuthStorage.getToken()) {

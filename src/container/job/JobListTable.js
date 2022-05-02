@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 
 
-const JobListTable = ({ state, type, jobRole, apply, clear, status }) => { // props from JobPost
+const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,setNumberOfPage,setExportTog }) => { // props from JobPost
   const {
     addJobPostSuccess,editJobPostSuccess,getJobsFilterForMainSuccess
   } = actions;
@@ -159,7 +159,10 @@ useEffect(() => {
 }, [editJobPostData])
 
   useEffect(() => {
-    dispatch(getJobPost(perPage, pageNumber))
+    dispatch(getJobPost(perPage, pageNumber));
+    setPagePer(perPage);
+    setNumberOfPage(pageNumber);
+    setExportTog(false)
   }, [perPage, pageNumber])
 
   const onApproved = (id, isAp) => {
@@ -341,7 +344,7 @@ useEffect(() => {
               // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               onChange: (page, pageSize) => {
                 setPageNumber(page);
-                setPerPage(pageSize)
+                setPerPage(pageSize);
               }
             }}
             // pagination={false}

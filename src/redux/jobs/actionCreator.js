@@ -174,8 +174,12 @@ export const getEmployerData = () => async (dispatch) => {
     .catch((err) => dispatch(getEmployerDataErr(err)))
 }
 
-export const allJobs = (type) => async (dispatch) => {
-  await ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&type=${type}`)
+export const allJobs = (type,state,jobRole) => async (dispatch) => {
+  let URL = `job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`
+  if(type){
+    URL=URL.concat(`&type=${type}`)
+  }
+  await ApiPost(URL)
     .then((res) => {
       //console.log("res",res)
       return dispatch(allJobsSuccess(res))

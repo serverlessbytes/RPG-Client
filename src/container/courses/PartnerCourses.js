@@ -45,6 +45,7 @@ const PartnerCourses = () => {
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
+  const [exportTog,setExportTog]=useState(false)
 
   const catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
@@ -54,10 +55,13 @@ const PartnerCourses = () => {
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData)
 
   useEffect(() => {
-    if (data.length) {
+    if (data.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // 
+      toast.success("Partner course data exported successfully")
+    }else if(exportTog){
+      toast.success("No Partner course data for export")
     }
-    console.log("state", state);
+   
   }, [data])
 
   useEffect(() => {
@@ -124,15 +128,7 @@ useEffect(() => {
   ];
   useEffect(() => {
     if (allCategortData?.data?.data) { //set a state for export word
-      setData(allCategortData.data.data.map((item) => {
-        return {
-          ...item,
-          courseCategory: item?.courseCategory?.name,
-          jobTypes: item?.jobTypes?.name,
-          // schemeCategory: item?.schemeCategory?.name,
-          // benifitLine: item.benifitLine,
-        }
-      })
+      setData(allCategortData?.data?.data
       )
     }
   }, [allCategortData])
@@ -353,12 +349,13 @@ useEffect(() => {
 
   const callback = key => {
     setStatus(key);
-    setPageNumber(1)
-    console.log(key);
+    setPageNumber(1);
+    setExportTog(false)
   };
 
   const onePartnercourseData = () => {
     dispatch(getallSwayamCourse(state.mode))
+    setExportTog(true)
   }
   // const onAllPartnerCourse = () => {
   // }
@@ -474,6 +471,7 @@ useEffect(() => {
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
+                            setExportTog(false)
                           },
                           // defaultPageSize: 5,
                           // total: usersTableData.length,
@@ -507,6 +505,7 @@ useEffect(() => {
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
+                            setExportTog(false)
                           },
                         }}
                       />

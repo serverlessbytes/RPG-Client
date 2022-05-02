@@ -51,9 +51,10 @@ const SwayamCourses = () => {
   const [usertable, setUsertable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('');
+  const [exportTog,setExportTog]=useState(false);
 
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const allCategortData = useSelector(state => state.category.getAllCourse);
+  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const header = [
     { label: "id", key: "id" },
@@ -70,11 +71,15 @@ const SwayamCourses = () => {
   ];
 
   useEffect(() => {
-    if (state.length) {
+    if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
+      toast.success("Swayam course data exported successfully")
+    }else if(exportTog){
+      toast.success("No swayam data for export")
     }
-    console.log("state", state);
+    
   }, [state])
+
 
   useEffect(() => {
     return (() => {
@@ -83,9 +88,6 @@ const SwayamCourses = () => {
     })
   }, [])
 
-useEffect(()=>{
-  console.log("editSwayamCourseData",editSwayamCourseData)
-},[editSwayamCourseData])
 
 useEffect(() => {
   if (addSwayamCourseData && addSwayamCourseData.message  === 'Course Created Successfully') {
@@ -126,31 +128,18 @@ useEffect(()=>{
   }
 },[editSwayamCourseErr])
 
+
   useEffect(() => {
-    if (allCategortData?.data?.data) { //set a state for export excel
-      setState(allCategortData.data.data.map((item) => {
-        return {
-          ...item,
-          // courseCategory: item?.courseCategory?.name,
-          // jobTypes: item?.jobTypes?.name,
-          schemeCategory: item?.schemeCategory?.name,
-          benifitLine: item.benifitLine,
-        }
-      })
-      )
+    if (courseData?.data?.data) { 
+      setState(courseData.data.data)
     }
-  }, [allCategortData])
+  }, [courseData])
 
 
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
 
-  // useEffect(() => {
-  //   if (categoryData && categoryData.data && categoryData.data.length > 0) {
-  //     setData({ ...data, category: categoryData.data[0].id });
-  //   }
-  // }, [categoryData]);
 
   useEffect(() => {
     if (status && data.category) {
@@ -223,7 +212,6 @@ useEffect(()=>{
         isActive: true,
         isDeleted: false,
       };
-      console.log("dt",dt)
       dispatch(editSwayamCourse(dt));
     }
   }
@@ -245,7 +233,9 @@ useEffect(()=>{
   }
 
   const onExportCourse = () => {
-    dispatch(getallSwayamCourse(data.mode))
+    // dispatch(getallSwayamCourse(data.mode))
+    dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    setExportTog(true)
     // if (state.length > 0) {
     //   setTimeout(() => {
     //     CSVLinkRef?.current?.link.click()
@@ -256,8 +246,8 @@ useEffect(()=>{
 
   const onAllExportCourse = () => {
     ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
-      console.log("ressss", res)
       setState(res?.data?.data)
+      setExportTog(true)
     })
   }
 
@@ -386,6 +376,7 @@ useEffect(()=>{
 
   const callback = key => {
     setStatus(key);
+    setExportTog(false)
   };
 
   return (
@@ -461,7 +452,7 @@ useEffect(()=>{
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={() => Submit()}>
+                    <Button size="small" type="primary" onClick={() => {Submit();setExportTog(false)}}>
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>
@@ -495,7 +486,8 @@ useEffect(()=>{
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
-                            setPerPage(pageSize)
+                            setPerPage(pageSize);
+                            setExportTog(false);
                           }
                           // defaultPageSize: 5,
                           // total: usersTableData.length,
@@ -541,7 +533,8 @@ useEffect(()=>{
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
-                            setPerPage(pageSize)
+                            setPerPage(pageSize);
+                            setExportTog(false);
                           }
                           // defaultPageSize: 5,
                           // total: usersTableData.length,

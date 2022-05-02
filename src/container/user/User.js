@@ -36,6 +36,7 @@ const User = () => {
     const [perPage, setPerPage] = useState(5)
     const [pageNumber, setPageNumber] = useState(1)
     const [userType, setUserType] = useState("")
+    const [exportTog,setExportTog]=useState(false)
 
     const getAllUsers = useSelector((state) => state.users.getAllUser)
     const alluser = useSelector((state) => state.users.allUser)
@@ -84,10 +85,13 @@ const User = () => {
     }
   
     useEffect(() => {
-        if (state.length) {
-            CSVLinkRef?.current?.link.click()  // 
+        if (state.length && exportTog) {
+            CSVLinkRef?.current?.link.click()  
+            toast.success("User data exported successfully")
+        }else if(exportTog){
+            toast.success("No user data for export")
         }
-        console.log("state", state);
+        
     }, [state])
 
     useEffect(() => {
@@ -259,10 +263,12 @@ const User = () => {
 
     const exPortuser = () => {
         dispatch(allUser(userType))
+        setExportTog(true)
     }
     const allexPortuser = () => {
         ApiGet(`user/auth/allUsers`).then((res) => {
             setState(res?.data?.data)
+            setExportTog(true)
         })
     }
 

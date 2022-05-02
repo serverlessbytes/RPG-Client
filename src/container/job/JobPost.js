@@ -9,7 +9,7 @@ import { Col, Form, Row, Badge, Select, Tabs, Input } from 'antd';
 import JobListTable from './JobListTable';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { allJobs, getJobroles } from '../../redux/jobs/actionCreator';
+import { allJobs, getJobroles, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import e from 'cors';
 import { getStateData } from '../../redux/state/actionCreator';
@@ -18,6 +18,7 @@ import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/jobs/actions';
+import { toast } from 'react-toastify';
 
 const JobPost = ({ match }) => {
     const {allJobsSuccess} = actions;
@@ -29,15 +30,12 @@ const JobPost = ({ match }) => {
 
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const allJobsData = useSelector((state) => state.job.allJobs)
-    let stateData = useSelector((state) => state.state.getStateData) //state
+    const stateData = useSelector((state) => state.state.getStateData) //state
+    const filterData=useSelector((state)=>state.job.getJobFilterData)
 
     useEffect(() => {
-        console.log("allJobsData", allJobsData)//dipatch state 
-    }, [allJobsData]);
-
-    // useEffect(() => {
-    //     console.log("jobRolesData", jobRolesData)
-    // }, [jobRolesData])
+        console.log("filterData", filterData)
+    }, [filterData])
 
     const [stateJob, setStateJob] = useState([]) //set data for job 
     const [state, setState] = useState("")
@@ -45,6 +43,10 @@ const JobPost = ({ match }) => {
     const [jobRole, setJobRole] = useState("")
     const [apply, setApply] = useState(false)
     const [status, setStatus] = useState('active');
+    const [exportTog,setExportTog]=useState(false);
+    const [pagePer,setPagePer]=useState();
+    const [numberOfPage,setNumberOfPage]=useState();
+
 
     const onChangevalue = (e, name) => {
         if (name === "type") {
@@ -59,12 +61,17 @@ const JobPost = ({ match }) => {
     }
     const callback = key => {
         setStatus(key);
+        setExportTog(false)
       };
 
     useEffect(() => {
-        if (stateJob.length) {
-            CSVLinkRef?.current?.link.click()  // 
+        if (stateJob.length && exportTog) {
+            CSVLinkRef?.current?.link.click() 
+            toast.success("Job data exported successfully")
+        }else if(exportTog){
+            toast.success("No data for export")
         }
+        
 
     }, [stateJob]) //
 
@@ -105,9 +112,8 @@ const JobPost = ({ match }) => {
     ];
 
     useEffect(() => {
-        if (allJobsData?.data?.data) {
-            console.log("allJobsData",allJobsData)
-            setStateJob(allJobsData?.data?.data.map((item) => {
+        if (filterData?.data?.data) {
+            setStateJob(filterData?.data?.data.map((item) => {
                 return {
                     ...item,
                     jobRole: item?.jobRole?.name,
@@ -117,18 +123,27 @@ const JobPost = ({ match }) => {
                     state: item?.state?.name,
                     name:item?.name?.name,
                 }
-            }))  //set a state
+            })) 
+             //set a state
         }
-    }, [allJobsData])
+    }, [filterData])
 
+    // const onExportJobs = () => {
+    //     dispatch(getJobsFilterForMain(pagePer,numberOfPage, state?.state ? state?.state : "", type?.type ? type?.type : "", jobRole?.jobRole ? jobRole?.jobRole : "", status))
+    //     setExportTog(true)
+    //     //CSVLinkRef?.current?.link.click()
+    // };
     const onExportJobs = () => {
-        dispatch(allJobs(type.type))
+        dispatch(getJobsFilterForMain(pagePer,numberOfPage, state?.state ? state?.state : "", type?.type ? type?.type : "", jobRole?.jobRole ? jobRole?.jobRole : "", status))
+        setExportTog(true)
         //CSVLinkRef?.current?.link.click()
     };
     const allexPortJobs = () => {
+        
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
             console.log("resres", res)
             setStateJob(res?.data?.data.map((item) => {
+                setExportTog(true)
                 return {
                     ...item,
                     jobRole: item?.jobRole?.name,
@@ -227,7 +242,7 @@ const JobPost = ({ match }) => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" name="submit" onClick={(e) => setApply(!apply)}>
+                                        <Button size="small" type="primary" name="submit" onClick={(e) => {setApply(!apply);setExportTog(false)}}>
                                             Apply
                                         </Button>
                                         <Button size="small" type="light" onClick={() => onClear()}>
@@ -239,10 +254,10 @@ const JobPost = ({ match }) => {
 
                             <Tabs defaultActiveKey="1" onChange={callback}>
                                 <TabPane tab="Active Jobs" key="active">
-                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status} />
+                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status} setPagePer={setPagePer} setNumberOfPage={setNumberOfPage} setExportTog={setExportTog}/>
                                 </TabPane>
                                 <TabPane tab="Inactive Jobs" key="inactive">
-                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status}/>
+                                    <JobListTable state={state} type={type} jobRole={jobRole} apply={apply} status={status} setPagePer={setPagePer} setNumberOfPage={setNumberOfPage} setExportTog={setExportTog}/>
                                 </TabPane>
                             </Tabs>
 

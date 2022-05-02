@@ -42,7 +42,7 @@ const login = (body,keepSignIn) => async (dispatch) => {
         } else {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data, false)
         }
-        return dispatch(loginSuccess(true));
+        return dispatch(loginSuccess(res));
       }
     })
 

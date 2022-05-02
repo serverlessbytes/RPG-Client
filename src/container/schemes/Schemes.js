@@ -40,6 +40,7 @@ const Schemes = () => {
   const [status, setStatus] = useState('active');
   const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
+  const [exportTog,setExportTog]=useState(false)
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   
   const users = useSelector(state => state.scheme.getAllSchemeData);
@@ -53,8 +54,8 @@ const Schemes = () => {
   const addSchemeErr = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastify
 
   useEffect(() => {
-    console.log("dataScheme", editSchemedata);
-  },[editSchemedata])
+    console.log("users", users);
+  },[users])
   
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -137,6 +138,21 @@ useEffect(()=>{
 
   ];
   useEffect(() => {
+    if (users?.data) { //set a state for export excel
+      setState(users.data.map((item) => {
+        return {
+          ...item,
+          locations: item?.locations?.map(item => item.name),
+          schemeBenifit: item?.schemeBenifit?.name,
+          schemeCategory: item?.schemeCategory?.name,
+          benifitLine: item.benifitLine,
+        }
+      })
+      )
+    }
+  }, [users])
+
+  useEffect(() => {
     if (allschemeData?.data?.data) { //set a state for export excel
       setState(allschemeData.data.data.map((item) => {
         return {
@@ -152,10 +168,13 @@ useEffect(()=>{
   }, [allschemeData])
 
   useEffect(() => {
-    if (state.length) {
+    if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
+      toast.success("Scheme data exported successfully")
+    }else if(exportTog){
+      toast.success("No scheme data for export")
     }
-    console.log("state", state);
+    
   }, [state])
 
   useEffect(() => {
@@ -191,7 +210,6 @@ useEffect(()=>{
 
   const onRestore = (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
-    console.log("userForactive", userForactive)
     let data = {
       id: userForactive.id,
       sequence: userForactive.sequence,
@@ -217,7 +235,6 @@ useEffect(()=>{
       isApproved: true,
       //key:key,
     }
-    console.log("data", data)
     dispatch(editSchemeData(data));
   }
 
@@ -228,7 +245,8 @@ useEffect(()=>{
 
   const callback = key => {
     setStatus(key);
-    setPageNumber(1)
+    setPageNumber(1);
+    setExportTog(false);
   };
 
   const viewSchemesdata = (key) => {
@@ -237,7 +255,13 @@ useEffect(()=>{
   }
 
   const onExportschemes = () => {
-    dispatch(getAllSchemes());
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    setExportTog(true)
+  }
+
+  const onAllExportSchemes=()=>{
+    dispatch(getAllSchemes())
+    setExportTog(true)
   }
 
   const clearFilter = () => {
@@ -387,7 +411,7 @@ useEffect(()=>{
             <Button size="small" onClick={() => onExportschemes()} type="info">
               Export Schemes
             </Button>
-            <Button size="small" type="info">
+            <Button size="small" onClick={() => onAllExportSchemes()} type="info">
               Export All Scheme
             </Button>
             <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
@@ -460,7 +484,7 @@ useEffect(()=>{
                                 </Col> */}
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={e => onApply(e)}>
+                    <Button size="small" type="primary" onClick={e => {onApply(e);setExportTog(false)}}>
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>
