@@ -10,8 +10,10 @@ import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
 import { addSchemecategory, editSchemecategory, getSchemecategory } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
-
+import { toast } from 'react-toastify';
+import actions from '../../redux/schemes/actions';
 const SchemeCategory = () => {
+    const {editSchemecategorySuccess} = actions;
 
 
     const dispatch = useDispatch()
@@ -27,10 +29,21 @@ const SchemeCategory = () => {
     });
 
     const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
+    const editSchemeCatogeryData = useSelector((state) => state.scheme.editSchemeCatogeryData)
 
     useEffect(() => {
         dispatch(getSchemecategory());
     }, [])
+    
+    useEffect(() => {
+        console.log('editSchemeCatogeryData', editSchemeCatogeryData)
+        if (editSchemeCatogeryData && editSchemeCatogeryData.message === 'Scheme Category updated successfully.') {
+            dispatch(editSchemecategorySuccess(null))
+            toast.success(editSchemeCatogeryData.message    );
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editSchemeCatogeryData])  
 
     const onEdit = (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)

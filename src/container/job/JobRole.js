@@ -9,9 +9,12 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobcategory, editJobcategory, getJobcategory, getJobroles, addJobrole, editJobrole } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
+import { toast } from 'react-toastify';
+import actions from '../../redux/jobs/actions';
+
 
 const JobRole = () => {
-
+    const {editJobroleSuccess} = actions;
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -29,6 +32,17 @@ const JobRole = () => {
 
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
+    const editJobRoleData = useSelector((state) => state.job.editJobRoleData)
+
+    useEffect(() => {
+        console.log('editJobRoleData', editJobRoleData)
+        if (editJobRoleData && editJobRoleData.message === "job Role updated successfully.") {
+            dispatch(editJobroleSuccess(null))
+            toast.success(editJobRoleData.message);
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editJobRoleData])           
 
     useEffect(() => {
         dispatch(getJobcategory());

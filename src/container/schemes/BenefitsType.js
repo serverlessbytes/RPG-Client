@@ -10,14 +10,18 @@ import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
 import { editBenefitsData, getBenefitsData, postBenefitsData } from '../../redux/benefitsType/actionCreator';
 import uuid from 'react-uuid';
+import { toast } from 'react-toastify';
+import actions from '../../redux/benefitsType/actions';
 
 const BenefitsType = () => {
+    const {editBenefitsSuccess} = actions;
 
     const usersTableData = [];
     //const [form] = Form.useForm()
     const [dataForEdit, setDataForEdit] = useState(); //foredit
 
     const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
+    const editBenefitData = useSelector((state) => state.beneFit.editBenefitData)
     useEffect(() => {
     }, [getBenefitData]);
     const dispatch = useDispatch();
@@ -31,6 +35,16 @@ const BenefitsType = () => {
     });
     const languageData = useSelector((state) => state.language.getLanguageData);
 
+    useEffect(() => {
+        console.log('editBenefitData', editBenefitData)
+        if (editBenefitData && editBenefitData.message === 'Scheme Benifit updated successfully.') {
+            dispatch(editBenefitsSuccess(null))
+            toast.success(editBenefitData.message);
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editBenefitData])  
+    
     useEffect(() => {
         dispatch(getBenefitsData())
     }, []);
