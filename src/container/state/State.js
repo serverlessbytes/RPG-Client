@@ -115,7 +115,7 @@ const State = () => {
                     </ProjectPagination> */}
                 </Cards>
             </Main>
-            <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">State</label>
                     <Form.Item name="name">

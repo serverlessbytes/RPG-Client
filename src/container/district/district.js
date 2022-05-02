@@ -138,7 +138,7 @@ const district = () => {
                                 <Form.Item label="State" >
                                     <Select
                                         size="large"
-                                        className="sDash_fullwidth-select"
+                                        className={statedata ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                                         name="state"
                                         value={statedata}
                                         placeholder="Select State"
@@ -193,7 +193,7 @@ const district = () => {
                     </ProjectPagination> */}
                 </Cards>
             </Main>
-            <Modal title="Enter District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">District</label>
                     <Form.Item name="name">
@@ -213,8 +213,8 @@ const district = () => {
                         />
                     </Form.Item> */}
                     <Form.Item label="State">
-                        <Select placeholder="Select State" className="sDash_fullwidth-select" style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
-                            <Option value="" >Select State</Option>
+                        <Select placeholder="Select State" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
+                            <Option value='' >Select State</Option>
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>

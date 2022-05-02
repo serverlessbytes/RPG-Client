@@ -304,7 +304,7 @@ const User = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item label="Users Type">
-                                            <Select size="large" value={userType} placeholder="Select" className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                            <Select size="large" value={userType} placeholder="Select"  className={userType ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} name="userType" onChange={(e) => selectValue(e, "userType")}>
                                                 <option value={""}>Select User</option>
                                                 <option value={"USER"}>USER</option>
                                                 <option value={"PARTNER"}>PARTNER</option>

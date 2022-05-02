@@ -200,7 +200,7 @@ const BenefitsType = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Add Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Benefit</label>
                     <Form.Item name="name">

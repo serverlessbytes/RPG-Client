@@ -169,7 +169,7 @@ const JobPost = ({ match }) => {
                             Export All Jobs
                         </Button>
                         <Button size="small" onClick={() => { history.push("new") }} type="primary">
-                            Add JobPost
+                            Add Job Post
                         </Button>
                         <CSVLink headers={header} data={stateJob} ref={CSVLinkRef} filename="Job.csv" style={{ opacity: 0 }}></CSVLink>
                     </div>
@@ -183,7 +183,7 @@ const JobPost = ({ match }) => {
                                 <Col md={6} xs={24} className="mb-mb-25">
                                     <Form  layout="vertical">
                                         <Form.Item label="Type">
-                                            <Select size="large" value={type.type} className="sDash_fullwidth-select" name="type" placeholder="Select Type" onChange={(e) => onChangevalue(e, "type")}>
+                                            <Select size="large" value={type.type} className={type.type ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} name="type" placeholder="Select Type" onChange={(e) => onChangevalue(e, "type")}>
                                                 <Option value="">Select Type</Option>
                                                 <Option value="PARTTIME">Part-Time</Option>
                                                 <Option value="FULLTIME">Full-time</Option>
@@ -197,7 +197,7 @@ const JobPost = ({ match }) => {
                                             {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
                                             <Select
                                                 size="large"
-                                                className="sDash_fullwidth-select"
+                                                className={state.state ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                                                 name="state"
                                                 value={state.state}
                                                 placeholder="Select State"
@@ -216,7 +216,7 @@ const JobPost = ({ match }) => {
                                 <Col md={6} xs={24} className="mb-md-25">
                                     <Form  layout="vertical">
                                         <Form.Item  label="Job Role">
-                                            <Select size="large" value={jobRole.jobRole} className="sDash_fullwidth-select" name="jobRole" placeholder="Select Job Role" onChange={(e) => onChangevalue(e, "jobRole")}>
+                                            <Select size="large" value={jobRole.jobRole} className={jobRole.jobRole ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} name="jobRole" placeholder="Select Job Role" onChange={(e) => onChangevalue(e, "jobRole")}>
                                             <Option value="">Select Job Role</Option>
                                                 {jobRolesData && jobRolesData.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>

@@ -13,9 +13,7 @@ const HorizontalFormStyleWrap = Styled.div`
                 margin-bottom: 12px;
             }
         }
-        .ant-form-item{
-            margin-bottom: 25px !important;
-        }
+     
         .ant-input-affix-wrapper > input.ant-input{
             padding-top: 12px;
             padding-bottom: 12px;

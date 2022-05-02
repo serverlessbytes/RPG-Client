@@ -20,13 +20,6 @@ const Adduser = () => {
     let history = useHistory();
     let location = useLocation();
 
-    useEffect(() => {
-        console.log("location", location);
-    }, [])
-
-    useEffect(() => {
-        console.log("id", id);
-    }, [])
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
         console.log('radio checked', e.target.value);
@@ -163,7 +156,6 @@ const Adduser = () => {
     const oncancel = () => {
         dispatch(getOneUserSuccess([])) // for a data balnk
         history.push(`/admin/user`)
-
     }
 
     return (
