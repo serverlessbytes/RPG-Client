@@ -143,6 +143,16 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           User
         </NavLink>
       </Menu.Item>
+      <Menu.Item key="banner">
+        <NavLink onClick={toggleCollapsed} to={`${path}/banner`}>
+          Banner
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item key="carousel">
+        <NavLink onClick={toggleCollapsed} to={`${path}/carousel`}>
+          Carousel
+        </NavLink>
+      </Menu.Item>
     </Menu>
   );
 };

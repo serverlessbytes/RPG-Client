@@ -325,10 +325,10 @@ const ThemeLayout = WrappedComponent => {
               <Layout className="atbd-main-layout">
                 <Content>
                   <WrappedComponent {...this.props} />
-                  <Footer className="admin-footer" style={footerStyle}>
+                  {/* <Footer className="admin-footer" style={footerStyle}>
                     <Row>
                       <Col md={12} xs={24}>
-                        {/* <span className="admin-footer__copyright">2022 © SovWare</span> */}
+                        <span className="admin-footer__copyright">2022 © SovWare</span>
                       </Col>
                       <Col md={12} xs={24}>
                         <div className="admin-footer__links">
@@ -338,7 +338,7 @@ const ThemeLayout = WrappedComponent => {
                         </div>
                       </Col>
                     </Row>
-                  </Footer>
+                  </Footer> */}
                 </Content>
               </Layout>
             </Layout>
