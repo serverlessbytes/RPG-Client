@@ -62,6 +62,7 @@ const initialState = {
   loading: false,
   error: null,
   postcategoryData: null,
+  postcategoryError:null,
   editcategoryData: null,
   categoryData: null,
   courseFilterData: null,
@@ -79,6 +80,7 @@ const initialState = {
   addSwayamCourseModuleError:null,
   editSwayamCourseModuleData:null,
   getAllCourse:null,
+  editCategoryError:null,
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -98,7 +100,7 @@ const cateGoryReducer = (state = initialState, action) => {
     case POST_CATEGORY_ERR:
       return {
         ...state,
-        error: err,
+        postcategoryError: err,
         loading: false,
       };
 
@@ -116,7 +118,7 @@ const cateGoryReducer = (state = initialState, action) => {
     case EDIT_CATEGORY_ERR:
       return {
         ...state,
-        error: err,
+        editCategoryError: err,
         loading: false,
       };
 

@@ -13,7 +13,7 @@ import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/schemes/actions';
 const SchemeCategory = () => {
-    const {editSchemecategorySuccess} = actions;
+    const {editSchemecategorySuccess,addSchemecategorySuccess,addSchemecategoryErr,editSchemecategoryErr} = actions;
 
 
     const dispatch = useDispatch()
@@ -30,20 +30,49 @@ const SchemeCategory = () => {
 
     const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
     const editSchemeCatogeryData = useSelector((state) => state.scheme.editSchemeCatogeryData)
+    const addSchemeCatogeryData = useSelector((state) => state.scheme.addSchemeCatogeryData)
+    const addSchemeCatogeryError = useSelector((state) => state.scheme.addSchemeCatogeryError)
+    const editSchemeCatogeryError = useSelector((state) => state.scheme.editSchemeCatogeryError)
 
     useEffect(() => {
         dispatch(getSchemecategory());
     }, [])
+
+    useEffect(() => {
+        console.log("addSchemeCatogeryData",addSchemeCatogeryData)
+    }, [addSchemeCatogeryData])
     
     useEffect(() => {
-        console.log('editSchemeCatogeryData', editSchemeCatogeryData)
-        if (editSchemeCatogeryData && editSchemeCatogeryData.message === 'Scheme Category updated successfully.') {
+        if (editSchemeCatogeryData && editSchemeCatogeryData.status === 200) {
             dispatch(editSchemecategorySuccess(null))
-            toast.success(editSchemeCatogeryData.message    );
+            toast.success("Scheme Category update successfull");
             //toastAssetsAdd(true)
             //onHide()
         }
     }, [editSchemeCatogeryData])  
+
+    useEffect(() => {
+        if (addSchemeCatogeryData && addSchemeCatogeryData.status === 200) {
+            dispatch(addSchemecategorySuccess(null))
+            toast.success("Scheme Category add successfull");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addSchemeCatogeryData])  
+
+    useEffect(()=>{
+        if(addSchemeCatogeryError){
+            dispatch(addSchemecategoryErr(null))
+            toast.error("Something wrong");
+        }
+    },[addSchemeCatogeryError])
+
+    useEffect(()=>{
+        if(editSchemeCatogeryError){
+            dispatch(editSchemecategoryErr(null))
+            toast.error("Something wrong");
+        }
+    },[editSchemeCatogeryError])
 
     const onEdit = (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
@@ -227,7 +256,7 @@ const SchemeCategory = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
@@ -236,16 +265,8 @@ const SchemeCategory = () => {
                             name="name"
                         />
                     </Form.Item>
-                    {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder=""
-                            name="key"
-                        />
-                    </Form.Item> */}
                 </Form>
-
-            </Modal>}
+            </Modal>
         </>
     )
 }

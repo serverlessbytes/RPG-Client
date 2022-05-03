@@ -14,7 +14,8 @@ import actions from '../../redux/jobs/actions';
 
 
 const JobRole = () => {
-    const {editJobroleSuccess} = actions;
+    const {editJobroleSuccess,editJobroleErr,addJobroleSuccess,
+        addJobroleErr,} = actions;
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -33,16 +34,44 @@ const JobRole = () => {
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const editJobRoleData = useSelector((state) => state.job.editJobRoleData)
+    const addJobRoledata = useSelector((state) => state.job.addJobRoleData)
+    const addJobRoleError = useSelector((state) => state.job.addJobRoleError)
+    const editJobRoleError = useSelector((state) => state.job.editJobRoleError)
 
     useEffect(() => {
         console.log('editJobRoleData', editJobRoleData)
-        if (editJobRoleData && editJobRoleData.message === "job Role updated successfully.") {
+        if (editJobRoleData && editJobRoleData.status === 200) {
             dispatch(editJobroleSuccess(null))
-            toast.success(editJobRoleData.message);
+            toast.success("Job Role update successful");
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [editJobRoleData])           
+    }, [editJobRoleData])  
+    
+    useEffect(() => {
+        //console.log("")
+        console.log('addJobRoledata', addJobRoledata)
+        if (addJobRoledata && addJobRoledata.status === 200) {
+            dispatch(addJobroleSuccess(null))
+            toast.success("Job Role add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addJobRoledata])  
+
+    useEffect(()=>{
+        if(addJobRoleError){
+            dispatch(addJobroleErr(null))
+            toast.error("Something wrong");
+        }
+    },[addJobRoleError])
+
+    useEffect(()=>{
+        if(editJobRoleError){
+            dispatch(editJobroleErr(null))
+            toast.error("Something wrong");
+        }
+    },[editJobRoleError])
 
     useEffect(() => {
         dispatch(getJobcategory());
@@ -143,7 +172,8 @@ const JobRole = () => {
             }
             dispatch(editJobrole(data))
         }
-        // form.resetFields()
+         form.resetFields()
+        setSelectedJobCategory()
         setIsModalVisible(false);
     };
 
@@ -240,16 +270,16 @@ const JobRole = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+             <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label>Job category</label>
-                    {isDisabled && <Form.Item initialValue="Select a job category " name="jobCategoryId">
+                    <Form.Item initialValue="Select a job category " name="jobCategoryId">
                         <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select">
                             {jobData?.data && jobData?.data?.map((items) => (
                                 <Option value={items.id}>{items.name} </Option>
                             ))}
                         </Select>
-                    </Form.Item>}
+                    </Form.Item>
                     <label htmlFor="name">Job role name</label>
                     <Form.Item name="name">
                         <Input
@@ -259,7 +289,7 @@ const JobRole = () => {
                     </Form.Item>
                 </Form>
 
-            </Modal>}
+            </Modal>
         </>
     )
 }

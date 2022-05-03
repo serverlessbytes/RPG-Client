@@ -59,6 +59,7 @@ const initialState = {
   addState:null,
   getOneSchemeData:null,
   allSchemeData:null,
+  editSchemeCatogeryError:null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -96,7 +97,7 @@ const schemeReducer = (state = initialState, action) => {
     case ADD_SCHEMECATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        addSchemeCatogeryError: err,
         loading: false,
       };
 
@@ -114,7 +115,7 @@ const schemeReducer = (state = initialState, action) => {
     case EDIT_SCHEMECATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        editSchemeCatogeryError: err,
         loading: false,
       };
 

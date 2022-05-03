@@ -74,6 +74,8 @@ const initialState = {
   editJobPostErr:null,
   getEmployerData:null,
   allJobs:null,
+  addJobRoleError:null,
+  editJobRoleError:null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -112,7 +114,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOBCATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        addJobCatogeryError: err,
         loading: false,
       };
 
@@ -130,7 +132,7 @@ const jobReducer = (state = initialState, action) => {
     case EDIT_JOBCATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        editJobCatogeryError: err,
         loading: false,
       };
 
@@ -167,7 +169,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOBROLE_ERR:
       return {
         ...state,
-        error: err,
+        addJobRoleError: err,
         loading: false,
       };
 
@@ -185,7 +187,7 @@ const jobReducer = (state = initialState, action) => {
     case EDIT_JOBROLE_ERR:
       return {
         ...state,
-        error: err,
+        editJobRoleError: err,
         loading: false,
       };
 

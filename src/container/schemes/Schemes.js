@@ -73,7 +73,7 @@ const Schemes = () => {
     if (editSchemedata && editSchemedata.status === 200) {
         dispatch(editSchemeSuccess(null))
         //dispatch(getJobsFilterForMainSuccess(null))
-        toast.success("Scheme Update successful");
+        toast.success("Scheme update successful");
 
         //toastAssetsAdd(true)
         //onHide()
@@ -87,7 +87,7 @@ const Schemes = () => {
   useEffect(() => {
     if (addSchemeData && addSchemeData.status === 200) {
         dispatch(addSchemeSuccess(null))
-        toast.success("Scheme Add successful");
+        toast.success("Scheme add successful");
         //toastAssetsAdd(true)
         //onHide()
     }

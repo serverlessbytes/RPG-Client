@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import actions from '../../redux/benefitsType/actions';
 
 const BenefitsType = () => {
-    const {editBenefitsSuccess} = actions;
+    const {editBenefitsSuccess,editBenefitsErr,postBenefitsSuccess,postBenefitsErr,} = actions;
 
     const usersTableData = [];
     //const [form] = Form.useForm()
@@ -22,6 +22,10 @@ const BenefitsType = () => {
 
     const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
     const editBenefitData = useSelector((state) => state.beneFit.editBenefitData)
+    const postBenefitsdata = useSelector((state) => state.beneFit.postBenefitsData)
+    const postBenefitsError = useSelector((state) => state.beneFit.postBenefitsError)
+    const editBenefitError = useSelector((state) => state.beneFit.editBenefitError)
+
     useEffect(() => {
     }, [getBenefitData]);
     const dispatch = useDispatch();
@@ -36,14 +40,38 @@ const BenefitsType = () => {
     const languageData = useSelector((state) => state.language.getLanguageData);
 
     useEffect(() => {
+        console.log('postBenefitsdata', postBenefitsdata)
+        if (postBenefitsdata && postBenefitsdata.status === 200) {
+            dispatch(postBenefitsSuccess(null))
+            toast.success("Scheme Benifit add successful.");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [postBenefitsdata]) 
+
+    useEffect(()=>{
+        if(postBenefitsError){
+            dispatch(postBenefitsErr(null))
+            toast.error("Something wrong");
+        }
+    },[postBenefitsError])
+
+    useEffect(() => {
         console.log('editBenefitData', editBenefitData)
-        if (editBenefitData && editBenefitData.message === 'Scheme Benifit updated successfully.') {
+        if (editBenefitData && editBenefitData.status === 200) {
             dispatch(editBenefitsSuccess(null))
-            toast.success(editBenefitData.message);
+            toast.success("Scheme Benifit update successful.");
             //toastAssetsAdd(true)
             //onHide()
         }
     }, [editBenefitData])  
+
+    useEffect(()=>{
+        if(editBenefitError){
+            dispatch(editBenefitsErr(null))
+            toast.error("Something wrong");
+        }
+    },[editBenefitError])
     
     useEffect(() => {
         dispatch(getBenefitsData())
