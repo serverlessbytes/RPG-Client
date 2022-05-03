@@ -18,6 +18,7 @@ const CourseCategory = () => {
         postCategorySuccess,
         postCategoryDataErr,
         editCategorySuccess,
+        editcategoryErr,
       } = actions;
 
     const [dataForEdit, setDataForEdit] = useState(); //foredit
@@ -34,12 +35,13 @@ const CourseCategory = () => {
     const postcategorydata = useSelector((state) => state.category.postcategoryData)
     const editcategoryData = useSelector((state) => state.category.editcategoryData)
     // const postStateError = useSelector((state) => state.category.postStateErr)
- 
+    const postcategoryError = useSelector((state) => state.category.postcategoryError)
+    const editCategoryError = useSelector((state) => state.category.editCategoryError)
 
     useEffect(() => {
        if (postcategorydata && postcategorydata.status  === 200) {
            dispatch(postCategorySuccess(null))
-           toast.success("Category Add successful");
+           toast.success("Category add successful");
            //toastAssetsAdd(true)
            //onHide()
        }
@@ -48,6 +50,13 @@ const CourseCategory = () => {
        //   toast.success("Jobs Update successful");
        // }
     }, [postcategorydata])
+
+    useEffect(()=>{
+        if(postcategoryError){
+            dispatch(postCategoryDataErr(null))
+            toast.error("Something wrong");
+        }
+    },[postcategoryError])
 
     useEffect(() => {
        if (editcategoryData && editcategoryData.status  === 200) {
@@ -62,6 +71,12 @@ const CourseCategory = () => {
        // }
     }, [editcategoryData])
     
+    useEffect(()=>{
+        if(editCategoryError){
+            dispatch(editcategoryErr(null))
+            toast.error("Something wrong");
+        }
+    },[editCategoryError])
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -98,7 +113,6 @@ const CourseCategory = () => {
         }
         // dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
-       
     }
 
     const handleOk = () => {
@@ -108,7 +122,6 @@ const CourseCategory = () => {
                     delete data.key;
 
                     data = {
-                        
                         ...data, 
                         categoryId: dataForEdit.id, 
                         "isActive": true,

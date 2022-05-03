@@ -22,8 +22,10 @@ const initialState = {
   error: null,
   postStateData:null,
   postBenefitsData:null,
+  postBenefitsError:null,
   getBenefitData:null,
   editBenefitData:null,
+  editBenefitError:null,
 };
 
 const BenefitsReducer = (state = initialState, action) => {
@@ -43,7 +45,7 @@ const BenefitsReducer = (state = initialState, action) => {
     case POST_BENEFITS_ERR:
       return {
         ...state,
-        error: err,
+        postBenefitsError: err,
         loading: false,
       };
       
@@ -79,7 +81,7 @@ const BenefitsReducer = (state = initialState, action) => {
     case EDIT_BENEFITS_ERR:
       return {
         ...state,
-        error: err,
+        editBenefitError: err,
         loading: false,
       };
 

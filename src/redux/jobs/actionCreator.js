@@ -85,7 +85,7 @@ export const  getJobroles = () => async (dispatch) => {
 export const addJobrole = (body) => async (dispatch) => {
   await ApiPost(`job/addRole?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
     .then((res) => {
-      dispatch(addJobroleSuccess(res))
+       dispatch(addJobroleSuccess(res))
       return dispatch(getJobroles())
     })
     .catch((err) => dispatch(addJobroleErr(err)))

@@ -8,6 +8,8 @@ const {
   postBenefitsSuccess,
   getBenefitsSuccess,
   editBenefitsSuccess,
+  postBenefitsErr,
+  editBenefitsErr,
 } = actions;
 
 
@@ -16,6 +18,7 @@ export const postBenefitsData = (body) => async (dispatch) => {
     .then((res) => {
       return dispatch(postBenefitsSuccess(res))
     })
+    .catch((err) => dispatch(postBenefitsErr(err)))
 }
 
 export const getBenefitsData = () => async (dispatch) => {
@@ -33,6 +36,7 @@ export const editBenefitsData = (body) => async (dispatch) => {
         dispatch(getBenefitsData(body))
       }
     })
+    .catch((err) => dispatch(editBenefitsErr(err)))
 }
 
 

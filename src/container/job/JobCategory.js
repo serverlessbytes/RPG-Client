@@ -12,11 +12,17 @@ import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
 const JobCategory = () => {
-    const {editJobcategorySuccess} = actions;
+    const {editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
+        addJobcategoryErr,} = actions;
 
 
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const editJobCatogeryData = useSelector((state) => state.job.editJobCatogeryData)
+    const addJobCatogerydata = useSelector((state) => state.job.addJobCatogeryData)
+    const addJobCatogeryError = useSelector((state) => state.job.addJobCatogeryError)
+    const editJobCatogeryError = useSelector((state) => state.job.editJobCatogeryError)
+   // const jobCatogeryData = useSelector((state) => state.job.jobCatogeryData)
+
     const dispatch = useDispatch()
     const usersTableData = [];
     const [form] = Form.useForm()
@@ -30,35 +36,70 @@ const JobCategory = () => {
     });
 
     useEffect(() => {
+        console.log('addJobCatogerydata', addJobCatogerydata)
+        if (addJobCatogerydata && addJobCatogerydata.status === 200) {
+            dispatch(addJobcategorySuccess(null))
+            toast.success("Job Category add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addJobCatogerydata]) 
+
+    useEffect(()=>{
+        if(addJobCatogeryError){
+            dispatch(addJobcategoryErr(null))
+            toast.error("Something wrong");
+        }
+    },[addJobCatogeryError])
+
+    useEffect(() => {
         console.log('editJobCatogeryData', editJobCatogeryData)
         if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
-            toast.success("job Category updated successfully.");
+            toast.success("Job Category update successful");
             //toastAssetsAdd(true)
             //onHide()
         }else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
-            toast.success("job Category deleted successfully.");
+            toast.success("Job Category delete successful");
             //toastAssetsAdd(true)
             //onHide()
         }
     }, [editJobCatogeryData])  
+
+    useEffect(()=>{
+        if(editJobCatogeryError){
+            dispatch(editJobcategoryErr(null))
+            toast.error("Something wrong");
+        }
+    },[editJobCatogeryError])
+
     useEffect(() => {
         dispatch(getJobcategory());
     }, [])
-    useEffect(() => {
-        console.log("jobDatajobData", jobData)
-    }, [jobData])
+
+    // useEffect(() => {
+    // }, [jobCatogeryData]);
+
+    // useEffect(() => {
+    //    // console.log("jobDatajobData", jobData)
+    //    return (()=>{
+    //        dispatch(editJobcategorySuccess(null))
+    //    })
+    // }, [])
 
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
+            console.log("dataForEdit",dataForEdit)
             setSelectedJobCategory(dataForEdit)
+            console.log("selectedJobCategory",selectedJobCategory)
             form.setFieldsValue({
+                ...dataForEdit,
                 name: dataForEdit.name
             })
-            setIsModalVisible(true);
         }
+        setIsModalVisible(true);
     }
 
     const onDelete = (id) => {
@@ -113,6 +154,7 @@ const JobCategory = () => {
     const handleOk = () => {
         let data = form.getFieldsValue()
         if (!selectedJobCategory) {
+            
             data = {
                 ...data,
                 key: uuid()
@@ -129,6 +171,7 @@ const JobCategory = () => {
             dispatch(editJobcategory(data))
         }
         form.resetFields()
+        setSelectedJobCategory()
         setIsModalVisible(false);
     };
 
@@ -182,8 +225,6 @@ const JobCategory = () => {
             width: '90px',
         },
     ];
-
-
 
     return (
         <>
@@ -245,7 +286,7 @@ const JobCategory = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText="Add">
 
                 <Form name="login" form={form} layout="vertical">
@@ -266,7 +307,7 @@ const JobCategory = () => {
                     </Form.Item> */}
                 </Form>
 
-            </Modal>}
+            </Modal>
         </>
     )
 }
