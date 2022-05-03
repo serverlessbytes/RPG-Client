@@ -39,6 +39,7 @@ import cateGoryReducer from './course/reducers';
 import jobReducer from './jobs/reducers';
 import dashboardReducer from './dashboard/reducers';
 import districtReducer from './district/reducers';
+import testimonialReducer from './testimonial/reducers';
 
 
 const rootReducers = combineReducers({
@@ -90,6 +91,7 @@ const rootReducers = combineReducers({
   job: jobReducer,
   dashboard:dashboardReducer,
   district:districtReducer,
+  testimonial:testimonialReducer,
 });
 
 export default rootReducers;

@@ -1,15 +1,23 @@
 import { Col, Form, Input, Row,} from 'antd';
 import { PageHeader } from '../../components/page-headers/page-headers'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Main } from '../styled';
-import { useHistory} from 'react-router';
+import { useHistory, useLocation} from 'react-router';
 import {useRouteMatch } from 'react-router-dom';
+import { addTestimonial, editTestimonial, getoneTestimonialData } from '../../redux/testimonial/actionCreator';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Addtestimonial = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('id')
 
+    const dispatch = useDispatch();
     const history = useHistory();
+    let location = useLocation();
+
+    useEffect(()=>{console.log("id",id)},[id])
     const [error, setError] = useState({})
     const [data, setData] = useState({
         name : "",
@@ -19,6 +27,22 @@ const Addtestimonial = () => {
         message :""
     })
     const { TextArea } = Input;
+
+    const getOneDataTestimoial = useSelector((state) => state.testimonial.getOneTestimonialData)
+
+    useEffect(() => {
+        if (getOneDataTestimoial && getOneDataTestimoial.data) {
+            console.log("getOneDataTestimoial", getOneDataTestimoial)
+            setData({
+                ...data,
+                name: getOneDataTestimoial.data[0].name,
+                role: getOneDataTestimoial.data[0].role,
+                videoUrl: getOneDataTestimoial.data[0].videoUrl,
+                imageUrl: getOneDataTestimoial.data[0].imageUrl,
+                message: getOneDataTestimoial.data[0].message,
+            })
+        }
+    }, [getOneDataTestimoial])
 
     const validation = () =>{
         let error = {}
@@ -56,13 +80,40 @@ const Addtestimonial = () => {
     const handleChange = (e) =>{
         setData({...data,[e.target.name]:e.target.value})
     }
-
+ 
+    useEffect(() => {
+        if (location.search) {
+            dispatch(getoneTestimonialData(location.search.split('=')[1]))
+        }
+    }, [location.search])
     
     const onsubmit = () =>{
         if (validation()) {
             return;
         }
-        
+        let Data = {
+            name : data.name,
+            role : data.role,
+            videoUrl : data.videoUrl,
+            imageUrl :data.imageUrl,
+            message : data.message,
+        }
+        if (!location.search) {
+            dispatch(addTestimonial(Data));
+            history.push(`/admin/testimonial`)
+        }
+        else{
+            Data = {
+                ...Data,
+                id : location.search.split('=')[1],
+                isActive : true,
+                isDeleted : false
+            }
+            console.log("data",Data)
+            dispatch(editTestimonial(Data))
+            history.push(`/admin/testimonial`)
+        }
+      
     }
 
     const handalCancel = () => {
@@ -75,9 +126,6 @@ const Addtestimonial = () => {
         })
         history.push('/admin/testimonial')
     }
-
-
-    
 
     return (
         <>
@@ -139,7 +187,7 @@ const Addtestimonial = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" onClick={onsubmit} size="medium">
-                            Add
+                        {id?"Edit":"Add"}
                         </Button>
                         <Button className="btn-signin" type="light" onClick={handalCancel} size="medium">
                             Cancel
