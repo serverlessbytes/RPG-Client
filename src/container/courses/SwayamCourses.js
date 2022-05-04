@@ -251,9 +251,10 @@ useEffect(()=>{
   }
 
   const onAllExportCourse = () => {
+    setExportTog(true)
     ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
       setState(res?.data?.data)
-      setExportTog(true)
+      
     })
   }
 
