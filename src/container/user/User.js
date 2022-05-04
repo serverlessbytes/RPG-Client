@@ -269,9 +269,9 @@ const User = () => {
         setExportTog(true)
     }
     const allexPortuser = () => {
+        setExportTog(true)
         ApiGet(`user/auth/allUsers`).then((res) => {
             setState(res?.data?.data)
-            setExportTog(true)
         })
     }
 

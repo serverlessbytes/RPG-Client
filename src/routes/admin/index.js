@@ -14,6 +14,7 @@ import district from './district';
 import Testimonial from './Testimonial';
 import Banner from '../../container/banner/Banner';
 import Carousel from '../../container/carousel/Carousel';
+import Employer from '../../container/employer/Employer';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -39,6 +40,7 @@ const Admin = () => {
         <Route path={`${path}/user`} component={user} />
         <Route path={`${path}/banner`} component={Banner} />
         <Route path={`${path}/carousel`} component={Carousel} />
+        <Route path={`${path}/employer`} component={Employer} />
       </Suspense>
     </Switch>
   );
