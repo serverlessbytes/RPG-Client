@@ -16,6 +16,8 @@ import RichTextEditor from 'react-rte';
 
 
 const AddJobPost = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('id')
     let history = useHistory();
     let dispatch = useDispatch();
     let location = useLocation();
@@ -44,14 +46,14 @@ const AddJobPost = () => {
     // const addJobPostData = useSelector((state) => state.job.addJobPostData)
 
     // useEffect(() => { console.log("addJobPostData", addJobPostData) }, [addJobPostData])
-
     useEffect(() => {
         //console.log("location.search", location.search);
-        if (location.search.split("=")[1]) {
-            seteditJobsID(location.search.split("=")[1])
-            dispatch(getoneJobPost(location.search.split("=")[1]))
+        if (id) {
+            seteditJobsID(id)
+            dispatch(getoneJobPost(id))
         }
-    }, [location.search])
+    }, [id])
+
     const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
     const [error, setError] = useState({}); // for valadation
 

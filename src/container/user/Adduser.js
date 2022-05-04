@@ -39,10 +39,11 @@ const Adduser = () => {
     const [error, setError] = useState({})
 
     useEffect(() => {
-        if (location.search) {
-            dispatch(getOneUser(location.search.split('=')[1]))
+        if (id) {
+            // dispatch(getOneUser(location.search.split('=')[1]))
+            dispatch(getOneUser(id))
         }
-    }, [location.search])
+    }, [id])
 
     const getOneData = useSelector((state) => state.users.getOneUser)
 

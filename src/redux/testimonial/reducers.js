@@ -26,6 +26,9 @@ const initialState = {
   getTestimonialData: null,
   editTestimonialData: null,
   getOneTestimonialData:null,
+  editTestimonialDataError:null,
+  addTestimonialDataError: null,
+
 };
 
 const testimonialReducer = (state = initialState, action) => {
@@ -45,7 +48,7 @@ const testimonialReducer = (state = initialState, action) => {
     case ADD_TESTIMONIAL_ERR:
       return {
         ...state,
-        error: err,
+        addTestimonialDataError: err,
         loading: false,
       };
 
@@ -81,7 +84,7 @@ const testimonialReducer = (state = initialState, action) => {
         case EDIT_TESTIMONIAL_ERR:
           return {
             ...state,
-            error: err,
+            editTestimonialDataError: err,
             loading: false,
           };
 

@@ -9,6 +9,9 @@ import { editTestimonial, getTestimonial } from '../../redux/testimonial/actionC
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
+import actions from '../../redux/testimonial/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Testimonial = () => {
 
@@ -16,9 +19,53 @@ const Testimonial = () => {
     const dispatch = useDispatch();
     const { path } = useRouteMatch();
 
+    const { addTestimonialSuccess, addTestimonialErr, editTestimonialSuccess,
+        editTestimonialErr,
+    } = actions;
+
     const [usertable, setUsertable] = useState([])
 
     const getAllUsers = useSelector((state) => state.testimonial.getTestimonialData)
+    const addTestimonialdata = useSelector((state) => state.testimonial.addTestimonialData)
+    const addTestimonialDataError = useSelector((state) => state.testimonial.addTestimonialDataError)
+    const editTestimonialdata = useSelector((state) => state.testimonial.editTestimonialData)
+    const editTestimonialDataError = useSelector((state) => state.testimonial.editTestimonialDataError)
+
+    useEffect(() => {
+        console.log("editTestimonialdata", editTestimonialdata);
+    }, [editTestimonialdata])
+
+    useEffect(() => {
+        if (addTestimonialdata && addTestimonialdata.status === 200) {
+            dispatch(addTestimonialSuccess(null))
+            toast.success("Testimonial add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addTestimonialdata])
+
+    useEffect(()=>{
+        if(addTestimonialDataError){ 
+          dispatch(addTestimonialErr(null))
+          toast.error("Something Wrong")
+        }
+      },[addTestimonialDataError])
+
+      useEffect(() => {
+        if (editTestimonialdata && editTestimonialdata.status === 200) {
+            dispatch(editTestimonialSuccess(null))
+            toast.success("Testimonial update successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editTestimonialdata])
+
+    useEffect(()=>{
+        if(editTestimonialDataError){ 
+          dispatch(editTestimonialErr(null))
+          toast.error("Something Wrong")
+        }
+      },[editTestimonialDataError])
 
     useEffect(() => {
         dispatch(getTestimonial())
@@ -30,7 +77,7 @@ const Testimonial = () => {
 
     const onDelete = (id) => {
         let userForDelete = getAllUsers && getAllUsers.data.find(item => item.id === id)
-        console.log("userForDelete",userForDelete)
+        console.log("userForDelete", userForDelete)
         if (userForDelete) {
             delete userForDelete.createdAt
             delete userForDelete.updatedAt
@@ -49,7 +96,6 @@ const Testimonial = () => {
     useEffect(() => {
         if (getAllUsers && getAllUsers.data) {
             setUsertable(getAllUsers.data?.map(item => {
-                console.log("item", item)
                 return ({
                     name: item.name,
                     role: item.role,

@@ -26,6 +26,7 @@ const Signup = () => {
             name: data.name,
             password: data.password,
             phone: data.phone,
+            userType : 'ADMIN',
         }
         dispatch(signUp(dt))
 

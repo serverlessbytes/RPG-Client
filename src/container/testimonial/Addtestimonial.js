@@ -8,16 +8,18 @@ import { useHistory, useLocation} from 'react-router';
 import {useRouteMatch } from 'react-router-dom';
 import { addTestimonial, editTestimonial, getoneTestimonialData } from '../../redux/testimonial/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
+import actions from '../../redux/testimonial/actions';
 
 const Addtestimonial = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id')
+    
+    const {getoneTestimonialDataSuccess} = actions;
 
     const dispatch = useDispatch();
     const history = useHistory();
     let location = useLocation();
 
-    useEffect(()=>{console.log("id",id)},[id])
     const [error, setError] = useState({})
     const [data, setData] = useState({
         name : "",
@@ -35,11 +37,11 @@ const Addtestimonial = () => {
             console.log("getOneDataTestimoial", getOneDataTestimoial)
             setData({
                 ...data,
-                name: getOneDataTestimoial.data[0].name,
-                role: getOneDataTestimoial.data[0].role,
-                videoUrl: getOneDataTestimoial.data[0].videoUrl,
-                imageUrl: getOneDataTestimoial.data[0].imageUrl,
-                message: getOneDataTestimoial.data[0].message,
+                name: getOneDataTestimoial.data.name,
+                role: getOneDataTestimoial.data.role,
+                videoUrl: getOneDataTestimoial.data.videoUrl,
+                imageUrl: getOneDataTestimoial.data.imageUrl,
+                message: getOneDataTestimoial.data.message,
             })
         }
     }, [getOneDataTestimoial])
@@ -58,15 +60,15 @@ const Addtestimonial = () => {
             flag = true;
         }
 
-        if (data.videoUrl === ""){
-            error.videoUrl = "Video URL is required";
-            flag = true;
-        }
+        // if (data.videoUrl === ""){
+        //     error.videoUrl = "Video URL is required";
+        //     flag = true;
+        // }
 
-        if (data.imageUrl === ""){
-            error.imageUrl = "Image URL is required";
-            flag = true;
-        }
+        // if (data.imageUrl === ""){
+        //     error.imageUrl = "Image URL is required";
+        //     flag = true;
+        // }
 
         if (data.message === ""){
             error.message = "Message is required";
@@ -81,23 +83,45 @@ const Addtestimonial = () => {
         setData({...data,[e.target.name]:e.target.value})
     }
  
+    // useEffect(() => {
+    //     if (location.search) {
+    //         dispatch(getoneTestimonialData(location.search.split('=')[1]))
+    //         // dispatch(getoneTestimonialData(id))
+    //     }
+    // }, [location.search])
+
     useEffect(() => {
-        if (location.search) {
-            dispatch(getoneTestimonialData(location.search.split('=')[1]))
+        if (id) {
+            dispatch(getoneTestimonialData(id))
         }
-    }, [location.search])
+    }, [id])
     
     const onsubmit = () =>{
         if (validation()) {
             return;
         }
+
         let Data = {
             name : data.name,
             role : data.role,
-            videoUrl : data.videoUrl,
-            imageUrl :data.imageUrl,
+            // videoUrl : data.videoUrl,
+            // imageUrl :data.imageUrl,
             message : data.message,
         }
+
+        if(data.videoUrl) {
+            Data = {
+                ...Data,
+                videoUrl : data.videoUrl
+            }
+        }
+        if(data.imageUrl) {
+            Data = {
+                ...Data,
+                imageUrl : data.imageUrl
+            }
+        }
+
         if (!location.search) {
             dispatch(addTestimonial(Data));
             history.push(`/admin/testimonial`)
@@ -105,15 +129,18 @@ const Addtestimonial = () => {
         else{
             Data = {
                 ...Data,
-                id : location.search.split('=')[1],
+               // id : location.search.split('=')[1],
+                id : id,
+                videoUrl : data.videoUrl,
+                imageUrl : data.imageUrl,
                 isActive : true,
                 isDeleted : false
             }
             console.log("data",Data)
             dispatch(editTestimonial(Data))
             history.push(`/admin/testimonial`)
-        }
-      
+            handalCancel();
+        } 
     }
 
     const handalCancel = () => {
@@ -124,6 +151,7 @@ const Addtestimonial = () => {
             imageUrl : "",
             message :""
         })
+        dispatch(getoneTestimonialDataSuccess([]));
         history.push('/admin/testimonial')
     }
 
@@ -139,7 +167,7 @@ const Addtestimonial = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item>
-                                <Input placeholder="Enter Name" value={data.name} onChange={(e) => handleChange(e)} name="name" />
+                                <Input placeholder="Name" value={data.name} onChange={(e) => handleChange(e)} name="name" />
                                 {
                                     error.name && <span style={{ color: "red" }}>{error.name}</span>
                                 }
@@ -149,7 +177,7 @@ const Addtestimonial = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="role">Role</label>
                             <Form.Item>
-                                <Input placeholder="Enter Role" value={data.role} onChange={(e) => handleChange(e)} name="role" />
+                                <Input placeholder="Role" value={data.role} onChange={(e) => handleChange(e)} name="role" />
                                 {
                                     error.role && <span style={{ color: "red" }}>{error.role}</span>
                                 }
@@ -158,20 +186,20 @@ const Addtestimonial = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="videoUrl">VideoUrl</label>
                             <Form.Item>
-                                <Input placeholder="VideoUrl" value={data.videoUrl} onChange={(e) => handleChange(e)} name="videoUrl" />
-                                {
+                                <Input placeholder="VideoURL" value={data.videoUrl} onChange={(e) => handleChange(e)} name="videoUrl" />
+                                {/* {
                                     error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>
-                                }
+                                } */}
                             </Form.Item>
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="imageUrl">ImageUrl</label>
                             <Form.Item>
-                                <Input placeholder="ImageUrl" value={data.imageUrl} onChange={(e) => handleChange(e)} name="imageUrl" />
-                                {
+                                <Input placeholder="ImageURL" value={data.imageUrl} onChange={(e) => handleChange(e)} name="imageUrl" />
+                                {/* {
                                     error.imageUrl && <span style={{ color: "red" }}>{error.imageUrl}</span>
-                                }
+                                } */}
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>

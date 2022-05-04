@@ -40,6 +40,8 @@ import jobReducer from './jobs/reducers';
 import dashboardReducer from './dashboard/reducers';
 import districtReducer from './district/reducers';
 import testimonialReducer from './testimonial/reducers';
+import bannerReducer from './banner/reducers';
+import carouselReducer from './carousel/reducers';
 
 
 const rootReducers = combineReducers({
@@ -92,6 +94,8 @@ const rootReducers = combineReducers({
   dashboard:dashboardReducer,
   district:districtReducer,
   testimonial:testimonialReducer,
+  banner:bannerReducer,
+  carousel:carouselReducer,
 });
 
 export default rootReducers;
