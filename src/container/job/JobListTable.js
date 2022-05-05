@@ -199,6 +199,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         company: item.description,
         position: item.jobRole.name,
         joinDate: moment(item.startDate).format('DD-MM-YYYY'),
+        vacancies : item.vacancies,
         approved: (
           <>
             <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
@@ -309,6 +310,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
     {
       title: 'Approved',
       dataIndex: 'approved',
+    },
+    {
+      title: 'Vacancies',
+      dataIndex: 'vacancies',
     },
     {
       title: 'Actions',

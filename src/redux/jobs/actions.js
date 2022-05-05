@@ -50,6 +50,10 @@ const actions = {
     GET_ALLJOBS_BEGINE:"GET_ALLJOBS_BEGINE",
     GET_ALLJOBS_SUCCESS:"GET_ALLJOBS_SUCCESS",
     GET_ALLJOBS_ERR:"GET_ALLJOBS_ERR",
+
+    GET_JOB_APPLICATION_BEGINE:"GET_JOB_APPLICATION_BEGINE",
+    GET_JOB_APPLICATION_SUCCESS:"GET_JOB_APPLICATION_SUCCESS",
+    GET_JOB_APPLICATION_ERR:"GET_JOB_APPLICATION_ERR",
     
    
     getJobcategoryBegin: () => {
@@ -59,7 +63,7 @@ const actions = {
     },
   
     getJobcategorySuccess: data => {
-      //console.log("getJobcategorySuccess=====data",data);
+      // console.log("getJobcategorySuccess=====data",data);
       return {
         type: actions.GET_JOBCATEGOTRY_SUCCESS,
         data,
@@ -313,6 +317,26 @@ const actions = {
     allJobsErr: err => {
       return {
         type: actions.GET_ALLJOBS_ERR,
+        err,
+      };
+    },
+
+    getJobApplicationBegin: () => {
+      return {
+        type: actions.GET_JOB_APPLICATION_BEGINE,
+      };
+    },
+  
+    getJobApplicationSuccess: data => {
+      return {
+        type: actions.GET_JOB_APPLICATION_SUCCESS,
+        data,
+      };
+    },
+  
+    getJobApplicationErr: err => {
+      return {
+        type: actions.GET_JOB_APPLICATION_ERR,
         err,
       };
     },
