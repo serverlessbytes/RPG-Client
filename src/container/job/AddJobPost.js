@@ -315,7 +315,7 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
-            shift: state.shift,
+            shifts: state.shifts,
             email: state.email,
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),

@@ -44,6 +44,9 @@ const {
   allJobsSuccess,
   allJobsErr,
 
+  getJobApplicationSuccess,
+  getJobApplicationErr,
+
 } = actions;
 let per_page,page_num,State,Status,Type,jobrole;
 export const getJobcategory = () => async (dispatch) => {
@@ -194,5 +197,16 @@ export const jobApproved = (id,body) => async (dispatch) => {
     })
     .catch((err) => console.log("Error",err))
 }
+
+export const getJobApplication = (perPage,pageNumber) => async (dispatch) => {
+  await ApiGet(`jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
+    .then((res) => {
+      //console.log("res",res)
+      return dispatch(getJobApplicationSuccess(res))
+    })
+    .catch((err) => dispatch(getJobApplicationErr(err)))
+}
+
+
 
 
