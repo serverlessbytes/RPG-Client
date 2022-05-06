@@ -265,7 +265,7 @@ const User = () => {
     };
 
     const exPortuser = () => {
-        dispatch(allUser(userType))
+       dispatch(allUser(userType))
         setExportTog(true)
     }
     const allexPortuser = () => {
@@ -274,6 +274,8 @@ const User = () => {
             setState(res?.data?.data)
         })
     }
+
+   
 
     return (
         <>

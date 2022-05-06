@@ -39,10 +39,12 @@ const Adduser = () => {
     const [error, setError] = useState({})
 
     useEffect(() => {
+     
         if (id) {
             // dispatch(getOneUser(location.search.split('=')[1]))
             dispatch(getOneUser(id))
         }
+        
     }, [id])
 
     const getOneData = useSelector((state) => state.users.getOneUser)
@@ -138,6 +140,7 @@ const Adduser = () => {
         if (!location.search) {
             dispatch(addUserSignup(data));
             history.push(`/admin/user`)
+             
         }
         else {
             delete data.key
@@ -155,9 +158,15 @@ const Adduser = () => {
         }
     }
     const oncancel = () => {
-        dispatch(getOneUserSuccess([])) // for a data balnk
         history.push(`/admin/user`)
-    }
+        
+    }   
+     useEffect(() => {
+       return(()=>{
+        dispatch(getOneUserSuccess([])) // for a data balnk
+       })
+     }, [])
+      
 
     return (
         <>
@@ -284,7 +293,7 @@ const Adduser = () => {
                         {id?"Edit":"Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
-                           // onClick={() => history.push(`/admin/user`)}
+                        //    onClick={() => history.push(`/admin/user`)}
                            onClick={(e) => oncancel(e)}
                         >
                             Cancel

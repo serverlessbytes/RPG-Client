@@ -53,6 +53,7 @@ const Carousel = () => {
             dispatch(editCarouselSuccess(null))
             toast.success("Carousel update successful")
         }
+     
     }, [editCarouselData])
 
     useEffect(() => {
@@ -68,14 +69,18 @@ const Carousel = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false);
-        setData({
-            title: "",
-            imageUrl: ""
-        })
-        dispatch(getOneCarouselSuccess(null))
-        setSelectedCarousel(null)
+        // setData({
+        //     title: "",
+        //     imageUrl: ""
+        // })
+        // setSelectedCarousel(null)
     };
-
+    useEffect(() => {
+        return(()=>{
+    dispatch(getOneCarouselSuccess(null))
+         })
+ }, [])
+ 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }

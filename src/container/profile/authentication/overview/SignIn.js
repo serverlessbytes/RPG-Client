@@ -57,7 +57,7 @@ const SignIn = () => {
             ]}
             label="Email Address"
           >
-            <Input />
+            <Input placeholder='Email Address' />
           </Form.Item>
           <Form.Item name="password"
             rules={[{ message: 'Please input your Password!', required: true }]}
