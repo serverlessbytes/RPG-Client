@@ -47,7 +47,7 @@ const ThemeLayout = WrappedComponent => {
       }
       window.addEventListener('resize', this.updateDimensions);
       this.updateDimensions();
-      ApiGet(`language/getLanguage`).then((res) => {
+      ApiGet(`language/getLanguage`).then((res) => {  
         this.setState({
           langData: res.data
         });

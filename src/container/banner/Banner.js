@@ -12,6 +12,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/banner/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { set } from 'js-cookie';
 
 //import { data, data } from 'browserslist';
 
@@ -27,6 +28,7 @@ const Banner = () => {
         imageUrl: ""
     });
     const [selectedBanner, setSelectedBanner] = useState();
+    const [nameTog, setNameTog] = useState(false)
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -111,7 +113,7 @@ const Banner = () => {
             setIsModalVisible(false)
             handleCancel()
         }
-
+        setNameTog(true) 
     };
 
     const handleCancel = () => {
@@ -121,8 +123,8 @@ const Banner = () => {
             imageUrl: ""
         })
         setSelectedBanner(null)
+        setNameTog(false)
     };
-    
     useEffect(() => {
         return(()=>{
             dispatch(getOneBannerSuccess([]))
@@ -132,8 +134,10 @@ const Banner = () => {
     const onEdit = (id) => {
         let dataForEdit = getBannerData && getBannerData.data.find((item) => item.id === id)
         
+        setNameTog(true)
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
+           
         }
         dispatch(getOneBanner(dataForEdit.id))
         setIsModalVisible(true)
@@ -243,8 +247,10 @@ const Banner = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
+                   
                     title="Banner"
-                    okText="Add"
+
+                    okText={nameTog ? "Edit" : "Add"}
                 >
                     <Form name="banner" layout="vertical">
                         <label htmlFor="title">Title</label>

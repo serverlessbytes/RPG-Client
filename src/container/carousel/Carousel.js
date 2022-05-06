@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
+
 const Carousel = () => {
     const dispatch = useDispatch()
 
@@ -21,6 +22,7 @@ const Carousel = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [carouselTableData, setcarouselTableData] = useState([{ title: 'ABC' }, { title: 'BCD' }]);
     const [selectedCarousel, setSelectedCarousel] = useState(); // for edit
+    const [nameTod, setNameTod] = useState(false)
     const [data, setData] = useState({
         title: "",
         imageUrl: "",
@@ -106,7 +108,9 @@ const Carousel = () => {
         }
         dispatch(getOneCarousel(dataForEdit.id))
         setIsModalVisible(true);
+        setNameTod(true)
     }
+
 
     const handleOk = () => {
         if (!selectedCarousel) {
@@ -130,6 +134,8 @@ const Carousel = () => {
             dispatch(editCarousel(dataEdit))
             handleCancel()
         }
+
+        setNameTod(false)
 
     };
 
@@ -245,7 +251,7 @@ const Carousel = () => {
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
                     title="Carousel"
-                    okText="Add"
+                    okText={nameTod ? "Edit" : "Add"}
                 >
                     <Form name="carousel" layout="vertical">
                         <label htmlFor="title">Title</label>

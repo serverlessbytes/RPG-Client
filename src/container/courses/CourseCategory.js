@@ -26,6 +26,7 @@ const CourseCategory = () => {
     const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -284,7 +285,10 @@ const CourseCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
+            
+            okText={nameTog ? "Edit" :"Add"}
+            >
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
