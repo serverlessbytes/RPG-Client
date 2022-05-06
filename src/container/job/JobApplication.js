@@ -1,11 +1,11 @@
-import { Button, Col, Form, Row, Select, Table, Tabs } from 'antd';
+import { Button, Checkbox, Col, Form, Row, Select, Table, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import SampleCardSix from '../../components/cards/sampleCard/SampleCardSix';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { cardSix } from '../../demoData/sampleCards.json';
-import { getJobApplication,getJobroles,getJobcategory} from '../../redux/jobs/actionCreator';
+import { getJobApplication, getJobroles, getJobcategory, updateIsSelectedJobApplication, updateIsHired } from '../../redux/jobs/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
@@ -15,11 +15,10 @@ const JobApplication = () => {
     const dispatch = useDispatch();
     const [status, setStatus] = useState('all');
     const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
-    const [perPage, setPerPage] = useState(15) // forpagination
+    const [perPage, setPerPage] = useState(2) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
 
-
-    const getJobApplicationData = useSelector((state)=>state.job.getJobApplicationData)
+    const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const jobcatogerydata = useSelector((state) => state.job.jobCatogeryData)
 
@@ -27,49 +26,105 @@ const JobApplication = () => {
 
     const callback = (key) => {
         setStatus(key);
+        setPageNumber(1)
     }
 
-    useEffect(()=>{
-        dispatch(getJobApplication(perPage,pageNumber))
-    },[])
+    useEffect(() => {
+        if (status !== "all") {
+            dispatch(getJobApplication(perPage, pageNumber, status))
+        }
+        else {
+            dispatch(getJobApplication(perPage, pageNumber))
+        }
+    }, [perPage, pageNumber, status])
 
     useEffect(() => {
-        dispatch(getJobroles());  
+        dispatch(getJobroles());
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getJobcategory());
-    },[])
+    }, [])
+
+    const onselect = (id, selected) => {
+        console.log("selected",selected);
+        dispatch(updateIsSelectedJobApplication(id, !selected))
+    }
+
+    const onHired = (id, hired) => {
+        dispatch(updateIsHired(id, !hired))
+    }
 
     useEffect(() => {
         if (getJobApplicationData && getJobApplicationData.data) {
             setjobApplicatiobtable(getJobApplicationData?.data?.data?.map(item => {
-            console.log("item",item)
-          return ({
-            name: item.user_details.name,
-            email: item.user_details.email,
-            phone: item.user_details.phone,
-            jobRole: item.job_details.jobRole.name,
-            action: (
-              <div className="table-actions">
-                  <>
-                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                      <FeatherIcon icon="edit" size={16} />
-                    </Button>
-                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                      <FeatherIcon icon="trash-2" size={16} />
-                    </Button>
-                    <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
-                      <FeatherIcon icon="eye" size={16} />
-                    </Button>
-                  </>
-              </div>
-            ),
-          });
-        })
-    )
-    }}
-      ,[getJobApplicationData])
+                return ({
+                    name: item.user_details.name,
+                    email: item.user_details.email,
+                    phone: item.user_details.phone,
+                    jobRole: item.job_details.jobRole.name,
+                    Select: (
+                        <div>
+                            {status === "all" ?
+                                <>
+                                    {/* <Checkbox id='visible' name="selected" checked={state.selected} onChange={(e)=>onChangehandle(e)}></Checkbox> */}
+                                    <Button
+                                        className="btn-signin ml-10"
+                                        type="primary"
+                                        onClick={() => onselect(item.id, item.selected)}
+                                    >
+                                        {!item.selected ? 'Select' : 'Unselect'}
+                                    </Button>
+                                    {/* {item.selected === true ? <label>Selected</label> : ""} */}
+                                </>
+                                : status === "selected" ?
+                                    <>
+                                        <Button
+                                            className="btn-signin ml-10"
+                                            type="primary"
+                                            onClick={() => onselect(item.id, item.selected)}
+                                        >
+                                            {!item.selected ? 'Select' : 'Unselect'}
+                                        </Button>
+                                        <Button
+                                            className="btn-signin ml-10"
+                                            type="primary"
+                                            onClick={() => onHired(item.id, item.hired)}
+                                        >
+                                            {!item.hired ? 'Hired' : 'Unhired'}
+                                        </Button>
+                                        {/* {item.selected === true ? <label>Selected</label> : ""} */}
+                                    </>
+                                    : <Button
+                                        className="btn-signin ml-10"
+                                        type="primary"
+                                        onClick={() => onHired(item.id, item.hired)}
+                                    >
+                                        {!item.hired ? 'Hired' : 'Unhired'}
+                                    </Button>
+                            }
+                        </div>
+                    ),
+                    action: (
+                        <div className="table-actions">
+                            <>
+                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                    <FeatherIcon icon="edit" size={16} />
+                                </Button>
+                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                    <FeatherIcon icon="trash-2" size={16} />
+                                </Button>
+                                <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
+                                    <FeatherIcon icon="eye" size={16} />
+                                </Button>
+                            </>
+                        </div>
+                    ),
+                });
+            })
+            )
+        }
+    },[getJobApplicationData])
 
     const jobApplicationTableColumns = [
         {
@@ -90,6 +145,10 @@ const JobApplication = () => {
             dataIndex: 'jobRole',
         },
         {
+            title: 'Select',
+            dataIndex: 'Select',
+        },
+        {
             title: 'Actions',
             dataIndex: 'action',
             width: '90px',
@@ -107,9 +166,9 @@ const JobApplication = () => {
                         <Button
                             size="small"
                             type="primary"
-                            // onClick={() => {
-                            //     history.push(`${path}/`);
-                            // }}
+                        // onClick={() => {
+                        //     history.push(`${path}/`);
+                        // }}
                         >
                             Add JobApplication
                         </Button>
@@ -122,39 +181,35 @@ const JobApplication = () => {
                         <Col xs={24}>
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        
-                                        <Form.Item  label="Job Role">
-                                            <Select size="large" value  name="jobRole" placeholder="Select Job Role">
-                                            <Option value="">Select Job Role</Option>
+                                    <Form layout="vertical">
+                                        <Form.Item label="Job Role">
+                                            <Select size="large" name="jobRole" placeholder="Select Job Role" >
+                                                <Option value="">Select Job Role</Option>
                                                 {jobRolesData && jobRolesData.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}
                                             </Select>
-                                        
                                         </Form.Item>
                                     </Form>
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        
-                                        <Form.Item  label="Job Category">
-                                            <Select size="large" value  name="jobCategory" placeholder="Select Job Categoty">
-                                            <Option value="">Select Job Category</Option>
-                                                {/* {jobcatogerydata && jobcatogerydata.map((items) => (
+                                    <Form layout="vertical">
+                                        <Form.Item label="Job Category">
+                                            <Select size="large" name="jobCategory" placeholder="Select Job Categoty" >
+                                                <Option value="">Select Job Categoty</Option>
+                                                {jobcatogerydata && jobcatogerydata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
-                                                ))} */}
+                                                ))}
                                             </Select>
-                                        
                                         </Form.Item>
                                     </Form>
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" >
+                                        <Button type="primary" >
                                             Apply
                                         </Button>
-                                        <Button size="small" type="light">
+                                        <Button type="light">
                                             Clear
                                         </Button>
                                     </ListButtonSizeWrapper>
@@ -167,65 +222,42 @@ const JobApplication = () => {
                             </Col>
                         );
                     })} */}
-                            <Tabs defaultActiveKey="1" onChange={callback}>
+                            <Tabs onChange={callback}>
                                 <TabPane tab="All" key="all">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-                                            {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                                             <Table
-                                                // rowSelection={rowSelection}
                                                 dataSource={jobApplicatiobtable}
                                                 columns={jobApplicationTableColumns}
                                                 pagination={{
-                                                    // defaultPageSize: courseData?.per_page,
-                                                    // defaultPageSize: courseData?.data.per_page,
-                                                    //   defaultPageSize: courseData?.data.per_page,
-                                                    //   total: courseData?.data.page_count,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    //   onChange: (page, pageSize) => {
-                                                    //     setPageNumber(page);
-                                                    //     setPerPage(pageSize);
-                                                    //     setExportTog(false)
-                                                    //   },
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    defaultPageSize: getJobApplicationData?.data.per_page,
+                                                    total: getJobApplicationData?.data.page_count,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize);
+                                                    },
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Select" key="select">
+                                <TabPane tab="Selected" key="selected">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-                                            {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                                             <Table
-                                                // rowSelection={rowSelection}
                                                 dataSource={jobApplicatiobtable}
                                                 // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
                                                 columns={jobApplicationTableColumns}
                                                 pagination={{
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    //defaultPageSize: courseData?.data.per_page,
-                                                    //total: courseData?.data.page_count,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    //   onChange: (page, pageSize) => {
-                                                    //     setPageNumber(page);
-                                                    //     setPerPage(pageSize);
-                                                    //     setExportTog(false)
-                                                    //   },
+                                                    defaultPageSize: getJobApplicationData?.data.per_page,
+                                                    total: getJobApplicationData?.data.page_count,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize);
+
+                                                    },
                                                 }}
                                             />
                                         </TableWrapper>
@@ -235,29 +267,20 @@ const JobApplication = () => {
                                 <TabPane tab="Hired" key="hired">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-                                            {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={jobApplicatiobtable}
                                                 // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
                                                 columns={jobApplicationTableColumns}
                                                 pagination={{
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    //defaultPageSize: courseData?.data.per_page,
-                                                    //total: courseData?.data.page_count,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                                    //   onChange: (page, pageSize) => {
-                                                    //     setPageNumber(page);
-                                                    //     setPerPage(pageSize);
-                                                    //     setExportTog(false)
-                                                    //   },
+                                                    defaultPageSize: getJobApplicationData?.data.per_page,
+                                                    total: getJobApplicationData?.data.page_count,
+                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize);
+
+                                                    },
                                                 }}
                                             />
                                         </TableWrapper>

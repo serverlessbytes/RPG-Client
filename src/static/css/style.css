@@ -2790,3 +2790,11 @@ padding-bottom: 8px;
 .mb-0{
   margin-bottom: 0px !important;
 }
+
+.select-btn{
+  color: #fff !important;
+  border-color: #5F63F2 !important;
+  background: #5F63F2 !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
