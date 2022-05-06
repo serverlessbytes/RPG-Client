@@ -57,6 +57,14 @@ const {
   GET_JOB_APPLICATION_SUCCESS,
   GET_JOB_APPLICATION_ERR,
 
+  UPDATE_IS_SELECTED_JOB_APPLICATION_BEGINE,
+  UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS,
+  UPDATE_IS_SELECTED_JOB_APPLICATION_ERR,
+
+  UPDATE_IS_HIRED_JOB_APPLICATION_BEGINE,
+  UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS,
+  UPDATE_IS_HIRED_JOB_APPLICATION_ERR,
+
 
 } = actions;
 
@@ -80,7 +88,9 @@ const initialState = {
   allJobs: null,
   addJobRoleError: null,
   editJobRoleError: null,
-  getJobApplicationData:null,
+  getJobApplicationData: null,
+  updateIsSelectedData: null,
+  updateIsHiredData: null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -322,7 +332,7 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_JOB_APPLICATION_BEGINE:
+    case GET_JOB_APPLICATION_BEGINE:
       return {
         ...state,
         loading: true,
@@ -334,6 +344,42 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
     case GET_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        updateIsSelectedData: data,
+        loading: false,
+      };
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case UPDATE_IS_HIRED_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        updateIsHiredData: data,
+        loading: false,
+      };
+    case UPDATE_IS_HIRED_JOB_APPLICATION_ERR:
       return {
         ...state,
         error: err,
