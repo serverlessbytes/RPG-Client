@@ -144,16 +144,21 @@ const Addtestimonial = () => {
     }
 
     const handalCancel = () => {
-        setData ({
-            name : "",
-            role : "",
-            videoUrl : "",
-            imageUrl : "",
-            message :""
-        })
-        dispatch(getoneTestimonialDataSuccess([]));
+        // setData ({
+        //     name : "",
+        //     role : "",
+        //     videoUrl : "",
+        //     imageUrl : "",
+        //     message :""
+        // })
         history.push('/admin/testimonial')
     }
+     useEffect(() => {
+       return(()=>{
+        dispatch(getoneTestimonialDataSuccess([]));
+       })
+     }, [])
+     
 
     return (
         <>

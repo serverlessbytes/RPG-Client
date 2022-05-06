@@ -61,6 +61,7 @@ const ProviderConfig = ({ basename }) => {
   useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));
+    
     }
   }, [])
 

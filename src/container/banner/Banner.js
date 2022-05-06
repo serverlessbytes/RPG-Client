@@ -120,12 +120,18 @@ const Banner = () => {
             title: "",
             imageUrl: ""
         })
-        dispatch(getOneBannerSuccess([]))
         setSelectedBanner(null)
     };
-
+    
+    useEffect(() => {
+        return(()=>{
+            dispatch(getOneBannerSuccess([]))
+       })
+     }, [])
+     
     const onEdit = (id) => {
         let dataForEdit = getBannerData && getBannerData.data.find((item) => item.id === id)
+        
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
         }
@@ -215,7 +221,6 @@ const Banner = () => {
                                 columns={bannerTableColumns}
                                 pagination={false}
                             />
-
                         </TableWrapper>
                     </UserTableStyleWrapper>
                     {/* <ProjectPagination>
