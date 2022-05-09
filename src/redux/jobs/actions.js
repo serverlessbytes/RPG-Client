@@ -63,6 +63,10 @@ const actions = {
   UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS: "UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS",
   UPDATE_IS_HIRED_JOB_APPLICATION_ERR: "UPDATE_IS_HIRED_JOB_APPLICATION_ERR",
 
+  ADD_JOB_APPLICATION_BEGINE: "ADD_JOB_APPLICATION_BEGINE",
+  ADD_JOB_APPLICATION_SUCCESS: "ADD_JOB_APPLICATION_SUCCESS",
+  ADD_JOB_APPLICATION_ERR: "ADD_JOB_APPLICATION_ERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -386,6 +390,27 @@ const actions = {
   updateIsHiredErr: err => {
     return {
       type: actions.UPDATE_IS_HIRED_JOB_APPLICATION_ERR,
+      err,
+    };
+  },
+
+
+  addJobApplicationBegin: () => {
+    return {
+      type: actions.ADD_JOB_APPLICATION_BEGINE,
+    };
+  },
+
+  addJobApplicationSuccess: data => {
+    return {
+      type: actions.ADD_JOB_APPLICATION_SUCCESS,
+      data,
+    };
+  },
+
+  addJobApplicationErr: err => {
+    return {
+      type: actions.ADD_JOB_APPLICATION_ERR,
       err,
     };
   },

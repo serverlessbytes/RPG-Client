@@ -1565,6 +1565,10 @@ table thead tr th:first-child {
   text-align: left !important;
 }
 
+.job-application table thead tr th:last-child {
+  text-align: left !important;
+}
+
 .ant-table-row .ant-table-cell{
   text-align: left !important;
 }
