@@ -113,9 +113,7 @@ const Banner = () => {
             setIsModalVisible(false)
             handleCancel()
         }
-        setNameTog(true) 
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
         setData({
@@ -125,6 +123,7 @@ const Banner = () => {
         setSelectedBanner(null)
         setNameTog(false)
     };
+
     useEffect(() => {
         return(()=>{
             dispatch(getOneBannerSuccess([]))
@@ -133,14 +132,13 @@ const Banner = () => {
      
     const onEdit = (id) => {
         let dataForEdit = getBannerData && getBannerData.data.find((item) => item.id === id)
-        
-        setNameTog(true)
+      
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
-           
         }
         dispatch(getOneBanner(dataForEdit.id))
         setIsModalVisible(true)
+        setNameTog(true)
     }
 
     const onDelete = (id) => {

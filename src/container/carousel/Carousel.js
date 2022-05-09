@@ -71,11 +71,7 @@ const Carousel = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false);
-        // setData({
-        //     title: "",
-        //     imageUrl: ""
-        // })
-        // setSelectedCarousel(null)
+        setNameTod(false)
     };
     useEffect(() => {
         return(()=>{

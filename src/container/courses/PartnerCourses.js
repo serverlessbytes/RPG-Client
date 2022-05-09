@@ -239,9 +239,7 @@ const PartnerCourses = () => {
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
         console.log("res", res)
-        if (res.status === 200) {
-          toast.success("Approved successful");
-        }
+        toast.success( res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
       })
   }

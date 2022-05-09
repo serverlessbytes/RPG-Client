@@ -32,6 +32,7 @@ const BenefitsType = () => {
 
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -97,6 +98,7 @@ const BenefitsType = () => {
                 ...dataForEdit,
                 name: dataForEdit.name,
             })
+            setNameTog(true)
         }
         //dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
@@ -110,6 +112,7 @@ const BenefitsType = () => {
     const handleCancel = () => {
         form.resetFields();
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const handleOk = () => {
@@ -138,7 +141,7 @@ const BenefitsType = () => {
         }
         form.resetFields()
         setIsModalVisible(false);
-        
+         setNameTog(false)
     };
 
     const [state, setState] = useState({
@@ -242,7 +245,8 @@ const BenefitsType = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+            <Modal title="Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
+            okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Benefit</label>
                     <Form.Item name="name">

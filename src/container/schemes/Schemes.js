@@ -276,21 +276,15 @@ useEffect(()=>{
       id: id,
       isApproved: !isAp
     }
-    ApiPost(`scheme/updateIsApproved`,data)
+        console.log("data", data);
+     ApiPost(`scheme/updateIsApproved?`,data)
     .then((res) => {
       console.log("res",res)
-      if(res.status === 200)
-      {
-        toast.success("Approved successful");
-      }
-      // else if(res.data.isApproved === false){
-      //   toast.success("Approved Un-successful");
-      // }
+    toast.success( data.isApproved ? "Approved successful" : "Approved Unsuccessful" )
       dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
     })
     .catch((err) => console.log("Error",err))
   }
-
   users &&
     users.data.map(item => {
       // console.log(item.key);

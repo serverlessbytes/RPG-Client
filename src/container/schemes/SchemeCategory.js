@@ -12,6 +12,7 @@ import { addSchemecategory, editSchemecategory, getSchemecategory } from '../../
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/schemes/actions';
+import { set } from 'js-cookie';
 const SchemeCategory = () => {
     const {editSchemecategorySuccess,addSchemecategorySuccess,addSchemecategoryErr,editSchemecategoryErr} = actions;
 
@@ -22,6 +23,7 @@ const SchemeCategory = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [schemeCategoryTableData, setSchemeCategoryTableData] = useState([]);
     const [selectedSchemeCategory, setSelectedSchemeCategory] = useState();
+    const [nameTod, setnameTod] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -83,6 +85,7 @@ const SchemeCategory = () => {
             })
             setIsModalVisible(true);
         }
+        setnameTod(true)
     }
 
     const onDelete = (id) => {
@@ -100,12 +103,14 @@ const SchemeCategory = () => {
 
     useEffect(() => {
         if (schemeData && schemeData.data) {
-
             setSchemeCategoryTableData(schemeData.data ?
                 schemeData.data.map((item) => {
+                    console.log("item",item);
                     return {
                         ...item,  
+                        SchemeCategory: item.name,
                         action: (
+                        
                             <div className='active-schemes-table'>
                                 <div className="table-actions">
                                     <>
@@ -131,6 +136,7 @@ const SchemeCategory = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setnameTod(false)
     };
 
     const handleOk = () => {
@@ -153,6 +159,7 @@ const SchemeCategory = () => {
         }
         form.resetFields()
         setIsModalVisible(false);
+        setnameTod(false)
     };
 
     const [state, setState] = useState({
@@ -172,7 +179,6 @@ const SchemeCategory = () => {
 
     users?.data?.map(user => {
         const { id, name, designation, status } = user;
-
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
             action: (
@@ -194,9 +200,9 @@ const SchemeCategory = () => {
 
     const schemeTableColumns = [
         {
-            title: 'Scheme Category',
+            title: 'SchemeCategory',
             dataIndex: 'name',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.SchemeCategory.length - b.SchemeCategory.length,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -256,7 +262,9 @@ const SchemeCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
+            
+            okText={nameTod ? "Edit" :"Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">

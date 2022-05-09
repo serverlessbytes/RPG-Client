@@ -85,6 +85,7 @@ const CourseCategory = () => {
     const handleCancel = () => {
         form.resetFields(); // for blank field
         setIsModalVisible(false);
+        setNameTog(false)
     };
     const onDelete = (id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
@@ -114,6 +115,7 @@ const CourseCategory = () => {
         }
         // dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
+        setNameTog(true)
     }
 
     const handleOk = () => {
