@@ -53,6 +53,9 @@ const {
   updateIsHiredSuccess,
   updateIsHiredErr,
 
+  addJobApplicationSuccess,
+  addJobApplicationErr,
+
 } = actions;
 let per_page, page_num, State, Status, Type, jobrole;
 export const getJobcategory = () => async (dispatch) => {
@@ -183,14 +186,14 @@ export const getEmployerData = () => async (dispatch) => {
     .catch((err) => dispatch(getEmployerDataErr(err)))
 }
 
-export const allJobs = (type, state, jobRole) => async (dispatch) => {
+export const allJobs = (type) => async (dispatch) => {
   let URL = `job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`
   if (type) {
     URL = URL.concat(`&type=${type}`)
   }
   await ApiPost(URL)
     .then((res) => {
-      //console.log("res",res)
+      // console.log("res",res)
       return dispatch(allJobsSuccess(res))
     })
     .catch((err) => dispatch(allJobsErr(err)))
@@ -206,8 +209,6 @@ export const jobApproved = (id, body) => async (dispatch) => {
 
 export const getJobApplication = (perPage, pageNumber, status) => async (dispatch) => {
   per_page = perPage, page_num = pageNumber, Status = status,
-    console.log("Status=====", Status);
-
   await ApiGet(`jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}${status ? `&${status}=true` : ''}`)
     .then((res) => {
       //console.log("res",res)
@@ -237,6 +238,16 @@ export const updateIsHired = (id, value) => async (dispatch) => {
       }
     })
     .catch((err) => dispatch(updateIsHiredErr(err)))
+}
+
+export const addJobApplication = (body) => async (dispatch) => {
+  await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    .then((res) => {
+      //console.log("res",res)
+      return dispatch(addJobApplicationSuccess(res))
+      //return dispatch(getJobPost(perPage,pageNumber))
+    })
+    .catch((err) => dispatch(addJobApplicationErr(err)))
 }
 
 

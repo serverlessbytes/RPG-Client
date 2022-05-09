@@ -9,14 +9,17 @@ import { getJobApplication, getJobroles, getJobcategory, updateIsSelectedJobAppl
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
+import { useHistory, useRouteMatch } from 'react-router';
 
 const JobApplication = () => {
 
     const dispatch = useDispatch();
     const [status, setStatus] = useState('all');
     const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
-    const [perPage, setPerPage] = useState(2) // forpagination
+    const [perPage, setPerPage] = useState(10) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
+    const { path } = useRouteMatch();
+    const history = useHistory();
 
     const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
@@ -47,7 +50,7 @@ const JobApplication = () => {
     }, [])
 
     const onselect = (id, selected) => {
-        console.log("selected",selected);
+        console.log("selected", selected);
         dispatch(updateIsSelectedJobApplication(id, !selected))
     }
 
@@ -105,26 +108,26 @@ const JobApplication = () => {
                             }
                         </div>
                     ),
-                    action: (
-                        <div className="table-actions">
-                            <>
-                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                    <FeatherIcon icon="edit" size={16} />
-                                </Button>
-                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                    <FeatherIcon icon="trash-2" size={16} />
-                                </Button>
-                                <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
-                                    <FeatherIcon icon="eye" size={16} />
-                                </Button>
-                            </>
-                        </div>
-                    ),
+                    // action: (
+                    //     <div className="table-actions">
+                    //         <>
+                    //             <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                    //                 <FeatherIcon icon="edit" size={16} />
+                    //             </Button>
+                    //             <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                    //                 <FeatherIcon icon="trash-2" size={16} />
+                    //             </Button>
+                    //             <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
+                    //                 <FeatherIcon icon="eye" size={16} />
+                    //             </Button>
+                    //         </>
+                    //     </div>
+                    // ),
                 });
             })
             )
         }
-    },[getJobApplicationData])
+    }, [getJobApplicationData])
 
     const jobApplicationTableColumns = [
         {
@@ -148,11 +151,11 @@ const JobApplication = () => {
             title: 'Select',
             dataIndex: 'Select',
         },
-        {
-            title: 'Actions',
-            dataIndex: 'action',
-            width: '90px',
-        },
+        // {
+        //     title: 'Actions',
+        //     dataIndex: 'action',
+        //     width: '90px',
+        // },
     ];
 
     const { TabPane } = Tabs;
@@ -166,9 +169,9 @@ const JobApplication = () => {
                         <Button
                             size="small"
                             type="primary"
-                        // onClick={() => {
-                        //     history.push(`${path}/`);
-                        // }}
+                            onClick={() => {
+                                history.push(`addjobapplication`);
+                            }}
                         >
                             Add JobApplication
                         </Button>
@@ -225,7 +228,7 @@ const JobApplication = () => {
                             <Tabs onChange={callback}>
                                 <TabPane tab="All" key="all">
                                     <UserTableStyleWrapper>
-                                        <TableWrapper className="table-responsive">
+                                        <TableWrapper className="table-responsive job-application">
                                             <Table
                                                 dataSource={jobApplicatiobtable}
                                                 columns={jobApplicationTableColumns}
@@ -244,7 +247,7 @@ const JobApplication = () => {
                                 </TabPane>
                                 <TabPane tab="Selected" key="selected">
                                     <UserTableStyleWrapper>
-                                        <TableWrapper className="table-responsive">
+                                        <TableWrapper className="table-responsive job-application">
                                             <Table
                                                 dataSource={jobApplicatiobtable}
                                                 // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
@@ -266,7 +269,7 @@ const JobApplication = () => {
 
                                 <TabPane tab="Hired" key="hired">
                                     <UserTableStyleWrapper>
-                                        <TableWrapper className="table-responsive">
+                                        <TableWrapper className="table-responsive job-application">
                                             <Table
                                                 // rowSelection={rowSelection}
                                                 dataSource={jobApplicatiobtable}
