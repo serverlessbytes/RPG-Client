@@ -11,6 +11,7 @@ import { addJobcategory, editJobcategory, getJobcategory } from '../../redux/job
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
+import { set } from 'date-fns';
 const JobCategory = () => {
     const {editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
         addJobcategoryErr,} = actions;
@@ -29,6 +30,7 @@ const JobCategory = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [selectedJobCategory, setSelectedJobCategory] = useState();
+    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -100,6 +102,7 @@ const JobCategory = () => {
             })
         }
         setIsModalVisible(true);
+        setNameTog(true)
     }
 
     const onDelete = (id) => {
@@ -123,6 +126,7 @@ const JobCategory = () => {
 
                     return {
                         ...item,
+                        JobCategory : item.name ,
                         action: (
                             <div className='active-jobs-table'>
                                 <div className="table-actions">
@@ -149,6 +153,7 @@ const JobCategory = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const handleOk = () => {
@@ -173,6 +178,7 @@ const JobCategory = () => {
         form.resetFields()
         setSelectedJobCategory()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const [state, setState] = useState({
@@ -216,7 +222,7 @@ const JobCategory = () => {
         {
             title: 'Job Category',
             dataIndex: 'name',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.JobCategory.length - b.JobCategory.length,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -287,7 +293,8 @@ const JobCategory = () => {
             </Main>
 
             <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
-                okText="Add">
+                okText= {nameTog ? "Edit" : "Add"}
+                >
 
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>

@@ -25,6 +25,7 @@ const JobRole = () => {
     const [jobRolesTableData, setJobRolesTableData] = useState([]);
     const [selectedJobRole, setSelectedJobCategory] = useState();
     const [isDisabled, setIsDisabled] = useState(true);
+    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -94,6 +95,7 @@ const JobRole = () => {
             })
             setIsModalVisible(true);
             setIsDisabled(false);
+            setNameTog(true)
         }
     }
 
@@ -151,6 +153,7 @@ const JobRole = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const handleOk = () => {
@@ -175,6 +178,7 @@ const JobRole = () => {
          form.resetFields()
         setSelectedJobCategory()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const [state, setState] = useState({
@@ -270,7 +274,8 @@ const JobRole = () => {
                 </Cards>
             </Main>
 
-             <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+             <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
+             okText= {nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label>Job category</label>
                     <Form.Item initialValue="Select a job category " name="jobCategoryId">

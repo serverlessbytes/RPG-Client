@@ -176,15 +176,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then((res) => {
         console.log("res",res)
-        if (res.data.isApproved === true) {
-          
-          toast.success("Approved successful");
-          //dispatch(getJobsFilterForMainSuccess(null))
-        }
-        else if (res.data.isApproved === false) {
-          toast.success("Approved Un-successful");
-        }
-  
+          toast.success( res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
         dispatch(getJobsFilterForMain (perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
       })
       .catch((err) => console.log("Error",err))

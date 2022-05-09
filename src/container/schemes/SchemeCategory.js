@@ -178,7 +178,7 @@ const SchemeCategory = () => {
     };
 
     users?.data?.map(user => {
-        const { id, name, designation, status } = user;
+        // const { id, name, designation, status } = user;
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
             action: (

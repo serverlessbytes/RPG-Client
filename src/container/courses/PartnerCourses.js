@@ -240,6 +240,7 @@ const PartnerCourses = () => {
       .then((res) => {
         console.log("res", res)
         toast.success( res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
+      
         dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
       })
   }
