@@ -20,6 +20,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ImportFileModal from '../../components/modals/ImportFileModal';
 
 const Schemes = () => {
   const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess,editSchemeErr,addSchemeErr} = actions;
@@ -41,6 +42,7 @@ const Schemes = () => {
   const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [exportTog,setExportTog]=useState(false)
+  const [importModal, setImportModal] = useState(false);
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   
   const users = useSelector(state => state.scheme.getAllSchemeData);
@@ -414,6 +416,9 @@ useEffect(()=>{
             <Button onClick={reDirect} size="small" type="primary">
               Add Scheme
             </Button>
+            <Button onClick={() => setImportModal(true)} size="small" type="primary">
+              Import
+            </Button>
 
             {/* <Button size="small" type="warning">
                             Deactivate All Schemes
@@ -574,6 +579,7 @@ useEffect(()=>{
       </Main>
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
+      {importModal && <ImportFileModal importModal={importModal} handleCancel={()=>setImportModal(false)} modaltitle="Import Schemes"/>}
     </>
   );
 };

@@ -19,6 +19,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ImportFileModal from '../../components/modals/ImportFileModal';
 
 const {
   getallSwayamCourseSuccess,
@@ -47,7 +48,7 @@ const SwayamCourses = () => {
   const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
   const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
 
-  const [data,setData] = useState({
+  const [data, setData] = useState({
     category: '',
     mode: '',
   });
@@ -56,8 +57,9 @@ const SwayamCourses = () => {
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
+  const [importModal, setImportModal] = useState(false);
   const [state, setState] = useState('');
-  const [exportTog,setExportTog]=useState(false);
+  const [exportTog, setExportTog] = useState(false);
 
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
   const allCategoryData = useSelector(state => state.category.getAllCourse);
@@ -80,10 +82,10 @@ const SwayamCourses = () => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
       toast.success("Swayam course data exported successfully")
-    }else if(exportTog){
+    } else if (exportTog) {
       toast.success("No swayam data for export")
     }
-    
+
   }, [state])
 
 
@@ -94,49 +96,49 @@ const SwayamCourses = () => {
     })
   }, [])
 
-useEffect(() => {
-  if (addSwayamCourseModuleData && addSwayamCourseModuleData.status  === 200) {
+  useEffect(() => {
+    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
       dispatch(addSwayamCourseModuleSuccess(null))
       // dispatch(getJobsFilterForMainSuccess(null))
       toast.success("Swayam Course Add successful");
       //toastAssetsAdd(true)
       //onHide()
-  }
-  // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-  //   dispatch(editSchemeSuccess(null))
-  //   toast.success("Jobs Update successful");
-  // }
-}, [addSwayamCourseModuleData])
+    }
+    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+    //   dispatch(editSchemeSuccess(null))
+    //   toast.success("Jobs Update successful");
+    // }
+  }, [addSwayamCourseModuleData])
 
-useEffect(()=>{
-  if(addSwayamCourseModuleError){ 
-    dispatch(addSwayamCourseModuleErr(null))
-    toast.error("Something Wrong")
-  }
-},[addSwayamCourseModuleError])
+  useEffect(() => {
+    if (addSwayamCourseModuleError) {
+      dispatch(addSwayamCourseModuleErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [addSwayamCourseModuleError])
 
-useEffect(() => {
-  if (editSwayamCourseData && editSwayamCourseData.isActive  === false) {
+  useEffect(() => {
+    if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
       dispatch(editSwayamPartnerCourseSuccess(null))
       toast.success("Swayam Course Delete successful");
       //toastAssetsAdd(true)
       //onHide()
-  }
-  else if(editSwayamCourseData && editSwayamCourseData.isActive  === true){
-    dispatch(editSwayamPartnerCourseSuccess(null))
-    toast.success("Swayam Course Update successful");
-  }
-}, [editSwayamCourseData])
+    }
+    else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
+      dispatch(editSwayamPartnerCourseSuccess(null))
+      toast.success("Swayam Course Update successful");
+    }
+  }, [editSwayamCourseData])
 
-useEffect(()=>{
-  if(editSwayamCourseErr){ 
-    toast.error("Something Wrong")
-  }
-},[editSwayamCourseErr])
+  useEffect(() => {
+    if (editSwayamCourseErr) {
+      toast.error("Something Wrong")
+    }
+  }, [editSwayamCourseErr])
 
 
   useEffect(() => {
-    if (courseData?.data?.data) { 
+    if (courseData?.data?.data) {
       setState(courseData.data.data)
     }
   }, [courseData])
@@ -151,7 +153,7 @@ useEffect(()=>{
     if (status && data.category) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     }
-    else{
+    else {
       Submit()
     }
   }, [status, perPage, pageNumber]);
@@ -201,11 +203,11 @@ useEffect(()=>{
 
   const onActive = (id) => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
-    console.log("activeCourse",activeCourse)
+    console.log("activeCourse", activeCourse)
     if (activeCourse) {
       let dt = {
         key: activeCourse.key,
-        courseId:activeCourse.id,
+        courseId: activeCourse.id,
         detail: activeCourse.detail,
         thumbnail: activeCourse.thumbnail,
         name: activeCourse.name,
@@ -223,8 +225,8 @@ useEffect(()=>{
   }
 
   const Submit = () => {
-    console.log("category",data.category)
-    console.log("status",status)
+    console.log("category", data.category)
+    console.log("status", status)
     dispatch(getCoursefilter(data.category ? data.category : "", perPage, pageNumber, data.mode ? data.mode : "", status));
   };
 
@@ -254,12 +256,12 @@ useEffect(()=>{
     setExportTog(true)
     ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
       setState(res?.data?.data)
-      
+
     })
   }
 
   const onApproved = (id, isAp, key) => {
-    if(status !== "active"){
+    if (status !== "active") {
       return
     }
     let data = {
@@ -269,8 +271,8 @@ useEffect(()=>{
     }
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
-        console.log("res",res)
-       toast.success(res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
+        console.log("res", res)
+        toast.success(res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
         dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
       })
   }
@@ -289,7 +291,7 @@ useEffect(()=>{
             Certification: item.certificate ? 'Yes' : 'No',
             approved: (
               <>
-              {/* {
+                {/* {
                 status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
                 <Switch checked={item.isApproved}></Switch>
               </div> :
@@ -298,7 +300,7 @@ useEffect(()=>{
              </div>
               } */}
                 <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled = {status === "active" ? false : true}></Switch>
+                  <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
                 </div>
               </>
             ),
@@ -407,6 +409,13 @@ useEffect(()=>{
             >
               Add Course
             </Button>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => setImportModal(true)}
+            >
+              Import
+            </Button>
           </div>
         ]}
       />
@@ -456,7 +465,7 @@ useEffect(()=>{
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={() => {Submit();setExportTog(false)}}>
+                    <Button size="small" type="primary" onClick={() => { Submit(); setExportTog(false) }}>
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>
@@ -497,7 +506,7 @@ useEffect(()=>{
                           // total: usersTableData.length,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                        // pagination={false}
+                      // pagination={false}
 
                       />
                     </TableWrapper>
@@ -544,8 +553,8 @@ useEffect(()=>{
                           // total: usersTableData.length,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                        
-                        // pagination={false}
+
+                      // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
@@ -567,6 +576,7 @@ useEffect(()=>{
       </Main>
 
       {viewModal && <ViewSwayamCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={oneSwayamCourseData?.data} />}
+      {importModal && <ImportFileModal importModal={importModal} handleCancel={()=>setImportModal(false)} modaltitle="Import Swayam Courses"/>}
     </>
   );
 };
