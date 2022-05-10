@@ -1,4 +1,4 @@
-import actions from "./actions";
+import actions from './actions';
 
 const {
   GET_SCHEMECATEGOTRY_BEGINE,
@@ -21,11 +21,10 @@ const {
   ADD_SCHEMEN_SUCCESS,
   ADD_SCHEMEN_ERR,
 
-  ADD_STATE_BEGINE,//getSchemeBenifits
+  ADD_STATE_BEGINE, //getSchemeBenifits
   ADD_STATE_SUCCESS,
   ADD_STATE_ERR,
 
-  
   GET_SCHEMEN_BEGINE,
   GET_SCHEMEN_SUCCESS,
   GET_SCHEMEN_ERR,
@@ -42,6 +41,9 @@ const {
   GET_ALLSCHEMES_SUCCESS,
   GET_ALLSCHEMES_ERR,
 
+  ADD_SCHEME_IN_BULK_BEGINE,
+  ADD_SCHEME_IN_BULK_SUCCESS,
+  ADD_SCHEME_IN_BULK_ERR,
 } = actions;
 
 const initialState = {
@@ -51,15 +53,15 @@ const initialState = {
   addSchemeCatogeryData: null,
   editSchemeCatogeryData: null,
   schemeBenefitData: null,
-  addSchemeData:null,
-  addSchemeErr:null,
+  addSchemeData: null,
+  addSchemeErr: null,
   editSchemeData: null,
-  editSchemeErr:null,
-  getAllSchemeData:null,
-  addState:null,
-  getOneSchemeData:null,
-  allSchemeData:null,
-  editSchemeCatogeryError:null,
+  editSchemeErr: null,
+  getAllSchemeData: null,
+  addState: null,
+  getOneSchemeData: null,
+  allSchemeData: null,
+  editSchemeCatogeryError: null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -119,14 +121,14 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_SCHEMENBENIFITS_BEGINE:
+    case GET_SCHEMENBENIFITS_BEGINE:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case GET_SCHEMENBENIFITS_SUCCESS:
+    case GET_SCHEMENBENIFITS_SUCCESS:
       return {
         ...state,
         error: err,
@@ -134,21 +136,21 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_SCHEMENBENIFITS_ERR:
-      return {
-        ...state,
-        error: err,
-        loading: false,
-      };
-    
-  case ADD_SCHEMEN_BEGINE:
+    case GET_SCHEMENBENIFITS_ERR:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case ADD_SCHEMEN_SUCCESS:
+    case ADD_SCHEMEN_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_SCHEMEN_SUCCESS:
       return {
         ...state,
         error: err,
@@ -156,21 +158,21 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case ADD_SCHEMEN_ERR:
+    case ADD_SCHEMEN_ERR:
       return {
         ...state,
         addSchemeErr: err,
         loading: false,
       };
-      
-      case ADD_STATE_BEGINE:
+
+    case ADD_STATE_BEGINE:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case ADD_STATE_SUCCESS:
+    case ADD_STATE_SUCCESS:
       return {
         ...state,
         error: err,
@@ -178,96 +180,96 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case ADD_STATE_ERR:
+    case ADD_STATE_ERR:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case GET_SCHEMEN_BEGINE:
+    case GET_SCHEMEN_BEGINE:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case GET_SCHEMEN_SUCCESS:
+    case GET_SCHEMEN_SUCCESS:
       return {
         ...state,
         getAllSchemeData: data,
         loading: false,
       };
 
-      case GET_SCHEMEN_ERR:
+    case GET_SCHEMEN_ERR:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case GET_ONESCHEME_BEGINE:
+    case GET_ONESCHEME_BEGINE:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case GET_ONESCHEME_SUCCESS:
+    case GET_ONESCHEME_SUCCESS:
       return {
         ...state,
         getOneSchemeData: data,
         loading: false,
       };
 
-      case GET_ONESCHEME_ERR:
+    case GET_ONESCHEME_ERR:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case EDIT_SCHEME_BEGINE:
+    case EDIT_SCHEME_BEGINE:
       return {
         ...state,
         error: err,
         loading: false,
       };
 
-      case EDIT_SCHEME_SUCCESS:
+    case EDIT_SCHEME_SUCCESS:
       return {
         ...state,
         editSchemeData: data,
         loading: false,
       };
 
-      case EDIT_SCHEME_ERR:
+    case EDIT_SCHEME_ERR:
       return {
         ...state,
         editSchemeErr: err,
         loading: false,
       };
 
-      case GET_ALLSCHEMES_BEGINE:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
-  
-        case GET_ALLSCHEMES_SUCCESS:
-        return {
-          ...state,
-          allSchemeData: data,
-          loading: false,
-        };
-  
-        case GET_ALLSCHEMES_ERR:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
+    case GET_ALLSCHEMES_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case GET_ALLSCHEMES_SUCCESS:
+      return {
+        ...state,
+        allSchemeData: data,
+        loading: false,
+      };
+
+    case GET_ALLSCHEMES_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
     default:
       return state;
