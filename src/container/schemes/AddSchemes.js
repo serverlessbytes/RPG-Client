@@ -200,71 +200,71 @@ const AddSchemes = () => {
     let error = {};
     let flage = false;
     if (state.name === '') {
-      error.name = '*Scheme Name is required';
+      error.name = 'Scheme Name is required';
       flage = true;
     }
     if (state.schemeCategory === '') {
-      error.schemeCategory = '*schemeCategory is required';
+      error.schemeCategory = 'schemeCategory is required';
       flage = true;
     }
     if (state.sequence === '') {
-      error.sequence = '*sequence is required';
+      error.sequence = 'sequence is required';
       flage = true;
     }
     if (state.schemeBenifit === '') {
-      error.schemeBenifit = '*schemeBenifit is required';
+      error.schemeBenifit = 'schemeBenifit is required';
       flage = true;
     }
     if (state.benifitLine.toString('markdown').length <= 2) {
-      error.benifitLine = ' *benifitLine is required';
+      error.benifitLine = 'benifitLine is required';
       flage = true;
     }
     if (state.benificiary === '') {
-      error.benificiary = ' *benificiary is required';
+      error.benificiary = 'benificiary is required';
       flage = true;
     }
     if (state.detail.toString('markdown').length <= 2) {
-      error.detail = '*detail is required';
+      error.detail = 'detail is required';
       flage = true;
     }
     if (state.howToApply.toString('markdown').length <= 2) {
-      error.howToApply = '* howToApply is required';
+      error.howToApply = 'howToApply is required';
       flage = true;
     }
     if (state.documentation.toString('markdown').length <= 2) {
-      error.documentation = '*documentation is required';
+      error.documentation = 'documentation is required';
       flage = true;
     }
     if (state.locations.length < 1) {
-      error.locations = ' *locations is required';
+      error.locations = 'locations is required';
       flage = true;
     }
     if (state.website === '') {
-      error.website = ' *website is required';
+      error.website = 'website is required';
       flage = true;
     }
     if (state.type === '') {
-      error.type = ' *type is required';
+      error.type = 'type is required';
       flage = true;
     }
     if (state.grievanceRedress === '') {
-      error.grievanceRedress = '*grievanceRedress is required';
+      error.grievanceRedress = 'grievanceRedress is required';
       flage = true;
     }
     if (state.elink === '') {
-      error.elink = ' *elink is required';
+      error.elink = 'elink is required';
       flage = true;
     }
     if (state.spoc === '') {
-      error.spoc = '*spoc is required';
+      error.spoc = 'spoc is required';
       flage = true;
     }
     if (state.videoUrl === '') {
-      error.videoUrl = '*VideoUrl is required';
+      error.videoUrl = 'VideoUrl is required';
       flage = true;
     }
     if (state.thumbnail === '') {
-      error.thumbnail = '*ThumbNail is required';
+      error.thumbnail = 'ThumbNail is required';
       flage = true;
     }
     setError(error);

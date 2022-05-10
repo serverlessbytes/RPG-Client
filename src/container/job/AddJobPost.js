@@ -71,7 +71,7 @@ const AddJobPost = () => {
         requirements: "",
         jobCategoryId: "",
         isActive: true,
-        shifts: [],
+        shifts: "",
         email: "",
         phone: "",
         type: "",
@@ -612,7 +612,7 @@ const AddJobPost = () => {
                                             <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} mode="multiple">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} >
                                                     <Option value={"DAY"}> Day </Option>
                                                     <Option value={"NIGHT"}> Night </Option>
                                                 </Select>
@@ -702,7 +702,7 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="name">Type of Job</label>
+                                            <label htmlFor="name" className='mb-0'>Type of Job</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="isactive" style={{marginBottom:"0px"}}>
@@ -722,7 +722,7 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="isactive">Type Of Field</label>
+                                            <label htmlFor="isactive" className='mb-0'>Type Of Field</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="isactive" style={{marginBottom:"0px"}}>

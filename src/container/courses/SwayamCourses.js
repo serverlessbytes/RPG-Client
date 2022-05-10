@@ -270,7 +270,7 @@ useEffect(()=>{
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
       .then((res) => {
         console.log("res",res)
-       toast.success(res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
+       toast.success(res.data.isApproved ? "Approved successful" : "Disapproved successful")
         dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
       })
   }

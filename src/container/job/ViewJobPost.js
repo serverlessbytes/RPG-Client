@@ -69,9 +69,8 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
               <span><label style={{ fontWeight: 'bold' }} >Description:</label> {data?.description}</span><br />
             </Col>
             <Col lg={8}>
-              <span><label style={{ fontWeight: 'bold' }} >Shift:</label> {data?.shifts.join(",")}</span><br />
+              <span><label style={{ fontWeight: 'bold' }} >Shift:</label> {data?.shifts?.join(",")}</span><br />
             </Col>
-
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Requried Experience:</label> {data?.reqExperience}</span><br />
             </Col>

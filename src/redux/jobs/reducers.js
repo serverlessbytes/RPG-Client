@@ -270,12 +270,14 @@ const jobReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+
     case GET_JOBSFILTER_SUCCESS:
       return {
         ...state,
         getJobFilterData: data,
         loading: false,
       };
+      
     case GET_JOBSFILTER_ERR:
       return {
         ...state,

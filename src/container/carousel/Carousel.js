@@ -72,6 +72,10 @@ const Carousel = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
         setNameTod(false)
+        setData({
+            title:"",
+            imageUrl:"",
+        })
     };
     useEffect(() => {
         return(()=>{
@@ -175,7 +179,7 @@ const Carousel = () => {
             })
             )
         }
-    }, [getCarouseldata])
+    }, [getCarouseldata])   
 
     const carouselTableColumns = [
         {
