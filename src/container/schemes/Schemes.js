@@ -282,7 +282,7 @@ useEffect(()=>{
      ApiPost(`scheme/updateIsApproved?`,data)
     .then((res) => {
       console.log("res",res)
-    toast.success( data.isApproved ? "Approved successful" : "Approved Unsuccessful" )
+    toast.success( data.isApproved ? "Approved successful" : "Disapproved successful " )
       dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
     })
     .catch((err) => console.log("Error",err))

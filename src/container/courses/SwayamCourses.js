@@ -9,7 +9,13 @@ import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editSwayamCourse, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
+import {
+  editSwayamCourse,
+  getallSwayamCourse,
+  getCategoryData,
+  getCoursefilter,
+  getOneCoursefilter,
+} from '../../redux/course/actionCreator';
 import moment from 'moment';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
@@ -34,7 +40,7 @@ const SwayamCourses = () => {
   const dispatch = useDispatch();
   const { Option } = Select;
   const history = useHistory();
-  const CSVLinkRef = useRef(null)
+  const CSVLinkRef = useRef(null);
   const usersTableData = [];
   const { path } = useRouteMatch();
   const [activeCoursetog, setActiveCourseTog] = useState(true);
@@ -65,42 +71,40 @@ const SwayamCourses = () => {
   const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const header = [
-    { label: "id", key: "id" },
-    { label: "name", key: "name" },
-    { label: "certificate", key: "certificate" },
-    { label: "createdAt", key: "createdAt" },
-    { label: "detail", key: "detail" },
-    { label: "duration", key: "duration" },
-    { label: "key", key: "key" },
-    { label: "mode", key: "mode" },
-    { label: "sequence", key: "sequence" },
-    { label: "thumbnail", key: "thumbnail" },
-    { label: "viewCount", key: "viewCount" },
+    { label: 'id', key: 'id' },
+    { label: 'name', key: 'name' },
+    { label: 'certificate', key: 'certificate' },
+    { label: 'createdAt', key: 'createdAt' },
+    { label: 'detail', key: 'detail' },
+    { label: 'duration', key: 'duration' },
+    { label: 'key', key: 'key' },
+    { label: 'mode', key: 'mode' },
+    { label: 'sequence', key: 'sequence' },
+    { label: 'thumbnail', key: 'thumbnail' },
+    { label: 'viewCount', key: 'viewCount' },
   ];
 
   useEffect(() => {
     if (state.length && exportTog) {
-      CSVLinkRef?.current?.link.click()  // for export
-      toast.success("Swayam course data exported successfully")
+      CSVLinkRef?.current?.link.click(); // for export
+      toast.success('Swayam course data exported successfully');
     } else if (exportTog) {
-      toast.success("No swayam data for export")
+      toast.success('No swayam data for export');
     }
-
-  }, [state])
-
+  }, [state]);
 
   useEffect(() => {
-    return (() => {
+    return () => {
       // setState([])
-      dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
-    })
-  }, [])
+      dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
+    };
+  }, []);
 
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
-      dispatch(addSwayamCourseModuleSuccess(null))
+      dispatch(addSwayamCourseModuleSuccess(null));
       // dispatch(getJobsFilterForMainSuccess(null))
-      toast.success("Swayam Course Add successful");
+      toast.success('Swayam Course Add successful');
       //toastAssetsAdd(true)
       //onHide()
     }
@@ -108,53 +112,48 @@ const SwayamCourses = () => {
     //   dispatch(editSchemeSuccess(null))
     //   toast.success("Jobs Update successful");
     // }
-  }, [addSwayamCourseModuleData])
+  }, [addSwayamCourseModuleData]);
 
   useEffect(() => {
     if (addSwayamCourseModuleError) {
-      dispatch(addSwayamCourseModuleErr(null))
-      toast.error("Something Wrong")
+      dispatch(addSwayamCourseModuleErr(null));
+      toast.error('Something Wrong');
     }
-  }, [addSwayamCourseModuleError])
+  }, [addSwayamCourseModuleError]);
 
   useEffect(() => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
-      dispatch(editSwayamPartnerCourseSuccess(null))
-      toast.success("Swayam Course Delete successful");
+      dispatch(editSwayamPartnerCourseSuccess(null));
+      toast.success('Swayam Course Delete successful');
       //toastAssetsAdd(true)
       //onHide()
+    } else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
+      dispatch(editSwayamPartnerCourseSuccess(null));
+      toast.success('Swayam Course Update successful');
     }
-    else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
-      dispatch(editSwayamPartnerCourseSuccess(null))
-      toast.success("Swayam Course Update successful");
-    }
-  }, [editSwayamCourseData])
+  }, [editSwayamCourseData]);
 
   useEffect(() => {
     if (editSwayamCourseErr) {
-      toast.error("Something Wrong")
+      toast.error('Something Wrong');
     }
-  }, [editSwayamCourseErr])
-
+  }, [editSwayamCourseErr]);
 
   useEffect(() => {
     if (courseData?.data?.data) {
-      setState(courseData.data.data)
+      setState(courseData.data.data);
     }
-  }, [courseData])
-
+  }, [courseData]);
 
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
 
-
   useEffect(() => {
     if (status && data.category) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-    }
-    else {
-      Submit()
+    } else {
+      Submit();
     }
   }, [status, perPage, pageNumber]);
 
@@ -173,7 +172,9 @@ const SwayamCourses = () => {
     }
   };
 
-  useEffect(() => { console.log("dataaaa", data) }, [data])
+  useEffect(() => {
+    console.log('dataaaa', data);
+  }, [data]);
 
   const onEdit = id => {
     history.push(`${path}/addcourses?id=${id}`);
@@ -201,9 +202,9 @@ const SwayamCourses = () => {
     }
   };
 
-  const onActive = (id) => {
+  const onActive = id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
-    console.log("activeCourse", activeCourse)
+    console.log('activeCourse', activeCourse);
     if (activeCourse) {
       let dt = {
         key: activeCourse.key,
@@ -222,60 +223,60 @@ const SwayamCourses = () => {
       };
       dispatch(editSwayamCourse(dt));
     }
-  }
+  };
 
   const Submit = () => {
-    console.log("category", data.category)
-    console.log("status", status)
-    dispatch(getCoursefilter(data.category ? data.category : "", perPage, pageNumber, data.mode ? data.mode : "", status));
+    console.log('category', data.category);
+    console.log('status', status);
+    dispatch(
+      getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status),
+    );
   };
 
   const clearFilter = () => {
-    setData({ category: '' })
-    dispatch(getCoursefilter("", perPage, pageNumber, "", status));
-  }
+    setData({ category: '' });
+    dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+  };
 
-  const viewSwayamCoursedata = (key) => {
-    dispatch(getOneCoursefilter(key))
-    setViewModal(true)
-  }
+  const viewSwayamCoursedata = key => {
+    dispatch(getOneCoursefilter(key));
+    setViewModal(true);
+  };
 
   const onExportCourse = () => {
     // dispatch(getallSwayamCourse(data.mode))
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-    setExportTog(true)
+    setExportTog(true);
     // if (state.length > 0) {
     //   setTimeout(() => {
     //     CSVLinkRef?.current?.link.click()
     //   });
     // }
-    // CSVLinkRef?.current?.link.click() 
-  }
+    // CSVLinkRef?.current?.link.click()
+  };
 
   const onAllExportCourse = () => {
-    setExportTog(true)
-    ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
-      setState(res?.data?.data)
-
-    })
-  }
+    setExportTog(true);
+    ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then(res => {
+      setState(res?.data?.data);
+    });
+  };
 
   const onApproved = (id, isAp, key) => {
-    if (status !== "active") {
-      return
+    if (status !== 'active') {
+      return;
     }
     let data = {
       courseId: id,
       key: key,
-      isApproved: !isAp
-    }
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
-      .then((res) => {
-        console.log("res", res)
-        toast.success(res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
-        dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-      })
-  }
+      isApproved: !isAp,
+    };
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+      console.log('res', res);
+      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    });
+  };
 
   useEffect(() => {
     if (courseData && courseData.data) {
@@ -300,7 +301,7 @@ const SwayamCourses = () => {
              </div>
               } */}
                 <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
+                  <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
                 </div>
               </>
             ),
@@ -311,30 +312,38 @@ const SwayamCourses = () => {
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
+                  {status === 'active' ? (
+                    <>
+                      <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
+                        <FeatherIcon icon="edit" size={16} />
+                      </Button>
 
-                  {
-                    status === "active" ?
-                      <>
-                        <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
-                          <FeatherIcon icon="edit" size={16} />
-                        </Button>
-
-                        {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+                      {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
                       <FeatherIcon icon="x-circle" size={16} />
                     </Button> */}
-                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                          <FeatherIcon icon="trash-2" size={16} />
-                        </Button>
-                        <Button className="btn-icon" type="success" onClick={() => viewSwayamCoursedata(item.id)} shape="circle">
-                          <FeatherIcon icon="eye" size={16} />
-                        </Button>
-                      </>
-                      : <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
-                        <FeatherIcon icon="rotate-ccw" size={16} />
+                      <Button
+                        className="btn-icon"
+                        type="danger"
+                        to="#"
+                        onClick={() => onDelete(item.id)}
+                        shape="circle"
+                      >
+                        <FeatherIcon icon="trash-2" size={16} />
                       </Button>
-                  }
-
-
+                      <Button
+                        className="btn-icon"
+                        type="success"
+                        onClick={() => viewSwayamCoursedata(item.id)}
+                        shape="circle"
+                      >
+                        <FeatherIcon icon="eye" size={16} />
+                      </Button>
+                    </>
+                  ) : (
+                    <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
+                      <FeatherIcon icon="rotate-ccw" size={16} />
+                    </Button>
+                  )}
                 </div>
               </div>
             ),
@@ -382,7 +391,7 @@ const SwayamCourses = () => {
 
   const callback = key => {
     setStatus(key);
-    setExportTog(false)
+    setExportTog(false);
   };
 
   return (
@@ -392,11 +401,16 @@ const SwayamCourses = () => {
         title="Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-
             <Button size="small" onClick={() => onExportCourse()} type="info">
               Export Course
             </Button>
-            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="SwayamCourse.csv" style={{ opacity: 0 }}></CSVLink>
+            <CSVLink
+              data={state}
+              ref={CSVLinkRef}
+              headers={header}
+              filename="SwayamCourse.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
             <Button size="small" type="info" onClick={() => onAllExportCourse()}>
               Export All Course
             </Button>
@@ -409,14 +423,10 @@ const SwayamCourses = () => {
             >
               Add Course
             </Button>
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => setImportModal(true)}
-            >
+            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
               Import
             </Button>
-          </div>
+          </div>,
         ]}
       />
 
@@ -465,7 +475,14 @@ const SwayamCourses = () => {
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={() => { Submit(); setExportTog(false) }}>
+                    <Button
+                      size="small"
+                      type="primary"
+                      onClick={() => {
+                        Submit();
+                        setExportTog(false);
+                      }}
+                    >
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>
@@ -501,13 +518,12 @@ const SwayamCourses = () => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                             setExportTog(false);
-                          }
+                          },
                           // defaultPageSize: 5,
                           // total: usersTableData.length,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                      // pagination={false}
-
+                        // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
@@ -548,13 +564,13 @@ const SwayamCourses = () => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                             setExportTog(false);
-                          }
+                          },
                           // defaultPageSize: 5,
                           // total: usersTableData.length,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
 
-                      // pagination={false}
+                        // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
@@ -575,8 +591,21 @@ const SwayamCourses = () => {
         </Cards>
       </Main>
 
-      {viewModal && <ViewSwayamCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={oneSwayamCourseData?.data} />}
-      {importModal && <ImportFileModal importModal={importModal} handleCancel={()=>setImportModal(false)} modaltitle="Import Swayam Courses"/>}
+      {viewModal && (
+        <ViewSwayamCourse
+          viewModal={viewModal}
+          type="primary"
+          setViewModal={setViewModal}
+          data={oneSwayamCourseData?.data}
+        />
+      )}
+      {importModal && (
+        <ImportFileModal
+          importModal={importModal}
+          handleCancel={() => setImportModal(false)}
+          modaltitle="Import Swayam Courses"
+        />
+      )}
     </>
   );
 };

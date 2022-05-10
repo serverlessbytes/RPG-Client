@@ -64,7 +64,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         type: courseDataDelete.type,
         isActive: false,
         extraType: courseDataDelete.extraType,
-        shifts: courseDataDelete.shifts,
+        shifts: courseDataDelete?.shifts ? courseDataDelete?.shifts : "" ,
         email: courseDataDelete.email,
         phone: courseDataDelete.phone,
         startDate: courseDataDelete.startDate,
@@ -89,7 +89,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
 
   const onRestore = (id) => {
     let jobsData = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data.data.find((item) => item.id === id)
-    //console.log("jobsdataInactive", jobsData);
+    console.log("jobsdataInactive", jobsData);
     if (jobsData) {
       let data = {
         name: jobsData.name.id,
@@ -176,7 +176,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then((res) => {
         console.log("res",res)
-          toast.success( res.data.isApproved ? "Approved successful" : "Approved Unsuccessful")
+          toast.success( res.data.isApproved ? "Approved successful" : "Disapproved successful ")
         dispatch(getJobsFilterForMain (perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
       })
       .catch((err) => console.log("Error",err))

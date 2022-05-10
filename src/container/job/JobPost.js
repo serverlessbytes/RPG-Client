@@ -68,6 +68,7 @@ const JobPost = ({ match }) => {
         if (stateJob.length && exportTog) {
             CSVLinkRef?.current?.link.click() 
             toast.success("Job data exported successfully")
+            setExportTog(false)
         }else if(exportTog){
             toast.success("No data for export")
         }
@@ -119,7 +120,7 @@ const JobPost = ({ match }) => {
                     jobRole: item?.jobRole?.name,
                     district: item?.district?.name,
                     jobType: item?.jobType?.name,
-                    shifts: item?.shifts[0],
+                    shifts: item?.shifts ? item?.shifts[0]:"",
                     state: item?.state?.name,
                     name:item?.name?.name,
                 }
@@ -139,7 +140,6 @@ const JobPost = ({ match }) => {
         //CSVLinkRef?.current?.link.click()
     };
     const allexPortJobs = () => {
-        
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then((res) => {
             console.log("resres", res)
             setStateJob(res?.data?.data.map((item) => {
@@ -149,8 +149,8 @@ const JobPost = ({ match }) => {
                     jobRole: item?.jobRole?.name,
                     district: item?.district?.name,
                     jobType: item?.jobType?.name,
-                    shifts: item.shifts[0],
-                    state: item.state?.name,
+                    shifts: item?.shifts ? item?.shifts[0] : "",
+                    state: item?.state?.name,
                     name:item?.name?.name,
                 }
             }))
@@ -180,7 +180,7 @@ const JobPost = ({ match }) => {
                         <Button size="small" onClick={() => onExportJobs()} type="info">
                             Export Jobs
                         </Button>
-                        <Button onClick={allexPortJobs} size="small" type="info">
+                   <Button onClick={allexPortJobs} size="small" type="info">
                             Export All Jobs
                         </Button>
                         <Button size="small" onClick={() => { history.push("new") }} type="primary">
