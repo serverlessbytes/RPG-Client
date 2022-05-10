@@ -13,76 +13,86 @@ import EmailSent from './overview/crm/EmailSent';
 import SalesLeaderBoard from './overview/crm/SalesLeaderboard';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { getDashBoardCourseData, getDashBoardUserData, getTopMostViewedCourses, getTopMostViewedJobs, getTopMostViewedSchemes } from '../../redux/dashboard/actionCreator';
+import {
+  getDashBoardCourseData,
+  getDashBoardUserData,
+  getTopMostViewedCourses,
+  getTopMostViewedJobs,
+  getTopMostViewedSchemes,
+} from '../../redux/dashboard/actionCreator';
+import { getUser } from '../../redux/authentication/actionCreator';
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
 
-  const dispatch =useDispatch()
+  const coursesData = useSelector(state => state.dashboard.dashBoardCourseData);
+  const userData = useSelector(state => state.dashboard.dashBoardUserData);
+  const topTenCourseData = useSelector(state => state.dashboard.topTenCourseData);
+  const topTenSchemesData = useSelector(state => state.dashboard.topTenSchemeData);
+  const topTenJobsData = useSelector(state => state.dashboard.topTenJobData);
 
-  const coursesData=useSelector(state=>state.dashboard.dashBoardCourseData) 
-  const userData=useSelector(state=>state.dashboard.dashBoardUserData)
-  const topTenCourseData=useSelector(state=>state.dashboard.topTenCourseData)
-  const topTenSchemesData=useSelector(state=>state.dashboard.topTenSchemeData)
-  const topTenJobsData=useSelector(state=>state.dashboard.topTenJobData)
-
-
-
-  const [tenCourseData,setTenCourseData]=useState()
-  const [tenSchemesData,setTenSchemesData]=useState()
-  const [tenJobData,setTenJobData]=useState()
- 
+  const [tenCourseData, setTenCourseData] = useState();
+  const [tenSchemesData, setTenSchemesData] = useState();
+  const [tenJobData, setTenJobData] = useState();
 
   useEffect(() => {
-    if(topTenCourseData && topTenCourseData.data && topTenCourseData.data.data){
-      setTenCourseData(topTenCourseData.data.data.map((item)=>{
-        return{
-          name:item.name,
-          category:item.courseCategory.name,
-          certification:item.certificate?"Yes":"No"
-        }
-      }))
+    if (topTenCourseData && topTenCourseData.data && topTenCourseData.data.data) {
+      setTenCourseData(
+        topTenCourseData.data.data.map(item => {
+          return {
+            name: item.name,
+            category: item.courseCategory.name,
+            certification: item.certificate ? 'Yes' : 'No',
+          };
+        }),
+      );
     }
-  }, [topTenCourseData])
+  }, [topTenCourseData]);
 
   useEffect(() => {
-    if(topTenSchemesData && topTenSchemesData.data && topTenSchemesData.data.data){
-      setTenSchemesData(topTenSchemesData.data.data.map((item)=>{
-        return{
-          name:item.name,
-          category:item.schemeCategory.name,
-          type:item.type
-        }
-      }))
+    dispatch(getUser());
+  }, []);
+
+  useEffect(() => {
+    if (topTenSchemesData && topTenSchemesData.data && topTenSchemesData.data.data) {
+      setTenSchemesData(
+        topTenSchemesData.data.data.map(item => {
+          return {
+            name: item.name,
+            category: item.schemeCategory.name,
+            type: item.type,
+          };
+        }),
+      );
     }
-  }, [topTenSchemesData])
-
+  }, [topTenSchemesData]);
 
   useEffect(() => {
-    if(topTenJobsData && topTenJobsData.data && topTenJobsData.data.data){
-      setTenJobData(topTenJobsData.data.data.map((item)=>{
-        return{
-          name:item?.name?.name,
-          type:item.type,
-          extraType:item.extraType,
-          start_date:moment(item.startDate).format("YYYY:MM:DD"),
-          end_date:moment(item.endDate).format("YYYY:MM:DD"),
-          role:item.jobRole.name,
-          category:item.jobType.name
-        }
-      }))
+    if (topTenJobsData && topTenJobsData.data && topTenJobsData.data.data) {
+      setTenJobData(
+        topTenJobsData.data.data.map(item => {
+          return {
+            name: item?.name?.name,
+            type: item.type,
+            extraType: item.extraType,
+            start_date: moment(item.startDate).format('YYYY:MM:DD'),
+            end_date: moment(item.endDate).format('YYYY:MM:DD'),
+            role: item.jobRole.name,
+            category: item.jobType.name,
+          };
+        }),
+      );
     }
-  }, [topTenJobsData])
-
+  }, [topTenJobsData]);
 
   useEffect(() => {
-    dispatch(getDashBoardCourseData())
-    dispatch(getDashBoardUserData())
-    dispatch(getTopMostViewedCourses())
-    dispatch(getTopMostViewedSchemes())
-    dispatch(getTopMostViewedJobs())
-  }, [])
+    dispatch(getDashBoardCourseData());
+    dispatch(getDashBoardUserData());
+    dispatch(getTopMostViewedCourses());
+    dispatch(getTopMostViewedSchemes());
+    dispatch(getTopMostViewedJobs());
+  }, []);
 
-  
   const courseColumns = [
     {
       title: 'Course Name',
@@ -117,7 +127,6 @@ const Dashboard = () => {
       dataIndex: 'type',
       key: 'type',
     },
-    
   ];
 
   const jobColumns = [
@@ -162,16 +171,12 @@ const Dashboard = () => {
       key: 'category',
     },
   ];
-  
 
   return (
     <>
-      <PageHeader
-        ghost
-        title="Dashbord"
-      />
+      <PageHeader ghost title="Dashbord" />
       <Main>
-      <h3>Users</h3>
+        <h3>Users</h3>
         <Row gutter={25}>
           <Col xxl={6} md={12} sm={12} xs={24}>
             <Cards headless>
@@ -188,7 +193,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -207,7 +211,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -226,7 +229,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -245,7 +247,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -264,7 +265,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -286,7 +286,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -305,7 +304,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -324,7 +322,6 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
@@ -343,12 +340,11 @@ const Dashboard = () => {
                     </p> */}
                   </CardBarChart2>
                 </div>
-
               </EChartCard>
             </Cards>
           </Col>
         </Row>
-        
+
         <Row gutter={25}>
           <Col xxl={12} xs={24}>
             {/* <Row gutter={25}>
@@ -387,7 +383,7 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} setHeight={"height635"} />
+              <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} setHeight={'height635'} />
             </Suspense>
           </Col>
           <Col xxl={12} xs={24}>
@@ -411,7 +407,12 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 10 Jobs viewes'} columns={jobColumns} data={tenJobData}/>
+              <SalesLeaderBoard
+                dnone={'d-none'}
+                tableheader={'Top 10 Jobs viewes'}
+                columns={jobColumns}
+                data={tenJobData}
+              />
             </Suspense>
           </Col>
           <Col xxl={8} xs={24}>
@@ -422,7 +423,12 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 10 courses viewes'} columns={courseColumns} data={tenCourseData}/>
+              <SalesLeaderBoard
+                dnone={'d-none'}
+                tableheader={'Top 10 courses viewes'}
+                columns={courseColumns}
+                data={tenCourseData}
+              />
             </Suspense>
           </Col>
           <Col xxl={8} xs={24}>
@@ -433,12 +439,15 @@ const Dashboard = () => {
                 </Cards>
               }
             >
-              <SalesLeaderBoard dnone={'d-none'} tableheader={'Top 10 schemes' } columns={schemesColumns} data={tenSchemesData}
-               />
+              <SalesLeaderBoard
+                dnone={'d-none'}
+                tableheader={'Top 10 schemes'}
+                columns={schemesColumns}
+                data={tenSchemesData}
+              />
             </Suspense>
           </Col>
         </Row>
-
       </Main>
     </>
   );

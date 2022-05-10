@@ -15,10 +15,11 @@ import ProtectedRoute from './components/utilities/protectedRoute';
 import AuthStorage from './helper/AuthStorage';
 import STORAGEKEY from './config/APP/app.config';
 import actions from './redux/authentication/actions';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { RouterContext, RouterProvider } from './utility/routerContext';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import { getUser } from './redux/authentication/actionCreator';
 
 const { theme } = config;
 
@@ -35,8 +36,8 @@ const ProviderConfig = ({ basename }) => {
   //useEffect(()=>{"isLoggedIn",isLoggedIn},[isLoggedIn])
   const history = useHistory();
   const route = useContext(RouterContext);
-  const dispatch = useDispatch()
-  const loginData=useSelector(state=>state.auth.login)
+  const dispatch = useDispatch();
+  const loginData = useSelector(state => state.auth.login);
 
   const { loginSuccess } = actions;
 
@@ -53,31 +54,30 @@ const ProviderConfig = ({ basename }) => {
   }, [setPath]);
 
   useEffect(() => {
-    console.log("loginData" ,loginData);
-    if(loginData && loginData.data){
-      toast.success("Login successful");
+    console.log('loginData', loginData);
+    if (loginData && loginData.data) {
+      toast.success('Login successful');
     }
-  }, [loginData])
-  
+  }, [loginData]);
+
   useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));
-    
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
       if (path === process.env.PUBLIC_URL || path === `${process.env.PUBLIC_URL}/`) {
-        if (route.from === "/") {
+        if (route.from === '/') {
           // toast.success("Login successful");
-          history.push("/admin");
+          history.push('/admin');
         } else {
           history.push(route.from);
         }
       }
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
 
   return (
     <ConfigProvider direction={rtl ? 'rtl' : 'ltr'}>
@@ -87,15 +87,14 @@ const ProviderConfig = ({ basename }) => {
             <Redirect to="/admin" />
           )} */}
       </ThemeProvider>
-    </ConfigProvider >
+    </ConfigProvider>
   );
 };
 
 function App() {
   return (
-    
     <Provider store={store}>
-       <ToastContainer />
+      <ToastContainer />
       <Router basename={process.env.PUBLIC_URL}>
         <RouterProvider>
           <ProviderConfig basename={process.env.PUBLIC_URL} />

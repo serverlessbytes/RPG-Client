@@ -62,7 +62,7 @@
     "simple-react-lightbox": "^3.6.9-0",
     "styled-components": "^5.3.3",
     "swiper": "^7.4.1",
-    "xlsx": "^0.17.4"
+    "xlsx": "^0.17.5"
   },
   "homepage": "http://cpanel.digiprojer.in/",
   "scripts": {
