@@ -62,6 +62,8 @@ const initialState = {
   getOneSchemeData: null,
   allSchemeData: null,
   editSchemeCatogeryError: null,
+  addSchemeInBulk: null,
+  addSchemeInBulkErr: null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -265,6 +267,27 @@ const schemeReducer = (state = initialState, action) => {
       };
 
     case GET_ALLSCHEMES_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_SCHEME_IN_BULK_BEGINE:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_SCHEME_IN_BULK_SUCCESS:
+      return {
+        ...state,
+        addSchemeInBulk: data,
+        loading: false,
+      };
+
+    case ADD_SCHEME_IN_BULK_ERR:
       return {
         ...state,
         error: err,

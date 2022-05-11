@@ -158,8 +158,8 @@ export const editSchemeData = body => async dispatch => {
     .catch(err => dispatch(editSchemeErr(err)));
 };
 
-export const addSchemeInBulkImport = (body, langId) => async dispatch => {
-  await ApiPost(`scheme/addSchemeInBulk?langId=${langId}`, body)
+export const addSchemeInBulkImport = body => async dispatch => {
+  await ApiPost(`scheme/addSchemeInBulk?langId=$${AuthStorage.getStorageData(STORAGEKEY.language)}}`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
       console.log('res', res);
