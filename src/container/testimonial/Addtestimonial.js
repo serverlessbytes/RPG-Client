@@ -163,7 +163,7 @@ const Addtestimonial = () => {
     return (
         <>
             <PageHeader
-                title="Add Testimonial"
+                title={id ? "Edit Testimonial" : "Add Testimonial"}
             />
             <Main >
                 <Cards headless>

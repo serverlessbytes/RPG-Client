@@ -303,7 +303,8 @@ const AddPartnerCourses = () => {
     const { TextArea } = Input;
     return (
         <>
-            <PageHeader ghost title="Add Partner Courses" />
+            <PageHeader ghost 
+            title= {id ? "Edit Partner Courses" :"Add Partner Courses" } />
             <Main>
                 <Cards headless>
                     <Row justify="space-between">
