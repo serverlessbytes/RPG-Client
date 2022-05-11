@@ -27,14 +27,14 @@ const ThemeLayout = WrappedComponent => {
   class LayoutComponent extends Component {
     constructor(props) {
       super(props);
-      const storageLang = AuthStorage.getStorageData(STORAGEKEY.language)
+      const storageLang = AuthStorage.getStorageData(STORAGEKEY.language);
       this.state = {
         collapsed: false,
         hide: true,
         searchHide: true,
         activeSearch: false,
         langData: [],
-        lang: storageLang ? storageLang : ""
+        lang: storageLang ? storageLang : '',
         //lang:  ""
       };
       this.updateDimensions = this.updateDimensions.bind(this);
@@ -43,30 +43,29 @@ const ThemeLayout = WrappedComponent => {
     componentDidMount() {
       const ls = localStorage.getItem('language');
       if (ls) {
-        this.setState({ ...this.state, lang: ls })
+        this.setState({ ...this.state, lang: ls });
       }
       window.addEventListener('resize', this.updateDimensions);
       this.updateDimensions();
-      ApiGet(`language/getLanguage`).then((res) => {  
+      ApiGet(`language/getLanguage`).then(res => {
         this.setState({
-          langData: res.data
+          langData: res.data,
         });
         if (!ls) {
-          this.setState({ ...this.state, lang: res.data[0].id })
-          AuthStorage.setStorageData(STORAGEKEY.language, res.data[0].id, true)
+          this.setState({ ...this.state, lang: res.data[0].id });
+          AuthStorage.setStorageData(STORAGEKEY.language, res.data[0].id, true);
         }
-      })
+      });
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevState.langData !== this.state.langData) {
-        let lang = this.state.langData.find((item) => item.id === AuthStorage.getStorageData(STORAGEKEY.language))
+        let lang = this.state.langData.find(item => item.id === AuthStorage.getStorageData(STORAGEKEY.language));
         // console.log("getStorageData(STORAGEKEY.language)",AuthStorage.getStorageData(STORAGEKEY.language));
         if (lang) {
-          this.setState({ ...this.state, lang: lang.id })
+          this.setState({ ...this.state, lang: lang.id });
         }
       }
-
     }
 
     componentWillUnmount() {
@@ -78,8 +77,6 @@ const ThemeLayout = WrappedComponent => {
         collapsed: window.innerWidth <= 1200 && true,
       });
     }
-
-
 
     render() {
       const { collapsed, hide, searchHide, activeSearch } = this.state;
@@ -122,13 +119,13 @@ const ThemeLayout = WrappedComponent => {
         });
       };
 
-      const handleChange = (e) => {
+      const handleChange = e => {
         if (e) {
-          AuthStorage.setStorageData(STORAGEKEY.language, e, true)
-          this.setState({ lang: e })
+          AuthStorage.setStorageData(STORAGEKEY.language, e, true);
+          this.setState({ lang: e });
           window.location.reload(false);
         }
-      }
+      };
 
       const footerStyle = {
         padding: '20px 30px 18px',
@@ -148,8 +145,6 @@ const ThemeLayout = WrappedComponent => {
         [left]: 0,
         zIndex: 998,
       };
-
-
 
       const renderView = ({ style, ...props }) => {
         const customStyle = {
@@ -203,14 +198,14 @@ const ThemeLayout = WrappedComponent => {
                 [!rtl ? 'left' : 'right']: 0,
               }}
             >
-              <Row style={{justifyContent:"space-between"}}>
+              <Row style={{ justifyContent: 'space-between' }}>
                 <Col lg={!topMenu ? 4 : 3} sm={6} xs={12} className="align-center-v navbar-brand">
                   {!topMenu || window.innerWidth <= 991 ? (
                     <Button type="link" onClick={toggleCollapsed}>
                       <img src={require(`../static/img/icon/${collapsed ? 'right.svg' : 'left.svg'}`)} alt="menu" />
                     </Button>
                   ) : null}
-                  <Link
+                  {/* <Link
                     className={topMenu && window.innerWidth > 991 ? 'striking-logo top-menu' : 'striking-logo'}
                     to="/admin"
                   >
@@ -218,7 +213,7 @@ const ThemeLayout = WrappedComponent => {
                       src={!darkMode ? require(`../static/img/Logo_Dark.svg`) : require(`../static/img/Logo_white.png`)}
                       alt=""
                     />
-                  </Link>
+                  </Link> */}
                 </Col>
 
                 {/* <Col lg={!topMenu ? 14 : 15} md={8} sm={0} xs={0}>
@@ -228,13 +223,24 @@ const ThemeLayout = WrappedComponent => {
                 </Col> */}
 
                 <Col lg={18} md={18}>
-                  <Row style={{justifyContent:"flex-end", alignItems: "center", display:`${window.innerWidth < 768 ? "none" : "flex" }`}}>
+                  <Row
+                    style={{
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      display: `${window.innerWidth < 768 ? 'none' : 'flex'}`,
+                    }}
+                  >
                     <Col xxl={2} xl={3} lg={3} md={4}>
-                      <Form.Item name="languageId" className='language py-16 mb-0'>
-                        <Select defaultValue={this.state.lang} placeholder="Language" size="small" onChange={(e) => handleChange(e)} className="sDash_fullwidth-select" >
-                          {this.state.langData && this.state.langData.map((items) => (
-                            <Option value={items.id}>{items.name}</Option>
-                          ))}
+                      <Form.Item name="languageId" className="language py-16 mb-0">
+                        <Select
+                          defaultValue={this.state.lang}
+                          placeholder="Language"
+                          size="small"
+                          onChange={e => handleChange(e)}
+                          className="sDash_fullwidth-select"
+                        >
+                          {this.state.langData &&
+                            this.state.langData.map(items => <Option value={items.id}>{items.name}</Option>)}
                         </Select>
                       </Form.Item>
                     </Col>

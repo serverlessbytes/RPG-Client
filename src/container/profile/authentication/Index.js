@@ -13,11 +13,11 @@ const AuthLayout = WraperContent => {
               <img src={require('../../../static/img/auth/topShape.png')} alt="" className="topShape" />
               <img src={require('../../../static/img/auth/bottomShape.png')} alt="" className="bottomShape" />
               <Content>
-                <img style={{ width: '150px' }} src={require('../../../static/img/Logo_Dark.svg')} alt="" />
+                {/* <img style={{ width: '150px' }} src={require('../../../static/img/Logo_Dark.svg')} alt="" /> */}
                 <br />
                 <br />
                 <Heading as="h1">
-                  StrikingDash React <br />
+                  Swayam <br />
                   Web Application
                 </Heading>
                 <img
