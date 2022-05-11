@@ -447,7 +447,8 @@ useEffect(()=>{
 
   return (
     <>
-      <PageHeader ghost title="Add Swayam Courses" />
+      <PageHeader ghost 
+      title= {id ? "Edit Swayam Courses" : "Add Swayam Courses" }/>
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>

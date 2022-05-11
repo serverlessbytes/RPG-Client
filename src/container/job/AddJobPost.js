@@ -13,6 +13,8 @@ import actions from "../../redux/jobs/actions";
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
 import RichTextEditor from 'react-rte';
+import { set } from 'js-cookie';
+import { data } from 'browserslist';
 
 
 const AddJobPost = () => {
@@ -24,7 +26,7 @@ const AddJobPost = () => {
     const { Option } = Select;
     const { TextArea } = Input;
     const [editJobsID, seteditJobsID] = useState()
-
+  
     const {
         getoneJobPostSuccess, // foe edit
     } = actions;
@@ -122,14 +124,20 @@ const AddJobPost = () => {
                 shifts: getOneJobPostData.data.shifts,
                 email: getOneJobPostData.data.email,
                 phone: getOneJobPostData.data.phone,
+
                 type: getOneJobPostData.data.type,
                 extraType: getOneJobPostData.data.extraType,
+                
                 startDate: moment(getOneJobPostData.data.startDate),
                 endDate: moment(getOneJobPostData.data.endDate),
                 jobRoleId: getOneJobPostData.data.jobRole.id,
             })
         }
     }, [getOneJobPostData])
+
+    useEffect(() => {
+        console.log('state', state)
+    },[state])
 
     const validation = () => {
         let error = {};
@@ -323,18 +331,31 @@ const AddJobPost = () => {
             jobRoleId: state.jobRoleId,
             jobCategoryId: state.jobCategoryId,
         }
+        console.log("data" ,data);
         dispatch(editJobPost(data));
         onCancel()
     }
+    //  useEffect(() => {
+    // return(() =>{
+    //     dispatch(editJobPost(data));
+    // }) 
+    // }, [])
+     
     const onCancel = () => {
-        dispatch(getoneJobPostSuccess([]))
         history.push(`/admin/job/post`);
-
     }
+    useEffect(() => {
+      return(() =>{
+        dispatch(getoneJobPostSuccess([]))
+      })
+    }, [])
+    
+    
+
     return (
         <>
             <PageHeader
-                title="Add Job Post"
+                title={editJobsID ? "Edit job Post" : "Add Job Post"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
@@ -357,7 +378,8 @@ const AddJobPost = () => {
                                         <Col lg={16} md={15} xs={24}>
                                             <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="basic-select" >
-                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary " value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} >
+                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} >
+                                                  
                                                         {jobData && jobData.data.map((items) => (
                                                             <Option value={items.id}>{items.name} </Option>
                                                         ))}
@@ -612,9 +634,9 @@ const AddJobPost = () => {
                                             <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} >
-                                                    <Option value={"DAY"}> Day </Option>
-                                                    <Option value={"NIGHT"}> Night </Option>
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}    >
+                                                   <Option value="DAY"> Day </Option>
+                                                    <Option value="NIGHT"> Night </Option>
                                                 </Select>
                                                 {error.shifts && <span style={{ color: "red" }}>{error.shifts}</span>}
                                             </Form.Item>
@@ -705,16 +727,16 @@ const AddJobPost = () => {
                                             <label htmlFor="name" className='mb-0'>Type of Job</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="isactive" style={{marginBottom:"0px"}}>
+                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
                                                 <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
                                                     <Space direction="vertical">
                                                         <Row>
-                                                            <Radio checked={state.type === true} value={"PARTTIME"}  style={{marginBottom:"0px"}}>Part-time</Radio>
-                                                            <Radio checked={state.type === true} value={"FULLTIME"}  style={{marginBottom:"0px"}}>Full-time</Radio>
+                                                            <Radio checked={state.type === "PARTTIME"}   value="PARTTIME"  style={{marginBottom:"0px"}}>Part-time</Radio>
+                                                            <Radio checked={state.type === "FULLTIME"}value="FULLTIME"  style={{marginBottom:"0px"}}>Full-time</Radio>
                                                         </Row>
                                                     </Space>
                                                 </Radio.Group>
-                                            </Form.Item>
+                                            {/* </Form.Item> */}
                                         {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                         </Col>
                                     </Row>
@@ -725,21 +747,21 @@ const AddJobPost = () => {
                                             <label htmlFor="isactive" className='mb-0'>Type Of Field</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="isactive" style={{marginBottom:"0px"}}>
+                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
                                                 <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
                                                     <Space direction="vertical">
                                                         <Row>
-                                                            <Radio checked={state.extraType === true} value={"CONTRACTUAL"} style={{marginBottom:"0px"}}>
+                                                            <Radio checked={state.extraType === "CONTRACTUAL"} value={"CONTRACTUAL"} style={{marginBottom:"0px"}}>
                                                                 Contractual
                                                             </Radio>
-                                                            <Radio checked={state.extraType === true} value={"ONROLL"} style={{marginBottom:"0px"}}>
+                                                            <Radio checked={state.extraType === "ONROLL"} value={"ONROLL"} style={{marginBottom:"0px"}}>
                                                                 OnRoll
                                                             </Radio>
                                                         </Row>
                                                     </Space>
 
                                                 </Radio.Group>
-                                            </Form.Item>
+                                            {/* </Form.Item> */}
                                                 {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
                                         </Col>
                                     </Row>
@@ -756,12 +778,14 @@ const AddJobPost = () => {
 
                         </Form>
                         <div className="sDash_form-action mt-20">
+       
                             {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
                                     Add
                                 </Button>
                             }
+
 
                             <Button
                                 className="btn-signin"

@@ -316,7 +316,7 @@ const AddSchemes = () => {
     <>
       <PageHeader
         ghost
-        title="Add Scheme"
+        title={id ? "Edit Scheme" : "Add Scheme"}
         /*    buttons={[
                    // <div key="1" className="page-header-actions">
                    //     <Button size="small" type="link">

@@ -171,7 +171,7 @@ const Adduser = () => {
     return (
         <>
           <PageHeader
-                title="Add User"
+                title={id ? "Edit User" : "Add User"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
