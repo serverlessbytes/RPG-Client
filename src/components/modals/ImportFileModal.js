@@ -3,17 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import uuid from 'react-uuid';
 import * as XLSX from 'xlsx';
+import STORAGEKEY from '../../config/APP/app.config';
+import AuthStorage from '../../helper/AuthStorage';
 import { addSchemeInBulkImport } from '../../redux/schemes/actionCreator';
+import { getStateData } from '../../redux/state/actionCreator';
 
 const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const { Option } = Select;
 
   const dispatch = useDispatch();
 
-  const userData = useSelector(state => state.auth.getUserData.data);
+  const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
 
   const SchemeCategoryFromRedux = useSelector(state => state.scheme.schemecatogeryData.data);
   const SchemeBenefitDataFromRedux = useSelector(state => state.beneFit.getBenefitData.data);
+  const stateData = useSelector(state => state.state.getStateData?.data);
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
@@ -21,6 +25,10 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const [schemeCategoryArray, setSchemeCategoryArray] = useState([]);
   const [schemeBanefitArray, setSchemeBanefitArray] = useState([]);
+
+  const [stateArray, setStateArray] = useState([]);
+  const [selectedStateArray, setSelectedStateArray] = useState([]);
+
   const [schemeCategoryID, setSchemeCategoryID] = useState('');
   const [schemeBanefitID, setSchemeBanefitID] = useState('');
 
@@ -41,6 +49,21 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     });
     setSchemeBanefitArray(SchemeBenefitDataFromRedux);
   }, [SchemeBenefitDataFromRedux]);
+
+  // SETTING STATE
+  useEffect(() => {
+    if (stateData) {
+      stateData.forEach(ele => {
+        (ele.value = ele.id), (ele.label = ele.name);
+      });
+      setStateArray(stateData);
+    }
+  }, [stateData]);
+
+  // GET STATE
+  useEffect(() => {
+    dispatch(getStateData());
+  }, []);
 
   const readUploadFile = e => {
     if (e.target.files[0].name.split('.').lastIndexOf('xlsx') === 1) {
@@ -83,19 +106,25 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const handleOk = () => {
     if (FileData) {
       FileData.forEach(e => {
-        e['langauge'] = language;
+        e['language'] = language;
         e['createdByUser'] = userData.id;
         e['modifiedByUser'] = userData.id;
         e['schemeCategory'] = schemeCategoryID;
         e['schemeBenifit'] = schemeBanefitID;
+        e['locations'] = selectedStateArray;
+        e['isActive'] = true;
         e['key'] = uuid();
       });
     }
 
     if (FileData && schemeCategoryID && schemeBanefitID) {
-      dispatch(addSchemeInBulkImport(FileData, language));
+      dispatch(addSchemeInBulkImport(FileData));
       handleCancel();
     }
+  };
+
+  const stateSelected = event => {
+    setSelectedStateArray(event);
   };
 
   return (
@@ -158,10 +187,27 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
             </Col>
           </Row>
 
-          {/* <Table
-                        dataSource={usersTableData}
-                        columns={usersTableColumns}
-                    /> */}
+          <Row>
+            <Col md={12} xs={24} className="mb-25">
+              <Form layout="vertical">
+                <Form.Item label="Select Locations">
+                  <Select
+                    mode="multiple"
+                    options={stateArray}
+                    size="large"
+                    className="sDash_fullwidth-select"
+                    name="benefits"
+                    onChange={e => {
+                      stateSelected(e);
+                    }}
+                    placeholder="Select Locations"
+                  >
+                    <Option value="">Select Locations</Option>
+                  </Select>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
         </Modal>
       </Col>
     </>

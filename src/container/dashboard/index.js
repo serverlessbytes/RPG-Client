@@ -21,12 +21,15 @@ import {
   getTopMostViewedSchemes,
 } from '../../redux/dashboard/actionCreator';
 import { getUser } from '../../redux/authentication/actionCreator';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   const coursesData = useSelector(state => state.dashboard.dashBoardCourseData);
   const userData = useSelector(state => state.dashboard.dashBoardUserData);
+  const userProfile = useSelector(state => state.auth.getUserData);
   const topTenCourseData = useSelector(state => state.dashboard.topTenCourseData);
   const topTenSchemesData = useSelector(state => state.dashboard.topTenSchemeData);
   const topTenJobsData = useSelector(state => state.dashboard.topTenJobData);
@@ -52,6 +55,12 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getUser());
   }, []);
+
+  useEffect(() => {
+    if (userProfile) {
+      AuthStorage.setStorageJsonData(STORAGEKEY.userData, userProfile.data, true);
+    }
+  }, [userProfile]);
 
   useEffect(() => {
     if (topTenSchemesData && topTenSchemesData.data && topTenSchemesData.data.data) {

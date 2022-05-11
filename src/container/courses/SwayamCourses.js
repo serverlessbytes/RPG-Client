@@ -269,15 +269,14 @@ const SwayamCourses = () => {
     let data = {
       courseId: id,
       key: key,
-      isApproved: !isAp
-    }
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
-      .then((res) => {
-        console.log("res",res)
-       toast.success(res.data.isApproved ? "Approved successful" : "Disapproved successful")
-        dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-      })
-  }
+      isApproved: !isAp,
+    };
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+      console.log('res', res);
+      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    });
+  };
 
   useEffect(() => {
     if (courseData && courseData.data) {
@@ -424,9 +423,9 @@ const SwayamCourses = () => {
             >
               Add Course
             </Button>
-            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
+            {/* <Button size="small" type="primary" onClick={() => setImportModal(true)}>
               Import
-            </Button>
+            </Button> */}
           </div>,
         ]}
       />
