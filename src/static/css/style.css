@@ -1,5 +1,9 @@
 /* Utilitiy classes */
 
+*{
+  font-family: 'Lato', sans-serif !important;
+}
+
 .spin {
   height: 100vh;
   display: flex;
