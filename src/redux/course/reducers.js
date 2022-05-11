@@ -10,7 +10,7 @@ const {
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_ERR,
 
-  EDIT_CATEGORY_BEGINE, 
+  EDIT_CATEGORY_BEGINE,
   EDIT_CATEGORY_SUCCESS,
   EDIT_CATEGORY_ERR,
 
@@ -54,6 +54,14 @@ const {
   GET_ALLSWAYAM_COURSE_SUCCESS,
   GET_ALLSWAYAM_COURSE_ERR,
 
+  ADD_PARTNER_COURSE_IN_BULK_BEGINE,
+  ADD_PARTNER_COURSE_IN_BULK_SUCCESS,
+  ADD_PARTNER_COURSE_IN_BULK_ERR,
+
+  ADD_SWAYAM_COURSE_IN_BULK_BEGINE,
+  ADD_SWAYAM_COURSE_IN_BULK_SUCCESS,
+  ADD_SWAYAM_COURSE_IN_BULK_ERR,
+
 
 } = actions;
 
@@ -62,25 +70,31 @@ const initialState = {
   loading: false,
   error: null,
   postcategoryData: null,
-  postcategoryError:null,
+  postcategoryError: null,
   editcategoryData: null,
   categoryData: null,
   courseFilterData: null,
   editFilterData: null,
-  editPartnerCourseData:null,
-  editPartnerCourseError:null,
-  postPartnerCourseData:null,
-  postPartnerCourseDataerr:null,
-  addSwayamCourseData:null,
-  addSwayamCourseDataErr:null,
-  editSwayamCourseData:null,
-  editSwayamCourseErr:null,
-  addSwayamCourseModuleData:null,
-  getSwayamCourseModuleData:null,
-  addSwayamCourseModuleError:null,
-  editSwayamCourseModuleData:null,
-  getAllCourse:null,
-  editCategoryError:null,
+  editPartnerCourseData: null,
+  editPartnerCourseError: null,
+  postPartnerCourseData: null,
+  postPartnerCourseDataerr: null,
+  addSwayamCourseData: null,
+  addSwayamCourseDataErr: null,
+  editSwayamCourseData: null,
+  editSwayamCourseErr: null,
+  addSwayamCourseModuleData: null,
+  getSwayamCourseModuleData: null,
+  addSwayamCourseModuleError: null,
+  editSwayamCourseModuleData: null,
+  getSwayamCourseModuleData: null,
+  addSwayamCourseModuleError: null,
+  getAllCourse: null,
+  editCategoryError: null,
+  addPartnerCourseInBulkData: null,
+  addPartnerCourseInBulkError: null,
+  addSwayamCourseInBulkData: null,
+  addSwayamCourseInBulkError: null,
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -191,132 +205,167 @@ const cateGoryReducer = (state = initialState, action) => {
         editPartnerCourseError: err,
         loading: false,
       };
-  
-      case POST_PARTNERCOURSE_BEGINE:
+
+    case POST_PARTNERCOURSE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case POST_PARTNERCOURSE_SUCCESS:
+      return {
+        ...state,
+        postPartnerCourseData: data,
+        loading: false,
+      };
+    case POST_PARTNERCOURSE_ERR:
+      return {
+        ...state,
+        postPartnerCourseDataerr: err,
+        loading: false,
+      };
+    case ADD_SWAYAM_COURSE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_SWAYAM_COURSE_SUCCESS:
+      return {
+        ...state,
+        addSwayamCourseData: data,
+        loading: false,
+      };
+    case ADD_SWAYAM_COURSE_ERR:
+      return {
+        ...state,
+        addSwayamCourseDataErr: err,
+        loading: false,
+      };
+
+    case EDIT_SWAYAM_COURSE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_SWAYAM_COURSE_SUCCESS:
+      return {
+        ...state,
+        editSwayamCourseData: data,
+        loading: false,
+      };
+    case EDIT_SWAYAM_COURSE_ERR:
+      return {
+        ...state,
+        editSwayamCourseErr: err,
+        loading: false,
+      };
+
+    case ADD_SWAYAM_COURSE_MODULE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_SWAYAM_COURSE_MODULE_SUCCESS:
+      return {
+        ...state,
+        addSwayamCourseModuleData: data,
+        loading: false,
+      };
+    case ADD_SWAYAM_COURSE_MODULE_ERR:
+      return {
+        ...state,
+        addSwayamCourseModuleError: err,
+        loading: false,
+      };
+
+    case GET_SWAYAM_COURSE_MODULE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_SWAYAM_COURSE_MODULE_SUCCESS:
+      return {
+        ...state,
+        getSwayamCourseModuleData: data,
+        loading: false,
+      };
+    case GET_SWAYAM_COURSE_MODULE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_SWAYAM_COURSE_MODULE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_SWAYAM_COURSE_MODULE_SUCCESS:
+      return {
+        ...state,
+        editSwayamCourseModuleData: data,
+        loading: false,
+      };
+    case EDIT_SWAYAM_COURSE_MODULE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case GET_ALLSWAYAM_COURSE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_ALLSWAYAM_COURSE_SUCCESS:
+      return {
+        ...state,
+        getAllCourse: data,
+        loading: false,
+      };
+    case GET_ALLSWAYAM_COURSE_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+      case ADD_PARTNER_COURSE_IN_BULK_BEGINE:
         return {
           ...state,
           loading: true,
         };
-      case POST_PARTNERCOURSE_SUCCESS:
+      case ADD_PARTNER_COURSE_IN_BULK_SUCCESS:
         return {
           ...state,
-          postPartnerCourseData: data,
+          addPartnerCourseInBulkData: data,
           loading: false,
         };
-      case POST_PARTNERCOURSE_ERR:
+      case ADD_PARTNER_COURSE_IN_BULK_ERR:
         return {
           ...state,
-          postPartnerCourseDataerr: err,
+          addPartnerCourseInBulkError: err,
           loading: false,
         };
-      case ADD_SWAYAM_COURSE_BEGINE:
+
+      case ADD_SWAYAM_COURSE_IN_BULK_BEGINE:
         return {
           ...state,
           loading: true,
         };
-      case ADD_SWAYAM_COURSE_SUCCESS:
+      case ADD_SWAYAM_COURSE_IN_BULK_SUCCESS:
         return {
           ...state,
-          addSwayamCourseData: data,
+          addSwayamCourseInBulkData: data,
           loading: false,
         };
-      case ADD_SWAYAM_COURSE_ERR:
+      case ADD_SWAYAM_COURSE_IN_BULK_ERR:
         return {
           ...state,
-          addSwayamCourseDataErr: err,
+          addSwayamCourseInBulkError: err,
           loading: false,
         };
-
-        case EDIT_SWAYAM_COURSE_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case EDIT_SWAYAM_COURSE_SUCCESS:
-          return {
-            ...state,
-            editSwayamCourseData: data,
-            loading: false,
-          };
-        case EDIT_SWAYAM_COURSE_ERR:
-          return {
-            ...state,
-            editSwayamCourseErr: err,
-            loading: false,
-          };
-
-        case ADD_SWAYAM_COURSE_MODULE_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case ADD_SWAYAM_COURSE_MODULE_SUCCESS:
-          return {
-            ...state,
-            addSwayamCourseModuleData: data,
-            loading: false,
-          };
-        case ADD_SWAYAM_COURSE_MODULE_ERR:
-          return {
-            ...state,
-            addSwayamCourseModuleError: err,
-            loading: false,
-          };
-
-        case GET_SWAYAM_COURSE_MODULE_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case GET_SWAYAM_COURSE_MODULE_SUCCESS:
-          return {
-            ...state,
-            getSwayamCourseModuleData: data,
-            loading: false,
-          };
-        case GET_SWAYAM_COURSE_MODULE_ERR:
-          return {
-            ...state,
-            error: err,
-            loading: false,
-          };
-
-          case EDIT_SWAYAM_COURSE_MODULE_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
-          case EDIT_SWAYAM_COURSE_MODULE_SUCCESS:
-            return {
-              ...state,
-              editSwayamCourseModuleData: data,
-              loading: false,
-            };
-          case EDIT_SWAYAM_COURSE_MODULE_ERR:
-            return {
-              ...state,
-              error: err,
-              loading: false,
-            };
-
-            case GET_ALLSWAYAM_COURSE_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
-          case GET_ALLSWAYAM_COURSE_SUCCESS:
-            return {
-              ...state,
-              getAllCourse: data,
-              loading: false,
-            };
-          case GET_ALLSWAYAM_COURSE_ERR:
-            return {
-              ...state,
-              error: err,
-              loading: false,
-            };
-
 
     default:
       return state;

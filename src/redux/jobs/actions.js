@@ -67,6 +67,10 @@ const actions = {
   ADD_JOB_APPLICATION_SUCCESS: "ADD_JOB_APPLICATION_SUCCESS",
   ADD_JOB_APPLICATION_ERR: "ADD_JOB_APPLICATION_ERR",
 
+  ADD_BULK_JOBS_BEGINE: "ADD_BULK_JOBS_BEGINE",
+  ADD_BULK_JOBS_SUCCESS: "ADD_BULK_JOBS_SUCCESS",
+  ADD_BULK_JOBS_ERR: "ADD_BULK_JOB_ERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -411,6 +415,26 @@ const actions = {
   addJobApplicationErr: err => {
     return {
       type: actions.ADD_JOB_APPLICATION_ERR,
+      err,
+    };
+  },
+
+  addBlukJobsBegin: () => {
+    return {
+      type: actions.ADD_BULK_JOBS_BEGINE,
+    };
+  },
+
+  addBlukJobsSuccess: data => {
+    return {
+      type: actions.ADD_BULK_JOBS_SUCCESS,
+      data,
+    };
+  },
+
+  addBlukJobsErr: err => {
+    return {
+      type: actions.ADD_BULK_JOBS_ERR,
       err,
     };
   },

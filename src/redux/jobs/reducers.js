@@ -69,6 +69,10 @@ const {
   ADD_JOB_APPLICATION_SUCCESS,
   ADD_JOB_APPLICATION_ERR,
 
+  ADD_BULK_JOBS_BEGINE,
+  ADD_BULK_JOBS_SUCCESS,
+  ADD_BULK_JOBS_ERR,
+
 
 } = actions;
 
@@ -96,6 +100,8 @@ const initialState = {
   updateIsSelectedData: null,
   updateIsHiredData: null,
   addJobsApplicationData : null,
+  addBulkJobsData : null,
+  addBulkJobsError : null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -408,6 +414,24 @@ const jobReducer = (state = initialState, action) => {
         return {
           ...state,
           error: err,
+          loading: false,
+        };
+
+      case ADD_BULK_JOBS_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_BULK_JOBS_SUCCESS:
+        return {
+          ...state,
+          addBulkJobsData: data,
+          loading: false,
+        };
+      case ADD_BULK_JOBS_ERR:
+        return {
+          ...state,
+          addBulkJobsError: err,
           loading: false,
         };
   

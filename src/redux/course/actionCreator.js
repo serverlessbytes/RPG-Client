@@ -23,6 +23,12 @@ const {
   editSwayamCourseModuleSuccess,
   getallSwayamCourseSuccess,
   addSwayamPartnerCourseErr,
+  addPartnerCourseInBulkBegin,
+  addPartnerCourseInBulkSuccess,
+  addPartnerCourseInBulkErr,
+  addSwayamCourseBegin,
+  addSwayamCourseInBulkBegin,
+  addSwayamCourseInBulkErr,
 } = actions;
 
 let page_number,per_page,category,Inactive,Mode;
@@ -147,6 +153,22 @@ export const getallSwayamCourse = (mode) => async (dispatch) => {
     .then((res) => {
       return dispatch(getallSwayamCourseSuccess(res))
     })
+}
+
+export const addPartnerCourseInBulk = (body) => async (dispatch) => {
+  dispatch(addPartnerCourseInBulkBegin(true))
+  await ApiPost(`course/addPartnerCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+  .then((res) => {
+    return dispatch(addPartnerCourseInBulkSuccess(res))
+  }).catch(e => dispatch(addPartnerCourseInBulkErr(e)))
+}
+
+export const addSwayamCourseInBulk = (body) => async (dispatch) => {
+  dispatch(addSwayamCourseInBulkBegin(true))
+  await ApiPost(`course/addSwayamCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+  .then((res) => {
+    return dispatch(addSwayamCourseModuleSuccess(res))
+  }).catch(e => dispatch(addSwayamCourseInBulkErr(e)))
 }
 
 

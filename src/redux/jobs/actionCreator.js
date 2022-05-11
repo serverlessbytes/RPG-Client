@@ -56,6 +56,10 @@ const {
   addJobApplicationSuccess,
   addJobApplicationErr,
 
+  addBlukJobsBegin,
+  addBlukJobsSuccess,
+  addBlukJobsErr
+
 } = actions;
 let per_page, page_num, State, Status, Type, jobrole;
 export const getJobcategory = () => async (dispatch) => {
@@ -250,8 +254,13 @@ export const addJobApplication = (body) => async (dispatch) => {
     .catch((err) => dispatch(addJobApplicationErr(err)))
 }
 
-
-
-
-
-
+export const addBulkJobs = (body) => async (dispatch) => {
+  dispatch(addBlukJobsBegin(true))
+  await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    .then((res) => {
+      //console.log("res",res)
+      return dispatch(addBlukJobsSuccess(res))
+      //return dispatch(getJobPost(perPage,pageNumber))
+    })
+    .catch((err) => dispatch(addBlukJobsErr(err)))
+}
