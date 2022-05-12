@@ -84,7 +84,6 @@ const CourseCategory = () => {
 
     const handleCancel = () => {
         form.resetFields(); // for blank field
-        
         setIsModalVisible(false);
         setNameTog(false)
         setDataForEdit(null)

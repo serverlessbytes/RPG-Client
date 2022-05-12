@@ -15,8 +15,8 @@ import actions from '../../redux/benefitsType/actions';
 
 const BenefitsType = () => {
     const {editBenefitsSuccess,editBenefitsErr,postBenefitsSuccess,postBenefitsErr,} = actions;
-
     const usersTableData = [];
+    const [benifitsTableData, setBenifitsTableData] = useState([]);
     //const [form] = Form.useForm()
     const [dataForEdit, setDataForEdit] = useState(); //foredit
 
@@ -26,8 +26,6 @@ const BenefitsType = () => {
     const postBenefitsError = useSelector((state) => state.beneFit.postBenefitsError)
     const editBenefitError = useSelector((state) => state.beneFit.editBenefitError)
 
-    useEffect(() => {
-    }, [getBenefitData]);
     const dispatch = useDispatch();
 
     const [form] = Form.useForm();
@@ -43,6 +41,7 @@ const BenefitsType = () => {
     useEffect(() => {
         console.log('postBenefitsdata', postBenefitsdata)
         if (postBenefitsdata && postBenefitsdata.status === 200) {
+            dispatch(getBenefitsData())
             dispatch(postBenefitsSuccess(null))
             toast.success("Scheme Benifit add successful.");
             //toastAssetsAdd(true)
@@ -50,6 +49,10 @@ const BenefitsType = () => {
         }
     }, [postBenefitsdata]) 
 
+    useEffect(() => {
+        dispatch(getBenefitsData())
+    }, []);
+    
     useEffect(()=>{
         if(postBenefitsError){
             dispatch(postBenefitsErr(null))
@@ -74,9 +77,7 @@ const BenefitsType = () => {
         }
     },[editBenefitError])
     
-    useEffect(() => {
-        dispatch(getBenefitsData())
-    }, []);
+ 
 
     const onDelete = (id) => {
         let dataForDelete = getBenefitData && getBenefitData.data && getBenefitData.data.find((item) => item.id === id)
@@ -113,33 +114,8 @@ const BenefitsType = () => {
         form.resetFields();
         setIsModalVisible(false);
         setNameTog(false)
+        setDataForEdit(null)
     };
-
-// const  handleOk =() =>{
-//     let data = form.getFieldsValue()
-//     if (!dataForEdit) {
-//         data ={
-//             ...data,
-//             key: uuid()
-//         }
-//         dispatch(postBenefitsData(data))
-//         setIsModalVisible(false)
-//     }
-//     else{
-//         delete dataForEdit.key 
-//         data ={
-//             id: dataForEdit.id, 
-//                 "isActive": true,
-//                 "isDeleted": false
-//         }
-//         dispatch(editBenefitData(data))
-//     }
-//     form.resetFields()
-//     setIsModalVisible(false)
-//     setNameTog(false)
-//     handleCancel()
-// }
-
 
     const handleOk = () => {
         let data = form.getFieldsValue() //get value from form field
@@ -164,8 +140,7 @@ const BenefitsType = () => {
             console.log("data", data)
         }
         form.resetFields()
-        setIsModalVisible(false);
-         setNameTog(false)
+         handleCancel()
     };
 
     const [state, setState] = useState({
@@ -183,12 +158,13 @@ const BenefitsType = () => {
         setState({ ...state, current, pageSize });
     };
 
-    // users.map(user => {
-    //     const {  } = user;
 
-    //useEffect(() =>{
-    getBenefitData && getBenefitData.data.map((item) => {
-        return usersTableData.push({
+   
+
+    useEffect(() =>{
+    if (getBenefitData && getBenefitData.data) {
+        setBenifitsTableData(getBenefitData.data.map((item) => {
+        return {
             Typeofbenefit: item.name,
             action: (
                 <div className='active-schemes-table'>
@@ -204,10 +180,11 @@ const BenefitsType = () => {
                     </div>
                 </div>
             ),
-        });
-    });
-     //},[getBenefitData])
-
+        };
+        }))
+    }
+     },[getBenefitData])
+     
     const usersTableColumns = [
         {
             title: 'Type Of Benefit',
@@ -246,8 +223,7 @@ const BenefitsType = () => {
                             </Form>
 
                             <Table
-                                // rowSelection={rowSelection}
-                                dataSource={usersTableData}
+                                dataSource={benifitsTableData}
                                 columns={usersTableColumns}
                                 pagination={false}
                             />

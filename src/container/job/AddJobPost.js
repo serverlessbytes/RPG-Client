@@ -119,7 +119,7 @@ const AddJobPost = () => {
                 vacancies: getOneJobPostData.data.vacancies,
                 reqExperience: getOneJobPostData.data.reqExperience,
                 requirements: getOneJobPostData.data.requirements,
-                jobCategoryId: getOneJobPostData.data.jobType.id,
+                jobCategoryId: getOneJobPostData.data.jobType?.id,
                 isActive: true,
                 shifts: getOneJobPostData.data.shifts,
                 email: getOneJobPostData.data.email,
@@ -130,7 +130,7 @@ const AddJobPost = () => {
                 
                 startDate: moment(getOneJobPostData.data.startDate),
                 endDate: moment(getOneJobPostData.data.endDate),
-                jobRoleId: getOneJobPostData.data.jobRole.id,
+                jobRoleId: getOneJobPostData.data.jobRole?.id,
             })
         }
     }, [getOneJobPostData])
