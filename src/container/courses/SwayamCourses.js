@@ -172,10 +172,6 @@ const SwayamCourses = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('dataaaa', data);
-  }, [data]);
-
   const onEdit = id => {
     history.push(`${path}/addcourses?id=${id}`);
   };
@@ -204,7 +200,6 @@ const SwayamCourses = () => {
 
   const onActive = id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
-    console.log('activeCourse', activeCourse);
     if (activeCourse) {
       let dt = {
         key: activeCourse.key,
@@ -226,8 +221,6 @@ const SwayamCourses = () => {
   };
 
   const Submit = () => {
-    console.log('category', data.category);
-    console.log('status', status);
     dispatch(
       getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status),
     );
@@ -272,7 +265,6 @@ const SwayamCourses = () => {
       isApproved: !isAp,
     };
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-      console.log('res', res);
       toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     });
@@ -286,10 +278,10 @@ const SwayamCourses = () => {
           return {
             //key: id,
 
-            CourseName: item?.name,
-            CourseCategory: item?.courseCategory?.name,
-            CourseDuration: item?.duration,
-            Certification: item?.certificate ? 'Yes' : 'No',
+            CourseName: item.name,
+            CourseCategory: item.courseCategory?.name,
+            CourseDuration: item.duration,
+            Certification: item.certificate ? 'Yes' : 'No',
             approved: (
               <>
                 {/* {
