@@ -8,7 +8,13 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
+import {
+  editPartnerCoursefilter,
+  getallSwayamCourse,
+  getCategoryData,
+  getCoursefilter,
+  getOneCoursefilter,
+} from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
 import { ApiPost } from '../../helper/API/ApiData';
@@ -17,15 +23,24 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ImportPartnerCourse from '../../components/modals/ImportPartnerCourses';
 
 const PartnerCourses = () => {
   const {
-    addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr,
+    addPartnerCourseSuccess,
+    addPartnerCourseErr,
+    getallSwayamCourseSuccess,
+    editPartnerCourseSuccess,
+    editPartnerCourseErr,
   } = actions;
+
+  const [importModal, setImportModal] = useState(false);
 
   const courseData = useSelector(state => state.category.courseFilterData);
 
-  useEffect(() => { console.log("courseData", courseData) }, [courseData])
+  useEffect(() => {
+    console.log('courseData', courseData);
+  }, [courseData]);
 
   const { Option } = Select;
   const history = useHistory();
@@ -34,7 +49,8 @@ const PartnerCourses = () => {
   const CSVLinkRef = useRef(null);
 
   const [viewModal, setViewModal] = useState(false);
-  const [state, setState] = useState({ //
+  const [state, setState] = useState({
+    //
     category: '',
     mode: 'PARTNER',
   });
@@ -45,103 +61,102 @@ const PartnerCourses = () => {
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
-  const [exportTog,setExportTog]=useState(false)
+  const [exportTog, setExportTog] = useState(false);
 
   const catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
-  const onePartnerCourseData = useSelector(state => state.category.editFilterData)
-  const postPartnerCourseData = useSelector(state => state.category.postPartnerCourseData)
-  const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr)
-  const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData)
-  const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError)
+  const onePartnerCourseData = useSelector(state => state.category.editFilterData);
+  const postPartnerCourseData = useSelector(state => state.category.postPartnerCourseData);
+  const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr);
+  const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
+  const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
 
   useEffect(() => {
     if (data.length && exportTog) {
-      CSVLinkRef?.current?.link.click()  // 
-      toast.success("Partner course data exported successfully")
-    }else if(exportTog){
-      toast.success("No Partner course data for export")
+      CSVLinkRef?.current?.link.click(); //
+      toast.success('Partner course data exported successfully');
+    } else if (exportTog) {
+      toast.success('No Partner course data for export');
     }
-   
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
-    return (() => {
+    return () => {
       // setState([])
-      dispatch(getallSwayamCourseSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
-    })
-  }, [])
+      dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
+    };
+  }, []);
 
-  useEffect(() => { console.log("postPartnerCourseData", postPartnerCourseData) }, [postPartnerCourseData])
+  useEffect(() => {
+    console.log('postPartnerCourseData', postPartnerCourseData);
+  }, [postPartnerCourseData]);
 
   useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
-      dispatch(addPartnerCourseSuccess(null))
-      toast.success("Partner Course Add successful");
+      dispatch(addPartnerCourseSuccess(null));
+      toast.success('Partner Course Add successful');
     }
-  }, [postPartnerCourseData])
+  }, [postPartnerCourseData]);
 
   useEffect(() => {
     if (postPartnerCourseDataerr) {
-      dispatch(addPartnerCourseErr(null))
-      toast.error("Something Wrong")
+      dispatch(addPartnerCourseErr(null));
+      toast.error('Something Wrong');
     }
-  }, [postPartnerCourseDataerr])
+  }, [postPartnerCourseDataerr]);
 
   useEffect(() => {
     if (editPartnerCourseData && editPartnerCourseData.isActive === false) {
-      dispatch(editPartnerCourseSuccess(null))
-      toast.success("Partner Course Delete successful");
+      dispatch(editPartnerCourseSuccess(null));
+      toast.success('Partner Course Delete successful');
+    } else if (editPartnerCourseData && editPartnerCourseData.isActive === true) {
+      dispatch(editPartnerCourseSuccess(null));
+      toast.success('Partner Course Update successful');
     }
-    else if (editPartnerCourseData && editPartnerCourseData.isActive === true) {
-      dispatch(editPartnerCourseSuccess(null))
-      toast.success("Partner Course Update successful");
-    }
-  }, [editPartnerCourseData])
+  }, [editPartnerCourseData]);
 
   useEffect(() => {
     if (editPartnerCourseError) {
-      dispatch(editPartnerCourseErr(null))
-      toast.error("Something Wrong")
+      dispatch(editPartnerCourseErr(null));
+      toast.error('Something Wrong');
     }
-  }, [editPartnerCourseError])
+  }, [editPartnerCourseError]);
 
   const header = [
-    { label: "id", key: "id" },
-    { label: "name", key: "name" },
-    { label: "location", key: "location" },
-    { label: "contactPersonEmail", key: "contactPersonEmail" },
-    { label: "contactPersonName", key: "contactPersonName" },
-    { label: "contactPersonPhone", key: "contactPersonPhone" },
-    { label: "district", key: "district" },
-    { label: "createdAt", key: "createdAt" },
-    { label: "detail", key: "detail" },
-    { label: "duration", key: "duration" },
-    { label: "eligibility", key: "eligibility" },
-    { label: "isActive", key: "isActive" },
-    { label: "isApproved", key: "isApproved" },
-    { label: "isDeleted", key: "isDeleted" },
-    { label: "key", key: "key" },
-    { label: "mode", key: "mode" },
-    { label: "organization", key: "organization" },
-    { label: "pincode", key: "pincode" },
-    { label: "thumbnail", key: "thumbnail" },
-    { label: "sequence", key: "sequence" },
-    { label: "certificationBody", key: "certificationBody" },
-    { label: "certificate", key: "certificate" },
-    { label: "component", key: "component" },
+    { label: 'id', key: 'id' },
+    { label: 'name', key: 'name' },
+    { label: 'location', key: 'location' },
+    { label: 'contactPersonEmail', key: 'contactPersonEmail' },
+    { label: 'contactPersonName', key: 'contactPersonName' },
+    { label: 'contactPersonPhone', key: 'contactPersonPhone' },
+    { label: 'district', key: 'district' },
+    { label: 'createdAt', key: 'createdAt' },
+    { label: 'detail', key: 'detail' },
+    { label: 'duration', key: 'duration' },
+    { label: 'eligibility', key: 'eligibility' },
+    { label: 'isActive', key: 'isActive' },
+    { label: 'isApproved', key: 'isApproved' },
+    { label: 'isDeleted', key: 'isDeleted' },
+    { label: 'key', key: 'key' },
+    { label: 'mode', key: 'mode' },
+    { label: 'organization', key: 'organization' },
+    { label: 'pincode', key: 'pincode' },
+    { label: 'thumbnail', key: 'thumbnail' },
+    { label: 'sequence', key: 'sequence' },
+    { label: 'certificationBody', key: 'certificationBody' },
+    { label: 'certificate', key: 'certificate' },
+    { label: 'component', key: 'component' },
   ];
   useEffect(() => {
-    if (allCategortData?.data?.data) { //set a state for export word
-      setData(allCategortData?.data?.data
-      )
+    if (allCategortData?.data?.data) {
+      //set a state for export word
+      setData(allCategortData?.data?.data);
     }
-  }, [allCategortData])
+  }, [allCategortData]);
 
   useEffect(() => {
     dispatch(getCategoryData());
   }, []);
-
 
   useEffect(() => {
     if (catdata && catdata.data && catdata.data.length > 0) {
@@ -169,10 +184,10 @@ const PartnerCourses = () => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
 
-  const viewPartnerCoursedata = (key) => {
-    dispatch(getOneCoursefilter(key))
-    setViewModal(true)
-  }
+  const viewPartnerCoursedata = key => {
+    dispatch(getOneCoursefilter(key));
+    setViewModal(true);
+  };
 
   const onDelete = id => {
     let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
@@ -200,7 +215,8 @@ const PartnerCourses = () => {
     }
   };
 
-  const onActive = (id) => { //for inactive toactive data
+  const onActive = id => {
+    //for inactive toactive data
     let activedata = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activedata.certificate;
     let categoryId = activedata.courseCategory.id;
@@ -224,26 +240,25 @@ const PartnerCourses = () => {
       };
       dispatch(editPartnerCoursefilter(activedata));
     }
-  }
+  };
 
   const onApproved = (id, isAp, key) => {
-    if (status !== "active") {
-      return
+    if (status !== 'active') {
+      return;
     }
     let data = {
       courseId: id,
       key: key,
-      isApproved: !isAp
-    }
-    console.log("data", data);
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
-      .then((res) => {
-        console.log("res", res)
-        toast.success( res.data.isApproved ? "Approved successful" : "Disapproved successful")
-      
-        dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
-      })
-  }
+      isApproved: !isAp,
+    };
+    console.log('data', data);
+    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+      console.log('res', res);
+      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+    });
+  };
 
   useEffect(() => {
     if (courseData && courseData.data) {
@@ -259,7 +274,7 @@ const PartnerCourses = () => {
             approved: (
               <>
                 <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
+                  <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
                 </div>
               </>
             ),
@@ -267,8 +282,7 @@ const PartnerCourses = () => {
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
-
-                  {status === 'active' ?
+                  {status === 'active' ? (
                     <>
                       <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
                         <FeatherIcon icon="edit" size={16} />
@@ -282,15 +296,20 @@ const PartnerCourses = () => {
                       >
                         <FeatherIcon icon="trash-2" size={16} />
                       </Button>
-                      <Button className="btn-icon" type="success" onClick={() => viewPartnerCoursedata(item.id)} shape="circle">
+                      <Button
+                        className="btn-icon"
+                        type="success"
+                        onClick={() => viewPartnerCoursedata(item.id)}
+                        shape="circle"
+                      >
                         <FeatherIcon icon="eye" size={16} />
                       </Button>
                     </>
-                    :
+                  ) : (
                     <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
                       <FeatherIcon icon="rotate-ccw" size={16} />
                     </Button>
-                  }
+                  )}
 
                   {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
@@ -309,10 +328,10 @@ const PartnerCourses = () => {
   };
   useEffect(() => {
     if (state.category) {
-      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status));
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
     }
     //dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status))
-  }, [state.category, perPage, pageNumber, state.mode, status]); //paganation 
+  }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
 
   const usersTableColumns = [
     {
@@ -353,13 +372,13 @@ const PartnerCourses = () => {
   const callback = key => {
     setStatus(key);
     setPageNumber(1);
-    setExportTog(false)
+    setExportTog(false);
   };
 
   const onePartnercourseData = () => {
-    dispatch(getallSwayamCourse(state.mode))
-    setExportTog(true)
-  }
+    dispatch(getallSwayamCourse(state.mode));
+    setExportTog(true);
+  };
   // const onAllPartnerCourse = () => {
   // }
 
@@ -370,10 +389,22 @@ const PartnerCourses = () => {
         title="Partner Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            <Button size="small" type="info" onClick={() => { onePartnercourseData() }}>
+            <Button
+              size="small"
+              type="info"
+              onClick={() => {
+                onePartnercourseData();
+              }}
+            >
               Export Courses
             </Button>
-            <CSVLink data={data} ref={CSVLinkRef} headers={header} filename="Partner.csv" style={{ opacity: 0 }}></CSVLink>
+            <CSVLink
+              data={data}
+              ref={CSVLinkRef}
+              headers={header}
+              filename="Partner.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
             {/* <Button size="small" type="info" onClick={() => onAllPartnerCourse()}>
               Export All Course
             </Button> */}
@@ -385,6 +416,9 @@ const PartnerCourses = () => {
               }}
             >
               Add Courses
+            </Button>
+            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
+              Import
             </Button>
           </div>,
         ]}
@@ -474,7 +508,7 @@ const PartnerCourses = () => {
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
-                            setExportTog(false)
+                            setExportTog(false);
                           },
                           // defaultPageSize: 5,
                           // total: usersTableData.length,
@@ -508,7 +542,7 @@ const PartnerCourses = () => {
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
-                            setExportTog(false)
+                            setExportTog(false);
                           },
                         }}
                       />
@@ -520,7 +554,22 @@ const PartnerCourses = () => {
           </Row>
         </Cards>
       </Main>
-      {viewModal && <ViewPartnerCourse viewModal={viewModal} type="primary" setViewModal={setViewModal} data={onePartnerCourseData && onePartnerCourseData.data ? onePartnerCourseData.data : ''} />}
+      {viewModal && (
+        <ViewPartnerCourse
+          viewModal={viewModal}
+          type="primary"
+          setViewModal={setViewModal}
+          data={onePartnerCourseData && onePartnerCourseData.data ? onePartnerCourseData.data : ''}
+        />
+      )}
+
+      {
+        <ImportPartnerCourse
+          importModal={importModal}
+          handleCancel={() => setImportModal(false)}
+          modaltitle="Import Swayam Courses"
+        />
+      }
     </>
   );
 };
