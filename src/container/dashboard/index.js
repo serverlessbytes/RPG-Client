@@ -44,7 +44,7 @@ const Dashboard = () => {
         topTenCourseData.data.data.map(item => {
           return {
             name: item.name,
-            category: item.courseCategory.name,
+            category: item.courseCategory?.name,
             certification: item.certificate ? 'Yes' : 'No',
           };
         }),

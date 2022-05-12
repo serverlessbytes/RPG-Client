@@ -1,3 +1,4 @@
+import { data } from "browserslist";
 const actions = {
   POST_CATEGORY_BEGINE: 'POST_CATEGORY_BEGINE',
   POST_CATEGORY_SUCCESS: 'POST_CATEGORY_SUCCESS',
@@ -58,7 +59,9 @@ const actions = {
   ADD_SWAYAM_COURSE_IN_BULK_BEGINE: 'ADD_SWAYAM_COURSE_IN_BULK_BEGINE',
   ADD_SWAYAM_COURSE_IN_BULK_SUCCESS: 'ADD_SWAYAM_COURSE_IN_BULK_SUCCESS',
   ADD_SWAYAM_COURSE_IN_BULK_ERR: 'ADD_SWAYAM_COURSE_IN_BULK_ERR',
-  //CourseRating
+
+  
+  //--- CourseRating --- 
   POST_ADD_COURSE_RATING_BEGINE: 'POST_ADD_COURSE_RATING_BEGINE',
   POST_ADD_COURSE_RATING_SUCCESS: 'POST_ADD_COURSE_RATING_SUCCESS',
   POST_ADD_COURSE_RATING_ERR: 'POST_ADD_COURSE_RATING_ERR',
@@ -381,6 +384,120 @@ const actions = {
       err,
     };
   },
+
+    //--- CourseRating --- 
+
+   addCourseRatingBegin : () =>{
+    return{
+      type :actions.POST_ADD_COURSE_RATING_BEGINE,
+    };
+  },
+   addCourseRatingSuccess : data =>{
+    return{
+      type :actions.POST_ADD_COURSE_RATING_SUCCESS,
+      data,
+    };
+  },
+   addCourseRatingErr : err =>{
+    return{
+      type :actions.POST_ADD_COURSE_RATING_ERR,
+      err,
+    };
+  },
+
+ courseRatingBeginn : () =>{
+    return {
+     type : actions.GET_COURSE_RATING_BEGINE , 
+    };
+  },
+  courseRatingSuccess : data =>{
+    return {
+     type : actions.GET_COURSE_RATING_SUCCESS, 
+     data,
+    };
+  },
+  courseRatingErr: err =>{
+    return {
+     type : actions.GET_COURSE_RATING_ERR,
+     err, 
+    };
+  },
+
+  courseRatingByIdBegin : () =>{
+    return{
+      type : actions.POST_COURSE_RATING_BY_ID_BEGINE,
+    };
+  },
+ courseRatingByIdSuccess : data =>{
+    return{
+      type : actions.POST_COURSE_RATING_BY_ID_SUCCESS,
+      data,
+    };
+  },
+ courseRatingByIdErr : err =>{
+    return{
+      type : actions.POST_COURSE_RATING_BY_ID_ERR,
+      err
+    };
+  },
+
+ specificCourseRatingBegin : () =>{
+    return{
+      type : actions.GET_SPECIFIC_COURSE_RATING_BEGINE
+    };
+  },
+ specificCourseRatingSuccess: data =>{
+    return{
+      type : actions.GET_SPECIFIC_COURSE_RATING_SUCCESS,
+      data
+    };
+  },
+ specificCourseRatingErr :err =>{
+    return{
+      type : actions.GET_SPECIFIC_COURSE_RATING_ERR,
+      err
+    };
+  },
+
+ specificUserCourseRatingBegin :() =>{
+    return{
+      type : actions.GET_SPECIFIC_USER_COURSE_RATING_BEGINE,
+      err
+    };
+  },
+ specificUserCourseRatingSuccess :data =>{
+    return{
+      type : actions.GET_SPECIFIC_USER_COURSE_RATING_SUCCESS,
+      data
+    };
+  },
+specificUserCourseRatingErr : err =>{
+    return{
+      type : actions.GET_SPECIFIC_USER_COURSE_RATING_ERR,
+      err
+    };
+  },
+
+  editCategoryRatingBegin : () =>{
+    return{
+      type : actions.EDIT_COURSE_RATING_BEGINE,
+    };
+  },
+  editCategoryRatingSuccess : data =>{
+    return{
+      type : actions.EDIT_COURSE_RATING_SUCCESS,
+      data,
+    };
+  },
+  editCategoryRatingErr : () =>{
+    return{
+      type : actions.EDIT_COURSE_RATING_ERR,
+      err
+    }
+  }
+  
+
 };
+
 
 export default actions;

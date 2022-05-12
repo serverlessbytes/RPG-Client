@@ -286,10 +286,10 @@ const SwayamCourses = () => {
           return {
             //key: id,
 
-            CourseName: item.name,
-            CourseCategory: item.courseCategory.name,
-            CourseDuration: item.duration,
-            Certification: item.certificate ? 'Yes' : 'No',
+            CourseName: item?.name,
+            CourseCategory: item?.courseCategory?.name,
+            CourseDuration: item?.duration,
+            Certification: item?.certificate ? 'Yes' : 'No',
             approved: (
               <>
                 {/* {
@@ -449,7 +449,7 @@ const SwayamCourses = () => {
                         <Option value="">Select Category</Option>
                         {categoryData &&
                           categoryData.data &&
-                          categoryData.data.map(items => <Option value={items.id}>{items.name} </Option>)}
+                          categoryData.data.map(items => <Option value={items?.id}>{items?.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>

@@ -2,6 +2,7 @@ import actions from './actions';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import { async } from '@firebase/util';
 
 const {
 
@@ -29,6 +30,20 @@ const {
   addSwayamCourseBegin,
   addSwayamCourseInBulkBegin,
   addSwayamCourseInBulkErr,
+
+   //--- CourseRating --- 
+  addCourseRatingSuccess,
+  addCourseRatingErr,
+  courseRatingSuccess,
+  courseRatingErr,
+  courseRatingByIdSuccess,
+  courseRatingByIdErr,
+  specificCourseRatingSuccess,
+  specificCourseRatingErr,
+  specificUserCourseRatingSuccess,
+  specificUserCourseRatingErr,
+  editCategoryRatingSuccess,
+  editCategoryRatingErr,
 } = actions;
 
 let page_number,per_page,category,Inactive,Mode;
@@ -171,9 +186,55 @@ export const addSwayamCourseInBulk = (body) => async (dispatch) => {
   }).catch(e => dispatch(addSwayamCourseInBulkErr(e)))
 }
 
+// --- CourseRating --- 
 
+export const addCourseRating =(body) => async(dispatch) =>{
+  await ApiPost(`courseRating/addCourseRating`,body)
+  .then((res) =>{
+    return dispatch(addCourseRatingSuccess(res))
+   })
+   .catch(e => addCourseRatingErr(e))
+}
 
+export const getCourseRatingData =(body) => async(dispatch) =>{
+  await ApiPost(`courseRating/getCourseRatings`,body)
+  .then((res) =>{
+    return dispatch(courseRatingSuccess(res))
+   })
+   .catch(e => courseRatingErr(e))
+}
 
+export const getCourseRatingsByID = (body) => async(dispatch) =>{
+  await ApiPost(`courseRating/getCourseRating`,body)
+  .then((res)=>{
+    return dispatch(courseRatingByIdSuccess(res))
+  })
+  .catch(e => courseRatingByIdErr (e))
+}
+
+ export const specificCourseRatings =(body) => async(dispatch) =>{
+   await ApiGet(`courseRating/specificCourseRatings`,body)
+   .then((res) =>{
+     return dispatch(specificCourseRatingSuccess(res))
+   })
+   .catch(e =>specificCourseRatingErr(e))
+ }
+ 
+ export const specificUserCourseRatings =(body) => async (dispatch) =>{
+   await ApiGet (`courseRating/specificUserCourseRatings`,body)
+   .then((res) =>{
+     return(specificUserCourseRatingSuccess(res))
+   })
+   .catch(e=>specificUserCourseRatingErr(e))
+ }
+
+ export const editCategoryRating = (body) =>  async(dispatch) =>{
+   await ApiPost (`courseRating/editCourseRating`,body)
+   .then((res) =>{
+     return(editCategoryRatingSuccess(res))
+   })
+   .catch(e => editCategoryRatingErr(e))
+ }
 
 
 
