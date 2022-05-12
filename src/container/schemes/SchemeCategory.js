@@ -137,6 +137,7 @@ const SchemeCategory = () => {
         form.resetFields()
         setIsModalVisible(false);
         setnameTod(false)
+        setSelectedSchemeCategory(null)
     };
 
     const handleOk = () => {
@@ -147,7 +148,9 @@ const SchemeCategory = () => {
                 key: uuid()
             }
             dispatch(addSchemecategory(data))
-        } else {
+            setIsModalVisible(false)
+        } 
+        else {
             delete selectedSchemeCategory.key
             data = {
                 id: selectedSchemeCategory.id,
@@ -160,6 +163,7 @@ const SchemeCategory = () => {
         form.resetFields()
         setIsModalVisible(false);
         setnameTod(false)
+        handleCancel()
     };
 
     const [state, setState] = useState({

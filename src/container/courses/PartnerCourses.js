@@ -142,7 +142,7 @@ const PartnerCourses = () => {
     { label: 'organization', key: 'organization' },
     { label: 'pincode', key: 'pincode' },
     { label: 'thumbnail', key: 'thumbnail' },
-    { label: 'sequence', key: 'sequence' },
+    // { label: 'sequence', key: 'sequence' },
     { label: 'certificationBody', key: 'certificationBody' },
     { label: 'certificate', key: 'certificate' },
     { label: 'component', key: 'component' },
@@ -268,7 +268,7 @@ const PartnerCourses = () => {
           return {
             //key: id,
             CourseName: item.name,
-            CourseCategory: item.courseCategory.name,
+            CourseCategory: item.courseCategory?.name,
             //State: item.state,
             CourseType: item.mode,
             approved: (

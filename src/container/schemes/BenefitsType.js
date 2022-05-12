@@ -115,10 +115,35 @@ const BenefitsType = () => {
         setNameTog(false)
     };
 
+// const  handleOk =() =>{
+//     let data = form.getFieldsValue()
+//     if (!dataForEdit) {
+//         data ={
+//             ...data,
+//             key: uuid()
+//         }
+//         dispatch(postBenefitsData(data))
+//         setIsModalVisible(false)
+//     }
+//     else{
+//         delete dataForEdit.key 
+//         data ={
+//             id: dataForEdit.id, 
+//                 "isActive": true,
+//                 "isDeleted": false
+//         }
+//         dispatch(editBenefitData(data))
+//     }
+//     form.resetFields()
+//     setIsModalVisible(false)
+//     setNameTog(false)
+//     handleCancel()
+// }
+
+
     const handleOk = () => {
+        let data = form.getFieldsValue() //get value from form field
         if (dataForEdit) {
-            let data = form.getFieldsValue() //get value from form field
-            //console.log("========>data<==========", data);
             //delete data.key;
             data = {
                 ...data, 
@@ -131,7 +156,6 @@ const BenefitsType = () => {
         }
         else {
             let data = form.getFieldsValue()
-            //console.log("========>data<==========", data);
             data = {
                 ...data,
                 key: uuid()

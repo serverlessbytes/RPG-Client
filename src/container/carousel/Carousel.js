@@ -55,7 +55,6 @@ const Carousel = () => {
             dispatch(editCarouselSuccess(null))
             toast.success("Carousel update successful")
         }
-     
     }, [editCarouselData])
 
     useEffect(() => {
@@ -72,6 +71,7 @@ const Carousel = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
         setNameTod(false)
+        setSelectedCarousel(null)
         setData({
             title:"",
             imageUrl:"",
@@ -103,6 +103,7 @@ const Carousel = () => {
 
     const onEdit = (id) => {
         let dataForEdit = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)
+        console.log("dataForEdit------------",dataForEdit);
         if (dataForEdit) {
             setSelectedCarousel(dataForEdit)
         }
@@ -119,6 +120,7 @@ const Carousel = () => {
                 imageUrl: data.imageUrl,
             }
             dispatch(addCarousel(Data))
+            setIsModalVisible(false)
             handleCancel()
         }
 
@@ -132,11 +134,10 @@ const Carousel = () => {
             }
             //console.log("data",dataEdit)
             dispatch(editCarousel(dataEdit))
+            setIsModalVisible(false)
             handleCancel()
         }
-
         setNameTod(false)
-
     };
 
     const onDelete = (id) => {

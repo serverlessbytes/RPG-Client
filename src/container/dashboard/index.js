@@ -86,8 +86,8 @@ const Dashboard = () => {
             extraType: item.extraType,
             start_date: moment(item.startDate).format('YYYY:MM:DD'),
             end_date: moment(item.endDate).format('YYYY:MM:DD'),
-            role: item.jobRole.name,
-            category: item.jobType.name,
+            role: item.jobRole?.name,
+            category: item.jobType?.name,
           };
         }),
       );

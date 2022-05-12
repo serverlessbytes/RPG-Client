@@ -42,7 +42,7 @@ const AddPartnerCourses = () => {
         contactpersonphone: '',
         pincode: '',
         locations: '',
-        sequence: '',
+        // sequence: '',
         duration: '',
         cateGory: '',
         state: '',
@@ -96,7 +96,7 @@ const AddPartnerCourses = () => {
                 contactpersonphone: editOneFilterData.data.contactPersonPhone,
                 pincode: editOneFilterData.data.pincode,
                 locations: editOneFilterData.data.location,
-                sequence: editOneFilterData.data.sequence,
+                // sequence: editOneFilterData.data.sequence,
                 duration: moment(editOneFilterData.data.duration, 'HH:mm:ss'),
                 cateGory: editOneFilterData.data.courseCategory.id,
                 state: editOneFilterData.data.state,
@@ -155,10 +155,10 @@ const AddPartnerCourses = () => {
             error.locations = '*locations is required';
             flage = true;
         }
-        if (state.sequence === '') {
-            error.sequence = '*sequence is required';
-            flage = true;
-        }
+        // if (state.sequence === '') {
+        //     error.sequence = '*sequence is required';
+        //     flage = true;
+        // }
         if (state.duration === '') {
             error.duration = '*Time is required';
             flage = true;
@@ -212,7 +212,7 @@ const AddPartnerCourses = () => {
             district: state.district,
             pincode: state.pincode,
             location: state.locations,
-            sequence: parseInt(state.sequence),
+            // sequence: parseInt(state.sequence),
             mode: state.mode,
             thumbnail: state.thumbnail
         };
@@ -236,7 +236,7 @@ const AddPartnerCourses = () => {
             contactPersonPhone: state.contactpersonphone,
             pincode: state.pincode,
             location: state.locations,
-            sequence: parseInt(state.sequence),
+            // sequence: parseInt(state.sequence),
             duration: moment(state.duration).format('hh:mm:ss'),
             categoryId: state.cateGory,
             state: state.state,
@@ -282,13 +282,15 @@ const AddPartnerCourses = () => {
         }
         else if (name === 'mode') {
             setState({ ...state, mode: e });
-        } else if (name === 'sequence') {
-            if (e.target.value > 0) {
-                setState({ ...state, [e.target.name]: e.target.value });
-            } else {
-                setState({ ...state, [e.target.name]: 0 });
-            }
         }
+        //  else if (name === 'sequence') {
+        //     if (e.target.value > 0) {
+        //         setState({ ...state, [e.target.name]: e.target.value });
+        //     } 
+        //     else {
+        //         setState({ ...state, [e.target.name]: 0 });
+        //     }
+        // }
     };
 
 
@@ -404,8 +406,9 @@ const AddPartnerCourses = () => {
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonemail">Contact Person Email</label>
-                            <Form.Item name="contactpersonemail">
+                            <Form.Item name="contactpersonemail" >
                                 <Input
+                                    type="email"
                                     value={state.contactpersonemail}
                                     placeholder="contactpersonemail"
                                     name="contactpersonemail"
@@ -504,7 +507,7 @@ const AddPartnerCourses = () => {
                                 {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                             </Form.Item>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24} xs={24}>
+                        {/* <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Sequence </label>
                             <Form.Item name="location">
                                 <Input
@@ -516,7 +519,7 @@ const AddPartnerCourses = () => {
                                 />
                                 {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                             </Form.Item>
-                        </Col>
+                        </Col> */}
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Thumbnail</label>
                             <Form.Item >

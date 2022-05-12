@@ -84,8 +84,10 @@ const CourseCategory = () => {
 
     const handleCancel = () => {
         form.resetFields(); // for blank field
+        
         setIsModalVisible(false);
         setNameTog(false)
+        setDataForEdit(null)
     };
     const onDelete = (id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
@@ -123,7 +125,6 @@ const CourseCategory = () => {
         if(dataForEdit){
             let data = form.getFieldsValue()
                     delete data.key;
-
                     data = {
                         ...data, 
                         categoryId: dataForEdit.id, 
