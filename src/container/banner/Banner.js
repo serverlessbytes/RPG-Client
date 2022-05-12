@@ -23,12 +23,13 @@ const Banner = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [bannerTableData, setBannerTableData] = useState([]); // for table
+      const [selectedBanner, setSelectedBanner] = useState();
+    const [nameTog, setNameTog] = useState(false)
     const [data, setData] = useState({
         title: "",
         imageUrl: ""
     });
-    const [selectedBanner, setSelectedBanner] = useState();
-    const [nameTog, setNameTog] = useState(false)
+ 
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);

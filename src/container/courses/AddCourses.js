@@ -144,7 +144,7 @@ useEffect(()=>{
         ...state,
         detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.detail, 'markdown'),
         name: editOneSwayamCourseData.data.name,
-        categoryId: editOneSwayamCourseData.data.courseCategory.id,
+        categoryId: editOneSwayamCourseData.data.courseCategory?.id,
         duration: moment(editOneSwayamCourseData.data.duration, 'HH:mm:ss'),
         jobCategoryIds: editOneSwayamCourseData.data.jobTypes.map(item => item.id),
         certification: editOneSwayamCourseData.data.certificate,

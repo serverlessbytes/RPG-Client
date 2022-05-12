@@ -88,6 +88,7 @@ const SwayamCourses = () => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click(); // for export
       toast.success('Swayam course data exported successfully');
+      setExportTog(false)
     } else if (exportTog) {
       toast.success('No swayam data for export');
     }
