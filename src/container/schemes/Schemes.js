@@ -23,7 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
 
 const Schemes = () => {
-  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess,editSchemeErr,addSchemeErr} = actions;
+  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess,editSchemeErr,addSchemeErr , addSchemeInBulk} = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -53,8 +53,10 @@ const Schemes = () => {
   const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
   const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
   const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
-  const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastify
+  const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
+  const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
 
+  
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
@@ -85,6 +87,17 @@ const Schemes = () => {
     //   toast.success("Jobs Update successful");
     // }
   }, [editSchemedata])
+ 
+  useEffect(() => {
+    console.log("schemeModulData=====", schemeModulData);
+    if (schemeModulData && schemeModulData.status === 200) {
+      toast.success("Scheme Import sucessful")
+      dispatch(addSchemeInBulk(null))
+    
+    }
+  }, [schemeModulData])
+  
+
 
   useEffect(() => {
     if (addSchemeData && addSchemeData.status === 200) {

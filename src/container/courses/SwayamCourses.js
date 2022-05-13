@@ -102,11 +102,15 @@ const SwayamCourses = () => {
     };
   }, []);
 
+   useEffect(() => {
+    console.log("addSwayamCourseData-----" ,addSwayamCourseData );
+   }, [addSwayamCourseData])
+   
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
       dispatch(addSwayamCourseModuleSuccess(null));
       // dispatch(getJobsFilterForMainSuccess(null))
-      toast.success('Swayam Course Add successful');
+      toast.success('Swayam Course Import successful');
       //toastAssetsAdd(true)
       //onHide()
     }

@@ -15,8 +15,8 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
 
-  const SchemeCategoryFromRedux = useSelector(state => state.scheme.schemecatogeryData.data);
-  const SchemeBenefitDataFromRedux = useSelector(state => state.beneFit.getBenefitData.data);
+  const SchemeCategoryFromRedux = useSelector(state => state.scheme.schemecatogeryData?.data);
+  const SchemeBenefitDataFromRedux = useSelector(state => state.beneFit.getBenefitData?.data);
   const stateData = useSelector(state => state.state.getStateData?.data);
   const language = localStorage.getItem('language');
 

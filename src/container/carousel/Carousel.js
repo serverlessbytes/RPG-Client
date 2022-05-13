@@ -102,8 +102,7 @@ const Carousel = () => {
     }, [getOneCarouselData])
 
     const onEdit = (id) => {
-        let dataForEdit = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)
-        console.log("dataForEdit------------",dataForEdit);
+        let dataForEdit = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)    
         if (dataForEdit) {
             setSelectedCarousel(dataForEdit)
         }
@@ -141,6 +140,7 @@ const Carousel = () => {
     };
 
     const onDelete = (id) => {
+        debugger
         let dataForDelete = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)
         console.log("dataForDelete",dataForDelete)
           if(dataForDelete){

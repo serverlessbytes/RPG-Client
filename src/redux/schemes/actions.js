@@ -250,10 +250,10 @@ const actions = {
     };
   },
 
-  addSchemeInBulk: err => {
+  addSchemeInBulk: data => {
     return {
       type: actions.ADD_SCHEME_IN_BULK_SUCCESS,
-      err,
+      data,
     };
   },
 };

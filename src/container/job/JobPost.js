@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 import ImportJobPost from '../../components/modals/ImportJobPost';
 
 const JobPost = ({ match }) => {
-  const { allJobsSuccess } = actions;
+  const { allJobsSuccess ,addBlukJobsSuccess } = actions;
   const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -33,6 +33,14 @@ const JobPost = ({ match }) => {
   const allJobsData = useSelector(state => state.job.allJobs);
   const stateData = useSelector(state => state.state.getStateData); //state
   const filterData = useSelector(state => state.job.getJobFilterData);
+  const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
+  
+  useEffect(() => {
+    if (addJobPostModulData && addJobPostModulData.status === 200) {
+      toast.success("Job Post Import Successful")
+      dispatch(addBlukJobsSuccess(null));
+    }
+  }, [addJobPostModulData]);
 
   useEffect(() => {
     console.log('filterData', filterData);
@@ -329,7 +337,10 @@ const JobPost = ({ match }) => {
         </Cards>
       </Main>
 
-      {<ImportJobPost importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Jobs" />}
+      {<ImportJobPost 
+      importModal={importModal}
+       handleCancel={() => setImportModal(false)} 
+       modaltitle="Import Jobs" />}
     </>
   );
 };

@@ -129,7 +129,7 @@ const district = () => {
         console.log("datat", data)
         dispatch(postDistrictData(data))
         setIsModalVisible(false);
-       form.resetFields()
+        handleCancel()
     };
 
     const handleCancel = () => {

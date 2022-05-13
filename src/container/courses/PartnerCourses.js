@@ -32,6 +32,7 @@ const PartnerCourses = () => {
     getallSwayamCourseSuccess,
     editPartnerCourseSuccess,
     editPartnerCourseErr,
+    addPartnerCourseInBulkSuccess
   } = actions;
 
   const [importModal, setImportModal] = useState(false);
@@ -70,7 +71,8 @@ const PartnerCourses = () => {
   const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr);
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
-
+  const  addPartnerCourseModulData= useSelector(state=> state.category.addPartnerCourseInBulkData)
+ 
   useEffect(() => {
     if (data.length && exportTog) {
       CSVLinkRef?.current?.link.click(); //
@@ -80,6 +82,13 @@ const PartnerCourses = () => {
     }
   }, [data]);
 
+   useEffect(() => {
+     if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
+       toast.success("Add PartnerCourse Import uccessful")
+       dispatch(addPartnerCourseInBulkSuccess(null))
+     }
+   }, [addPartnerCourseModulData])
+  
   useEffect(() => {
     return () => {
       // setState([])
