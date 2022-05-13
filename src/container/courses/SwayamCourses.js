@@ -26,6 +26,7 @@ import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
+import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 
 const {
   getallSwayamCourseSuccess,
@@ -88,7 +89,7 @@ const SwayamCourses = () => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click(); // for export
       toast.success('Swayam course data exported successfully');
-      setExportTog(false)
+      setExportTog(false);
     } else if (exportTog) {
       toast.success('No swayam data for export');
     }
@@ -416,9 +417,9 @@ const SwayamCourses = () => {
             >
               Add Course
             </Button>
-            {/* <Button size="small" type="primary" onClick={() => setImportModal(true)}>
+            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
               Import
-            </Button> */}
+            </Button>
           </div>,
         ]}
       />
@@ -593,7 +594,7 @@ const SwayamCourses = () => {
         />
       )}
       {importModal && (
-        <ImportFileModal
+        <ImportSwayamCourse
           importModal={importModal}
           handleCancel={() => setImportModal(false)}
           modaltitle="Import Swayam Courses"
