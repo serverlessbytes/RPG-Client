@@ -35,7 +35,7 @@ const district = () => {
     const postDistrictdataa = useSelector((state) => state.district.postDistrictData) //state
     const postDistrictDataError = useSelector((state) => state.district.getStateData) //state
 
-    useEffect(() => { console.log("postDistrictdataa", postDistrictdataa) }, [postDistrictdataa])
+    useEffect(() => { console.log("stateData", stateData) }, [stateData])
 
     const onstatedata = (e, name) => {
         if (name === "state") {
@@ -86,7 +86,6 @@ const district = () => {
         if (diStrict && diStrict.data) {
             setstateTableData(diStrict.data)
         }
-        console.log("stateData", stateData);
     }, [diStrict])
 
     const languagesTableColumns = [
@@ -106,7 +105,7 @@ const district = () => {
     }
 
     useEffect(() => {
-        dispatch(getDistrictData(statedata))
+            dispatch(getDistrictData(statedata))
     }, [statedata])
 
     const [form] = Form.useForm()

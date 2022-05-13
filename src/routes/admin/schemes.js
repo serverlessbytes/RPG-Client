@@ -5,6 +5,7 @@ const   Schemes = lazy(() => import('../../container/schemes/Schemes'));
 const AddSchemes = lazy(() => import('../../container/schemes/AddSchemes'));
 const SchemeCategory = lazy(() => import('../../container/schemes/SchemeCategory'));
 const BenefitsType = lazy(() => import('../../container/schemes/BenefitsType'));
+const SchemeRating = lazy(() => import('../../container/schemes/SchemeRating'));
 
 const schemes = () => {
 
@@ -16,6 +17,7 @@ const schemes = () => {
             <Route exact path={`${path}/addscheme`} component={AddSchemes} />
             <Route exact path={`${path}/schemecategory`} component={SchemeCategory} />
             <Route exact path={`${path}/benefitstype`} component={BenefitsType} />
+            <Route exact path={`${path}/schemerating`} component={SchemeRating} />
         </Switch>
     )
 }

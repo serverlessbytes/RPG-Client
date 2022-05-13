@@ -5,7 +5,7 @@ const actions = {
  
     GET_ALLUSER_BEGINE:"GET_ALLUSER_BEGINE",
     GET_ALLUSER_SUCCESS:"GET_ALLUSER_SUCCESS",
-    GET_ALLUSER_ERR:"GET_ALLUSER_ERR", //   
+    GET_ALLUSER_ERR:"GET_ALLUSER_ERR",   
 
     EDIT_PROFILE_BEGINE:"EDIT_PROFILE_BEGINE",
     EDIT_PROFILE_SUCCESS:"EDIT_PROFILE_SUCCESS",
@@ -18,6 +18,10 @@ const actions = {
     GET_ALLUSERS_BEGINE:"GET_ALLUSERS_BEGINE",
     GET_ALLUSERS_SUCCESS:"GET_ALLUSERS_SUCCESS",
     GET_ALLUSERS_ERR:"GET_ALLUSERS_ERR",
+
+    GET_USER_RATING_BEGINE:"GET_USER_RATING_BEGINE",
+    GET_USER_RATING_SUCCESS:"GET_USER_RATING_SUCCESS",
+    GET_USER_RATING_ERR:"GET_USER_RATING_ERR",
 
   
     getSchemecategoryBegin: () => {
@@ -116,6 +120,26 @@ const actions = {
       allUserErr: err => {
         return {
           type: actions.GET_ALLUSERS_ERR,
+          err,
+        };
+      },
+
+      getUserRatingBegin: () => {
+        return {
+          type: actions.GET_USER_RATING_BEGINE,
+        };
+      },
+    
+      getUserRatingSuccess: data => {
+        return {
+          type: actions.GET_USER_RATING_SUCCESS,
+          data,
+        };
+      },
+    
+      getUserRatingErr: err => {
+        return {
+          type: actions.GET_USER_RATING_ERR,
           err,
         };
       },

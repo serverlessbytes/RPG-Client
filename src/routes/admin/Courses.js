@@ -7,6 +7,7 @@ const PartnerCourses = lazy(() => import('../../container/courses/PartnerCourses
 const AddPartnerCourses = lazy(() => import('../../container/courses/AddPartnerCourses'));
 const CourseCategory = lazy(() => import('../../container/courses/CourseCategory'));
 const AddCourses = lazy(() => import('../../container/courses/AddCourses'));
+const CourseRating = lazy(() => import('../../container/courses/CourseRating'))
 
 const Courses = () => {
     const { path } = useRouteMatch();
@@ -17,6 +18,7 @@ const Courses = () => {
             <Route exact path={`${path}/partnercourses/addpartnercourses`} component={AddPartnerCourses} />
             <Route exact path={`${path}/coursecategory`} component={CourseCategory} />
             <Route exact path={`${path}/addcourses`} component={AddCourses} />
+            <Route exact path= {`${path}/courserating`} component={CourseRating} />
         </Switch>
     )
 }

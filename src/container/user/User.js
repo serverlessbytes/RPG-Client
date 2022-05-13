@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Pagination, Row, Select, Table, Tabs } from 'antd';
@@ -10,9 +9,6 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
-import moment from 'moment';
-import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { CSVLink } from 'react-csv';
 import { ApiGet } from '../../helper/API/ApiData';
@@ -45,10 +41,6 @@ const User = () => {
     const userSignupError = useSelector((state) => state.users.userSignupErr)
     const editProfileData = useSelector((state) => state.users.editProfileData)
     const editProfileError = useSelector((state) => state.users.editProfileErr)
-
-    useEffect(() => {
-        console.log("addUserSignupData", addUserSignupData);
-    }, [addUserSignupData])
 
     useEffect(() => {
         if (addUserSignupData && addUserSignupData.status === 200) {
@@ -135,7 +127,7 @@ const User = () => {
 
     useEffect(() => {
         if (alluser?.data?.data) {
-            setState(alluser.data.data)  //set a state for export word
+            setState(alluser.data.data)  //set a state for export excel
 
         }
     }, [alluser])
@@ -178,7 +170,6 @@ const User = () => {
 
     useEffect(() => {
         if (getAllUsers && getAllUsers.data) {
-            // console.log("getAllUsers", getAllUsers)
             setUsertable(getAllUsers.data?.data?.map(item => {
 
                 return ({
@@ -210,17 +201,7 @@ const User = () => {
             )
         }
     }, [getAllUsers])
-    useEffect(() => {
-        console.log("usertable", usertable)
-    }, [usertable])
     const usersTableColumns = [
-
-        // {
-        //     title: 'Sequence',
-        //     dataIndex: 'Sequence',
-        //     sorter: (a, b) => a.Sequence.length - b.Sequence.length,
-        //     sortDirections: ['descend', 'ascend'],
-        // },
         {
             title: 'Name',
             dataIndex: 'name',
@@ -239,16 +220,6 @@ const User = () => {
             title: 'UserType',
             dataIndex: 'userType',
         },
-        // {
-        //     title: 'Location',
-        //     dataIndex: 'Location',
-        //     sorter: (a, b) => a.status.length - b.status.length,
-        //     sortDirections: ['descend', 'ascend'],
-        // },
-        // {
-        //     title: 'Last Updated',
-        //     dataIndex: 'LastUpdated',
-        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -274,8 +245,6 @@ const User = () => {
             setState(res?.data?.data)
         })
     }
-
-   
 
     return (
         <>

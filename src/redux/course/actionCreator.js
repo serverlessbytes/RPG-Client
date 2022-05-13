@@ -196,8 +196,11 @@ export const addCourseRating =(body) => async(dispatch) =>{
    .catch(e => addCourseRatingErr(e))
 }
 
-export const getCourseRatingData =(body) => async(dispatch) =>{
-  await ApiPost(`courseRating/getCourseRatings`,body)
+export const getCourseRatingData =(perpage,pagenumber) => async(dispatch) =>{
+  // console.log("page_number",page_number)
+  per_page = perpage;
+  page_number = pagenumber;
+  await ApiGet(`courseRating/getCourseRatings?per_page=${perpage}&page_number=${pagenumber}`)
   .then((res) =>{
     return dispatch(courseRatingSuccess(res))
    })
@@ -231,7 +234,10 @@ export const getCourseRatingsByID = (body) => async(dispatch) =>{
  export const editCategoryRating = (body) =>  async(dispatch) =>{
    await ApiPost (`courseRating/editCourseRating`,body)
    .then((res) =>{
-     return(editCategoryRatingSuccess(res))
+     (editCategoryRatingSuccess(res))
+     if (res.status === 200) {  
+      return dispatch(getCourseRatingData(per_page, page_number))
+    }
    })
    .catch(e => editCategoryRatingErr(e))
  }

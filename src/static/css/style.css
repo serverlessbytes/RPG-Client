@@ -1573,6 +1573,14 @@ table thead tr th:first-child {
   text-align: left !important;
 }
 
+.scheme-rating table thead tr th:last-child {
+  text-align: left !important;
+}
+
+.course-rating table thead tr th:last-child {
+  text-align: left !important;
+}
+
 .ant-table-row .ant-table-cell{
   text-align: left !important;
 }

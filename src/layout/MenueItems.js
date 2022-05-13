@@ -114,6 +114,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Benefits Type
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="schemerating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme/schemerating`}>
+            Scheme Rating
+          </NavLink>
+        </Menu.Item>
       </SubMenu>
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
       <SubMenu key="courses" title="Courses">
@@ -132,17 +137,33 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Course Category
           </NavLink>
         </Menu.Item>
-      </SubMenu>
+
+        <Menu.Item key="courserating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses/courserating`}>
+            Course Rating
+          </NavLink>
+        </Menu.Item>
+
+      </SubMenu >
       <Menu.Item key="testimonial">
         <NavLink onClick={toggleCollapsed} to={`${path}/testimonial`}>
           Testimonial
         </NavLink>
       </Menu.Item>
+
+      <SubMenu key="user" title="User">
       <Menu.Item key="user">
         <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
           User
         </NavLink>
       </Menu.Item>
+        <Menu.Item key="userrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/userrating`}>
+            User Rating
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+
       <Menu.Item key="employer">
         <NavLink onClick={toggleCollapsed} to={`${path}/employer`}>
           Employer

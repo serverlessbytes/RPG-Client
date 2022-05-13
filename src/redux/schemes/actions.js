@@ -43,6 +43,10 @@ const actions = {
   ADD_SCHEME_IN_BULK_SUCCESS: 'ADD_SCHEME_IN_BULK_SUCCESS',
   ADD_SCHEME_IN_BULK_ERR: 'ADD_SCHEME_IN_BULK_ERR',
 
+  GET_SCHEMERATING_BEGINE: 'GET_SCHEMERATING_BEGINE',
+  GET_SCHEMERATING_SUCCESS: 'GET_SCHEMERATING_SUCCESS',
+  GET_SCHEMERATING_ERR: 'GET_SCHEMERATING_ERR',
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -253,6 +257,26 @@ const actions = {
   addSchemeInBulk: err => {
     return {
       type: actions.ADD_SCHEME_IN_BULK_SUCCESS,
+      err,
+    };
+  },
+
+  getSchemeRatingBegin: () => {
+    return {
+      type: actions.GET_SCHEMERATING_BEGINE,
+    };
+  },
+
+  getSchemeRatingSuccess: data => {
+    return {
+      type: actions.GET_SCHEMERATING_SUCCESS,
+      data,
+    };
+  },
+
+  getSchemeRatingErr: err => {
+    return {
+      type: actions.GET_SCHEMERATING_ERR,
       err,
     };
   },
