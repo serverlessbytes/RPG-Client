@@ -85,6 +85,15 @@ const State = () => {
     const showModal = () => {
         setIsModalVisible(true);
     };
+
+//  useEffect(() => {
+//   setData({
+//       name: "",
+//       key : "",
+//   })
+//  }, [showModal])
+ 
+
     const { Option } = Select;
     const handleOk = () => {
         let stateData = form.getFieldsValue()
@@ -94,10 +103,11 @@ const State = () => {
         }
         dispatch(postStateData(stateData))
         setIsModalVisible(false);
+        handleCancel()
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
+        form.resetFields()
     };
     useEffect(() => {
         dispatch(getStateData())

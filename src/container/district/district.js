@@ -15,6 +15,7 @@ import { getDistrictData, postDistrictData } from '../../redux/district/actionCr
 import actions from '../../redux/district/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { fromUnixTime } from 'date-fns';
 
 const district = () => {
     const dispatch = useDispatch()
@@ -128,10 +129,12 @@ const district = () => {
         console.log("datat", data)
         dispatch(postDistrictData(data))
         setIsModalVisible(false);
+       form.resetFields()
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
+        form.resetFields()
     };
     useEffect(() => {
         dispatch(getStateData())
