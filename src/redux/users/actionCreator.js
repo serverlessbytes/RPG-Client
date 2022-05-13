@@ -20,6 +20,9 @@ const {
     allUserSuccess,
     allUserErr,
 
+    getUserRatingSuccess,
+    getUserRatingErr,
+
 } = actions;
 
 let Status;
@@ -81,21 +84,11 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
       .catch((err) => dispatch(allUserErr(err)))
   }
 
-// export const getOneSchemeData = (key) => async (dispatch) => {
-//   await ApiGet(`scheme/getOneScheme${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-//     .then((res) => {
-//       return dispatch(getOneSchemeSuccess(res.data))
-//     })
-//     .catch((err) => dispatch(getOneSchemenErr(err)))
-// }
+  export const getUserRating = (perpage,pagenum) => async (dispatch) => {   
+    await ApiGet(`userRating/getUserRatings?per_page=${perpage}&page_number=${pagenum}`)
+      .then((res) => {
+        return dispatch(getUserRatingSuccess(res))
+      })
+      .catch((err) => dispatch(getUserRatingErr(err)))
+  }
 
-// export const editSchemeData = (body) => async (dispatch) => {
-//   await ApiPost(`scheme/editScheme`, body)
-//     .then((res) => {
-//       dispatch(editSchemeSuccess(res.data))
-//       if (res.status === 200) {
-//         dispatch(getSchemeData(per_Page, page_Num))
-//       }
-//     })
-//     .catch((err) => dispatch(editSchemenErr(err)))
-// }

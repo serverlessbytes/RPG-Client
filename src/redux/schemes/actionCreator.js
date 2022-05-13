@@ -38,6 +38,9 @@ const {
 
   addSchemeInBulkErr,
   addSchemeInBulk,
+
+  getSchemeRatingSuccess,
+  getSchemeRatingErr,
 } = actions;
 let per_Page, page_Num, Status;
 export const getSchemecategory = () => async dispatch => {
@@ -170,3 +173,11 @@ export const addSchemeInBulkImport = body => async dispatch => {
     })
     .catch(err => dispatch(addSchemeInBulkErr(err)));
 };
+
+export const getSchemeRating = (perpage,pagenum) => async dispatch => {
+  await ApiGet(`schemeRating/getSchemeRatings?per_page=${perpage}&page_number=${pagenum}`)
+  .then( res => {
+    return dispatch(getSchemeRatingSuccess(res))
+  })
+  .catch(err => dispatch(getSchemeRatingErr(err)))
+}
