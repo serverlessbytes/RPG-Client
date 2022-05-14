@@ -21,6 +21,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
+  const [error, seterror] = useState(); // for valadation
   const [FileData, setFileData] = useState();
 
   const [schemeCategoryArray, setSchemeCategoryArray] = useState([]);
@@ -31,6 +32,11 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const [schemeCategoryID, setSchemeCategoryID] = useState('');
   const [schemeBanefitID, setSchemeBanefitID] = useState('');
+
+
+  useEffect(()=>{
+    console.log("selectedStateArray",selectedStateArray)
+  },[selectedStateArray])
 
   //   SCHEME CATEGORY
   useEffect(() => {
@@ -66,7 +72,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   }, []);
 
   const readUploadFile = e => {
-    if (e.target.files[0].name.split('.').lastIndexOf('xlsx') === 1) {
+    if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -82,7 +88,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     } else {
       // toastError(true)
       setError('Please select valid file');
-      e.target.value = '';
+      // e.target.value = '';
     }
   };
 
@@ -102,8 +108,32 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     }
     return result;
   };
-
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    if (schemeCategoryID === '') {
+      error.schemeCategory = 'SchemeCategory is required';
+      flage = true;
+    }
+    if (schemeBanefitID === '') {
+      error.schemeBanefitID = 'SchemeBanefit is required';
+      flage = true;
+    }
+    if (selectedStateArray.length == 0) {
+      error.locations = 'Locations is required';
+      flage = true;
+    }
+    if (!FileData) {
+      error.name = 'File is required';
+      flage = true;
+    }
+    seterror(error);
+    return flage;
+  };
   const handleOk = () => {
+    if(validation()){
+      return;
+  }
     if (FileData) {
       FileData.forEach(e => {
         e['language'] = language;
@@ -142,6 +172,8 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
+                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25">
@@ -156,7 +188,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                     options={schemeCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="schemeCategory"
                     onChange={e => {
                       setSchemeCategoryID(e);
                     }}
@@ -164,6 +196,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select Scheme Category</Option>
                   </Select>
+                  {error && error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
                 </Form.Item>
               </Form>
             </Col>
@@ -174,7 +207,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                     options={schemeBanefitArray}
                     size="large"
                     className="sDash_fullwidth-select"
-                    name="benefits"
+                    name="schemeBanefitID"
                     onChange={e => {
                       setSchemeBanefitID(e);
                     }}
@@ -182,6 +215,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select Scheme Benefits</Option>
                   </Select>
+                  {error && error.schemeBanefitID && <span style={{ color: 'red' }}>{error.schemeBanefitID}</span>}
                 </Form.Item>
               </Form>
             </Col>
@@ -196,7 +230,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                     options={stateArray}
                     size="large"
                     className="sDash_fullwidth-select"
-                    name="benefits"
+                    name="locations"
                     onChange={e => {
                       stateSelected(e);
                     }}
@@ -204,6 +238,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select Locations</Option>
                   </Select>
+                  {error && error.locations && <span style={{ color: 'red' }}>{error.locations}</span>}
                 </Form.Item>
               </Form>
             </Col>

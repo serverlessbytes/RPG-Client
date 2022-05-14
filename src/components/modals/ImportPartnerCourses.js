@@ -18,6 +18,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
+  const [error, seterror] = useState(); // for valadation 
   const [FileData, setFileData] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
@@ -34,8 +35,8 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     }
   }, [CourseCategoryFromRedux]);
 
-  const readUploadFile = e => {
-    if (e.target.files[0].name.split('.').lastIndexOf('xlsx') === 1) {
+  const readUploadFile = (e) => {
+    if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -51,7 +52,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     } else {
       // toastError(true)
       setError('Please select valid file');
-      e.target.value = '';
+      // e.target.value = '';
     }
   };
 
@@ -72,7 +73,25 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     return result;
   };
 
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    if (courseCategoryID === '') {
+      error.courseCategoryID = 'CourseCategory is required'; 
+      flage = true;
+    }
+    if (!FileData) {
+      error.name = 'File is required';
+      flage = true;
+    }
+    seterror(error);
+    return flage;
+  };
+
   const handleOk = () => {
+    if (validation()) {
+      return;
+    }
     if (FileData) {
       FileData.forEach(e => {
         e['language'] = language;
@@ -103,7 +122,9 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
           <Row gutter={30}>
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
-                <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                <Input placeholder="File upload"  name="name" accept="*" type="file" onChange={(e) => readUploadFile(e)} />
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
+                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
@@ -114,7 +135,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
                     options={courseCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="courseCategoryID"
                     onChange={e => {
                       setCourseCategoryID(e);
                     }}
@@ -122,6 +143,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select course category</Option>
                   </Select>
+                  {error && error.courseCategoryID && <span style={{ color: 'red' }}>{error.courseCategoryID}</span>}
                 </Form.Item>
               </Form>
             </Col>

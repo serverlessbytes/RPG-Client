@@ -20,6 +20,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
+  const [error, seterror] = useState(); // for valadation
   const [FileData, setFileData] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
@@ -55,7 +56,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   }, []);
 
   const readUploadFile = e => {
-    if (e.target.files[0].name.split('.').lastIndexOf('xlsx') === 1) {
+    if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -71,7 +72,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     } else {
       // toastError(true)
       setError('Please select valid file');
-      e.target.value = '';
+      // e.target.value = '';
     }
   };
 
@@ -92,7 +93,29 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     return result;
   };
 
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    if (courseCategoryID === '') {
+      error.courseCategoryID = 'CourseCategory is required';
+      flage = true;
+    }
+    if (jobCategoryID.length == 0) {
+      error.jobCategoryID = 'JobCategory is required';
+      flage = true;
+    }
+    if (!FileData) {
+      error.name = 'File is required';
+      flage = true;
+    }
+    seterror(error);
+    return flage;
+  };
+
   const handleOk = () => {
+    if (validation()) {
+      return;
+    }
     if (FileData) {
       FileData.forEach(e => {
         e['jobCategoryIds'] = jobCategoryID;
@@ -125,6 +148,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
+                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
@@ -135,7 +160,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                     options={courseCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="courseCategoryID"
                     onChange={e => {
                       setCourseCategoryID(e);
                     }}
@@ -143,6 +168,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select course category</Option>
                   </Select>
+                  {error && error.courseCategoryID && <span style={{ color: 'red' }}>{error.courseCategoryID}</span>}
                 </Form.Item>
 
                 <Form.Item label="Job Category">
@@ -151,7 +177,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                     options={jobCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="jobCategoryID"
                     onChange={e => {
                       setJobCategoryID([...jobCategoryID, e]);
                     }}
@@ -159,6 +185,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select job category</Option>
                   </Select>
+                  {error && error.jobCategoryID && <span style={{ color: 'red' }}>{error.jobCategoryID}</span>}
                 </Form.Item>
               </Form>
             </Col>

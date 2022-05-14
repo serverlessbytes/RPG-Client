@@ -24,6 +24,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
+  const [error,seterror] =useState({}); // for valadation
   const [FileData, setFileData] = useState();
 
   const [jobRoleArray, setJobRoleArray] = useState([]);
@@ -108,7 +109,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [JobRole]);
 
   const readUploadFile = e => {
-    if (e.target.files[0].name.split('.').lastIndexOf('xlsx') === 1) {
+    if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -124,7 +125,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     } else {
       // toastError(true)
       setError('Please select valid file');
-      e.target.value = '';
+      // e.target.value = '';
     }
   };
 
@@ -145,7 +146,42 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     return result;
   };
 
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    if (jobCategoryID === '') {
+      error.jobCategoryID = 'JobCategory is required';
+      flage = true;
+    }
+    if (jobRoleID === '') {
+      error.jobRoleId = 'JobRole is required';
+      flage = true;
+    }
+    if (stateID === '') {
+      error.state = 'State is required';
+      flage = true;
+    }
+    if (districtID === '') {
+      error.district = 'District is required'; 
+      flage = true;
+    }
+    if (employertID === '') {
+      error.employertID = 'Employer is required';  
+      flage = true;
+    }
+    if (!FileData) {
+      error.name = 'File is required';
+      flage = true;
+    }
+
+    seterror(error);
+    return flage;
+  };
+
   const handleOk = () => {
+    if(validation()){
+        return;
+    }
     if (FileData) {
       FileData.forEach(e => {
         e['vacancies'] = +e.vacancies;
@@ -182,7 +218,10 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
           <Row gutter={30}>
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
+                {/* <Input placeholder="File upload" name="name" type="file" onChange={(e)=>{console.log(';e',e)}} /> */}
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
+                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
@@ -193,7 +232,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                     options={employerArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="employertID"
                     onChange={e => {
                       setEmployerID(e);
                     }}
@@ -201,6 +240,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select employer</Option>
                   </Select>
+                  {error.employertID && <span style={{ color: 'red' }}>{error.employertID}</span>}
                 </Form.Item>
 
                 <Form.Item label="Job Category">
@@ -208,7 +248,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                     options={jobCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="jobCategoryID"
                     onChange={e => {
                       setJobCategoryID(e);
                     }}
@@ -216,6 +256,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select job category</Option>
                   </Select>
+                  {error.jobCategoryID && <span style={{ color: 'red' }}>{error.jobCategoryID}</span>}
                 </Form.Item>
 
                 <Form.Item label="Job role">
@@ -223,7 +264,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                     options={jobRoleArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="jobRoleId"
                     onChange={e => {
                       setJobRoleID(e);
                     }}
@@ -231,6 +272,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select job role</Option>
                   </Select>
+                  {error.jobRoleId && <span style={{ color: 'red' }}>{error.jobRoleId}</span>}
                 </Form.Item>
 
                 <Form.Item label="Select state">
@@ -238,7 +280,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                     options={stateArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="state"
                     onChange={e => {
                       setStateID(e);
                     }}
@@ -246,6 +288,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select state</Option>
                   </Select>
+                  {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                 </Form.Item>
 
                 <Form.Item label="Select district">
@@ -253,7 +296,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                     options={districtArray}
                     size="large"
                     className="sDash_fullwidth-select "
-                    name="category"
+                    name="district"
                     onChange={e => {
                       setDistrictID(e);
                     }}
@@ -261,6 +304,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   >
                     <Option value="">Select district</Option>
                   </Select>
+                  {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                 </Form.Item>
               </Form>
             </Col>
