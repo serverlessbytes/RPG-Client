@@ -6,11 +6,12 @@ import { Main, TableWrapper } from '../styled';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCarousel, editCarousel, getCarousel, getOneCarousel } from '../../redux/carousel/actionCreator';
+import { addCarousel, carousel, editCarousel, getCarousel, getOneCarousel } from '../../redux/carousel/actionCreator';
 import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/carousel/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApiPost } from '../../helper/API/ApiData';
 
 
 
@@ -139,8 +140,19 @@ const Carousel = () => {
         setNameTod(false)
     };
 
-    const onDelete = (id) => {
-        debugger
+    const newCarousel = (userForDelete) => {
+       const newVal = ApiPost(`carousel/editCarousel`, userForDelete)
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(getCarousel())
+          }
+          return res
+        })
+        .catch((err) => { return err })
+        return newVal
+    } 
+
+    const onDelete = async (id) => {
         let dataForDelete = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)
         console.log("dataForDelete",dataForDelete)
           if(dataForDelete){
@@ -152,7 +164,11 @@ const Carousel = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            dispatch(editCarousel(userForDelete))
+            // dispatch(editCarousel(userForDelete))
+            const deleteCarousel = await newCarousel(userForDelete)
+            if(deleteCarousel.status === 200){
+                toast.success("Carousel deleted successful")
+            }
           }
     }
 
