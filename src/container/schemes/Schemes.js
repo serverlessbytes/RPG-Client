@@ -55,7 +55,7 @@ const Schemes = () => {
   const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
-
+  const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
   
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -93,11 +93,13 @@ const Schemes = () => {
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
-    
+    }
+    if (schemeModulData && schemeModulData.status !==200) {
+      toast.error("somthimg went wromg")
+      dispatch(addSchemeInBulk(null))
     }
   }, [schemeModulData])
   
-
 
   useEffect(() => {
     if (addSchemeData && addSchemeData.status === 200) {

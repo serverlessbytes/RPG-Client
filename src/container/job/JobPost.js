@@ -40,6 +40,10 @@ const JobPost = ({ match }) => {
       toast.success("Job Post Import Successful")
       dispatch(addBlukJobsSuccess(null));
     }
+    if (addJobPostModulData && addJobPostModulData.status !== 200) {
+      toast.error("Somthingwent wrong")
+      dispatch(addBlukJobsSuccess(null))
+    }
   }, [addJobPostModulData]);
 
   useEffect(() => {

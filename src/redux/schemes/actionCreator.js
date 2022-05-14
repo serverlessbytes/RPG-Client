@@ -162,7 +162,7 @@ export const editSchemeData = body => async dispatch => {
 };
 
 export const addSchemeInBulkImport = body => async dispatch => {
-  await ApiPost(`scheme/addSchemeInBulk?langId=$${AuthStorage.getStorageData(STORAGEKEY.language)}}`, body)
+  await ApiPost(`scheme/addSchemeInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
       console.log('res', res);
@@ -171,7 +171,13 @@ export const addSchemeInBulkImport = body => async dispatch => {
         dispatch(getSchemeData(per_Page, page_Num, Status));
       }
     })
-    .catch(err => dispatch(addSchemeInBulkErr(err)));
+    .catch(err => {
+      let newErr = {
+        message: "Somthing went wrong",
+        status: 500
+      }
+      dispatch(addSchemeInBulk(newErr))
+    });
 };
 
 export const getSchemeRating = (perpage,pagenum) => async dispatch => {

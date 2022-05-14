@@ -262,5 +262,12 @@ export const addBulkJobs = (body) => async (dispatch) => {
       return dispatch(addBlukJobsSuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })
-    .catch((err) => dispatch(addBlukJobsErr(err)))
+    .catch(err =>{
+      let newError = {
+        message : "Somthing went wrong",
+        status : 500
+      }
+      dispatch(addBlukJobsBegin(newError))
+    }
+    )
 }

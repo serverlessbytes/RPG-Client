@@ -140,7 +140,6 @@ const Carousel = () => {
     };
 
     const onDelete = (id) => {
-        debugger
         let dataForDelete = getCarouseldata && getCarouseldata.data.find((item) => item.id === id)
         console.log("dataForDelete",dataForDelete)
           if(dataForDelete){
