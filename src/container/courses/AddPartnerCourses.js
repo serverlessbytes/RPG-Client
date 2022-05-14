@@ -9,7 +9,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom
 import uuid from 'react-uuid';
 import { addPartnerCourse, editPartnerCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
+import { getCategoryData     } from '../../redux/course/actionCreator';
 import { useLocation } from 'react-router';
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
@@ -68,8 +68,8 @@ const AddPartnerCourses = () => {
     useEffect(() => {
         dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
     }, [state.state]);
-    useEffect(() => {
 
+    useEffect(() => {
         if (location.search) {
             dispatch(getOneCoursefilter(location.search.split('=')[1]));
             setEditPartnerCourseID(location.search.split('=')[1])
@@ -106,7 +106,7 @@ const AddPartnerCourses = () => {
                 thumbnail: editOneFilterData.data.thumbnail
             });
         }
-    }, [editOneFilterData]);
+    },[editOneFilterData]);
     const validation = () => {
         // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
         let error = {};

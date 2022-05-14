@@ -54,7 +54,6 @@ const ProviderConfig = ({ basename }) => {
   }, [setPath]);
 
   useEffect(() => {
-    console.log('loginData', loginData);
     if (loginData && loginData.data) {
       toast.success('Login successful');
     }
