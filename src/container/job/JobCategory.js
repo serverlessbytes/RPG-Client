@@ -12,6 +12,8 @@ import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
 import { set } from 'date-fns';
+import { ApiPost } from '../../helper/API/ApiData';
+import { async } from '@firebase/util';
 const JobCategory = () => {
     const {editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
         addJobcategoryErr,} = actions;
@@ -105,7 +107,18 @@ const JobCategory = () => {
         setNameTog(true)
     }
 
-    const onDelete = (id) => {
+    const newJobCategory = dataForEdit =>{
+      const newVal =   ApiPost("job/editCategory" , dataForEdit)
+        .then((res) =>{
+            if (res.status === 200) {
+                dispatch(getJobcategory())
+            }
+            return res
+        })
+    return  newVal
+    }
+
+    const onDelete = async (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
             delete dataForEdit.key
@@ -114,7 +127,11 @@ const JobCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editJobcategory(dataForEdit))
+            // dispatch(editJobcategory(dataForEdit))
+            const deleteJobcatrgory =  await newJobCategory(dataForEdit)
+            if (deleteJobcatrgory.status === 200) {
+                 toast.success("Job Category delete successful")
+            }
         }
     }
 

@@ -13,6 +13,8 @@ import actions from '../../redux/banner/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { set } from 'js-cookie';
+import { ApiPost } from '../../helper/API/ApiData';
+import { async } from '@firebase/util';
 
 //import { data, data } from 'browserslist';
 
@@ -142,7 +144,21 @@ const Banner = () => {
         setNameTog(true)
     }
 
-    const onDelete = (id) => {
+    const newBanner  = userForDelete =>{
+        const newval = ApiPost("banner/editBanner" , userForDelete)
+        .then((res) =>{
+        if (res.status === 200 ) {
+             dispatch(GetBanner())
+        }
+        return res;
+        })
+    .catch((err) =>{
+     return err;
+    })
+         return newval;
+    }
+
+    const onDelete =  async (id) => {
         let dataForDelete = getBannerData && getBannerData.data.find((item) => item.id === id)
         if (dataForDelete) {
             let userForDelete = {
@@ -152,7 +168,12 @@ const Banner = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            dispatch(editBanner(userForDelete))
+            // dispatch(editBanner(userForDelete))
+
+            const deletebanner = await newBanner(userForDelete)
+             if (deletebanner.status === 200) {
+                toast.success("Banner delete successful")
+             }
         }
     }
 

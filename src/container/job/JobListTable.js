@@ -42,10 +42,21 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
   const editJobPostErr = useSelector((state) => state.job.editJobPostErr) //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)
   const addJobPostData = useSelector((state) => state.job.addJobPostData) //fetch for tostify from reducer 
+  // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])
 
-  // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])//
+ const newJobPost =  data =>{
+  let id = data.id
+  delete data.id
+    const newVal = ApiPost(`job/update?jobId=${id}` , data)
+   .then((res) =>{
+     if (res.status === 200) {
+       dispatch(getJobPost(perPage, pageNumber))
+     } return res
+   })
+    return newVal
+ }
 
-  const onDelete = (id) => {
+  const onDelete = async(id) => {
     let courseDataDelete = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find((item) => item.id === id)
     console.log("courseDataDelete", courseDataDelete)
     if (courseDataDelete) {
@@ -69,11 +80,15 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         phone: courseDataDelete.phone,
         startDate: courseDataDelete.startDate,
         endDate: courseDataDelete.endDate,
-        jobRoleId: courseDataDelete.jobRole.id,
-        jobCategoryId: courseDataDelete.jobType.id,
+        jobRole: courseDataDelete.jobRole.id,
+        jobType: courseDataDelete.jobType.id,
         id: id,
       }
-      dispatch((editJobPost(data)))
+      // dispatch((editJobPost(data)))
+      const deleteJobPost = await newJobPost(data)
+      if (deleteJobPost.status === 200) {
+        toast.success("Jobs delete successfully.")
+      }
     }
   }
 
@@ -111,8 +126,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         phone: jobsData.phone,
         startDate: jobsData.startDate,
         endDate: jobsData.endDate,
-        jobRoleId: jobsData.jobRole.id,
-        jobCategoryId: jobsData.jobType.id,
+        jobRole: jobsData.jobRole.id,
+        jobType: jobsData.jobType.id,
         id: id,
       }
       dispatch((editJobPost(data)))

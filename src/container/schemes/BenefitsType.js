@@ -12,6 +12,9 @@ import { editBenefitsData, getBenefitsData, postBenefitsData } from '../../redux
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/benefitsType/actions';
+import { ApiPost } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import { getSchemeBenifits } from '../../redux/schemes/actionCreator';
 
 const BenefitsType = () => {
     const {editBenefitsSuccess,editBenefitsErr,postBenefitsSuccess,postBenefitsErr,} = actions;
@@ -77,9 +80,19 @@ const BenefitsType = () => {
         }
     },[editBenefitError])
     
- 
+ const newBenefites = dataForEdit =>{
+      const newVal = ApiPost(`scheme/editSchemeBenifit`,dataForEdit)
+     .then((res) =>{
+         console.log("res-------" ,res );
+         if(res.status === 200){
+             dispatch(getBenefitsData())
+        }
+        return res;
+     })
+     return newVal
+ }
 
-    const onDelete = (id) => {
+    const onDelete =  async (id) => {
         let dataForDelete = getBenefitData && getBenefitData.data && getBenefitData.data.find((item) => item.id === id)
         if (dataForDelete) {
             delete dataForDelete.key
@@ -88,7 +101,11 @@ const BenefitsType = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editBenefitsData(dataForDelete))
+            // dispatch(editBenefitsData(dataForDelete))
+        const deleteBenifts = await newBenefites(dataForDelete)
+            if (deleteBenifts.status === 200) {
+            toast.success("Scheme Benifit delete successful.")
+            }
         }
     }
     const onEdit = (id) => {

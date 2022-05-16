@@ -29,6 +29,7 @@ const Schemes = () => {
   let dispatch = useDispatch();
   const CSVLinkRef = useRef(null)
   const { Option } = Select;
+  // const [setUsersTableData, setsetUsersTableData] = useState()
   const usersTableData = [];
 
 
@@ -57,13 +58,18 @@ const Schemes = () => {
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
   
+
+   useEffect(() => {
+     console.log("allschemeData-----------",allschemeData);
+   }, [allschemeData])
+   
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
       setSchemeCategory({ ...schemeCategory, benefit: e });
     }
-  };
+  };  
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -125,7 +131,7 @@ useEffect(()=>{
 },[addSchemeError])
 
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    dispatch( (perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -144,7 +150,7 @@ useEffect(()=>{
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
     { label: "key", key: "key" },
-    { label: "sequence", key: "sequence" },
+    // { label: "sequence", key: "sequence" },
     { label: "spoc", key: "spoc" },
     { label: "thumbnail", key: "thumbnail" },
     { label: "updatedAt", key: "updatedAt" },
@@ -206,7 +212,19 @@ useEffect(()=>{
     history.push(`${path}/addscheme?key=${key}`);
   };
 
-  const deleteSchemes = key => {
+ const newSchemes = userForDelete =>{
+   const newVal = ApiPost("scheme/editScheme" , userForDelete)
+  .then((res)=>{
+    if (res.status === 200) {
+      console.log("----------------------------");
+      dispatch(getAllSchemes())
+    }
+    return res
+  })
+   return newVal
+ }
+
+  const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
     if (userForDelete) {
       delete userForDelete.key;
@@ -220,7 +238,11 @@ useEffect(()=>{
         isActive: false,
         isDeleted: true,
       };
-      dispatch(editSchemeData(userForDelete));
+      // dispatch(editSchemeData(userForDelete));
+      const deleteSchemes =   await newSchemes(userForDelete)
+      if (deleteSchemes.status === 200) {
+        toast.success("schemes delete suucessful")
+      }
     }
   };
 
@@ -228,7 +250,7 @@ useEffect(()=>{
     let userForactive = users && users.data.find(item => item.key === key);
     let data = {
       id: userForactive.id,
-      sequence: userForactive.sequence,
+      // sequence: userForactive.sequence,
       name: userForactive.name,
       schemeCategory: userForactive.schemeCategory.id,
       schemeBenifit: userForactive.schemeBenifit.id,
@@ -265,10 +287,10 @@ useEffect(()=>{
     setExportTog(false);
   };
 
-  const viewSchemesdata = (key) => {
-    dispatch(getOneSchemeData(key))
-    setViewModal(true)
-  }
+  // const viewSchemesdata = (key) => {
+  //   dispatch(getOneSchemeData(key))
+  //   setViewModal(true)
+  // }
 
   const onExportschemes = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
@@ -302,6 +324,11 @@ useEffect(()=>{
     })
     .catch((err) => console.log("Error",err))
   }
+
+  useEffect(() => {
+  console.log("users",users);  
+  }, [users])
+  
   users &&
     users.data.map(item => {
       // console.log(item.key);

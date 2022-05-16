@@ -12,6 +12,9 @@ import uuid from 'react-uuid';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApiPost } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const CourseCategory = () => {
     const {
@@ -88,7 +91,19 @@ const CourseCategory = () => {
         setNameTog(false)
         setDataForEdit(null)
     };
-    const onDelete = (id) => {
+
+ const newCourseCategory = dataForDelete =>{
+     const newVal = ApiPost(`course/editCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}` ,dataForDelete)
+     .then((res) =>{
+         if (res.status === 200) {
+             dispatch(getCategoryData())
+         }
+         return res
+     })
+     return newVal
+ }
+
+    const onDelete =  async(id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
         if (dataForDelete) {
             delete dataForDelete.key
@@ -99,7 +114,11 @@ const CourseCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editCategoryData(dataForDelete))
+            // dispatch(editCategoryData(dataForDelete))
+            const deleteCourseCategory = await  newCourseCategory(dataForDelete)
+            if(deleteCourseCategory.status === 200){
+                toast.success("Category deleted successful")
+            }
         }
     }
 

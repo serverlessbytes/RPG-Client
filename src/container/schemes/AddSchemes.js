@@ -42,7 +42,7 @@ const AddSchemes = () => {
     elink: '',
     spoc: '',
     isActive: '',
-    sequence: '',
+    // sequence: '',
     videoUrl: '',
     thumbnail: '',
   });
@@ -85,7 +85,7 @@ const AddSchemes = () => {
         elink: getOneScHemeData.elink,
         spoc: getOneScHemeData.spoc,
         isActive: getOneScHemeData.isActive,
-        sequence: getOneScHemeData.sequence,
+        // sequence: getOneScHemeData.sequence,
         videoUrl: getOneScHemeData.videoUrl,
         thumbnail: getOneScHemeData.thumbnail,
         id: getOneScHemeData.id,
@@ -177,13 +177,14 @@ const AddSchemes = () => {
         ...state,
         [e.target.name]: e.target.checked,
       });
-    } else if (e.target.name === 'sequence') {
-      if (e.target.value > 0) {
-        setState({ ...state, [e.target.name]: e.target.value });
-      } else {
-        setState({ ...state, [e.target.name]: 0 });
-      }
-    }
+    } 
+    // else if (e.target.name === 'sequence') {
+    //   if (e.target.value > 0) {
+    //     setState({ ...state, [e.target.name]: e.target.value });
+    //   } else {
+    //     setState({ ...state, [e.target.name]: 0 });
+    //   }
+    // }
     // else if (name === "sequence") {
 
     //     if (e.target.value === "" || re.test(e.target.value)) {
@@ -393,7 +394,7 @@ const AddSchemes = () => {
               </Form.Item>
             </Col>
 
-            <Col lg={11} md={11} sm={24} xs={24}>
+            {/* <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="name">Senquence</label>
               <Form.Item>
                 <Input
@@ -405,7 +406,7 @@ const AddSchemes = () => {
                 />
                 {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
               </Form.Item>
-            </Col>
+            </Col> */}
           </Row>
           <div style={{ marginBottom: '20px' }}>
             <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>

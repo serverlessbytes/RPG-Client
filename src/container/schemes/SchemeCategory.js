@@ -13,6 +13,8 @@ import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/schemes/actions';
 import { set } from 'js-cookie';
+import { ApiPost } from '../../helper/API/ApiData';
+import { async } from '@firebase/util';
 const SchemeCategory = () => {
     const {editSchemecategorySuccess,addSchemecategorySuccess,addSchemecategoryErr,editSchemecategoryErr} = actions;
 
@@ -88,7 +90,17 @@ const SchemeCategory = () => {
         setnameTod(true)
     }
 
-    const onDelete = (id) => {
+    const newSchemeCategory =  dataForEdit =>{
+        const newVal = ApiPost("scheme/editSchemeCategory" ,dataForEdit)
+        .then((res) =>{
+            if (res.status === 200) {
+                dispatch(getSchemecategory())
+            } return res
+        })
+        return newVal
+    }
+
+    const onDelete = async(id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
         if (dataForEdit) {
             delete dataForEdit.key
@@ -97,7 +109,11 @@ const SchemeCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editSchemecategory(dataForEdit))
+            // dispatch(editSchemecategory(dataForEdit))
+            const deleteSchemesCategory =  await newSchemeCategory(dataForEdit)
+            if (deleteSchemesCategory.status === 200) {
+                toast.success("Scheme Category delete successfull")
+            }
         }
     }
 

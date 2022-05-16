@@ -12,6 +12,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/testimonial/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApiPost } from '../../helper/API/ApiData';
 
 const Testimonial = () => {
 
@@ -75,7 +76,18 @@ const Testimonial = () => {
         history.push(`${path}/addtestimonial?id=${id}`)
     }
 
-    const onDelete = (id) => {
+    const newTestimonial = userForDelete => {
+        const newVal  = ApiPost("testimonial/editTestimonial",userForDelete )
+        .then((res) =>{
+        if (res.status === 200) {
+            dispatch(editTestimonial())
+        }
+        return res
+        })
+        return newVal
+    }
+
+    const onDelete = async(id) => {
         let userForDelete = getAllUsers && getAllUsers.data.find(item => item.id === id)
         console.log("userForDelete", userForDelete)
         if (userForDelete) {
@@ -89,7 +101,11 @@ const Testimonial = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            dispatch(editTestimonial(userForDelete))
+            // dispatch(editTestimonial(userForDelete))
+           const deleteTestimonial =  await newTestimonial(userForDelete)
+           if (deleteTestimonial.status === 200) {
+               toast.success("Testimonial delete successful")
+           }
         }
     }
 

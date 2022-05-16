@@ -182,7 +182,18 @@ const SwayamCourses = () => {
     history.push(`${path}/addcourses?id=${id}`);
   };
 
-  const onDelete = id => {
+  //  const newSawyamCourse = dt =>{
+  //    ApiPost("course/editSwayamCourse" , dt)
+  //    .then((res) =>{
+  //      if (res.status === 200) {
+  //        dispatch(getCategoryData())
+  //      }
+  //      return res
+  //    })
+  //    return newSawyamCourse
+  //  }
+
+  const onDelete = async id => {
     const singleData = courseData.data.data.find(item => item.id === id);
     if (singleData) {
       let dt = {
@@ -201,6 +212,10 @@ const SwayamCourses = () => {
         isDeleted: true,
       };
       dispatch(editSwayamCourse(dt));
+    //   const deleteSwayamCourses = await newSawyamCourse(dt);
+    //   if (deleteSwayamCourses.status === 200) {
+    //     toast.success("SwayamCourse delete successful")
+    //   }
     }
   };
 

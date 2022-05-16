@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { useRouteMatch } from 'react-router-dom';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { CSVLink } from 'react-csv';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/users/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -132,7 +132,19 @@ const User = () => {
         }
     }, [alluser])
 
-    const onDelete = (id) => {
+     const newUser = userForDelete =>{
+     const newVal = ApiPost("user/auth/editProfile" , userForDelete) 
+       .then((res)=>{
+     if (res.status === 200) {
+         dispatch(allUser())
+     }
+     return res
+    })
+     return newVal   
+     }
+
+
+    const onDelete =  async (id) => {
         let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id)
 
         if (userForDelete) {
@@ -149,6 +161,10 @@ const User = () => {
             }
             console.log("userForDelete", userForDelete)
             dispatch(editProfile(userForDelete))
+             const deleteUser = await newUser(userForDelete)
+             if (deleteUser.status === 200) {
+                 toast.success("User delete successful")
+             }
         }
     }
 
