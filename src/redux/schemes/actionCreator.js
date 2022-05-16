@@ -41,6 +41,12 @@ const {
 
   getSchemeRatingSuccess,
   getSchemeRatingErr,
+
+  editSchemeRatingSuccess,
+  editSchemeRatingErr,
+
+  getOneSchemeRatingSuccess,
+  getOneSchemeRatingErr,
 } = actions;
 let per_Page, page_Num, Status;
 export const getSchemecategory = () => async dispatch => {
@@ -181,9 +187,31 @@ export const addSchemeInBulkImport = body => async dispatch => {
 };
 
 export const getSchemeRating = (perpage,pagenum) => async dispatch => {
+  per_Page = perpage;
+  page_Num = pagenum;
   await ApiGet(`schemeRating/getSchemeRatings?per_page=${perpage}&page_number=${pagenum}`)
   .then( res => {
     return dispatch(getSchemeRatingSuccess(res))
   })
   .catch(err => dispatch(getSchemeRatingErr(err)))
+}
+
+export const editSchemeRating = body => async dispatch => {
+  await ApiPost(`schemeRating/editSchemeRating`, body)
+    .then(res => {
+      dispatch(editSchemeRatingSuccess(res));
+      console.log('res', res);
+      if (res.status === 200) {
+        return dispatch(getSchemeRating(per_Page,page_Num));
+      }
+    })
+    .catch(err => dispatch(editSchemeRatingErr(err)));
+};
+
+export const getOneSchemeRating = (id) => async dispatch => {
+  await ApiGet(`schemeRating/getSchemeRating?id=${id}`)
+  .then( res => {
+    return dispatch(getOneSchemeRatingSuccess(res))
+  })
+  .catch(err => dispatch(getOneSchemeRatingErr(err)))
 }

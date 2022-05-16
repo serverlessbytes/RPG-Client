@@ -23,6 +23,14 @@ const actions = {
     GET_USER_RATING_SUCCESS:"GET_USER_RATING_SUCCESS",
     GET_USER_RATING_ERR:"GET_USER_RATING_ERR",
 
+    GETONE_USER_RATING_BEGINE:"GETONE_USER_RATING_BEGINE",
+    GETONE_USER_RATING_SUCCESS:"GETONE_USER_RATING_SUCCESS",
+    GETONE_USER_RATING_ERR:"GETONE_USER_RATING_ERR",
+
+    EDIT_USER_RATING_BEGINE:"EDIT_USER_RATING_BEGINE",
+    EDIT_USER_RATING_SUCCESS:"EDIT_USER_RATING_SUCCESS",
+    EDIT_USER_RATING_ERR:"EDIT_USER_RATING_ERR",
+
   
     getSchemecategoryBegin: () => {
       return {
@@ -140,6 +148,46 @@ const actions = {
       getUserRatingErr: err => {
         return {
           type: actions.GET_USER_RATING_ERR,
+          err,
+        };
+      },
+
+      getOneUserRatingBegin: () => {
+        return {
+          type: actions.GETONE_USER_RATING_BEGINE,
+        };
+      },
+    
+      getOneUserRatingSuccess: data => {
+        return {
+          type: actions.GETONE_USER_RATING_SUCCESS,
+          data,
+        };
+      },
+    
+      getOneUserRatingErr: err => {
+        return {
+          type: actions.GETONE_USER_RATING_ERR,
+          err,
+        };
+      },
+
+      edituserRatingBegin: () => {
+        return {
+          type: actions.EDIT_USER_RATING_BEGINE,
+        };
+      },
+    
+      edituserRatingSuccess: data => {
+        return {
+          type: actions.EDIT_USER_RATING_SUCCESS,
+          data,
+        };
+      },
+    
+      edituserRatingErr: err => {
+        return {
+          type: actions.EDIT_USER_RATING_ERR,
           err,
         };
       },

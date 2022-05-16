@@ -105,7 +105,9 @@ const district = () => {
     }
 
     useEffect(() => {
+        if (statedata) {
             dispatch(getDistrictData(statedata))
+        }
     }, [statedata])
 
     const [form] = Form.useForm()

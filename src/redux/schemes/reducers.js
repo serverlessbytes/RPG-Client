@@ -49,6 +49,14 @@ const {
   GET_SCHEMERATING_SUCCESS,
   GET_SCHEMERATING_ERR,
 
+  EDIT_SCHEME_RATING_BEGINE,
+  EDIT_SCHEME_RATING_SUCCESS,
+  EDIT_SCHEME_RATING_ERR,
+
+  GET_ONESCHEME_RATING_BEGINE,
+  GET_ONESCHEME_RATING_SUCCESS,
+  GET_ONESCHEME_RATING_ERR,
+
 } = actions;
 
 const initialState = {
@@ -70,6 +78,8 @@ const initialState = {
   addSchemeInBulk: null,
   addSchemeInBulkErr: null,
   schemeRatingData : null,
+  editSchemeRatingData : null,
+  getOneSchemeRatingData : null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -317,6 +327,42 @@ const schemeReducer = (state = initialState, action) => {
           error: err,
           loading: false,
         };
+
+        case EDIT_SCHEME_RATING_BEGINE:
+          return {
+            ...state,
+            loading: true,
+          };
+        case EDIT_SCHEME_RATING_SUCCESS:
+          return {
+            ...state,
+            editSchemeRatingData: data,
+            loading: false,
+          };
+        case EDIT_SCHEME_RATING_ERR:
+          return {
+            ...state,
+            error: err,
+            loading: false,
+          };
+
+          case GET_ONESCHEME_RATING_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+          case GET_ONESCHEME_RATING_SUCCESS:
+            return {
+              ...state,
+              getOneSchemeRatingData: data,
+              loading: false,
+            };
+          case GET_ONESCHEME_RATING_ERR:
+            return {
+              ...state,
+              error: err,
+              loading: false,
+            };
 
     default:
       return state;

@@ -47,6 +47,14 @@ const actions = {
   GET_SCHEMERATING_SUCCESS: 'GET_SCHEMERATING_SUCCESS',
   GET_SCHEMERATING_ERR: 'GET_SCHEMERATING_ERR',
 
+  EDIT_SCHEME_RATING_BEGINE: 'EDIT_SCHEME_RATING_BEGINE',
+  EDIT_SCHEME_RATING_SUCCESS: 'EDIT_SCHEME_RATING_SUCCESS',
+  EDIT_SCHEME_RATING_ERR: 'EDIT_SCHEME_RATING_ERR',
+
+  GET_ONESCHEME_RATING_BEGINE: 'GET_ONESCHEME_RATING_BEGINE',
+  GET_ONESCHEME_RATING_SUCCESS: 'GET_ONESCHEME_RATING_SUCCESS',
+  GET_ONESCHEME_RATING_ERR: 'GET_ONESCHEME_RATING_ERR',
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -280,5 +288,46 @@ const actions = {
       err,
     };
   },
+
+  editSchemeRatingBegin: () => {
+    return {
+      type: actions.EDIT_SCHEME_RATING_BEGINE,
+    };
+  },
+
+  editSchemeRatingSuccess: data => {
+    return {
+      type: actions.EDIT_SCHEME_RATING_SUCCESS,
+      data,
+    };
+  },
+
+  editSchemeRatingErr: err => {
+    return {
+      type: actions.EDIT_SCHEME_RATING_ERR,
+      err,
+    };
+  },
+
+  getOneSchemeRatingBegin: () => {
+    return {
+      type: actions.GET_ONESCHEME_RATING_BEGINE,
+    };
+  },
+
+  getOneSchemeRatingSuccess: data => {
+    return {
+      type: actions.GET_ONESCHEME_RATING_SUCCESS,
+      data,
+    };
+  },
+
+  getOneSchemeRatingErr: err => {
+    return {
+      type: actions.GET_ONESCHEME_RATING_ERR,
+      err,
+    };
+  },
+
 };
 export default actions;

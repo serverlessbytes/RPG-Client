@@ -311,7 +311,7 @@ useEffect(()=>{
       duration: moment(state.duration).format('HH:mm:ss'),
       jobCategoryIds: state.jobCategoryIds,
       certification: state.certification,
-      sequence: parseInt(state.sequence),
+      // sequence: parseInt(state.sequence),
       mode: state.mode,
       thumbnail: state.thumbnail,
       isActive: true,
