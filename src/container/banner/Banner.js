@@ -25,13 +25,13 @@ const Banner = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [bannerTableData, setBannerTableData] = useState([]); // for table
-      const [selectedBanner, setSelectedBanner] = useState();
+    const [selectedBanner, setSelectedBanner] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [data, setData] = useState({
         title: "",
         imageUrl: ""
     });
- 
+
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -44,7 +44,7 @@ const Banner = () => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-   useEffect(() => { console.log("editBannerdata", editBannerdata) }, [editBannerdata])
+    useEffect(() => { console.log("editBannerdata", editBannerdata) }, [editBannerdata])
 
     useEffect(() => {
         dispatch(GetBanner());
@@ -128,14 +128,14 @@ const Banner = () => {
     };
 
     useEffect(() => {
-        return(()=>{
+        return (() => {
             dispatch(getOneBannerSuccess([]))
-       })
-     }, [])
-     
+        })
+    }, [])
+
     const onEdit = (id) => {
         let dataForEdit = getBannerData && getBannerData.data.find((item) => item.id === id)
-      
+
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
         }
@@ -267,7 +267,7 @@ const Banner = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
-                   
+
                     title="Banner"
 
                     okText={nameTog ? "Edit" : "Add"}

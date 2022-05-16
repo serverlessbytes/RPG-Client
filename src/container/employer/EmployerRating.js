@@ -9,12 +9,12 @@ import { editSchemeRating, getOneSchemeRating, getSchemeRating } from '../../red
 import FeatherIcon from 'feather-icons-react';
 
 
-const SchemeRating = () => {
+const EmployerRating = () => {
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch()
 
-    const [schemeRatingtable, setSchemeRatingtable] = useState([]) //set data
+    const [EmployerRatingtable, setEmployerRatingtable] = useState([]) //set data
     const [per_Page, setPerPage] = useState(2) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -91,7 +91,7 @@ const SchemeRating = () => {
     }, [getOneSchemeRatingData])
 
     useEffect(() => {
-        setSchemeRatingtable(schemeRatingData?.data?.data?.map(item => {
+        setEmployerRatingtable(schemeRatingData?.data?.data?.map(item => {
             return ({
                 scheme: item.scheme.name,
                 rating: item.rating,
@@ -117,10 +117,10 @@ const SchemeRating = () => {
         )
     }, [schemeRatingData])
 
-    const SchemeRatingTableColumns = [
+    const EmployerRatingTableColumns = [
         {
-            title: 'Scheme',
-            dataIndex: 'scheme',
+            title: 'Employer',
+            dataIndex: 'employer',
             // key: 'user',
             sorter: (a, b) => a?.scheme?.length - b?.scheme?.length,
             sortDirections: ['descend', 'ascend'],
@@ -147,7 +147,7 @@ const SchemeRating = () => {
         <>
             <PageHeader
                 ghost
-                title="Scheme Rating"
+                title="Employer Rating"
             />
             <Main>
                 <Cards headless>
@@ -155,17 +155,17 @@ const SchemeRating = () => {
                         <TableWrapper className="table-responsive pb-30">
                             <Table
                                 // rowSelection={rowSelection}
-                                dataSource={schemeRatingtable}
-                                columns={SchemeRatingTableColumns}
-                                pagination={{
-                                    defaultPageSize: schemeRatingData?.data.per_page,
-                                    total: schemeRatingData?.data.page_count,
-                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                                    onChange: (page, pageSize) => {
-                                        setPageNumber(page);
-                                        setPerPage(pageSize);
-                                    }
-                                }}
+                                dataSource={EmployerRatingtable}
+                                columns={EmployerRatingTableColumns}
+                                // pagination={{
+                                //     defaultPageSize: schemeRatingData?.data.per_page,
+                                //     total: schemeRatingData?.data.page_count,
+                                //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                //     onChange: (page, pageSize) => {
+                                //         setPageNumber(page);
+                                //         setPerPage(pageSize);
+                                //     }
+                                // }}
                             // pagination={false}
                             />
                         </TableWrapper>
@@ -177,7 +177,7 @@ const SchemeRating = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
-                    title="Scheme Rating"
+                    title="Employer Rating"
                     okText={"Edit"}
                 >
                     <Form name="banner" layout="vertical">
@@ -206,7 +206,7 @@ const SchemeRating = () => {
     );
 };
 
-export default SchemeRating;
+export default EmployerRating;
 
 
 

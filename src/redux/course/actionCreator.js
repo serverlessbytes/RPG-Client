@@ -207,12 +207,12 @@ export const getCourseRatingData =(perpage,pagenumber) => async(dispatch) =>{
    .catch(e => courseRatingErr(e))
 }
 
-export const getCourseRatingsByID = (body) => async(dispatch) =>{
-  await ApiPost(`courseRating/getCourseRating`,body)
+export const getCourseRatingsByID = (id) => async(dispatch) =>{
+  await ApiGet(`courseRating/getCourseRating?id=${id}`)
   .then((res)=>{
     return dispatch(courseRatingByIdSuccess(res))
   })
-  .catch(e => courseRatingByIdErr (e))
+  .catch(e => courseRatingByIdErr(e))
 }
 
  export const specificCourseRatings =(body) => async(dispatch) =>{

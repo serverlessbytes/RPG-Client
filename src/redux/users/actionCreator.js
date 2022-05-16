@@ -23,6 +23,12 @@ const {
     getUserRatingSuccess,
     getUserRatingErr,
 
+    edituserRatingSuccess,
+    edituserRatingErr,
+
+    getOneUserRatingSuccess,
+    getOneUserRatingErr,
+
 } = actions;
 
 let Status;
@@ -84,11 +90,35 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
       .catch((err) => dispatch(allUserErr(err)))
   }
 
-  export const getUserRating = (perpage,pagenum) => async (dispatch) => {   
+  export const getUserRating = (perpage,pagenum) => async (dispatch) => {
+    per_page=perpage;
+    page_num=pagenum;   
     await ApiGet(`userRating/getUserRatings?per_page=${perpage}&page_number=${pagenum}`)
       .then((res) => {
         return dispatch(getUserRatingSuccess(res))
       })
       .catch((err) => dispatch(getUserRatingErr(err)))
   }
+
+  export const edituserRating = (body) =>  async(dispatch) =>{
+    await ApiPost (`userRating/editUserRating`,body)
+    .then((res) =>{
+      (edituserRatingSuccess(res))
+      if (res.status === 200) {  
+       return dispatch(getUserRating(per_page, page_num))
+     }
+    })
+    .catch(e => edituserRatingErr(e))
+  }
+
+  export const getOneUserRating = (id) => async (dispatch) => {   
+    await ApiGet(`userRating/getUserRating?id=${id}`)
+      .then((res) => {
+        // console.log("res",res)
+        return dispatch(getOneUserRatingSuccess(res))
+      })
+      .catch((err) => dispatch(getOneUserRatingErr(err)))
+  }
+
+
 

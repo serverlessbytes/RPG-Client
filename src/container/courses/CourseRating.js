@@ -1,66 +1,118 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageHeader, Select,Table } from 'antd';
+import { Button, Form, Input, Modal, PageHeader, Select, Table } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
-import { Main,TableWrapper } from '../styled';
+import { Main, TableWrapper } from '../styled';
 import { useHistory, useRouteMatch } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCourseRatingData } from '../../redux/course/actionCreator';
+import { editCategoryRating, getCourseRatingData, getCourseRatingsByID } from '../../redux/course/actionCreator';
 import { Cards } from '../../components/cards/frame/cards-frame';
+import FeatherIcon from 'feather-icons-react';
 
 
-const CourseRating = () => { 
+const CourseRating = () => {
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch()
-  
+
     const [courseRatingtable, setCourseRatingtable] = useState([]) //set data
     const [per_Page, setPerPage] = useState(5) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedCourseRating, setSelectedCourseRating] = useState();
+    const [data, setData] = useState({
+        rating: "",
+        comment: ""
+    })
 
     const CourseRatingData = useSelector((state) => state.category.CourseRatingData)
+    const CourseRatingByIdData = useSelector((state) => state.category.CourseRatingByIdData)
 
     useEffect(() => {
         dispatch(getCourseRatingData(per_Page, pageNumber))
     }, [per_Page, pageNumber])
 
-    // const onDelete = (id) => {
-    //     let CourseRatingDataDelete = CourseRatingData && CourseRatingData?.data && CourseRatingData?.data?.data.find((item) => item.id === id)
-    //     console.log("CourseRatingDataDelete", CourseRatingDataDelete)
-    //     if (CourseRatingDataDelete) {
-    //         let data = {
-    //             comment: CourseRatingDataDelete.comment,
-    //             rating: CourseRatingDataDelete.rating,
-    //             isDeleted: true,
-    //             id: CourseRatingDataDelete.id,
-    //             isActive: false,
-    //         }
-    //         dispatch((editCategoryRating(data)))
-    //     }
-    // }
+    const onDelete = (id) => {
+        let CourseRatingDataDelete = CourseRatingData && CourseRatingData?.data && CourseRatingData?.data?.data.find((item) => item.id === id)
+        if (CourseRatingDataDelete) {
+            let data = {
+                comment: CourseRatingDataDelete.comment,
+                rating: CourseRatingDataDelete.rating,
+                isDeleted: true,
+                id: CourseRatingDataDelete.id,
+                isActive: false,
+            }
+            dispatch((editCategoryRating(data)))
+        }
+    }
+
+    const onEdit = (id) => {
+        setIsModalVisible(true)
+        let CourseRatingDataEdit = CourseRatingData && CourseRatingData?.data && CourseRatingData?.data?.data.find((item) => item.id === id)
+        if (CourseRatingDataEdit) {
+            setSelectedCourseRating(CourseRatingDataEdit)
+        }
+        if (CourseRatingDataEdit) {
+            dispatch(getCourseRatingsByID(CourseRatingDataEdit.id))
+        }
+
+    }
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+    }
+
+    const handleOk = () => {
+        setIsModalVisible(false)
+        if (selectedCourseRating) {
+            let Data = {
+                id: selectedCourseRating.id,
+                comment: data.comment,
+                rating: data.rating,
+                isActive: true,
+                isDeleted: false,
+            }
+            dispatch(editCategoryRating(Data))
+        }
+    }
+
+    const handleChange = (e) => {
+        setData({ ...data, [e.target.name]: e.target.value })
+    }
+
+    useEffect(() => {
+        console.log("CourseRatingByIdData", CourseRatingByIdData)
+        if (CourseRatingByIdData && CourseRatingByIdData.data) {
+            setData({
+                ...data,
+                rating: CourseRatingByIdData.data.rating,
+                comment: CourseRatingByIdData.data.comment,
+            })
+        }
+    }, [CourseRatingByIdData])
 
     useEffect(() => {
         setCourseRatingtable(CourseRatingData?.data?.data?.map(item => {
             return ({
-                course : item.course.name,
+                course: item.course.name,
                 rating: item.rating,
                 createdByUser: item.createdByUser.name,
                 comment: item.comment,
-                // action: (
-                //     <div className="table-actions">
-                //         <>
-                //             <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
-                //                 <FeatherIcon icon="edit" size={16} />
-                //             </Button>
-                //             <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                //                 <FeatherIcon icon="trash-2" size={16} />
-                //             </Button>
-                //             <Button className="btn-icon" type="success" shape="circle">
-                //                 <FeatherIcon icon="eye" size={16} />
-                //             </Button>
-                //         </>
-                //     </div>
-                // ),
+                action: (
+                    <div className="table-actions">
+                        <>
+                            <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
+                                <FeatherIcon icon="edit" size={16} />
+                            </Button>
+                            <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                <FeatherIcon icon="trash-2" size={16} />
+                            </Button>
+                            {/* <Button className="btn-icon" type="success" shape="circle">
+                                <FeatherIcon icon="eye" size={16} />
+                            </Button> */}
+                        </>
+                    </div>
+                ),
             });
         })
         )
@@ -70,9 +122,8 @@ const CourseRating = () => {
         {
             title: 'Course',
             dataIndex: 'course',
-            // key: 'user',
-              sorter: (a, b) => a?.course?.length - b?.course?.length,
-              sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a?.course?.length - b?.course?.length,
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Rating',
@@ -86,6 +137,10 @@ const CourseRating = () => {
             title: 'Comment',
             dataIndex: 'comment',
         },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+        },
     ];
 
     return (
@@ -97,7 +152,7 @@ const CourseRating = () => {
             <Main>
                 <Cards headless>
                     <UserTableStyleWrapper>
-                        <TableWrapper className="table-responsive pb-30 course-rating">
+                        <TableWrapper className="table-responsive pb-30">
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={courseRatingtable}
@@ -116,6 +171,37 @@ const CourseRating = () => {
                     </UserTableStyleWrapper>
                 </Cards>
             </Main>
+            {isModalVisible &&
+                <Modal
+                    onOk={() => handleOk()}
+                    visible={isModalVisible}
+                    onCancel={() => handleCancel()}
+                    title="Course Rating"
+                    okText={"Edit"}
+                >
+                    <Form name="course" layout="vertical">
+                        <label htmlFor="rating">Rating</label>
+                        <Form.Item>
+                            <Input
+                                placeholder="Enter Rating"
+                                name="rating"
+                                value={data.rating}
+                                onChange={(e) => handleChange(e)}
+                            />
+                        </Form.Item>
+                        <label htmlFor="Comment">Comment</label>
+                        <Form.Item>
+                            <Input
+                                type="text"
+                                placeholder="Enter Comment"
+                                name="comment"
+                                value={data.comment}
+                                onChange={(e) => handleChange(e)}
+                            />
+                        </Form.Item>
+                    </Form>
+                </Modal>}
+
         </>
     );
 };

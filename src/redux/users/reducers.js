@@ -25,6 +25,14 @@ const {
   GET_USER_RATING_SUCCESS,
   GET_USER_RATING_ERR,
 
+  GETONE_USER_RATING_BEGINE,
+  GETONE_USER_RATING_SUCCESS,
+  GETONE_USER_RATING_ERR,
+
+  EDIT_USER_RATING_BEGINE,
+  EDIT_USER_RATING_SUCCESS,
+  EDIT_USER_RATING_ERR,
+
 } = actions;
 
 const initialState = {
@@ -38,6 +46,8 @@ const initialState = {
   editProfileData:null,
   editProfileErr:null,
   getUserRatingData:null,
+  getOneUserRatingData:null,
+  editUserRatingData:null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -150,6 +160,43 @@ const userReducer = (state = initialState, action) => {
             editProfileErr: err,
             loading: false,
           };
+
+          
+        case GETONE_USER_RATING_BEGINE:
+          return {
+            ...state,
+            loading: true,
+          };
+        case GETONE_USER_RATING_SUCCESS:
+          return {
+            ...state,
+            getOneUserRatingData: data,
+            loading: false,
+          };
+        case GETONE_USER_RATING_ERR:
+          return {
+            ...state,
+            error: err,
+            loading: false,
+          };
+
+          case EDIT_USER_RATING_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+          case EDIT_USER_RATING_SUCCESS:
+            return {
+              ...state,
+              editUserRatingData: data,
+              loading: false,
+            };
+          case EDIT_USER_RATING_ERR:
+            return {
+              ...state,
+              error: err,
+              loading: false,
+            };
 
 
 
