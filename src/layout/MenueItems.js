@@ -145,11 +145,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </Menu.Item>
 
       </SubMenu >
-      <Menu.Item key="testimonial">
+      {/* <Menu.Item key="testimonial">
         <NavLink onClick={toggleCollapsed} to={`${path}/testimonial`}>
           Testimonial
         </NavLink>
-      </Menu.Item>
+      </Menu.Item> */}
 
       <SubMenu key="user" title="User">
         <Menu.Item key="user">
@@ -169,15 +169,33 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           <NavLink onClick={toggleCollapsed} to={`${path}/employer`}>
             Employer
           </NavLink>
-      </Menu.Item>
-      <Menu.Item key="employerrating">
+        </Menu.Item>
+        <Menu.Item key="employerrating">
           <NavLink onClick={toggleCollapsed} to={`${path}/employer/employerrating`}>
             Employer Rating
           </NavLink>
-      </Menu.Item>
+        </Menu.Item>
       </SubMenu>
 
-      <Menu.Item key="banner">
+      <SubMenu key="layout" title="Layout">
+        <Menu.Item key="banner">
+          <NavLink onClick={toggleCollapsed} to={`${path}/banner`}>
+            Banner
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="carousel">
+          <NavLink onClick={toggleCollapsed} to={`${path}/carousel`}>
+            Carousel
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="testimonial">
+          <NavLink onClick={toggleCollapsed} to={`${path}/testimonial`}>
+            Testimonial
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+
+      {/* <Menu.Item key="banner">
         <NavLink onClick={toggleCollapsed} to={`${path}/banner`}>
           Banner
         </NavLink>
@@ -186,7 +204,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         <NavLink onClick={toggleCollapsed} to={`${path}/carousel`}>
           Carousel
         </NavLink>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 };

@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdown, Space, Menu } from 'antd';
 import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,6 @@ import {
   getCoursefilter,
   getOneCoursefilter,
 } from '../../redux/course/actionCreator';
-import moment from 'moment';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -27,6 +26,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
 import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
+import { DownOutlined } from '@ant-design/icons';
 
 const {
   getallSwayamCourseSuccess,
@@ -97,27 +97,15 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     return () => {
-      // setState([])
       dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
     };
   }, []);
 
-   useEffect(() => {
-    console.log("addSwayamCourseData-----" ,addSwayamCourseData );
-   }, [addSwayamCourseData])
-   
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
       dispatch(addSwayamCourseModuleSuccess(null));
-      // dispatch(getJobsFilterForMainSuccess(null))
       toast.success('Swayam Course Import successful');
-      //toastAssetsAdd(true)
-      //onHide()
     }
-    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-    //   dispatch(editSchemeSuccess(null))
-    //   toast.success("Jobs Update successful");
-    // }
   }, [addSwayamCourseModuleData]);
 
   useEffect(() => {
@@ -131,8 +119,6 @@ const SwayamCourses = () => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
       dispatch(editSwayamPartnerCourseSuccess(null));
       toast.success('Swayam Course Delete successful');
-      //toastAssetsAdd(true)
-      //onHide()
     } else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
       dispatch(editSwayamPartnerCourseSuccess(null));
       toast.success('Swayam Course Update successful');
@@ -212,10 +198,10 @@ const SwayamCourses = () => {
         isDeleted: true,
       };
       dispatch(editSwayamCourse(dt));
-    //   const deleteSwayamCourses = await newSawyamCourse(dt);
-    //   if (deleteSwayamCourses.status === 200) {
-    //     toast.success("SwayamCourse delete successful")
-    //   }
+      //   const deleteSwayamCourses = await newSawyamCourse(dt);
+      //   if (deleteSwayamCourses.status === 200) {
+      //     toast.success("SwayamCourse delete successful")
+      //   }
     }
   };
 
@@ -291,6 +277,46 @@ const SwayamCourses = () => {
     });
   };
 
+  const onClick = ({ key }) => {
+    if (key == 'exportCourse') {
+      onExportCourse();
+    }
+    if (key == 'exportAllCourse') {
+      onAllExportCourse();
+    }
+    if (key == 'addCourse') {
+      history.push(`/admin/courses/addcourses`);
+    }
+    if (key == 'import') {
+      setImportModal(true);
+    }
+
+  };
+
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Export Course',
+          key: 'exportCourse',
+        },
+        {
+          label: 'Export All Course',
+          key: 'exportAllCourse',
+        },
+        {
+          label: 'Add Course',
+          key: 'addCourse',
+        },
+        {
+          label: 'Import',
+          key: 'import',
+        },
+      ]}
+    />
+  );
+
   useEffect(() => {
     if (courseData && courseData.data) {
       setUsertable(
@@ -298,8 +324,12 @@ const SwayamCourses = () => {
           // const { id, name, designation, status } = user;
           return {
             //key: id,
-
-            CourseName: item.name,
+            CourseName: (
+              <span style={{ cursor: "pointer" }} onClick={() => viewSwayamCoursedata(item.id)}>
+                {item?.name}
+              </span>
+            ),
+            // CourseName: item.name,
             CourseCategory: item.courseCategory?.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
@@ -330,10 +360,6 @@ const SwayamCourses = () => {
                       <Button className="btn-icon" onClick={() => onEdit(item.id)} type="info" to="#" shape="circle">
                         <FeatherIcon icon="edit" size={16} />
                       </Button>
-
-                      {/* <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-                      <FeatherIcon icon="x-circle" size={16} />
-                    </Button> */}
                       <Button
                         className="btn-icon"
                         type="danger"
@@ -343,14 +369,14 @@ const SwayamCourses = () => {
                       >
                         <FeatherIcon icon="trash-2" size={16} />
                       </Button>
-                      <Button
+                      {/* <Button
                         className="btn-icon"
                         type="success"
                         onClick={() => viewSwayamCoursedata(item.id)}
                         shape="circle"
                       >
                         <FeatherIcon icon="eye" size={16} />
-                      </Button>
+                      </Button> */}
                     </>
                   ) : (
                     <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
@@ -414,7 +440,7 @@ const SwayamCourses = () => {
         title="Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            <Button size="small" onClick={() => onExportCourse()} type="info">
+            {/* <Button size="small" onClick={() => onExportCourse()} type="info">
               Export Course
             </Button>
             <CSVLink
@@ -438,7 +464,22 @@ const SwayamCourses = () => {
             </Button>
             <Button size="small" type="primary" onClick={() => setImportModal(true)}>
               Import
-            </Button>
+            </Button> */}
+            <Dropdown overlay={menu} trigger='click'>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  Click menu item
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+            <CSVLink
+              headers={header}
+              data={state}
+              ref={CSVLinkRef}
+              filename="SwayamCourse.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
           </div>,
         ]}
       />
@@ -536,7 +577,7 @@ const SwayamCourses = () => {
                           // total: usersTableData.length,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                        // pagination={false}
+                      // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
@@ -583,7 +624,7 @@ const SwayamCourses = () => {
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
 
-                        // pagination={false}
+                      // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>

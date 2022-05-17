@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 
 
-const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,setNumberOfPage,setExportTog }) => { // props from JobPost
+const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog }) => { // props from JobPost
   const {
     addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess
   } = actions;
@@ -44,19 +44,20 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
   const addJobPostData = useSelector((state) => state.job.addJobPostData) //fetch for tostify from reducer 
   // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])
 
- const newJobPost =  data =>{
-  let id = data.id
-  delete data.id
-    const newVal = ApiPost(`job/update?jobId=${id}` , data)
-   .then((res) =>{
-     if (res.status === 200) {
-       dispatch(getJobPost(perPage, pageNumber))
-     } return res
-   })
+  const newJobPost = data => {
+    let id = data.id
+    delete data.id
+    const newVal = ApiPost(`job/update?jobId=${id}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getJobPost(perPage, pageNumber))
+        }
+        return res
+      })
     return newVal
- }
+  }
 
-  const onDelete = async(id) => {
+  const onDelete = async (id) => {
     let courseDataDelete = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find((item) => item.id === id)
     console.log("courseDataDelete", courseDataDelete)
     if (courseDataDelete) {
@@ -75,7 +76,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         type: courseDataDelete.type,
         isActive: false,
         extraType: courseDataDelete.extraType,
-        shifts: courseDataDelete?.shifts ? courseDataDelete?.shifts : "" ,
+        shifts: courseDataDelete?.shifts ? courseDataDelete?.shifts : "",
         email: courseDataDelete.email,
         phone: courseDataDelete.phone,
         startDate: courseDataDelete.startDate,
@@ -160,7 +161,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
   }, [editJobPostErr])
 
   useEffect(() => {
-    console.log("editJobPostData",editJobPostData)
+    console.log("editJobPostData", editJobPostData)
     if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
       dispatch(editJobPostSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
@@ -190,23 +191,27 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
     }
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then((res) => {
-        console.log("res",res)
-          toast.success( res.data.isApproved ? "Approved successful" : "Disapproved successful ")
-        dispatch(getJobsFilterForMain (perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
+        console.log("res", res)
+        toast.success(res.data.isApproved ? "Approved successful" : "Disapproved successful ")
+        dispatch(getJobsFilterForMain(perPage, pageNumber, state.state ? state.state : "", type.type ? type.type : "", jobRole.jobRole ? jobRole.jobRole : ""))
       })
-      .catch((err) => console.log("Error",err))
+      .catch((err) => console.log("Error", err))
   }
 
   useEffect(() => {
     // if (apply) {
     setUsertable(getJobFilterData?.data?.data?.map(item => {
       return ({
-        user: item?.name?.name,
+        user: (
+          <span style={{cursor:"pointer"}} onClick={() => viewJobdata(item.id)}>
+            {item?.name?.name}
+          </span>
+        ),
         email: item.email,
         company: item.description,
         position: item.jobRole?.name,
         joinDate: moment(item.startDate).format('DD-MM-YYYY'),
-        vacancies : item.vacancies,
+        vacancies: item.vacancies,
         approved: (
           <>
             <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
@@ -219,15 +224,15 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
           <div className="table-actions">
             {status === "active" ?
               <>
-                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                {/* <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                   <FeatherIcon icon="edit" size={16} />
-                </Button>
+                </Button> */}
                 <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                   <FeatherIcon icon="trash-2" size={16} />
                 </Button>
-                <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
+                {/* <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
                   <FeatherIcon icon="eye" size={16} />
-                </Button>
+                </Button> */}
               </>
               :
               <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
@@ -359,7 +364,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
                 setPerPage(pageSize);
               }
             }}
-            // pagination={false}
+          // pagination={false}
           />
         </TableWrapper>
       </UserTableStyleWrapper>

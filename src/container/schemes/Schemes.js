@@ -4,7 +4,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination } from 'antd';
+import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Menu, Dropdown, Space } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -21,9 +21,10 @@ import actions from '../../redux/schemes/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
+import { DownOutlined } from '@ant-design/icons';
 
 const Schemes = () => {
-  const {getAllSchemesSuccess,addSchemeSuccess,editSchemeSuccess,editSchemeErr,addSchemeErr , addSchemeInBulk} = actions;
+  const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -31,7 +32,6 @@ const Schemes = () => {
   const { Option } = Select;
   // const [setUsersTableData, setsetUsersTableData] = useState()
   const usersTableData = [];
-
 
   const [schemeCategory, setSchemeCategory] = useState({
     category: '',
@@ -42,10 +42,11 @@ const Schemes = () => {
   const [status, setStatus] = useState('active');
   const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
-  const [exportTog,setExportTog]=useState(false)
+  const [exportTog, setExportTog] = useState(false)
   const [importModal, setImportModal] = useState(false);
+  const [schemeTableData, setSchemeTableData] = useState();
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
-  
+
   const users = useSelector(state => state.scheme.getAllSchemeData);
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
@@ -57,19 +58,14 @@ const Schemes = () => {
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
-  
 
-   useEffect(() => {
-     console.log("allschemeData-----------",allschemeData);
-   }, [allschemeData])
-   
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
       setSchemeCategory({ ...schemeCategory, benefit: e });
     }
-  };  
+  };
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -81,57 +77,57 @@ const Schemes = () => {
 
   useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
-        dispatch(editSchemeSuccess(null))
-        //dispatch(getJobsFilterForMainSuccess(null))
-        toast.success("Scheme update successful");
+      dispatch(editSchemeSuccess(null))
+      //dispatch(getJobsFilterForMainSuccess(null))
+      toast.success("Scheme update successful");
 
-        //toastAssetsAdd(true)
-        //onHide()
+      //toastAssetsAdd(true)
+      //onHide()
     }
     // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
     //   dispatch(editSchemeSuccess(null))
     //   toast.success("Jobs Update successful");
     // }
   }, [editSchemedata])
- 
+
   useEffect(() => {
     console.log("schemeModulData=====", schemeModulData);
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
     }
-    if (schemeModulData && schemeModulData.status !==200) {
+    if (schemeModulData && schemeModulData.status !== 200) {
       toast.error("somthimg went wromg")
       dispatch(addSchemeInBulk(null))
     }
   }, [schemeModulData])
-  
+
 
   useEffect(() => {
     if (addSchemeData && addSchemeData.status === 200) {
-        dispatch(addSchemeSuccess(null))
-        toast.success("Scheme add successful");
-        //toastAssetsAdd(true)
-        //onHide()
+      dispatch(addSchemeSuccess(null))
+      toast.success("Scheme add successful");
+      //toastAssetsAdd(true)
+      //onHide()
     }
-}, [addSchemeData])
+  }, [addSchemeData])
 
-useEffect(()=>{
-  if(editSchemeError){ 
-    dispatch(editSchemeErr(null))
-    toast.error("Something Wrong")
-  }
-},[editSchemeError])
+  useEffect(() => {
+    if (editSchemeError) {
+      dispatch(editSchemeErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [editSchemeError])
 
-useEffect(()=>{
-  if(addSchemeError){ 
-    dispatch(addSchemeErr(null))
-    toast.error("Something Wrong")
-  }
-},[addSchemeError])
+  useEffect(() => {
+    if (addSchemeError) {
+      dispatch(addSchemeErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [addSchemeError])
 
   const onApply = () => {
-    dispatch( (perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    dispatch((perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -193,10 +189,10 @@ useEffect(()=>{
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
       toast.success("Scheme data exported successfully")
-    }else if(exportTog){
+    } else if (exportTog) {
       toast.success("No scheme data for export")
     }
-    
+
   }, [state])
 
   useEffect(() => {
@@ -212,17 +208,16 @@ useEffect(()=>{
     history.push(`${path}/addscheme?key=${key}`);
   };
 
- const newSchemes = userForDelete =>{
-   const newVal = ApiPost("scheme/editScheme" , userForDelete)
-  .then((res)=>{
-    if (res.status === 200) {
-      console.log("----------------------------");
-      dispatch(getAllSchemes())
-    }
-    return res
-  })
-   return newVal
- }
+  const newSchemes = userForDelete => {
+    const newVal = ApiPost("scheme/editScheme", userForDelete)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getAllSchemes())
+        }
+        return res
+      })
+    return newVal
+  }
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
@@ -239,7 +234,7 @@ useEffect(()=>{
         isDeleted: true,
       };
       // dispatch(editSchemeData(userForDelete));
-      const deleteSchemes =   await newSchemes(userForDelete)
+      const deleteSchemes = await newSchemes(userForDelete)
       if (deleteSchemes.status === 200) {
         toast.success("schemes delete suucessful")
       }
@@ -287,17 +282,17 @@ useEffect(()=>{
     setExportTog(false);
   };
 
-  // const viewSchemesdata = (key) => {
-  //   dispatch(getOneSchemeData(key))
-  //   setViewModal(true)
-  // }
+  const viewSchemesdata = (key) => {
+    dispatch(getOneSchemeData(key))
+    setViewModal(true)
+  }
 
   const onExportschemes = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
     setExportTog(true)
   }
 
-  const onAllExportSchemes=()=>{
+  const onAllExportSchemes = () => {
     dispatch(getAllSchemes())
     setExportTog(true)
   }
@@ -307,6 +302,46 @@ useEffect(()=>{
     dispatch(getSchemeData(perPage, pageNumber, status));
   }
 
+  const onClick = ({ key }) => {
+    if (key == 'exportSchemes') {
+      onExportschemes();
+    }
+    if (key == 'exportAllScheme') {
+      onAllExportSchemes();
+    }
+    if (key == 'addScheme') {
+      reDirect();
+    }
+    if (key == 'import') {
+      setImportModal(true);
+    }
+
+  };
+
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Export Schemes',
+          key: 'exportSchemes',
+        },
+        {
+          label: 'Export All Scheme',
+          key: 'exportAllScheme',
+        },
+        {
+          label: 'Add Scheme',
+          key: 'addScheme',
+        },
+        {
+          label: 'Import',
+          key: 'import',
+        },
+      ]}
+    />
+  );
+
   const onApproved = (id, isAp) => {
     if (status !== "active") {
       return
@@ -315,25 +350,25 @@ useEffect(()=>{
       id: id,
       isApproved: !isAp
     }
-        console.log("data", data);
-     ApiPost(`scheme/updateIsApproved?`,data)
-    .then((res) => {
-      console.log("res",res)
-    toast.success( data.isApproved ? "Approved successful" : "Disapproved successful " )
-      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit?schemeCategory.benefit:"", schemeCategory.category?schemeCategory.category:""));
-    })
-    .catch((err) => console.log("Error",err))
+
+    ApiPost(`scheme/updateIsApproved?`, data)
+      .then((res) => {
+        console.log("res", res)
+        toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
+        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+      })
+      .catch((err) => console.log("Error", err))
   }
 
   useEffect(() => {
-  console.log("users",users);  
-  }, [users])
-  
-  users &&
-    users.data.map(item => {
-      // console.log(item.key);
-      return usersTableData.push({
-        SchemeName: item.name,
+    setSchemeTableData(users?.data.map(item => {
+      return ({
+        SchemeName: (
+          <span style={{ cursor: "pointer" }} onClick={() => viewSchemesdata(item.key)}>
+            {item?.name}
+          </span>
+        ),
+        // SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         Website: item.website,
@@ -345,6 +380,7 @@ useEffect(()=>{
             </div>
           </>
         ),
+
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
@@ -352,7 +388,7 @@ useEffect(()=>{
               {
                 status === "active" ?
                   <>
-                    <Button
+                    {/* <Button
                       className="btn-icon"
                       onClick={() => reDirectSchemes(item.key)}
                       type="info"
@@ -360,7 +396,7 @@ useEffect(()=>{
                       shape="circle"
                     >
                       <FeatherIcon icon="edit" size={16} />
-                    </Button>
+                    </Button> */}
                     <Button
                       className="btn-icon"
                       type="warning"
@@ -370,9 +406,9 @@ useEffect(()=>{
                     >
                       <FeatherIcon icon="trash-2" size={16} />
                     </Button>
-                    <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
+                    {/* <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
                       <FeatherIcon icon="eye" size={16} />
-                    </Button>
+                    </Button> */}
                   </> : <Button
                     className="btn-icon"
                     type="warning"
@@ -394,9 +430,11 @@ useEffect(()=>{
           </div>
         ),
       });
-    });
+    })
+    )
+  }, [users])
 
-  const usersTableColumns = [
+  const schemeTableColumns = [
 
     {
       title: 'Scheme Name',
@@ -444,28 +482,45 @@ useEffect(()=>{
         ghost
         title="Schemes"
         buttons={[
-          <div className="page-header-actions">
-            <Button size="small" onClick={() => onExportschemes()} type="info">
-              Export Schemes
-            </Button>
-            <Button size="small" onClick={() => onAllExportSchemes()} type="info">
-              Export All Scheme
-            </Button>
-            <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
-            {/* <Button size="small" type="light">
-                            Import Schemes
-                        </Button> */}
-            <Button onClick={reDirect} size="small" type="primary">
-              Add Scheme
-            </Button>
-            <Button onClick={() => setImportModal(true)} size="small" type="primary">
-              Import
-            </Button>
+          //   <div className="page-header-actions">
+          //     <Button size="small" onClick={() => onExportschemes()} type="info">
+          //       Export Schemes
+          //     </Button>
+          //     <Button size="small" onClick={() => onAllExportSchemes()} type="info">
+          //       Export All Scheme
+          //     </Button>
+          //     <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
+          //     {/* <Button size="small" type="light">
+          //                     Import Schemes
+          //                 </Button> */}
+          //     <Button onClick={reDirect} size="small" type="primary">
+          //       Add Scheme
+          //     </Button>
+          //     <Button onClick={() => setImportModal(true)} size="small" type="primary">
+          //       Import
+          //     </Button>
 
-            {/* <Button size="small" type="warning">
-                            Deactivate All Schemes
-                        </Button> */}
-          </div>,
+          //     {/* <Button size="small" type="warning">
+          //                     Deactivate All Schemes
+          //                 </Button> */}
+          //   </div>,
+          <div key="1" className="page-header-actions">
+            <Dropdown overlay={menu} trigger='click'>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  Click menu item
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+            <CSVLink
+              headers={header}
+              data={state}
+              ref={CSVLinkRef}
+              filename="Scheme.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
+          </div>
         ]}
       />
       <Main>
@@ -478,7 +533,7 @@ useEffect(()=>{
                     <Form.Item label="Scheme Category">
                       <Select
                         size="large"
-                         className={schemeCategory.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
+                        className={schemeCategory.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         name="category"
                         value={schemeCategory.category}
                         onChange={e => onChnageValue(e, 'category')}
@@ -495,7 +550,7 @@ useEffect(()=>{
                     <Form.Item label="Scheme Benefits">
                       <Select
                         size="large"
-                         className={schemeCategory.benefit ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
+                        className={schemeCategory.benefit ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         value={schemeCategory.benefit}
                         name="benefits"
                         onChange={e => onChnageValue(e, 'benefits')}
@@ -524,7 +579,7 @@ useEffect(()=>{
                                 </Col> */}
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={e => {onApply(e);setExportTog(false)}}>
+                    <Button size="small" type="primary" onClick={e => { onApply(e); setExportTog(false) }}>
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>
@@ -555,8 +610,8 @@ useEffect(()=>{
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usersTableData}
-                        columns={usersTableColumns}
+                        dataSource={schemeTableData}
+                        columns={schemeTableColumns}
                         // pagination={false}
                         pagination={{
                           defaultPageSize: users?.per_page,
@@ -595,9 +650,9 @@ useEffect(()=>{
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usersTableData}
+                        dataSource={schemeTableData}
                         // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
-                        columns={usersTableColumns}
+                        columns={schemeTableColumns}
                         pagination={{
                           defaultPageSize: users?.per_page,
                           total: users?.page_count,
@@ -621,7 +676,7 @@ useEffect(()=>{
       </Main>
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
-      {importModal && <ImportFileModal importModal={importModal} handleCancel={()=>setImportModal(false)} modaltitle="Import Schemes"/>}
+      {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Schemes" />}
     </>
   );
 };

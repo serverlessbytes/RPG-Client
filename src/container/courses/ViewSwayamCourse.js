@@ -1,7 +1,10 @@
 import React from 'react'
-import { Col, Image, Modal, Row } from 'antd';
+import { Button, Col, Image, Modal, Row } from 'antd';
+import { useHistory, useRouteMatch } from 'react-router';
 
 const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
+  let history = useHistory();
+  const { path } = useRouteMatch();
 
   const handleOk = () => {
     setViewModal(false);
@@ -10,6 +13,11 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
   const handleCancel = () => {
     setViewModal(false);
   };
+
+  const onEdit = (id) => {
+    // console.log("key",key)
+    history.push(`${path}/addcourses?id=${id}`);
+  }
 
   return (
     <>
@@ -61,8 +69,11 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Course Details:</label> {data?.detail}</span><br />
             </Col>
-
           </Row>
+
+          <Button size="small" className='edit-view' style={{ float: 'right' }} onClick={() => onEdit(data?.id)} type="primary">
+            Edit
+          </Button>
           {/* <h4>Name of the Course:{data?.name}</h4><br/> */}
           {/* <span>Course name:{data?.name}</span><br /> */}
           {/* <span>Thumbnail:</span> */}
@@ -84,8 +95,6 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
           {/* <span>Mode:{data?.mode}</span><br /> */}
           {/* <span>Course Details:{data?.detail}</span><br /> */}
           {/* <span>Certification:{data?.certificate === true ? "Yes" : "No"}</span><br /> */}
-
-
         </Modal>
       </Col>
     </>

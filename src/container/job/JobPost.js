@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import PropTypes from 'prop-types';
-import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
 import { ListButtonSizeWrapper, TableWrapper } from '../styled';
@@ -11,7 +10,6 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { allJobs, getJobroles, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
-import e from 'cors';
 import { getStateData } from '../../redux/state/actionCreator';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -20,9 +18,12 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/jobs/actions';
 import { toast } from 'react-toastify';
 import ImportJobPost from '../../components/modals/ImportJobPost';
+// import './index.css';
+import { Menu, Dropdown, message, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 const JobPost = ({ match }) => {
-  const { allJobsSuccess ,addBlukJobsSuccess } = actions;
+  const { allJobsSuccess, addBlukJobsSuccess } = actions;
   const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,7 +35,7 @@ const JobPost = ({ match }) => {
   const stateData = useSelector(state => state.state.getStateData); //state
   const filterData = useSelector(state => state.job.getJobFilterData);
   const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
-  
+
   useEffect(() => {
     if (addJobPostModulData && addJobPostModulData.status === 200) {
       toast.success("Job Post Import Successful")
@@ -188,40 +189,100 @@ const JobPost = ({ match }) => {
   useEffect(() => {
     dispatch(getJobroles());
   }, []);
+
   useEffect(() => {
     dispatch(getStateData()); //dipatch state
   }, []);
+
+  const onClick = ({ key }) => {
+    if (key == 'exportJobs') {
+      onExportJobs();
+    }
+    if (key == 'exportAllJobs') {
+      allexPortJobs();
+    }
+    if (key == 'addJobPost') {
+      history.push('new');
+    }
+    if (key == 'import') {
+      setImportModal(true);
+    }
+
+  };
+
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Export Jobs',
+          key: 'exportJobs',
+        },
+        {
+          label: 'Export All Jobs',
+          key: 'exportAllJobs',
+        },
+        {
+          label: 'Add Job Post',
+          key: 'addJobPost',
+        },
+        {
+          label: 'Import',
+          key: 'import',
+        },
+      ]}
+    />
+  );
+
   return (
     <>
       <PageHeader
         ghost
         title="Job"
+
         buttons={[
+          //   <div key="1" className="page-header-actions">
+          //     <Button size="small" onClick={() => onExportJobs()} type="info">
+          //       Export Jobs
+          //     </Button>
+          //     <Button onClick={allexPortJobs} size="small" type="info">
+          //       Export All Jobs
+          //     </Button>
+          //     <Button
+          //       size="small"
+          //       onClick={() => {
+          //         history.push('new');
+          //       }}
+          //       type="primary"
+          //     >
+          //       Add Job Post
+          //     </Button>
+          //     <Button
+          //       size="small"
+          //       onClick={() => {
+          //         setImportModal(true);
+          //       }}
+          //       type="primary"
+          //     >
+          //       Import
+          //     </Button>
+          //     <CSVLink
+          //       headers={header}
+          //       data={stateJob}
+          //       ref={CSVLinkRef}
+          //       filename="Job.csv"
+          //       style={{ opacity: 0 }}
+          //     ></CSVLink>
+          //   </div>,
           <div key="1" className="page-header-actions">
-            <Button size="small" onClick={() => onExportJobs()} type="info">
-              Export Jobs
-            </Button>
-            <Button onClick={allexPortJobs} size="small" type="info">
-              Export All Jobs
-            </Button>
-            <Button
-              size="small"
-              onClick={() => {
-                history.push('new');
-              }}
-              type="primary"
-            >
-              Add Job Post
-            </Button>
-            <Button
-              size="small"
-              onClick={() => {
-                setImportModal(true);
-              }}
-              type="primary"
-            >
-              Import
-            </Button>
+            <Dropdown overlay={menu} trigger='click'>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  Click menu item
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
             <CSVLink
               headers={header}
               data={stateJob}
@@ -229,9 +290,10 @@ const JobPost = ({ match }) => {
               filename="Job.csv"
               style={{ opacity: 0 }}
             ></CSVLink>
-          </div>,
+          </div>
         ]}
       />
+
       <Main>
         <Cards headless>
           <Row gutter={15}>
@@ -341,10 +403,10 @@ const JobPost = ({ match }) => {
         </Cards>
       </Main>
 
-      {<ImportJobPost 
-      importModal={importModal}
-       handleCancel={() => setImportModal(false)} 
-       modaltitle="Import Jobs" />}
+      {< ImportJobPost
+        importModal={importModal}
+        handleCancel={() => setImportModal(false)}
+        modaltitle="Import Jobs" />}
     </>
   );
 };

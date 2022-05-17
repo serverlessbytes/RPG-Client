@@ -634,7 +634,7 @@ const AddJobPost = () => {
                                             <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}    >
+                                                <Select  size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}>
                                                    <Option value="DAY"> Day </Option>
                                                     <Option value="NIGHT"> Night </Option>
                                                 </Select>

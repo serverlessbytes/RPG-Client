@@ -15,10 +15,12 @@ import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/users/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Menu, Dropdown, message, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import ReactStars from "react-rating-stars-component";
 
 const User = () => {
-    const {addUserSignupSuccess,editProfileSuccess,addUserSignupErr,editProfileErr} = actions;
+    const { addUserSignupSuccess, editProfileSuccess, addUserSignupErr, editProfileErr } = actions;
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch();
@@ -33,7 +35,7 @@ const User = () => {
     const [perPage, setPerPage] = useState(5)
     const [pageNumber, setPageNumber] = useState(1)
     const [userType, setUserType] = useState("")
-    const [exportTog,setExportTog]=useState(false)
+    const [exportTog, setExportTog] = useState(false)
 
     const getAllUsers = useSelector((state) => state.users.getAllUser)
     const alluser = useSelector((state) => state.users.allUser)
@@ -50,15 +52,15 @@ const User = () => {
             //onHide()
         }
     }, [addUserSignupData])
- 
-    useEffect(()=>{
-        if(userSignupError){ 
-          dispatch(addUserSignupErr(null))
-          toast.error("Something Wrong")
-        }
-      },[userSignupError])
 
-      useEffect(() => {
+    useEffect(() => {
+        if (userSignupError) {
+            dispatch(addUserSignupErr(null))
+            toast.error("Something Wrong")
+        }
+    }, [userSignupError])
+
+    useEffect(() => {
         if (editProfileData && editProfileData.status === 200) {
             dispatch(editProfileSuccess(null))
             toast.success("User Updated successful");
@@ -67,31 +69,27 @@ const User = () => {
         }
     }, [editProfileData])
 
-    useEffect(()=>{
-        if(editProfileError){ 
-          dispatch(editProfileErr(null))
-          toast.error("Something Wrong")
+    useEffect(() => {
+        if (editProfileError) {
+            dispatch(editProfileErr(null))
+            toast.error("Something Wrong")
         }
-      },[editProfileError])
+    }, [editProfileError])
 
     const callback = (key) => {
         setStatus(key)
         setPageNumber(1)
     }
-  
-    useEffect(() => {
-        if (state.length && exportTog) {
-            CSVLinkRef?.current?.link.click()  
-            toast.success("User data exported successfully")
-        }else if(exportTog){
-            toast.success("No user data for export")
-        }
-        
-    }, [state])
 
     useEffect(() => {
-        console.log("state2", state2);
-    }, [state2])
+        if (state.length && exportTog) {
+            CSVLinkRef?.current?.link.click()
+            toast.success("User data exported successfully")
+        } else if (exportTog) {
+            toast.success("No user data for export")
+        }
+
+    }, [state])
 
     const selectValue = (e, name) => {
         if (name === 'userType') {
@@ -109,11 +107,9 @@ const User = () => {
     }
 
     const onClear = () => {
-        //console.log("-------", e)
         setUserType("", 'userType');
         dispatch(getAllUser(perPage, pageNumber, status, ""))
     }
-
 
     const reDirect = () => {
         history.push(`${path}/adduser`);
@@ -123,8 +119,6 @@ const User = () => {
         history.push(`${path}/adduser?id=${id}`)
     }
 
-    //setState({...state,alluser}) // all user
-
     useEffect(() => {
         if (alluser?.data?.data) {
             setState(alluser.data.data)  //set a state for export excel
@@ -132,19 +126,18 @@ const User = () => {
         }
     }, [alluser])
 
-     const newUser = userForDelete =>{
-     const newVal = ApiPost("user/auth/editProfile" , userForDelete) 
-       .then((res)=>{
-     if (res.status === 200) {
-         dispatch(allUser())
-     }
-     return res
-    })
-     return newVal   
-     }
+    const newUser = userForDelete => {
+        const newVal = ApiPost("user/auth/editProfile", userForDelete)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(allUser())
+                }
+                return res
+            })
+        return newVal
+    }
 
-
-    const onDelete =  async (id) => {
+    const onDelete = async (id) => {
         let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id)
 
         if (userForDelete) {
@@ -161,10 +154,10 @@ const User = () => {
             }
             console.log("userForDelete", userForDelete)
             dispatch(editProfile(userForDelete))
-             const deleteUser = await newUser(userForDelete)
-             if (deleteUser.status === 200) {
-                 toast.success("User delete successful")
-             }
+            const deleteUser = await newUser(userForDelete)
+            if (deleteUser.status === 200) {
+                toast.success("User delete successful")
+            }
         }
     }
 
@@ -252,7 +245,7 @@ const User = () => {
     };
 
     const exPortuser = () => {
-       dispatch(allUser(userType))
+        dispatch(allUser(userType))
         setExportTog(true)
     }
     const allexPortuser = () => {
@@ -262,6 +255,38 @@ const User = () => {
         })
     }
 
+    const onClick = ({ key }) => {
+        if (key == 'exportUser') {
+            exPortuser();
+        }
+        if (key == 'exportAllUser') {
+            allexPortuser();
+        }
+        if (key == 'addUser') {
+            reDirect();
+        }
+    };
+
+    const menu = (
+        <Menu
+            onClick={onClick}
+            items={[
+                {
+                    label: 'Export User',
+                    key: 'exportUser',
+                },
+                {
+                    label: 'Export All User',
+                    key: 'exportAllUser',
+                },
+                {
+                    label: 'Add User',
+                    key: 'addUser',
+                },
+            ]}
+        />
+    );
+
     return (
         <>
             <PageHeader
@@ -269,14 +294,8 @@ const User = () => {
                 title="Users"
                 buttons={[
                     <div className="page-header-actions">
-                        {/* <Button size="small" type="link">
-                        Export Schemes
-                    </Button>
-                    <Button size="small" type="light">
-                        Import Schemes
-                    </Button> */}
 
-                        <Button onClick={exPortuser} size="small" type="info">
+                        {/* <Button onClick={exPortuser} size="small" type="info">
                             Export User
                         </Button>
                         <Button onClick={allexPortuser} size="small" type="info">
@@ -285,10 +304,25 @@ const User = () => {
                         <Button onClick={reDirect} size="small" type="primary">
                             Add User
                         </Button>
-                        <CSVLink data={state} ref={CSVLinkRef} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
+                        <CSVLink data={state} ref={CSVLinkRef} filename="User.csv" style={{ opacity: 0 }}></CSVLink> */}
                         {/* <Button size="small" type="warning">
                             Deactivate All Schemes
                         </Button> */}
+                        <Dropdown overlay={menu} trigger='click'>
+                            <a onClick={e => e.preventDefault()}>
+                                <Space>
+                                    Click menu item
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        <CSVLink
+                            // headers={header}
+                            data={state}
+                            ref={CSVLinkRef}
+                            filename="User.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
                     </div>
                 ]}
             />
@@ -300,7 +334,7 @@ const User = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item label="Users Type">
-                                            <Select size="large" value={userType} placeholder="Select"  className={userType ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                            <Select size="large" value={userType} placeholder="Select" className={userType ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} name="userType" onChange={(e) => selectValue(e, "userType")}>
                                                 <option value={""}>Select User</option>
                                                 <option value={"USER"}>USER</option>
                                                 <option value={"PARTNER"}>PARTNER</option>
@@ -357,8 +391,8 @@ const User = () => {
                                                         setPerPage(pageSize)
                                                     }
                                                 }}
-                                                // size="middle"
-                                                // pagination={false}
+                                            // size="middle"
+                                            // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
@@ -387,7 +421,7 @@ const User = () => {
                                                 // rowSelection={rowSelection}
                                                 dataSource={usertable}
                                                 // columns={usersTableColumns.filter(item => item.title !== "Actions")}
-                                                columns={usersTableColumns} 
+                                                columns={usersTableColumns}
                                                 pagination={{
                                                     defaultPageSize: getAllUsers?.data.per_page,
                                                     total: getAllUsers?.data.page_count,
@@ -400,8 +434,8 @@ const User = () => {
                                                     // total: usersTableData.length,
                                                     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                 }}
-                                                // size="middle"
-                                                // pagination={false}
+                                            // size="middle"
+                                            // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
