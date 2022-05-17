@@ -132,12 +132,12 @@ const Employer = () => {
                                 <TabPane tab="Active Users" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-
-                                            <Form name="sDash_select" layout="vertical">
+                                                    {/* --- search bar --- */}
+                                            {/* <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="search" label="">
                                                     <Input placeholder="search" style={{ width: 200 }} />
                                                 </Form.Item>
-                                            </Form>
+                                            </Form> */}
 
                                             <Table
                                                 dataSource={usertable}

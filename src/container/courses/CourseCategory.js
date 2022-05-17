@@ -275,12 +275,12 @@ const CourseCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-
-                            <Form name="sDash_select" layout="vertical">
+                                    {/* --- search bar --- */}
+                            {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
                                 </Form.Item>
-                            </Form>
+                            </Form> */}
 
                             <Table
                                 // rowSelection={rowSelection}

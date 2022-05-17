@@ -59,7 +59,7 @@ const SwayamCourses = () => {
     category: '',
     mode: '',
   });
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [usertable, setUsertable] = useState([]);
@@ -80,7 +80,7 @@ const SwayamCourses = () => {
     { label: 'duration', key: 'duration' },
     { label: 'key', key: 'key' },
     { label: 'mode', key: 'mode' },
-    { label: 'sequence', key: 'sequence' },
+    // { label: 'sequence', key: 'sequence' },
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
@@ -206,7 +206,7 @@ const SwayamCourses = () => {
         duration: singleData.duration,
         jobCategoryIds: singleData.jobTypes.map(item => item.id),
         certification: singleData.certificate,
-        sequence: parseInt(singleData.sequence),
+        // sequence: parseInt(singleData.sequence),
         mode: singleData.mode,
         isActive: false,
         isDeleted: true,
@@ -218,6 +218,17 @@ const SwayamCourses = () => {
     //   }
     }
   };
+
+  const activeSwayamCourses = dt =>{
+    const newVal = ApiPost("course/editSwayamCourse" , dt)
+    .then((res) =>{
+      if (res.status === 200) {
+        dispatch(getCategoryData())
+      } 
+      return res
+    })
+    return newVal
+  }
 
   const onActive = id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
@@ -232,12 +243,16 @@ const SwayamCourses = () => {
         duration: activeCourse.duration,
         jobCategoryIds: activeCourse.jobTypes.map(item => item.id),
         certification: activeCourse.certificate,
-        sequence: parseInt(activeCourse.sequence),
+        // sequence: parseInt(activeCourse.sequence),
         mode: activeCourse.mode,
         isActive: true,
         isDeleted: false,
       };
-      dispatch(editSwayamCourse(dt));
+      const restoreSwayamCourses =  activeSwayamCourses(dt)
+      if( restoreSwayamCourses.status === 200){
+        toast.success("SwayamCourse active successful")
+      }
+      // dispatch(editSwayamCourse(dt));
     }
   };
 
@@ -508,11 +523,12 @@ const SwayamCourses = () => {
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
-                      <Form name="sDash_select" layout="vertical">
+                            {/* --- search bar --- */} 
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}

@@ -16,7 +16,7 @@ import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
 import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
-import { ApiPost } from '../../helper/API/ApiData';
+import { ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,7 +40,7 @@ const Schemes = () => {
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
   const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [exportTog,setExportTog]=useState(false)
   const [importModal, setImportModal] = useState(false);
@@ -241,12 +241,23 @@ useEffect(()=>{
       // dispatch(editSchemeData(userForDelete));
       const deleteSchemes =   await newSchemes(userForDelete)
       if (deleteSchemes.status === 200) {
-        toast.success("schemes delete suucessful")
+        toast.success("schemes delete successful")
       }
     }
   };
 
-  const onRestore = (key) => {
+   const activeSchemeData = data =>{
+       const newVal = ApiPost("scheme/editScheme" ,data)
+    .then((res) =>{
+      if (res.status === 200) {
+        dispatch(getAllSchemes())
+      }
+      return res
+    })
+    return newVal
+   }
+
+  const onRestore = async (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
     let data = {
       id: userForactive.id,
@@ -273,7 +284,12 @@ useEffect(()=>{
       isApproved: true,
       //key:key,
     }
-    dispatch(editSchemeData(data));
+    const restoreSchemeData = await activeSchemeData(data)
+    if( restoreSchemeData.status === 200){
+      toast.success("Schemes active successful")
+    }
+    // dispatch(editSchemeData(data));
+
   }
 
   useEffect(() => {
@@ -547,11 +563,13 @@ useEffect(()=>{
                 <TabPane tab="Active Schemes" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
-                      <Form name="sDash_select" layout="vertical">
+                      
+                       {/* --- search bar --- */}
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}
@@ -587,11 +605,12 @@ useEffect(()=>{
                 <TabPane tab="Inactive Schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      <Form name="sDash_select" layout="vertical">
+                         {/* --- search bar --- */}
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}

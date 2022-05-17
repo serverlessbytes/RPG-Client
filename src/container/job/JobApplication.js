@@ -16,7 +16,7 @@ const JobApplication = () => {
     const dispatch = useDispatch();
     const [status, setStatus] = useState('all');
     const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
-    const [perPage, setPerPage] = useState(10) // forpagination
+    const [perPage, setPerPage] = useState(20) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
     const { path } = useRouteMatch();
     const history = useHistory();

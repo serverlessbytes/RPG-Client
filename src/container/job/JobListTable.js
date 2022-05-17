@@ -13,6 +13,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
+import { data } from 'browserslist';
 
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,setNumberOfPage,setExportTog }) => { // props from JobPost
@@ -30,7 +31,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
 
   const usersTableData = [];
   const [usertable, setUsertable] = useState([]) //set data
-  const [perPage, setPerPage] = useState(5) // forpagination
+  const [perPage, setPerPage] = useState(20) // forpagination
   const [pageNumber, setPageNumber] = useState(1)
   const [approved, setApproved] = useState()
   const [viewModal, setViewModal] = useState(false);
@@ -50,8 +51,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
     const newVal = ApiPost(`job/update?jobId=${id}` , data)
    .then((res) =>{
      if (res.status === 200) {
-       dispatch(getJobPost(perPage, pageNumber))
-     } return res
+         dispatch(getJobPost(perPage, pageNumber))
+     return res
+     }
    })
     return newVal
  }
@@ -91,18 +93,24 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
       }
     }
   }
-
-  // useEffect(() => {
-  //   if (editJobPostData && editJobPostData.status === 200) {  //getJobFilterData
-  //     dispatch(getJobPost(perPage, pageNumber))
-  //   }
-  // }, [editJobPostData])
-
   const onEdit = (id) => {
     history.push(`/admin/job/new?id=${id}`)
   }
 
-  const onRestore = (id) => {
+  const activeJobPost = data =>{
+    let id = data.id
+    delete data.id
+    const newVal = ApiPost(`job/update?jobId=${id}` , data)
+    .then((res) =>{
+      if (res.status === 200) {
+        dispatch(getJobPost(perPage, pageNumber))
+      } 
+      return res
+    })
+    return newVal
+  }
+
+  const onRestore = async(id) => {
     let jobsData = getJobFilterData && getJobFilterData?.data && getJobFilterData?.data.data.find((item) => item.id === id)
     console.log("jobsdataInactive", jobsData);
     if (jobsData) {
@@ -130,7 +138,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
         jobType: jobsData.jobType.id,
         id: id,
       }
-      dispatch((editJobPost(data)))
+      const restoreJobPost = await activeJobPost(data)
+      if (restoreJobPost.status === 200) {
+        toast.success("Jobs active successfully.")
+      }
+      // dispatch((editJobPost(data)))
     }
   }
 
@@ -160,15 +172,20 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status,setPagePer,se
   }, [editJobPostErr])
 
   useEffect(() => {
-    console.log("editJobPostData",editJobPostData)
-    if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
-      dispatch(editJobPostSuccess(null))
-      //dispatch(getJobsFilterForMainSuccess(null))
-      toast.success("Jobs Delete successful");
-      //toastAssetsAdd(true)
-      //onHide()
-    }
-    else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
+    // console.log("editJobPostData",editJobPostData)
+    // if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
+    //   dispatch(editJobPostSuccess(null))
+    //   //dispatch(getJobsFilterForMainSuccess(null))
+    //   toast.success("Jobs Delete successful");
+    //   //toastAssetsAdd(true)
+    //   //onHide()
+    // }
+    // else
+    //  if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
+    //   dispatch(editJobPostSuccess(null))
+    //   toast.success("Jobs Update successful");
+    // }
+    if (editJobPostData && editJobPostData.status === 200) {
       dispatch(editJobPostSuccess(null))
       toast.success("Jobs Update successful");
     }

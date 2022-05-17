@@ -15,6 +15,7 @@ import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/users/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { data } from 'browserslist';
 
 
 const User = () => {
@@ -30,7 +31,7 @@ const User = () => {
     const [state, setState] = useState([]) //set data for export
     const [state2, setState2] = useState([]) //set data
     const [status, setStatus] = useState("active")
-    const [perPage, setPerPage] = useState(5)
+    const [perPage, setPerPage] = useState(20)// forpagination
     const [pageNumber, setPageNumber] = useState(1)
     const [userType, setUserType] = useState("")
     const [exportTog,setExportTog]=useState(false)
@@ -133,7 +134,7 @@ const User = () => {
     }, [alluser])
 
      const newUser = userForDelete =>{
-     const newVal = ApiPost("user/auth/editProfile" , userForDelete) 
+     const newVal = ApiPost(`user/auth/editProfile?id=${id}` , userForDelete) 
        .then((res)=>{
      if (res.status === 200) {
          dispatch(allUser())
@@ -168,7 +169,17 @@ const User = () => {
         }
     }
 
-    const onActive = (id) => {
+    const activeUser =  data =>{
+        const newVal =  ApiPost(`user/auth/editProfile?id=${id}`, data)
+        .then((res) =>{
+            if(res.status === 200){
+                dispatch(allUser())
+            }
+            return res
+        })
+        return newVal
+    }
+    const onActive = async (id) => {
         let users = getAllUsers && getAllUsers.data && getAllUsers.data.data.find((item) => item.id === id)
         let data = {
             avatar: users.avatar,
@@ -180,7 +191,11 @@ const User = () => {
             phone: users.phone,
             userType: users.userType,
         }
-        dispatch(editProfile(data))
+        const restoreUsre =  await activeUser(data)
+        if (restoreUsre.status === 200) {
+            toast.success(" User active successful")
+        }
+        // dispatch(editProfile(data))
     }
     const { TabPane } = Tabs;
 
@@ -337,12 +352,12 @@ const User = () => {
                                 <TabPane tab="Active Users" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-
-                                            <Form name="sDash_select" layout="vertical">
+                                                    {/* --- search bar --- */}
+                                            {/* <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="search" label="">
                                                     <Input placeholder="search" style={{ width: 200 }} />
                                                 </Form.Item>
-                                            </Form>
+                                            </Form> */}
 
                                             <Table
                                                 // rowSelection={rowSelection}
