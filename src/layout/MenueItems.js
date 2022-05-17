@@ -1,12 +1,13 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink, useRouteMatch ,useHistory} from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import propTypes from 'prop-types';
 import SubMenu from 'antd/lib/menu/SubMenu';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
   const { path } = useRouteMatch();
+  const history =  useHistory()
   const pathName = window.location.pathname;
   const pathArray = pathName.split(path);
   const mainPath = pathArray[1];
@@ -49,12 +50,13 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item>
 
       {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
-      <SubMenu key="job" title="Jobs">
-        <Menu.Item key="dashboard">
-          <NavLink onClick={toggleCollapsed} to={`${path}/job/dashboard`}>
+      <SubMenu key="job" title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}  
+      >
+        {/* <Menu.Item key="dashboard">
+          <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
             Jobs Dashboard
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="post">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
             Jobs Post
@@ -76,6 +78,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item>
       </SubMenu>
+
       <Menu.Item key="state">
         <NavLink onClick={toggleCollapsed} to={`${path}/state`}>
           State
@@ -93,17 +96,17 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item> */}
 
       {/* <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes"> */}
-      <SubMenu key="schemes" title="Schemes">
+      <SubMenu key="schemes" title="Schemes" onTitleClick={() =>history.push(`${path}/scheme`)}>
         <Menu.Item key="scheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
             Govt Schemes
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="addscheme">
+        {/* <Menu.Item key="addscheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme/addscheme`}>
             Add Govt Schemes
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="schemecategory">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme/schemecategory`}>
             Scheme Category
@@ -120,8 +123,9 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item>
       </SubMenu>
+
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
-      <SubMenu key="courses" title="Courses">
+      <SubMenu key="courses" title="Courses" onTitleClick={() =>  history.push(`${path}/courses`)}>
         <Menu.Item key="courses">
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
@@ -151,7 +155,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </NavLink>
       </Menu.Item> */}
 
-      <SubMenu key="user" title="User">
+      <SubMenu key="user" title="User" onTitleClick={() => history.push(`${path}/user`)}>
         <Menu.Item key="user">
           <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
             User
@@ -164,8 +168,8 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </Menu.Item>
       </SubMenu>
 
-      <SubMenu key="employer" title="Employer">
-        <Menu.Item key="employer">
+      <SubMenu key="employer" title="Employer" onTitleClick={( ) => history.push( `${path}/employer`)}>
+        <Menu.Item key="employer"> 
           <NavLink onClick={toggleCollapsed} to={`${path}/employer`}>
             Employer
           </NavLink>

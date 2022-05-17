@@ -160,7 +160,8 @@ const JobPost = ({ match }) => {
     //CSVLinkRef?.current?.link.click()
   };
   const allexPortJobs = () => {
-    ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then(res => {
+    ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    .then(res => {
       console.log('resres', res);
       setStateJob(
         res?.data?.data.map(item => {

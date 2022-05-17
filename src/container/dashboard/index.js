@@ -186,8 +186,10 @@ const Dashboard = () => {
       <PageHeader ghost title="Dashbord" />
       <Main>
         <h3>Users</h3>
+
         <Row gutter={25}>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+
+          <Col xxl={8} md={12} sm={12} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -205,7 +207,8 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+
+          <Col xxl={8} md={12} sm={12} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -223,7 +226,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col xxl={8} md={12} sm={12} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -241,7 +244,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col xxl={8} md={12} sm={12} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -259,7 +262,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col xxl={8} md={12} sm={12} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">

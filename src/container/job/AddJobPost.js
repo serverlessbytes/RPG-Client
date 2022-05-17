@@ -71,7 +71,7 @@ const AddJobPost = () => {
         vacancies: "",
         reqExperience: "",
         requirements: "",
-        jobCategoryId: "",
+        jobType: "",
         isActive: true,
         shifts: "",
         email: "",
@@ -80,7 +80,7 @@ const AddJobPost = () => {
         extraType: "",
         startDate: "",
         endDate: "",
-        jobRoleId: "",
+        jobRole: "",
         key: "",
     });
     useEffect(() => {
@@ -119,7 +119,7 @@ const AddJobPost = () => {
                 vacancies: getOneJobPostData.data.vacancies,
                 reqExperience: getOneJobPostData.data.reqExperience,
                 requirements: getOneJobPostData.data.requirements,
-                jobCategoryId: getOneJobPostData.data.jobType?.id,
+                jobType: getOneJobPostData.data.jobType?.id,
                 isActive: true,
                 shifts: getOneJobPostData.data.shifts,
                 email: getOneJobPostData.data.email,
@@ -130,7 +130,7 @@ const AddJobPost = () => {
                 
                 startDate: moment(getOneJobPostData.data.startDate),
                 endDate: moment(getOneJobPostData.data.endDate),
-                jobRoleId: getOneJobPostData.data.jobRole?.id,
+                jobRole: getOneJobPostData.data.jobRole?.id,
             })
         }
     }, [getOneJobPostData])
@@ -150,12 +150,12 @@ const AddJobPost = () => {
             error.benifits = 'Benifits is required';
             flage = true;
         }
-        if (state.jobCategoryId === '') {
-            error.jobCategoryId = 'Job Category is required';
+        if (state.jobType === '') {
+            error.jobType = 'Job Category is required';
             flage = true;
         }
-        if (state.jobRoleId === '') {
-            error.jobRoleId = 'Job Role is required';
+        if (state.jobRole === '') {
+            error.jobRole = 'Job Role is required';
             flage = true;
         }
         if (state.name === '') {
@@ -235,11 +235,11 @@ const AddJobPost = () => {
     const onChnageHandle = (e, name) => {
         console.log("name", name);
         console.log("e", e);
-        if (name === "jobCategoryId") {
-            setState({ ...state, jobCategoryId: e })
+        if (name === "jobType") {
+            setState({ ...state, jobType: e })
         }
-        else if (name === "jobRoleId") {
-            setState({ ...state, jobRoleId: e })
+        else if (name === "jobRole") {
+            setState({ ...state, jobRole: e })
         }
         else if (name === "shifts") {
             setState({ ...state, shifts: e })
@@ -300,8 +300,8 @@ const AddJobPost = () => {
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
             endDate: moment.utc(state.endDate).format(),
-            jobRoleId: state.jobRoleId,
-            jobCategoryId: state.jobCategoryId,
+            jobRole: state.jobRole,
+            jobType: state.jobType,
         };
         dispatch(addJobPost(data))
         onCancel()
@@ -328,8 +328,8 @@ const AddJobPost = () => {
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
             endDate: moment.utc(state.endDate).format(),
-            jobRoleId: state.jobRoleId,
-            jobCategoryId: state.jobCategoryId,
+            jobRole: state.jobRole,
+            jobType: state.jobType,
         }
         console.log("data" ,data);
         dispatch(editJobPost(data));
@@ -373,18 +373,18 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="jobCategoryId">Type of job post</label>
+                                            <label htmlFor="jobType">Type of job post</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="basic-select" >
-                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} >
+                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobType} name="jobType" onChange={(e) => onChnageHandle(e, "jobType")} >
                                                   
                                                         {jobData && jobData.data.map((items) => (
                                                             <Option value={items.id}>{items.name} </Option>
                                                         ))}
                                                     </Select>
-                                                    {error.jobCategoryId && <span style={{ color: 'red' }}>{error.jobCategoryId}</span>}
+                                                    {error.jobType && <span style={{ color: 'red' }}>{error.jobType}</span>}
                                                 </Form.Item>
                                             </Form>
                                         </Col>
@@ -412,12 +412,12 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="Selectajobrole" initialValue="Select a job role">
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRoleId} name="jobRoleId" onChange={(e) => onChnageHandle(e, "jobRoleId")} defaultValue="Select Job Role">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRole} name="jobRole" onChange={(e) => onChnageHandle(e, "jobRole")} defaultValue="Select Job Role">
                                                     {jobRolData && jobRolData.map((items) => (
                                                         <Option value={items.id}>{items.name} </Option>
                                                     ))}
                                                 </Select>
-                                                {error.jobRoleId && <span style={{ color: 'red' }}>{error.jobRoleId}</span>}
+                                                {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
                                             </Form.Item>
                                         </Col>
                                     </Row>

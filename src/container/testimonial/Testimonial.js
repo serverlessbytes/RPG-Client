@@ -77,7 +77,7 @@ const Testimonial = () => {
     }
 
     const newTestimonial = userForDelete => {
-        const newVal  = ApiPost("testimonial/editTestimonial",userForDelete )
+        const newVal  = ApiPost(`testimonial/editTestimonial`,userForDelete )
         .then((res) =>{
         if (res.status === 200) {
             dispatch(editTestimonial())

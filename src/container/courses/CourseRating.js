@@ -16,7 +16,7 @@ const CourseRating = () => {
     let dispatch = useDispatch()
 
     const [courseRatingtable, setCourseRatingtable] = useState([]) //set data
-    const [per_Page, setPerPage] = useState(5) // forpagination
+    const [per_Page, setPerPage] = useState(20) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedCourseRating, setSelectedCourseRating] = useState();

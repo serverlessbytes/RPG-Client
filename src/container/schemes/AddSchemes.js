@@ -208,10 +208,10 @@ const AddSchemes = () => {
       error.schemeCategory = 'schemeCategory is required';
       flage = true;
     }
-    if (state.sequence === '') {
-      error.sequence = 'sequence is required';
-      flage = true;
-    }
+    // if (state.sequence === '') {
+    //   error.sequence = 'sequence is required';
+    //   flage = true;
+    // }
     if (state.schemeBenifit === '') {
       error.schemeBenifit = 'schemeBenifit is required';
       flage = true;
@@ -278,7 +278,7 @@ const AddSchemes = () => {
     }
     let data = {
       key: uuid(),
-      sequence: parseInt(state.sequence),
+      // sequence: parseInt(state.sequence),
       benifitLine: state.benifitLine.toString('markdown'),
       detail: state.detail.toString('markdown'),
       howToApply: state.howToApply.toString('markdown'),
