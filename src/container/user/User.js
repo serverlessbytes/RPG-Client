@@ -17,7 +17,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Menu, Dropdown, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import ReactStars from 'react-rating-stars-component';
+// import ReactStars from 'react-rating-stars-component';
+import ReactStars from "react-rating-stars-component";
 import { data } from 'browserslist';
 
 const User = () => {
