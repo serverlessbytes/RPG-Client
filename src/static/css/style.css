@@ -2816,8 +2816,15 @@ padding-bottom: 8px;
 }
 
 .edit-view{
-  bottom: 15px;
   padding: 4px 13px !important;
   height: 32px !important;
-  right: -10px;
+  position: initial !important;
+}
+
+.pr{
+  padding-right: 5px;
+}
+
+.mb{
+  margin-bottom: 20px !important;
 }

@@ -12,6 +12,7 @@ const JobCategory = lazy(() => import('../../container/job/JobCategory'))
 const JobRole = lazy(() => import('../../container/job/JobRole'))
 const JobApplication = lazy(() => import('../../container/job/JobApplication'))
 const AddJobApplication = lazy(() => import('../../container/job/AddJobApplication'))
+const JobPostPage = lazy(() => import('../../container/job/JobPostPage'))
 
 const JobRoutes = () => {
   const { path } = useRouteMatch();
@@ -25,6 +26,7 @@ const JobRoutes = () => {
       <Route exact path={`${path}/role`} component={JobRole} />
       <Route exact path={`${path}/application`} component={JobApplication} />
       <Route exact path={`${path}/addjobapplication`} component = {AddJobApplication}></Route>
+      <Route exact path={`${path}/view`} component = {JobPostPage}></Route>
     </Switch>
   );
 };

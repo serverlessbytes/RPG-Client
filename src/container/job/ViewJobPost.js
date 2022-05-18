@@ -9,10 +9,6 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
     setViewModal(false);
   };
 
-  useEffect(() => {
-    console.log("data", data)
-  },[data])
-
   const onEdit = (id) => {
     history.push(`/admin/job/new?id=${id}`)
   };

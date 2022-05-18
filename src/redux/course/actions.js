@@ -331,7 +331,6 @@ const actions = {
   },
 
   getallSwayamCourseSuccess: data => {
-    console.log('data', data);
     return {
       type: actions.GET_ALLSWAYAM_COURSE_SUCCESS,
       data,

@@ -50,7 +50,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
 
   //  CATEGORY
   useEffect(() => {
-    console.log('JobCategory', JobCategory);
     if (JobCategory && 'data' in JobCategory) {
       JobCategory.data.forEach(element => {
         element['label'] = element.name;
@@ -61,7 +60,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [JobCategory]);
 
   useEffect(() => {
-    console.log('stateData', stateData);
     if (stateData && 'data' in stateData) {
       stateData.data.forEach(element => {
         element['label'] = element.name;
@@ -72,7 +70,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [stateData]);
 
   useEffect(() => {
-    console.log('district', district);
     if (district && 'data' in district) {
       district.data.forEach(element => {
         element['label'] = element.name;
@@ -83,7 +80,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [district]);
 
   useEffect(() => {
-    console.log('employer', employer);
     if (employer && 'data' in employer) {
       employer.data.data.forEach(element => {
         element['label'] = element.name;
@@ -94,11 +90,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [employer]);
 
   useEffect(() => {
-    console.log('jobCategoryArray', jobCategoryArray);
-  }, [jobCategoryArray]);
-
-  useEffect(() => {
-    console.log('JobRole', JobRole);
     if (JobRole) {
       JobRole.forEach(element => {
         element['label'] = element.name;

@@ -47,10 +47,6 @@ const JobPost = ({ match }) => {
     }
   }, [addJobPostModulData]);
 
-  useEffect(() => {
-    console.log('filterData', filterData);
-  }, [filterData]);
-
   const [stateJob, setStateJob] = useState([]); //set data for job
   const [state, setState] = useState('');
   const [type, setType] = useState('');
@@ -161,23 +157,23 @@ const JobPost = ({ match }) => {
   };
   const allexPortJobs = () => {
     ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-    .then(res => {
-      console.log('resres', res);
-      setStateJob(
-        res?.data?.data.map(item => {
-          setExportTog(true);
-          return {
-            ...item,
-            jobRole: item?.jobRole?.name,
-            district: item?.district?.name,
-            jobType: item?.jobType?.name,
-            shifts: item?.shifts ? item?.shifts[0] : '',
-            state: item?.state?.name,
-            name: item?.name?.name,
-          };
-        }),
-      );
-    });
+      .then(res => {
+        console.log('resres', res);
+        setStateJob(
+          res?.data?.data.map(item => {
+            setExportTog(true);
+            return {
+              ...item,
+              jobRole: item?.jobRole?.name,
+              district: item?.district?.name,
+              jobType: item?.jobType?.name,
+              shifts: item?.shifts ? item?.shifts[0] : '',
+              state: item?.state?.name,
+              name: item?.name?.name,
+            };
+          }),
+        );
+      });
   };
 
   const onClear = () => {
@@ -279,7 +275,7 @@ const JobPost = ({ match }) => {
             <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
-                  Click menu item
+                  Actions
                   <DownOutlined />
                 </Space>
               </a>

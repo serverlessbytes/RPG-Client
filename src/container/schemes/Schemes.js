@@ -241,16 +241,16 @@ const Schemes = () => {
     }
   };
 
-   const activeSchemeData = data =>{
-       const newVal = ApiPost("scheme/editScheme" ,data)
-    .then((res) =>{
-      if (res.status === 200) {
-        dispatch(getAllSchemes())
-      }
-      return res
-    })
+  const activeSchemeData = data => {
+    const newVal = ApiPost("scheme/editScheme", data)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getAllSchemes())
+        }
+        return res
+      })
     return newVal
-   }
+  }
 
   const onRestore = async (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
@@ -280,7 +280,7 @@ const Schemes = () => {
       //key:key,
     }
     const restoreSchemeData = await activeSchemeData(data)
-    if( restoreSchemeData.status === 200){
+    if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
     }
     // dispatch(editSchemeData(data));
@@ -299,8 +299,9 @@ const Schemes = () => {
   };
 
   const viewSchemesdata = (key) => {
-    dispatch(getOneSchemeData(key))
-    setViewModal(true)
+    // dispatch(getOneSchemeData(key))
+    // setViewModal(true)
+    history.push(`/admin/scheme/view?key=${key}`)
   }
 
   const onExportschemes = () => {
@@ -404,7 +405,7 @@ const Schemes = () => {
               {
                 status === "active" ?
                   <>
-                    {/* <Button
+                    <Button
                       className="btn-icon"
                       onClick={() => reDirectSchemes(item.key)}
                       type="info"
@@ -412,7 +413,7 @@ const Schemes = () => {
                       shape="circle"
                     >
                       <FeatherIcon icon="edit" size={16} />
-                    </Button> */}
+                    </Button>
                     <Button
                       className="btn-icon"
                       type="warning"
@@ -524,7 +525,7 @@ const Schemes = () => {
             <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
-                  Click menu item
+                  Actions
                   <DownOutlined />
                 </Space>
               </a>
@@ -618,8 +619,8 @@ const Schemes = () => {
                 <TabPane tab="Active Schemes" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
-                      
-                       {/* --- search bar --- */}
+
+                      {/* --- search bar --- */}
                       {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
@@ -660,7 +661,7 @@ const Schemes = () => {
                 <TabPane tab="Inactive Schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                         {/* --- search bar --- */}
+                      {/* --- search bar --- */}
                       {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />

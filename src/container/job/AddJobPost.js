@@ -26,7 +26,7 @@ const AddJobPost = () => {
     const { Option } = Select;
     const { TextArea } = Input;
     const [editJobsID, seteditJobsID] = useState()
-  
+
     const {
         getoneJobPostSuccess, // foe edit
     } = actions;
@@ -99,8 +99,6 @@ const AddJobPost = () => {
         dispatch(getEmployerData()) //dipatch getEmployerData
     }, []);
 
-
-
     useEffect(() => {
         if (getOneJobPostData && getOneJobPostData.data) {
             console.log("getOneJobPostData", getOneJobPostData)
@@ -127,17 +125,13 @@ const AddJobPost = () => {
 
                 type: getOneJobPostData.data.type,
                 extraType: getOneJobPostData.data.extraType,
-                
+
                 startDate: moment(getOneJobPostData.data.startDate),
                 endDate: moment(getOneJobPostData.data.endDate),
                 jobRole: getOneJobPostData.data.jobRole?.id,
             })
         }
     }, [getOneJobPostData])
-
-    useEffect(() => {
-        console.log('state', state)
-    },[state])
 
     const validation = () => {
         let error = {};
@@ -228,13 +222,10 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = e => {
-
         setState({ ...state, [e.target.name]: e.target.value });
     }
-    useEffect(() => { console.log("state", state) }, [state])
+
     const onChnageHandle = (e, name) => {
-        console.log("name", name);
-        console.log("e", e);
         if (name === "jobType") {
             setState({ ...state, jobType: e })
         }
@@ -331,7 +322,7 @@ const AddJobPost = () => {
             jobRole: state.jobRole,
             jobType: state.jobType,
         }
-        console.log("data" ,data);
+        console.log("data", data);
         dispatch(editJobPost(data));
         onCancel()
     }
@@ -340,17 +331,17 @@ const AddJobPost = () => {
     //     dispatch(editJobPost(data));
     // }) 
     // }, [])
-     
+
     const onCancel = () => {
         history.push(`/admin/job/post`);
     }
     useEffect(() => {
-      return(() =>{
-        dispatch(getoneJobPostSuccess([]))
-      })
+        return (() => {
+            dispatch(getoneJobPostSuccess([]))
+        })
     }, [])
-    
-    
+
+
 
     return (
         <>
@@ -379,7 +370,7 @@ const AddJobPost = () => {
                                             <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="basic-select" >
                                                     <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobType} name="jobType" onChange={(e) => onChnageHandle(e, "jobType")} >
-                                                  
+
                                                         {jobData && jobData.data.map((items) => (
                                                             <Option value={items.id}>{items.name} </Option>
                                                         ))}
@@ -634,8 +625,8 @@ const AddJobPost = () => {
                                             <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select  size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}>
-                                                   <Option value="DAY"> Day </Option>
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}>
+                                                    <Option value="DAY"> Day </Option>
                                                     <Option value="NIGHT"> Night </Option>
                                                 </Select>
                                                 {error.shifts && <span style={{ color: "red" }}>{error.shifts}</span>}
@@ -728,16 +719,16 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
-                                                <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
-                                                    <Space direction="vertical">
-                                                        <Row>
-                                                            <Radio checked={state.type === "PARTTIME"}   value="PARTTIME"  style={{marginBottom:"0px"}}>Part-time</Radio>
-                                                            <Radio checked={state.type === "FULLTIME"}value="FULLTIME"  style={{marginBottom:"0px"}}>Full-time</Radio>
-                                                        </Row>
-                                                    </Space>
-                                                </Radio.Group>
+                                            <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
+                                                <Space direction="vertical">
+                                                    <Row>
+                                                        <Radio checked={state.type === "PARTTIME"} value="PARTTIME" style={{ marginBottom: "0px" }}>Part-time</Radio>
+                                                        <Radio checked={state.type === "FULLTIME"} value="FULLTIME" style={{ marginBottom: "0px" }}>Full-time</Radio>
+                                                    </Row>
+                                                </Space>
+                                            </Radio.Group>
                                             {/* </Form.Item> */}
-                                        {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
+                                            {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -748,21 +739,21 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
-                                                <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
-                                                    <Space direction="vertical">
-                                                        <Row>
-                                                            <Radio checked={state.extraType === "CONTRACTUAL"} value={"CONTRACTUAL"} style={{marginBottom:"0px"}}>
-                                                                Contractual
-                                                            </Radio>
-                                                            <Radio checked={state.extraType === "ONROLL"} value={"ONROLL"} style={{marginBottom:"0px"}}>
-                                                                OnRoll
-                                                            </Radio>
-                                                        </Row>
-                                                    </Space>
+                                            <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
+                                                <Space direction="vertical">
+                                                    <Row>
+                                                        <Radio checked={state.extraType === "CONTRACTUAL"} value={"CONTRACTUAL"} style={{ marginBottom: "0px" }}>
+                                                            Contractual
+                                                        </Radio>
+                                                        <Radio checked={state.extraType === "ONROLL"} value={"ONROLL"} style={{ marginBottom: "0px" }}>
+                                                            OnRoll
+                                                        </Radio>
+                                                    </Row>
+                                                </Space>
 
-                                                </Radio.Group>
+                                            </Radio.Group>
                                             {/* </Form.Item> */}
-                                                {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
+                                            {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -778,14 +769,13 @@ const AddJobPost = () => {
 
                         </Form>
                         <div className="sDash_form-action mt-20">
-       
+
                             {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
                                     Add
                                 </Button>
                             }
-
 
                             <Button
                                 className="btn-signin"

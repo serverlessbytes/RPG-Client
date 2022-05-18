@@ -24,6 +24,8 @@ import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportPartnerCourse from '../../components/modals/ImportPartnerCourses';
+import { Menu, Dropdown, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 const PartnerCourses = () => {
   const {
@@ -35,14 +37,6 @@ const PartnerCourses = () => {
     addPartnerCourseInBulkSuccess
   } = actions;
 
-  const [importModal, setImportModal] = useState(false);
-
-  const courseData = useSelector(state => state.category.courseFilterData);
-
-  useEffect(() => {
-    console.log('courseData', courseData);
-  }, [courseData]);
-
   const { Option } = Select;
   const history = useHistory();
   let dispatch = useDispatch();
@@ -51,19 +45,19 @@ const PartnerCourses = () => {
 
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState({
-    //
     category: '',
     mode: 'PARTNER',
   });
-
+  const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
-  const [usertable, setUsertable] = useState([]); //set data
+  const [partnertable, setPartnertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
   const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [exportTog, setExportTog] = useState(false);
 
+  const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
   const onePartnerCourseData = useSelector(state => state.category.editFilterData);
@@ -71,8 +65,8 @@ const PartnerCourses = () => {
   const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr);
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
-  const  addPartnerCourseModulData= useSelector(state=> state.category.addPartnerCourseInBulkData)
- 
+  const addPartnerCourseModulData = useSelector(state => state.category.addPartnerCourseInBulkData)
+
   useEffect(() => {
     if (data.length && exportTog) {
       CSVLinkRef?.current?.link.click(); //
@@ -82,13 +76,13 @@ const PartnerCourses = () => {
     }
   }, [data]);
 
-   useEffect(() => {
-     if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
-       toast.success("Add PartnerCourse Import uccessful")
-       dispatch(addPartnerCourseInBulkSuccess(null))
-     }
-   }, [addPartnerCourseModulData])
-  
+  useEffect(() => {
+    if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
+      toast.success("Add PartnerCourse Import uccessful")
+      dispatch(addPartnerCourseInBulkSuccess(null))
+    }
+  }, [addPartnerCourseModulData])
+
   useEffect(() => {
     return () => {
       // setState([])
@@ -158,7 +152,7 @@ const PartnerCourses = () => {
   ];
   useEffect(() => {
     if (allCategortData?.data?.data) {
-      //set a state for export word
+      //set a state for export excel
       setData(allCategortData?.data?.data);
     }
   }, [allCategortData]);
@@ -260,18 +254,17 @@ const PartnerCourses = () => {
       key: key,
       isApproved: !isAp,
     };
-    console.log('data', data);
+
     ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
       console.log('res', res);
       toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-
       dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
     });
   };
 
   useEffect(() => {
     if (courseData && courseData.data) {
-      setUsertable(
+      setPartnertable(
         courseData.data?.data?.map(item => {
           // const { id, name, designation, status } = user;
           return {
@@ -339,10 +332,9 @@ const PartnerCourses = () => {
     if (state.category) {
       dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
     }
-    //dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : "", status))
   }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
 
-  const usersTableColumns = [
+  const partnerCourseTableColumns = [
     {
       title: 'Course Name',
       dataIndex: 'CourseName',
@@ -352,19 +344,10 @@ const PartnerCourses = () => {
       title: 'Course Category',
       dataIndex: 'CourseCategory',
     },
-    // {
-    //     title: 'State',
-    //     dataIndex: 'State',
-    // },
     {
       title: 'Course Type',
       dataIndex: 'CourseType',
     },
-    // {
-    //     title: 'Language',
-    //     dataIndex: 'Language',
-    //     sortDirections: ['descend', 'ascend'],
-    // },
     {
       title: 'Approved',
       dataIndex: 'approved',
@@ -388,8 +371,38 @@ const PartnerCourses = () => {
     dispatch(getallSwayamCourse(state.mode));
     setExportTog(true);
   };
-  // const onAllPartnerCourse = () => {
-  // }
+
+  const onClick = ({ key }) => {
+    if (key == 'exportCourses') {
+      onePartnercourseData();
+    }
+    if (key == 'addCourses') {
+      history.push(`${path}/addpartnercourses`);
+    }
+    if (key == 'import') {
+      setImportModal(true)
+    }
+  };
+
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Export Courses',
+          key: 'exportCourses',
+        },
+        {
+          label: 'Add Courses',
+          key: 'addCourses',
+        },
+        {
+          label: 'Import',
+          key: 'import',
+        },
+      ]}
+    />
+  );
 
   return (
     <>
@@ -398,7 +411,7 @@ const PartnerCourses = () => {
         title="Partner Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            <Button
+            {/* <Button
               size="small"
               type="info"
               onClick={() => {
@@ -413,11 +426,11 @@ const PartnerCourses = () => {
               headers={header}
               filename="Partner.csv"
               style={{ opacity: 0 }}
-            ></CSVLink>
+            ></CSVLink> */}
             {/* <Button size="small" type="info" onClick={() => onAllPartnerCourse()}>
               Export All Course
             </Button> */}
-            <Button
+            {/* <Button
               size="small"
               type="primary"
               onClick={() => {
@@ -428,7 +441,22 @@ const PartnerCourses = () => {
             </Button>
             <Button size="small" type="primary" onClick={() => setImportModal(true)}>
               Import
-            </Button>
+            </Button> */}
+            <Dropdown overlay={menu} trigger="click">
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  Actions
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+            <CSVLink
+              data={data}
+              ref={CSVLinkRef}
+              headers={header}
+              filename="Partner.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
           </div>,
         ]}
       />
@@ -453,17 +481,6 @@ const PartnerCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col> */}
-                {/* <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="State">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select State">
-                                                <Option value="1"> All India </Option>
-                                                <Option value="2"> Andaman and Nicobar Islands </Option>
-                                                <Option value="3"> Arunachal Pradesh </Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
                 {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item label="Mode">
@@ -506,11 +523,9 @@ const PartnerCourses = () => {
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usertable}
-                        columns={usersTableColumns}
+                        dataSource={partnertable}
+                        columns={partnerCourseTableColumns}
                         pagination={{
-                          // defaultPageSize: courseData?.per_page,
-                          // defaultPageSize: courseData?.data.per_page,
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
@@ -519,9 +534,6 @@ const PartnerCourses = () => {
                             setPerPage(pageSize);
                             setExportTog(false);
                           },
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
                       />
                     </TableWrapper>
@@ -538,13 +550,10 @@ const PartnerCourses = () => {
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usertable}
+                        dataSource={partnertable}
                         // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
-                        columns={usersTableColumns}
+                        columns={partnerCourseTableColumns}
                         pagination={{
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
                           // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,

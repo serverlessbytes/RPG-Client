@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import { data } from 'browserslist';
+import JobPostPage from './JobPostPage';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog }) => {
   // props from JobPost
@@ -64,7 +65,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const onDelete = async id => {
     let courseDataDelete =
       getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find(item => item.id === id);
-    console.log('courseDataDelete', courseDataDelete);
     if (courseDataDelete) {
       let data = {
         name: courseDataDelete.name.id,
@@ -185,31 +185,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [editJobPostErr]);
 
   useEffect(() => {
-    console.log('editJobPostData', editJobPostData);
     if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
       dispatch(editJobPostSuccess(null));
-      //dispatch(getJobsFilterForMainSuccess(null))
       toast.success('Jobs Delete successful');
-      //toastAssetsAdd(true)
-      //onHide()
-    } else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
-      // console.log("editJobPostData",editJobPostData)
-      // if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
-      //   dispatch(editJobPostSuccess(null))
-      //   //dispatch(getJobsFilterForMainSuccess(null))
-      //   toast.success("Jobs Delete successful");
-      //   //toastAssetsAdd(true)
-      //   //onHide()
-      // }
-      // else
-      //  if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
-      //   dispatch(editJobPostSuccess(null))
-      //   toast.success("Jobs Update successful");
-      // }
-      if (editJobPostData && editJobPostData.status === 200) {
-        dispatch(editJobPostSuccess(null));
-        toast.success('Jobs Update successful');
-      }
+    }
+    else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
+      dispatch(editJobPostSuccess(null))
+      toast.success("Jobs Update successful");
     }
   }, [editJobPostData]);
 
@@ -220,32 +202,31 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setExportTog(false);
   }, [perPage, pageNumber]);
 
-  const onApproved = (id, isAp) => {
-    if (status !== 'active') {
-      return;
-    }
-    let data = {
-      isApproved: !isAp,
-    };
-    ApiPost(`job/updateIsApproved?jobId=${id}`, data)
-      .then(res => {
-        console.log('res', res);
-        toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
-        dispatch(
-          getJobsFilterForMain(
-            perPage,
-            pageNumber,
-            state.state ? state.state : '',
-            type.type ? type.type : '',
-            jobRole.jobRole ? jobRole.jobRole : '',
-          ),
-        );
-      })
-      .catch(err => console.log('Error', err));
-  };
+  // const onApproved = (id, isAp) => {
+  //   if (status !== 'active') {
+  //     return;
+  //   }
+  //   let data = {
+  //     isApproved: !isAp,
+  //   };
+  //   ApiPost(`job/updateIsApproved?jobId=${id}`, data)
+  //     .then(res => {
+  //       console.log('res', res);
+  //       toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+  //       dispatch(
+  //         getJobsFilterForMain(
+  //           perPage,
+  //           pageNumber,
+  //           state.state ? state.state : '',
+  //           type.type ? type.type : '',
+  //           jobRole.jobRole ? jobRole.jobRole : '',
+  //         ),
+  //       );
+  //     })
+  //     .catch(err => console.log('Error', err));
+  // };
 
-  useEffect(
-    () => {
+  useEffect(() => {
       // if (apply) {
       setUsertable(
         getJobFilterData?.data?.data?.map(item => {
@@ -260,21 +241,21 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             position: item.jobRole?.name,
             joinDate: moment(item.startDate).format('DD-MM-YYYY'),
             vacancies: item.vacancies,
-            approved: (
-              <>
-                <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
-                  <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-                </div>
-              </>
-            ),
+            // approved: (
+            //   <>
+            //     <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
+            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+            //     </div>
+            //   </>
+            // ),
             // status: status,
             action: (
               <div className="table-actions">
                 {status === 'active' ? (
                   <>
-                    {/* <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                  <FeatherIcon icon="edit" size={16} />
-                </Button> */}
+                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                      <FeatherIcon icon="edit" size={16} />
+                    </Button>
                     <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                       <FeatherIcon icon="trash-2" size={16} />
                     </Button>
@@ -334,9 +315,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     [getJobFilterData],
   );
 
-  const viewJobdata = key => {
-    dispatch(getoneJobPost(key));
-    setViewModal(true);
+  const viewJobdata = id => {
+    // dispatch(getoneJobPost(key));
+    //setViewModal(true);
+     history.push(`/admin/job/view?id=${id}`)
   };
 
   const usersTableColumns = [
@@ -369,10 +351,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       dataIndex: 'joinDate',
       // key: 'joinDate',
     },
-    {
-      title: 'Approved',
-      dataIndex: 'approved',
-    },
+    // {
+    //   title: 'Approved',
+    //   dataIndex: 'approved',
+    // },
     {
       title: 'Vacancies',
       dataIndex: 'vacancies',
@@ -414,7 +396,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 setPerPage(pageSize);
               },
             }}
-            // pagination={false}
+          // pagination={false}
           />
         </TableWrapper>
       </UserTableStyleWrapper>
@@ -433,6 +415,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       {viewModal && (
         <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneJobPostData?.data} />
       )}
+      {/* <JobPostPage data={getOneJobPostData?.data}></JobPostPage> */}
     </>
   );
 };

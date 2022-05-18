@@ -205,14 +205,14 @@ const SwayamCourses = () => {
     }
   };
 
-  const activeSwayamCourses = dt =>{
-    const newVal = ApiPost("course/editSwayamCourse" , dt)
-    .then((res) =>{
-      if (res.status === 200) {
-        dispatch(getCategoryData())
-      } 
-      return res
-    })
+  const activeSwayamCourses = dt => {
+    const newVal = ApiPost("course/editSwayamCourse", dt)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getCategoryData())
+        }
+        return res
+      })
     return newVal
   }
 
@@ -234,8 +234,8 @@ const SwayamCourses = () => {
         isActive: true,
         isDeleted: false,
       };
-      const restoreSwayamCourses =  activeSwayamCourses(dt)
-      if( restoreSwayamCourses.status === 200){
+      const restoreSwayamCourses = activeSwayamCourses(dt)
+      if (restoreSwayamCourses.status === 200) {
         toast.success("SwayamCourse active successful")
       }
       // dispatch(editSwayamCourse(dt));
@@ -253,9 +253,10 @@ const SwayamCourses = () => {
     dispatch(getCoursefilter('', perPage, pageNumber, '', status));
   };
 
-  const viewSwayamCoursedata = key => {
-    dispatch(getOneCoursefilter(key));
-    setViewModal(true);
+  const viewSwayamCoursedata = id => {
+    // dispatch(getOneCoursefilter(key));
+    // setViewModal(true);
+    history.push(`/admin/courses/viewcourse?id=${id}`)
   };
 
   const onExportCourse = () => {
@@ -483,7 +484,7 @@ const SwayamCourses = () => {
             <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
-                  Click menu item
+                  Actions
                   <DownOutlined />
                 </Space>
               </a>
@@ -564,7 +565,7 @@ const SwayamCourses = () => {
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
-                            {/* --- search bar --- */} 
+                      {/* --- search bar --- */}
                       {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
