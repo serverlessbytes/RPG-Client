@@ -19,10 +19,10 @@ const Employer = () => {
 
     const [perPage, setPerPage] = useState(5)
     const [pageNumber, setPageNumber] = useState(1)
-    const [status, setStatus] = useState("active") 
-    const [usertable, setUsertable] = useState([]) 
-    const [exportEmployer,setExportEmployer]=useState([])
-    const [exportTog,setExportTog]=useState(false)
+    const [status, setStatus] = useState("active")
+    const [usertable, setUsertable] = useState([])
+    const [exportEmployer, setExportEmployer] = useState([])
+    const [exportTog, setExportTog] = useState(false)
 
     const getEmployer = useSelector((state) => state.users.getAllUser)
 
@@ -34,12 +34,12 @@ const Employer = () => {
 
     useEffect(() => {
         if (exportEmployer.length && exportTog) {
-            CSVLinkRef?.current?.link.click()  
+            CSVLinkRef?.current?.link.click()
             toast.success("User data exported successfully")
-        }else if(exportTog){
+        } else if (exportTog) {
             toast.success("No user data for export")
         }
-        
+
     }, [exportEmployer])
 
     useEffect(() => {
@@ -76,17 +76,17 @@ const Employer = () => {
     }, [getEmployer])
 
 
-    const allEmployerExport=()=>{
+    const allEmployerExport = () => {
         setExportTog(true)
         ApiGet(`user/auth/allUsers?type=EMPLOYER`).then((res) => {
             setExportEmployer(res?.data?.data)
         })
     }
 
-    const callback=(data)=>{
+    const callback = (data) => {
         setStatus(data)
     }
-    
+
 
     const usersTableColumns = [
 
@@ -109,83 +109,83 @@ const Employer = () => {
         },
     ]
 
-   
-  return (
-    <>
-    <PageHeader
-        ghost
-        title="Employer"
-        buttons={[
-            <div className="page-header-actions">
-                <Button  size="small" type="primary" onClick={allEmployerExport}>
-                    Export All
-                </Button>
-                <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-            </div>
-        ]}
-    />
 
-    <Main >
-        <Cards headless>
+    return (
+        <>
+            <PageHeader
+                ghost
+                title="Employer"
+                buttons={[
+                    <div className="page-header-actions">
+                        <Button size="small" type="primary" onClick={allEmployerExport}>
+                            Export All
+                        </Button>
+                        <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
+                    </div>
+                ]}
+            />
 
-        <Tabs onChange={callback}>
-                                <TabPane tab="Active Users" key="active">
-                                    <UserTableStyleWrapper>
-                                        <TableWrapper className="table-responsive">
-                                                    {/* --- search bar --- */}
-                                            {/* <Form name="sDash_select" layout="vertical">
+            <Main >
+                <Cards headless>
+
+                    <Tabs onChange={callback}>
+                        <TabPane tab="Active Users" key="active">
+                            <UserTableStyleWrapper>
+                                <TableWrapper className="table-responsive">
+                                    {/* --- search bar --- */}
+                                    {/* <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="search" label="">
                                                     <Input placeholder="search" style={{ width: 200 }} />
                                                 </Form.Item>
                                             </Form> */}
 
-                                            <Table
-                                                dataSource={usertable}
-                                                columns={usersTableColumns}
-                                                pagination={{
-                                                    defaultPageSize: getEmployer?.data.per_page,
-                                                    total: getEmployer?.data.page_count,
-                                                    onChange: (page, pageSize) => {
-                                                        setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
-                                                }}
-                                             
-                                            />
-                                        </TableWrapper>
-                                    </UserTableStyleWrapper>
-                                </TabPane>
-                                <TabPane tab="Inactive Users" key='inactive'>
-                                    <UserTableStyleWrapper>
-                                        <TableWrapper className="table-responsive">
+                                    <Table
+                                        dataSource={usertable}
+                                        columns={usersTableColumns}
+                                        pagination={{
+                                            defaultPageSize: getEmployer?.data.per_page,
+                                            total: getEmployer?.data.page_count,
+                                            onChange: (page, pageSize) => {
+                                                setPageNumber(page);
+                                                setPerPage(pageSize)
+                                            }
+                                        }}
 
-                                            <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="search" label="">
-                                                    <Input placeholder="search" style={{ width: 200 }} />
-                                                </Form.Item>
-                                            </Form>
+                                    />
+                                </TableWrapper>
+                            </UserTableStyleWrapper>
+                        </TabPane>
+                        <TabPane tab="Inactive Users" key='inactive'>
+                            <UserTableStyleWrapper>
+                                <TableWrapper className="table-responsive">
 
-                                            <Table
-                                                dataSource={usertable}
-                                                columns={usersTableColumns} 
-                                                pagination={{
-                                                    defaultPageSize: getEmployer?.data.per_page,
-                                                    total: getEmployer?.data.page_count,
-                                                    onChange: (page, pageSize) => {
-                                                        setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
-                                                }}
-                                            />
-                                        </TableWrapper>
-                                    </UserTableStyleWrapper>
-                                </TabPane>
-                            </Tabs>
+                                    <Form name="sDash_select" layout="vertical">
+                                        <Form.Item name="search" label="">
+                                            <Input placeholder="search" style={{ width: 200 }} />
+                                        </Form.Item>
+                                    </Form>
+
+                                    <Table
+                                        dataSource={usertable}
+                                        columns={usersTableColumns}
+                                        pagination={{
+                                            defaultPageSize: getEmployer?.data.per_page,
+                                            total: getEmployer?.data.page_count,
+                                            onChange: (page, pageSize) => {
+                                                setPageNumber(page);
+                                                setPerPage(pageSize)
+                                            }
+                                        }}
+                                    />
+                                </TableWrapper>
+                            </UserTableStyleWrapper>
+                        </TabPane>
+                    </Tabs>
                 </Cards>
             </Main>
 
-</>
-  )
+        </>
+    )
 }
 
 export default Employer

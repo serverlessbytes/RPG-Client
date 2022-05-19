@@ -4,67 +4,43 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiGet } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
-import { useForm } from 'antd/lib/form/Form';
 
-
-const Admin = () => {
+const Partner = () => {
     const { path } = useRouteMatch();
-    let history = useHistory();
-    const dispatch = useDispatch()
-
+    const history = useHistory()
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    const [adminData, setAdminData] = useState()
-    const [adminTable, setAdminTable] = useState([])
+    const [employerData, setEmployerData] = useState()
+    const [employerTable, setEmployerTable] = useState([])
 
+    const { TabPane } = Tabs;
 
     const callback = key => {
-        setStatus(key),
-            setPageNumber(1)
-    }
-    const { TabPane } = Tabs
-
+        setStatus(key);
+        setPageNumber(1);
+    };
     const getData = () => {
-        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=ADMIN`)
+        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=EMPLOYER`)
             .then((res) => {
-                setAdminData(res)
+                setEmployerData(res)
                 console.log("res", res);
             })
             .catch((err) => console.log(err))
     }
-
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
-    };
-    const onDelete = async (id) => {
-        let userForDelete = adminData && adminData.data && adminData.data.data.find(item => item.id === id);
-        if (userForDelete) {
-            userForDelete = {
-                ...userForDelete,
-                id: userForDelete.id,
-                isActive: false,
-                isDeleted: true,
-                avatar: 'dfd',
-            };
-            delete userForDelete.userTakenRatings
-            console.log('userForDelete', userForDelete);
-            dispatch(editProfile(userForDelete));
-
-        }
-    };
+    }
 
     useEffect(() => {
-        console.log("----- adminData", adminData);
-        if (adminData && adminData.data) {
-            setAdminTable(
-                adminData.data.data.map((item) => {
+        console.log("----- employerData", employerData);
+        if (employerData && employerData.data) {
+            setEmployerTable(
+                employerData.data.data.map((item) => {
                     return {
                         name: item.name,
                         email: item.email,
@@ -93,13 +69,15 @@ const Admin = () => {
             )
 
         }
-    }, [adminData])
+    }, [employerData])
+
     useEffect(() => {
         getData()
     }, [perPage, pageNumber, status])
 
 
-    const adminTableColumns = [
+
+    const employerTableColumns = [
         {
             title: 'Name',
             dataIndex: 'name',
@@ -121,12 +99,11 @@ const Admin = () => {
     ];
 
 
-
     return (
         <>
             <PageHeader
                 ghost
-                title="User"
+                title="Employer"
             // buttons={[
             //     <div className="page-header-actions">
             //         <Button size="small" type="primary" onClick={allEmployerExport}>
@@ -145,11 +122,11 @@ const Admin = () => {
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
-                                                dataSource={adminTable}
-                                                columns={adminTableColumns}
+                                                dataSource={employerTable}
+                                                columns={employerTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: adminData?.data.per_Page,
-                                                    total: adminData?.data.page_count,
+                                                    defaultPageSize: employerData?.data.per_Page,
+                                                    total: employerData?.data.page_count,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize);
@@ -164,11 +141,11 @@ const Admin = () => {
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
-                                                dataSource={adminTable}
-                                                columns={adminTableColumns}
+                                                dataSource={employerTable}
+                                                columns={employerTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: adminData?.data.per_Page,
-                                                    total: adminData?.data.page_count,
+                                                    defaultPageSize: employerData?.data.per_Page,
+                                                    total: employerData?.data.page_count,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize);
@@ -187,4 +164,7 @@ const Admin = () => {
     )
 }
 
-export default Admin
+export default Partner
+
+
+

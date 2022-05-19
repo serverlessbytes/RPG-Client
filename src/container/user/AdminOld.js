@@ -1,69 +1,34 @@
+
 import React, { useEffect, useState } from 'react'
 import { Cards } from '../../components/cards/frame/cards-frame';
 import FeatherIcon from 'feather-icons-react';
-import { Col, PageHeader, Row, Table, Tabs } from 'antd';
+import { Col, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiGet } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
-import { useForm } from 'antd/lib/form/Form';
 
 
 const Admin = () => {
-    const { path } = useRouteMatch();
-    let history = useHistory();
-    const dispatch = useDispatch()
-
-    const [status, setStatus] = useState('active');
+    const [adminData, setAdminData] = useState()
+    const [adminTable, setAdminTable] = useState()
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    const [adminData, setAdminData] = useState()
-    const [adminTable, setAdminTable] = useState([])
+    const [status, setStatus] = useState('active');
 
-
-    const callback = key => {
-        setStatus(key),
-            setPageNumber(1)
-    }
-    const { TabPane } = Tabs
 
     const getData = () => {
-        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=ADMIN`)
+        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=PARTNER`)
             .then((res) => {
                 setAdminData(res)
-                console.log("res", res);
             })
             .catch((err) => console.log(err))
     }
 
-    const onEdit = (id) => {
-        history.push(`${path}/adduser?id=${id}`);
-    };
-    const onDelete = async (id) => {
-        let userForDelete = adminData && adminData.data && adminData.data.data.find(item => item.id === id);
-        if (userForDelete) {
-            userForDelete = {
-                ...userForDelete,
-                id: userForDelete.id,
-                isActive: false,
-                isDeleted: true,
-                avatar: 'dfd',
-            };
-            delete userForDelete.userTakenRatings
-            console.log('userForDelete', userForDelete);
-            dispatch(editProfile(userForDelete));
-
-        }
-    };
-
     useEffect(() => {
-        console.log("----- adminData", adminData);
         if (adminData && adminData.data) {
-            setAdminTable(
+            setAdminData(
                 adminData.data.data.map((item) => {
                     return {
                         name: item.name,
@@ -88,16 +53,21 @@ const Admin = () => {
                                 )}
                             </div>
                         ),
-                    };
+                    }
                 })
             )
-
         }
     }, [adminData])
+
     useEffect(() => {
         getData()
     }, [perPage, pageNumber, status])
 
+    const callback = key => {
+        setStatus(key);
+        setPageNumber(1);
+    };
+    const { TabPane } = Tabs;
 
     const adminTableColumns = [
         {
@@ -121,21 +91,8 @@ const Admin = () => {
     ];
 
 
-
     return (
         <>
-            <PageHeader
-                ghost
-                title="User"
-            // buttons={[
-            //     <div className="page-header-actions">
-            //         <Button size="small" type="primary" onClick={allEmployerExport}>
-            //             Export All
-            //         </Button>
-            //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-            //     </div>
-            // ]}
-            />
             <Main>
                 <Cards headless>
                     <Row gutter={15}>
@@ -143,6 +100,7 @@ const Admin = () => {
                             <Tabs onChange={callback}>
                                 <TabPane tab="Active Partner" key="active">
                                     <UserTableStyleWrapper>
+
                                         <TableWrapper className="table-responsive">
                                             <Table
                                                 dataSource={adminTable}
@@ -186,5 +144,4 @@ const Admin = () => {
         </>
     )
 }
-
 export default Admin

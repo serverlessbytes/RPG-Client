@@ -39,12 +39,12 @@ const Adduser = () => {
     const [error, setError] = useState({})
 
     useEffect(() => {
-     
+
         if (id) {
             // dispatch(getOneUser(location.search.split('=')[1]))
             dispatch(getOneUser(id))
         }
-        
+
     }, [id])
 
     const getOneData = useSelector((state) => state.users.getOneUser)
@@ -98,7 +98,7 @@ const Adduser = () => {
             error.password = "Password is required";
             flage = true;
         }
-        if (!state.phone.match('[0-9]{10}')){
+        if (!state.phone.match('[0-9]{10}')) {
             error.phone = "Phone is required";
             flage = true;
         }
@@ -109,7 +109,7 @@ const Adduser = () => {
         //    }else{
         //     error.phone = "Phone is required";
         //    }
-            
+
         //     flage = true;
         // }
         if (state.userType === "") {
@@ -139,8 +139,8 @@ const Adduser = () => {
 
         if (!location.search) {
             dispatch(addUserSignup(data));
-            history.push(`/admin/user`)
-             
+            oncancel()
+
         }
         else {
             delete data.key
@@ -149,28 +149,46 @@ const Adduser = () => {
                 id: location.search.split('=')[1],
                 isDeleted: false,
                 isActive: true,
-                avatar:"dfd",
+                avatar: "dfd",
                 //isApproved: true
 
             }
             dispatch(editProfile(data))
-            history.push(`/admin/user`)
+            oncancel()
+
         }
     }
+    // -- from goBAck Same Page
     const oncancel = () => {
-        history.push(`/admin/user`)
-        
-    }   
-     useEffect(() => {
-       return(()=>{
-        dispatch(getOneUserSuccess([])) // for a data balnk
-       })
-     }, [])
-      
+        if (window.location.pathname.includes("partner")) {
+            history.push(`/admin/user/partner`);
+        } else if (window.location.pathname.includes("employer")) {
+            history.push(`/admin/user/employer`);
+        } else if (window.location.pathname.includes("partner")) {
+            history.push(`/admin/user/partner`);
+        } else if (window.location.pathname.includes("useradmin")) {
+            history.push(`/admin/user/useradmin`);
+        } else if (window.location.pathname.includes("superadmin")) {
+            history.push(`/admin/user/superadmin`);
+        }
+        else (
+            history.push('/admin/user')
+        )
+    }
+
+
+
+
+    useEffect(() => {
+        return (() => {
+            dispatch(getOneUserSuccess([])) // for a data balnk
+        })
+    }, [])
+
 
     return (
         <>
-          <PageHeader
+            <PageHeader
                 title={id ? "Edit User" : "Add User"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
@@ -290,11 +308,11 @@ const Adduser = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                        {id?"Edit":"Add"}
+                            {id ? "Edit" : "Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
-                        //    onClick={() => history.push(`/admin/user`)}
-                           onClick={(e) => oncancel(e)}
+                            //    onClick={() => history.push(`/admin/user`)}
+                            onClick={(e) => oncancel(e)}
                         >
                             Cancel
                         </Button>

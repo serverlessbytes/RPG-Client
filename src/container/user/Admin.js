@@ -4,26 +4,19 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiGet } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
-import { useForm } from 'antd/lib/form/Form';
-
 
 const Admin = () => {
-    const { path } = useRouteMatch();
-    let history = useHistory();
-    const dispatch = useDispatch()
-
+    const history = useHistory()
+    const { path } = useRouteMatch()
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
     const [adminData, setAdminData] = useState()
     const [adminTable, setAdminTable] = useState([])
-
 
     const callback = key => {
         setStatus(key),
@@ -39,26 +32,10 @@ const Admin = () => {
             })
             .catch((err) => console.log(err))
     }
-
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
-    };
-    const onDelete = async (id) => {
-        let userForDelete = adminData && adminData.data && adminData.data.data.find(item => item.id === id);
-        if (userForDelete) {
-            userForDelete = {
-                ...userForDelete,
-                id: userForDelete.id,
-                isActive: false,
-                isDeleted: true,
-                avatar: 'dfd',
-            };
-            delete userForDelete.userTakenRatings
-            console.log('userForDelete', userForDelete);
-            dispatch(editProfile(userForDelete));
+    }
 
-        }
-    };
 
     useEffect(() => {
         console.log("----- adminData", adminData);
@@ -126,7 +103,7 @@ const Admin = () => {
         <>
             <PageHeader
                 ghost
-                title="User"
+                title="Super Admin"
             // buttons={[
             //     <div className="page-header-actions">
             //         <Button size="small" type="primary" onClick={allEmployerExport}>
