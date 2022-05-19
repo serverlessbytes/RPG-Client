@@ -1,24 +1,22 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Button } from '../../components/buttons/buttons';
-import { PageHeader } from '../../components/page-headers/page-headers';
-import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
+import React, { useEffect, useRef, useState } from 'react'
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Pagination, Row, Select, Table, Tabs } from 'antd';
+import FeatherIcon from 'feather-icons-react';
+import { Col, Form, PageHeader, Row, Select, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
-import { CSVLink } from 'react-csv';
+import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
-import actions from '../../redux/users/actions';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button } from '../../components/buttons/buttons';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { useForm } from 'antd/lib/form/Form';
 import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 // import ReactStars from 'react-rating-stars-component';
 import { data } from 'browserslist';
+import actions from '../../redux/users/actions';
+import { CSVLink } from 'react-csv';
 
 const User = () => {
     const { addUserSignupSuccess, editProfileSuccess, addUserSignupErr, editProfileErr } = actions;
@@ -406,65 +404,30 @@ const User = () => {
                                                         setPerPage(pageSize);
                                                     },
                                                 }}
-                                            // size="middle"
-                                            // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                    {/* <ProjectPagination>
-                                        <Pagination
-                                            onChange={() => { }}
-                                            showSizeChanger
-                                            onShowSizeChange={() => { }}
-                                            pageSize={10}
-                                            defaultCurrent={1}
-                                            total={10}
-                                        />
-                                    </ProjectPagination> */}
                                 </TabPane>
-                                <TabPane tab="Inactive Users" key="inactive">
+
+                                {/* <TabPane tab="Inactive Partner" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-                                            <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="search" label="">
-                                                    <Input placeholder="search" style={{ width: 200 }} />
-                                                </Form.Item>
-                                            </Form>
-
                                             <Table
-                                                // rowSelection={rowSelection}
-                                                dataSource={usertable}
-                                                // columns={usersTableColumns.filter(item => item.title !== "Actions")}
-                                                columns={usersTableColumns}
+                                                dataSource={adminTable}
+                                                columns={adminTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.data.per_page,
-                                                    total: getAllUsers?.data.page_count,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    defaultPageSize: adminData?.data.per_Page,
+                                                    total: adminData?.data.page_count,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
                                                         setPerPage(pageSize);
                                                     },
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                                 }}
-                                            // size="middle"
-                                            // pagination={false}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
-                                    {/* <ProjectPagination>
-                                        <Pagination
-                                            onChange={() => { }}
-                                            showSizeChanger
-                                            onShowSizeChange={() => { }}
-                                            pageSize={10}
-                                            defaultCurrent={1}
-                                            total={10}
-                                        />
-                                    </ProjectPagination> */}
-                                </TabPane>
-                            </Tabs>
+                                </TabPane> */}
+                            </Tabs >
                         </Col>
                     </Row>
                 </Cards>

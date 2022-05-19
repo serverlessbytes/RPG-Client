@@ -1,13 +1,13 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { NavLink, useRouteMatch ,useHistory} from 'react-router-dom';
+import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import propTypes from 'prop-types';
 import SubMenu from 'antd/lib/menu/SubMenu';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
   const { path } = useRouteMatch();
-  const history =  useHistory()
+  const history = useHistory()
   const pathName = window.location.pathname;
   const pathArray = pathName.split(path);
   const mainPath = pathArray[1];
@@ -50,7 +50,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item>
 
       {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
-      <SubMenu key="job" title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}  
+      <SubMenu key="job" title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}
       >
         {/* <Menu.Item key="dashboard">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
@@ -96,7 +96,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item> */}
 
       {/* <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes"> */}
-      <SubMenu key="schemes" title="Schemes" onTitleClick={() =>history.push(`${path}/scheme`)}>
+      <SubMenu key="schemes" title="Schemes" onTitleClick={() => history.push(`${path}/scheme`)}>
         <Menu.Item key="scheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
             Govt Schemes
@@ -125,7 +125,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </SubMenu>
 
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
-      <SubMenu key="courses" title="Courses" onTitleClick={() =>  history.push(`${path}/courses`)}>
+      <SubMenu key="courses" title="Courses" onTitleClick={() => history.push(`${path}/courses`)}>
         <Menu.Item key="courses">
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
@@ -155,7 +155,13 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </NavLink>
       </Menu.Item> */}
 
-      <SubMenu key="user" title="User" onTitleClick={() => history.push(`${path}/user`)}>
+      <SubMenu key="user" title="Users" onTitleClick={() => history.push(`${path}/user`)}>
+        {/* <Menu.Item key="user">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
+            User
+          </NavLink>
+        </Menu.Item> */}
+
         <Menu.Item key="user">
           <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
             User
@@ -166,10 +172,42 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             User Rating
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="partner">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/partner`}>
+            Partner
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="employer">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/employer`}>
+            Employer
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="employerrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/employerrating`}>
+            Employer Rating
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="useradmin">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/useradmin`}>
+            Admin
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="superadmin">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/superadmin`}>
+            SuperAdmin
+          </NavLink>
+        </Menu.Item>
+
+        {/* <Menu.Item key="userrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/userrating`}>
+            User Rating
+          </NavLink>
+        </Menu.Item> */}
       </SubMenu>
 
-      <SubMenu key="employer" title="Employer" onTitleClick={( ) => history.push( `${path}/employer`)}>
-        <Menu.Item key="employer"> 
+      {/* 
+      <SubMenu key="employer" title="Employer" onTitleClick={() => history.push(`${path}/employer`)}>
+        <Menu.Item key="employer">
           <NavLink onClick={toggleCollapsed} to={`${path}/employer`}>
             Employer
           </NavLink>
@@ -179,7 +217,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Employer Rating
           </NavLink>
         </Menu.Item>
-      </SubMenu>
+      </SubMenu> */}
 
       <SubMenu key="layout" title="Layout">
         <Menu.Item key="banner">
