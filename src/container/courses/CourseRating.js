@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Modal, PageHeader, Select, Table } from 'antd';
-import { UserTableStyleWrapper } from '../pages/style';
+import { ComingsoonStyleWrapper, UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import { useHistory, useRouteMatch } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
 import { editCategoryRating, getCourseRatingData, getCourseRatingsByID } from '../../redux/course/actionCreator';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import FeatherIcon from 'feather-icons-react';
+import actions from '../../redux/course/actions';
+import 'react-toastify/dist/ReactToastify.css';
+import { ApiPost } from '../../helper/API/ApiData';
+import { toast } from 'react-toastify';
 
 
 const CourseRating = () => {
+    const { editCategoryRatingSuccess } = actions;
     const { path } = useRouteMatch();
     let history = useHistory();
     let dispatch = useDispatch()
@@ -27,12 +32,35 @@ const CourseRating = () => {
 
     const CourseRatingData = useSelector((state) => state.category.CourseRatingData)
     const CourseRatingByIdData = useSelector((state) => state.category.CourseRatingByIdData)
+    const editCategoryRatingData = useSelector((state) => state.category.editCategoryRatingData)
+
+    useEffect(() => {
+        if (editCategoryRatingData && editCategoryRatingData.status === 200) {
+            dispatch(editCategoryRatingSuccess(null))
+            toast.success('CourseRating updated successful');
+        }
+    }, [editCategoryRatingData])
+
 
     useEffect(() => {
         dispatch(getCourseRatingData(per_Page, pageNumber))
     }, [per_Page, pageNumber])
 
-    const onDelete = (id) => {
+    const newCourse =  data => {
+        const newVal = ApiPost(`courseRating/editCourseRating`, data)
+          .then(res => {
+            if (res.status === 200) {
+                dispatch(getCourseRatingData(per_Page, pageNumber))
+            }
+            return res;
+          })
+          .catch(err => {
+            return err;
+          });
+        return newVal;
+      };
+
+    const onDelete = async id => {
         let CourseRatingDataDelete = CourseRatingData && CourseRatingData?.data && CourseRatingData?.data?.data.find((item) => item.id === id)
         if (CourseRatingDataDelete) {
             let data = {
@@ -42,7 +70,11 @@ const CourseRating = () => {
                 id: CourseRatingDataDelete.id,
                 isActive: false,
             }
-            dispatch((editCategoryRating(data)))
+            const deleteCourseRating = await newCourse(data);
+            if (deleteCourseRating.status === 200) {
+                toast.success('CourseRating deleted successful');
+            }
+            // dispatch((editCategoryRating(data)))
         }
     }
 
@@ -81,7 +113,6 @@ const CourseRating = () => {
     }
 
     useEffect(() => {
-        console.log("CourseRatingByIdData", CourseRatingByIdData)
         if (CourseRatingByIdData && CourseRatingByIdData.data) {
             setData({
                 ...data,

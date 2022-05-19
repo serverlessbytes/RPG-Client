@@ -7,6 +7,10 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { editSchemeRating, getOneSchemeRating, getSchemeRating } from '../../redux/schemes/actionCreator';
 import FeatherIcon from 'feather-icons-react';
+import actions from '../../redux/schemes/actions';
+import 'react-toastify/dist/ReactToastify.css';
+import { ApiPost } from '../../helper/API/ApiData';
+import { toast } from 'react-toastify';
 
 
 const SchemeRating = () => {
@@ -14,8 +18,9 @@ const SchemeRating = () => {
     let history = useHistory();
     let dispatch = useDispatch()
 
+    const { editSchemeRatingSuccess } = actions;
     const [schemeRatingtable, setSchemeRatingtable] = useState([]) //set data
-    const [per_Page, setPerPage] = useState(2) // forpagination
+    const [per_Page, setPerPage] = useState(20) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedSchemeRating, setSelectedSchemeRating] = useState();
@@ -26,17 +31,38 @@ const SchemeRating = () => {
 
     const schemeRatingData = useSelector((state) => state.scheme.schemeRatingData)
     const getOneSchemeRatingData = useSelector((state) => state.scheme.getOneSchemeRatingData)
-
+    const editSchemeRatingData = useSelector((state) => state.scheme.editSchemeRatingData)
 
     useEffect(() => {
         dispatch(getSchemeRating(per_Page, pageNumber))
     }, [per_Page, pageNumber])
 
+    useEffect(() => {
+        if (editSchemeRatingData && editSchemeRatingData.status === 200) {
+            dispatch(editSchemeRatingSuccess(null))
+            toast.success('SchemeRating updated successful');
+        }
+    }, [editSchemeRatingData])
+
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const onDelete = (id) => {
+    const newScheme =  data => {
+        const newVal = ApiPost(`schemeRating/editSchemeRating`, data)
+          .then(res => {
+            if (res.status === 200) {
+                dispatch(getSchemeRating(per_Page, pageNumber))
+            }
+            return res;
+          })
+          .catch(err => {
+            return err;
+          });
+        return newVal;
+      };
+
+    const onDelete = async id => {
         let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
         if (schemeRatingForDelete) {
             let data = {
@@ -46,7 +72,11 @@ const SchemeRating = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            dispatch(editSchemeRating(data))
+            // dispatch(editSchemeRating(data))
+            const deleteSchemeRating = await newScheme(data);
+            if (deleteSchemeRating.status === 200) {
+                toast.success('SchemeRating deleted successful');
+            }
         }
     }
 

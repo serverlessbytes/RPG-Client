@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
+import StarRatings from 'react-star-ratings';
 
 const Schemes = () => {
   const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
@@ -66,6 +67,23 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, benefit: e });
     }
   };
+
+  // useEffect(() => {
+  //   if (users?.data) {
+  //     users?.data.map((item,i) => {
+  //       let x = Math.floor((Math.random() * 5) + 1);
+
+  //       let data = {
+  //         "comment": "test rating",
+  //         "rating": x,
+  //         "schemeId": item.id
+  //       }
+  //       ApiPost('schemeRating/addSchemeRating',data).then((res) => {
+  //         console.log('index', i)
+  //       })
+  //     })
+  //   }
+  // }, [users]);
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -226,6 +244,7 @@ const Schemes = () => {
       delete userForDelete.updatedAt;
       delete userForDelete.viewCount;
       delete userForDelete.createdAt;
+      delete userForDelete.schemeRatings;
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,
@@ -379,6 +398,14 @@ const Schemes = () => {
 
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
+      let schemeratings =  item.schemeRatings.map(item => item.rating)
+      console.log("schemeratings",schemeratings)
+      var sum = 0;
+      for (var i = 0; i < schemeratings.length; i++) {
+        sum += parseInt(schemeratings[i], 10);
+      }
+      var avg = sum / schemeratings.length;
+      console.log(avg);
       return ({
         SchemeName: (
           <span style={{ cursor: "pointer" }} onClick={() => viewSchemesdata(item.key)}>
@@ -388,6 +415,16 @@ const Schemes = () => {
         // SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
+        //  schemeRatings: item.schemeRatings.map(item => item.rating),
+        schemeRatings : (
+          <StarRatings
+          rating={avg?avg:0}
+          starRatedColor="#f57c00"
+          numberOfStars={5}
+          name="schemeRatings"
+          starDimension="13px"
+        />
+        ),
         Website: item.website,
         LastUpdated: moment(item.updatedAt).format('DD-MM-YYYY'),
         approved: (
@@ -466,6 +503,10 @@ const Schemes = () => {
     {
       title: 'Target Beneficiary',
       dataIndex: 'TargetBeneficiary',
+    },
+    {
+      title: 'Scheme Ratings',
+      dataIndex: 'schemeRatings',
     },
     {
       title: 'Website',

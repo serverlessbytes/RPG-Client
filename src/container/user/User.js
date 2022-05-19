@@ -17,6 +17,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { data } from 'browserslist';
 import actions from '../../redux/users/actions';
 import { CSVLink } from 'react-csv';
+import StarRatings from 'react-star-ratings';
 
 const User = () => {
     const { addUserSignupSuccess, editProfileSuccess, addUserSignupErr, editProfileErr } = actions;
@@ -42,6 +43,27 @@ const User = () => {
     const userSignupError = useSelector(state => state.users.userSignupErr);
     const editProfileData = useSelector(state => state.users.editProfileData);
     const editProfileError = useSelector(state => state.users.editProfileErr);
+
+    // useEffect(() => {
+    //     console.log("getAllUsers", getAllUsers)
+    // }, [getAllUsers])
+
+    // useEffect(() => {
+    //     if (getAllUsers?.data?.data) {
+    //       getAllUsers?.data?.data.map((item,i) => {
+    //         let x = Math.floor((Math.random() * 5) + 1);
+
+    //         let data = {
+    //           "comment":"test rating",
+    //           "rating": x,
+    //           "userId": item.id
+    //         }
+    //         ApiPost('userRating/addUserRating',data).then((res) => {
+    //           console.log('index', i)
+    //         })
+    //       })
+    //     }
+    //   }, [getAllUsers]);
 
     useEffect(() => {
         if (addUserSignupData && addUserSignupData.status === 200) {
@@ -190,9 +212,26 @@ const User = () => {
         if (getAllUsers && getAllUsers.data) {
             setUsertable(
                 getAllUsers.data?.data?.map(item => {
+                    let userTakenRatings = item.userTakenRatings.map(item => item.rating)
+
+                    var sum = 0;
+                    for (var i = 0; i < userTakenRatings.length; i++) {
+                      sum += parseInt(userTakenRatings[i]);
+                    }
+                    var avg = sum / userTakenRatings.length;
+
                     return {
                         name: item.name,
                         email: item.email,
+                        userTakenRatings: (
+                            <StarRatings
+                                rating={avg?avg:0}
+                                starRatedColor="#f57c00"
+                                numberOfStars={5}
+                                name="UserRating"
+                                starDimension="13px"
+                            />
+                        ),
                         phone: item.phone,
                         userType: item.userType,
                         avatar: '',
@@ -229,6 +268,10 @@ const User = () => {
         {
             title: 'Email',
             dataIndex: 'email',
+        },
+        {
+            title: 'UserRating',
+            dataIndex: 'userTakenRatings',
         },
         {
             title: 'Phone',

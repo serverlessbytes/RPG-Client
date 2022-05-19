@@ -20,20 +20,17 @@ function ViewCourse() {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const getOneCoursedata = useSelector(state => state.category.editFilterData);
+    const getOneCoursedata = useSelector(state => state.category.editFilterData); //fetch single data from redux
 
-    useEffect(() => {
-        if (getOneCoursedata) {
-            console.log("getOneCoursedata", getOneCoursedata)
-        }
-    }
-
-        , [getOneCoursedata])
-    useEffect(() => { console.log("id", id) }, [id])
+    // useEffect(() => {
+    //     if (getOneCoursedata) {
+    //         console.log("getOneCoursedata", getOneCoursedata)
+    //     }
+    // },[getOneCoursedata])
+    // useEffect(() => { console.log("id", id) }, [id])
 
     useEffect(() => {
         if (id) {
-            console.log("id", id)
             dispatch(getOneCoursefilter(id));
         } else {
             history.push(`/admin/courses`)
