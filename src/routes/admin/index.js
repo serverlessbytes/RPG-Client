@@ -14,7 +14,7 @@ import user from './user';
 import Testimonial from './Testimonial';
 import Banner from '../../container/banner/Banner';
 import Carousel from '../../container/carousel/Carousel';
-import Employer from './Employer';
+import Employer from './employer';
 
 const Admin = () => {
   const { path } = useRouteMatch();
