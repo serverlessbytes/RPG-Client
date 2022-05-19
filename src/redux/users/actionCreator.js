@@ -103,7 +103,7 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
   export const edituserRating = (body) =>  async(dispatch) =>{
     await ApiPost (`userRating/editUserRating`,body)
     .then((res) =>{
-      (edituserRatingSuccess(res))
+      dispatch(edituserRatingSuccess(res))
       if (res.status === 200) {  
        return dispatch(getUserRating(per_page, page_num))
      }

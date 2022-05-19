@@ -234,7 +234,7 @@ export const getCourseRatingsByID = (id) => async(dispatch) =>{
  export const editCategoryRating = (body) =>  async(dispatch) =>{
    await ApiPost (`courseRating/editCourseRating`,body)
    .then((res) =>{
-     (editCategoryRatingSuccess(res))
+     dispatch(editCategoryRatingSuccess(res))
      if (res.status === 200) {  
       return dispatch(getCourseRatingData(per_page, page_number))
     }

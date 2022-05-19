@@ -43,14 +43,14 @@ const initialState = {
   getAllUser: null,
   getOneUser: null,
   allUser: null,
-  editProfileData:null,
-  editProfileErr:null,
-  getUserRatingData:null,
-  getOneUserRatingData:null,
-  editUserRatingData:null,
+  editProfileData: null,
+  editProfileErr: null,
+  getUserRatingData: null,
+  getOneUserRatingData: null,
+  editUserRatingData: null,
 };
 
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => { 
   const { type, data, err } = action;
   switch (type) {
     case ADD_USERSIGNUP_BEGINE:
@@ -125,78 +125,79 @@ const userReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case EDIT_PROFILE_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case EDIT_PROFILE_SUCCESS:
-        return {
-          ...state,
-          editProfileData: data,
-          loading: false,
-        };
-      case EDIT_PROFILE_ERR:
-        return {
-          ...state,
-          editProfileErr: err,
-          loading: false,
-        };
+    case EDIT_PROFILE_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_PROFILE_SUCCESS:
+      return {
+        ...state,
+        editProfileData: data,
+        loading: false,
+      };
+    case EDIT_PROFILE_ERR:
+      return {
+        ...state,
+        editProfileErr: err,
+        loading: false,
+      };
 
-        case GET_USER_RATING_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case GET_USER_RATING_SUCCESS:
-          return {
-            ...state,
-            getUserRatingData: data,
-            loading: false,
-          };
-        case GET_USER_RATING_ERR:
-          return {
-            ...state,
-            editProfileErr: err,
-            loading: false,
-          };
+    case GET_USER_RATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_USER_RATING_SUCCESS:
+      return {
+        ...state,
+        getUserRatingData: data,
+        loading: false,
+      };
+    case GET_USER_RATING_ERR:
+      return {
+        ...state,
+        editProfileErr: err,
+        loading: false,
+      };
 
-          
-        case GETONE_USER_RATING_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case GETONE_USER_RATING_SUCCESS:
-          return {
-            ...state,
-            getOneUserRatingData: data,
-            loading: false,
-          };
-        case GETONE_USER_RATING_ERR:
-          return {
-            ...state,
-            error: err,
-            loading: false,
-          };
 
-          case EDIT_USER_RATING_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
-          case EDIT_USER_RATING_SUCCESS:
-            return {
-              ...state,
-              editUserRatingData: data,
-              loading: false,
-            };
-          case EDIT_USER_RATING_ERR:
-            return {
-              ...state,
-              error: err,
-              loading: false,
-            };
+    case GETONE_USER_RATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GETONE_USER_RATING_SUCCESS:
+      return {
+        ...state,
+        getOneUserRatingData: data,
+        loading: false,
+      };
+    case GETONE_USER_RATING_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_USER_RATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_USER_RATING_SUCCESS:
+      console.log("dataaa", data)
+      return {
+        ...state,
+        editUserRatingData: data,
+        loading: false,
+      };
+    case EDIT_USER_RATING_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
 
 

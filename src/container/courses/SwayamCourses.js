@@ -27,6 +27,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
 import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
+import StarRatings from 'react-star-ratings';
 
 const {
   getallSwayamCourseSuccess,
@@ -133,6 +134,18 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     if (courseData?.data?.data) {
+      // courseData?.data?.data.map((item,i) => {
+      //   let x = Math.floor((Math.random() * 5) + 1);
+
+      //   let data = {
+      //     "comment": "test rating",
+      //     "rating": x,
+      //     "courseId": item.id
+      //   }
+      //   ApiPost('courseRating/addCourseRating',data).then((res) => {
+      //     console.log('index', i)
+      //   })
+      // })
       setState(courseData.data.data);
     }
   }, [courseData]);
@@ -233,6 +246,7 @@ const SwayamCourses = () => {
         mode: activeCourse.mode,
         isActive: true,
         isDeleted: false,
+        // courseRatings : activeCourse.courseRatings,
       };
       const restoreSwayamCourses = activeSwayamCourses(dt)
       if (restoreSwayamCourses.status === 200) {
@@ -337,33 +351,51 @@ const SwayamCourses = () => {
     if (courseData && courseData.data) {
       setUsertable(
         courseData.data?.data?.map(item => {
-          // const { id, name, designation, status } = user;
+          let courseRatings = item.courseRatings.map(item => item.rating)
+          console.log("courseRatings", courseRatings)
+          var sum = 0;
+
+          for (var i = 0; i < courseRatings.length; i++) {
+            sum += parseInt(courseRatings[i]);
+          }
+
+          var avg = sum / courseRatings.length;
+          console.log("avg", avg)
+
           return {
-            //key: id,
             CourseName: (
               <span style={{ cursor: "pointer" }} onClick={() => viewSwayamCoursedata(item.id)}>
                 {item?.name}
               </span>
             ),
-            // CourseName: item.name,
             CourseCategory: item.courseCategory?.name,
+            courseRatings: (
+              <StarRatings
+                rating={avg ? avg : 0}
+                starRatedColor="#f57c00"
+                numberOfStars={5}
+                name="swayamCourse"
+                starDimension="13px"
+              />
+            ),
+            // CourseName: item.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
-            approved: (
-              <>
-                {/* {
-                status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                <Switch checked={item.isApproved}></Switch>
-              </div> :
-               <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-               <Switch checked={false}></Switch>
-             </div>
-              } */}
-                <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-                </div>
-              </>
-            ),
+            // approved: (
+            //   <>
+            //     {/* {
+            //     status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+            //     <Switch checked={item.isApproved}></Switch>
+            //   </div> :
+            //    <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+            //    <Switch checked={false}></Switch>
+            //  </div>
+            //   } */}
+            //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+            //     </div>
+            //   </>
+            // ),
             // CourseDuration:item.
             //State: item.state,
             // CourseType: item.mode,
@@ -419,6 +451,10 @@ const SwayamCourses = () => {
       dataIndex: 'CourseCategory',
     },
     {
+      title: 'Course Rating',
+      dataIndex: 'courseRatings',
+    },
+    {
       title: 'Course Duration (HH:MM)',
       dataIndex: 'CourseDuration',
     },
@@ -431,10 +467,10 @@ const SwayamCourses = () => {
     //     dataIndex: 'Location',
     //     sortDirections: ['descend', 'ascend'],
     // },
-    {
-      title: 'Approved',
-      dataIndex: 'approved',
-    },
+    // {
+    //   title: 'Approved',
+    //   dataIndex: 'approved',
+    // },
     {
       title: 'Actions',
       dataIndex: 'action',

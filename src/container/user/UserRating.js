@@ -7,12 +7,17 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { edituserRating, getOneUserRating, getUserRating } from '../../redux/users/actionCreator';
 import FeatherIcon from 'feather-icons-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import actions from '../../redux/users/actions';
+import { ApiPost } from '../../helper/API/ApiData';
 
 const UserRating = () => {
     let dispatch = useDispatch()
 
+    const { edituserRatingSuccess } = actions;
     const [userRatingtable, setUserRatingtable] = useState([])
-    const [per_Page, setPerPage] = useState(2)
+    const [per_Page, setPerPage] = useState(20)
     const [pageNumber, setPageNumber] = useState(1)
     const [isModalVisible, setisModalVisible] = useState(false)
     const [selectedUserRating, setSelectedUserRating] = useState();
@@ -23,6 +28,18 @@ const UserRating = () => {
 
     const getUserRatingData = useSelector((state) => state.users.getUserRatingData)
     const getOneUserRatingData = useSelector((state) => state.users.getOneUserRatingData)
+    const editUserRatingdata = useSelector((state) => state.users.editUserRatingData)
+
+    // useEffect(()=>{
+    //     console.log("editUserRatingdata",editUserRatingdata)
+    // },[editUserRatingdata])
+
+    useEffect(() => {
+        if (editUserRatingdata && editUserRatingdata.status === 200) {
+            dispatch(edituserRatingSuccess(null));
+            toast.success('UserRating updated successful');
+        }
+    }, [editUserRatingdata])
 
     const onEdit = (id) => {
         setisModalVisible(true)
@@ -33,28 +50,44 @@ const UserRating = () => {
         if (getUserRatingDataEdit) {
             dispatch(getOneUserRating(getUserRatingDataEdit.id))
         }
-
     }
 
-    const onDelete = (id) => {
+    const newUser =  data => {
+        const newVal = ApiPost(`userRating/editUserRating`, data)
+          .then(res => {
+            if (res.status === 200) {
+                dispatch(getUserRating(per_Page, pageNumber));
+            }
+            return res;
+          })
+          .catch(err => {
+            return err;
+          });
+        return newVal;
+      };
+
+    const onDelete = async id => {
         let getUserRatingDataDelete = getUserRatingData && getUserRatingData.data && getUserRatingData.data.data.find((item) => item.id === id)
-        //    console.log("getUserRatingDataDelete",getUserRatingDataDelete)
         let data = {
             id: getUserRatingDataDelete.id,
             comment: getUserRatingDataDelete.comment,
             rating: getUserRatingDataDelete.rating,
             isActive: false,
             isDeleted: true,
+        };
+        const deleteUserRating = await newUser(data);
+        if (deleteUserRating.status === 200) {
+            toast.success('UserRating deleted successful');
         }
-        dispatch(edituserRating(data))
+        // dispatch(edituserRating(data))
     }
 
     const handleChange = (e) => {
-        setData({...data,[e.target.name] : e.target.value})
+        setData({ ...data, [e.target.name]: e.target.value })
     }
 
     const handleOk = () => {
-        if(selectedUserRating){
+        if (selectedUserRating) {
             let Data = {
                 id: selectedUserRating.id,
                 comment: data.comment,
@@ -62,11 +95,10 @@ const UserRating = () => {
                 isActive: true,
                 isDeleted: false,
             }
-            console.log("Data",Data)
             setisModalVisible(false)
             dispatch(edituserRating(Data))
         }
-       
+
     }
 
     const handleCancel = () => {
@@ -75,11 +107,11 @@ const UserRating = () => {
 
     useEffect(() => {
         if (getOneUserRatingData && getOneUserRatingData.data) {
-           setData({
-               ...data,
-               rating : getOneUserRatingData.data.rating,
-               comment : getOneUserRatingData.data.comment,
-           })
+            setData({
+                ...data,
+                rating: getOneUserRatingData.data.rating,
+                comment: getOneUserRatingData.data.comment,
+            })
         }
     }, [getOneUserRatingData])
 
@@ -174,7 +206,7 @@ const UserRating = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
-                    title="Course Rating"
+                    title="User Rating"
                     okText={"Edit"}
                 >
                     <Form name="course" layout="vertical">

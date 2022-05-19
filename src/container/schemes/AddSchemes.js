@@ -75,8 +75,8 @@ const AddSchemes = () => {
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
         name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.id,
-        schemeBenifit: getOneScHemeData.schemeBenifit.id,
+        schemeCategory: getOneScHemeData.schemeCategory.name,
+        schemeBenifit: getOneScHemeData.schemeBenifit.name,
         locations: getOneScHemeData.locations.map(item => item.id),
         website: getOneScHemeData.website,
         type: getOneScHemeData.type,
@@ -177,7 +177,7 @@ const AddSchemes = () => {
         ...state,
         [e.target.name]: e.target.checked,
       });
-    } 
+    }
     // else if (e.target.name === 'sequence') {
     //   if (e.target.value > 0) {
     //     setState({ ...state, [e.target.name]: e.target.value });
@@ -318,22 +318,22 @@ const AddSchemes = () => {
       <PageHeader
         ghost
         title={id ? "Edit Scheme" : "Add Scheme"}
-        /*    buttons={[
-                   // <div key="1" className="page-header-actions">
-                   //     <Button size="small" type="link">
-                   //         Export Schemes
-                   //     </Button>
-                   //     <Button size="small" type="light">
-                   //         Import Schemes
-                   //     </Button>
-                   //     <Button size="small" type="success">
-                   //         Create Scheme
-                   //     </Button>
-                   //     <Button size="small" type="warning">
-                   //         Deactivate All Schemes
-                   //     </Button>
-                   // </div>
-               ]} */
+      /*    buttons={[
+                 // <div key="1" className="page-header-actions">
+                 //     <Button size="small" type="link">
+                 //         Export Schemes
+                 //     </Button>
+                 //     <Button size="small" type="light">
+                 //         Import Schemes
+                 //     </Button>
+                 //     <Button size="small" type="success">
+                 //         Create Scheme
+                 //     </Button>
+                 //     <Button size="small" type="warning">
+                 //         Deactivate All Schemes
+                 //     </Button>
+                 // </div>
+             ]} */
       />
 
       <Main>
