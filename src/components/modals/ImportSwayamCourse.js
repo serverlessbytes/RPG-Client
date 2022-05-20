@@ -122,8 +122,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         e['language'] = language;
         e['createdByUser'] = userData.id;
         e['modifiedByUser'] = userData.id;
-        e['categoryId'] = courseCategoryID;
-        e['key'] = uuid();
+        // e['categoryId'] = courseCategoryID;
+        // e['key'] = uuid();
       });
     }
 
@@ -148,14 +148,14 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
-                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
-                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
             <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
-                <Form.Item label="Course Category">
+                {/* <Form.Item label="Course Category">
                   <Select
                     options={courseCategoryArray}
                     size="large"
@@ -169,7 +169,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                     <Option value="">Select course category</Option>
                   </Select>
                   {error && error.courseCategoryID && <span style={{ color: 'red' }}>{error.courseCategoryID}</span>}
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item label="Job Category">
                   <Select

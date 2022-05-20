@@ -26,6 +26,11 @@ const EmployerRating = () => {
         comment: ""
     });
 
+    useEffect(() => {
+        console.log("EmployerRatingtable=============", EmployerRatingtable);
+    }, [EmployerRatingtable])
+
+
     const schemeRatingData = useSelector((state) => state.scheme.schemeRatingData)
     const getOneSchemeRatingData = useSelector((state) => state.scheme.getOneSchemeRatingData)
 
@@ -93,6 +98,7 @@ const EmployerRating = () => {
     }, [getOneSchemeRatingData])
 
     useEffect(() => {
+
         setEmployerRatingtable(schemeRatingData?.data?.data?.map(item => {
             return ({
                 scheme: item.scheme.name,

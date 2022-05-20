@@ -50,7 +50,7 @@ const initialState = {
   editUserRatingData: null,
 };
 
-const userReducer = (state = initialState, action) => { 
+const userReducer = (state = initialState, action) => {
   const { type, data, err } = action;
   switch (type) {
     case ADD_USERSIGNUP_BEGINE:

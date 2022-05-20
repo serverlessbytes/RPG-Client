@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Form, Input, Modal, PageHeader, Select, Table } from 'antd';
+import { Form, Input, Modal, PageHeader, Select, Table } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import { useHistory, useRouteMatch } from 'react-router';
@@ -11,6 +11,7 @@ import actions from '../../redux/schemes/actions';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
+import { Button } from '../../components/buttons/buttons';
 
 
 const SchemeRating = () => {
@@ -48,19 +49,19 @@ const SchemeRating = () => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const newScheme =  data => {
+    const newScheme = data => {
         const newVal = ApiPost(`schemeRating/editSchemeRating`, data)
-          .then(res => {
-            if (res.status === 200) {
-                dispatch(getSchemeRating(per_Page, pageNumber))
-            }
-            return res;
-          })
-          .catch(err => {
-            return err;
-          });
+            .then(res => {
+                if (res.status === 200) {
+                    dispatch(getSchemeRating(per_Page, pageNumber))
+                }
+                return res;
+            })
+            .catch(err => {
+                return err;
+            });
         return newVal;
-      };
+    };
 
     const onDelete = async id => {
         let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)

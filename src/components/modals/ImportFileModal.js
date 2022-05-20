@@ -34,9 +34,9 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const [schemeBanefitID, setSchemeBanefitID] = useState('');
 
 
-  useEffect(()=>{
-    console.log("selectedStateArray",selectedStateArray)
-  },[selectedStateArray])
+  useEffect(() => {
+    console.log("selectedStateArray", selectedStateArray)
+  }, [selectedStateArray])
 
   //   SCHEME CATEGORY
   useEffect(() => {
@@ -131,19 +131,19 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
   const handleOk = () => {
-    if(validation()){
+    if (validation()) {
       return;
-  }
+    }
     if (FileData) {
       FileData.forEach(e => {
-        e['language'] = language;
+        // e['language'] = language;
         e['createdByUser'] = userData.id;
         e['modifiedByUser'] = userData.id;
-        e['schemeCategory'] = schemeCategoryID;
-        e['schemeBenifit'] = schemeBanefitID;
+        // e['schemeCategory'] = schemeCategoryID;
+        // e['schemeBenifit'] = schemeBanefitID;
         e['locations'] = selectedStateArray;
         e['isActive'] = true;
-        e['key'] = uuid();
+        // e['key'] = uuid();
       });
     }
 
@@ -172,8 +172,8 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
-                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
-                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25">
@@ -181,7 +181,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                 Import
               </Button> */}
             </Col>
-            <Col md={12} xs={24} className="mb-25">
+            {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Scheme Category">
                   <Select
@@ -199,8 +199,8 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                   {error && error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
                 </Form.Item>
               </Form>
-            </Col>
-            <Col md={12} xs={24} className="mb-25">
+            </Col> */}
+            {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Scheme Benefits">
                   <Select
@@ -218,7 +218,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                   {error && error.schemeBanefitID && <span style={{ color: 'red' }}>{error.schemeBanefitID}</span>}
                 </Form.Item>
               </Form>
-            </Col>
+            </Col> */}
           </Row>
 
           <Row>

@@ -52,7 +52,7 @@ const PartnerCourses = () => {
   const [data, setData] = useState([]);
   const [partnertable, setPartnertable] = useState([]); //set data
   const [activeCoursetog, setActiveCourseTog] = useState(true);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(20);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [exportTog, setExportTog] = useState(false);

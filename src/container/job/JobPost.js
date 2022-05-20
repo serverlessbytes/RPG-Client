@@ -296,7 +296,7 @@ const JobPost = ({ match }) => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                <Col md={6} xs={24} className="mb-mb-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
                     <Form.Item label="Type">
                       <Select
@@ -314,7 +314,7 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col md={6} xs={24} className="mb-md-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="State">
                       {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
@@ -332,7 +332,7 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col md={6} xs={24} className="mb-md-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
                     <Form.Item label="Job Role">
                       <Select
@@ -349,17 +349,13 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button
-                      size="small"
-                      type="primary"
-                      name="submit"
-                      onClick={e => {
-                        setApply(!apply);
-                        setExportTog(false);
-                      }}
-                    >
+                    <Button size="small" type="primary" onClick={e => {
+                      setApply(!apply);
+                      setExportTog(false);
+                    }}>
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => onClear()}>

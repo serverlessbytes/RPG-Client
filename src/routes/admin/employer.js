@@ -1,17 +1,17 @@
-import React,{ lazy } from 'react'
+import React, { lazy } from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 const EmployerComponent = lazy(() => import('../../container/employer/Employer'));
-const EmployerRating =lazy(()=>import('../../container/employer/EmployerRating'))
+const EmployerRating = lazy(() => import('../../container/employer/EmployerRating'))
 
 const Employer = () => {
     const { path } = useRouteMatch();
-    return(
+    return (
         <Switch>
             <Route exact path={`${path}`} component={EmployerComponent} />
             <Route exact path={`${path}/employerrating`} component={EmployerRating} />
-        </Switch>    
+        </Switch>
     )
-  
+
 }
 
 export default Employer

@@ -7,9 +7,12 @@ import { Main, TableWrapper } from '../styled';
 import { ApiGet } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
+import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const Employer = () => {
+    const dispatch = useDispatch()
     const { path } = useRouteMatch();
     const history = useHistory()
     const [status, setStatus] = useState('active');
@@ -35,7 +38,24 @@ const Employer = () => {
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
     }
-
+    const onDelete = (id) => {
+        let employerForDelete = employerData && employerData.data && employerData.data.data.find(item => item.id === id);
+        if (userForDelete) {
+            //delete userForDelete.key
+            //delete userForDelete.updatedAt
+            //delete userForDelete.avatar,
+            employerForDelete = {
+                ...employerForDelete,
+                id: employerForDelete.id,
+                isActive: false,
+                isDeleted: true,
+                avatar: 'dfd',
+            };
+            delete employerForDelete.userTakenRatings
+            console.log('employerForDelete', employerForDelete);
+            dispatch(editProfile(employerForDelete));
+        }
+    };
     useEffect(() => {
         console.log("----- employerData", employerData);
         if (employerData && employerData.data) {

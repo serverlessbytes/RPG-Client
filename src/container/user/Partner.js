@@ -43,18 +43,18 @@ const Partner = () => {
   }
 
   const onDelete = (id) => {
-    let userForDelete = partnerData && partnerData.data && partnerData.data.data.find(item => item.id === id);
-    if (userForDelete) {
-      userForDelete = {
-        ...userForDelete,
-        id: userForDelete.id,
+    let partnerForDelete = partnerData && partnerData.data && partnerData.data.data.find(item => item.id === id);
+    if (partnerForDelete) {
+      partnerForDelete = {
+        ...partnerForDelete,
+        id: partnerForDelete.id,
         isActive: false,
         isDeleted: true,
         avatar: 'dfd',
       };
-      delete userForDelete.userTakenRatings
-      console.log('userForDelete', userForDelete);
-      dispatch(editProfile(userForDelete));
+      delete partnerForDelete.userTakenRatings
+      console.log('partnerForDelete', partnerForDelete);
+      dispatch(editProfile(partnerForDelete));
     }
   }
   const onActive = (id) => {

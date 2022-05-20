@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Form, Input, Modal, PageHeader, Select, Table } from 'antd';
+import { Form, Input, Modal, PageHeader, Select, Table } from 'antd';
 import { ComingsoonStyleWrapper, UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import { useHistory, useRouteMatch } from 'react-router';
@@ -12,6 +12,7 @@ import actions from '../../redux/course/actions';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
+import { Button } from '../../components/buttons/buttons';
 
 
 const CourseRating = () => {
@@ -46,19 +47,19 @@ const CourseRating = () => {
         dispatch(getCourseRatingData(per_Page, pageNumber))
     }, [per_Page, pageNumber])
 
-    const newCourse =  data => {
+    const newCourse = data => {
         const newVal = ApiPost(`courseRating/editCourseRating`, data)
-          .then(res => {
-            if (res.status === 200) {
-                dispatch(getCourseRatingData(per_Page, pageNumber))
-            }
-            return res;
-          })
-          .catch(err => {
-            return err;
-          });
+            .then(res => {
+                if (res.status === 200) {
+                    dispatch(getCourseRatingData(per_Page, pageNumber))
+                }
+                return res;
+            })
+            .catch(err => {
+                return err;
+            });
         return newVal;
-      };
+    };
 
     const onDelete = async id => {
         let CourseRatingDataDelete = CourseRatingData && CourseRatingData?.data && CourseRatingData?.data?.data.find((item) => item.id === id)

@@ -41,7 +41,7 @@ const AddSchemes = () => {
     grievanceRedress: '',
     elink: '',
     spoc: '',
-    isActive: '',
+    isActive: true,
     // sequence: '',
     videoUrl: '',
     thumbnail: '',
@@ -573,12 +573,12 @@ const AddSchemes = () => {
             </Col>
           </Row>
 
-          <div>
+          {/* <div>
             <label htmlFor="visible" className="ml-10">
               Visible to User
             </label>
             <Checkbox id="visible" name="isActive" checked={state.isActive} onChange={e => onChangeValue(e)}></Checkbox>
-          </div>
+          </div> */}
 
           <div className="sDash_form-action mt-20">
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>

@@ -77,7 +77,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     let error = {};
     let flage = false;
     if (courseCategoryID === '') {
-      error.courseCategoryID = 'CourseCategory is required'; 
+      error.courseCategoryID = 'CourseCategory is required';
       flage = true;
     }
     if (!FileData) {
@@ -94,11 +94,11 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     }
     if (FileData) {
       FileData.forEach(e => {
-        e['language'] = language;
+        // e['language'] = language;
         e['createdByUser'] = userData.id;
         e['modifiedByUser'] = userData.id;
-        e['categoryId'] = courseCategoryID;
-        e['key'] = uuid();
+        // e['categoryId'] = courseCategoryID;
+        // e['key'] = uuid();
       });
     }
 
@@ -122,13 +122,13 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
           <Row gutter={30}>
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
-                <Input placeholder="File upload"  name="name" accept="*" type="file" onChange={(e) => readUploadFile(e)} />
-                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
-                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                <Input placeholder="File upload" name="name" accept="*" type="file" onChange={(e) => readUploadFile(e)} />
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
-            <Col md={12} xs={24} className="mb-25">
+            {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Course Category">
                   <Select
@@ -146,7 +146,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
                   {error && error.courseCategoryID && <span style={{ color: 'red' }}>{error.courseCategoryID}</span>}
                 </Form.Item>
               </Form>
-            </Col>
+            </Col> */}
           </Row>
         </Modal>
       </Col>

@@ -50,6 +50,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
   // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])
 
+  useEffect(() => {
+    console.log(getOneJobPostData, "getOneJobPostData");
+  }, [getOneJobPostData])
+
+
   const newJobPost = data => {
     let id = data.id;
     delete data.id;
@@ -227,53 +232,53 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   // };
 
   useEffect(() => {
-      // if (apply) {
-      setUsertable(
-        getJobFilterData?.data?.data?.map(item => {
-          return {
-            user: (
-              <span style={{ cursor: 'pointer' }} onClick={() => viewJobdata(item.id)}>
-                {item?.name?.name}
-              </span>
-            ),
-            email: item.email,
-            company: item.description,
-            position: item.jobRole?.name,
-            joinDate: moment(item.startDate).format('DD-MM-YYYY'),
-            vacancies: item.vacancies,
-            // approved: (
-            //   <>
-            //     <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
-            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-            //     </div>
-            //   </>
-            // ),
-            // status: status,
-            action: (
-              <div className="table-actions">
-                {status === 'active' ? (
-                  <>
-                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                      <FeatherIcon icon="edit" size={16} />
-                    </Button>
-                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                      <FeatherIcon icon="trash-2" size={16} />
-                    </Button>
-                    {/* <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
+    // if (apply) {
+    setUsertable(
+      getJobFilterData?.data?.data?.map(item => {
+        return {
+          user: (
+            <span style={{ cursor: 'pointer' }} onClick={() => viewJobdata(item.id)}>
+              {item?.name?.name}
+            </span>
+          ),
+          email: item.email,
+          company: item.description,
+          position: item.jobRole?.name,
+          joinDate: moment(item.startDate).format('DD-MM-YYYY'),
+          vacancies: item.vacancies,
+          // approved: (
+          //   <>
+          //     <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
+          //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+          //     </div>
+          //   </>
+          // ),
+          // status: status,
+          action: (
+            <div className="table-actions">
+              {status === 'active' ? (
+                <>
+                  <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                    <FeatherIcon icon="edit" size={16} />
+                  </Button>
+                  <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                    <FeatherIcon icon="trash-2" size={16} />
+                  </Button>
+                  {/* <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
                   <FeatherIcon icon="eye" size={16} />
                 </Button> */}
-                  </>
-                ) : (
-                  <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
-                    <FeatherIcon icon="rotate-ccw" size={16} />
-                  </Button>
-                )}
-              </div>
-            ),
-          };
-        }),
-      );
-    },
+                </>
+              ) : (
+                <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
+                  <FeatherIcon icon="rotate-ccw" size={16} />
+                </Button>
+              )}
+            </div>
+          ),
+        };
+      }),
+    );
+  },
     // else if (jobData && jobData.data) {
     //   console.log("jobData",jobData)
     //   let newJobData={...jobData}
@@ -318,7 +323,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const viewJobdata = id => {
     // dispatch(getoneJobPost(key));
     //setViewModal(true);
-     history.push(`/admin/job/view?id=${id}`)
+    history.push(`/admin/job/view?id=${id}`)
   };
 
   const usersTableColumns = [

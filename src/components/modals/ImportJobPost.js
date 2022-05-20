@@ -24,7 +24,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
-  const [error,seterror] =useState({}); // for valadation
+  const [error, seterror] = useState({}); // for valadation
   const [FileData, setFileData] = useState();
 
   const [jobRoleArray, setJobRoleArray] = useState([]);
@@ -153,11 +153,11 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       flage = true;
     }
     if (districtID === '') {
-      error.district = 'District is required'; 
+      error.district = 'District is required';
       flage = true;
     }
     if (employertID === '') {
-      error.employertID = 'Employer is required';  
+      error.employertID = 'Employer is required';
       flage = true;
     }
     if (!FileData) {
@@ -170,21 +170,21 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   };
 
   const handleOk = () => {
-    if(validation()){
-        return;
+    if (validation()) {
+      return;
     }
     if (FileData) {
       FileData.forEach(e => {
         e['vacancies'] = +e.vacancies;
         e['language'] = language;
-        e['state'] = stateID;
-        e['name'] = employertID;
-        e['district'] = districtID;
+        // e['state'] = stateID;
+        // e['name'] = employertID;
+        // e['district'] = district ID;
         e['isActive'] = true;
         e['createdByUser'] = userData.id;
         e['modifiedByUser'] = userData.id;
-        e['jobRoleId'] = jobRoleID;
-        e['jobCategoryId'] = jobCategoryID;
+        // e['jobRoleId'] = jobRoleID;
+        // e['jobCategoryId'] = jobCategoryID;
         e['key'] = uuid();
       });
     }
@@ -211,12 +211,12 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
               <Form.Item name="name">
                 {/* <Input placeholder="File upload" name="name" type="file" onChange={(e)=>{console.log(';e',e)}} /> */}
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
-                {Error ? <span style={{ color: 'red' }}>{Error}</span> : 
-                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
-            <Col md={12} xs={24} className="mb-25">
+            {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="employer">
                   <Select
@@ -298,7 +298,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                 </Form.Item>
               </Form>
-            </Col>
+            </Col> */}
           </Row>
         </Modal>
       </Col>

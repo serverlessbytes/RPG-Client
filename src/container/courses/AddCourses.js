@@ -81,28 +81,28 @@ const AddCourses = () => {
     },
   ]);
 
-  useEffect (()=>{
-    return(()=>{dispatch(addSwayamPartnerCourseSuccess(null))} //for clear a Modules
+  useEffect(() => {
+    return (() => { dispatch(addSwayamPartnerCourseSuccess(null)) } //for clear a Modules
     )
-  },[])
-  
-useEffect(() => {
-  if (addSwayamCourseData && addSwayamCourseData.status  === 200) {
-    toast.success("Swayam Course Modules Add successful");
-       dispatch(addSwayamPartnerCourseSuccess(null))
-  }
-  // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-  //   dispatch(editSchemeSuccess(null))
-  //   toast.success("Jobs Update successful");
-  // }
-}, [addSwayamCourseData])
+  }, [])
 
-useEffect(()=>{
-  if(addSwayamCourseDataErr){ 
-    dispatch(addSwayamPartnerCourseErr())
-    toast.error("Something Wrong")
-  }
-},[addSwayamCourseDataErr])
+  useEffect(() => {
+    if (addSwayamCourseData && addSwayamCourseData.status === 200) {
+      toast.success("Swayam Course Modules Add successful");
+      dispatch(addSwayamPartnerCourseSuccess(null))
+    }
+    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+    //   dispatch(editSchemeSuccess(null))
+    //   toast.success("Jobs Update successful");
+    // }
+  }, [addSwayamCourseData])
+
+  useEffect(() => {
+    if (addSwayamCourseDataErr) {
+      dispatch(addSwayamPartnerCourseErr())
+      toast.error("Something Wrong")
+    }
+  }, [addSwayamCourseDataErr])
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -138,7 +138,7 @@ useEffect(()=>{
   }, [addSwayamCourseData]);
 
   useEffect(() => {
-    console.log("editOneSwayamCourseData",editOneSwayamCourseData);
+    console.log("editOneSwayamCourseData", editOneSwayamCourseData);
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && id) {
       setState({
         ...state,
@@ -447,8 +447,8 @@ useEffect(()=>{
 
   return (
     <>
-      <PageHeader ghost 
-      title= {id ? "Edit Swayam Courses" : "Add Swayam Courses" }/>
+      <PageHeader ghost
+        title={id ? "Edit Swayam Courses" : "Add Swayam Courses"} />
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>
@@ -553,7 +553,7 @@ useEffect(()=>{
                     {error.jobCategoryIds && <span style={{ color: 'red' }}>{error.jobCategoryIds}</span>}
                   </Form.Item>
                 </Col>
-                <Col lg={11} md={11} sm={24} xs={24}>
+                {/* <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Senquence</label>
                   <Form.Item>
                     <Input
@@ -567,7 +567,7 @@ useEffect(()=>{
                     />
                   </Form.Item>
                   {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
-                </Col>
+                </Col> */}
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>

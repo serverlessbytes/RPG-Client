@@ -398,7 +398,7 @@ const Schemes = () => {
 
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
-      let schemeratings =  item.schemeRatings.map(item => item.rating)
+      let schemeratings = item.schemeRatings.map(item => item.rating)
       // console.log("schemeratings",schemeratings)
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
@@ -416,22 +416,22 @@ const Schemes = () => {
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         //  schemeRatings: item.schemeRatings.map(item => item.rating),
-        schemeRatings : (
+        schemeRatings: (
           <StarRatings
-          rating={avg?avg:0}
-          starRatedColor="#f57c00"
-          numberOfStars={5}
-          name="schemeRatings"
-          starDimension="13px"
-        />
+            rating={avg ? avg : 0}
+            starRatedColor="#f57c00"
+            numberOfStars={5}
+            name="schemeRatings"
+            starDimension="13px"
+          />
         ),
         Website: item.website,
         LastUpdated: moment(item.updatedAt).format('DD-MM-YYYY'),
         approved: (
           <>
-            <div onClick={() => onApproved(item.id, item.isApproved)}>
+            {/* <div onClick={() => onApproved(item.id, item.isApproved)}>
               <Switch checked={item.isApproved} disabled={status === "active" ? false : true}></Switch>
-            </div>
+            </div> */}
           </>
         ),
 
@@ -516,10 +516,10 @@ const Schemes = () => {
       title: 'Last Updated',
       dataIndex: 'LastUpdated',
     },
-    {
-      title: 'Approved',
-      dataIndex: 'approved',
-    },
+    // {
+    //   title: 'Approved',
+    //   dataIndex: 'approved',
+    // },
     {
       title: 'Actions',
       dataIndex: 'action',
