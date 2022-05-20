@@ -30,6 +30,8 @@ const AddCourses = () => {
 
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
+  const langId = searchParams.get('langId');
+  const key = searchParams.get('key');
   const history = useHistory();
   const { Option } = Select;
   const { TextArea } = Input;
@@ -283,18 +285,18 @@ useEffect(()=>{
       return;
     }
     let data = {
-      key: uuid(),
+      key: key ? key : uuid(),
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
       duration: moment(state.duration).format('HH:mm:ss'),
       jobCategoryIds: state.jobCategoryIds,
       certification: state.certification,
-      sequence: parseInt(state.sequence),
+      // sequence: parseInt(state.sequence),
       mode: state.mode,
       thumbnail: state.thumbnail,
     };
-    dispatch(addSwayamCourse(data));
+    dispatch(addSwayamCourse(data,langId));
     // history.push('/admin/courses');
   };
 
