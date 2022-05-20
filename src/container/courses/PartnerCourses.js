@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImportPartnerCourse from '../../components/modals/ImportPartnerCourses';
 import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import StarRatings from 'react-star-ratings';
 
 const PartnerCourses = () => {
   const {
@@ -75,6 +76,23 @@ const PartnerCourses = () => {
       toast.success('No Partner course data for export');
     }
   }, [data]);
+
+  // useEffect(() => {
+  //   console.log("courseData", courseData)
+  //   if (courseData?.data?.data) {
+  //     courseData?.data?.data.map((item,i) => {
+  //       let x = Math.floor((Math.random() * 5) + 1);
+  //       let data = {
+  //         "comment": "test rating",
+  //         "rating": x,
+  //         "courseId": item.id
+  //       }
+  //       ApiPost('courseRating/addCourseRating',data).then((res) => {
+  //         console.log('index', i)
+  //       })
+  //     })
+  //   }
+  // }, [courseData])
 
   useEffect(() => {
     if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
@@ -187,9 +205,10 @@ const PartnerCourses = () => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
 
-  const viewPartnerCoursedata = key => {
-    dispatch(getOneCoursefilter(key));
-    setViewModal(true);
+  const viewPartnerCoursedata = id => {
+    // dispatch(getOneCoursefilter(id));
+    // setViewModal(true);
+    history.push(`/admin/courses/viewpartnercourse?id=${id}`)
   };
 
   const onDelete = id => {
@@ -205,6 +224,7 @@ const PartnerCourses = () => {
       delete activeCourseDelete.viewCount;
       delete activeCourseDelete.isApproved;
       delete activeCourseDelete.createdAt;
+      delete activeCourseDelete.courseRatings;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -232,6 +252,7 @@ const PartnerCourses = () => {
       delete activedata.viewCount;
       delete activedata.isApproved;
       delete activedata.createdAt;
+      delete activedata.courseRatings;
 
       activedata = {
         ...activedata,
@@ -245,41 +266,62 @@ const PartnerCourses = () => {
     }
   };
 
-  const onApproved = (id, isAp, key) => {
-    if (status !== 'active') {
-      return;
-    }
-    let data = {
-      courseId: id,
-      key: key,
-      isApproved: !isAp,
-    };
+  // const onApproved = (id, isAp, key) => {
+  //   if (status !== 'active') {
+  //     return;
+  //   }
+  //   let data = {
+  //     courseId: id,
+  //     key: key,
+  //     isApproved: !isAp,
+  //   };
 
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-      console.log('res', res);
-      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-    });
-  };
+  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+  //     console.log('res', res);
+  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+  //     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+  //   });
+  // };
 
   useEffect(() => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-          // const { id, name, designation, status } = user;
+          console.log("courseData", courseData)
+          let courseRatings = item.courseRatings.map(item => item.rating)
+          console.log("courseRating", courseRatings)
+
+          var sum = 0;
+
+          for (var i = 0; i < courseRatings.length; i++) {
+            sum += parseInt(courseRatings[i]);
+          }
+
+          var avg = sum / courseRatings.length;
+
           return {
             //key: id,
-            CourseName: item.name,
-            CourseCategory: item.courseCategory?.name,
-            //State: item.state,
-            CourseType: item.mode,
-            approved: (
-              <>
-                <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-                  <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-                </div>
-              </>
+            CourseName: (
+              <span onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
+            CourseCategory: item.courseCategory?.name,
+            courseRatings: (
+              <StarRatings
+                rating={avg ? avg : 0}
+                starRatedColor="#f57c00"
+                numberOfStars={5}
+                name="patnerCourse"
+                starDimension="13px"
+              />
+            ),
+            CourseType: item.mode,
+            // approved: (
+            //   <>
+            //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+            //     </div>
+            //   </>
+            // ),
             // Language: "Hindi",
             action: (
               <div className="active-schemes-table">
@@ -298,14 +340,14 @@ const PartnerCourses = () => {
                       >
                         <FeatherIcon icon="trash-2" size={16} />
                       </Button>
-                      <Button
+                      {/* <Button
                         className="btn-icon"
                         type="success"
                         onClick={() => viewPartnerCoursedata(item.id)}
                         shape="circle"
                       >
                         <FeatherIcon icon="eye" size={16} />
-                      </Button>
+                      </Button> */}
                     </>
                   ) : (
                     <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
@@ -326,13 +368,20 @@ const PartnerCourses = () => {
   }, [courseData]);
 
   const Submit = () => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
+    dispatch(getCoursefilter(state.category ? state.category : '', perPage, pageNumber, state.mode ? state.mode : '', status));
   };
+
+  // const clearFilter = () => {
+  //   setState({ category: '' });
+  //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+  // };
+
   useEffect(() => {
     if (state.category) {
-      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+      dispatch(getCoursefilter('', perPage, pageNumber,'', status));
+      // dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
     }
-  }, [state.category, perPage, pageNumber, state.mode, status]); //paganation
+  }, [perPage, pageNumber, state.mode, status]); //paganation
 
   const partnerCourseTableColumns = [
     {
@@ -345,13 +394,14 @@ const PartnerCourses = () => {
       dataIndex: 'CourseCategory',
     },
     {
+      title: 'Course Ratings',
+      dataIndex: 'courseRatings',
+    },
+    {
       title: 'Course Type',
       dataIndex: 'CourseType',
     },
-    {
-      title: 'Approved',
-      dataIndex: 'approved',
-    },
+
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -496,9 +546,9 @@ const PartnerCourses = () => {
                     {/* <Button size="small" type="primary" onClick={e => Submit(e)}>
                       Apply
                     </Button>
-                    <Button size="small" type="light">
-                                            Clear
-                                        </Button> */}
+                    <Button size="small" type="light" onClick= {e => clearFilter(e)}>
+                      Clear
+                    </Button> */}
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>

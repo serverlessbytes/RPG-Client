@@ -41,20 +41,20 @@ function ViewCourse() {
         history.push(`/admin/courses/addcourses?id=${id}`)
     }
 
-    const onApproved = (key, isAp, id) => {
+    const onApproved = (key,isAp,id) => {
         // if (status !== 'active') {
         //   return;
         // }
         let data = {
-            courseId: id,
-            key: key,
-            isApproved: !isAp,
+          courseId: id,
+          key: key,
+          isApproved: !isAp,
         };
         ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-            toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-            dispatch(getOneCoursefilter(id));
+          toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+          dispatch(getOneCoursefilter(id));
         });
-    };
+      };
 
     return (
         <>
@@ -90,9 +90,9 @@ function ViewCourse() {
                             <Col lg={8} className="mb">
                                 <span><label className='pr' style={{ fontWeight: 'bold' }} >Course name:</label> {getOneCoursedata?.data?.name}</span><br />
                             </Col>
-                            {/* <Col lg={8} className="mb">
+                            <Col lg={8} className="mb">
                                 <span><label className='pr' style={{ fontWeight: 'bold' }} >Senquence:</label> {getOneCoursedata?.data?.sequence}</span><br />
-                            </Col> */}
+                            </Col>
                             <Col lg={8} className="mb">
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >Mode:</label> {getOneCoursedata?.data?.mode}</span><br />
                             </Col>
@@ -103,28 +103,27 @@ function ViewCourse() {
                             <Col lg={8} className="mb">
                                 <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Details:</label> {getOneCoursedata?.data?.detail}</span><br />
                             </Col>
-
+                        
                             <Col lg={8} className="mb">
-                                <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)}>
+                                <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved,getOneCoursedata.data?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneCoursedata?.data?.isApproved}  ></Switch>
                                 </div>
                             </Col>
+                            <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.id)} type="primary">
+                                Edit
+                            </Button>
+                            <Button
+                                className='edit-view'
+                                size="medium"
+                                style={{ marginLeft: '14px' }}
+                                onClick={() => history.push(`/admin/courses`)}
+                            >
+                                Cancel
+                            </Button>
+                    </Row>
 
-                        </Row>
-                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.id)} type="primary">
-                            Edit
-                        </Button>
-                        <Button
-                            className='edit-view'
-                            size="medium"
-                            style={{ marginLeft: '14px' }}
-                            onClick={() => history.push(`/admin/courses`)}
-                        >
-                            Cancel
-                        </Button>
-
-                        {/* <Row gutter={10}>
+                    {/* <Row gutter={10}>
                             <Col lg={8} className="mb">
                                 <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType.name}</span><br />
                             </Col>
@@ -143,9 +142,9 @@ function ViewCourse() {
                         >
                             Cancel
                         </Button> */}
-                    </Col>
-                </Cards>
-            </Main>
+                </Col>
+            </Cards>
+        </Main>
 
         </>
     )

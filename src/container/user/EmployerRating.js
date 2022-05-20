@@ -38,30 +38,30 @@ const EmployerRating = () => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    // const onDelete = (id) => {
-    //     let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
-    //     if (schemeRatingForDelete) {
-    //         let data = {
-    //             id: schemeRatingForDelete.id,
-    //             comment: schemeRatingForDelete.comment,
-    //             rating: schemeRatingForDelete.rating,
-    //             isActive: false,
-    //             isDeleted: true,
-    //         }
-    //         dispatch(editSchemeRating(data))
-    //     }
-    // }
+    const onDelete = (id) => {
+        let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
+        if (schemeRatingForDelete) {
+            let data = {
+                id: schemeRatingForDelete.id,
+                comment: schemeRatingForDelete.comment,
+                rating: schemeRatingForDelete.rating,
+                isActive: false,
+                isDeleted: true,
+            }
+            dispatch(editSchemeRating(data))
+        }
+    }
 
-    // const onEdit = (id) => {
-    //     setIsModalVisible(true)
-    //     let schemeRatingForEdit = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
-    //     if (schemeRatingForEdit) {
-    //         setSelectedSchemeRating(schemeRatingForEdit)
-    //     }
-    //     if (schemeRatingForEdit) {
-    //         dispatch(getOneSchemeRating(schemeRatingForEdit.id))
-    //     }
-    // }
+    const onEdit = (id) => {
+        setIsModalVisible(true)
+        let schemeRatingForEdit = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
+        if (schemeRatingForEdit) {
+            setSelectedSchemeRating(schemeRatingForEdit)
+        }
+        if (schemeRatingForEdit) {
+            dispatch(getOneSchemeRating(schemeRatingForEdit.id))
+        }
+    }
 
     const handleOk = () => {
         if (selectedSchemeRating) {
@@ -92,32 +92,32 @@ const EmployerRating = () => {
         }
     }, [getOneSchemeRatingData])
 
-    // useEffect(() => {
-    //     setEmployerRatingtable(schemeRatingData?.data?.data?.map(item => {
-    //         return ({
-    //             scheme: item.scheme.name,
-    //             rating: item.rating,
-    //             createdByUser: item.createdByUser.name,
-    //             comment: item.comment,
-    //             action: (
-    //                 <div className="table-actions">
-    //                     <>
-    //                         <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
-    //                             <FeatherIcon icon="edit" size={16} />
-    //                         </Button>
-    //                         <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-    //                             <FeatherIcon icon="trash-2" size={16} />
-    //                         </Button>
-    //                         {/* <Button className="btn-icon" type="success" shape="circle">
-    //                             <FeatherIcon icon="eye" size={16} />
-    //                         </Button> */}
-    //                     </>
-    //                 </div>
-    //             ),
-    //         });
-    //     })
-    //     )
-    // }, [schemeRatingData])
+    useEffect(() => {
+        setEmployerRatingtable(schemeRatingData?.data?.data?.map(item => {
+            return ({
+                scheme: item.scheme.name,
+                rating: item.rating,
+                createdByUser: item.createdByUser.name,
+                comment: item.comment,
+                action: (
+                    <div className="table-actions">
+                        <>
+                            <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
+                                <FeatherIcon icon="edit" size={16} />
+                            </Button>
+                            <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                <FeatherIcon icon="trash-2" size={16} />
+                            </Button>
+                            {/* <Button className="btn-icon" type="success" shape="circle">
+                                <FeatherIcon icon="eye" size={16} />
+                            </Button> */}
+                        </>
+                    </div>
+                ),
+            });
+        })
+        )
+    }, [schemeRatingData])
 
     const EmployerRatingTableColumns = [
         {

@@ -103,7 +103,7 @@ const Admin = () => {
     <>
       <PageHeader
         ghost
-        title="Super Admin"
+        title="Admin"
       // buttons={[
       //     <div className="page-header-actions">
       //         <Button size="small" type="primary" onClick={allEmployerExport}>
