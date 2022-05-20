@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Dashboard from './dashboard';
@@ -15,9 +15,15 @@ import Testimonial from './Testimonial';
 import Banner from '../../container/banner/Banner';
 import Carousel from '../../container/carousel/Carousel';
 import Employer from './employer';
+import { useDispatch } from 'react-redux';
+import { getLanguageData } from '../../redux/language/actionCreator';
 
 const Admin = () => {
   const { path } = useRouteMatch();
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getLanguageData())
+  }, [])
 
   return (
     <Switch>

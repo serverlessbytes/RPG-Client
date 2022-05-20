@@ -14,6 +14,7 @@ import {
   getallSwayamCourse,
   getCategoryData,
   getCoursefilter,
+  getOneCourseDetailByKey,
   getOneCoursefilter,
 } from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
@@ -28,6 +29,8 @@ import ImportFileModal from '../../components/modals/ImportFileModal';
 import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
+import { async } from '@firebase/util';
+import ConfirmModal from '../../components/modals/confirm_modal';
 
 const {
   getallSwayamCourseSuccess,
@@ -47,6 +50,7 @@ const SwayamCourses = () => {
   const { path } = useRouteMatch();
   const [activeCoursetog, setActiveCourseTog] = useState(true);
 
+  const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
@@ -68,9 +72,15 @@ const SwayamCourses = () => {
   const [importModal, setImportModal] = useState(false);
   const [state, setState] = useState('');
   const [exportTog, setExportTog] = useState(false);
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [langIds, setLangIds] = useState({
+    hindi: '',
+    marathi: ''
+  });
 
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
   const allCategoryData = useSelector(state => state.category.getAllCourse);
+
 
   const header = [
     { label: 'id', key: 'id' },
@@ -229,6 +239,27 @@ const SwayamCourses = () => {
     return newVal
   }
 
+  useEffect(() => {
+    console.log('languageData', languageData)
+    let temp = {
+      hindi: '',
+      marathi: ''
+    }
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        console.log('item', item.id)
+        temp.hindi = item.id
+      }
+    })
+    setLangIds(temp)
+  }, [languageData])
+
+  useEffect(() => {
+    console.log('langIds', langIds)
+
+  }, [langIds])
   const onActive = id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
     if (activeCourse) {
@@ -306,6 +337,25 @@ const SwayamCourses = () => {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     });
   };
+
+  const getOneCourseDetailByKey = async (languageId, key) => {
+    await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
+      .then((res) => {
+        //  dispatch(editCategoryRatingSuccess(res))
+        //  if (res.status === 200) {  
+        //   return dispatch(getCourseRatingData(per_page, page_number))
+        // }
+        if (res.status === 200) {
+          toast.success("Course alredy exist in this language!")
+        }
+      })
+      .catch(e => {
+        if (e.response.status) {
+          setIsConfirmModal(true)
+          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
+        }
+      })
+  }
 
   const onClick = ({ key }) => {
     if (key == 'exportCourse') {
@@ -400,6 +450,39 @@ const SwayamCourses = () => {
             //State: item.state,
             // CourseType: item.mode,
             // Language: "Hindi",
+
+            selectLanguage: (
+              <div className="">
+                {/* <div className="active-schemes-table"> */}
+                <div className="">
+                  {/* <div className="table-actions"> */}
+
+                  <>
+                    <Button size="small" type="primary" onClick={() => {
+                      getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                    }}>
+                      {/* <FeatherIcon icon="edit" size={16} /> */}
+                      Hindi
+                    </Button>
+                    <Button size="small" type="primary" onClick={() => {
+                      getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                    }} >
+                      {/* <FeatherIcon icon="edit" size={16} /> */}
+                      Marathi
+                    </Button>
+
+                    {/* <Button
+                        className="btn-icon"
+                        type="success"
+                        onClick={() => viewSwayamCoursedata(item.id)}
+                        shape="circle"
+                      >
+                        <FeatherIcon icon="eye" size={16} />
+                      </Button> */}
+                  </>
+                </div>
+              </div>
+            ),
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
@@ -462,6 +545,11 @@ const SwayamCourses = () => {
       title: 'Certification',
       dataIndex: 'Certification',
     },
+    {
+      title: 'Select Language',
+      dataIndex: 'selectLanguage',
+      width: '90px',
+    },
     // {
     //     title: 'Language',
     //     dataIndex: 'Location',
@@ -476,6 +564,7 @@ const SwayamCourses = () => {
       dataIndex: 'action',
       width: '90px',
     },
+
   ];
 
   const { TabPane } = Tabs;
@@ -711,6 +800,30 @@ const SwayamCourses = () => {
           importModal={importModal}
           handleCancel={() => setImportModal(false)}
           modaltitle="Import Swayam Courses"
+        />
+      )}
+      {isConfirmModal && (
+        <ConfirmModal
+          onOk={() => { setIsConfirmModal(false) }}
+          onCancel={() => { setIsConfirmModal(false) }}
+          visible={isConfirmModal}
+          footer={<>
+            <Button size="small" type="primary" onClick={() => {
+              // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+              setIsConfirmModal(false)
+            }}>
+              {/* <FeatherIcon icon="edit" size={16} /> */}
+              No
+            </Button>
+            <Button size="small" type="primary" onClick={() => {
+              // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+              setIsConfirmModal(false)
+            }} >
+              {/* <FeatherIcon icon="edit" size={16} /> */}
+              Yes
+            </Button>
+          </>}
+          children={"This coures in not available in this language. You want to add?"}
         />
       )}
     </>
