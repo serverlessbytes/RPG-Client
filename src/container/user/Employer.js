@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-const Partner = () => {
+const Employer = () => {
     const { path } = useRouteMatch();
     const history = useHistory()
     const [status, setStatus] = useState('active');
@@ -164,7 +164,7 @@ const Partner = () => {
     )
 }
 
-export default Partner
+export default Employer
 
 
 
