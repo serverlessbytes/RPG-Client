@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-const Admin = () => {
+const SuperAdmin = () => {
   const history = useHistory()
   const { path } = useRouteMatch()
   const [status, setStatus] = useState('active');
@@ -164,4 +164,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default SuperAdmin
