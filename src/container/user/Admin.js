@@ -38,7 +38,6 @@ const Admin = () => {
 
 
     useEffect(() => {
-        console.log("----- adminData", adminData);
         if (adminData && adminData.data) {
             setAdminTable(
                 adminData.data.data.map((item) => {
@@ -103,7 +102,7 @@ const Admin = () => {
         <>
             <PageHeader
                 ghost
-                title="Super Admin"
+                title="Admin"
             // buttons={[
             //     <div className="page-header-actions">
             //         <Button size="small" type="primary" onClick={allEmployerExport}>

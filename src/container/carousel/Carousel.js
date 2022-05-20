@@ -191,7 +191,7 @@ const Carousel = () => {
                         onClick={() => onDelete(item.id)}
                         shape="circle"
                       >
-                        <FeatherIcon icon="x-circle" size={16} />
+                        <FeatherIcon icon="trash-2" size={16} />
                       </Button>
                     </>
                   </div>

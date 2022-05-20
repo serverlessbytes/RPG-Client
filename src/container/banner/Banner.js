@@ -191,7 +191,7 @@ const Banner = () => {
                                         <FeatherIcon icon="edit" size={16} />
                                     </Button>
                                     <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                        <FeatherIcon icon="x-circle" size={16} />
+                                        <FeatherIcon icon="trash-2" size={16} />
                                     </Button>
                                 </>
                             </div>
