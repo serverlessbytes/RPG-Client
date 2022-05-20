@@ -399,13 +399,13 @@ const Schemes = () => {
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings =  item.schemeRatings.map(item => item.rating)
-      console.log("schemeratings",schemeratings)
+      // console.log("schemeratings",schemeratings)
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
       }
       var avg = sum / schemeratings.length;
-      console.log(avg);
+      // console.log(avg);
       return ({
         SchemeName: (
           <span style={{ cursor: "pointer" }} onClick={() => viewSchemesdata(item.key)}>

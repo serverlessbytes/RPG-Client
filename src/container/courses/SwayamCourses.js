@@ -352,7 +352,7 @@ const SwayamCourses = () => {
       setUsertable(
         courseData.data?.data?.map(item => {
           let courseRatings = item.courseRatings.map(item => item.rating)
-          console.log("courseRatings", courseRatings)
+          // console.log("courseRatings", courseRatings)
           var sum = 0;
 
           for (var i = 0; i < courseRatings.length; i++) {
@@ -360,7 +360,7 @@ const SwayamCourses = () => {
           }
 
           var avg = sum / courseRatings.length;
-          console.log("avg", avg)
+          // console.log("avg", avg)
 
           return {
             CourseName: (
