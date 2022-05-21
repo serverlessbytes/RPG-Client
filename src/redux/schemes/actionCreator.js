@@ -48,7 +48,7 @@ const {
   getOneSchemeRatingSuccess,
   getOneSchemeRatingErr,
 } = actions;
-let per_Page, page_Num, Status;
+let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search;
 export const getSchemecategory = () => async dispatch => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then(res => {
@@ -101,39 +101,54 @@ export const addSchemeData = data => async dispatch => {
     .catch(err => dispatch(addSchemeErr(err)));
 };
 
-export const getSchemeData = (perPage, pageNumber, status, schemeBenifit, schemeCategory) => async dispatch => {
+export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, searchBar) => async dispatch => {
   per_Page = perPage;
-  page_Num = pageNumber;
-  Status = status;
-  let apiData;
-  if (schemeCategory && schemeBenifit) {
-    apiData = ApiGet(
-      `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-        STORAGEKEY.language,
-      )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`,
-    );
-  } else if (schemeCategory && schemeBenifit === '') {
-    apiData = ApiGet(
-      `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-        STORAGEKEY.language,
-      )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeCategory=${schemeCategory}`,
-    );
-  } else if (schemeCategory === '' && schemeBenifit) {
-    apiData = ApiGet(
-      `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-        STORAGEKEY.language,
-      )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}`,
-    );
-  } else {
-    apiData = ApiGet(
-      `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-        STORAGEKEY.language,
-      )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`,
-    );
+  page_number = pageNumber;
+  status = Status;
+  schemeBenifit = Benifit;
+  schemeCategory = Category
+  search = searchBar
+  let URL = `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
+  if (Status) {
+    URL = URL.concat(`&status=${Status} `)
   }
-  apiData
+  if (Benifit) {
+    URL = URL.concat(`&schemeBenifit=${Benifit} `)
+  }
+  if (Category) {
+    URL = URL.concat(`&schemeCategory =${Category}`)
+  }
+  if (searchBar) {
+    URL = URL.concat(`&search =${searchBar}`)
+  }
+  // let apiData;
+  // if (schemeCategory && schemeBenifit) {
+  //   apiData = ApiGet(
+  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
+  //       STORAGEKEY.language,
+  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`,
+  //   );
+  // } else if (schemeCategory && schemeBenifit === '') {
+  //   apiData = ApiGet(
+  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
+  //       STORAGEKEY.language,
+  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeCategory=${schemeCategory}`,
+  //   );
+  // } else if (schemeCategory === '' && schemeBenifit) {
+  //   apiData = ApiGet(
+  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
+  //       STORAGEKEY.language,
+  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}`,
+  //   );
+  // } else {
+  //   apiData = ApiGet(
+  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
+  //       STORAGEKEY.language,
+  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`,
+  //   );
+  // }
+  await ApiGet(URL)
     .then(res => {
-      //console.log("res====",res)
       return dispatch(getSchemeSuccess(res.data));
     })
     .catch(err => dispatch(getSchemenErr(err)));
@@ -186,14 +201,14 @@ export const addSchemeInBulkImport = body => async dispatch => {
     });
 };
 
-export const getSchemeRating = (perpage,pagenum) => async dispatch => {
+export const getSchemeRating = (perpage, pagenum) => async dispatch => {
   per_Page = perpage;
   page_Num = pagenum;
   await ApiGet(`schemeRating/getSchemeRatings?per_page=${perpage}&page_number=${pagenum}`)
-  .then( res => {
-    return dispatch(getSchemeRatingSuccess(res))
-  })
-  .catch(err => dispatch(getSchemeRatingErr(err)))
+    .then(res => {
+      return dispatch(getSchemeRatingSuccess(res))
+    })
+    .catch(err => dispatch(getSchemeRatingErr(err)))
 }
 
 export const editSchemeRating = body => async dispatch => {
@@ -202,7 +217,7 @@ export const editSchemeRating = body => async dispatch => {
       dispatch(editSchemeRatingSuccess(res));
       console.log('res', res);
       if (res.status === 200) {
-        return dispatch(getSchemeRating(per_Page,page_Num));
+        return dispatch(getSchemeRating(per_Page, page_Num));
       }
     })
     .catch(err => dispatch(editSchemeRatingErr(err)));
@@ -210,8 +225,8 @@ export const editSchemeRating = body => async dispatch => {
 
 export const getOneSchemeRating = (id) => async dispatch => {
   await ApiGet(`schemeRating/getSchemeRating?id=${id}`)
-  .then( res => {
-    return dispatch(getOneSchemeRatingSuccess(res))
-  })
-  .catch(err => dispatch(getOneSchemeRatingErr(err)))
+    .then(res => {
+      return dispatch(getOneSchemeRatingSuccess(res))
+    })
+    .catch(err => dispatch(getOneSchemeRatingErr(err)))
 }

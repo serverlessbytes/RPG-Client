@@ -2,6 +2,7 @@ import { async } from "@firebase/util";
 import STORAGEKEY from "../../config/APP/app.config";
 import { ApiGet, ApiPatch, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
+import schemes from "../../routes/admin/schemes";
 import actions from "./actions";
 
 const {
@@ -61,7 +62,7 @@ const {
   addBlukJobsErr
 
 } = actions;
-let per_page, page_num, State, Status, Type, jobrole;
+let per_page, page_num, State, Status, Type, jobrole, search;
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
@@ -158,8 +159,13 @@ export const getoneJobPost = (data) => async (dispatch) => {
     .catch((err) => dispatch(getoneJobPostErr(err)))
 }
 
-export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status) => async (dispatch) => {
-  per_page = perPage, page_num = pageNumber, State = state, Status = status, Type = type, jobrole = jobRole;
+export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status, searchBar) => async (dispatch) => {
+  per_page = perPage,
+    page_num = pageNumber,
+    State = state, Type = type,
+    jobrole = jobRole,
+    Status = status,
+    search = searchBar;
   let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (state) {
     URL = URL.concat(`&state=${state}`)
@@ -172,6 +178,9 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
   }
   if (status) {
     URL = URL.concat(`&status=${status}`)
+  }
+  if (schemes) {
+    URL = URL.concat(`&search=${searchBar}`)
   }
 
   await ApiPost(URL)
@@ -212,8 +221,7 @@ export const jobApproved = (id, body) => async (dispatch) => {
 }
 
 export const getJobApplication = (perPage, pageNumber, status) => async (dispatch) => {
-  per_page = perPage, page_num = pageNumber, Status = status,
-  await ApiGet(`jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}${status ? `&${status}=true` : ''}`)
+  per_page = perPage, page_num = pageNumber, Status = status, await ApiGet(`jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}${status ? `&${status}=true` : ''}`)
     .then((res) => {
       //console.log("res",res)
       return dispatch(getJobApplicationSuccess(res))
@@ -262,10 +270,10 @@ export const addBulkJobs = (body) => async (dispatch) => {
       return dispatch(addBlukJobsSuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })
-    .catch(err =>{
+    .catch(err => {
       let newError = {
-        message : "Somthing went wrong",
-        status : 500
+        message: "Somthing went wrong",
+        status: 500
       }
       dispatch(addBlukJobsBegin(newError))
     }

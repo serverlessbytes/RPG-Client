@@ -36,7 +36,8 @@ const Schemes = () => {
 
   const [schemeCategory, setSchemeCategory] = useState({
     category: '',
-    benefit: ''
+    benefit: '',
+    search: '',
   });
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState('') //for export
@@ -65,7 +66,9 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
       setSchemeCategory({ ...schemeCategory, benefit: e });
-    }
+    } else if (name === "search") [
+      setSchemeCategory({ ...schemeCategory, search: e })
+    ]
   };
 
   // useEffect(() => {
@@ -145,7 +148,7 @@ const Schemes = () => {
   }, [addSchemeError])
 
   const onApply = () => {
-    dispatch((perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    dispatch((perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -334,7 +337,7 @@ const Schemes = () => {
   }
 
   const clearFilter = () => {
-    setSchemeCategory({ category: "", benefit: "" })
+    setSchemeCategory({ ...schemeCategory, category: "", benefit: "", search: "" })
     dispatch(getSchemeData(perPage, pageNumber, status));
   }
 
@@ -621,6 +624,13 @@ const Schemes = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+                <Col md={6} xs={24} className="mb-25">
+                  <Form name="sDash_select" layout="vertical">
+                    <Form.Item label="Search">
+                      <Input placeholder="search" name='search' value={schemeCategory.search} onChange={(e) => { onChnageValue(e.target.value, 'search') }} />
+                    </Form.Item>
+                  </Form>
+                </Col>
                 {/* <Col md={6} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item name="basic-select" label="Location">
@@ -637,7 +647,12 @@ const Schemes = () => {
                                 </Col> */}
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    <Button size="small" type="primary" onClick={e => { onApply(e); setExportTog(false) }}>
+                    <Button size="small" type="primary"
+                      onClick={() => {
+                        onApply();
+                        setExportTog(false)
+                      }}>
+
                       Apply
                     </Button>
                     <Button size="small" type="light" onClick={() => clearFilter()}>

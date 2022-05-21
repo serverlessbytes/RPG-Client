@@ -63,6 +63,7 @@ const SwayamCourses = () => {
   const [data, setData] = useState({
     category: '',
     mode: '',
+    search: '',
   });
   const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
@@ -73,6 +74,7 @@ const SwayamCourses = () => {
   const [state, setState] = useState('');
   const [exportTog, setExportTog] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  // const [searchValue, setSearchValue] = useState()
   const [langIds, setLangIds] = useState({
     hindi: '',
     marathi: ''
@@ -185,6 +187,9 @@ const SwayamCourses = () => {
     } else if (name == 'mode') {
       setData({ ...data, mode: e });
     }
+    else if (name == 'search') {
+      setData({ ...data, search: e })
+    }
   };
 
   const onEdit = id => {
@@ -286,15 +291,13 @@ const SwayamCourses = () => {
       // dispatch(editSwayamCourse(dt));
     }
   };
-
   const Submit = () => {
     dispatch(
-      getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status),
+      getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "",)
     );
   };
-
   const clearFilter = () => {
-    setData({ category: '' });
+    setData({ ...data, category: '', search: '' });
     dispatch(getCoursefilter('', perPage, pageNumber, '', status));
   };
 
@@ -668,6 +671,14 @@ const SwayamCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
+                <Col md={6} xs={24} className="mb-25">
+                  <Form name="sDash_select" layout="vertical">
+                    <Form.Item name="search" label="Search">
+                      <Input placeholder="search" value={data.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                    </Form.Item>
+                  </Form>
+                </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
                     <Button
@@ -737,11 +748,12 @@ const SwayamCourses = () => {
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      <Form name="sDash_select" layout="vertical">
+                      {/* --- search bar --- */}
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}
