@@ -228,10 +228,10 @@ const AddCourses = () => {
       error.jobCategoryIds = 'Job Category is required';
       flage = true;
     }
-    if (state.sequence === '') {
-      error.sequence = 'Senquence is required';
-      flage = true;
-    }
+    // if (state.sequence === '') {
+    //   error.sequence = 'Senquence is required';
+    //   flage = true;
+    // }
     if (state.certification === '') {
       error.certification = 'Certification name is required';
       flage = true;
@@ -296,7 +296,7 @@ const AddCourses = () => {
       mode: state.mode,
       thumbnail: state.thumbnail,
     };
-    dispatch(addSwayamCourse(data,langId));
+    dispatch(addSwayamCourse(data, langId));
     // history.push('/admin/courses');
   };
 

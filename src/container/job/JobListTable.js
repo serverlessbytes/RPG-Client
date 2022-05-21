@@ -22,7 +22,7 @@ import actions from '../../redux/jobs/actions';
 import { data } from 'browserslist';
 import JobPostPage from './JobPostPage';
 
-const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog }) => {
+const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
   const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess } = actions;
   const { path } = useRouteMatch();
@@ -163,10 +163,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         state?.state ? state?.state : '',
         type?.type ? type?.type : '',
         jobRole?.jobRole ? jobRole?.jobRole : '',
+        search.search ? search.search : '',
         status,
       ),
     );
-  }, [perPage, pageNumber, apply, status]);
+  }, [perPage, pageNumber, apply, status, search]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {

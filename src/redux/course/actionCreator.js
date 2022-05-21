@@ -50,7 +50,7 @@ const {
   editCategoryRatingErr,
 } = actions;
 
-let page_number, per_page, category, Inactive, Mode;
+let page_number, per_page, category, Inactive, Mode, search;
 export const postCategoryData = (body) => async (dispatch) => {
   await ApiPost(`course/addCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
@@ -85,20 +85,23 @@ export const addPartnerCourse = (body) => async (dispatch) => {
     })
     .catch((err) => dispatch(addPartnerCourseErr(err)))
 }
-export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive) => async (dispatch) => {
+export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive, searchBar) => async (dispatch) => {
   //console.log("categoryId",categoryId)
   category = categoryId;
   per_page = perPage;
   page_number = pageNumber;
   Mode = mode;
   Inactive = inactive;
-
+  search = searchBar;
   let URL = `course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${inactive}`
   if (categoryId) {
     URL = URL.concat(`&categoryId=${categoryId}`)
   }
   if (mode) {
     URL = URL.concat(`&mode=${mode}`)
+  }
+  if (searchBar) {
+    URL = URL.concat(`&search=${searchBar}`)
   }
   await ApiGet(URL)
     .then((res) => {
@@ -125,7 +128,7 @@ export const editPartnerCoursefilter = (data, categoryId, perPage, pageNumber, m
     .catch((err) => dispatch(editPartnerCourseErr(err)))
 }
 
-export const addSwayamCourse = (data,langId) => async (dispatch) => {
+export const addSwayamCourse = (data, langId) => async (dispatch) => {
   await ApiPost(`course/addSwayamCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSwayamPartnerCourseSuccess(res))
