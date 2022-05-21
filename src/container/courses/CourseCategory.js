@@ -15,6 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import bn from 'date-fns/esm/locale/bn/index.js';
+import ImportCourseCategory from '../../components/modals/ImportCourseCategory';
 
 const CourseCategory = () => {
     const {
@@ -30,6 +32,8 @@ const CourseCategory = () => {
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [nameTog, setNameTog] = useState(false)
+  const [importModal, setImportModal] = useState(false);
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -41,6 +45,7 @@ const CourseCategory = () => {
     // const postStateError = useSelector((state) => state.category.postStateErr)
     const postcategoryError = useSelector((state) => state.category.postcategoryError)
     const editCategoryError = useSelector((state) => state.category.editCategoryError)
+    const importCourseCategory = useSelector((state) => state.category.importCourseCategoryData);
 
     useEffect(() => {
        if (postcategorydata && postcategorydata.status  === 200) {
@@ -81,6 +86,17 @@ const CourseCategory = () => {
             toast.error("Something wrong");
         }
     },[editCategoryError])
+
+    useEffect(()=>{
+        console.log("importCourseCategory",importCourseCategory);
+        if(importCourseCategory && importCourseCategory.status === 200){
+            toast.success("Category imported");
+        }else if(importCourseCategory && importCourseCategory.status !== 200){
+            toast.error("Something wrong");
+        }
+    },[importCourseCategory])
+
+
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -255,6 +271,11 @@ const CourseCategory = () => {
         },
     ];
 
+    const importCategory = () => {
+        setImportModal(true);
+
+    }
+
 
 
 
@@ -267,6 +288,9 @@ const CourseCategory = () => {
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Category
+                        </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={importCategory}>
+                            Import
                         </Button>
                     </div>
                 ]}
@@ -328,6 +352,11 @@ const CourseCategory = () => {
                 </Form>
 
             </Modal>
+
+            {< ImportCourseCategory
+        importModal={importModal}
+        handleCancel={() => setImportModal(false)}
+        modaltitle="Import Course Category" />}
         </>
     )
 }

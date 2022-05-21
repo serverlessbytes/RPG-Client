@@ -58,7 +58,11 @@ const {
 
   addBlukJobsBegin,
   addBlukJobsSuccess,
-  addBlukJobsErr
+  addBlukJobsErr,
+
+  addBlukJobCategoyBegin,
+  addBlukJobCategoySuccess,
+  addBlukJobCategoyErr
 
 } = actions;
 let per_page, page_num, State, Status, Type, jobrole;
@@ -268,6 +272,22 @@ export const addBulkJobs = (body) => async (dispatch) => {
         status : 500
       }
       dispatch(addBlukJobsBegin(newError))
+    }
+    )
+}
+
+
+export const addBulkJobCategory = (body) => async (dispatch) => {
+  dispatch(addBlukJobCategoyBegin(true))
+  await ApiPost(`job/addBulkJobCategory`, body)
+    .then((res) => {
+      //console.log("res",res)
+      return dispatch(addBlukJobCategoySuccess(res))
+      //return dispatch(getJobPost(perPage,pageNumber))
+    })
+    .catch(err =>{
+      console.log("ERR",err);
+      dispatch(addBlukJobCategoyErr(err))
     }
     )
 }

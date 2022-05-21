@@ -31,6 +31,10 @@ const {
   addSwayamCourseInBulkBegin,
   addSwayamCourseInBulkErr,
 
+  importCourseCategoryInBulkBegin,
+  importCourseCategoryInBulkSuccess,
+  importCourseCategoryInBulkErr,
+
   //--- CourseRating --- 
   addCourseRatingSuccess,
   addCourseRatingErr,
@@ -240,4 +244,15 @@ export const editCategoryRating = (body) => async (dispatch) => {
       }
     })
     .catch(e => editCategoryRatingErr(e))
+}
+
+export const importCourseCategory = (body) => async (dispatch) => {
+  await ApiPost(`course/addCourseCategoryInBulk`, body)
+    .then((res) => {
+      dispatch(importCourseCategoryInBulkSuccess(res))
+      if (res.status === 200) {
+        return dispatch(getCategoryData(per_page, page_number))
+      }
+    })
+    .catch(e => importCourseCategoryInBulkErr(e))
 }

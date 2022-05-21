@@ -73,6 +73,10 @@ const {
   ADD_BULK_JOBS_SUCCESS,
   ADD_BULK_JOBS_ERR,
 
+  ADD_BULK_JOBS_CATEGORY_BEGINE,
+  ADD_BULK_JOBS_CATEGORY_SUCCESS,
+  ADD_BULK_JOBS_CATEGORY_ERR,
+
 
 } = actions;
 
@@ -102,6 +106,8 @@ const initialState = {
   addJobsApplicationData : null,
   addBulkJobsData : null,
   addBulkJobsError : null,
+  importJobCategory:null,
+  importJobCategoryError:null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -434,6 +440,25 @@ const jobReducer = (state = initialState, action) => {
           addBulkJobsError: err,
           loading: false,
         };
+
+        case ADD_BULK_JOBS_CATEGORY_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_BULK_JOBS_CATEGORY_SUCCESS:
+        return {
+          ...state,
+          importJobCategory: data,
+          loading: false,
+        };
+      case ADD_BULK_JOBS_CATEGORY_ERR:
+        return {
+          ...state,
+          importJobCategoryError: err,
+          loading: false,
+        };
+  
   
 
 

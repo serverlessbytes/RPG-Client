@@ -60,6 +60,11 @@ const actions = {
   ADD_SWAYAM_COURSE_IN_BULK_SUCCESS: 'ADD_SWAYAM_COURSE_IN_BULK_SUCCESS',
   ADD_SWAYAM_COURSE_IN_BULK_ERR: 'ADD_SWAYAM_COURSE_IN_BULK_ERR',
 
+
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE: 'ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE',
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS: 'ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS',
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR: 'ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR',
+
   
   //--- CourseRating --- 
   POST_ADD_COURSE_RATING_BEGINE: 'POST_ADD_COURSE_RATING_BEGINE',
@@ -491,6 +496,26 @@ specificUserCourseRatingErr : err =>{
   editCategoryRatingErr : () =>{
     return{
       type : actions.EDIT_COURSE_RATING_ERR,
+      err
+    }
+  },
+
+  importCourseCategoryInBulkBegin: () => {
+    return{
+      type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE
+    }
+  },
+
+  importCourseCategoryInBulkSuccess: (data) => {
+    return{
+      type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS,
+      data
+    }
+  },
+
+  importCourseCategoryInBulkErr: () => {
+    return{
+      type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
       err
     }
   }

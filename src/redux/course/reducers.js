@@ -61,6 +61,9 @@ const {
   ADD_SWAYAM_COURSE_IN_BULK_SUCCESS,
   ADD_SWAYAM_COURSE_IN_BULK_ERR,
 
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE,
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS,
+  ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
 
     //--- CourseRating --- 
   POST_ADD_COURSE_RATING_BEGINE,
@@ -119,6 +122,9 @@ const initialState = {
   addPartnerCourseInBulkError: null,
   addSwayamCourseInBulkData: null,
   addSwayamCourseInBulkError: null,
+
+  importCourseCategoryData:null,
+  importCourseCategoryError:null
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -388,6 +394,25 @@ const cateGoryReducer = (state = initialState, action) => {
         return {
           ...state,
           addSwayamCourseInBulkError: err,
+          loading: false,
+        };
+
+
+      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS:
+        return {
+          ...state,
+          importCourseCategoryData: data,
+          loading: false,
+        };
+      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR:
+        return {
+          ...state,
+          importCourseCategoryError: err,
           loading: false,
         };
 

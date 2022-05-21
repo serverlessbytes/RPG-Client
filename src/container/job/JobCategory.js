@@ -14,6 +14,7 @@ import actions from '../../redux/jobs/actions';
 import { set } from 'date-fns';
 import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
+import ImportJobCategory from '../../components/modals/ImportJobCategory';
 const JobCategory = () => {
     const {editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
         addJobcategoryErr,} = actions;
@@ -24,7 +25,7 @@ const JobCategory = () => {
     const addJobCatogerydata = useSelector((state) => state.job.addJobCatogeryData)
     const addJobCatogeryError = useSelector((state) => state.job.addJobCatogeryError)
     const editJobCatogeryError = useSelector((state) => state.job.editJobCatogeryError)
-   // const jobCatogeryData = useSelector((state) => state.job.jobCatogeryData)
+   const importJob = useSelector((state) => state.job.importJobCategory)
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -33,6 +34,8 @@ const JobCategory = () => {
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [selectedJobCategory, setSelectedJobCategory] = useState();
     const [nameTog, setNameTog] = useState(false)
+  const [importModal, setImportModal] = useState(false);
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -48,6 +51,17 @@ const JobCategory = () => {
             //onHide()
         }
     }, [addJobCatogerydata]) 
+
+
+    
+    useEffect(()=>{
+        console.log("importJob",importJob);
+        if(importJob && importJob.status === 200){
+            toast.success("Category imported");
+        }else if(importJob && importJob.status !== 200){
+            toast.error("Something wrong");
+        }
+    },[importJob])
 
     useEffect(()=>{
         if(addJobCatogeryError){
@@ -259,6 +273,9 @@ const JobCategory = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Category
                         </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
+                            Import
+                        </Button>
                     </div>
                 ]}
             />
@@ -332,6 +349,11 @@ const JobCategory = () => {
                 </Form>
 
             </Modal>
+
+            {< ImportJobCategory
+        importModal={importModal}
+        handleCancel={() => setImportModal(false)}
+        modaltitle="Import Job Category" />}
         </>
     )
 }
