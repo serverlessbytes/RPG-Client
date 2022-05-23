@@ -10,6 +10,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import { getOneSchemeData } from '../../redux/schemes/actionCreator';
 // import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
+import FeatherIcon from 'feather-icons-react';
 
 function ViewScheme() {
     const searchParams = new URLSearchParams(window.location.search);
@@ -35,7 +36,7 @@ function ViewScheme() {
         history.push(`/admin/scheme/addscheme?key=${key}`)
     }
 
-    const onApproved = (key, isAp,id) => {
+    const onApproved = (key, isAp, id) => {
         // if (status !== 'active') {
         //   return;
         // }
@@ -60,10 +61,26 @@ function ViewScheme() {
             <Main>
                 <Cards headless>
                     <Col md={24}>
+                        <Button
+                            // className="btn-icon"
+                            onClick={() => history.push(`/admin/scheme`)}
+                            type="info"
+                            to="#"
+                            shape="arrow-left"
+                            style={{ marginBottom: "20px" }}
+                        >
+                            <FeatherIcon icon="arrow-left" size={24} />
+                        </Button>
+
+                        {/* <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onEdit(getOneSchemedata?.key)} type="primary">
+                            Approved
+                        </Button> */}
+
                         <Row gutter={10}>
                             <Col lg={12} className="mb">
                                 {/* <label style={{fontWeight:'bold'}}>VideoUrl:</label> */}
-                                <iframe width="100%" height="345" src={getOneSchemedata?.videoUrl}></iframe>
+                                {/* <iframe width="100%" height="345" src={getOneSchemedata?.videoUrl}></iframe> */}
+                                <img width="100%" height="345" src={getOneSchemedata?.videoUrl} />
                             </Col>
                             <Col lg={12} className="mb">
                                 {/* <label style={{fontWeight:'bold'}}>Thumbnail:</label> */}
@@ -121,7 +138,7 @@ function ViewScheme() {
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >Location:</label> {getOneSchemedata?.locations.map((item, i) => (item.name)).join(',')}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <div onClick={() => onApproved(getOneSchemedata?.key, getOneSchemedata?.isApproved,getOneSchemedata?.id)}>
+                                <div onClick={() => onApproved(getOneSchemedata?.key, getOneSchemedata?.isApproved, getOneSchemedata?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneSchemedata?.isApproved} ></Switch>
                                 </div>
@@ -129,39 +146,16 @@ function ViewScheme() {
                             <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneSchemedata?.key)} type="primary">
                                 Edit
                             </Button>
-                            <Button
+                            {/* <Button
                                 className='edit-view'
                                 // type="light"
                                 size="medium"
                                 style={{ marginLeft: '14px' }}
-                                // onClick={() => {
-                                //     history.push(`/admin/job/post`);
-                                // }}
                                 onClick={() => history.push(`/admin/scheme`)}
                             >
                                 Cancel
-                            </Button>
+                            </Button> */}
                         </Row>
-
-                        {/* <Row gutter={10}>
-                            <Col lg={8} className="mb">
-                                <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType.name}</span><br />
-                            </Col>
-                          
-                        
-
-                        {/* <Button
-                            className='edit-view'
-                            // type="light"
-                            size="medium"
-                            style={{ marginLeft: '14px' }}
-                            // onClick={() => {
-                            //     history.push(`/admin/job/post`);
-                            // }}
-                            onClick={() => history.push(`/admin/job/post`)}
-                        >
-                            Cancel
-                        </Button> */}
                     </Col>
                 </Cards>
             </Main>

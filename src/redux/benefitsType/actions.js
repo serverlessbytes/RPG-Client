@@ -12,6 +12,10 @@ const actions = {
   EDIT_BENEFITS_SUCCESS:"EDIT_BENEFITS_SUCCESS",
   EDIT_BENEFITS_ERR:"EDIT_BENEFITS_ERR",
 
+  ADD_SCHEMEBENEFITS_BULK_BEGINE: 'ADD_SCHEMEBENEFITS_BULK_BEGINE', // FOR IMPORT SCHEME-BENEFITS
+  ADD_SCHEMEBENEFITS_BULK_SUCCESS: 'ADD_SCHEMEBENEFITS_BULK_SUCCESS',
+  ADD_SCHEMEBENEFITS_BULK_ERR: 'ADD_SCHEMEBENEFITS_BULK_ERR',
+
   postBenefitsBegin: () => {
     return {
       type: actions.POST_BENEFITS_BEGINE,
@@ -68,6 +72,26 @@ const actions = {
   editBenefitsErr: err => {
     return {
       type: actions.EDIT_BENEFITS_ERR,
+      err,
+    };
+  },
+
+  addSchemeBenefitBulkBegin: () => {
+    return {
+      type: actions.ADD_SCHEMEBENEFITS_BULK_BEGINE,
+    };
+  },
+
+  addSchemeBenefitBulkSuccess: data => {
+    return {
+      type: actions.ADD_SCHEMEBENEFITS_BULK_SUCCESS,
+      data,
+    };
+  },
+
+  addSchemeBenefitBulkErr: err => {
+    return {
+      type: actions.ADD_SCHEMEBENEFITS_BULK_ERR,
       err,
     };
   },

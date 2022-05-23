@@ -77,9 +77,11 @@ const initialState = {
   editSchemeCatogeryError: null,
   addSchemeInBulk: null,
   addSchemeInBulkErr: null,
-  schemeRatingData : null,
-  editSchemeRatingData : null,
-  getOneSchemeRatingData : null,
+  schemeRatingData: null,
+  editSchemeRatingData: null,
+  getOneSchemeRatingData: null,
+  addSchemeBenefitBulkData: null,
+  getBenefitData : null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -310,59 +312,59 @@ const schemeReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_SCHEMERATING_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case GET_SCHEMERATING_SUCCESS:
-        return {
-          ...state,
-          schemeRatingData: data,
-          loading: false,
-        };
-      case GET_SCHEMERATING_ERR:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
+    case GET_SCHEMERATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_SCHEMERATING_SUCCESS:
+      return {
+        ...state,
+        schemeRatingData: data,
+        loading: false,
+      };
+    case GET_SCHEMERATING_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
-        case EDIT_SCHEME_RATING_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case EDIT_SCHEME_RATING_SUCCESS:
-          return {
-            ...state,
-            editSchemeRatingData: data,
-            loading: false,
-          };
-        case EDIT_SCHEME_RATING_ERR:
-          return {
-            ...state,
-            error: err,
-            loading: false,
-          };
+    case EDIT_SCHEME_RATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_SCHEME_RATING_SUCCESS:
+      return {
+        ...state,
+        editSchemeRatingData: data,
+        loading: false,
+      };
+    case EDIT_SCHEME_RATING_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
-          case GET_ONESCHEME_RATING_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
-          case GET_ONESCHEME_RATING_SUCCESS:
-            return {
-              ...state,
-              getOneSchemeRatingData: data,
-              loading: false,
-            };
-          case GET_ONESCHEME_RATING_ERR:
-            return {
-              ...state,
-              error: err,
-              loading: false,
-            };
+    case GET_ONESCHEME_RATING_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_ONESCHEME_RATING_SUCCESS:
+      return {
+        ...state,
+        getOneSchemeRatingData: data,
+        loading: false,
+      };
+    case GET_ONESCHEME_RATING_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
     default:
       return state;

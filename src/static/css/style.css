@@ -2946,3 +2946,9 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .mb {
   margin-bottom: 20px !important;
 }
+.SchemeName{
+  cursor: pointer;
+}
+.SchemeName:hover{
+  text-decoration: underline;
+}

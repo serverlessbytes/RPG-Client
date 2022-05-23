@@ -16,16 +16,15 @@ import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
 import ImportJobCategory from '../../components/modals/ImportJobCategory';
 const JobCategory = () => {
-    const {editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
-        addJobcategoryErr,} = actions;
-
+    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
+        addJobcategoryErr, } = actions;
 
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const editJobCatogeryData = useSelector((state) => state.job.editJobCatogeryData)
     const addJobCatogerydata = useSelector((state) => state.job.addJobCatogeryData)
-    const addJobCatogeryError = useSelector((state) => state.job.addJobCatogeryError)
+    const importJobCategoryError = useSelector((state) => state.job.importJobCategoryError)
     const editJobCatogeryError = useSelector((state) => state.job.editJobCatogeryError)
-   const importJob = useSelector((state) => state.job.importJobCategory)
+    const importJob = useSelector((state) => state.job.importJobCategory)
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -34,7 +33,7 @@ const JobCategory = () => {
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [selectedJobCategory, setSelectedJobCategory] = useState();
     const [nameTog, setNameTog] = useState(false)
-  const [importModal, setImportModal] = useState(false);
+    const [importModal, setImportModal] = useState(false);
 
     const { users } = useSelector(state => {
         return {
@@ -50,47 +49,43 @@ const JobCategory = () => {
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [addJobCatogerydata]) 
+    }, [addJobCatogerydata])
 
-
-    
-    useEffect(()=>{
-        console.log("importJob",importJob);
-        if(importJob && importJob.status === 200){
+    useEffect(() => {
+        console.log("importJob", importJob);
+        if (importJob && importJob.status === 200) {
             toast.success("Category imported");
-        }else if(importJob && importJob.status !== 200){
+        }
+        else if(importJob && importJob.status !== 200){
             toast.error("Something wrong");
         }
     },[importJob])
 
-    useEffect(()=>{
-        if(addJobCatogeryError){
+    useEffect(() => {
+        if (importJobCategoryError) {
+            // console.log("addJobCatogeryError",addJobCatogeryError)
             dispatch(addJobcategoryErr(null))
             toast.error("Something wrong");
         }
-    },[addJobCatogeryError])
+    },[importJobCategoryError])
 
     useEffect(() => {
         console.log('editJobCatogeryData', editJobCatogeryData)
         if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
             toast.success("Job Category update successful");
-            //toastAssetsAdd(true)
-            //onHide()
-        }else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
+        } else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
             toast.success("Job Category delete successful");
-            //toastAssetsAdd(true)
-            //onHide()
         }
-    }, [editJobCatogeryData])  
+    }, [editJobCatogeryData])
 
-    useEffect(()=>{
-        if(editJobCatogeryError){
+    useEffect(() => {
+        if (editJobCatogeryError) {
             dispatch(editJobcategoryErr(null))
             toast.error("Something wrong");
         }
-    },[editJobCatogeryError])
+    }, [editJobCatogeryError])
 
     useEffect(() => {
         dispatch(getJobcategory());
@@ -109,9 +104,9 @@ const JobCategory = () => {
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
-            console.log("dataForEdit",dataForEdit)
+            console.log("dataForEdit", dataForEdit)
             setSelectedJobCategory(dataForEdit)
-            console.log("selectedJobCategory",selectedJobCategory)
+            console.log("selectedJobCategory", selectedJobCategory)
             form.setFieldsValue({
                 ...dataForEdit,
                 name: dataForEdit.name
@@ -121,15 +116,15 @@ const JobCategory = () => {
         setNameTog(true)
     }
 
-    const newJobCategory = dataForEdit =>{
-      const newVal =   ApiPost("job/editCategory" , dataForEdit)
-        .then((res) =>{
-            if (res.status === 200) {
-                dispatch(getJobcategory())
-            }
-            return res
-        })
-    return  newVal
+    const newJobCategory = dataForEdit => {
+        const newVal = ApiPost("job/editCategory", dataForEdit)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getJobcategory())
+                }
+                return res
+            })
+        return newVal
     }
 
     const onDelete = async (id) => {
@@ -142,9 +137,9 @@ const JobCategory = () => {
                 isDeleted: true
             }
             // dispatch(editJobcategory(dataForEdit))
-            const deleteJobcatrgory =  await newJobCategory(dataForEdit)
+            const deleteJobcatrgory = await newJobCategory(dataForEdit)
             if (deleteJobcatrgory.status === 200) {
-                 toast.success("Job Category delete successful")
+                toast.success("Job Category delete successful")
             }
         }
     }
@@ -157,7 +152,7 @@ const JobCategory = () => {
 
                     return {
                         ...item,
-                        JobCategory : item.name ,
+                        JobCategory: item.name,
                         action: (
                             <div className='active-jobs-table'>
                                 <div className="table-actions">
@@ -190,7 +185,7 @@ const JobCategory = () => {
     const handleOk = () => {
         let data = form.getFieldsValue()
         if (!selectedJobCategory) {
-            
+
             data = {
                 ...data,
                 key: uuid()
@@ -283,7 +278,7 @@ const JobCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                                {/* --- search bar --- */}
+                            {/* --- search bar --- */}
                             {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
@@ -327,8 +322,8 @@ const JobCategory = () => {
             </Main>
 
             <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
-                okText= {nameTog ? "Edit" : "Add"}
-                >
+                okText={nameTog ? "Edit" : "Add"}
+            >
 
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
@@ -351,9 +346,9 @@ const JobCategory = () => {
             </Modal>
 
             {< ImportJobCategory
-        importModal={importModal}
-        handleCancel={() => setImportModal(false)}
-        modaltitle="Import Job Category" />}
+                importModal={importModal}
+                handleCancel={() => setImportModal(false)}
+                modaltitle="Import Job Category" />}
         </>
     )
 }

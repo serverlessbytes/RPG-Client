@@ -10,6 +10,9 @@ import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
+import Item from 'antd/lib/list/Item';
+import { isTemplateMiddle } from 'typescript';
+import StarRatings from 'react-star-ratings';
 
 
 const User = () => {
@@ -32,7 +35,6 @@ const User = () => {
         ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=USER`)
             .then((res) => {
                 setUserData(res)
-                console.log("res", res);
             })
             .catch((err) => console.log(err))
     }
@@ -55,21 +57,38 @@ const User = () => {
                 avatar: 'dfd',
             };
             delete userForDelete.userTakenRatings
-            console.log('userForDelete', userForDelete);
             dispatch(editProfile(userForDelete));
         }
     };
-
-
 
     useEffect(() => {
         console.log("----- userData", userData);
         if (userData && userData.data) {
             setUserTable(
                 userData.data.data.map((item) => {
+                    let userRank = item.userTakenRatings.map(item => item.rating);
+
+                    var sum = 0;
+
+                    for (var i = 0; i < userRank.length; i++) {
+                        sum += parseInt(userRank[i]);
+                    }
+
+                    var avg = sum / userRank.length;
+
+                    console.log("Rank", userRank)
                     return {
                         name: item.name,
                         email: item.email,
+                        userTakenRatings: (
+                            <StarRatings
+                                rating={avg?avg:0}
+                                starRatedColor="#f57c00"
+                                numberOfStars={5}
+                                name="swayamCourse"
+                                starDimension="13px"
+                            />
+                        ),
                         phone: item.phone,
                         avatar: '',
                         action: (
@@ -111,6 +130,10 @@ const User = () => {
         {
             title: 'Email',
             dataIndex: 'email',
+        },
+        {
+            title: 'UserRating',
+            dataIndex: 'userTakenRatings',
         },
         {
             title: 'Phone',

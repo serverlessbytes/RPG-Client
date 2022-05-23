@@ -290,11 +290,14 @@ export const addBulkJobCategory = (body) => async (dispatch) => {
   await ApiPost(`job/addBulkJobCategory`, body)
     .then((res) => {
       //console.log("res",res)
-      return dispatch(addBlukJobCategoySuccess(res))
+      dispatch(addBlukJobCategoySuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
+      if (res.status === 200) {
+        dispatch(getJobcategory())
+      }
     })
-    .catch(err =>{
-      console.log("ERR",err);
+    .catch(err => {
+      console.log("ERR", err);
       dispatch(addBlukJobCategoyErr(err))
     }
     )

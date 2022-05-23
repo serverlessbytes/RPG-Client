@@ -48,7 +48,7 @@ const {
   getOneSchemeRatingSuccess,
   getOneSchemeRatingErr,
 } = actions;
-let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search;
+let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, page_Num;
 export const getSchemecategory = () => async dispatch => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then(res => {

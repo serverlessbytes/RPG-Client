@@ -24,7 +24,7 @@ const CourseCategory = () => {
         postCategoryDataErr,
         editCategorySuccess,
         editcategoryErr,
-      } = actions;
+    } = actions;
 
     const [dataForEdit, setDataForEdit] = useState(); //foredit
     const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const CourseCategory = () => {
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [nameTog, setNameTog] = useState(false)
-  const [importModal, setImportModal] = useState(false);
+    const [importModal, setImportModal] = useState(false);
 
     const { users } = useSelector(state => {
         return {
@@ -48,53 +48,47 @@ const CourseCategory = () => {
     const importCourseCategory = useSelector((state) => state.category.importCourseCategoryData);
 
     useEffect(() => {
-       if (postcategorydata && postcategorydata.status  === 200) {
-           dispatch(postCategorySuccess(null))
-           toast.success("Category add successful");
-           //toastAssetsAdd(true)
-           //onHide()
-       }
-       // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-       //   dispatch(editSchemeSuccess(null))
-       //   toast.success("Jobs Update successful");
-       // }
+        if (postcategorydata && postcategorydata.status === 200) {
+            dispatch(postCategorySuccess(null))
+            toast.success("Category add successful");
+        }
     }, [postcategorydata])
 
-    useEffect(()=>{
-        if(postcategoryError){
+    useEffect(() => {
+        if (postcategoryError) {
             dispatch(postCategoryDataErr(null))
             toast.error("Something wrong");
         }
-    },[postcategoryError])
+    }, [postcategoryError])
 
     useEffect(() => {
-       if (editcategoryData && editcategoryData.status  === 200) {
-           dispatch(editCategorySuccess(null))
-           toast.success("Category updated successful");
-           //toastAssetsAdd(true)
-           //onHide()
-       }
-       // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-       //   dispatch(editSchemeSuccess(null))
-       //   toast.success("Jobs Update successful");
-       // }
+        if (editcategoryData && editcategoryData.status === 200) {
+            dispatch(editCategorySuccess(null))
+            toast.success("Category updated successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+        // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+        //   dispatch(editSchemeSuccess(null))
+        //   toast.success("Jobs Update successful");
+        // }
     }, [editcategoryData])
-    
-    useEffect(()=>{
-        if(editCategoryError){
+
+    useEffect(() => {
+        if (editCategoryError) {
             dispatch(editcategoryErr(null))
             toast.error("Something wrong");
         }
-    },[editCategoryError])
+    }, [editCategoryError])
 
-    useEffect(()=>{
-        console.log("importCourseCategory",importCourseCategory);
-        if(importCourseCategory && importCourseCategory.status === 200){
+    useEffect(() => {
+        console.log("importCourseCategory", importCourseCategory);
+        if (importCourseCategory && importCourseCategory.status === 200) {
             toast.success("Category imported");
-        }else if(importCourseCategory && importCourseCategory.status !== 200){
+        } else if (importCourseCategory && importCourseCategory.status !== 200) {
             toast.error("Something wrong");
         }
-    },[importCourseCategory])
+    }, [importCourseCategory])
 
 
     const showModal = () => {
@@ -108,31 +102,31 @@ const CourseCategory = () => {
         setDataForEdit(null)
     };
 
- const newCourseCategory = dataForDelete =>{
-     const newVal = ApiPost(`course/editCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}` ,dataForDelete)
-     .then((res) =>{
-         if (res.status === 200) {
-             dispatch(getCategoryData())
-         }
-         return res
-     })
-     return newVal
- }
+    const newCourseCategory = dataForDelete => {
+        const newVal = ApiPost(`course/editCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dataForDelete)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getCategoryData())
+                }
+                return res
+            })
+        return newVal
+    }
 
-    const onDelete =  async(id) => {
+    const onDelete = async (id) => {
         let dataForDelete = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
         if (dataForDelete) {
             delete dataForDelete.key
-            delete dataForDelete.id     
+            delete dataForDelete.id
             dataForDelete = {
                 ...dataForDelete,
-                categoryId : id,
+                categoryId: id,
                 isActive: false,
                 isDeleted: true
             }
             // dispatch(editCategoryData(dataForDelete))
-            const deleteCourseCategory = await  newCourseCategory(dataForDelete)
-            if(deleteCourseCategory.status === 200){
+            const deleteCourseCategory = await newCourseCategory(dataForDelete)
+            if (deleteCourseCategory.status === 200) {
                 toast.success("Category deleted successful")
             }
         }
@@ -156,19 +150,19 @@ const CourseCategory = () => {
 
     const handleOk = () => {
         let data = form.getFieldsValue()
-        if(dataForEdit){
+        if (dataForEdit) {
             let data = form.getFieldsValue()
-                    delete data.key;
-                    data = {
-                        ...data, 
-                        categoryId: dataForEdit.id, 
-                        "isActive": true,
-                        "isDeleted": false
-                    }
-                    dispatch(editCategoryData(data))
-                    handleCancel()
+            delete data.key;
+            data = {
+                ...data,
+                categoryId: dataForEdit.id,
+                "isActive": true,
+                "isDeleted": false
+            }
+            dispatch(editCategoryData(data))
+            handleCancel()
         }
-        else{
+        else {
             data = {
                 ...data,
                 key: uuid()
@@ -176,7 +170,7 @@ const CourseCategory = () => {
             dispatch(postCategoryData(data))
             setIsModalVisible(false);
         }
-   
+
     };
     // const handleOk = () => {
     //     if (dataForEdit) {
@@ -276,9 +270,6 @@ const CourseCategory = () => {
 
     }
 
-
-
-
     return (
         <>
             <PageHeader
@@ -299,7 +290,7 @@ const CourseCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                                    {/* --- search bar --- */}
+                            {/* --- search bar --- */}
                             {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
@@ -330,9 +321,9 @@ const CourseCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
-            
-            okText={nameTog ? "Edit" :"Add"}
+            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+
+                okText={nameTog ? "Edit" : "Add"}
             >
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
@@ -354,9 +345,9 @@ const CourseCategory = () => {
             </Modal>
 
             {< ImportCourseCategory
-        importModal={importModal}
-        handleCancel={() => setImportModal(false)}
-        modaltitle="Import Course Category" />}
+                importModal={importModal}
+                handleCancel={() => setImportModal(false)}
+                modaltitle="Import Course Category" />}
         </>
     )
 }

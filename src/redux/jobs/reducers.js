@@ -108,6 +108,7 @@ const initialState = {
   addBulkJobsError : null,
   importJobCategory:null,
   importJobCategoryError:null,
+  addJobCatogeryError : null,
 };
 
 const jobReducer = (state = initialState, action) => {
