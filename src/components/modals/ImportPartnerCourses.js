@@ -76,10 +76,10 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
   const validation = () => {
     let error = {};
     let flage = false;
-    if (courseCategoryID === '') {
-      error.courseCategoryID = 'CourseCategory is required';
-      flage = true;
-    }
+    // if (courseCategoryID === '') {
+    //   error.courseCategoryID = 'CourseCategory is required';
+    //   flage = true;
+    // }
     if (!FileData) {
       error.name = 'File is required';
       flage = true;
@@ -95,17 +95,20 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     if (FileData) {
       FileData.forEach(e => {
         // e['language'] = language;
-        e['createdByUser'] = userData.id;
-        e['modifiedByUser'] = userData.id;
+        // e['createdByUser'] = userData.id;
+        // e['modifiedByUser'] = userData.id;
         // e['categoryId'] = courseCategoryID;
         // e['key'] = uuid();
       });
     }
-
-    if (FileData && courseCategoryID) {
+    if (FileData) {
       dispatch(addPartnerCourseInBulk(FileData));
       handleCancel();
     }
+    // if (FileData && courseCategoryID) {
+    //   dispatch(addPartnerCourseInBulk(FileData));
+    //   handleCancel();
+    // }
   };
 
   return (

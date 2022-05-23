@@ -183,13 +183,12 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
   if (status) {
     URL = URL.concat(`&status=${status}`)
   }
-  if (schemes) {
-    URL = URL.concat(`&search=${searchBar}`)
-  }
+  // if (searchBar) {
+  //   URL = URL.concat(`&search=${searchBar}`)
+  // }
 
   await ApiPost(URL)
     .then((res) => {
-
       return dispatch(getJobsFilterForMainSuccess(res))
     })
     .catch((err) => dispatch(getJobsFilterForMainErr(err)))
@@ -268,7 +267,8 @@ export const addJobApplication = (body) => async (dispatch) => {
 
 export const addBulkJobs = (body) => async (dispatch) => {
   dispatch(addBlukJobsBegin(true))
-  await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  // await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  await ApiPost(`job/addBulkJobs`, body)
     .then((res) => {
       //console.log("res",res)
       return dispatch(addBlukJobsSuccess(res))
@@ -293,8 +293,8 @@ export const addBulkJobCategory = (body) => async (dispatch) => {
       return dispatch(addBlukJobCategoySuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })
-    .catch(err =>{
-      console.log("ERR",err);
+    .catch(err => {
+      console.log("ERR", err);
       dispatch(addBlukJobCategoyErr(err))
     }
     )

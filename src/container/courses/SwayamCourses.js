@@ -581,7 +581,7 @@ const SwayamCourses = () => {
     <>
       <PageHeader
         ghost
-        title="Courses"
+        title="Swayam Courses"
         buttons={[
           <div key="1" className="page-header-actions">
             {/* <Button size="small" onClick={() => onExportCourse()} type="info">
@@ -674,7 +674,7 @@ const SwayamCourses = () => {
 
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item name="search" label="Search">
+                    <Form.Item label="Search">
                       <Input placeholder="search" value={data.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>

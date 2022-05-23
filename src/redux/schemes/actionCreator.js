@@ -170,6 +170,7 @@ export const getAllSchemes = () => async dispatch => {
 };
 
 export const editSchemeData = body => async dispatch => {
+  // await ApiPost(`scheme/editScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
   await ApiPost(`scheme/editScheme`, body)
     .then(res => {
       dispatch(editSchemeSuccess(res));
@@ -203,7 +204,7 @@ export const addSchemeInBulkImport = body => async dispatch => {
 
 export const getSchemeRating = (perpage, pagenum) => async dispatch => {
   per_Page = perpage;
-  page_Num = pagenum;
+  page_number = pagenum;
   await ApiGet(`schemeRating/getSchemeRatings?per_page=${perpage}&page_number=${pagenum}`)
     .then(res => {
       return dispatch(getSchemeRatingSuccess(res))

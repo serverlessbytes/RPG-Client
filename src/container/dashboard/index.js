@@ -183,13 +183,13 @@ const Dashboard = () => {
 
   return (
     <>
-      <PageHeader ghost title="Dashbord" />
+      <PageHeader ghost title="Dashboard" />
       <Main>
         <h3>Users</h3>
 
         <Row gutter={25}>
 
-          <Col xxl={8} md={12} sm={12} xs={24}>
+          <Col md={8} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -208,7 +208,7 @@ const Dashboard = () => {
             </Cards>
           </Col>
 
-          <Col xxl={8} md={12} sm={12} xs={24}>
+          <Col md={8} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -226,7 +226,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={8} md={12} sm={12} xs={24}>
+          <Col md={8} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -244,7 +244,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={8} md={12} sm={12} xs={24}>
+          <Col md={8} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -262,22 +262,22 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={8} md={12} sm={12} xs={24}>
+          <Col md={8} xs={24}>
             <Cards headless>
-              <EChartCard>
-                <div className="card-chunk">
-                  <CardBarChart2>
-                    <Heading as="h1">{userData?.data?.employer}</Heading>
-                    <span>No.of employers</span>
-                    {/* <p>
+              {/* <EChartCard> */}
+              <div className="card-chunk">
+                <CardBarChart2>
+                  <Heading as="h1">{userData?.data?.employer}</Heading>
+                  <span>No.of employers</span>
+                  {/* <p>
                       <span className="growth-upward">
                         25%
                       </span>
                       <span>Since last week</span>
                     </p> */}
-                  </CardBarChart2>
-                </div>
-              </EChartCard>
+                </CardBarChart2>
+              </div>
+              {/* </EChartCard> */}
             </Cards>
           </Col>
         </Row>

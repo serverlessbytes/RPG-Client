@@ -179,7 +179,8 @@ export const getallSwayamCourse = (mode) => async (dispatch) => {
 
 export const addPartnerCourseInBulk = (body) => async (dispatch) => {
   dispatch(addPartnerCourseInBulkBegin(true))
-  await ApiPost(`course/addPartnerCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  // await ApiPost(`course/addPartnerCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  await ApiPost(`course/addPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&mode='PARTNER'`, body)
     .then((res) => {
       return dispatch(addPartnerCourseInBulkSuccess(res))
     }).catch(e => dispatch(addPartnerCourseInBulkErr(e)))

@@ -48,11 +48,11 @@ const JobPost = ({ match }) => {
   }, [addJobPostModulData]);
 
   const [stateJob, setStateJob] = useState([]); //set data for job
+  const [apply, setApply] = useState(false);
   const [state, setState] = useState('');
   const [type, setType] = useState('');
   const [jobRole, setJobRole] = useState('');
   const [search, setSearch] = useState('')
-  const [apply, setApply] = useState(false);
   const [status, setStatus] = useState('active');
   const [exportTog, setExportTog] = useState(false);
   const [pagePer, setPagePer] = useState();
@@ -67,15 +67,9 @@ const JobPost = ({ match }) => {
     } else if (name === 'state') {
       setState({ ...jobRole, state: e });
     } else if (name === "search") {
-
       setSearch(e)
     }
   };
-
-  useEffect(() => {
-    console.log(search, "search=======");
-  }, [search])
-
   const callback = key => {
     setStatus(key);
     setExportTog(false);
@@ -305,7 +299,7 @@ const JobPost = ({ match }) => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                <Col md={4} xs={24} className="mb-25">
+                <Col md={5} xs={24} className="mb-25">
                   <Form layout="vertical">
                     <Form.Item label="Type">
                       <Select
@@ -323,7 +317,7 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col md={4} xs={24} className="mb-25">
+                <Col md={5} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="State">
                       {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
@@ -341,7 +335,7 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col md={4} xs={24} className="mb-25">
+                <Col md={5} xs={24} className="mb-25">
                   <Form layout="vertical">
                     <Form.Item label="Job Role">
                       <Select
@@ -358,7 +352,7 @@ const JobPost = ({ match }) => {
                     </Form.Item>
                   </Form>
                 </Col>
-                <Col md={4} xs={24} className="mb-25">
+                <Col md={5} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
                       <Input placeholder="search" name='search' value={search} onChange={(e) => onChangevalue(e.target.value, "search")} />
