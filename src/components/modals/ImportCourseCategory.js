@@ -67,6 +67,7 @@ const ImportCourseCategory = ({ importModal, handleCancel, modaltitle }) => {
       dispatch(importCourseCategory(FileData));
       handleCancel();
     }
+    
   };
 
   return (

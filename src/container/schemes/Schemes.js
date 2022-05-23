@@ -415,7 +415,7 @@ const Schemes = () => {
       // console.log(avg);
       return ({
         SchemeName: (
-          <span style={{ cursor: "pointer" }} onClick={() => viewSchemesdata(item.key)}>
+          <span className='SchemeName'  onClick={() => viewSchemesdata(item.key)}>
             {item?.name}
           </span>
         ),
