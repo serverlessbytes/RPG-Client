@@ -25,7 +25,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
 
   const [Error, setError] = useState();
   const [error, seterror] = useState({}); // for valadation
-  const [FileData, setFileData] = useState();
+  const [fileData, setFileData] = useState();
 
   const [jobRoleArray, setJobRoleArray] = useState([]);
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
@@ -140,27 +140,27 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   const validation = () => {
     let error = {};
     let flage = false;
-    if (jobCategoryID === '') {
-      error.jobCategoryID = 'JobCategory is required';
-      flage = true;
-    }
-    if (jobRoleID === '') {
-      error.jobRoleId = 'JobRole is required';
-      flage = true;
-    }
-    if (stateID === '') {
-      error.state = 'State is required';
-      flage = true;
-    }
-    if (districtID === '') {
-      error.district = 'District is required';
-      flage = true;
-    }
-    if (employertID === '') {
-      error.employertID = 'Employer is required';
-      flage = true;
-    }
-    if (!FileData) {
+    // if (jobCategoryID === '') {
+    //   error.jobCategoryID = 'JobCategory is required';
+    //   flage = true;
+    // }
+    // if (jobRoleID === '') {
+    //   error.jobRoleId = 'JobRole is required';
+    //   flage = true;
+    // }
+    // if (stateID === '') {
+    //   error.state = 'State is required';
+    //   flage = true;
+    // }
+    // if (districtID === '') {
+    //   error.district = 'District is required';
+    //   flage = true;
+    // }
+    // if (employertID === '') {
+    //   error.employertID = 'Employer is required';
+    //   flage = true;
+    // }
+    if (!fileData) {
       error.name = 'File is required';
       flage = true;
     }
@@ -169,28 +169,34 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
 
+  useEffect(() => {
+    console.log(fileData, "fileData-------------");
+  }, [fileData])
+
   const handleOk = () => {
     if (validation()) {
       return;
     }
-    if (FileData) {
-      FileData.forEach(e => {
+    if (fileData) {
+
+      fileData.forEach(e => {
         e['vacancies'] = +e.vacancies;
-        e['language'] = language;
+        // e['language'] = language;
         // e['state'] = stateID;
         // e['name'] = employertID;
         // e['district'] = district ID;
         e['isActive'] = true;
-        e['createdByUser'] = userData.id;
-        e['modifiedByUser'] = userData.id;
+        // e['createdByUser'] = userData.id;
+        // e['modifiedByUser'] = userData.id;
+        // e['name']
         // e['jobRoleId'] = jobRoleID;
         // e['jobCategoryId'] = jobCategoryID;
-        e['key'] = uuid();
+        // e['key'] = uuid();
       });
     }
 
-    if (FileData && jobCategoryID && jobRoleID) {
-      dispatch(addBulkJobs(FileData));
+    if (fileData) {
+      dispatch(addBulkJobs(fileData));
       handleCancel();
     }
   };
@@ -216,8 +222,8 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
-            {/* <Col md={12} xs={24} className="mb-25">
-              <Form layout="vertical">
+            <Col md={12} xs={24} className="mb-25">
+              {/* <Form layout="vertical">
                 <Form.Item label="employer">
                   <Select
                     options={employerArray}
@@ -297,8 +303,8 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
                   </Select>
                   {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                 </Form.Item>
-              </Form>
-            </Col> */}
+              </Form> */}
+            </Col>
           </Row>
         </Modal>
       </Col>

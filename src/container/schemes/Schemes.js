@@ -148,7 +148,7 @@ const Schemes = () => {
   }, [addSchemeError])
 
   const onApply = () => {
-    dispatch((perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
   };
   const header = [
     { label: "id", key: "id" },
@@ -190,6 +190,11 @@ const Schemes = () => {
       )
     }
   }, [users])
+
+  useEffect(() => {
+    console.log(schemeCategory, "schemeCategory");
+  }, [schemeCategory])
+
 
   useEffect(() => {
     if (allschemeData?.data?.data) { //set a state for export excel
@@ -340,7 +345,6 @@ const Schemes = () => {
     setSchemeCategory({ ...schemeCategory, category: "", benefit: "", search: "" })
     dispatch(getSchemeData(perPage, pageNumber, status));
   }
-
   const onClick = ({ key }) => {
     if (key == 'exportSchemes') {
       onExportschemes();
@@ -627,7 +631,7 @@ const Schemes = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" name='search' value={schemeCategory.search} onChange={(e) => { onChnageValue(e.target.value, 'search') }} />
+                      <Input placeholder="search" name='search' value={schemeCategory.search} onChange={e => onChnageValue(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>

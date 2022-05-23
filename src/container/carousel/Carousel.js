@@ -173,32 +173,32 @@ const Carousel = () => {
     if (getCarouseldata && getCarouseldata.data) {
       setcarouselTableData(
         getCarouseldata &&
-          getCarouseldata.data.map(item => {
-            return {
-              title: item.title,
-              imageUrl: item.imageUrl,
-              action: (
-                <div className="active-schemes-table">
-                  <div className="table-actions">
-                    <>
-                      <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                        <FeatherIcon icon="edit" size={16} />
-                      </Button>
-                      <Button
-                        className="btn-icon"
-                        type="danger"
-                        to="#"
-                        onClick={() => onDelete(item.id)}
-                        shape="circle"
-                      >
-                        <FeatherIcon icon="x-circle" size={16} />
-                      </Button>
-                    </>
-                  </div>
+        getCarouseldata.data.map(item => {
+          return {
+            title: item.title,
+            imageUrl: item.imageUrl,
+            action: (
+              <div className="active-schemes-table">
+                <div className="table-actions">
+                  <>
+                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                      <FeatherIcon icon="edit" size={16} />
+                    </Button>
+                    <Button
+                      className="btn-icon"
+                      type="danger"
+                      to="#"
+                      onClick={() => onDelete(item.id)}
+                      shape="circle"
+                    >
+                      <FeatherIcon icon="x-circle" size={16} />
+                    </Button>
+                  </>
                 </div>
-              ),
-            };
-          }),
+              </div>
+            ),
+          };
+        }),
       );
     }
   }, [getCarouseldata]);

@@ -21,7 +21,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
 
   const [Error, setError] = useState();
   const [error, seterror] = useState(); // for valadation
-  const [FileData, setFileData] = useState();
+  const [fileData, setFileData] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
@@ -96,15 +96,15 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const validation = () => {
     let error = {};
     let flage = false;
-    if (courseCategoryID === '') {
-      error.courseCategoryID = 'CourseCategory is required';
-      flage = true;
-    }
+    // if (courseCategoryID === '') {
+    //   error.courseCategoryID = 'CourseCategory is required';
+    //   flage = true;
+    // }
     if (jobCategoryID.length == 0) {
       error.jobCategoryID = 'JobCategory is required';
       flage = true;
     }
-    if (!FileData) {
+    if (!fileData) {
       error.name = 'File is required';
       flage = true;
     }
@@ -112,12 +112,19 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
 
+
+  useEffect(() => {
+    console.log("fileData", fileData);
+  }, [fileData])
+
+
   const handleOk = () => {
     if (validation()) {
       return;
     }
-    if (FileData) {
-      FileData.forEach(e => {
+    if (fileData) {
+      fileData.forEach(e => {
+        console.log("*-------------*");
         e['jobCategoryIds'] = jobCategoryID;
         e['language'] = language;
         e['createdByUser'] = userData.id;
@@ -126,9 +133,12 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         // e['key'] = uuid();
       });
     }
-
-    if (FileData && courseCategoryID && jobCategoryID.length > 0) {
-      dispatch(addSwayamCourseInBulk(FileData));
+    // if (fileData && courseCategoryID && jobCategoryID.length > 0) {
+    //   dispatch(addSwayamCourseInBulk(fileData));
+    //   handleCancel();
+    // }
+    if (fileData) {
+      dispatch(addSwayamCourseInBulk(fileData));
       handleCancel();
     }
   };
