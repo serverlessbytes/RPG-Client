@@ -131,14 +131,14 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
   const handleOk = () => {
-    if (validation()) {
-      return;
-    }
+    // if (validation()) {
+    //   return;
+    // }
     if (FileData) {
       FileData.forEach(e => {
         // e['language'] = language;
-        e['createdByUser'] = userData.id;
-        e['modifiedByUser'] = userData.id;
+        // e['createdByUser'] = userData.id;
+        // e['modifiedByUser'] = userData.id;
         // e['schemeCategory'] = schemeCategoryID;
         // e['schemeBenifit'] = schemeBanefitID;
         e['locations'] = selectedStateArray;
@@ -147,7 +147,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
       });
     }
 
-    if (FileData && schemeCategoryID && schemeBanefitID) {
+    if (FileData) {
       dispatch(addSchemeInBulkImport(FileData));
       handleCancel();
     }

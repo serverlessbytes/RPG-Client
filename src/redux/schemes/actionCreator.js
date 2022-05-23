@@ -47,6 +47,11 @@ const {
 
   getOneSchemeRatingSuccess,
   getOneSchemeRatingErr,
+
+  addSchemeCategoryInBulkBegin,
+  addSchemeCategoryInBulkSuccess,
+  addSchemeCategoryInBulkErr
+
 } = actions;
 let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search;
 export const getSchemecategory = () => async dispatch => {
@@ -183,7 +188,7 @@ export const editSchemeData = body => async dispatch => {
 };
 
 export const addSchemeInBulkImport = body => async dispatch => {
-  await ApiPost(`scheme/addSchemeInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  await ApiPost(`scheme/addSchemeInBulk`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
       console.log('res', res);
@@ -229,4 +234,19 @@ export const getOneSchemeRating = (id) => async dispatch => {
       return dispatch(getOneSchemeRatingSuccess(res))
     })
     .catch(err => dispatch(getOneSchemeRatingErr(err)))
+}
+
+export const addSchemeCategoryInBulk = (body) => async (dispatch) => {
+  await ApiPost(`scheme/addSchemeCategoryInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  .then(res => {
+    dispatch(addSchemeCategoryInBulkSuccess(res));
+    console.log('res', res);
+    if (res.status === 200) {
+      // redirect after click edit button on listing call getSchemeData
+      dispatch(getSchemecategory());
+    }
+  })
+  .catch(err => {
+    dispatch(addSchemeCategoryInBulkErr(err))
+  });
 }

@@ -57,6 +57,10 @@ const {
   GET_ONESCHEME_RATING_SUCCESS,
   GET_ONESCHEME_RATING_ERR,
 
+  ADD_SCHEME_CATEGORY_IN_BULK_BEGINE,
+  ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS,
+  ADD_SCHEME_CATEGORY_IN_BULK_ERR,
+
 } = actions;
 
 const initialState = {
@@ -80,6 +84,10 @@ const initialState = {
   schemeRatingData : null,
   editSchemeRatingData : null,
   getOneSchemeRatingData : null,
+
+  importSchemeCategoryBegin:null,
+  importSchemeCategoryData:null,
+  importSchemeCategoryError:null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -363,6 +371,26 @@ const schemeReducer = (state = initialState, action) => {
               error: err,
               loading: false,
             };
+
+
+          case ADD_SCHEME_CATEGORY_IN_BULK_BEGINE:
+            return {
+              ...state,
+              loading: true,
+            };
+
+            case ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS:
+              return {
+                ...state,
+                importSchemeCategoryData: data,
+                loading: false,
+              };
+            case ADD_SCHEME_CATEGORY_IN_BULK_ERR:
+              return {
+                ...state,
+                importSchemeCategoryError: err,
+                loading: false,
+              };
 
     default:
       return state;

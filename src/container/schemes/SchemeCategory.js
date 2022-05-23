@@ -15,6 +15,7 @@ import actions from '../../redux/schemes/actions';
 import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
+import ImportSchemeCategory from '../../components/modals/ImportSchemeCategory';
 const SchemeCategory = () => {
     const {editSchemecategorySuccess,addSchemecategorySuccess,addSchemecategoryErr,editSchemecategoryErr} = actions;
 
@@ -26,6 +27,8 @@ const SchemeCategory = () => {
     const [schemeCategoryTableData, setSchemeCategoryTableData] = useState([]);
     const [selectedSchemeCategory, setSelectedSchemeCategory] = useState();
     const [nameTod, setnameTod] = useState(false)
+  const [importModal, setImportModal] = useState(false);
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -37,6 +40,7 @@ const SchemeCategory = () => {
     const addSchemeCatogeryData = useSelector((state) => state.scheme.addSchemeCatogeryData)
     const addSchemeCatogeryError = useSelector((state) => state.scheme.addSchemeCatogeryError)
     const editSchemeCatogeryError = useSelector((state) => state.scheme.editSchemeCatogeryError)
+    const ImportCategory = useSelector((state) => state.scheme.importSchemeCategoryData);
 
     useEffect(() => {
         dispatch(getSchemecategory());
@@ -77,6 +81,15 @@ const SchemeCategory = () => {
             toast.error("Something wrong");
         }
     },[editSchemeCatogeryError])
+
+    useEffect(()=>{
+        console.log("ImportCategory",ImportCategory);
+        if(ImportCategory && ImportCategory.status === 200){
+            toast.success("Category imported");
+        }else if(ImportCategory && ImportCategory.status !== 200){
+            toast.error("Something wrong");
+        }
+    },[ImportCategory])
 
     const onEdit = (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
@@ -244,6 +257,9 @@ const SchemeCategory = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Category
                         </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
+                            Import
+                        </Button>
                     </div>
                 ]}
             />
@@ -295,6 +311,12 @@ const SchemeCategory = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
+            
+            {< ImportSchemeCategory
+        importModal={importModal}
+        handleCancel={() => setImportModal(false)}
+        modaltitle="Import Scheme Category" />}
         </>
     )
 }
