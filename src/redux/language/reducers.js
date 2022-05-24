@@ -113,13 +113,13 @@ const languageReducer = (state = initialState, action) => {
         ...state,
         loading: true,
       }
-    case GET_LANGUAGE_BY_NAME__SUCCESS:
+    case GET_LANGUAGE_BY_NAME_SUCCESS:
       return {
         ...state,
         data,
         loading: false,
       }
-    case GET_LANGUAGE_BY_NAME__ERR:
+    case GET_LANGUAGE_BY_NAME_ERR:
       return {
         ...state,
         error: err,
