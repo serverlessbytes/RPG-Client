@@ -24,6 +24,7 @@ const CourseCategory = () => {
         postCategoryDataErr,
         editCategorySuccess,
         editcategoryErr,
+        importCourseCategoryInBulkErr,
     } = actions;
 
     const [dataForEdit, setDataForEdit] = useState(); //foredit
@@ -46,6 +47,15 @@ const CourseCategory = () => {
     const postcategoryError = useSelector((state) => state.category.postcategoryError)
     const editCategoryError = useSelector((state) => state.category.editCategoryError)
     const importCourseCategory = useSelector((state) => state.category.importCourseCategoryData);
+    const importCourseCategoryError = useSelector((state) => state.category.importCourseCategoryError);
+    const getcategoryData = useSelector((state) => state.category.categoryData)
+
+    useEffect(()=>{
+        if(importCourseCategoryError){
+
+            console.log("importCourseCategoryError",importCourseCategoryError)}
+        }
+        ,[importCourseCategoryError])
 
     useEffect(() => {
         if (postcategorydata && postcategorydata.status === 200) {
@@ -82,13 +92,19 @@ const CourseCategory = () => {
     }, [editCategoryError])
 
     useEffect(() => {
-        console.log("importCourseCategory", importCourseCategory);
         if (importCourseCategory && importCourseCategory.status === 200) {
             toast.success("Category imported");
         } else if (importCourseCategory && importCourseCategory.status !== 200) {
             toast.error("Something wrong");
         }
     }, [importCourseCategory])
+
+    useEffect(()=>{
+        if(importCourseCategoryError){ //
+            dispatch(importCourseCategoryInBulkErr(null))
+            toast.error("Something wrong");
+        }
+    },[importCourseCategoryError])
 
 
     const showModal = () => {
@@ -220,14 +236,11 @@ const CourseCategory = () => {
         // console.log("getCategoryData",getCategoryData); 
     }, [])
 
-    const getcategoryData = useSelector((state) => state.category.categoryData)
     useEffect(() => {
         console.log("getcategoryData", getcategoryData);
     }, [getcategoryData])
 
     getcategoryData && getcategoryData.data.map((item) => {
-        // const { id, name, designation, status } = user;
-
         return usersTableData.push({
             Category: item.name,
             // Sequence: '7',
@@ -248,7 +261,7 @@ const CourseCategory = () => {
         });
     });
 
-    const usersTableColumns = [
+    const coursetableColumns = [
         {
             title: 'Category',
             dataIndex: 'Category',
@@ -300,7 +313,7 @@ const CourseCategory = () => {
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={usersTableData}
-                                columns={usersTableColumns}
+                                columns={coursetableColumns}
                                 pagination={false}
                             />
 

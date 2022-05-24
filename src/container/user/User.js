@@ -75,8 +75,6 @@ const User = () => {
                     }
 
                     var avg = sum / userRank.length;
-
-                    console.log("Rank", userRank)
                     return {
                         name: item.name,
                         email: item.email,

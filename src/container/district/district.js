@@ -35,8 +35,6 @@ const district = () => {
     const postDistrictdataa = useSelector((state) => state.district.postDistrictData) //state
     const postDistrictDataError = useSelector((state) => state.district.getStateData) //state
 
-    useEffect(() => { console.log("stateData", stateData) }, [stateData])
-
     const onstatedata = (e, name) => {
         if (name === "state") {
             setStateData(e)
@@ -51,7 +49,6 @@ const district = () => {
             setState({ ...state, stateId: e })
         }
     }
-
 
     useEffect(() => {
         if (postDistrictdataa && postDistrictdataa.status === 200) {
