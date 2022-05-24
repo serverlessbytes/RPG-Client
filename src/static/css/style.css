@@ -2952,3 +2952,13 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .SchemeName:hover{
   text-decoration: underline;
 }
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-title >span {
+  margin-left: 10px !important;
+}
+
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline .ant-menu-item a{
+  margin-left: -40px;
+}
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline .ant-menu-item{
+  margin-left : 30px;
+}

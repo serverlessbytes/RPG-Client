@@ -44,7 +44,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       openKeys={openKeys}
     >
 
-      <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="feather" />}>
+      <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="pie-chart" />}>
         {/* <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="home" />}> */}
         <NavLink onClick={toggleCollapsed} to={`${path}`} >
           Dashboard
@@ -52,7 +52,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item>
 
       {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
-      <SubMenu key="job" title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}
+      <SubMenu key="job" className='menu' title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}
         icon={!topMenu && <FeatherIcon icon="feather" />}>
         {/* <Menu.Item key="dashboard">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
@@ -60,10 +60,11 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
           </NavLink>
         </Menu.Item> */}
         <Menu.Item key="post" icon={!topMenu && <FeatherIcon icon="feather" />}>
-          <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
+          <NavLink  onClick={toggleCollapsed} to={`${path}/job/post`}> 
             Jobs Post
           </NavLink>
         </Menu.Item >
+        {/* style={{marginLeft:"15px"}} */}
         <Menu.Item key="applications" icon={!topMenu && <FeatherIcon icon="feather" />}>
           <NavLink onClick={toggleCollapsed} to={`${path}/job/application`}>
             Jobs Applications
@@ -128,7 +129,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
 
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
       <SubMenu key="courses" title="Courses" onTitleClick={() => history.push(`${path}/courses`)} icon={!topMenu && <FeatherIcon icon="feather" />}>
-        <Menu.Item key="courses" icon={!topMenu && <FeatherIcon icon="feather" />}>
+        <Menu.Item key="courses" icon={!topMenu && <FeatherIcon icon="feather"  />}>
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
           </NavLink>

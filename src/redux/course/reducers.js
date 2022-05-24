@@ -122,7 +122,6 @@ const initialState = {
   addPartnerCourseInBulkError: null,
   addSwayamCourseInBulkData: null,
   addSwayamCourseInBulkError: null,
-
   importCourseCategoryData:null,
   importCourseCategoryError:null
 };

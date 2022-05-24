@@ -112,7 +112,6 @@ const Schemes = () => {
   }, [editSchemedata])
 
   useEffect(() => {
-    console.log("schemeModulData=====", schemeModulData);
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
@@ -190,11 +189,6 @@ const Schemes = () => {
       )
     }
   }, [users])
-
-  useEffect(() => {
-    console.log(schemeCategory, "schemeCategory");
-  }, [schemeCategory])
-
 
   useEffect(() => {
     if (allschemeData?.data?.data) { //set a state for export excel

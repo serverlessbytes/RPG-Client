@@ -513,10 +513,10 @@ specificUserCourseRatingErr : err =>{
     }
   },
 
-  importCourseCategoryInBulkErr: () => {
+  importCourseCategoryInBulkErr: (err) => {
     return{
       type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
-      err
+      err,
     }
   }
   

@@ -1,5 +1,5 @@
-import { Button, Col, PageHeader, Row, Switch } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Col, Form, Input, Modal, PageHeader, Row, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { getoneJobPost } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,15 +17,18 @@ function ViewScheme() {
     const id = searchParams.get('key');
     const dispatch = useDispatch();
     const history = useHistory();
+    const [form] = Form.useForm()
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [remark, setRemark] = useState('');
+    const [error, setError] = useState({});
 
     const getOneSchemedata = useSelector(state => state.scheme.getOneSchemeData);
 
-    useEffect(() => { console.log("getOneSchemedata", getOneSchemedata) }, [getOneSchemedata])
-    useEffect(() => { console.log("id", id) }, [id])
+    // useEffect(()=>{console.log("remark=====",remark)},[remark])
 
     useEffect(() => {
         if (id) {
-            console.log("id", id)
             dispatch(getOneSchemeData(id));
         } else {
             history.push(`/admin/scheme`)
@@ -34,6 +37,10 @@ function ViewScheme() {
 
     const onEdit = (key) => {
         history.push(`/admin/scheme/addscheme?key=${key}`)
+    }
+
+    const onChangeHandler = (e) => {
+        setRemark(e.target.value)
     }
 
     const onApproved = (key, isAp, id) => {
@@ -52,6 +59,45 @@ function ViewScheme() {
             })
             .catch((err) => console.log("Error", err))
     };
+
+    const handleOk = (key, isAp, id) => {
+        form.resetFields()
+        if (validation()) {
+            return;
+        }
+
+        if (getOneSchemedata?.isApproved) {
+            setIsModalVisible(true);
+            let Data = {
+                id: id,
+                isApproved: !isAp,
+                remark: remark,
+            };
+            ApiPost(`scheme/updateIsApproved?`, Data)
+                .then((res) => {
+                    console.log("res", res)
+                    toast.success(Data.isApproved ? "Approved successful" : "Disapproved successful ")
+                    dispatch(getOneSchemeData(key));
+                })
+                .catch((err) => console.log("Error", err))
+        }
+        setIsModalVisible(false);
+    }
+
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (remark === '') {
+            error.remark = 'Remark is required';
+            flage = true;
+        }
+        setError(error);
+        return flage;
+    }
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    }
 
     return (
         <>
@@ -72,9 +118,16 @@ function ViewScheme() {
                             <FeatherIcon icon="arrow-left" size={24} />
                         </Button>
 
-                        {/* <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onEdit(getOneSchemedata?.key)} type="primary">
-                            Approved
-                        </Button> */}
+                        {
+                            getOneSchemedata?.isApproved === false ?
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneSchemedata?.key, getOneSchemedata?.isApproved, getOneSchemedata?.id)} type="light">
+                                    Approved
+                                </Button>
+                                :
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => setIsModalVisible(true)} type="primary">
+                                    DisApproved
+                                </Button>
+                        }
 
                         <Row gutter={10}>
                             <Col lg={12} className="mb">
@@ -137,15 +190,12 @@ function ViewScheme() {
                             <Col lg={8} className="mb">
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >Location:</label> {getOneSchemedata?.locations.map((item, i) => (item.name)).join(',')}</span><br />
                             </Col>
-                            <Col lg={8} className="mb">
+                            {/* <Col lg={8} className="mb">
                                 <div onClick={() => onApproved(getOneSchemedata?.key, getOneSchemedata?.isApproved, getOneSchemedata?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneSchemedata?.isApproved} ></Switch>
                                 </div>
-                            </Col>
-                            <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneSchemedata?.key)} type="primary">
-                                Edit
-                            </Button>
+                            </Col> */}
                             {/* <Button
                                 className='edit-view'
                                 // type="light"
@@ -156,10 +206,27 @@ function ViewScheme() {
                                 Cancel
                             </Button> */}
                         </Row>
+                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneSchemedata?.key)} type="primary">
+                            Edit
+                        </Button>
+
+                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getOneSchemedata?.key, getOneSchemedata?.isApproved, getOneSchemedata?.id)} onCancel={() => handleCancel()} okText="Add">
+                            <Form form={form} layout="vertical">
+                                <label htmlFor="remark">Remark</label>
+                                <Form.Item name="remark">
+                                    <Input
+                                        placeholder="Enter Remark"
+                                        name="remark"
+                                        // defaultValue={remark}
+                                        onChange={(e) => { onChangeHandler(e) }}
+                                    />
+                                    {error.remark && <span style={{ color: 'red' }}>{error.remark}</span>}
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                     </Col>
                 </Cards>
             </Main>
-
         </>
     )
 }
