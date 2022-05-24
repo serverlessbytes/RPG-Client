@@ -239,7 +239,7 @@ const CourseCategory = () => {
                                 <FeatherIcon icon="edit" size={16} />
                             </Button>
                             <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-                                <FeatherIcon icon="x-circle" size={16} />
+                                <FeatherIcon icon="trash-2" size={16} />
                             </Button>
                         </>
                     </div>

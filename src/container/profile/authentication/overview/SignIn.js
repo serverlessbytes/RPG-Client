@@ -75,7 +75,7 @@ const SignIn = () => {
           </div>
           <Form.Item>
             <Button className="btn-signin" htmlType="submit" type="primary" size="large">
-              {isLoading ? 'Loading...' : 'Sign In'} 
+              {isLoading ? 'Loading...' : 'Sign In'}
             </Button>
           </Form.Item>
           {/* <p className="form-divider">

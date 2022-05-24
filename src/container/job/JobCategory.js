@@ -56,10 +56,10 @@ const JobCategory = () => {
         if (importJob && importJob.status === 200) {
             toast.success("Category imported");
         }
-        else if(importJob && importJob.status !== 200){
+        else if (importJob && importJob.status !== 200) {
             toast.error("Something wrong");
         }
-    },[importJob])
+    }, [importJob])
 
     useEffect(() => {
         if (importJobCategoryError) {
@@ -67,7 +67,7 @@ const JobCategory = () => {
             dispatch(addJobcategoryErr(null))
             toast.error("Something wrong");
         }
-    },[importJobCategoryError])
+    }, [importJobCategoryError])
 
     useEffect(() => {
         console.log('editJobCatogeryData', editJobCatogeryData)
@@ -161,7 +161,7 @@ const JobCategory = () => {
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
                                         <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                            <FeatherIcon icon="x-circle" size={16} />
+                                            <FeatherIcon icon="trash-2" size={16} />
                                         </Button>
                                     </>
                                 </div>

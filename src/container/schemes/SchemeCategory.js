@@ -17,7 +17,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
 import ImportSchemeCategory from '../../components/modals/ImportSchemeCategory';
 const SchemeCategory = () => {
-    const {editSchemecategorySuccess,addSchemecategorySuccess,addSchemecategoryErr,editSchemecategoryErr} = actions;
+    const { editSchemecategorySuccess, addSchemecategorySuccess, addSchemecategoryErr, editSchemecategoryErr } = actions;
 
 
     const dispatch = useDispatch()
@@ -27,7 +27,7 @@ const SchemeCategory = () => {
     const [schemeCategoryTableData, setSchemeCategoryTableData] = useState([]);
     const [selectedSchemeCategory, setSelectedSchemeCategory] = useState();
     const [nameTod, setnameTod] = useState(false)
-  const [importModal, setImportModal] = useState(false);
+    const [importModal, setImportModal] = useState(false);
 
     const { users } = useSelector(state => {
         return {
@@ -47,9 +47,9 @@ const SchemeCategory = () => {
     }, [])
 
     useEffect(() => {
-        console.log("addSchemeCatogeryData",addSchemeCatogeryData)
+        console.log("addSchemeCatogeryData", addSchemeCatogeryData)
     }, [addSchemeCatogeryData])
-    
+
     useEffect(() => {
         if (editSchemeCatogeryData && editSchemeCatogeryData.status === 200) {
             dispatch(editSchemecategorySuccess(null))
@@ -57,7 +57,7 @@ const SchemeCategory = () => {
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [editSchemeCatogeryData])  
+    }, [editSchemeCatogeryData])
 
     useEffect(() => {
         if (addSchemeCatogeryData && addSchemeCatogeryData.status === 200) {
@@ -66,30 +66,30 @@ const SchemeCategory = () => {
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [addSchemeCatogeryData])  
+    }, [addSchemeCatogeryData])
 
-    useEffect(()=>{
-        if(addSchemeCatogeryError){
+    useEffect(() => {
+        if (addSchemeCatogeryError) {
             dispatch(addSchemecategoryErr(null))
             toast.error("Something wrong");
         }
-    },[addSchemeCatogeryError])
+    }, [addSchemeCatogeryError])
 
-    useEffect(()=>{
-        if(editSchemeCatogeryError){
+    useEffect(() => {
+        if (editSchemeCatogeryError) {
             dispatch(editSchemecategoryErr(null))
             toast.error("Something wrong");
         }
-    },[editSchemeCatogeryError])
+    }, [editSchemeCatogeryError])
 
-    useEffect(()=>{
-        console.log("ImportCategory",ImportCategory);
-        if(ImportCategory && ImportCategory.status === 200){
+    useEffect(() => {
+        console.log("ImportCategory", ImportCategory);
+        if (ImportCategory && ImportCategory.status === 200) {
             toast.success("Category imported");
-        }else if(ImportCategory && ImportCategory.status !== 200){
+        } else if (ImportCategory && ImportCategory.status !== 200) {
             toast.error("Something wrong");
         }
-    },[ImportCategory])
+    }, [ImportCategory])
 
     const onEdit = (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
@@ -103,17 +103,17 @@ const SchemeCategory = () => {
         setnameTod(true)
     }
 
-    const newSchemeCategory =  dataForEdit =>{
-        const newVal = ApiPost("scheme/editSchemeCategory" ,dataForEdit)
-        .then((res) =>{
-            if (res.status === 200) {
-                dispatch(getSchemecategory())
-            } return res
-        })
+    const newSchemeCategory = dataForEdit => {
+        const newVal = ApiPost("scheme/editSchemeCategory", dataForEdit)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getSchemecategory())
+                } return res
+            })
         return newVal
     }
 
-    const onDelete = async(id) => {
+    const onDelete = async (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
         if (dataForEdit) {
             delete dataForEdit.key
@@ -123,7 +123,7 @@ const SchemeCategory = () => {
                 isDeleted: true
             }
             // dispatch(editSchemecategory(dataForEdit))
-            const deleteSchemesCategory =  await newSchemeCategory(dataForEdit)
+            const deleteSchemesCategory = await newSchemeCategory(dataForEdit)
             if (deleteSchemesCategory.status === 200) {
                 toast.success("Scheme Category delete successfull")
             }
@@ -134,12 +134,12 @@ const SchemeCategory = () => {
         if (schemeData && schemeData.data) {
             setSchemeCategoryTableData(schemeData.data ?
                 schemeData.data.map((item) => {
-                    console.log("item",item);
+                    console.log("item", item);
                     return {
-                        ...item,  
+                        ...item,
                         SchemeCategory: item.name,
                         action: (
-                        
+
                             <div className='active-schemes-table'>
                                 <div className="table-actions">
                                     <>
@@ -147,7 +147,7 @@ const SchemeCategory = () => {
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
                                         <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                            <FeatherIcon icon="x-circle" size={16} />
+                                            <FeatherIcon icon="trash-2" size={16} />
                                         </Button>
                                     </>
                                 </div>
@@ -178,7 +178,7 @@ const SchemeCategory = () => {
             }
             dispatch(addSchemecategory(data))
             setIsModalVisible(false)
-        } 
+        }
         else {
             delete selectedSchemeCategory.key
             data = {
@@ -267,7 +267,7 @@ const SchemeCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                                {/* --- search bar --- */}            
+                            {/* --- search bar --- */}
                             {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
@@ -298,9 +298,9 @@ const SchemeCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
-            
-            okText={nameTod ? "Edit" :"Add"}>
+            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+
+                okText={nameTod ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
@@ -312,11 +312,11 @@ const SchemeCategory = () => {
                 </Form>
             </Modal>
 
-            
+
             {< ImportSchemeCategory
-        importModal={importModal}
-        handleCancel={() => setImportModal(false)}
-        modaltitle="Import Scheme Category" />}
+                importModal={importModal}
+                handleCancel={() => setImportModal(false)}
+                modaltitle="Import Scheme Category" />}
         </>
     )
 }

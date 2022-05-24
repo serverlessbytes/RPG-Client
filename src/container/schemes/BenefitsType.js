@@ -53,15 +53,15 @@ const BenefitsType = () => {
         if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status === 200) {
             dispatch(addSchemeBenefitBulkSuccess(null))
             toast.success("Scheme imported  ");
-        }  else if(addSchemeBenefitBulkData && addSchemeBenefitBulkData.status !== 200){
+        } else if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status !== 200) {
             toast.error("Something wrong");
         }
     }, [addSchemeBenefitBulkData])
 
     useEffect(() => {
         if (addSchemeBenefitBulkError) {
-         dispatch(addSchemeBenefitBulkErr(null))
-         toast.error("Something wrong");
+            dispatch(addSchemeBenefitBulkErr(null))
+            toast.error("Something wrong");
         }
     }, [addSchemeBenefitBulkError])
 
@@ -211,7 +211,7 @@ const BenefitsType = () => {
                                         <FeatherIcon icon="edit" size={16} />
                                     </Button>
                                     <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-                                        <FeatherIcon icon="x-circle" size={16} />
+                                        <FeatherIcon icon="trash-2" size={16} />
                                     </Button>
                                 </>
                             </div>

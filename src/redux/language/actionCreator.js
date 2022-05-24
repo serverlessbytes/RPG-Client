@@ -1,9 +1,10 @@
 import actions from './actions';
 import products from '../../demoData/cart.json';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import AuthStorage from '../../helper/AuthStorage';
+import STORAGEKEY from '../../config/APP/app.config';
 
 const {
-  
   cartUpdateBegin,
   cartUpdateSuccess,
   cartUpdateErr,
@@ -57,23 +58,34 @@ const cartDelete = (id, chartData) => {
   };
 };
 
-const postLanguageData=(body) => async(dispatch)=>{
+const postLanguageData = (body) => async (dispatch) => {
   await ApiPost("language/addlanguage", body)
-  .then((res) =>{
+    .then((res) => {
       dispatch(postLanguageSuccess(res))
       return dispatch(getLanguageData())
-  })
-  .catch((err) => dispatch(postLanguageDataErr(err)))
+    })
+    .catch((err) => dispatch(postLanguageDataErr(err)))
 }
 
-const getLanguageData = () => async(dispatch)=>{
+const getLanguageData = () => async (dispatch) => {
   await ApiGet("language/getLanguage")
-  .then((res) =>{
+    .then((res) => {
       return dispatch(getLanguageSuccess(res))
-    
-  })
+
+    })
+}
+
+const getLanguageByName = () => async (dispatch) => {
+  const lan = "english"
+  await ApiGet(`language/getLanguageByName?name=${lan}`)
+    .then((res) => {
+      console.log(" ======================res", res);
+      // AuthStorage.setStorageData(STORAGEKEY.lang, res.data, false);
+      return dispatch(getLanguageByNameSuccess(res))
+    })
+    .catch((err) => dispatch(getLanguageByNameErr(res)))
 }
 
 
 
-export { stateGetData, cartUpdateQuantity, cartDelete, postLanguageData, getLanguageData };
+export { stateGetData, cartUpdateQuantity, cartDelete, postLanguageData, getLanguageData, getLanguageByName };

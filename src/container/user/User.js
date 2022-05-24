@@ -82,7 +82,7 @@ const User = () => {
                         email: item.email,
                         userTakenRatings: (
                             <StarRatings
-                                rating={avg?avg:0}
+                                rating={avg ? avg : 0}
                                 starRatedColor="#f57c00"
                                 numberOfStars={5}
                                 name="swayamCourse"

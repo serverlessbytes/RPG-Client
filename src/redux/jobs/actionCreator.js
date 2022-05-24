@@ -267,8 +267,8 @@ export const addJobApplication = (body) => async (dispatch) => {
 
 export const addBulkJobs = (body) => async (dispatch) => {
   dispatch(addBlukJobsBegin(true))
-  // await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-  await ApiPost(`job/addBulkJobs`, body)
+  await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    // await ApiPost(`job/addBulkJobs`, body)
     .then((res) => {
       //console.log("res",res)
       return dispatch(addBlukJobsSuccess(res))

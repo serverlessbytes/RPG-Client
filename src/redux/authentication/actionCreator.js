@@ -3,6 +3,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import { ApiGet, ApiPost, ApiPostNoAuth } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import actions from './actions';
+import { getLanguageByName } from '../language/actionCreator';
 
 const {
   loginBegin,
@@ -16,6 +17,7 @@ const {
   signUpBegin,
   getUserSuccess,
   editProfileSuccess,
+
 } = actions;
 
 // const login = () => {
@@ -37,11 +39,13 @@ const login = (body, keepSignIn) => async dispatch => {
     .then(res => {
       console.log('res  === ', res);
       if (res.message === 'user logged') {
+
         if (keepSignIn) {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data, true);
         } else {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data, false);
         }
+        dispatch(getLanguageByName())
         return dispatch(loginSuccess(res));
       }
     })

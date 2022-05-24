@@ -11,13 +11,19 @@ const actions = {
   CART_DELETE_SUCCESS: 'CART_DELETE_SUCCESS',
   CART_DELETE_ERR: 'CART_DELETE_ERR',
 
-  POST_LANGUAGE_BEGINE:"POST_LANGUAGE_BEGINE",
-  POST_LANGUAGE_SUCCESS:"POST_LANGUAGE_SUCCESS",
-  POST_LANGUAGE_ERR:"POST_LANGUAGE_ERR",
+  POST_LANGUAGE_BEGINE: "POST_LANGUAGE_BEGINE",
+  POST_LANGUAGE_SUCCESS: "POST_LANGUAGE_SUCCESS",
+  POST_LANGUAGE_ERR: "POST_LANGUAGE_ERR",
 
-  GET_LANGUAGE_BEGINE:"GET_LANGUAGE_BEGINE",
-  GET_LANGUAGE_SUCCESS:"GET_LANGUAGE_SUCCESS",
-  GET_LANGUAGE_ERR:"GET_LANGUAGE_ERR",
+  GET_LANGUAGE_BEGINE: "GET_LANGUAGE_BEGINE",
+  GET_LANGUAGE_SUCCESS: "GET_LANGUAGE_SUCCESS",
+  GET_LANGUAGE_ERR: "GET_LANGUAGE_ERR",
+
+  GET_LANGUAGE_BY_NAME_BEGINE: "GET_LANGUAGE_BY_NAME_BEGINE",
+  GET_LANGUAGE_BY_NAME__SUCCESS: "GET_LANGUAGE_BY_NAME_SUCCESS",
+  GET_LANGUAGE_BY_NAME__ERR: "GET_LANGUAGE_BY_NAME_ERR",
+
+
 
   postLanguageBegin: () => {
     return {
@@ -38,7 +44,7 @@ const actions = {
       err,
     };
   },
-  
+
   getLanguageBegin: () => {
     return {
       type: actions.GET_LANGUAGE_BEGINE,
@@ -99,6 +105,22 @@ const actions = {
     };
   },
 
+  getLanguageByNameBegin: () => {
+    return {
+      type: actions.GET_LANGUAGE_BY_NAME_BEGINE
+    };
+  },
+  getLanguageByNameSuccess: data => {
+    return {
+      type: actions.GET_LANGUAGE_BY_NAME__SUCCESS,
+      data,
+    };
+  },
+  getLanguageByNameErr: () => {
+    return {
+      type: actions.GET_LANGUAGE_BY_NAME__ERR
+    }
+  }
 };
 
 export default actions;

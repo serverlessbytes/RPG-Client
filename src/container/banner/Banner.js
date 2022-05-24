@@ -144,21 +144,21 @@ const Banner = () => {
         setNameTog(true)
     }
 
-    const newBanner  = userForDelete =>{
-        const newval = ApiPost("banner/editBanner" , userForDelete)
-        .then((res) =>{
-        if (res.status === 200 ) {
-             dispatch(GetBanner())
-        }
-        return res;
-        })
-    .catch((err) =>{
-     return err;
-    })
-         return newval;
+    const newBanner = userForDelete => {
+        const newval = ApiPost("banner/editBanner", userForDelete)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(GetBanner())
+                }
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            })
+        return newval;
     }
 
-    const onDelete =  async (id) => {
+    const onDelete = async (id) => {
         let dataForDelete = getBannerData && getBannerData.data.find((item) => item.id === id)
         if (dataForDelete) {
             let userForDelete = {
@@ -171,9 +171,9 @@ const Banner = () => {
             // dispatch(editBanner(userForDelete))
 
             const deletebanner = await newBanner(userForDelete)
-             if (deletebanner.status === 200) {
+            if (deletebanner.status === 200) {
                 toast.success("Banner delete successful")
-             }
+            }
         }
     }
 
@@ -191,7 +191,7 @@ const Banner = () => {
                                         <FeatherIcon icon="edit" size={16} />
                                     </Button>
                                     <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                        <FeatherIcon icon="x-circle" size={16} />
+                                        <FeatherIcon icon="trash-2" size={16} />
                                     </Button>
                                 </>
                             </div>

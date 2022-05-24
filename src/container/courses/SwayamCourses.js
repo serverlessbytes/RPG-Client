@@ -461,17 +461,17 @@ const SwayamCourses = () => {
                   {/* <div className="table-actions"> */}
 
                   <>
-                    <Button size="small" type="primary" onClick={() => {
+                    <Button size="small" type="primary" shape='round' onClick={() => {
                       getOneCourseDetailByKey(langIds?.hindi, item?.key)
                     }}>
                       {/* <FeatherIcon icon="edit" size={16} /> */}
-                      Hindi
+                      HN
                     </Button>
-                    <Button size="small" type="primary" onClick={() => {
+                    <Button size="small" type="primary" shape='round' onClick={() => {
                       getOneCourseDetailByKey(langIds?.marathi, item?.key)
                     }} >
                       {/* <FeatherIcon icon="edit" size={16} /> */}
-                      Marathi
+                      MT
                     </Button>
 
                     {/* <Button
