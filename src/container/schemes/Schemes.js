@@ -434,6 +434,44 @@ const Schemes = () => {
             </div> */}
           </>
         ),
+        selectLanguage: (
+          <div className="">
+            {/* <div className="active-schemes-table"> */}
+            <div className="">
+              {/* <div className="table-actions"> */}
+
+              <>
+                <Button size="small" type="primary" shape='round'
+                // onClick={() => {
+                //   console.log("lof ============>", item);
+                //   setSelectedLanguageData(item)
+                //   getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                // }}
+                >
+                  {/* <FeatherIcon icon="edit" size={16} /> */}
+                  HN
+                </Button>
+                <Button size="small" type="primary" shape='round'
+                //  onClick={() => {
+                //   getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                // }} 
+                >
+                  {/* <FeatherIcon icon="edit" size={16} /> */}
+                  MT
+                </Button>
+
+                {/* <Button
+                    className="btn-icon"
+                    type="success"
+                    onClick={() => viewSwayamCoursedata(item.id)}
+                    shape="circle"
+                  >
+                    <FeatherIcon icon="eye" size={16} />
+                  </Button> */}
+              </>
+            </div>
+          </div>
+        ),
 
         action: (
           <div className="active-schemes-table">
@@ -515,6 +553,11 @@ const Schemes = () => {
     {
       title: 'Last Updated',
       dataIndex: 'LastUpdated',
+    },
+    {
+      title: 'Select Language',
+      dataIndex: 'selectLanguage',
+      width: '90px',
     },
     // {
     //   title: 'Approved',

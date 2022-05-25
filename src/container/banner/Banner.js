@@ -102,6 +102,10 @@ const Banner = () => {
             }
             dispatch(addBanner(Data));
             setIsModalVisible(false)
+            setData({
+                title: "",
+                imageUrl: ""
+            })
         }
         else {
             let dataEdit = {

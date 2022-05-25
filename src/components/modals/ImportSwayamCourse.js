@@ -127,8 +127,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         console.log("*-------------*");
         e['jobCategoryIds'] = jobCategoryID;
         e['language'] = language;
-        e['createdByUser'] = userData.id;
-        e['modifiedByUser'] = userData.id;
+        // e['createdByUser'] = userData.id;
+        // e['modifiedByUser'] = userData.id;
         // e['categoryId'] = courseCategoryID;
         // e['key'] = uuid();
       });

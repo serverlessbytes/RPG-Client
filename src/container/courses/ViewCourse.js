@@ -169,12 +169,12 @@ function ViewCourse() {
                                 <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Details:</label> {getOneCoursedata?.data?.detail}</span><br />
                             </Col>
 
-                            {/* <Col lg={8} className="mb">
+                            <Col lg={8} className="mb">
                                 <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneCoursedata?.data?.isApproved}  ></Switch>
                                 </div>
-                            </Col> */}
+                            </Col> 
                             {/* <Button
                                 className='edit-view'
                                 size="medium"

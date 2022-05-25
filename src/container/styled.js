@@ -694,7 +694,7 @@ const Main = Styled.div`
                 padding: 25px;
             }
             ${({ theme }) => (theme.rtl ? 'border-right' : 'border-left')}: 1px solid ${({ theme }) =>
-  theme['border-color-light']};
+        theme['border-color-light']};
         }
     }
     .editor-compose > div {
@@ -1430,12 +1430,12 @@ const TableWrapper = Styled.div`
                     border-bottom: 1px solid ${({ theme }) => theme['border-color-light']};
                     &:first-child{
                         ${({ theme }) => (!theme.rtl ? 'border-left' : 'border-right')}: 1px solid ${({ theme }) =>
-  theme['border-color-light']};
+        theme['border-color-light']};
                         border-radius: ${({ theme }) => (!theme.rtl ? '10px 0 0 10px' : '0 10px 10px 0')} !important;
                     }
                     &:last-child{
                         ${({ theme }) => (theme.rtl ? 'border-left' : 'border-right')}: 1px solid ${({ theme }) =>
-  theme['border-color-light']};
+        theme['border-color-light']};
                         border-radius: ${({ theme }) => (!theme.rtl ? '0 10px 10px 0' : '10px 0 0 10px')} !important;
                     }
                 }
@@ -1721,28 +1721,28 @@ const ProjectPagination = Styled.div`
 `;
 
 export {
-  Main,
-  ButtonsGroupWrapper,
-  BlockButtonsWrapper,
-  ButtonSizeWrapper,
-  BtnWithIcon,
-  AlertList,
-  AutoCompleteWrapper,
-  CalendarWrapper,
-  DatePickerWrapper,
-  NotificationListWrapper,
-  TagInput,
-  PageHeaderWrapper,
-  MessageStyleWrapper,
-  BasicFormWrapper,
-  CardToolbox,
-  FormGroupWrapper,
-  DragDropStyle,
-  BannerCardStyleWrap,
-  FileCardWrapper,
-  TableWrapper,
-  ImportStyleWrap,
-  ExportStyleWrap,
-  ListButtonSizeWrapper,
-  ProjectPagination
+    Main,
+    ButtonsGroupWrapper,
+    BlockButtonsWrapper,
+    ButtonSizeWrapper,
+    BtnWithIcon,
+    AlertList,
+    AutoCompleteWrapper,
+    CalendarWrapper,
+    DatePickerWrapper,
+    NotificationListWrapper,
+    TagInput,
+    PageHeaderWrapper,
+    MessageStyleWrapper,
+    BasicFormWrapper,
+    CardToolbox,
+    FormGroupWrapper,
+    DragDropStyle,
+    BannerCardStyleWrap,
+    FileCardWrapper,
+    TableWrapper,
+    ImportStyleWrap,
+    ExportStyleWrap,
+    ListButtonSizeWrapper,
+    ProjectPagination
 };
