@@ -109,10 +109,6 @@ const PartnerCourses = () => {
   }, []);
 
   useEffect(() => {
-    console.log('postPartnerCourseData', postPartnerCourseData);
-  }, [postPartnerCourseData]);
-
-  useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
       dispatch(addPartnerCourseSuccess(null));
       toast.success('Partner Course Add successful');
@@ -287,10 +283,8 @@ const PartnerCourses = () => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-          console.log("courseData", courseData)
-          let courseRatings = item.courseRatings.map(item => item.rating)
-          console.log("courseRating", courseRatings)
 
+          let courseRatings = item.courseRatings.map(item => item.rating)
           var sum = 0;
 
           for (var i = 0; i < courseRatings.length; i++) {
@@ -302,7 +296,7 @@ const PartnerCourses = () => {
           return {
             //key: id,
             CourseName: (
-              <span onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
+              <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
             CourseCategory: item.courseCategory?.name,
             courseRatings: (

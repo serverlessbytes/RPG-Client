@@ -48,8 +48,7 @@ const SwayamCourses = () => {
   const CSVLinkRef = useRef(null);
   const usersTableData = [];
   const { path } = useRouteMatch();
-  const [activeCoursetog, setActiveCourseTog] = useState(true);
-
+ 
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
@@ -59,12 +58,15 @@ const SwayamCourses = () => {
   const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
   const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
   const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
+  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
+  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const [data, setData] = useState({
     category: '',
     mode: '',
     search: '',
   });
+  const [activeCoursetog, setActiveCourseTog] = useState(true);
   const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
@@ -79,11 +81,7 @@ const SwayamCourses = () => {
     hindi: '',
     marathi: ''
   });
-
-  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const allCategoryData = useSelector(state => state.category.getAllCourse);
-
-
+  
   const header = [
     { label: 'id', key: 'id' },
     { label: 'name', key: 'name' },
@@ -245,7 +243,6 @@ const SwayamCourses = () => {
   }
 
   useEffect(() => {
-    console.log('languageData', languageData)
     let temp = {
       hindi: '',
       marathi: ''
@@ -254,17 +251,12 @@ const SwayamCourses = () => {
       if (item.name === "marathi") {
         temp.marathi = item.id
       } else if (item.name === "Hindi") {
-        console.log('item', item.id)
         temp.hindi = item.id
       }
     })
     setLangIds(temp)
   }, [languageData])
 
-  useEffect(() => {
-    console.log('langIds', langIds)
-
-  }, [langIds])
   const onActive = id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
     if (activeCourse) {
@@ -417,7 +409,7 @@ const SwayamCourses = () => {
 
           return {
             CourseName: (
-              <span style={{ cursor: "pointer" }} onClick={() => viewSwayamCoursedata(item.id)}>
+              <span className='For-Underline' onClick={() => viewSwayamCoursedata(item.id)}>
                 {item?.name}
               </span>
             ),

@@ -1,5 +1,5 @@
-import { Button, Col, PageHeader, Row, Switch } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Col, Form, Input, Modal, PageHeader, Row, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { getoneJobPost } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,8 @@ import { getOneSchemeData } from '../../redux/schemes/actionCreator';
 import { getOneCoursefilter } from '../../redux/course/actionCreator';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
+import FeatherIcon from 'feather-icons-react';
+
 // import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
 
 function ViewCourse() {
@@ -19,15 +21,17 @@ function ViewCourse() {
     const id = searchParams.get('id');
     const dispatch = useDispatch();
     const history = useHistory();
+    const [form] = Form.useForm()
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [remark, setRemark] = useState('');
+    const [error, setError] = useState({});
+
+    useEffect(() => {
+        console.log("error", error)
+    }, [error])
 
     const getOneCoursedata = useSelector(state => state.category.editFilterData); //fetch single data from redux
-
-    // useEffect(() => {
-    //     if (getOneCoursedata) {
-    //         console.log("getOneCoursedata", getOneCoursedata)
-    //     }
-    // },[getOneCoursedata])
-    // useEffect(() => { console.log("id", id) }, [id])
 
     useEffect(() => {
         if (id) {
@@ -40,21 +44,60 @@ function ViewCourse() {
     const onEdit = (id) => {
         history.push(`/admin/courses/addcourses?id=${id}`)
     }
+    const onChangeHandler = (e) => {
+        setRemark(e.target.value)
+    }
 
-    const onApproved = (key,isAp,id) => {
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    }
+
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (remark === '') {
+            error.remark = 'Remark is required';
+            flage = true;
+        }
+        setError(error);
+        return flage;
+    }
+
+    const handleOk = (key, isAp, id) => {
+        if (validation()) {
+            return;
+        }
+        form.resetFields();
+        if (getOneCoursedata?.data?.isApproved) {
+            let data = {
+                courseId: id,
+                key: key,
+                isApproved: !isAp,
+                remark: remark,
+            };
+            ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+                toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+                dispatch(getOneCoursefilter(id));
+            });
+        }
+        setRemark('')
+        setIsModalVisible(false);
+    }
+
+    const onApproved = (key, isAp, id) => {
         // if (status !== 'active') {
         //   return;
         // }
         let data = {
-          courseId: id,
-          key: key,
-          isApproved: !isAp,
+            courseId: id,
+            key: key,
+            isApproved: !isAp,
         };
         ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-          toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-          dispatch(getOneCoursefilter(id));
+            toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+            dispatch(getOneCoursefilter(id));
         });
-      };
+    };
 
     return (
         <>
@@ -64,6 +107,28 @@ function ViewCourse() {
             <Main>
                 <Cards headless>
                     <Col md={24}>
+                        <Button
+                            // className="btn-icon"
+                            onClick={() => history.push(`/admin/courses`)}
+                            type="info"
+                            to="#"
+                            shape="arrow-left"
+                            style={{ marginBottom: "20px" }}
+                        >
+                            <FeatherIcon icon="arrow-left" size={24} />
+                        </Button>
+
+                        {
+                            getOneCoursedata?.data?.isApproved === false ?
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)} type="light">
+                                    Approved
+                                </Button>
+                                :
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => setIsModalVisible(true)} type="primary">
+                                    DisApproved
+                                </Button>
+                        }
+
                         <Row gutter={10}>
                             <Col lg={24} className="mb">
                                 {/* <div className='label' style={{ fontWeight: 'bold', textAlign: "center" }}>
@@ -103,48 +168,42 @@ function ViewCourse() {
                             <Col lg={8} className="mb">
                                 <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Details:</label> {getOneCoursedata?.data?.detail}</span><br />
                             </Col>
-                        
-                            <Col lg={8} className="mb">
-                                <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved,getOneCoursedata.data?.id)}>
+
+                            {/* <Col lg={8} className="mb">
+                                <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneCoursedata?.data?.isApproved}  ></Switch>
                                 </div>
-                            </Col>
-                            <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.id)} type="primary">
-                                Edit
-                            </Button>
-                            <Button
+                            </Col> */}
+                            {/* <Button
                                 className='edit-view'
                                 size="medium"
                                 style={{ marginLeft: '14px' }}
                                 onClick={() => history.push(`/admin/courses`)}
                             >
                                 Cancel
-                            </Button>
-                    </Row>
-
-                    {/* <Row gutter={10}>
-                            <Col lg={8} className="mb">
-                                <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType.name}</span><br />
-                            </Col>
-                          
-                        
-
-                        {/* <Button
-                            className='edit-view'
-                            // type="light"
-                            size="medium"
-                            style={{ marginLeft: '14px' }}
-                            // onClick={() => {
-                            //     history.push(`/admin/job/post`);
-                            // }}
-                            onClick={() => history.push(`/admin/job/post`)}
-                        >
-                            Cancel
-                        </Button> */}
-                </Col>
-            </Cards>
-        </Main>
+                            </Button> */}
+                        </Row>
+                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.id)} type="primary">
+                            Edit
+                        </Button>
+                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)} onCancel={() => handleCancel()} okText="Add">
+                            <Form form={form} layout="vertical">
+                                <label htmlFor="remark">Remark</label>
+                                <Form.Item name="remark">
+                                    <Input
+                                        placeholder="Enter Remark"
+                                        name="remark"
+                                        // defaultValue={remark}
+                                        onChange={(e) => { onChangeHandler(e) }}
+                                    />
+                                    {error.remark && <span style={{ color: 'red' }}>{error.remark}</span>}
+                                </Form.Item>
+                            </Form>
+                        </Modal>
+                    </Col>
+                </Cards>
+            </Main>
 
         </>
     )

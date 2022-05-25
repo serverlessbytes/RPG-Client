@@ -409,11 +409,10 @@ const Schemes = () => {
       // console.log(avg);
       return ({
         SchemeName: (
-          <span className='SchemeName' onClick={() => viewSchemesdata(item.key)}>
+          <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>
             {item?.name}
           </span>
         ),
-        // SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         //  schemeRatings: item.schemeRatings.map(item => item.rating),

@@ -48,13 +48,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const editJobPostErr = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
-  // useEffect(() => { console.log("editJobPostData", editJobPostData) }, [editJobPostData])
-
-  useEffect(() => {
-    console.log(getOneJobPostData, "getOneJobPostData");
-  }, [getOneJobPostData])
-
-
+  
   const newJobPost = data => {
     let id = data.id;
     delete data.id;
@@ -163,7 +157,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         state?.state ? state?.state : '',
         type?.type ? type?.type : '',
         jobRole?.jobRole ? jobRole?.jobRole : '',
-        search.search ? search.search : '',
+        // search.search ? search.search : '',
         status,
       ),
     );
@@ -208,29 +202,29 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setExportTog(false);
   }, [perPage, pageNumber]);
 
-  // const onApproved = (id, isAp) => {
-  //   if (status !== 'active') {
-  //     return;
-  //   }
-  //   let data = {
-  //     isApproved: !isAp,
-  //   };
-  //   ApiPost(`job/updateIsApproved?jobId=${id}`, data)
-  //     .then(res => {
-  //       console.log('res', res);
-  //       toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
-  //       dispatch(
-  //         getJobsFilterForMain(
-  //           perPage,
-  //           pageNumber,
-  //           state.state ? state.state : '',
-  //           type.type ? type.type : '',
-  //           jobRole.jobRole ? jobRole.jobRole : '',
-  //         ),
-  //       );
-  //     })
-  //     .catch(err => console.log('Error', err));
-  // };
+  const onApproved = (id, isAp) => {
+    if (status !== 'active') {
+      return;
+    }
+    let data = {
+      isApproved: !isAp,
+    };
+    ApiPost(`job/updateIsApproved?jobId=${id}`, data)
+      .then(res => {
+        console.log('res', res);
+        toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+        dispatch(
+          getJobsFilterForMain(
+            perPage,
+            pageNumber,
+            state.state ? state.state : '',
+            type.type ? type.type : '',
+            jobRole.jobRole ? jobRole.jobRole : '',
+          ),
+        );
+      })
+      .catch(err => console.log('Error', err));
+  };
 
   useEffect(() => {
     // if (apply) {
@@ -238,7 +232,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       getJobFilterData?.data?.data?.map(item => {
         return {
           user: (
-            <span style={{ cursor: 'pointer' }} onClick={() => viewJobdata(item.id)}>
+            <span  className='For-Underline' onClick={() => viewJobdata(item.id)}>
               {item?.name?.name}
             </span>
           ),
@@ -279,46 +273,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         };
       }),
     );
-  },
-    // else if (jobData && jobData.data) {
-    //   console.log("jobData",jobData)
-    //   let newJobData={...jobData}
-    //   console.log("newJobData",newJobData)
-    //   setUsertable(newJobData.data?.data?.map(item => {
-    //     return ({
-    //       user: item.name?.name,
-    //       email: item.email,
-    //       company: item.description,
-    //       position: item.jobRole.name,
-    //       joinDate: moment(item.startDate).format('DD-MM-YYYY') ,
-    //       approved:(
-    //       <>
-    //         <div id={item.id} onClick={()=>onApproved(item.id,item.isApproved)}>
-    //         <Switch checked={item.isApproved} ></Switch>
-    //         </div>
-    //       </>
-    //     ),
-
-    //       action: (
-    //         <div className="table-actions">
-    //           <>
-    //             <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-    //               <FeatherIcon icon="edit" size={16} />
-    //             </Button>
-    //             <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-    //               <FeatherIcon icon="trash-2" size={16} />
-    //             </Button>
-    //             <Button className="btn-icon" type="success" onClick={() =>viewJobdata(item.id) } shape="circle">
-    //                   <FeatherIcon icon="eye" size={16} />
-    //                 </Button>
-    //           </>
-    //         </div>
-    //       ),
-    //     });
-    //   }))
-    // }
-    // }
-    [getJobFilterData],
+  },[getJobFilterData],
   );
 
   const viewJobdata = id => {
@@ -357,14 +312,14 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       dataIndex: 'joinDate',
       // key: 'joinDate',
     },
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    // },
     {
       title: 'Vacancies',
       dataIndex: 'vacancies',
     },
+    // {
+    //   title: 'Approved',
+    //   dataIndex: 'approved',
+    // },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -391,9 +346,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             dataSource={usertable}
             columns={usersTableColumns}
             pagination={{
-              // defaultPageSize: 10,
-              // total: usersTableData.length,
-              // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               defaultPageSize: getJobFilterData?.data.per_page,
               total: getJobFilterData?.data.page_count,
               // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
@@ -421,7 +373,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       {viewModal && (
         <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneJobPostData?.data} />
       )}
-      {/* <JobPostPage data={getOneJobPostData?.data}></JobPostPage> */}
     </>
   );
 };

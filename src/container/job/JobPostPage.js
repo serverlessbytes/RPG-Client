@@ -1,5 +1,5 @@
-import { Button, Col, PageHeader, Row, Switch } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Col, Form, Input, PageHeader, Row, Modal, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { getoneJobPost } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,29 +8,77 @@ import { useHistory } from 'react-router';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
-// import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
+import FeatherIcon from 'feather-icons-react';
 
 function JobPostPage({ data }) {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id');
     const dispatch = useDispatch();
     const history = useHistory();
+    const [form] = Form.useForm()
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [remark, setRemark] = useState('')
+    const [error, setError] = useState({});
 
     const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
 
-    useEffect(() => { console.log("getOneJobPostData", getOneJobPostData) }, [getOneJobPostData])
+    useEffect(() => {
+        console.log("getOneJobPostData", getOneJobPostData)
+    }, [getOneJobPostData])
 
     useEffect(() => {
         if (id) {
-            console.log("id", id)
             dispatch(getoneJobPost(id));
-        }else{
+        } else {
             history.push(`/admin/job/post`)
         }
     }, [id])
 
+    const onChangeHandler = (e) => {
+        setRemark(e.target.value)
+    }
+
     const onEdit = (id) => {
         history.push(`/admin/job/new?id=${id}`)
+    }
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+    }
+
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (remark === '') {
+            error.remark = 'Remark is required';
+            flage = true;
+        }
+        setError(error);
+        return flage;
+    } 
+
+    const handleOk = (id, isAp) => {
+        form.resetFields()
+        if (validation()) {
+            return;
+        }
+        if (getOneJobPostData?.data?.isApproved) {
+            let data = {
+                isApproved: !isAp,
+                remark : remark,
+            };
+            console.log("data",data)
+            ApiPost(`job/updateIsApproved?jobId=${id}`, data)
+                .then(res => {
+                    console.log('res', res);
+                    dispatch(getoneJobPost(id));
+                    toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+                })
+                .catch(err => console.log('Error', err));
+        }
+        setRemark('')
+        setIsModalVisible(false)
     }
 
     const onApproved = (id, isAp) => {
@@ -40,6 +88,7 @@ function JobPostPage({ data }) {
         let data = {
             isApproved: !isAp,
         };
+        console.log("data",data)
         ApiPost(`job/updateIsApproved?jobId=${id}`, data)
             .then(res => {
                 console.log('res', res);
@@ -57,6 +106,27 @@ function JobPostPage({ data }) {
             <Main>
                 <Cards headless>
                     <Col md={24}>
+                        <Button
+                            // className="btn-icon"
+                            onClick={() => history.push(`/admin/job/post`)}
+                            type="info"
+                            to="#"
+                            shape="arrow-left"
+                            style={{ marginBottom: "20px" }}
+                        >
+                            <FeatherIcon icon="arrow-left" size={24} />
+                        </Button>
+                        {
+                            getOneJobPostData?.data?.isApproved === false ?
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneJobPostData?.data?.id, getOneJobPostData?.data?.isApproved)} type="light">
+                                    Approved
+                                </Button>
+                                :
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => setIsModalVisible(true)} type="primary">
+                                    DisApproved
+                                </Button>
+                        }
+
                         <Row gutter={10}>
                             <Col lg={8} className="mb">
                                 <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType.name}</span><br />
@@ -123,17 +193,34 @@ function JobPostPage({ data }) {
                             <Col lg={8} className="mb">
                                 <span><label style={{ fontWeight: 'bold' }} className="pr" >Type Of Field:</label> {getOneJobPostData?.data?.extraType}</span><br />
                             </Col>
+
                             <Col lg={8} className="mb">
                                 <div onClick={() => onApproved(getOneJobPostData?.data?.id, getOneJobPostData?.data?.isApproved)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneJobPostData?.data?.isApproved} ></Switch>
                                 </div>
                             </Col>
+
                         </Row>
                         <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneJobPostData?.data?.id)} type="primary">
                             Edit
                         </Button>
-                        <Button
+
+                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getOneJobPostData?.data?.id, getOneJobPostData?.data?.isApproved)} onCancel={() => handleCancel()} okText="Add">
+                            <Form form={form} layout="vertical">
+                                <label htmlFor="remark">Remark</label>
+                                <Form.Item name="remark">
+                                    <Input
+                                        placeholder="Enter Remark"
+                                        name="remark"
+                                        defaultValue={remark}
+                                        onChange={(e) => { onChangeHandler(e) }}
+                                    />
+                                    {error.remark && <span style={{ color: 'red' }}>{error.remark}</span>}
+                                </Form.Item>
+                            </Form>
+                        </Modal>
+                        {/* <Button
                             className='edit-view'
                             // type="light"
                             size="medium"
@@ -144,7 +231,7 @@ function JobPostPage({ data }) {
                             onClick={() => history.push(`/admin/job/post`)}
                         >
                             Cancel
-                        </Button>
+                        </Button> */}
                     </Col>
                 </Cards>
             </Main>

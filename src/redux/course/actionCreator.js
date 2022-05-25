@@ -203,7 +203,7 @@ export const addCourseRating = (body) => async (dispatch) => {
     .then((res) => {
       return dispatch(addCourseRatingSuccess(res))
     })
-    .catch(e => addCourseRatingErr(e))
+    .catch(e => dispatch(addCourseRatingErr(e)))
 }
 
 export const getCourseRatingData = (perpage, pagenumber) => async (dispatch) => {
@@ -214,7 +214,7 @@ export const getCourseRatingData = (perpage, pagenumber) => async (dispatch) => 
     .then((res) => {
       return dispatch(courseRatingSuccess(res))
     })
-    .catch(e => courseRatingErr(e))
+    .catch(e => dispatch(courseRatingErr(e)))
 }
 
 export const getCourseRatingsByID = (id) => async (dispatch) => {
@@ -222,7 +222,7 @@ export const getCourseRatingsByID = (id) => async (dispatch) => {
     .then((res) => {
       return dispatch(courseRatingByIdSuccess(res))
     })
-    .catch(e => courseRatingByIdErr(e))
+    .catch(e => dispatch(courseRatingByIdErr(e)))
 }
 
 export const specificCourseRatings = (body) => async (dispatch) => {
@@ -230,7 +230,7 @@ export const specificCourseRatings = (body) => async (dispatch) => {
     .then((res) => {
       return dispatch(specificCourseRatingSuccess(res))
     })
-    .catch(e => specificCourseRatingErr(e))
+    .catch(e => dispatch(specificCourseRatingErr(e)))
 }
 
 export const specificUserCourseRatings = (body) => async (dispatch) => {
@@ -238,7 +238,7 @@ export const specificUserCourseRatings = (body) => async (dispatch) => {
     .then((res) => {
       return (specificUserCourseRatingSuccess(res))
     })
-    .catch(e => specificUserCourseRatingErr(e))
+    .catch(e => dispatch(specificUserCourseRatingErr(e)))
 }
 
 export const editCategoryRating = (body) => async (dispatch) => {
@@ -249,7 +249,7 @@ export const editCategoryRating = (body) => async (dispatch) => {
         return dispatch(getCourseRatingData(per_page, page_number))
       }
     })
-    .catch(e => editCategoryRatingErr(e))
+    .catch(e => dispatch(editCategoryRatingErr(e)))
 }
 
 export const importCourseCategory = (body) => async (dispatch) => {
@@ -260,5 +260,5 @@ export const importCourseCategory = (body) => async (dispatch) => {
         return dispatch(getCategoryData(per_page, page_number))
       }
     })
-    .catch(e => importCourseCategoryInBulkErr(e))
+    .catch(e => dispatch(importCourseCategoryInBulkErr(e)))
 }

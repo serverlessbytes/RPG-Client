@@ -2946,10 +2946,10 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .mb {
   margin-bottom: 20px !important;
 }
-.SchemeName{
+.For-Underline{
   cursor: pointer;
 }
-.SchemeName:hover{
+.For-Underline:hover{
   text-decoration: underline;
 }
 .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-title >span {

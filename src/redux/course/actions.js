@@ -137,7 +137,6 @@ const actions = {
   },
 
   editCategorySuccess: data => {
-    //console.log("datata",data);
     return {
       type: actions.EDIT_CATEGORY_SUCCESS,
       data,

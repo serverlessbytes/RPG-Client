@@ -81,6 +81,7 @@ function ViewScheme() {
                 })
                 .catch((err) => console.log("Error", err))
         }
+        setRemark('')
         setIsModalVisible(false);
     }
 

@@ -62,7 +62,6 @@ const User = () => {
     };
 
     useEffect(() => {
-        console.log("----- userData", userData);
         if (userData && userData.data) {
             setUserTable(
                 userData.data.data.map((item) => {

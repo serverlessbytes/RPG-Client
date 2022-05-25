@@ -34,6 +34,7 @@ const CourseCategory = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
+    const [courseCategory, setCourseCategory] = useState()
 
     const { users } = useSelector(state => {
         return {
@@ -49,13 +50,6 @@ const CourseCategory = () => {
     const importCourseCategory = useSelector((state) => state.category.importCourseCategoryData);
     const importCourseCategoryError = useSelector((state) => state.category.importCourseCategoryError);
     const getcategoryData = useSelector((state) => state.category.categoryData)
-
-    useEffect(()=>{
-        if(importCourseCategoryError){
-
-            console.log("importCourseCategoryError",importCourseCategoryError)}
-        }
-        ,[importCourseCategoryError])
 
     useEffect(() => {
         if (postcategorydata && postcategorydata.status === 200) {
@@ -99,12 +93,12 @@ const CourseCategory = () => {
         }
     }, [importCourseCategory])
 
-    useEffect(()=>{
-        if(importCourseCategoryError){ //
+    useEffect(() => {
+        if (importCourseCategoryError) { //
             dispatch(importCourseCategoryInBulkErr(null))
             toast.error("Something wrong");
         }
-    },[importCourseCategoryError])
+    }, [importCourseCategoryError])
 
 
     const showModal = () => {
@@ -233,33 +227,53 @@ const CourseCategory = () => {
 
     useEffect(() => {
         dispatch(getCategoryData())
-        // console.log("getCategoryData",getCategoryData); 
     }, [])
 
     useEffect(() => {
-        console.log("getcategoryData", getcategoryData);
+        if (getcategoryData && getcategoryData.data) {
+            setCourseCategory(getcategoryData.data.map((item) => {
+                return {
+                    Category: item.name,
+                    action: (
+                        <div className='active-schemes-table'>
+                            <div className="table-actions">
+                                <>
+                                    <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
+                                        <FeatherIcon icon="edit" size={16} />
+                                    </Button>
+                                    <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+                                        <FeatherIcon icon="trash-2" size={16} />
+                                    </Button>
+                                </>
+                            </div>
+                        </div>
+                    ),
+                }
+            }
+            ))
+        }
     }, [getcategoryData])
 
-    getcategoryData && getcategoryData.data.map((item) => {
-        return usersTableData.push({
-            Category: item.name,
-            // Sequence: '7',
-            action: (
-                <div className='active-schemes-table'>
-                    <div className="table-actions">
-                        <>
-                            <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
-                                <FeatherIcon icon="edit" size={16} />
-                            </Button>
-                            <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-                                <FeatherIcon icon="trash-2" size={16} />
-                            </Button>
-                        </>
-                    </div>
-                </div>
-            ),
-        });
-    });
+    // getcategoryData && getcategoryData.data.map((item) => {
+    //     return usersTableData.push({
+    //         Category: item.name,
+    //         // Sequence: '7',
+    //         action: (
+    //             <div className='active-schemes-table'>
+    //                 <div className="table-actions">
+    //                     <>
+    //                         <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
+    //                             <FeatherIcon icon="edit" size={16} />
+    //                         </Button>
+    //                         <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
+    //                             <FeatherIcon icon="trash-2" size={16} />
+    //                         </Button>
+    //                     </>
+    //                 </div>
+    //             </div>
+    //         ),
+    //     });
+    // });
 
     const coursetableColumns = [
         {
@@ -267,10 +281,6 @@ const CourseCategory = () => {
             dataIndex: 'Category',
             sortDirections: ['descend', 'ascend'],
         },
-        // {
-        //     title: 'Sequence',
-        //     dataIndex: 'Sequence',
-        // },
         {
             title: 'Actions',
             dataIndex: 'action',
@@ -312,7 +322,7 @@ const CourseCategory = () => {
 
                             <Table
                                 // rowSelection={rowSelection}
-                                dataSource={usersTableData}
+                                dataSource={courseCategory}
                                 columns={coursetableColumns}
                                 pagination={false}
                             />
