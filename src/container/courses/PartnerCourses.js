@@ -17,7 +17,7 @@ import {
 } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
-import { ApiPost } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
@@ -27,6 +27,8 @@ import ImportPartnerCourse from '../../components/modals/ImportPartnerCourses';
 import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
+import ConfirmModal from '../../components/modals/confirm_modal';
+
 
 const PartnerCourses = () => {
   const {
@@ -57,6 +59,7 @@ const PartnerCourses = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [exportTog, setExportTog] = useState(false);
+  const [isConfirmModal, setIsConfirmModal] = useState(false)
 
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -142,6 +145,31 @@ const PartnerCourses = () => {
       toast.error('Something Wrong');
     }
   }, [editPartnerCourseError]);
+
+
+  const getOneCourseDetailByKey = async (languageId, key) => {
+    await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success("Course alredy exist in this language!")
+        }
+      })
+      .catch((e) => {
+        if (e.response.status) {
+          setIsConfirmModal(true)
+          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
+        }
+      })
+
+  }
+
+  const languageHandalCancle = () => {
+    console.log((" languageHandalCancle------------------"));
+  }
+
+  const languageHandalOk = () => {
+    console.log("languageHandalOk ---------");
+  }
 
   const header = [
     { label: 'id', key: 'id' },
@@ -323,6 +351,47 @@ const PartnerCourses = () => {
             //   </>
             // ),
             // Language: "Hindi",
+
+
+            selectLanguage: (
+              <div className="">
+                {/* <div className="active-schemes-table"> */}
+                <div className="">
+                  {/* <div className="table-actions"> */}
+
+                  <>
+                    <Button size="small" type="primary" shape='round'
+                      onClick={() => {
+                        console.log("lof ============>", item);
+                        getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                        // setSelectedLanguageData(item)
+                      }}
+                    >
+                      {/* <FeatherIcon icon="edit" size={16} /> */}
+                      HN
+                    </Button>
+                    <Button size="small" type="primary" shape='round'
+                      onClick={() => {
+                        console.log("lof ============>", item);
+                        getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                      }}
+                    >
+                      {/* <FeatherIcon icon="edit" size={16} /> */}
+                      MT
+                    </Button>
+
+                    {/* <Button
+                        className="btn-icon"
+                        type="success"
+                        onClick={() => viewSwayamCoursedata(item.id)}
+                        shape="circle"
+                      >
+                        <FeatherIcon icon="eye" size={16} />
+                      </Button> */}
+                  </>
+                </div>
+              </div>
+            ),
             action: (
               <div className="active-schemes-table">
                 <div className="table-actions">
@@ -378,7 +447,7 @@ const PartnerCourses = () => {
 
   useEffect(() => {
     if (state.category) {
-      dispatch(getCoursefilter('', perPage, pageNumber,'', status));
+      dispatch(getCoursefilter('', perPage, pageNumber, '', status));
       // dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
     }
   }, [perPage, pageNumber, state.mode, status]); //paganation
@@ -401,12 +470,17 @@ const PartnerCourses = () => {
       title: 'Course Type',
       dataIndex: 'CourseType',
     },
-
+    {
+      title: 'Select Language',
+      dataIndex: 'selectLanguage',
+      width: '90px',
+    },
     {
       title: 'Actions',
       dataIndex: 'action',
       width: '90px',
     },
+
   ];
 
   const { TabPane } = Tabs;
@@ -638,6 +712,30 @@ const PartnerCourses = () => {
           modaltitle="Import Swayam Courses"
         />
       }
+      {isConfirmModal && (
+        <ConfirmModal
+          onOk={() => { setIsConfirmModal(false) }}
+          onCancel={() => { setIsConfirmModal(false) }}
+          visible={isConfirmModal}
+          footer={<>
+            <Button size="small" type="primary" onClick={() => {
+              languageHandalCancle()
+              // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+            }}>
+              {/* <FeatherIcon icon="edit" size={16} /> */}
+              No
+            </Button>
+            <Button size="small" type="primary" onClick={() => {
+              // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+              languageHandalOk()
+            }} >
+              {/* <FeatherIcon icon="edit" size={16} /> */}
+              Yes
+            </Button>
+          </>}
+          children={"This coures in not available in this language. You want to add?"}
+        />
+      )}
     </>
   );
 };

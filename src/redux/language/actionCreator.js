@@ -76,11 +76,11 @@ const getLanguageData = () => async (dispatch) => {
 }
 
 const getLanguageByName = () => async (dispatch) => {
-  const lan = "english"
+  const lan = "English"
   await ApiGet(`language/getLanguageByName?name=${lan}`)
     .then((res) => {
       console.log(" ======================res", res);
-      // AuthStorage.setStorageData(STORAGEKEY.lang, res.data, false);
+      // AuthStorage.setStorageData(STORAGEKEY.lang, res.data.id, true);
       return dispatch(getLanguageByNameSuccess(res))
     })
     .catch((err) => dispatch(getLanguageByNameErr(res)))

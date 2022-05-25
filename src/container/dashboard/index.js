@@ -283,7 +283,7 @@ const Dashboard = () => {
         </Row>
         <h3>Courses</h3>
         <Row gutter={25}>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col md={6} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -301,7 +301,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col md={6} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -319,7 +319,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col md={6} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -337,7 +337,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col xxl={6} md={12} sm={12} xs={24}>
+          <Col md={6} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -358,9 +358,9 @@ const Dashboard = () => {
         </Row>
 
         <Row gutter={25}>
-          <Col xxl={12} xs={24}>
+          <Col md={12} xs={24}>
             {/* <Row gutter={25}>
-              <Col xxl={12} md={12} sm={12} xs={24}>
+              <Col md={12}  xs={24}>
                 <Cards headless>
                   <EChartCard>
                     <div className="card-chunk">
@@ -374,7 +374,7 @@ const Dashboard = () => {
                   </EChartCard>
                 </Cards>
               </Col>
-              <Col xxl={12} md={12} sm={12} xs={24}>
+              <Col md={12}  xs={24}>
                 <Cards headless>
                   <EChartCard>
                     <div className="card-chunk">
@@ -398,7 +398,7 @@ const Dashboard = () => {
               <EmailSent dnone={'d-none'} emailSendTitle={'Page views schemes'} setHeight={'height635'} />
             </Suspense>
           </Col>
-          <Col xxl={12} xs={24}>
+          <Col md={12} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
@@ -411,7 +411,7 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row gutter={25}>
-          <Col xxl={8} xs={24}>
+          <Col md={8} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
@@ -427,7 +427,7 @@ const Dashboard = () => {
               />
             </Suspense>
           </Col>
-          <Col xxl={8} xs={24}>
+          <Col md={8} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
@@ -443,7 +443,7 @@ const Dashboard = () => {
               />
             </Suspense>
           </Col>
-          <Col xxl={8} xs={24}>
+          <Col md={8} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
