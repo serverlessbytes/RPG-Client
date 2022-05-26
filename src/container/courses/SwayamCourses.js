@@ -49,7 +49,7 @@ const SwayamCourses = () => {
   const CSVLinkRef = useRef(null);
   const usersTableData = [];
   const { path } = useRouteMatch();
- 
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
@@ -89,7 +89,7 @@ const SwayamCourses = () => {
     hindi: '',
     marathi: ''
   });
-  
+
   const header = [
     { label: 'id', key: 'id' },
     { label: 'name', key: 'name' },
@@ -368,7 +368,7 @@ const SwayamCourses = () => {
   const languageHandalOk = () => {
     console.log("handleOk---------*");
     console.log("langIds", langIds.hindi);
-    let selectLanguage = {
+    let selectLanguageAddData = {
       key: selectedLanguageData.key,
       detail: selectedLanguageData.detail,
       name: selectedLanguageData.name,
@@ -379,8 +379,8 @@ const SwayamCourses = () => {
       mode: selectedLanguageData.mode,
       thumbnail: selectedLanguageData.thumbnail,
     };
-    console.log("selectLanguage =====>", selectLanguage);
-    dispatch(addSwayamCourse(selectLanguage, langIds.hindi))
+    console.log("selectLanguage =====>", selectLanguageAddData);
+    dispatch(addSwayamCourse(selectLanguageAddData, langIds.hindi))
     setIsConfirmModal(false)
   }
 
@@ -482,27 +482,25 @@ const SwayamCourses = () => {
             selectLanguage: (
               <div className="">
                 {/* <div className="active-schemes-table"> */}
-                <div className="">
-                  {/* <div className="table-actions"> */}
-                  <>
-                    <Button size="small" type="primary" shape='round' onClick={() => {
-                      console.log("lof =======HN=====>",);
-                      setSelectedLanguageData(item)
-                      getOneCourseDetailByKey(langIds?.hindi, item?.key)
-                    }}>
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
-                      HN
-                    </Button>
-                    <Button size="small" type="primary" shape='round' onClick={() => {
-                      console.log("lof =========MT===>",);
 
-                      getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                    }} >
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
-                      MT
-                    </Button>
+                {/* <div className="table-actions"> */}
+                <>
+                  <Button size="small" type="primary" shape='round' onClick={() => {
+                    console.log("lof =======HN=====>",);
+                    setSelectedLanguageData(item)
+                    getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                  }}>
+                    {/* <FeatherIcon icon="edit" size={16} /> */}
+                    HN
+                  </Button>
+                  <Button size="small" type="primary" shape='round' onClick={() => {
+                    console.log("lof =========MT===>",); getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                  }} >
+                    {/* <FeatherIcon icon="edit" size={16} /> */}
+                    MT
+                  </Button>
 
-                    {/* <Button
+                  {/* <Button
                         className="btn-icon"
                         type="success"
                         onClick={() => viewSwayamCoursedata(item.id)}
@@ -510,8 +508,7 @@ const SwayamCourses = () => {
                       >
                         <FeatherIcon icon="eye" size={16} />
                       </Button> */}
-                  </>
-                </div>
+                </>
               </div>
             ),
             action: (
@@ -842,27 +839,29 @@ const SwayamCourses = () => {
           modaltitle="Import Swayam Courses"
         />
       )}
+
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}
           onCancel={() => { setIsConfirmModal(false) }}
           visible={isConfirmModal}
-          footer={<>
-            <Button size="small" type="primary" onClick={() => {
-              languageHandalCancle()
-              // getOneCourseDetailByKey(langIds?.hindi, item?.key)
-            }}>
-              {/* <FeatherIcon icon="edit" size={16} /> */}
-              No
-            </Button>
-            <Button size="small" type="primary" onClick={() => {
-              // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-              languageHandalOk()
-            }} >
-              {/* <FeatherIcon icon="edit" size={16} /> */}
-              Yes
-            </Button>
-          </>}
+          footer={
+            <>
+              <Button size="small" type="primary" onClick={() => {
+                languageHandalCancle()
+                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+              }}>
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                No
+              </Button>
+              <Button size="small" type="primary" onClick={() => {
+                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                languageHandalOk()
+              }} >
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                Yes
+              </Button>
+            </>}
           children={"This coures in not available in this language. You want to add?"}
         />
       )}

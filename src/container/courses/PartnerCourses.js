@@ -9,6 +9,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import {
+  addPartnerCourse,
   editPartnerCoursefilter,
   getallSwayamCourse,
   getCategoryData,
@@ -60,7 +61,12 @@ const PartnerCourses = () => {
   const [status, setStatus] = useState('active');
   const [exportTog, setExportTog] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false)
-
+  const [selectedLanguageData, setSelectedLanguageData] = useState()
+  const [langIds, setLangIds] = useState({
+    hindi: '',
+    marathi: ''
+  });
+  const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
   const allCategortData = useSelector(state => state.category.getAllCourse); //export
@@ -112,6 +118,10 @@ const PartnerCourses = () => {
   }, []);
 
   useEffect(() => {
+    console.log('postPartnerCourseData', postPartnerCourseData);
+  }, [postPartnerCourseData]);
+
+  useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
       dispatch(addPartnerCourseSuccess(null));
       toast.success('Partner Course Add successful');
@@ -156,15 +166,52 @@ const PartnerCourses = () => {
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
-
   }
-
+  useEffect(() => {
+    let temp = {
+      hindi: '',
+      marathi: ''
+    }
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        temp.hindi = item.id
+      }
+    })
+    setLangIds(temp)
+  }, [languageData])
   const languageHandalCancle = () => {
-    console.log((" languageHandalCancle------------------"));
+    setIsConfirmModal(false)
   }
 
   const languageHandalOk = () => {
     console.log("languageHandalOk ---------");
+    let selectLanguageAddData = {
+      key: selectedLanguageData.key,
+      name: selectedLanguageData.name,
+      organization: selectedLanguageData.organization,
+      detail: selectedLanguageData.detail,
+      certificationBody: selectedLanguageData.certificationBody,
+      eligibility: selectedLanguageData.eligibility,
+      component: selectedLanguageData.component,
+      contactPersonName: selectedLanguageData.contactPersonName,
+      contactPersonEmail: selectedLanguageData.contactPersonEmail,
+      contactPersonPhone: selectedLanguageData.contactPersonPhone,
+      pincode: selectedLanguageData.pincode,
+      location: selectedLanguageData.location,
+      duration: selectedLanguageData.duration,
+      categoryId: selectedLanguageData.courseCategory.id,
+      state: selectedLanguageData.state,
+      district: selectedLanguageData.district,
+      mode: selectedLanguageData.mode,
+      certification: selectedLanguageData.certificate,
+      // categoryId: selectedLanguageData.id,
+      thumbnail: selectedLanguageData.thumbnail
+    };
+    console.log(selectLanguageAddData, "selectedLanguageData");
+    dispatch(addPartnerCourse(selectLanguageAddData, langIds.hindi))
+    setIsConfirmModal(false)
   }
 
   const header = [
@@ -311,8 +358,10 @@ const PartnerCourses = () => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-
+          console.log("courseData", courseData)
           let courseRatings = item.courseRatings.map(item => item.rating)
+          console.log("courseRating", courseRatings)
+
           var sum = 0;
 
           for (var i = 0; i < courseRatings.length; i++) {
@@ -324,7 +373,7 @@ const PartnerCourses = () => {
           return {
             //key: id,
             CourseName: (
-              <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
+              <span onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
             CourseCategory: item.courseCategory?.name,
             courseRatings: (
@@ -352,13 +401,12 @@ const PartnerCourses = () => {
                 {/* <div className="active-schemes-table"> */}
                 <div className="">
                   {/* <div className="table-actions"> */}
-
                   <>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
                         console.log("lof ============>", item);
                         getOneCourseDetailByKey(langIds?.hindi, item?.key)
-                        // setSelectedLanguageData(item)
+                        setSelectedLanguageData(item)
                       }}
                     >
                       {/* <FeatherIcon icon="edit" size={16} /> */}
@@ -711,22 +759,24 @@ const PartnerCourses = () => {
           onOk={() => { setIsConfirmModal(false) }}
           onCancel={() => { setIsConfirmModal(false) }}
           visible={isConfirmModal}
-          footer={<>
-            <Button size="small" type="primary" onClick={() => {
-              languageHandalCancle()
-              // getOneCourseDetailByKey(langIds?.hindi, item?.key)
-            }}>
-              {/* <FeatherIcon icon="edit" size={16} /> */}
-              No
-            </Button>
-            <Button size="small" type="primary" onClick={() => {
-              // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-              languageHandalOk()
-            }} >
-              {/* <FeatherIcon icon="edit" size={16} /> */}
-              Yes
-            </Button>
-          </>}
+          footer={
+            <>
+              <Button size="small" type="primary" onClick={() => {
+                languageHandalCancle()
+                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+              }}>
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                No
+              </Button>
+              <Button size="small" type="primary" onClick={() => {
+                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                languageHandalOk()
+              }} >
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                Yes
+              </Button>
+            </>
+          }
           children={"This coures in not available in this language. You want to add?"}
         />
       )}

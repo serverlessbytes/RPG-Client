@@ -14,8 +14,8 @@ import actions from '../../redux/jobs/actions';
 
 
 const JobRole = () => {
-    const {editJobroleSuccess,editJobroleErr,addJobroleSuccess,
-        addJobroleErr,} = actions;
+    const { editJobroleSuccess, editJobroleErr, addJobroleSuccess,
+        addJobroleErr, } = actions;
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -47,8 +47,8 @@ const JobRole = () => {
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [editJobRoleData])  
-    
+    }, [editJobRoleData])
+
     useEffect(() => {
         //console.log("")
         console.log('addJobRoledata', addJobRoledata)
@@ -58,21 +58,21 @@ const JobRole = () => {
             //toastAssetsAdd(true)
             //onHide()
         }
-    }, [addJobRoledata])  
+    }, [addJobRoledata])
 
-    useEffect(()=>{
-        if(addJobRoleError){
+    useEffect(() => {
+        if (addJobRoleError) {
             dispatch(addJobroleErr(null))
             toast.error("Something wrong");
         }
-    },[addJobRoleError])
+    }, [addJobRoleError])
 
-    useEffect(()=>{
-        if(editJobRoleError){
+    useEffect(() => {
+        if (editJobRoleError) {
             dispatch(editJobroleErr(null))
             toast.error("Something wrong");
         }
-    },[editJobRoleError])
+    }, [editJobRoleError])
 
     useEffect(() => {
         dispatch(getJobcategory());
@@ -156,13 +156,15 @@ const JobRole = () => {
         setNameTog(false)
     };
 
+
+
     const handleOk = () => {
         let data = form.getFieldsValue()
         console.log(data)
         if (!selectedJobRole) {
             data = {
                 ...data,
-                key: uuid()
+                key: [uuid()]
             }
             dispatch(addJobrole(data))
         } else {
@@ -175,7 +177,7 @@ const JobRole = () => {
             }
             dispatch(editJobrole(data))
         }
-         form.resetFields()
+        form.resetFields()
         setSelectedJobCategory()
         setIsModalVisible(false);
         setNameTog(false)
@@ -231,8 +233,8 @@ const JobRole = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                              
-                                {/* --- search bar --- */}
+
+                            {/* --- search bar --- */}
                             {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
@@ -275,8 +277,8 @@ const JobRole = () => {
                 </Cards>
             </Main>
 
-             <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} 
-             okText= {nameTog ? "Edit" : "Add"}>
+            <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+                okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label>Job category</label>
                     <Form.Item initialValue="Select a job category " name="jobCategoryId">

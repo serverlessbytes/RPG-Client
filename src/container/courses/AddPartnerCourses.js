@@ -9,7 +9,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom
 import uuid from 'react-uuid';
 import { addPartnerCourse, editPartnerCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryData     } from '../../redux/course/actionCreator';
+import { getCategoryData } from '../../redux/course/actionCreator';
 import { useLocation } from 'react-router';
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
@@ -27,8 +27,8 @@ const AddPartnerCourses = () => {
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
     const catdata = useSelector(state => state.category.categoryData);
 
-    useEffect(()=>{console.log("stateData",stateData)},[stateData])
-    useEffect(()=>{console.log("diStrictdata",diStrictdata)},[diStrictdata])
+    useEffect(() => { console.log("stateData", stateData) }, [stateData])
+    useEffect(() => { console.log("diStrictdata", diStrictdata) }, [diStrictdata])
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
         name: '',
@@ -106,7 +106,7 @@ const AddPartnerCourses = () => {
                 thumbnail: editOneFilterData.data.thumbnail
             });
         }
-    },[editOneFilterData]);
+    }, [editOneFilterData]);
     const validation = () => {
         // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
         let error = {};
@@ -305,8 +305,8 @@ const AddPartnerCourses = () => {
     const { TextArea } = Input;
     return (
         <>
-            <PageHeader ghost 
-            title= {id ? "Edit Partner Courses" :"Add Partner Courses" } />
+            <PageHeader ghost
+                title={id ? "Edit Partner Courses" : "Add Partner Courses"} />
             <Main>
                 <Cards headless>
                     <Row justify="space-between">
