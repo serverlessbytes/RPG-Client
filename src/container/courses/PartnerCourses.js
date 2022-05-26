@@ -209,11 +209,11 @@ const PartnerCourses = () => {
     }
   }, [catdata]);
 
-  useEffect(() => {
-    if (state && state.category && activeCoursetog) {
-      Submit();
-    }
-  }, [state]);
+  // useEffect(() => { //
+  //   if (state && state.category && activeCoursetog) {
+  //     Submit();
+  //   }
+  // }, [state]);
 
   const usersTableData = [];
 
@@ -430,9 +430,9 @@ const PartnerCourses = () => {
     }
   }, [courseData]);
 
-  const Submit = () => {
-    dispatch(getCoursefilter(state.category ? state.category : '', perPage, pageNumber, state.mode ? state.mode : '', status));
-  };
+  // const Submit = () => { //
+  //   dispatch(getCoursefilter(state.category ? state.category : '', perPage, pageNumber, state.mode ? state.mode : '', status));
+  // };
 
   // const clearFilter = () => {
   //   setState({ category: '' });
@@ -440,10 +440,10 @@ const PartnerCourses = () => {
   // };
 
   useEffect(() => {
-    if (state.category) {
-      dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-      // dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-    }
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+    // if (state.category) {
+    //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+    // }
   }, [perPage, pageNumber, state.mode, status]); //paganation
 
   const partnerCourseTableColumns = [

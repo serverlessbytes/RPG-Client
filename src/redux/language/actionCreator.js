@@ -16,6 +16,8 @@ const {
   postLanguageSuccess,
   getLanguageSuccess,
   postLanguageDataErr,
+
+  getLanguageByNameSuccess,
 } = actions;
 
 const stateGetData = () => {

@@ -5,7 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 import { NavLink, Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ThemeProvider } from 'styled-components';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import propTypes from 'prop-types';
 import MenueItems from './MenueItems';
 import TopMenu from './TopMenu';
@@ -28,6 +28,7 @@ const ThemeLayout = WrappedComponent => {
     constructor(props) {
       super(props);
       const storageLang = AuthStorage.getStorageData(STORAGEKEY.language);
+
       this.state = {
         collapsed: false,
         hide: true,
@@ -38,23 +39,37 @@ const ThemeLayout = WrappedComponent => {
         //lang:  ""
       };
       this.updateDimensions = this.updateDimensions.bind(this);
+      // const languageData = useSelector(state => state.language.getLanguage)
+      // console.log("languageData",languageData)
     }
 
+    // componentDidMount() {
+    //   const ls = localStorage.getItem('language');
+    //   console.log("ls",ls)
+    //   if (ls) {
+    //     this.setState({ ...this.state, lang: ls });
+    //   }
+    //   window.addEventListener('resize', this.updateDimensions);
+    //   this.updateDimensions();
+    //   ApiGet(`language/getLanguage`).then(res => {
+    //     console.log("res",res)
+    //     this.setState({
+    //       langData: res.data,
+    //     });
+    //     if (!ls) {
+    //       this.setState({ ...this.state, lang: res.data[0].id });
+    //       AuthStorage.setStorageData(STORAGEKEY.language, res.data[0].id, true);
+    //     }
+    //   });
+    // }
+
     componentDidMount() {
-      const ls = localStorage.getItem('language');
-      if (ls) {
-        this.setState({ ...this.state, lang: ls });
-      }
-      window.addEventListener('resize', this.updateDimensions);
-      this.updateDimensions();
-      ApiGet(`language/getLanguage`).then(res => {
+      const lan = "English"
+      ApiGet(`language/getLanguageByName?name=${lan}`).then(res => {
         this.setState({
-          langData: res.data,
+          lang: res.data,
         });
-        if (!ls) {
-          this.setState({ ...this.state, lang: res.data[0].id });
-          AuthStorage.setStorageData(STORAGEKEY.language, res.data[0].id, true);
-        }
+        AuthStorage.setStorageData(STORAGEKEY.language, res.data.id, true);
       });
     }
 
@@ -230,7 +245,7 @@ const ThemeLayout = WrappedComponent => {
                       display: `${window.innerWidth < 768 ? 'none' : 'flex'}`,
                     }}
                   >
-                    <Col xxl={2} xl={3} lg={3} md={4}>
+                    {/* <Col xxl={2} xl={3} lg={3} md={4}>
                       <Form.Item name="languageId" className="language py-16 mb-0">
                         <Select
                           defaultValue={this.state.lang}
@@ -243,7 +258,7 @@ const ThemeLayout = WrappedComponent => {
                             this.state.langData.map(items => <Option value={items.id}>{items.name}</Option>)}
                         </Select>
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col xxl={1} xl={2} lg={2} md={3}>
                       {topMenu && window.innerWidth > 991 ? (
                         <TopMenuSearch>

@@ -5,7 +5,6 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
-
 import { CardBarChart2, EChartCard } from './style';
 import Heading from '../../components/heading/heading';
 import ClosedDeals from './overview/crm/ClosedDeals';
@@ -411,7 +410,7 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row gutter={25}>
-          <Col md={8} xs={24}>
+          <Col md={24} xs={24} >
             <Suspense
               fallback={
                 <Cards headless>
@@ -427,7 +426,7 @@ const Dashboard = () => {
               />
             </Suspense>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={24} xs={24}>
             <Suspense
               fallback={
                 <Cards headless>
@@ -443,7 +442,7 @@ const Dashboard = () => {
               />
             </Suspense>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={24} xs={24} >
             <Suspense
               fallback={
                 <Cards headless>

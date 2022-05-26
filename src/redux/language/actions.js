@@ -20,7 +20,7 @@ const actions = {
   GET_LANGUAGE_ERR: "GET_LANGUAGE_ERR",
 
   GET_LANGUAGE_BY_NAME_BEGINE: "GET_LANGUAGE_BY_NAME_BEGINE",
-  GET_LANGUAGE_BY_NAME__SUCCESS: "GET_LANGUAGE_BY_NAME_SUCCESS",
+  GET_LANGUAGE_BY_NAME_SUCCESS: "GET_LANGUAGE_BY_NAME_SUCCESS",
   GET_LANGUAGE_BY_NAME__ERR: "GET_LANGUAGE_BY_NAME_ERR",
 
 
@@ -112,7 +112,7 @@ const actions = {
   },
   getLanguageByNameSuccess: data => {
     return {
-      type: actions.GET_LANGUAGE_BY_NAME__SUCCESS,
+      type: actions.GET_LANGUAGE_BY_NAME_SUCCESS,
       data,
     };
   },

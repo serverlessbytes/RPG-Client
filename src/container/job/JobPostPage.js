@@ -24,10 +24,6 @@ function JobPostPage({ data }) {
     const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
 
     useEffect(() => {
-        console.log("getOneJobPostData", getOneJobPostData)
-    }, [getOneJobPostData])
-
-    useEffect(() => {
         if (id) {
             dispatch(getoneJobPost(id));
         } else {
@@ -71,7 +67,7 @@ function JobPostPage({ data }) {
             console.log("data",data)
             ApiPost(`job/updateIsApproved?jobId=${id}`, data)
                 .then(res => {
-                    console.log('res', res);
+                    // console.log('res', res);
                     dispatch(getoneJobPost(id));
                     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
                 })
@@ -194,12 +190,12 @@ function JobPostPage({ data }) {
                                 <span><label style={{ fontWeight: 'bold' }} className="pr" >Type Of Field:</label> {getOneJobPostData?.data?.extraType}</span><br />
                             </Col>
 
-                            <Col lg={8} className="mb">
+                            {/* <Col lg={8} className="mb">
                                 <div onClick={() => onApproved(getOneJobPostData?.data?.id, getOneJobPostData?.data?.isApproved)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneJobPostData?.data?.isApproved} ></Switch>
                                 </div>
-                            </Col>
+                            </Col> */}
 
                         </Row>
                         <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneJobPostData?.data?.id)} type="primary">

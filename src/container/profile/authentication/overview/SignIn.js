@@ -23,7 +23,6 @@ const SignIn = () => {
   });
 
   const handleSubmit = () => {
-    console.log("form ==== form", form.getFieldsValue());
     const data = form.getFieldsValue()
     const keepSignIn = state.checked
     dispatch(login(data, keepSignIn));

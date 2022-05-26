@@ -170,10 +170,10 @@ function ViewCourse() {
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)}>
+                                {/* <div onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)}>
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneCoursedata?.data?.isApproved}  ></Switch>
-                                </div>
+                                </div> */}
                             </Col> 
                             {/* <Button
                                 className='edit-view'

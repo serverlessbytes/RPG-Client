@@ -33,8 +33,8 @@ const initialState = {
   error: null,
   LanguageError: null,
   postLanguageData: null,
-  getLanguageData: null
-
+  getLanguageData: null,
+  getLanguage: null,
 };
 
 const languageReducer = (state = initialState, action) => {
@@ -116,7 +116,7 @@ const languageReducer = (state = initialState, action) => {
     case GET_LANGUAGE_BY_NAME_SUCCESS:
       return {
         ...state,
-        data,
+        getLanguage:data,
         loading: false,
       }
     case GET_LANGUAGE_BY_NAME_ERR:
