@@ -6,6 +6,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, ProjectPagination, TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
 import {
+  addJobPost,
   editJobPost,
   getJobPost,
   getJobsFilterForMain,
@@ -15,12 +16,13 @@ import {
 import { useHistory, useRouteMatch } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
-import { ApiPost } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import { data } from 'browserslist';
 import JobPostPage from './JobPostPage';
+import ConfirmModal from '../../components/modals/confirm_modal';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
@@ -40,7 +42,14 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [pageNumber, setPageNumber] = useState(1);
   const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [selectedLanguageData, setSelectedLanguageData] = useState()
+  const [langIds, setLangIds] = useState({
+    hindi: '',
+    marathi: ''
+  });
 
+  const languageData = useSelector(state => state.language.getLanguageData);
   const jobData = useSelector(state => state.job.getJobPostData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
@@ -48,7 +57,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const editJobPostErr = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
-  
+
   const newJobPost = data => {
     let id = data.id;
     delete data.id;
@@ -60,6 +69,59 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     });
     return newVal;
   };
+
+  const getOneJobDetailByKey = async (languageId, key) => {
+    await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
+      .then((res) => {
+        console.log("res", res);
+        if (res.status === 200) {
+          toast.success("Course alredy exist in this language!")
+        }
+      })
+      .catch((e) => {
+        if (e.response.status) {
+          setIsConfirmModal(true)
+          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
+        }
+      })
+  }
+
+  const languageHandalCancle = () => {
+    console.log("languageHandalCancle");
+    setIsConfirmModal(false)
+  }
+
+  const languageHandalOk = () => {
+    console.log("languageHandalOk");
+    let selectLanguageAddData = {
+      key: selectedLanguageData.key,
+      name: selectedLanguageData.name.id,
+      state: selectedLanguageData.state.id,
+      district: selectedLanguageData.district.id,
+      town: selectedLanguageData.town,
+      pincode: selectedLanguageData.pincode,
+      description: selectedLanguageData.description,
+      vacancies: selectedLanguageData.vacancies,
+      reqExperience: selectedLanguageData.reqExperience,
+      salary: selectedLanguageData.salary,
+      benifits: selectedLanguageData.benifits,
+      requirements: selectedLanguageData.requirements,
+      type: selectedLanguageData.type,
+      extraType: selectedLanguageData.extraType,
+      isActive: selectedLanguageData.isActive,
+      shifts: selectedLanguageData.shifts,
+      email: selectedLanguageData.email,
+      phone: selectedLanguageData.phone,
+      startDate: selectedLanguageData.startDate,
+      endDate: selectedLanguageData.endDate,
+      jobRole: selectedLanguageData.jobRole.id,
+      jobType: selectedLanguageData.jobType.id,
+    };
+    console.log(selectLanguageAddData, "selectedLanguageData");
+    dispatch(addJobPost(selectLanguageAddData, langIds.hindi))
+    setIsConfirmModal(false)
+  }
+
 
   const onDelete = async id => {
     let courseDataDelete =
@@ -99,6 +161,28 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const onEdit = id => {
     history.push(`/admin/job/new?id=${id}`);
   };
+
+  useEffect(() => {
+    console.log("languageData", languageData);
+  }, [languageData])
+
+
+  useEffect(() => {
+    let temp = {
+      hindi: '',
+      marathi: ''
+    }
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        temp.hindi = item.id
+      }
+    })
+    setLangIds(temp)
+  }, [languageData])
+
+
 
   const activeJobPost = data => {
     let id = data.id;
@@ -227,12 +311,16 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   };
 
   useEffect(() => {
+    console.log("getJobFilterData------------>", getJobFilterData);
+  }, [getJobFilterData])
+
+  useEffect(() => {
     // if (apply) {
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
           user: (
-            <span  className='For-Underline' onClick={() => viewJobdata(item.id)}>
+            <span className='For-Underline' onClick={() => viewJobdata(item.id)}>
               {item?.name?.name}
             </span>
           ),
@@ -254,22 +342,22 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
               {/* <div className="active-schemes-table"> */}
               <div className="">
                 {/* <div className="table-actions"> */}
-
                 <>
                   <Button size="small" type="primary" shape='round'
-                  // onClick={() => {
-                  //   console.log("lof ============>", item);
-                  //   setSelectedLanguageData(item)
-                  //   getOneCourseDetailByKey(langIds?.hindi, item?.key)
-                  // }}
+                    onClick={() => {
+                      console.log("lof ============>", item);
+                      getOneJobDetailByKey(langIds?.hindi, item?.key)
+                      setSelectedLanguageData(item)
+                    }}
                   >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     HN
                   </Button>
                   <Button size="small" type="primary" shape='round'
-                  //  onClick={() => {
-                  //   getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                  // }} 
+                    onClick={() => {
+                      // setSelectedLanguageData(item)
+                      getOneJobDetailByKey(langIds?.marathi, item?.key)
+                    }}
                   >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT
@@ -311,7 +399,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         };
       }),
     );
-  },[getJobFilterData],
+  }, [getJobFilterData],
   );
 
   const viewJobdata = id => {
@@ -401,6 +489,31 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           />
         </TableWrapper>
       </UserTableStyleWrapper>
+      {isConfirmModal && (
+        <ConfirmModal
+          onOk={() => { setIsConfirmModal(false) }}
+          onCancel={() => { setIsConfirmModal(false) }}
+          visible={isConfirmModal}
+          footer={
+            <>
+              <Button size="small" type="primary" onClick={() => {
+                languageHandalCancle()
+                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+              }}>
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                No
+              </Button>
+              <Button size="small" type="primary" onClick={() => {
+                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                languageHandalOk()
+              }} >
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                Yes
+              </Button>
+            </>}
+          children={"This coures in not available in this language. You want to add?"}
+        />
+      )}
       {/* <ProjectPagination>
         
           <Pagination

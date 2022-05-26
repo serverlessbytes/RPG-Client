@@ -9,20 +9,22 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
 import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
-import { ApiPatch, ApiPost } from '../../helper/API/ApiData';
+import { ApiGet, ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
+import ConfirmModal from '../../components/modals/confirm_modal';
+
 
 const Schemes = () => {
   const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
@@ -47,14 +49,21 @@ const Schemes = () => {
   const [exportTog, setExportTog] = useState(false)
   const [importModal, setImportModal] = useState(false);
   const [schemeTableData, setSchemeTableData] = useState();
-  // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [selectedLanguageData, setSelectedLanguageData] = useState()
 
+  const [langIds, setLangIds] = useState({
+    hindi: "",
+    marathi: "",
+  })
+  // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
+  const languageData = useSelector(state => state.language.getLanguageData);
   const users = useSelector(state => state.scheme.getAllSchemeData);
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
   const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
-  const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
+  // const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
   const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
   const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
@@ -70,6 +79,7 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
+
 
   // useEffect(() => {
   //   if (users?.data) {
@@ -122,7 +132,6 @@ const Schemes = () => {
     }
   }, [schemeModulData])
 
-
   useEffect(() => {
     if (addSchemeData && addSchemeData.status === 200) {
       dispatch(addSchemeSuccess(null))
@@ -145,6 +154,68 @@ const Schemes = () => {
       toast.error("Something Wrong")
     }
   }, [addSchemeError])
+
+  useEffect(() => {
+    let temp = {
+      hindi: "",
+      marathi: "",
+    }
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        temp.hindi = item.id
+      }
+    })
+    setLangIds(temp);
+  }, [languageData])
+
+  const getOneSchemeDetailByKey = async (languageId, key) => {
+    await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
+      .then((res) => {
+        console.log("res", res);
+        if (res.status === 200) {
+          toast.success("Course alredy exist in this language!")
+        }
+      })
+      .catch((e) => {
+        if (e.response.status) {
+          setIsConfirmModal(true)
+          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
+        }
+      })
+  }
+  const languageHandalCancle = () => {
+    console.log("canclec-----------");
+    setIsConfirmModal(false)
+  }
+  const languageHandalOk = () => {
+    console.log("handleOk---------*");
+    let selectLanguageAddData = {
+      key: selectedLanguageData.key,
+      benifitLine: selectedLanguageData.benifitLine,
+      detail: selectedLanguageData.detail,
+      howToApply: selectedLanguageData.howToApply,
+      documentation: selectedLanguageData.documentation,
+      name: selectedLanguageData.name,
+      locations: selectedLanguageData.locations.map((item) => item.id),
+      schemeCategory: selectedLanguageData.schemeCategory.id,
+      schemeBenifit: selectedLanguageData.schemeBenifit.id,
+      website: selectedLanguageData.website,
+      type: selectedLanguageData.type,
+      benificiary: selectedLanguageData.benificiary,
+      grievanceRedress: selectedLanguageData.grievanceRedress,
+      elink: selectedLanguageData.elink,
+      spoc: selectedLanguageData.spoc,
+      isActive: selectedLanguageData.isActive,
+      videoUrl: selectedLanguageData.videoUrl,
+      thumbnail: selectedLanguageData.thumbnail,
+    };
+    setIsConfirmModal(false)
+    console.log("selectLanguage =====>", selectLanguageAddData);
+    dispatch(addSchemeData(selectLanguageAddData, langIds.hindi))
+  }
+
 
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
@@ -437,24 +508,26 @@ const Schemes = () => {
         selectLanguage: (
           <div className="">
             {/* <div className="active-schemes-table"> */}
-            <div className="">
+            <div className="languageBtn">
               {/* <div className="table-actions"> */}
 
               <>
                 <Button size="small" type="primary" shape='round'
-                // onClick={() => {
-                //   console.log("lof ============>", item);
-                //   setSelectedLanguageData(item)
-                //   getOneCourseDetailByKey(langIds?.hindi, item?.key)
-                // }}
+                  onClick={() => {
+                    console.log("lof ============>", item);
+                    console.log("langId", langIds);
+                    setSelectedLanguageData(item)
+                    getOneSchemeDetailByKey(langIds?.hindi, item?.key)
+                  }}
                 >
                   {/* <FeatherIcon icon="edit" size={16} /> */}
                   HN
                 </Button>
+
                 <Button size="small" type="primary" shape='round'
-                //  onClick={() => {
-                //   getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                // }} 
+                  onClick={() => {
+                    getOneSchemeDetailByKey(langIds?.marathi, item?.key)
+                  }}
                 >
                   {/* <FeatherIcon icon="edit" size={16} /> */}
                   MT
@@ -790,6 +863,31 @@ const Schemes = () => {
           </Row>
         </Cards>
       </Main>
+      {isConfirmModal && (
+        <ConfirmModal
+          onOk={() => { setIsConfirmModal(false) }}
+          onCancel={() => { setIsConfirmModal(false) }}
+          visible={isConfirmModal}
+          footer={
+            <>
+              <Button size="small" type="primary" onClick={() => {
+                languageHandalCancle()
+                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+              }}>
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                No
+              </Button>
+              <Button size="small" type="primary" onClick={() => {
+                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                languageHandalOk()
+              }} >
+                {/* <FeatherIcon icon="edit" size={16} /> */}
+                Yes
+              </Button>
+            </>}
+          children={"This coures in not available in this language. You want to add?"}
+        />
+      )}
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
       {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Schemes" />}
