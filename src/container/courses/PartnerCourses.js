@@ -187,6 +187,8 @@ const PartnerCourses = () => {
 
   const languageHandalOk = () => {
     console.log("languageHandalOk ---------");
+    console.log("langId------------", langIds);
+    console.log("langId------------", langIds.hindi);
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       name: selectedLanguageData.name,
@@ -209,9 +211,16 @@ const PartnerCourses = () => {
       // categoryId: selectedLanguageData.id,
       thumbnail: selectedLanguageData.thumbnail
     };
-    console.log(selectLanguageAddData, "selectedLanguageData");
-    dispatch(addPartnerCourse(selectLanguageAddData, langIds.hindi))
+    console.log("selectedLanguageData", selectLanguageAddData);
+    addLanguagePartnerCourses(selectLanguageAddData, langIds.hindi)
     setIsConfirmModal(false)
+  }
+  const addLanguagePartnerCourses = (body, languageID) => {
+    ApiPost(`course/addPartnerCourse?langId=${languageID}&mode=PARTNER`, body)
+      .then((res) => {
+        return dispatch(addPartnerCourseSuccess(res))
+      })
+      .catch((err) => dispatch(addPartnerCourseErr(err)))
   }
 
   const header = [

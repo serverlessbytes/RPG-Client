@@ -93,6 +93,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
   const languageHandalOk = () => {
     console.log("languageHandalOk");
+    console.log("langIds", langIds);
+    console.log("langIds.hindi", langIds.hindi);
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       name: selectedLanguageData.name.id,
@@ -118,10 +120,17 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       jobType: selectedLanguageData.jobType.id,
     };
     console.log(selectLanguageAddData, "selectedLanguageData");
-    dispatch(addJobPost(selectLanguageAddData, langIds.hindi))
+    addLanguageJobPost(selectLanguageAddData, langIds.hindi)
     setIsConfirmModal(false)
   }
-
+  const addLanguageJobPost = (body, languageID) => {
+    ApiPost(`job/add?langId=${languageID}`, body)
+      .then((res) => {
+        console.log("res", res);
+        return dispatch(addJobPostSuccess(res))
+      })
+      .catch((err) => dispatch(addJobPostErr(err)))
+  }
 
   const onDelete = async id => {
     let courseDataDelete =

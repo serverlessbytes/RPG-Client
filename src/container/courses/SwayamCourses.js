@@ -360,14 +360,18 @@ const SwayamCourses = () => {
       })
   }
 
+  useEffect(() => {
+    console.log("langId", langIds);
+  }, [langIds])
+
+
   const languageHandalCancle = () => {
     console.log("handleCancel---------*");
     setIsConfirmModal(false)
-
   }
   const languageHandalOk = () => {
     console.log("handleOk---------*");
-    console.log("langIds", langIds.hindi);
+    console.log("langIds-------------", langIds.hindi);
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       detail: selectedLanguageData.detail,
@@ -383,7 +387,6 @@ const SwayamCourses = () => {
     dispatch(addSwayamCourse(selectLanguageAddData, langIds.hindi))
     setIsConfirmModal(false)
   }
-
 
   const onClick = ({ key }) => {
     if (key == 'exportCourse') {
@@ -494,6 +497,7 @@ const SwayamCourses = () => {
                     HN
                   </Button>
                   <Button size="small" type="primary" shape='round' onClick={() => {
+                    selectedLanguageData(item)
                     console.log("lof =========MT===>",); getOneCourseDetailByKey(langIds?.marathi, item?.key)
                   }} >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
