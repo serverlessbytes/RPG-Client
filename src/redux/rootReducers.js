@@ -43,7 +43,7 @@ import testimonialReducer from './testimonial/reducers';
 import bannerReducer from './banner/reducers';
 import carouselReducer from './carousel/reducers';
 import queriesReducer from './query/reducers';
-import articlesReducer from './aticle/reducers';
+import articlesReducer from './article/reducers';
 
 
 const rootReducers = combineReducers({
@@ -98,9 +98,8 @@ const rootReducers = combineReducers({
   testimonial: testimonialReducer,
   banner: bannerReducer,
   carousel: carouselReducer,
-
-  queriesData: queriesReducer,
-  articlesData: articlesReducer
+  queries: queriesReducer,
+  articles: articlesReducer,
 });
 
 export default rootReducers;

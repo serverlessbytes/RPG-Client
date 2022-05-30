@@ -186,11 +186,10 @@ const Schemes = () => {
       })
   }
   const languageHandalCancle = () => {
-    console.log("canclec-----------");
     setIsConfirmModal(false)
   }
   const languageHandalOk = () => {
-    console.log("handleOk---------*");
+
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       benifitLine: selectedLanguageData.benifitLine,
@@ -212,7 +211,6 @@ const Schemes = () => {
       thumbnail: selectedLanguageData.thumbnail,
     };
     setIsConfirmModal(false)
-    console.log("selectLanguage =====>", selectLanguageAddData);
     dispatch(addSchemeData(selectLanguageAddData, langIds.hindi))
   }
 
@@ -514,8 +512,6 @@ const Schemes = () => {
               <>
                 <Button size="small" type="primary" shape='round'
                   onClick={() => {
-                    console.log("lof ============>", item);
-                    console.log("langId", langIds);
                     setSelectedLanguageData(item)
                     getOneSchemeDetailByKey(langIds?.hindi, item?.key)
                   }}

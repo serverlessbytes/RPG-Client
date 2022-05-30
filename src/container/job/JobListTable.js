@@ -172,11 +172,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   };
 
   useEffect(() => {
-    console.log("languageData", languageData);
-  }, [languageData])
-
-
-  useEffect(() => {
     let temp = {
       hindi: '',
       marathi: ''
@@ -190,8 +185,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     })
     setLangIds(temp)
   }, [languageData])
-
-
 
   const activeJobPost = data => {
     let id = data.id;
@@ -319,9 +312,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       .catch(err => console.log('Error', err));
   };
 
-  useEffect(() => {
-    console.log("getJobFilterData------------>", getJobFilterData);
-  }, [getJobFilterData])
 
   useEffect(() => {
     // if (apply) {
@@ -354,7 +344,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 <>
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
-                      console.log("lof ============>", item);
                       getOneJobDetailByKey(langIds?.hindi, item?.key)
                       setSelectedLanguageData(item)
                     }}

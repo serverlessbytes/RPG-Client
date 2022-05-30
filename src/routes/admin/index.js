@@ -17,6 +17,8 @@ import Carousel from '../../container/carousel/Carousel';
 import Employer from './employer';
 import { useDispatch } from 'react-redux';
 import { getLanguageData } from '../../redux/language/actionCreator';
+import Articial from '../../container/article/article';
+import Query from '../../container/query/query';
 
 const Admin = () => {
   const { path } = useRouteMatch();
@@ -47,6 +49,8 @@ const Admin = () => {
         <Route path={`${path}/banner`} component={Banner} />
         <Route path={`${path}/carousel`} component={Carousel} />
         <Route path={`${path}/employer`} component={Employer} />
+        <Route path={`${path}/article`} component={Articial} />
+        <Route path={`${path}/query`} component={Query} />
       </Suspense>
     </Switch>
   );

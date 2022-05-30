@@ -182,7 +182,7 @@ export const editSchemeData = body => async dispatch => {
       console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, Status));
+        dispatch(getSchemeData(per_Page, page_Num,tatus));
       }
     })
     .catch(err => dispatch(editSchemeErr(err)));
@@ -195,7 +195,7 @@ export const addSchemeInBulkImport = body => async dispatch => {
       console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, Status));
+        dispatch(getSchemeData(per_Page, page_Num,status));
       }
     })
     .catch(err => {

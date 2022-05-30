@@ -7,6 +7,14 @@ const actions = {
     EDIT_QUERIES_SUCCESS: "EDIT_QUERIES_SUCCESS",
     EDIT_QUERIES_ERR: "EDIT_QUERIES_ERR",
 
+    ADD_QUERIES_BEGIN: "ADD_QUERIES_BEGIN",
+    ADD_QUERIES_SUCCESS: "ADD_QUERIES_SUCCESS",
+    ADD_QUERIES_ERR: "ADD_QUERIES_ERR",
+
+    GET_QUERIES_BY_ID_BEGIN: "GET_QUERIES_BY_ID_BEGIN ",
+    GET_QUERIES_BY_ID_SUCCESS: "GET_QUERIES_BY_ID_SUCCESS ",
+    GET_QUERIES_BY_ID_ERR: "GET_QUERIES_BY_ID_ERR ",
+
 
     getQueriesBegin: () => {
         return {
@@ -28,24 +36,64 @@ const actions = {
         }
     },
 
-    eidtQueriesBegin: () => {
+    editQueriesBegin: () => {
         return {
             type: actions.EDIT_QUERIES_BEGIN
         }
     },
 
-    eidtQueriesSuccess: (data) => {
+    editQueriesSuccess: (data) => {
         return {
             type: actions.EDIT_QUERIES_SUCCESS,
             data,
         }
     },
-    eidtQueriesErr: (err) => {
+    editQueriesErr: (err) => {
         return {
             type: actions.EDIT_QUERIES_ERR,
             err,
         }
-    }
+    },
+
+    addQueriesBegin: () => {
+        return {
+            type: actions.ADD_QUERIES_BEGIN
+        }
+    },
+
+    addQueriesSuccess: (data) => {
+        return {
+            type: actions.ADD_QUERIES_SUCCESS,
+            data,
+        }
+    },
+    addQueriesErr: (err) => {
+        return {
+            type: actions.ADD_QUERIES_ERR,
+            err,
+        }
+    },
+
+    getQueriesFromIdBegin: () => {
+        return {
+            type: actions.GET_QUERIES_BY_ID_BEGIN
+        }
+    },
+
+    getQueriesFromIdSuccess: (data) => {
+        return {
+            type: actions.GET_QUERIES_BY_ID_SUCCESS,
+            data,
+        }
+    },
+    getQueriesFromIdErr: (err) => {
+        return {
+            type: actions.GET_QUERIES_BY_ID_ERR,
+            err,
+        }
+    },
+
+
 }
 
 export default actions

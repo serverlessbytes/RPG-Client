@@ -240,6 +240,18 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </Menu.Item>
       </SubMenu>
 
+      <Menu.Item key="article" icon={!topMenu && <FeatherIcon icon="hexagon" />}>
+        <NavLink onClick={toggleCollapsed} to={`${path}/article`}>
+          Article
+        </NavLink>
+      </Menu.Item>
+
+      <Menu.Item key="query" icon={!topMenu && <FeatherIcon icon="help-circle" />}>
+        <NavLink onClick={toggleCollapsed} to={`${path}/query`}>
+          Query
+        </NavLink>
+      </Menu.Item>
+
       {/* <Menu.Item key="banner">
         <NavLink onClick={toggleCollapsed} to={`${path}/banner`}>
           Banner
