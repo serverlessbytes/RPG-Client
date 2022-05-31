@@ -64,7 +64,6 @@ function JobPostPage({ data }) {
                 isApproved: !isAp,
                 remark : remark,
             };
-            console.log("data",data)
             ApiPost(`job/updateIsApproved?jobId=${id}`, data)
                 .then(res => {
                     // console.log('res', res);
@@ -84,14 +83,13 @@ function JobPostPage({ data }) {
         let data = {
             isApproved: !isAp,
         };
-        console.log("data",data)
         ApiPost(`job/updateIsApproved?jobId=${id}`, data)
             .then(res => {
-                console.log('res', res);
+                // console.log('res', res);
                 dispatch(getoneJobPost(id));
                 toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
             })
-            .catch(err => console.log('Error', err));
+            .catch(err);
     };
 
     return (

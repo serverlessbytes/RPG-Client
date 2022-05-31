@@ -42,7 +42,6 @@ const JobCategory = () => {
     });
 
     useEffect(() => {
-        console.log('addJobCatogerydata', addJobCatogerydata)
         if (addJobCatogerydata && addJobCatogerydata.status === 200) {
             dispatch(addJobcategorySuccess(null))
             toast.success("Job Category add successful");
@@ -52,7 +51,6 @@ const JobCategory = () => {
     }, [addJobCatogerydata])
 
     useEffect(() => {
-        console.log("importJob", importJob);
         if (importJob && importJob.status === 200) {
             toast.success("Category imported");
         }
@@ -70,7 +68,6 @@ const JobCategory = () => {
     }, [importJobCategoryError])
 
     useEffect(() => {
-        console.log('editJobCatogeryData', editJobCatogeryData)
         if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
             toast.success("Job Category update successful");
@@ -146,7 +143,6 @@ const JobCategory = () => {
 
     useEffect(() => {
         if (jobData && jobData.data) {
-            console.log("-----", jobData)
             setJobCategoryTableData(jobData.data ?
                 jobData.data.map((item) => {
 

@@ -169,10 +169,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
 
-  useEffect(() => {
-    console.log(fileData, "fileData-------------");
-  }, [fileData])
-
   const handleOk = () => {
     if (validation()) {
       return;

@@ -14,8 +14,15 @@ const actions = {
   GETONE_TESTIMONIAL_BEGINE:"GETONE_TESTIMONIAL_BEGINE",
   GETONE_TESTIMONIAL_SUCCESS:"GETONE_TESTIMONIAL_SUCCESS",
   GETONE_TESTIMONIAL_ERR:"GETONE_TESTIMONIAL_ERR", 
-  
 
+  ADD_BULK_TESTIMONIAL_BEGIN : "ADD_BULK_TESTIMONIAL_BEGIN",
+  ADD_BULK_TESTIMONIAL_SUCCESS : "ADD_BULK_TESTIMONIAL_SUCCESS",
+  ADD_BULK_TESTIMONIAL_ERR: "ADD_BULK_TESTIMONIAL_ERR",
+
+  GET_EXPORT_TESTIMONIAL_BEGIN : "GET_EXPORT_TESTIMONIAL_BEGIN",
+  GET_EXPORT_TESTIMONIAL_SUCCESS : "GET_EXPORT_TESTIMONIAL_SUCCESS",
+  GET_EXPORT_TESTIMONIAL_ERR: "GET_EXPORT_TESTIMONIAL_ERR",
+  
   addTestimonialBegin: () => {
     return {
       type: actions.ADD_TESTIMONIAL_BEGINE,
@@ -97,6 +104,45 @@ const actions = {
     };
   },
 
+  addBulkTestimonialBegin: () => {
+    return {
+      type: actions.ADD_BULK_TESTIMONIAL_BEGIN,
+    };
+  },
+
+  addBulkTestimonialSuccess: data => {
+    return {
+      type: actions.ADD_BULK_TESTIMONIAL_SUCCESS,
+      data,
+    };
+  },
+
+  addBulkTestimonialErr: err => {
+    return {
+      type: actions.ADD_BULK_TESTIMONIAL_ERR,
+      err,
+    };
+  },
+
+  getExportTestimonialsBegin: () => {
+    return {
+      type: actions.GET_EXPORT_TESTIMONIAL_BEGIN,
+    };
+  },
+
+  getExportTestimonialsSuccess: data => {
+    return {
+      type: actions.GET_EXPORT_TESTIMONIAL_SUCCESS,
+      data,
+    };
+  },
+
+  getExportTestimonialsErr: err => {
+    return {
+      type: actions.GET_EXPORT_TESTIMONIAL_ERR,
+      err,
+    };
+  },
 
 };
 export default actions;

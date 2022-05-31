@@ -69,11 +69,6 @@ const SwayamCourses = () => {
     search: '',
   });
   const [activeCoursetog, setActiveCourseTog] = useState(true);
-
-  useEffect(() => {
-    console.log(selectedLanguageData, "selectedLanguageData");
-  }, [selectedLanguageData])
-
   const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
@@ -360,18 +355,12 @@ const SwayamCourses = () => {
       })
   }
 
-  useEffect(() => {
-    console.log("langId", langIds);
-  }, [langIds])
-
-
   const languageHandalCancle = () => {
-    console.log("handleCancel---------*");
     setIsConfirmModal(false)
   }
   const languageHandalOk = () => {
-    console.log("handleOk---------*");
-    console.log("langIds-------------", langIds.hindi);
+    // console.log("handleOk---------*");
+    // console.log("langIds-------------", langIds.hindi);
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       detail: selectedLanguageData.detail,
@@ -383,7 +372,7 @@ const SwayamCourses = () => {
       mode: selectedLanguageData.mode,
       thumbnail: selectedLanguageData.thumbnail,
     };
-    console.log("selectLanguage =====>", selectLanguageAddData);
+    // console.log("selectLanguage =====>", selectLanguageAddData);
     dispatch(addSwayamCourse(selectLanguageAddData, langIds.hindi))
     setIsConfirmModal(false)
   }
@@ -433,7 +422,6 @@ const SwayamCourses = () => {
       setUsertable(
         courseData.data?.data?.map(item => {
           let courseRatings = item.courseRatings.map(item => item.rating)
-          // console.log("courseRatings", courseRatings)
           var sum = 0;
 
           for (var i = 0; i < courseRatings.length; i++) {
@@ -441,7 +429,6 @@ const SwayamCourses = () => {
           }
 
           var avg = sum / courseRatings.length;
-          // console.log("avg", avg)
 
           return {
             CourseName: (
@@ -489,7 +476,6 @@ const SwayamCourses = () => {
                 {/* <div className="table-actions"> */}
                 <>
                   <Button size="small" type="primary" shape='round' onClick={() => {
-                    console.log("lof =======HN=====>",);
                     setSelectedLanguageData(item)
                     getOneCourseDetailByKey(langIds?.hindi, item?.key)
                   }}>
@@ -498,7 +484,7 @@ const SwayamCourses = () => {
                   </Button>
                   <Button size="small" type="primary" shape='round' onClick={() => {
                     selectedLanguageData(item)
-                    console.log("lof =========MT===>",); getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                    getOneCourseDetailByKey(langIds?.marathi, item?.key)
                   }} >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT

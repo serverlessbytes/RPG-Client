@@ -15,6 +15,14 @@ const actions = {
   EDIT_BANNER_SUCCESS: "EDIT_BANNER_SUCCESS",
   EDIT_BANNER_ERR: "EDIT_BANNER_ERR",
 
+  ADD_BULK_BANNER_BEGIN: "ADD_BULK_BANNER_BEGIN",
+  ADD_BULK_BANNER_SUCCESS: "ADD_BULK_BANNER_SUCCESS",
+  ADD_BULK_BANEER_ERR: "ADD_BULK_BANEER_ERR",
+
+  GET_EXPORT_BANNER_BEGIN: "GET_EXPORT_BANNER_BEGIN",
+  GET_EXPORT_BANNER_SUCCESS: "GET_EXPORT_BANNER_SUCCESS",
+  GET_EXPORT_BANNER_ERR: "GET_EXPORT_BANNER_ERR",
+
 
   addBannerBegin: () => {
     return {
@@ -96,6 +104,45 @@ const actions = {
     };
   },
 
+  addBulkBannerBegin: () => {
+    return {
+      type: actions.ADD_BULK_BANNER_BEGIN,
+    };
+  },
+
+  addBulkBannerSuccess: data => {
+    return {
+      type: actions.ADD_BULK_BANNER_SUCCESS,
+      data,
+    }
+  },
+
+  addBulkBannerErr: err => {
+    return {
+      type: actions.ADD_BULK_BANEER_ERR,
+      err,
+    }
+  },
+
+  getExportBannersBegin: () => {
+    return {
+      type: actions.GET_EXPORT_BANNER_BEGIN,
+    }
+  },
+
+  getExportBannersSuccess: data => {
+    return {
+      type: actions.GET_EXPORT_BANNER_SUCCESS,
+      data,
+    }
+  },
+
+  getExportBannersErr: err => {
+    return {
+      type: actions.GET_EXPORT_BANNER_ERR,
+      err,
+    }
+  }
 
 
 

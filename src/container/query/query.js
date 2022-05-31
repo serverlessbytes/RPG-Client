@@ -4,7 +4,6 @@ import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Col, Form, Input, Modal, Row, Table, Tabs } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBanner, editBanner, GetBanner, getOneBanner } from '../../redux/banner/actionCreator';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
@@ -15,11 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
-import { addArticle, editArticles, getArticleById, getArticles } from '../../redux/article/actionCreator';
 import { useHistory } from 'react-router';
 import { addQueries, editQueries, getQueries, getQueriesFromId } from '../../redux/query/actionCreator';
-
-//import { data, data } from 'browserslist';
 
 const query = () => {
     const dispatch = useDispatch();
@@ -29,7 +25,7 @@ const query = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [queryTableData, setQueryTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(20); // forpagination
+    const [perPage, setPerPage] = useState(5); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuery, setSelectedQuery] = useState();//For Edit
     const [nameTog, setNameTog] = useState(false)
@@ -50,8 +46,6 @@ const query = () => {
     const handleChange = (e) => {
         setQueryData({ ...queryData, [e.target.name]: e.target.value })
     }
-
-    // useEffect(() => { console.log("getQueriesById", getQueriesById) }, [getQueriesById])
 
     useEffect(() => {
         dispatch(getQueries(perPage, pageNumber, status));
@@ -285,17 +279,14 @@ const query = () => {
                                             <Table
                                                 dataSource={queryTableData}
                                                 columns={queryColumns}
-                                            // pagination={false}
-                                            // pagination={{
-                                            //     defaultPageSize: users?.per_page,
-                                            //     total: users?.page_count,
-
-                                            //     onChange: (page, pageSize) => {
-                                            //         setPageNumber(page);
-                                            //         setPerPage(pageSize);
-                                            //     },
-
-                                            // }}
+                                                pagination={{
+                                                    defaultPageSize: getQueriesData?.data.per_page,
+                                                    total: getQueriesData?.data.page_count,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize);
+                                                    },
+                                                }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
@@ -307,15 +298,14 @@ const query = () => {
                                             <Table
                                                 dataSource={queryTableData}
                                                 columns={queryColumns}
-                                            // pagination={{
-                                            //     defaultPageSize: users?.per_page,
-                                            //     total: users?.page_count,
-                                            //     onChange: (page, pageSize) => {
-                                            //         setPageNumber(page);
-                                            //         setPerPage(pageSize);
-                                            //     },
-
-                                            // }}
+                                                pagination={{
+                                                    defaultPageSize: getQueriesData?.data.per_page,
+                                                    total: getQueriesData?.data.page_count,
+                                                    onChange: (page, pageSize) => {
+                                                        setPageNumber(page);
+                                                        setPerPage(pageSize);
+                                                    },
+                                                }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
@@ -332,7 +322,6 @@ const query = () => {
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
                     title="Query"
-
                     okText={nameTog ? "Edit" : "Add"}
                 >
                     <Form name="query" layout="vertical">
@@ -344,8 +333,8 @@ const query = () => {
                                 value={queryData.name}
                                 onChange={(e) => handleChange(e)}
                             />
-                           
                         </Form.Item>
+
                         <label htmlFor="email">Email</label>
                         <Form.Item>
                             <Input
@@ -355,7 +344,6 @@ const query = () => {
                                 value={queryData.email}
                                 onChange={(e) => handleChange(e)}
                             />
-                          
                         </Form.Item>
 
                         <label htmlFor="body">Body</label>
@@ -367,7 +355,6 @@ const query = () => {
                                 value={queryData.body}
                                 onChange={(e) => handleChange(e)}
                             />
-                             
                         </Form.Item>
                     </Form>
                 </Modal>}
