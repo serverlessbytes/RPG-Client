@@ -75,6 +75,10 @@ const actions = {
   ADD_BULK_JOBS_CATEGORY_SUCCESS: "ADD_BULK_JOBS_CATEGORY_SUCCESS",
   ADD_BULK_JOBS_CATEGORY_ERR: "ADD_BULK_JOBS_CATEGORY_ERR",
 
+  ADD_BULK_JOBROLES_BEGINE: "ADD_BULK_JOBSROLES_BEGINE",
+  ADD_BULK_JOBSROLES_SUCCESS: "ADD_BULK_JOBSROLES_SUCCESS",
+  ADD_BULK_JOBSROLES_ERR: "ADD_BULK_JOBROLES_ERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -460,6 +464,26 @@ const actions = {
   addBlukJobCategoyErr: err => {
     return {
       type: actions.ADD_BULK_JOBS_CATEGORY_ERR,
+      err,
+    };
+  },
+
+  addBlukJobRolesBegin: () => {
+    return {
+      type: actions.ADD_BULK_JOBROLES_BEGINE,
+    };
+  },
+
+  addBulkJobRolesSuccess: data => {
+    return {
+      type: actions.ADD_BULK_JOBSROLES_SUCCESS,
+      data,
+    };
+  },
+
+  addBulkJobRolesErr: err => {
+    return {
+      type: actions.ADD_BULK_JOBSROLES_ERR,
       err,
     };
   },

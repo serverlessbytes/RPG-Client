@@ -13,6 +13,7 @@ import actions from '../../redux/testimonial/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
+import ImportTestimonial from '../../components/modals/ImportTestimonial';
 
 const Testimonial = () => {
 
@@ -21,38 +22,54 @@ const Testimonial = () => {
     const { path } = useRouteMatch();
 
     const { addTestimonialSuccess, addTestimonialErr, editTestimonialSuccess,
-        editTestimonialErr,
+        editTestimonialErr,addBulkTestimonialSuccess,addBulkTestimonialErr,
     } = actions;
 
-    const [usertable, setUsertable] = useState([])
+    const [testiMonialtable, setTestiMonial] = useState([]);
+    const [perPage, setPerPage] = useState(10)
+    const [pageNum, setPageNum] = useState(1)
+    const [importModel,setImportModel] = useState(false)
 
     const getAllUsers = useSelector((state) => state.testimonial.getTestimonialData)
     const addTestimonialdata = useSelector((state) => state.testimonial.addTestimonialData)
     const addTestimonialDataError = useSelector((state) => state.testimonial.addTestimonialDataError)
     const editTestimonialdata = useSelector((state) => state.testimonial.editTestimonialData)
     const editTestimonialDataError = useSelector((state) => state.testimonial.editTestimonialDataError)
+    const addBulkTestimonialData = useSelector((state) => state.testimonial.addBulkTestimonialData)
+    const addBulkTestimonialError = useSelector((state) => state.testimonial.addBulkTestimonialErr)
 
     useEffect(() => {
-        console.log("editTestimonialdata", editTestimonialdata);
-    }, [editTestimonialdata])
+        if (addBulkTestimonialData && addBulkTestimonialData.status === 200) {
+            dispatch(addBulkTestimonialSuccess(null))
+            toast.success("Import Testimonial successful");
+        }
+        else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200){
+            toast.error("Something Wrong")
+        }
+    }, [addBulkTestimonialData])
+
+    useEffect(() => {
+        if (addBulkTestimonialError) {
+            dispatch(addBulkTestimonialErr(null))
+            toast.error("Something Wrong")
+        }
+    }, [addBulkTestimonialError])
 
     useEffect(() => {
         if (addTestimonialdata && addTestimonialdata.status === 200) {
             dispatch(addTestimonialSuccess(null))
             toast.success("Testimonial add successful");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [addTestimonialdata])
 
-    useEffect(()=>{
-        if(addTestimonialDataError){ 
-          dispatch(addTestimonialErr(null))
-          toast.error("Something Wrong")
+    useEffect(() => {
+        if (addTestimonialDataError) {
+            dispatch(addTestimonialErr(null))
+            toast.error("Something Wrong")
         }
-      },[addTestimonialDataError])
+    }, [addTestimonialDataError])
 
-      useEffect(() => {
+    useEffect(() => {
         if (editTestimonialdata && editTestimonialdata.status === 200) {
             dispatch(editTestimonialSuccess(null))
             toast.success("Testimonial update successful");
@@ -61,57 +78,55 @@ const Testimonial = () => {
         }
     }, [editTestimonialdata])
 
-    useEffect(()=>{
-        if(editTestimonialDataError){ 
-          dispatch(editTestimonialErr(null))
-          toast.error("Something Wrong")
+    useEffect(() => {
+        if (editTestimonialDataError) {
+            dispatch(editTestimonialErr(null))
+            toast.error("Something Wrong")
         }
-      },[editTestimonialDataError])
+    }, [editTestimonialDataError])
 
     useEffect(() => {
-        dispatch(getTestimonial())
-    }, [])
+        dispatch(getTestimonial(perPage, pageNum))
+    }, [perPage, pageNum])
 
     const onEdit = (id) => {
         history.push(`${path}/addtestimonial?id=${id}`)
     }
 
     const newTestimonial = userForDelete => {
-        const newVal  = ApiPost(`testimonial/editTestimonial`,userForDelete )
-        .then((res) =>{
-        if (res.status === 200) {
-            dispatch(editTestimonial())
-        }
-        return res
-        })
+        const newVal = ApiPost(`testimonial/editTestimonial`, userForDelete)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getTestimonial(perPage, pageNum))
+                }
+                return res
+            })
         return newVal
     }
 
-    const onDelete = async(id) => {
-        let userForDelete = getAllUsers && getAllUsers.data.find(item => item.id === id)
-        console.log("userForDelete", userForDelete)
+    const onDelete = async (id) => {
+        let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id)
         if (userForDelete) {
             delete userForDelete.createdAt
             delete userForDelete.updatedAt
             //delete userForDelete.avatar,
             userForDelete = {
                 ...userForDelete,
-
                 id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,
             }
             // dispatch(editTestimonial(userForDelete))
-           const deleteTestimonial =  await newTestimonial(userForDelete)
-           if (deleteTestimonial.status === 200) {
-               toast.success("Testimonial delete successful")
-           }
+            const deleteTestimonial = await newTestimonial(userForDelete)
+            if (deleteTestimonial.status === 200) {
+                toast.success("Testimonial delete successful")
+            }
         }
     }
 
     useEffect(() => {
-        if (getAllUsers && getAllUsers.data) {
-            setUsertable(getAllUsers.data?.map(item => {
+        if (getAllUsers && getAllUsers.data && getAllUsers.data.data) {
+            setTestiMonial(getAllUsers && getAllUsers.data && getAllUsers.data.data?.map(item => {
                 return ({
                     name: item.name,
                     role: item.role,
@@ -137,7 +152,10 @@ const Testimonial = () => {
     const reDirect = () => {
         history.push(`${path}/addtestimonial`);
     }
-    const usersTableColumns = [
+    const reDirectModel = () => {
+        setImportModel(true);
+    }
+    const testiMonialColumns = [
 
         {
             title: 'Name',
@@ -170,6 +188,9 @@ const Testimonial = () => {
                         <Button onClick={reDirect} size="small" type="primary">
                             Add Testimonial
                         </Button>
+                        <Button onClick={reDirectModel} size="small" type="primary">
+                            Import Testimonial
+                        </Button>
                     </div>
                 ]}
             />
@@ -188,17 +209,16 @@ const Testimonial = () => {
 
                             <Table
                                 // rowSelection={rowSelection}
-                                dataSource={usertable}
-                                columns={usersTableColumns}
-                            // pagination={{
-                            //     defaultPageSize: getAllUsers?.data.per_page,
-                            //     total: getAllUsers?.data.page_count,
-                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                            //     onChange: (page, pageSize) => {
-                            //         setPageNumber(page);
-                            //         setPerPage(pageSize)
-                            //     }
-                            // }}
+                                dataSource={testiMonialtable}
+                                columns={testiMonialColumns}
+                                pagination={{
+                                    defaultPageSize: getAllUsers?.data.per_page,
+                                    total: getAllUsers?.data.page_count,
+                                    onChange: (page, pageSize) => {
+                                        setPageNum(page);
+                                        setPerPage(pageSize)
+                                    }
+                                }}
                             // size="middle"
                             // pagination={false}
                             />
@@ -206,7 +226,7 @@ const Testimonial = () => {
                     </UserTableStyleWrapper>
                 </Cards>
             </Main>
-
+            {importModel && <ImportTestimonial modaltitle="Import Testimonial" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }

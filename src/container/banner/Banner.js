@@ -15,16 +15,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
+import Importbanner from '../../components/modals/ImportBanner';
 
 //import { data, data } from 'browserslist';
 
 const Banner = () => {
     const dispatch = useDispatch();
 
-    const { getOneBannerSuccess, addBannerSuccess, addBannerErr, editBannerSuccess, editBannerErr } = actions;
+    const { getOneBannerSuccess, addBannerSuccess, addBannerErr, editBannerSuccess, editBannerErr, addBulkBannerSuccess, addBulkBannerErr } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [importModel, setImportModel] = useState(false);
     const [bannerTableData, setBannerTableData] = useState([]); // for table
+    const [perPage, setPerPage] = useState(10)
+    const [pageNumber, setPageNumber] = useState(1)
     const [selectedBanner, setSelectedBanner] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [data, setData] = useState({
@@ -39,16 +43,40 @@ const Banner = () => {
     const addBannerError = useSelector((state) => state.banner.addBannerError);
     const editBannerdata = useSelector((state) => state.banner.editBannerData);
     const editBannerError = useSelector((state) => state.banner.editBannerError);
+    const addBulkbannerData = useSelector((state) => state.banner.addBulkbannerData);
+    const addBulkbannerErr = useSelector((state) => state.banner.addBulkbannerErr);
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    useEffect(() => { console.log("editBannerdata", editBannerdata) }, [editBannerdata])
+    useEffect(() => {
+        if(getBannerData){
+
+            console.log("getBannerData", getBannerData)
+        }
+    }, [getBannerData])
 
     useEffect(() => {
-        dispatch(GetBanner());
-    }, [])
+        dispatch(GetBanner(perPage,pageNumber));
+    }, [perPage,pageNumber])
+
+    useEffect(() => {
+        if (addBulkbannerData && addBulkbannerData.status === 200) {
+            dispatch(addBulkBannerSuccess(null))
+            toast.success("Import Banner successful")
+        }
+        else if(addBulkbannerData && addBulkbannerData.status !== 200){
+            toast.error("Something Wrong")
+        }
+    }, [addBulkbannerData])
+
+    useEffect(() => {
+        if (addBulkbannerErr) {
+            dispatch(addBulkBannerErr(null))
+            toast.error("Something Wrong")
+        }
+    }, [addBulkbannerErr])
 
     useEffect(() => {
         if (addBannerdata && addBannerdata.status === 200) {
@@ -94,6 +122,10 @@ const Banner = () => {
         setIsModalVisible(true);
     };
 
+    const showImportModal = () => {
+        setImportModel(true);
+    }
+
     const handleOk = () => {
         if (!selectedBanner) {
             let Data = {
@@ -138,7 +170,7 @@ const Banner = () => {
     }, [])
 
     const onEdit = (id) => {
-        let dataForEdit = getBannerData && getBannerData.data.find((item) => item.id === id)
+        let dataForEdit = getBannerData && getBannerData.data && getBannerData.data.data.find((item) => item.id === id)
 
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
@@ -152,7 +184,7 @@ const Banner = () => {
         const newval = ApiPost("banner/editBanner", userForDelete)
             .then((res) => {
                 if (res.status === 200) {
-                    dispatch(GetBanner())
+                    dispatch(GetBanner(perPage,pageNumber))
                 }
                 return res;
             })
@@ -163,7 +195,7 @@ const Banner = () => {
     }
 
     const onDelete = async (id) => {
-        let dataForDelete = getBannerData && getBannerData.data.find((item) => item.id === id)
+        let dataForDelete = getBannerData && getBannerData.data && getBannerData.data.data.find((item) => item.id === id)
         if (dataForDelete) {
             let userForDelete = {
                 id: dataForDelete.id,
@@ -183,7 +215,7 @@ const Banner = () => {
 
     useEffect(() => {
         if (getBannerData && getBannerData.data) {
-            setBannerTableData(getBannerData && getBannerData.data.map((item) => {
+            setBannerTableData(getBannerData && getBannerData.data &&getBannerData.data.data.map((item) => {
                 return {
                     title: item.title,
                     imageUrl: item.imageUrl,
@@ -235,6 +267,10 @@ const Banner = () => {
                         <Button size="small" type="primary" onClick={showModal}>
                             Add Banner
                         </Button>
+
+                        <Button size="small" type="primary" onClick={showImportModal}>
+                            Import Banner
+                        </Button>
                     </div>
                 ]}
             />
@@ -247,7 +283,14 @@ const Banner = () => {
                                 // rowSelection={rowSelection}
                                 dataSource={bannerTableData}
                                 columns={bannerTableColumns}
-                                pagination={false}
+                                pagination={{
+                                    defaultPageSize: getBannerData?.data.per_page,
+                                    total: getBannerData?.data.page_count,
+                                    onChange: (page, pageSize) => {
+                                        setPageNumber(page);
+                                        setPerPage(pageSize);
+                                    },
+                                }}
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>
@@ -298,6 +341,7 @@ const Banner = () => {
                         </Form.Item>
                     </Form>
                 </Modal>}
+                {importModel && <Importbanner modaltitle = "Import Banner" handleCancel = {() => setImportModel(false)} importModel= {importModel}  />}
         </>
     )
 }

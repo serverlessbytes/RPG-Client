@@ -77,6 +77,9 @@ const {
   ADD_BULK_JOBS_CATEGORY_SUCCESS,
   ADD_BULK_JOBS_CATEGORY_ERR,
 
+  ADD_BULK_JOBROLES_BEGINE,
+  ADD_BULK_JOBSROLES_SUCCESS,
+  ADD_BULK_JOBSROLES_ERR,
 
 } = actions;
 
@@ -103,12 +106,14 @@ const initialState = {
   getJobApplicationData: null,
   updateIsSelectedData: null,
   updateIsHiredData: null,
-  addJobsApplicationData : null,
-  addBulkJobsData : null,
-  addBulkJobsError : null,
-  importJobCategory:null,
-  importJobCategoryError:null,
-  addJobCatogeryError : null,
+  addJobsApplicationData: null,
+  addBulkJobsData: null,
+  addBulkJobsError: null,
+  importJobCategory: null,
+  importJobCategoryError: null,
+  addJobCatogeryError: null,
+  importJobRole : null,
+  importJobRoleErr : null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -290,7 +295,7 @@ const jobReducer = (state = initialState, action) => {
         getJobFilterData: data,
         loading: false,
       };
-      
+
     case GET_JOBSFILTER_ERR:
       return {
         ...state,
@@ -406,62 +411,77 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case ADD_JOB_APPLICATION_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_JOB_APPLICATION_SUCCESS:
-        return {
-          ...state,
-          addJobsApplicationData: data,
-          loading: false,
-        };
-      case ADD_JOB_APPLICATION_ERR:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
+    case ADD_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        addJobsApplicationData: data,
+        loading: false,
+      };
+    case ADD_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
 
-      case ADD_BULK_JOBS_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_BULK_JOBS_SUCCESS:
-        return {
-          ...state,
-          addBulkJobsData: data,
-          loading: false,
-        };
-      case ADD_BULK_JOBS_ERR:
-        return {
-          ...state,
-          addBulkJobsError: err,
-          loading: false,
-        };
+    case ADD_BULK_JOBS_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBS_SUCCESS:
+      return {
+        ...state,
+        addBulkJobsData: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBS_ERR:
+      return {
+        ...state,
+        addBulkJobsError: err,
+        loading: false,
+      };
 
-        case ADD_BULK_JOBS_CATEGORY_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_BULK_JOBS_CATEGORY_SUCCESS:
-        return {
-          ...state,
-          importJobCategory: data,
-          loading: false,
-        };
-      case ADD_BULK_JOBS_CATEGORY_ERR:
-        return {
-          ...state,
-          importJobCategoryError: err,
-          loading: false,
-        };
-  
-  
+    case ADD_BULK_JOBS_CATEGORY_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBS_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        importJobCategory: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBS_CATEGORY_ERR:
+      return {
+        ...state,
+        importJobCategoryError: err,
+        loading: false,
+      };
 
+    case ADD_BULK_JOBROLES_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBSROLES_SUCCESS:
+      return {
+        ...state,
+        importJobRole: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBSROLES_ERR:
+      return {
+        ...state,
+        importJobRoleErr: err,
+        loading: false,
+      };
 
     default:
       return state;

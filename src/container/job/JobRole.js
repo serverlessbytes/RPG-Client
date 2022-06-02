@@ -11,6 +11,7 @@ import { addJobcategory, editJobcategory, getJobcategory, getJobroles, addJobrol
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
+import ImportJobRole from '../../components/modals/ImportJobRole';
 
 
 const JobRole = () => {
@@ -21,6 +22,7 @@ const JobRole = () => {
     const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [importModal, setImportModel] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [jobRolesTableData, setJobRolesTableData] = useState([]);
     const [selectedJobRole, setSelectedJobCategory] = useState();
@@ -40,23 +42,16 @@ const JobRole = () => {
     const editJobRoleError = useSelector((state) => state.job.editJobRoleError)
 
     useEffect(() => {
-        console.log('editJobRoleData', editJobRoleData)
         if (editJobRoleData && editJobRoleData.status === 200) {
             dispatch(editJobroleSuccess(null))
             toast.success("Job Role update successful");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [editJobRoleData])
 
     useEffect(() => {
-        //console.log("")
-        console.log('addJobRoledata', addJobRoledata)
         if (addJobRoledata && addJobRoledata.status === 200) {
             dispatch(addJobroleSuccess(null))
             toast.success("Job Role add successful");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [addJobRoledata])
 
@@ -84,7 +79,6 @@ const JobRole = () => {
             setIsDisabled(true)
         }
     }, [isModalVisible])
-
 
     const onEdit = (id) => {
         let dataForEdit = jobRolesData && jobRolesData.find((item) => item.id === id)
@@ -150,6 +144,10 @@ const JobRole = () => {
         setIsModalVisible(true);
     };
 
+    const showImportModal = () => {
+        setImportModel(true);
+    }
+
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
@@ -214,8 +212,6 @@ const JobRole = () => {
         },
     ];
 
-
-
     return (
         <>
             <PageHeader
@@ -225,6 +221,9 @@ const JobRole = () => {
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Role
+                        </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showImportModal}>
+                            Import Role
                         </Button>
                     </div>
                 ]}
@@ -296,8 +295,10 @@ const JobRole = () => {
                         />
                     </Form.Item>
                 </Form>
-
             </Modal>
+
+            {importModal && <ImportJobRole modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModal} />}
+
         </>
     )
 }

@@ -12,21 +12,24 @@ import actions from '../../redux/carousel/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
+import ImportCarousel from '../../components/modals/ImportCarousel';
 
 const Carousel = () => {
   const dispatch = useDispatch();
 
-  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr } = actions;
+  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr,addBulkCarouselSuccess,addBulkCarouselErr } = actions;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [carouselTableData, setcarouselTableData] = useState([{ title: 'ABC' }, { title: 'BCD' }]);
+  const [carouselTableData, setcarouselTableData] = useState();
   const [selectedCarousel, setSelectedCarousel] = useState(); // for edit
   const [nameTod, setNameTod] = useState(false);
   const [data, setData] = useState({
     title: '',
     imageUrl: '',
   });
-  // const [languageTableData, setLanguageTableData] = useState([{title:'ABC'},{title:'BCD'}]);
+  const [perPage, setPerPage] = useState(10)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [importModel, setImportModel] = useState(false);
 
   const getCarouseldata = useSelector(state => state.carousel.getCarouselData);
   const getOneCarouselData = useSelector(state => state.carousel.getOneCarouselData);
@@ -34,6 +37,29 @@ const Carousel = () => {
   const addCarouselError = useSelector(state => state.carousel.addCarouselError);
   const editCarouselData = useSelector(state => state.carousel.editCarouselData);
   const editCarouselError = useSelector(state => state.carousel.editCarouselError);
+  const addBulkCarouselData = useSelector(state => state.carousel.addBulkCarouselData);
+  const addBulkCarouselError = useSelector(state => state.carousel.addBulkCarouselError);
+
+  // useEffect(() => {
+  //   console.log("getCarouseldata", getCarouseldata)
+  // }, [getCarouseldata])
+
+  useEffect(() => {
+    if (addBulkCarouselData && addBulkCarouselData.status === 200) {
+      dispatch(addBulkCarouselSuccess(null));
+      toast.success('Import Carousel successful');
+    }
+    else if (addBulkCarouselData && addBulkCarouselData.status !== 200){
+     toast.error("Something Wrong")
+    }
+  }, [addBulkCarouselData]);
+
+  useEffect(() => {
+    if (addBulkCarouselError) {
+      dispatch(addBulkCarouselErr(null));
+      toast.error('Something Wrong');
+    }
+  }, [addBulkCarouselError]);
 
   useEffect(() => {
     if (addCarouseldata && addCarouseldata.status === 200) {
@@ -67,6 +93,10 @@ const Carousel = () => {
     setIsModalVisible(true);
   };
 
+  const showImportModal = () => {
+    setImportModel(true);
+  }
+
   const handleCancel = () => {
     setIsModalVisible(false);
     setNameTod(false);
@@ -87,8 +117,8 @@ const Carousel = () => {
   };
 
   useEffect(() => {
-    dispatch(getCarousel());
-  }, []);
+    dispatch(getCarousel(perPage, pageNumber));
+  }, [perPage, pageNumber]);
 
   useEffect(() => {
     if (getOneCarouselData && getOneCarouselData.data) {
@@ -101,7 +131,7 @@ const Carousel = () => {
   }, [getOneCarouselData]);
 
   const onEdit = id => {
-    let dataForEdit = getCarouseldata && getCarouseldata.data.find(item => item.id === id);
+    let dataForEdit = getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.find(item => item.id === id);
     if (dataForEdit) {
       setSelectedCarousel(dataForEdit);
     }
@@ -139,7 +169,7 @@ const Carousel = () => {
     const newVal = ApiPost(`carousel/editCarousel`, userForDelete)
       .then(res => {
         if (res.status === 200) {
-          dispatch(getCarousel());
+          dispatch(getCarousel(perPage,pageNumber));
         }
         return res;
       })
@@ -150,7 +180,7 @@ const Carousel = () => {
   };
 
   const onDelete = async id => {
-    let dataForDelete = getCarouseldata && getCarouseldata.data.find(item => item.id === id);
+    let dataForDelete = getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.find(item => item.id === id);
     console.log('dataForDelete', dataForDelete);
     if (dataForDelete) {
       console.log('dataForDelete', dataForDelete);
@@ -172,8 +202,8 @@ const Carousel = () => {
   useEffect(() => {
     if (getCarouseldata && getCarouseldata.data) {
       setcarouselTableData(
-        getCarouseldata &&
-        getCarouseldata.data.map(item => {
+        getCarouseldata && getCarouseldata.data &&
+        getCarouseldata.data.data.map(item => {
           return {
             title: item.title,
             imageUrl: item.imageUrl,
@@ -233,6 +263,9 @@ const Carousel = () => {
             <Button size="small" type="primary" onClick={showModal}>
               Add Carousel
             </Button>
+            <Button size="small" type="primary" onClick={showImportModal}>
+              Import carousel
+            </Button>
           </div>,
         ]}
       />
@@ -245,7 +278,14 @@ const Carousel = () => {
                 // rowSelection={rowSelection}
                 dataSource={carouselTableData}
                 columns={carouselTableColumns}
-                pagination={false}
+                pagination={{
+                  defaultPageSize: getCarouseldata?.data.per_page,
+                  total: getCarouseldata?.data.page_count,
+                  onChange: (page, pageSize) => {
+                    setPageNumber(page);
+                    setPerPage(pageSize);
+                  },
+                }}
               />
             </TableWrapper>
           </UserTableStyleWrapper>
@@ -290,6 +330,8 @@ const Carousel = () => {
           </Form>
         </Modal>
       )}
+
+      {importModel && <ImportCarousel modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModel} />}
     </>
   );
 };

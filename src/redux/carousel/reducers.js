@@ -16,20 +16,26 @@ const {
   EDIT_CAROUSEL_BEGINE,
   EDIT_CAROUSEL_SUCCESS,
   EDIT_CAROUSEL_ERR,
-  
+
+  ADD_BULK_CAROUSEL_BEGINE,
+  ADD_BULK_CAROUSEL_SUCCESS,
+  ADD_BULK_CAROUSEL_ERR,
+
 } = actions;
 
 const initialState = {
   loading: false,
   error: null,
-  addCarouselData : null,
-  addCarouselError : null,
-  getCarouselData : null,
-  getCarouselError : null,
-  getOneCarouselData : null,
-  getOneCarouselError : null,
-  editCarouselData : null,
-  editCarouselError : null,
+  addCarouselData: null,
+  addCarouselError: null,
+  getCarouselData: null,
+  getCarouselError: null,
+  getOneCarouselData: null,
+  getOneCarouselError: null,
+  editCarouselData: null,
+  editCarouselError: null,
+  addBulkCarouselData : null,
+  addBulkCarouselError : null,
 };
 
 const carouselReducer = (state = initialState, action) => {
@@ -53,59 +59,77 @@ const carouselReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_CAROUSEL_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case GET_CAROUSEL_SUCCESS:
-        return {
-          ...state,
-          getCarouselData: data,
-          loading: false,
-        };
-      case GET_CAROUSEL_ERR:
-        return {
-          ...state,
-          getCarouselError: err,
-          loading: false,
-        };
+    case GET_CAROUSEL_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_CAROUSEL_SUCCESS:
+      return {
+        ...state,
+        getCarouselData: data,
+        loading: false,
+      };
+    case GET_CAROUSEL_ERR:
+      return {
+        ...state,
+        getCarouselError: err,
+        loading: false,
+      };
 
-        case GETONE_CAROUSEL_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case GETONE_CAROUSEL_SUCCESS:
-          return {
-            ...state,
-            getOneCarouselData: data,
-            loading: false,
-          };
-        case GETONE_CAROUSEL_ERR:
-          return {
-            ...state,
-            getOneCarouselError: err,
-            loading: false,
-          };
+    case GETONE_CAROUSEL_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GETONE_CAROUSEL_SUCCESS:
+      return {
+        ...state,
+        getOneCarouselData: data,
+        loading: false,
+      };
+    case GETONE_CAROUSEL_ERR:
+      return {
+        ...state,
+        getOneCarouselError: err,
+        loading: false,
+      };
 
-          case EDIT_CAROUSEL_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case EDIT_CAROUSEL_SUCCESS:
-          return {
-            ...state,
-            editCarouselData: data,
-            loading: false,
-          };
-        case EDIT_CAROUSEL_ERR:
-          return {
-            ...state,
-            editCarouselError: err,
-            loading: false,
-          };
+    case EDIT_CAROUSEL_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_CAROUSEL_SUCCESS:
+      return {
+        ...state,
+        editCarouselData: data,
+        loading: false,
+      };
+    case EDIT_CAROUSEL_ERR:
+      return {
+        ...state,
+        editCarouselError: err,
+        loading: false,
+      };
+
+    case ADD_BULK_CAROUSEL_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_CAROUSEL_SUCCESS:
+      return {
+        ...state,
+        addBulkCarouselData: data,
+        loading: false,
+      };
+    case ADD_BULK_CAROUSEL_ERR:
+      return {
+        ...state,
+        addBulkCarouselError: err,
+        loading: false,
+      };
 
 
     default:

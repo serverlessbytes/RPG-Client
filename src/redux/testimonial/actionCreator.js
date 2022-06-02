@@ -25,16 +25,14 @@ const {
 
 } = actions;
 
-export const addTestimonial = (body) => async (dispatch) => {
-  await ApiPost(`testimonial/addTestimonial?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-    .then((res) => {
-      return dispatch(addTestimonialSuccess(res))
-    })
-    .catch((err) => dispatch(addTestimonialErr(err)))
-}
+let perPage, pageNum;
 
-export const getTestimonial = () => async (dispatch) => {
-  await ApiGet(`testimonial/getTestimonials?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+export const getTestimonial = (per_page, page_num) => async (dispatch) => {
+
+  perPage = per_page;
+  pageNum = page_num;
+
+  await ApiGet(`testimonial/getTestimonials?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${per_page}&page_number=${page_num}`)
     .then((res) => {
       return dispatch(getTestimonialSuccess(res))
       // return dispatch(getSchemecategory())
@@ -42,6 +40,14 @@ export const getTestimonial = () => async (dispatch) => {
     .catch((err) => dispatch(getTestimonialErr(err)))
 }
 
+export const addTestimonial = (body) => async (dispatch) => {
+  await ApiPost(`testimonial/addTestimonial?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    .then((res) => {
+      dispatch(addTestimonialSuccess(res))
+      return dispatch(getTestimonial(perPage, pageNum))
+    })
+    .catch((err) => dispatch(addTestimonialErr(err)))
+}
 
 export const getoneTestimonialData = (data) => async (dispatch) => {
   await ApiGet(`testimonial/getTestimonial?id=${data}`)
@@ -58,7 +64,7 @@ export const editTestimonial = (data) => async (dispatch) => {
     .then((res) => {
       dispatch(editTestimonialSuccess(res))
       if (res.status === 200) {
-        return dispatch(getTestimonial())
+        return dispatch(getTestimonial(perPage, pageNum))
       }
     })
     .catch((err) => dispatch(editTestimonialErr(err)))
@@ -67,7 +73,10 @@ export const editTestimonial = (data) => async (dispatch) => {
 export const addBulkTestimonial = (body) => async (dispatch) => {
   await ApiPost(`testimonial/addBulkTestimonial`, body)
     .then((res) => {
-      return dispatch(addBulkTestimonialSuccess(res))
+       dispatch(addBulkTestimonialSuccess(res))
+      if (res.status === 200) {
+        return dispatch(getTestimonial(perPage, pageNum))
+      }
     })
     .catch((err) => dispatch(addBulkTestimonialErr(err)))
 }
