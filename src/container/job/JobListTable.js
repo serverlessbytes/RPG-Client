@@ -26,7 +26,8 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
-  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess } = actions;
+  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess,
+    addLanguageJobPostErr, } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -48,6 +49,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     hindi: '',
     marathi: ''
   });
+  const [languageIds, setLanguageIDs] = useState();
+  const [ids, setIDs] = useState();
 
   const languageData = useSelector(state => state.language.getLanguageData);
   const jobData = useSelector(state => state.job.getJobPostData);
@@ -56,6 +59,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const addJobPostErr = useSelector(state => state.job.addJobPostErr); //fetch for tostify from reducer for jobposterror
   const editJobPostErr = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
+  const addLanguageJobPost = useSelector(state => state.job.addLanguageJobPost);
+  const addLanguageJobPostError = useSelector(state => state.job.addLanguageJobPostErr);
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
 
   const newJobPost = data => {
@@ -70,17 +75,20 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     return newVal;
   };
 
-  const getOneJobDetailByKey = async (languageId, key) => {
-    await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
+  const getOneJobDetailByKey = async (languageId, key ,id) => {
+
+    await ApiGet(`job/getJobByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
         console.log("res", res);
         if (res.status === 200) {
-          toast.success("Course alredy exist in this language!")
+          toast.success("Jobs alredy exist in this language!")
         }
       })
       .catch((e) => {
         if (e.response.status) {
           setIsConfirmModal(true)
+          setLanguageIDs(languageId);
+          setIDs(id);
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
@@ -91,46 +99,50 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setIsConfirmModal(false)
   }
 
-  const languageHandalOk = () => {
-    console.log("languageHandalOk");
+  const languageHandalOk = (languageIds,ids) => {
+
+    history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
+    // history.push(`/admin/job/new?id=${id}`);
+    console.log("languageIds",languageIds);
     console.log("langIds", langIds);
+    console.log("ids", ids);
     console.log("langIds.hindi", langIds.hindi);
-    let selectLanguageAddData = {
-      key: selectedLanguageData.key,
-      name: selectedLanguageData.name.id,
-      state: selectedLanguageData.state.id,
-      district: selectedLanguageData.district.id,
-      town: selectedLanguageData.town,
-      pincode: selectedLanguageData.pincode,
-      description: selectedLanguageData.description,
-      vacancies: selectedLanguageData.vacancies,
-      reqExperience: selectedLanguageData.reqExperience,
-      salary: selectedLanguageData.salary,
-      benifits: selectedLanguageData.benifits,
-      requirements: selectedLanguageData.requirements,
-      type: selectedLanguageData.type,
-      extraType: selectedLanguageData.extraType,
-      isActive: selectedLanguageData.isActive,
-      shifts: selectedLanguageData.shifts,
-      email: selectedLanguageData.email,
-      phone: selectedLanguageData.phone,
-      startDate: selectedLanguageData.startDate,
-      endDate: selectedLanguageData.endDate,
-      jobRole: selectedLanguageData.jobRole.id,
-      jobType: selectedLanguageData.jobType.id,
-    };
-    console.log(selectLanguageAddData, "selectedLanguageData");
-    addLanguageJobPost(selectLanguageAddData, langIds.hindi)
-    setIsConfirmModal(false)
+    // let selectLanguageAddData = {
+    //   key: selectedLanguageData.key,
+    //   name: selectedLanguageData.name.id,
+    //   state: selectedLanguageData.state.id,
+    //   district: selectedLanguageData.district.id,
+    //   town: selectedLanguageData.town,
+    //   pincode: selectedLanguageData.pincode,
+    //   description: selectedLanguageData.description,
+    //   vacancies: selectedLanguageData.vacancies,
+    //   reqExperience: selectedLanguageData.reqExperience,
+    //   salary: selectedLanguageData.salary,
+    //   benifits: selectedLanguageData.benifits,
+    //   requirements: selectedLanguageData.requirements,
+    //   type: selectedLanguageData.type,
+    //   extraType: selectedLanguageData.extraType,
+    //   isActive: selectedLanguageData.isActive,
+    //   shifts: selectedLanguageData.shifts,
+    //   email: selectedLanguageData.email,
+    //   phone: selectedLanguageData.phone,
+    //   startDate: selectedLanguageData.startDate,
+    //   endDate: selectedLanguageData.endDate,
+    //   jobRole: selectedLanguageData.jobRole.id,
+    //   jobType: selectedLanguageData.jobType.id,
+    // };
+    // console.log(selectLanguageAddData, "selectedLanguageData");
+    // addLanguageJobPost(selectLanguageAddData, languageIds)
+    // setIsConfirmModal(false)
   }
-  const addLanguageJobPost = (body, languageID) => {
-    ApiPost(`job/add?langId=${languageID}`, body)
-      .then((res) => {
-        console.log("res", res);
-        return dispatch(addJobPostSuccess(res))
-      })
-      .catch((err) => dispatch(addJobPostErr(err)))
-  }
+  // const addLanguageJobPost = (body, languageID) => {
+  //   ApiPost(`job/add?langId=${languageID}`, body)
+  //     .then((res) => {
+  //       console.log("res", res);
+  //       return dispatch(addJobPostSuccess(res))
+  //     })
+  //     .catch((err) => dispatch(addJobPostErr(err)))
+  // }
 
   const onDelete = async id => {
     let courseDataDelete =
@@ -259,6 +271,21 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [addJobPostData]);
 
   useEffect(() => {
+    if (addLanguageJobPost && addLanguageJobPost.status === 200) {
+      dispatch(getJobsFilterForMainSuccess(null));
+      toast.success('Jobs Addd successful');
+      //toastAssetsAdd(true)
+      //onHide()
+    }
+  }, [addLanguageJobPost]);
+
+  useEffect(() => {
+    if (addLanguageJobPostError) {
+      toast.error('Something Wrong');
+    }
+  }, [addLanguageJobPostError]);
+
+  useEffect(() => {
     if (addJobPostErr) {
       toast.error('Something Wrong');
     }
@@ -312,6 +339,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       .catch(err => console.log('Error', err));
   };
 
+  useEffect(() => {
+    console.log("getJobFilterData", getJobFilterData,)
+  }, [getJobFilterData])
+
 
   useEffect(() => {
     // if (apply) {
@@ -344,7 +375,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 <>
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
-                      getOneJobDetailByKey(langIds?.hindi, item?.key)
+                      getOneJobDetailByKey(langIds?.hindi, item?.key,item?.id)
                       setSelectedLanguageData(item)
                     }}
                   >
@@ -354,7 +385,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
                       // setSelectedLanguageData(item)
-                      getOneJobDetailByKey(langIds?.marathi, item?.key)
+                      getOneJobDetailByKey(langIds?.marathi, item?.key,item?.id)
+                      setSelectedLanguageData(item)
                     }}
                   >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
@@ -503,7 +535,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
               </Button>
               <Button size="small" type="primary" onClick={() => {
                 // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                languageHandalOk()
+                languageHandalOk(languageIds,ids)
               }} >
                 {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes

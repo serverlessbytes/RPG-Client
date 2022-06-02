@@ -39,8 +39,8 @@ const ThemeLayout = WrappedComponent => {
         //lang:  ""
       };
       this.updateDimensions = this.updateDimensions.bind(this);
-      // const languageData = useSelector(state => state.language.getLanguage)
-      // console.log("languageData",languageData)
+  
+      // console.log("langData",langData)
     }
 
     // componentDidMount() {

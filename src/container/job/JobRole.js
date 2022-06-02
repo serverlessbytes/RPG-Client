@@ -13,10 +13,9 @@ import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
 import ImportJobRole from '../../components/modals/ImportJobRole';
 
-
 const JobRole = () => {
     const { editJobroleSuccess, editJobroleErr, addJobroleSuccess,
-        addJobroleErr, } = actions;
+        addJobroleErr, addBulkJobRolesSuccess, addBulkJobRolesErr } = actions;
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -40,6 +39,25 @@ const JobRole = () => {
     const addJobRoledata = useSelector((state) => state.job.addJobRoleData)
     const addJobRoleError = useSelector((state) => state.job.addJobRoleError)
     const editJobRoleError = useSelector((state) => state.job.editJobRoleError)
+    const importJobRole = useSelector((state) => state.job.importJobRole)
+    const importJobRoleErr = useSelector((state) => state.job.importJobRoleErr)
+
+    useEffect(() => {
+        if (importJobRole && importJobRole.status === 200) {
+            dispatch(addBulkJobRolesSuccess(null))
+            toast.success("Import Job Role successful");
+        }
+        else if (importJobRole && importJobRole.status !== 200) {
+            toast.error("Something wrong");
+        }
+    }, [importJobRole])
+
+    useEffect(() => {
+        if (importJobRoleErr) {
+            dispatch(addBulkJobRolesErr(null))
+            toast.error("Something wrong");
+        }
+    }, [importJobRoleErr])
 
     useEffect(() => {
         if (editJobRoleData && editJobRoleData.status === 200) {

@@ -79,6 +79,10 @@ const actions = {
   ADD_BULK_JOBSROLES_SUCCESS: "ADD_BULK_JOBSROLES_SUCCESS",
   ADD_BULK_JOBSROLES_ERR: "ADD_BULK_JOBROLES_ERR",
 
+  ADD_LANGUAGE_JOBPOST_BEGINE: "ADD_LANGUAGE_JOBPOST_BEGINE",
+  ADD_LANGUAGE_JOBPOST_SUCCESS: "ADD_LANGUAGE_JOBPOST_SUCCESS",
+  ADD_LANGUAGE_JOBPOST_ERR: "ADD_LANGUAGE_JOBPOSTERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -484,6 +488,26 @@ const actions = {
   addBulkJobRolesErr: err => {
     return {
       type: actions.ADD_BULK_JOBSROLES_ERR,
+      err,
+    };
+  },
+
+  addLanguageJobPostBegin: () => {
+    return {
+      type: actions.ADD_LANGUAGE_JOBPOST_BEGINE,
+    };
+  },
+
+  addLanguageJobPostSuccess: data => {
+    return {
+      type: actions.ADD_LANGUAGE_JOBPOST_SUCCESS,
+      data,
+    };
+  },
+
+  addLanguageJobPostErr: err => {
+    return {
+      type: actions.ADD_LANGUAGE_JOBPOST_ERR,
       err,
     };
   },

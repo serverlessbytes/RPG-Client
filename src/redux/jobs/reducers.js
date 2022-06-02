@@ -81,6 +81,10 @@ const {
   ADD_BULK_JOBSROLES_SUCCESS,
   ADD_BULK_JOBSROLES_ERR,
 
+  ADD_LANGUAGE_JOBPOST_BEGINE,
+  ADD_LANGUAGE_JOBPOST_SUCCESS,
+  ADD_LANGUAGE_JOBPOST_ERR,
+
 } = actions;
 
 const initialState = {
@@ -114,6 +118,8 @@ const initialState = {
   addJobCatogeryError: null,
   importJobRole : null,
   importJobRoleErr : null,
+  addLanguageJobPost:null,
+  addLanguageJobPostErr:null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -482,6 +488,24 @@ const jobReducer = (state = initialState, action) => {
         importJobRoleErr: err,
         loading: false,
       };
+
+      case ADD_LANGUAGE_JOBPOST_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case ADD_LANGUAGE_JOBPOST_SUCCESS:
+        return {
+          ...state,
+          addLanguageJobPost: data,
+          loading: false,
+        };
+      case ADD_LANGUAGE_JOBPOST_ERR:
+        return {
+          ...state,
+          addLanguageJobPostErr: err,
+          loading: false,
+        };
 
     default:
       return state;

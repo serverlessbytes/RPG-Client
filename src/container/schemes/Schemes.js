@@ -80,6 +80,9 @@ const Schemes = () => {
     ]
   };
 
+  // useEffect(()=>{
+  // },[])
+
 
   // useEffect(() => {
   //   if (users?.data) {
@@ -111,24 +114,23 @@ const Schemes = () => {
       dispatch(editSchemeSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
       toast.success("Scheme update successful");
-
-      //toastAssetsAdd(true)
-      //onHide()
     }
-    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-    //   dispatch(editSchemeSuccess(null))
-    //   toast.success("Jobs Update successful");
-    // }
   }, [editSchemedata])
+
+  useEffect(() => {
+    if (editSchemeError) {
+      dispatch(editSchemeErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [editSchemeError])
 
   useEffect(() => {
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
     }
-    if (schemeModulData && schemeModulData.status !== 200) {
+    else if (schemeModulData && schemeModulData.status !== 200) {
       toast.error("somthimg went wromg")
-      dispatch(addSchemeInBulk(null))
     }
   }, [schemeModulData])
 
@@ -140,13 +142,6 @@ const Schemes = () => {
       //onHide()
     }
   }, [addSchemeData])
-
-  useEffect(() => {
-    if (editSchemeError) {
-      dispatch(editSchemeErr(null))
-      toast.error("Something Wrong")
-    }
-  }, [editSchemeError])
 
   useEffect(() => {
     if (addSchemeError) {
@@ -310,12 +305,14 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
+    console.log("userForDelete",userForDelete,)
     if (userForDelete) {
       delete userForDelete.key;
       delete userForDelete.updatedAt;
       delete userForDelete.viewCount;
       delete userForDelete.createdAt;
       delete userForDelete.schemeRatings;
+      delete userForDelete.schemeRatingSum;
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,

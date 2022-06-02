@@ -68,6 +68,9 @@ const {
   addBulkJobRolesSuccess,
   addBulkJobRolesErr,
 
+  addLanguageJobPostSuccess,
+  addLanguageJobPostErr,
+
 } = actions;
 
 let per_page, page_num, State, Status, Type, jobrole, search;
@@ -317,4 +320,16 @@ export const addBulkJobRoles = (body) => async (dispatch) => {
       }
     })
     .catch((err) => dispatch(addBulkJobRolesErr(err)))
+}
+
+export const addLanguageJobPost = (languageID, body) => async (dispatch) => {
+  await ApiPost(`job/add?langId=${languageID}`, body)
+      .then((res) => {
+          console.log("res", res);
+           dispatch(addLanguageJobPostSuccess(res))
+          if(res.status === 200){
+              return  dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
+          }
+      })
+      .catch((err) => dispatch(addLanguageJobPostErr(err)))
 }

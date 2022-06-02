@@ -7,7 +7,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { addJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
+import { addJobPost, addLanguageJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
 import actions from "../../redux/jobs/actions";
 import { getStateData } from '../../redux/state/actionCreator';
@@ -15,50 +15,26 @@ import { getDistrictData } from '../../redux/district/actionCreator';
 import RichTextEditor from 'react-rte';
 import { set } from 'js-cookie';
 import { data } from 'browserslist';
+import { ApiPost } from '../../helper/API/ApiData';
 
 
 const AddJobPost = () => {
     const searchParams = new URLSearchParams(window.location.search);
-    const id = searchParams.get('id')
+    const id = searchParams.get('id');
+    const langId = searchParams.get('langid');
     let history = useHistory();
     let dispatch = useDispatch();
     let location = useLocation();
     const { Option } = Select;
     const { TextArea } = Input;
-    const [editJobsID, seteditJobsID] = useState()
-
     const {
         getoneJobPostSuccess, // foe edit
+        addJobPostErr
     } = actions;
-    // function onchange(date, dateString) { //for date    
-    //     console.log(date, dateString);
-    // }
-    // const [typeOfJob, setTypeOfJob] = useState("")
 
-    // const onChange = e => {
-    //     console.log('radio checked', e.target.value);
-    //     setTypeOfJob(e.target.value)
-    // };
-
-    let jobData = useSelector((state) => state.job.jobCatogeryData) //job category
-    let jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
-    let stateData = useSelector((state) => state.state.getStateData) //state
-    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
-    let getEmployerdata = useSelector((state) => state.job.getEmployerData)
-    // const addJobPostData = useSelector((state) => state.job.addJobPostData)
-
-    // useEffect(() => { console.log("addJobPostData", addJobPostData) }, [addJobPostData])
-    useEffect(() => {
-        //console.log("location.search", location.search);
-        if (id) {
-            seteditJobsID(id)
-            dispatch(getoneJobPost(id))
-        }
-    }, [id])
-
-    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
     const [error, setError] = useState({}); // for valadation
-
+    const [editJobsID, seteditJobsID] = useState();
+    // const [langIds, setLangIds] = useState();
     const [state, setState] = useState({
         salary: "",
         benifits: RichTextEditor.createEmptyValue(),
@@ -83,6 +59,25 @@ const AddJobPost = () => {
         jobRole: "",
         key: "",
     });
+
+    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
+    const jobData = useSelector((state) => state.job.jobCatogeryData) //job category
+    const jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
+    const stateData = useSelector((state) => state.state.getStateData) //state
+    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
+    const getEmployerdata = useSelector((state) => state.job.getEmployerData)
+    // const addJobPostData = useSelector((state) => state.job.addJobPostData
+
+    // useEffect(() => { console.log("id", id) }, [id])
+    // useEffect(() => { console.log("langId", langId) }, [langId])
+
+    useEffect(() => {
+        if (id) {
+            seteditJobsID(id)
+            dispatch(getoneJobPost(id))
+        }
+    }, [id])
+
     useEffect(() => {
         dispatch(getJobcategory()) //dispatch job category
     }, [])
@@ -261,15 +256,18 @@ const AddJobPost = () => {
     const onChangesEditorBenifit = (value) => {
         setState({ ...state, benifits: value });
     };
+
     useEffect(() => {
         dispatch(getDistrictData(state.state)) //dipatch district
     }, [state.state]);
+
     const onSubmit = (e) => {
         if (validation()) {
             return;
         }
         let data = {
-            key: uuid(),
+            // key: langId ? getOneJobPostData.data.key : uuid(),
+            // key: uuid(),
             name: state.name,
             state: state.state,
             district: state.district,
@@ -292,9 +290,35 @@ const AddJobPost = () => {
             jobRole: state.jobRole,
             jobType: state.jobType,
         };
-        dispatch(addJobPost(data))
-        onCancel()
+        if (langId) {
+            data = {
+                ...data,
+                key: getOneJobPostData.data.key,
+                jobRole: getOneJobPostData.data.jobRole.id,
+                jobType: getOneJobPostData.data.jobType.id,
+                name: getOneJobPostData.data.name.id,
+                state: getOneJobPostData.data.state.id,
+                district: getOneJobPostData.data.district.id,
+            }
+            dispatch(addLanguageJobPost(langId, data))
+            // addLanguageJobPost(langId, data)
+        }
+        else {
+            data = { ...data, key: uuid() }
+            dispatch(addJobPost(data))
+        }
+        onCancel();
     };
+
+    // const addLanguageJobPost = (languageID, body) => {
+    //     ApiPost(`job/add?langId=${languageID}`, body)
+    //         .then((res) => {
+    //             console.log("res", res);
+    //             return dispatch(addJobPostSuccess(res))
+    //         })
+    //         .catch((err) => dispatch(addJobPostErr(err)))
+    // }
+
     const onEdit = () => {
         let data = {
             id: editJobsID,
@@ -324,11 +348,6 @@ const AddJobPost = () => {
         dispatch(editJobPost(data));
         onCancel()
     }
-    //  useEffect(() => {
-    // return(() =>{
-    //     dispatch(editJobPost(data));
-    // }) 
-    // }, [])
 
     const onCancel = () => {
         history.push(`/admin/job/post`);
@@ -338,8 +357,6 @@ const AddJobPost = () => {
             dispatch(getoneJobPostSuccess([]))
         })
     }, [])
-
-
 
     return (
         <>
@@ -768,12 +785,18 @@ const AddJobPost = () => {
                         </Form>
                         <div className="sDash_form-action mt-20">
 
-                            {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
+                            {editJobsID && !langId ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
                                     Add
                                 </Button>
                             }
+                            {/* { langId ?  <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
+                                    Add
+                                </Button> : <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
+                                    Add
+                                </Button>
+                            } */}
 
                             <Button
                                 className="btn-signin"

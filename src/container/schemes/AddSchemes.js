@@ -75,8 +75,8 @@ const AddSchemes = () => {
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
         name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.name,
-        schemeBenifit: getOneScHemeData.schemeBenifit.name,
+        schemeCategory: getOneScHemeData.schemeCategory.id,//name
+        schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
         locations: getOneScHemeData.locations.map(item => item.id),
         website: getOneScHemeData.website,
         type: getOneScHemeData.type,
