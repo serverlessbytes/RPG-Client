@@ -340,11 +340,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   };
 
   useEffect(() => {
-    console.log("getJobFilterData", getJobFilterData,)
-  }, [getJobFilterData])
-
-
-  useEffect(() => {
     // if (apply) {
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {

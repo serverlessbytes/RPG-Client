@@ -265,7 +265,6 @@ export const updateIsHired = (id, value) => async (dispatch) => {
 export const addJobApplication = (body) => async (dispatch) => {
   await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
-      //console.log("res",res)
       return dispatch(addJobApplicationSuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })

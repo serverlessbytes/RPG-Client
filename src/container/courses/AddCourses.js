@@ -30,12 +30,21 @@ const AddCourses = () => {
 
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
-  const langId = searchParams.get('langId');
+  // const langid = searchParams.get('langid');
+  const langId = searchParams.get('langid');
   const key = searchParams.get('key');
   const history = useHistory();
   const { Option } = Select;
   const { TextArea } = Input;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("langId", langId)
+  }, [langId])
+
+  useEffect(() => {
+    console.log("id", id)
+  }, [id])
 
   const {
     addSwayamPartnerCourseSuccess,
@@ -75,7 +84,7 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      sequence: '',
+      // sequence: '',
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: '',
@@ -133,9 +142,16 @@ const AddCourses = () => {
     }
   }, [userData]);
 
+  // useEffect(()=>{
+  //   console.log("-------",addSwayamCourseData)
+  // },[addSwayamCourseData])
+
   useEffect(() => {
     if (addSwayamCourseData && 'data' in addSwayamCourseData) {
-      moduleState[0].course = addSwayamCourseData.data.id;
+      // moduleState[0].course = addSwayamCourseData.data.id;
+      // moduleState[0].course = addSwayamCourseData.data.id;
+      moduleState.course = addSwayamCourseData.data.id;
+      // console.log("==========",moduleState[0].course)
     }
   }, [addSwayamCourseData]);
 
@@ -332,7 +348,7 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      sequence: null,
+      // sequence: null,
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: userData && userData.data && userData.data.id,
@@ -366,25 +382,23 @@ const AddCourses = () => {
       return;
     }
 
-    const newData = moduleState
-      .filter(item => !item.moduleId)
-      .map(item => {
-        return {
-          key: item.key,
-          name: item.name,
-          detail: item.detail,
-          duration: moment(item.duration).format('HH:mm:ss'),
-          videoUrl: item.videoUrl,
-          sequence: parseInt(item.sequence),
-          course: item.course,
-          language: item.language,
-          createdByUser: item.createdByUser,
-          modifiedByUser: item.modifiedByUser,
-        };
-      });
+    const newData = moduleState.filter(item => !item.moduleId).map(item => {
+      console.log("item", item)
+      return {
+        key: item.key,
+        name: item.name,
+        detail: item.detail,
+        duration: moment(item.duration).format('HH:mm:ss'),
+        videoUrl: item.videoUrl,
+        // sequence: parseInt(item.sequence),
+        course: item.course,
+        language: item.language,
+        createdByUser: item.createdByUser,
+        modifiedByUser: item.modifiedByUser,
+      };
+    });
     dispatch(addSwayamCourseModule(newData));
     history.push('/admin/courses')
-
   };
 
   const onModuleEdit = () => {
@@ -637,7 +651,7 @@ const AddCourses = () => {
                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
               </div>
               <div className="sDash_form-action mt-20">
-                {id ? (
+                {id && !langId ? (
                   <Button className="btn-signin ml-10" onClick={() => onEdit()} type="primary" size="medium">
                     Edit
                   </Button>
@@ -835,6 +849,7 @@ const AddCourses = () => {
                     Add
                   </Button>
                 }
+
                 <Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
                   Submit
                 </Button>

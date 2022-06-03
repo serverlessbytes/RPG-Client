@@ -77,10 +77,10 @@ export const editCategoryData = (body) => async (dispatch) => {
     })
 }
 
-export const addPartnerCourse = (body) => async (dispatch) => {
+export const addPartnerCourse = (body,langId) => async (dispatch) => {
   console.log("LANG ID", AuthStorage.getStorageData(STORAGEKEY.language));
   console.log("BODY", body);
-  await ApiPost(`course/addPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, body)
+  await ApiPost(`course/addPartnerCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, body)
     .then((res) => {
       return dispatch(addPartnerCourseSuccess(res))
       //return dispatch(getCoursefilter(categoryId,perPage,pageNumber,mode,inactive))
@@ -149,8 +149,8 @@ export const editSwayamCourse = (data) => async (dispatch) => {
     })
 }
 
-export const addSwayamCourseModule = (data) => async (dispatch) => {
-  await ApiPost(`course/addSwayamCourseModule?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+export const addSwayamCourseModule = (data,langId) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourseModule?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSwayamCourseModuleSuccess(res))
     })

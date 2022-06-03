@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { addUserSignup, editProfile, getOneUser } from '../../redux/users/actionCreator';
 import { addJobApplication, allJobs } from '../../redux/jobs/actionCreator';
-// import actions from "../../redux/job/actions";
 
 const AddJobApplication = () => {
 
@@ -48,14 +47,6 @@ const AddJobApplication = () => {
     const [error, setError] = useState({})
 
     const allJobsData = useSelector((state) => state.job.allJobs)
-
-    useEffect(() => {
-        console.log("allJobsData", allJobsData);
-    }, [allJobsData])
-
-    // useEffect(() => {
-    //     console.log("jobApplication", jobApplication);
-    // }, [jobApplication])
 
     useEffect(() => {
         dispatch(allJobs())

@@ -124,7 +124,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
       dispatch(addSwayamCourseModuleSuccess(null));
-      toast.success('Swayam Course Import successful');
+      toast.success('Swayam Course Add successful');
     }
   }, [addSwayamCourseModuleData]);
 
@@ -367,25 +367,25 @@ const SwayamCourses = () => {
     setIsConfirmModal(false)
   }
   const languageHandalOk = () => {
-    // history.push(`${path}/addcourses?langid=${languageId}&?id=${id}`);
+    history.push(`${path}/addcourses?langid=${languageId}&id=${id}`);
     // console.log("handleOk---------*");
     // console.log("languageId-------------",languageId);
     // console.log("ID-------------",id);
-    
-    let selectLanguageAddData = {
-      key: selectedLanguageData.key,
-      detail: selectedLanguageData.detail,
-      name: selectedLanguageData.name,
-      categoryId: selectedLanguageData.courseCategory.id,
-      duration: selectedLanguageData.duration,
-      jobCategoryIds: selectedLanguageData.jobTypes.map((item) => item.id),
-      certification: selectedLanguageData.certificate,
-      mode: selectedLanguageData.mode,
-      thumbnail: selectedLanguageData.thumbnail,
-    };
+
+    // let selectLanguageAddData = {
+    //   key: selectedLanguageData.key,
+    //   detail: selectedLanguageData.detail,
+    //   name: selectedLanguageData.name,
+    //   categoryId: selectedLanguageData.courseCategory.id,
+    //   duration: selectedLanguageData.duration,
+    //   jobCategoryIds: selectedLanguageData.jobTypes.map((item) => item.id),
+    //   certification: selectedLanguageData.certificate,
+    //   mode: selectedLanguageData.mode,
+    //   thumbnail: selectedLanguageData.thumbnail,
+    // };
     // console.log("selectLanguage =====>", selectLanguageAddData);
-    dispatch(addSwayamCourse(selectLanguageAddData,languageId))
-    setIsConfirmModal(false)
+    // dispatch(addSwayamCourse(selectLanguageAddData,languageId))
+    // setIsConfirmModal(false)
   }
 
   const onClick = ({ key }) => {
@@ -487,15 +487,15 @@ const SwayamCourses = () => {
                 {/* <div className="table-actions"> */}
                 <>
                   <Button size="small" type="primary" shape='round' onClick={() => {
-                    setSelectedLanguageData(item)
-                    getOneCourseDetailByKey(langIds?.hindi, item?.key,item?.id)
+                    // setSelectedLanguageData(item)
+                    getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                   }}>
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     HN
                   </Button>
                   <Button size="small" type="primary" shape='round' onClick={() => {
-                    selectedLanguageData(item)
-                    getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
+                    // selectedLanguageData(item)
+                    getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }} >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT

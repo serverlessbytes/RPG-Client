@@ -98,8 +98,8 @@ export const getSchemeBenifits = () => async dispatch => {
     .catch(err => dispatch(getSchemeBenifitsErr(err)));
 };
 
-export const addSchemeData = data => async dispatch => {
-  await ApiPost(`scheme/addScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+export const addSchemeData = (data,langID) => async dispatch => {
+  await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then(res => {
       return dispatch(addSchemeSuccess(res));
     })

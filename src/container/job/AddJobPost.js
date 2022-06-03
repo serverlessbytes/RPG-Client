@@ -258,7 +258,10 @@ const AddJobPost = () => {
     };
 
     useEffect(() => {
-        dispatch(getDistrictData(state.state)) //dipatch district
+        if (state.state) {
+
+            dispatch(getDistrictData(state.state)) //dipatch district
+        }
     }, [state.state]);
 
     const onSubmit = (e) => {

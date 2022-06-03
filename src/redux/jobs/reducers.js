@@ -120,6 +120,7 @@ const initialState = {
   importJobRoleErr : null,
   addLanguageJobPost:null,
   addLanguageJobPostErr:null,
+  addJobsApplicationErr : null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -431,7 +432,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOB_APPLICATION_ERR:
       return {
         ...state,
-        error: err,
+        addJobsApplicationErr: err,
         loading: false,
       };
 

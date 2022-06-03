@@ -20,8 +20,18 @@ import { useHistory, useLocation, useRouteMatch } from 'react-router';
 const AddSchemes = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('key');
+  const langId = searchParams.get('langid');
+  const ids = searchParams.get('id');
   let history = useHistory();
   let location = useLocation();
+
+  useEffect(()=>{
+    console.log("langid",langId)
+  },[langId])
+
+  useEffect(()=>{
+    console.log("ids",ids)
+  },[ids])
 
   const dispatch = useDispatch();
   const { Option } = Select;
@@ -95,10 +105,6 @@ const AddSchemes = () => {
       });
     }
   }, [getOneScHemeData]);
-
-  useEffect(() => {
-    console.log('STATE', state);
-  }, [state]);
 
   const onChangesEditorBenifit = value => {
     setState({ ...state, benifitLine: value });
@@ -303,7 +309,7 @@ const AddSchemes = () => {
     };
     console.log('data', state);
     if (!location.search) {
-      dispatch(addSchemeData(data));
+      dispatch(addSchemeData(data,langId));
       // history.push(`${path}/scheme`)
       history.push(`/admin/scheme`);
     } else {
@@ -582,7 +588,7 @@ const AddSchemes = () => {
 
           <div className="sDash_form-action mt-20">
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>
-              {id ? 'Edit' : 'Add'}
+              {id && !langId ? 'Edit' : 'Add'}
             </Button>
             <Button className="btn-signin" type="light" size="medium" onClick={() => history.push(`/admin/scheme`)}>
               Cancel

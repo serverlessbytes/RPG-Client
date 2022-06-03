@@ -66,6 +66,9 @@ const PartnerCourses = () => {
     hindi: '',
     marathi: ''
   });
+  const [languageID, setLanguageIds] = useState();
+  const [id, setID] = useState();
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -153,7 +156,7 @@ const PartnerCourses = () => {
   }, [editPartnerCourseError]);
 
 
-  const getOneCourseDetailByKey = async (languageId, key) => {
+  const getOneCourseDetailByKey = async (languageId, key, id) => {
     await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
         if (res.status === 200) {
@@ -163,6 +166,8 @@ const PartnerCourses = () => {
       .catch((e) => {
         if (e.response.status) {
           setIsConfirmModal(true)
+          setLanguageIds(languageId);
+          setID(id)
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
@@ -186,34 +191,37 @@ const PartnerCourses = () => {
   }
 
   const languageHandalOk = () => {
-    console.log("languageHandalOk ---------");
-    console.log("langId------------", langIds);
-    console.log("langId------------", langIds.hindi);
-    let selectLanguageAddData = {
-      key: selectedLanguageData.key,
-      name: selectedLanguageData.name,
-      organization: selectedLanguageData.organization,
-      detail: selectedLanguageData.detail,
-      certificationBody: selectedLanguageData.certificationBody,
-      eligibility: selectedLanguageData.eligibility,
-      component: selectedLanguageData.component,
-      contactPersonName: selectedLanguageData.contactPersonName,
-      contactPersonEmail: selectedLanguageData.contactPersonEmail,
-      contactPersonPhone: selectedLanguageData.contactPersonPhone,
-      pincode: selectedLanguageData.pincode,
-      location: selectedLanguageData.location,
-      duration: selectedLanguageData.duration,
-      categoryId: selectedLanguageData.courseCategory.id,
-      state: selectedLanguageData.state,
-      district: selectedLanguageData.district,
-      mode: selectedLanguageData.mode,
-      certification: selectedLanguageData.certificate,
-      // categoryId: selectedLanguageData.id,
-      thumbnail: selectedLanguageData.thumbnail
-    };
-    console.log("selectedLanguageData", selectLanguageAddData);
-    addLanguagePartnerCourses(selectLanguageAddData, langIds.hindi)
-    setIsConfirmModal(false)
+
+    history.push(`${path}/addpartnercourses?langid=${languageID}&id=${id}`);
+
+    // console.log("languageHandalOk ---------");
+    // console.log("languageID------------", languageID);
+    // console.log("id------------",id);
+    // let selectLanguageAddData = {
+    //   key: selectedLanguageData.key,
+    //   name: selectedLanguageData.name,
+    //   organization: selectedLanguageData.organization,
+    //   detail: selectedLanguageData.detail,
+    //   certificationBody: selectedLanguageData.certificationBody,
+    //   eligibility: selectedLanguageData.eligibility,
+    //   component: selectedLanguageData.component,
+    //   contactPersonName: selectedLanguageData.contactPersonName,
+    //   contactPersonEmail: selectedLanguageData.contactPersonEmail,
+    //   contactPersonPhone: selectedLanguageData.contactPersonPhone,
+    //   pincode: selectedLanguageData.pincode,
+    //   location: selectedLanguageData.location,
+    //   duration: selectedLanguageData.duration,
+    //   categoryId: selectedLanguageData.courseCategory.id,
+    //   state: selectedLanguageData.state,
+    //   district: selectedLanguageData.district,
+    //   mode: selectedLanguageData.mode,
+    //   certification: selectedLanguageData.certificate,
+    //   // categoryId: selectedLanguageData.id,
+    //   thumbnail: selectedLanguageData.thumbnail
+    // };
+    // console.log("selectedLanguageData", selectLanguageAddData);
+    // addLanguagePartnerCourses(selectLanguageAddData, langIds.hindi)
+    // setIsConfirmModal(false)
   }
   const addLanguagePartnerCourses = (body, languageID) => {
     ApiPost(`course/addPartnerCourse?langId=${languageID}&mode=PARTNER`, body)
@@ -367,9 +375,9 @@ const PartnerCourses = () => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-          console.log("courseData", courseData)
+         
           let courseRatings = item.courseRatings.map(item => item.rating)
-          console.log("courseRating", courseRatings)
+          
 
           var sum = 0;
 
@@ -413,8 +421,8 @@ const PartnerCourses = () => {
                   <>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                        console.log("lof ============>", item);
-                        getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                       
+                        getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                         setSelectedLanguageData(item)
                       }}
                     >
@@ -423,8 +431,8 @@ const PartnerCourses = () => {
                     </Button>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                        console.log("lof ============>", item);
-                        getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                        
+                        getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
                       }}
                     >
                       {/* <FeatherIcon icon="edit" size={16} /> */}

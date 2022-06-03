@@ -10,6 +10,9 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useHistory, useRouteMatch } from 'react-router';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import actions from "../../redux/jobs/actions";
 
 const JobApplication = () => {
 
@@ -20,10 +23,14 @@ const JobApplication = () => {
     const [pageNumber, setPageNumber] = useState(1)
     const { path } = useRouteMatch();
     const history = useHistory();
+    const { addJobApplicationSuccess,
+        addJobApplicationErr } = actions;
 
     const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const jobcatogerydata = useSelector((state) => state.job.jobCatogeryData)
+    const addJobsApplicationdata = useSelector((state) => state.job.addJobsApplicationData)
+    const addJobsApplicationError = useSelector((state) => state.job.addJobsApplicationErr)
 
     // useEffect(() => { console.log("jobcatogerydata", jobcatogerydata) }, [jobcatogerydata])
 
@@ -31,6 +38,27 @@ const JobApplication = () => {
         setStatus(key);
         setPageNumber(1)
     }
+
+    useEffect(() => {
+        if (addJobsApplicationdata && addJobsApplicationdata.status === 200) {
+            dispatch(addJobApplicationSuccess(null))
+            toast.success("Jobs Application Add successful")
+        }
+        else if (addJobsApplicationdata && addJobsApplicationdata.status !== 200){
+             toast.error("Something Wrong");
+        }
+    },[addJobsApplicationdata])
+
+    useEffect(() => {
+        if(addJobsApplicationError){
+            dispatch(addJobApplicationErr(null))
+            toast.error("Something Wrong")
+        }
+    },[addJobsApplicationError])
+
+    useEffect(() => {
+        console.log("addJobsApplicationData", addJobsApplicationdata);
+    }, [addJobsApplicationdata])
 
     useEffect(() => {
         if (status !== "all") {

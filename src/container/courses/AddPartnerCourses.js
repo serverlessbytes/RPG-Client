@@ -17,18 +17,22 @@ import { getDistrictData } from '../../redux/district/actionCreator';
 const AddPartnerCourses = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id')
+    const langid = searchParams.get('langid')
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
     let dispatch = useDispatch();
+    const { Option } = Select;
+    const { TextArea } = Input;
 
     const editOneFilterData = useSelector(state => state.category.editFilterData);
     const stateData = useSelector((state) => state.state.getStateData);
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
     const catdata = useSelector(state => state.category.categoryData);
 
-    useEffect(() => { console.log("stateData", stateData) }, [stateData])
-    useEffect(() => { console.log("diStrictdata", diStrictdata) }, [diStrictdata])
+    useEffect(() => { console.log("id", id) }, [id])
+    useEffect(() => { console.log("langid", langid) }, [langid])
+
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
         name: '',
@@ -52,9 +56,6 @@ const AddPartnerCourses = () => {
         key: '',
         thumbnail: ''
     });
-
-
-
     const [editPartnerCourseID, setEditPartnerCourseID] = useState()
 
     useEffect(() => {
@@ -66,19 +67,18 @@ const AddPartnerCourses = () => {
     }, []);
 
     useEffect(() => {
-        dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
+        if (state.state) {
+
+            dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
+        }
     }, [state.state]);
 
     useEffect(() => {
         if (location.search) {
-            dispatch(getOneCoursefilter(location.search.split('=')[1]));
+            dispatch(getOneCoursefilter(id));
             setEditPartnerCourseID(location.search.split('=')[1])
         }
     }, [location.search])
-
-    useEffect(() => {
-        console.log("editPartnerCourseID", editPartnerCourseID);
-    }, [editPartnerCourseID])
 
     useEffect(() => {
         if (editOneFilterData && editOneFilterData.data && id) {
@@ -216,8 +216,36 @@ const AddPartnerCourses = () => {
             mode: state.mode,
             thumbnail: state.thumbnail
         };
-        dispatch(addPartnerCourse(data));
-        history.push(`/admin/courses/partnercourses`);
+        if (!langid) {
+            dispatch(addPartnerCourse(data));
+            history.push(`/admin/courses/partnercourses`);
+        }
+        else {
+            let selectLanguageAddData = {
+                key: editOneFilterData.data.key,
+                name: state.name,
+                organization: state.organiZation,
+                detail: state.detail,
+                certificationBody: state.certificationBody,
+                eligibility: state.eligiBility,
+                component: state.component,
+                contactPersonName: state.contactpersonname,
+                contactPersonEmail: state.contactpersonemail,
+                contactPersonPhone: state.contactpersonphone,
+                pincode: state.pincode,
+                location: state.locations,
+                duration: state.duration,
+                categoryId: editOneFilterData.data.courseCategory.id,
+                state: state.state,
+                district: state.district,
+                mode: state.mode,
+                certification: state.Certification,
+                thumbnail: state.thumbnail
+            };
+            dispatch(addPartnerCourse( selectLanguageAddData,langid));
+            history.push(`/admin/courses/partnercourses`);
+        }
+
     };
 
     const onEdit = () => {
@@ -294,7 +322,7 @@ const AddPartnerCourses = () => {
     };
 
 
-    const { Option } = Select;
+
     // const [typeOfJob, setTypeOfJob] = useState("");
 
     // const onChange = e => {
@@ -302,7 +330,7 @@ const AddPartnerCourses = () => {
     //     setTypeOfJob(e.target.value)
     // };
     // console.log("----",typeOfJob);
-    const { TextArea } = Input;
+
     return (
         <>
             <PageHeader ghost
@@ -553,7 +581,7 @@ const AddPartnerCourses = () => {
                         </Col>
                     </Row>
                     <div className="sDash_form-action mt-20">
-                        {editPartnerCourseID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
+                        {editPartnerCourseID && !langid ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                             Edit
                         </Button> : <Button className="btn-signin ml-10" type="primary" onClick={e => onsubmit(e)} size="medium">
                             Add

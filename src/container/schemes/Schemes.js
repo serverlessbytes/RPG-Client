@@ -51,11 +51,14 @@ const Schemes = () => {
   const [schemeTableData, setSchemeTableData] = useState();
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
+  const [languageIds, setLanguageIds] = useState();
+  const [id, setId] = useState();
 
   const [langIds, setLangIds] = useState({
     hindi: "",
     marathi: "",
   })
+
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   const languageData = useSelector(state => state.language.getLanguageData);
   const users = useSelector(state => state.scheme.getAllSchemeData);
@@ -79,10 +82,6 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
-
-  // useEffect(()=>{
-  // },[])
-
 
   // useEffect(() => {
   //   if (users?.data) {
@@ -165,7 +164,7 @@ const Schemes = () => {
     setLangIds(temp);
   }, [languageData])
 
-  const getOneSchemeDetailByKey = async (languageId, key) => {
+  const getOneSchemeDetailByKey = async (languageId, key, id) => {
     await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
       .then((res) => {
         console.log("res", res);
@@ -176,37 +175,44 @@ const Schemes = () => {
       .catch((e) => {
         if (e.response.status) {
           setIsConfirmModal(true)
+          setLanguageIds(languageId);
+          setId(id)
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
   }
+  
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
-  const languageHandalOk = () => {
 
-    let selectLanguageAddData = {
-      key: selectedLanguageData.key,
-      benifitLine: selectedLanguageData.benifitLine,
-      detail: selectedLanguageData.detail,
-      howToApply: selectedLanguageData.howToApply,
-      documentation: selectedLanguageData.documentation,
-      name: selectedLanguageData.name,
-      locations: selectedLanguageData.locations.map((item) => item.id),
-      schemeCategory: selectedLanguageData.schemeCategory.id,
-      schemeBenifit: selectedLanguageData.schemeBenifit.id,
-      website: selectedLanguageData.website,
-      type: selectedLanguageData.type,
-      benificiary: selectedLanguageData.benificiary,
-      grievanceRedress: selectedLanguageData.grievanceRedress,
-      elink: selectedLanguageData.elink,
-      spoc: selectedLanguageData.spoc,
-      isActive: selectedLanguageData.isActive,
-      videoUrl: selectedLanguageData.videoUrl,
-      thumbnail: selectedLanguageData.thumbnail,
-    };
-    setIsConfirmModal(false)
-    dispatch(addSchemeData(selectLanguageAddData, langIds.hindi))
+  const languageHandalOk = () => {
+    history.push(`${path}/addscheme?langid=${languageIds}&id=${id}`);
+    // history.push(`${path}/addscheme?id=${id}&langid=${languageIds}`);
+    // let selectLanguageAddData = {
+    //   key: selectedLanguageData.key,
+    //   benifitLine: selectedLanguageData.benifitLine,
+    //   detail: selectedLanguageData.detail,
+    //   howToApply: selectedLanguageData.howToApply,
+    //   documentation: selectedLanguageData.documentation,
+    //   name: selectedLanguageData.name,
+    //   locations: selectedLanguageData.locations.map((item) => item.id),
+    //   schemeCategory: selectedLanguageData.schemeCategory.id,
+    //   schemeBenifit: selectedLanguageData.schemeBenifit.id,
+    //   website: selectedLanguageData.website,
+    //   type: selectedLanguageData.type,
+    //   benificiary: selectedLanguageData.benificiary,
+    //   grievanceRedress: selectedLanguageData.grievanceRedress,
+    //   elink: selectedLanguageData.elink,
+    //   spoc: selectedLanguageData.spoc,
+    //   isActive: selectedLanguageData.isActive,
+    //   videoUrl: selectedLanguageData.videoUrl,
+    //   thumbnail: selectedLanguageData.thumbnail,
+    //   // id : selectedLanguageData.id,
+    // };
+    // console.log("selectLanguageAddData",selectLanguageAddData)
+    // setIsConfirmModal(false)
+    // dispatch(addSchemeData(selectLanguageAddData, languageIds))
   }
 
 
@@ -305,7 +311,7 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
-    console.log("userForDelete",userForDelete,)
+    console.log("userForDelete", userForDelete,)
     if (userForDelete) {
       delete userForDelete.key;
       delete userForDelete.updatedAt;
@@ -510,7 +516,7 @@ const Schemes = () => {
                 <Button size="small" type="primary" shape='round'
                   onClick={() => {
                     setSelectedLanguageData(item)
-                    getOneSchemeDetailByKey(langIds?.hindi, item?.key)
+                    getOneSchemeDetailByKey(langIds?.hindi, item?.key, item?.id)
                   }}
                 >
                   {/* <FeatherIcon icon="edit" size={16} /> */}
@@ -519,7 +525,7 @@ const Schemes = () => {
 
                 <Button size="small" type="primary" shape='round'
                   onClick={() => {
-                    getOneSchemeDetailByKey(langIds?.marathi, item?.key)
+                    getOneSchemeDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }}
                 >
                   {/* <FeatherIcon icon="edit" size={16} /> */}
