@@ -72,7 +72,7 @@ const SwayamCourses = () => {
   const [perPage, setPerPage] = useState(20);// forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
-  const [usertable, setUsertable] = useState([]);
+  const [SwayamCourse, setSwayamCoursetable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
   const [importModal, setImportModal] = useState(false);
   const [state, setState] = useState('');
@@ -84,6 +84,8 @@ const SwayamCourses = () => {
     hindi: '',
     marathi: ''
   });
+  const [languageId, setLanguageID] = useState()
+  const [id, setID] = useState() //
 
   const header = [
     { label: 'id', key: 'id' },
@@ -98,6 +100,10 @@ const SwayamCourses = () => {
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
+
+  // useEffect(()=>{
+  //   console.log("languageId",languageId)
+  // },[languageId])
 
   useEffect(() => {
     if (state.length && exportTog) {
@@ -336,7 +342,7 @@ const SwayamCourses = () => {
     });
   };
 
-  const getOneCourseDetailByKey = async (languageId, key) => {
+  const getOneCourseDetailByKey = async (languageId, key, id) => {
     await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
         //  dispatch(editCategoryRatingSuccess(res))
@@ -349,7 +355,9 @@ const SwayamCourses = () => {
       })
       .catch(e => {
         if (e.response.status) {
-          setIsConfirmModal(true)
+          setIsConfirmModal(true);
+          setLanguageID(languageId);
+          setID(id);
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
@@ -359,8 +367,11 @@ const SwayamCourses = () => {
     setIsConfirmModal(false)
   }
   const languageHandalOk = () => {
+    // history.push(`${path}/addcourses?langid=${languageId}&?id=${id}`);
     // console.log("handleOk---------*");
-    // console.log("langIds-------------", langIds.hindi);
+    // console.log("languageId-------------",languageId);
+    // console.log("ID-------------",id);
+    
     let selectLanguageAddData = {
       key: selectedLanguageData.key,
       detail: selectedLanguageData.detail,
@@ -373,7 +384,7 @@ const SwayamCourses = () => {
       thumbnail: selectedLanguageData.thumbnail,
     };
     // console.log("selectLanguage =====>", selectLanguageAddData);
-    dispatch(addSwayamCourse(selectLanguageAddData, langIds.hindi))
+    dispatch(addSwayamCourse(selectLanguageAddData,languageId))
     setIsConfirmModal(false)
   }
 
@@ -419,7 +430,7 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     if (courseData && courseData.data) {
-      setUsertable(
+      setSwayamCoursetable(
         courseData.data?.data?.map(item => {
           let courseRatings = item.courseRatings.map(item => item.rating)
           var sum = 0;
@@ -477,14 +488,14 @@ const SwayamCourses = () => {
                 <>
                   <Button size="small" type="primary" shape='round' onClick={() => {
                     setSelectedLanguageData(item)
-                    getOneCourseDetailByKey(langIds?.hindi, item?.key)
+                    getOneCourseDetailByKey(langIds?.hindi, item?.key,item?.id)
                   }}>
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     HN
                   </Button>
                   <Button size="small" type="primary" shape='round' onClick={() => {
                     selectedLanguageData(item)
-                    getOneCourseDetailByKey(langIds?.marathi, item?.key)
+                    getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
                   }} >
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT
@@ -541,7 +552,7 @@ const SwayamCourses = () => {
     }
   }, [courseData]);
 
-  const usersTableColumns = [
+  const swayamCourseTableColumns = [
     {
       title: 'Course Name',
       dataIndex: 'CourseName',
@@ -725,8 +736,8 @@ const SwayamCourses = () => {
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usertable}
-                        columns={usersTableColumns}
+                        dataSource={SwayamCourse}
+                        columns={swayamCourseTableColumns}
                         // pagination={{
                         //   defaultPageSize: 15,
                         //   total: usersTableData.length,
@@ -772,8 +783,8 @@ const SwayamCourses = () => {
 
                       <Table
                         // rowSelection={rowSelection}
-                        dataSource={usertable}
-                        columns={usersTableColumns}
+                        dataSource={SwayamCourse}
+                        columns={swayamCourseTableColumns}
                         // pagination={{
                         //   defaultPageSize: 15,
                         //   total: usersTableData.length,

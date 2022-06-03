@@ -180,7 +180,7 @@ const JobRole = () => {
         if (!selectedJobRole) {
             data = {
                 ...data,
-                key: [uuid()]
+                key: uuid()
             }
             dispatch(addJobrole(data))
         } else {
