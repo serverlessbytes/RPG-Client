@@ -113,6 +113,7 @@ export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive,
 
 export const getOneCoursefilter = (id) => async (dispatch) => {
   await ApiGet(`course/getCourse/${id}?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  // await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(editCoursefilterSuccess(res))
     })
