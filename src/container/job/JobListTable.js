@@ -27,7 +27,7 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
   const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess,
-    addLanguageJobPostErr, } = actions;
+    addLanguageJobPostErr, editJobPostErr } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -57,7 +57,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
   const addJobPostErr = useSelector(state => state.job.addJobPostErr); //fetch for tostify from reducer for jobposterror
-  const editJobPostErr = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
+  const editJobPostError = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
   const addLanguageJobPost = useSelector(state => state.job.addLanguageJobPost);
   const addLanguageJobPostError = useSelector(state => state.job.addLanguageJobPostErr);
@@ -103,10 +103,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
     // history.push(`/admin/job/new?id=${id}`);
-    console.log("languageIds",languageIds);
-    console.log("langIds", langIds);
-    console.log("ids", ids);
-    console.log("langIds.hindi", langIds.hindi);
+
     // let selectLanguageAddData = {
     //   key: selectedLanguageData.key,
     //   name: selectedLanguageData.name.id,
@@ -292,10 +289,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [addJobPostErr]);
 
   useEffect(() => {
-    if (editJobPostErr) {
+    if (editJobPostError) {
+      dispatch(editJobPostErr(null))
       toast.error('Something Wrong');
     }
-  }, [editJobPostErr]);
+  }, [editJobPostError]);
 
   useEffect(() => {
     if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {

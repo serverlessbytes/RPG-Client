@@ -153,6 +153,7 @@ const JobPost = ({ match }) => {
         type?.type ? type?.type : '',
         jobRole?.jobRole ? jobRole?.jobRole : '',
         status,
+        search,
       ),
     );
     setExportTog(true);

@@ -148,9 +148,9 @@ export const getJobPost = (perPage, pageNumber) => async (dispatch) => {
     .catch((err) => dispatch(getJobPostErr(err)))
 }
 
-export const editJobPost = (data) => async (dispatch) => {
-  let id = data.id
-  delete data.id
+export const editJobPost = (id,data) => async (dispatch) => {
+  // let id = data.id
+  // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
       dispatch(editJobPostSuccess(res))

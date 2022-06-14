@@ -69,7 +69,7 @@ const AddJobPost = () => {
     // const addJobPostData = useSelector((state) => state.job.addJobPostData
 
     // useEffect(() => { console.log("id", id) }, [id])
-    // useEffect(() => { console.log("langId", langId) }, [langId])
+    useEffect(() => { console.log("getOneJobPostData", getOneJobPostData) }, [getOneJobPostData])
 
     useEffect(() => {
         if (id) {
@@ -95,33 +95,33 @@ const AddJobPost = () => {
     }, []);
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData.data) {
+        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
-                key: getOneJobPostData.data.key,
-                salary: getOneJobPostData.data.salary,
-                benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.benifits, 'markdown'),
+                key: getOneJobPostData.data.data.key,
+                salary: getOneJobPostData.data.data.salary,
+                benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData?.data?.name?.name,
-                state: getOneJobPostData?.data?.state?.id,
-                district: getOneJobPostData?.data?.district?.id,
-                town: getOneJobPostData.data.town,
-                pincode: getOneJobPostData.data.pincode,
-                description: getOneJobPostData.data.description,
-                vacancies: getOneJobPostData.data.vacancies,
-                reqExperience: getOneJobPostData.data.reqExperience,
-                requirements: getOneJobPostData.data.requirements,
-                jobType: getOneJobPostData.data.jobType?.name,
+                name: getOneJobPostData?.data?.data.name?.name,
+                state: getOneJobPostData?.data?.data.state?.id,
+                district: getOneJobPostData?.data?.data.district?.id,
+                town: getOneJobPostData.data.data.town,
+                pincode: getOneJobPostData.data.data.pincode,
+                description: getOneJobPostData.data.data.description,
+                vacancies: getOneJobPostData.data.data.vacancies,
+                reqExperience: getOneJobPostData.data.data.reqExperience,
+                requirements: getOneJobPostData.data.data.requirements,
+                jobType: getOneJobPostData.data.data.jobType?.name,
                 isActive: true,
-                shifts: getOneJobPostData.data.shifts,
-                email: getOneJobPostData.data.email,
-                phone: getOneJobPostData.data.phone,
-                type: getOneJobPostData.data.type,
-                extraType: getOneJobPostData.data.extraType,
-                startDate: moment(getOneJobPostData.data.startDate),
-                endDate: moment(getOneJobPostData.data.endDate),
-                jobRole: getOneJobPostData.data.jobRole?.id,
+                shifts: getOneJobPostData.data.data.shifts,
+                email: getOneJobPostData.data.data.email,
+                phone: getOneJobPostData.data.data.phone,
+                type: getOneJobPostData.data.data.type,
+                extraType: getOneJobPostData.data.data.extraType,
+                startDate: moment(getOneJobPostData.data.data.startDate),
+                endDate: moment(getOneJobPostData.data.data.endDate),
+                jobRole: getOneJobPostData.data.data.jobRole?.id,
             })
         }
     }, [getOneJobPostData])
@@ -324,7 +324,7 @@ const AddJobPost = () => {
 
     const onEdit = () => {
         let data = {
-            id: editJobsID,
+            // id: editJobsID,
             name: state.name,
             state: state.state,
             district: state.district,
@@ -348,7 +348,7 @@ const AddJobPost = () => {
             jobType: state.jobType,
         }
         console.log("data", data);
-        dispatch(editJobPost(data));
+        dispatch(editJobPost(editJobsID,data));
         onCancel()
     }
 
