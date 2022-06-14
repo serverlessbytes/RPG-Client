@@ -9,7 +9,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom
 import uuid from 'react-uuid';
 import { addPartnerCourse, editPartnerCoursefilter, getOneCoursefilter } from '../../redux/course/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
+import { getCategoryData } from '../../redux/course/actionCreator';
 import { useLocation } from 'react-router';
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
@@ -17,18 +17,22 @@ import { getDistrictData } from '../../redux/district/actionCreator';
 const AddPartnerCourses = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id')
+    const langid = searchParams.get('langid')
     const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
     let dispatch = useDispatch();
+    const { Option } = Select;
+    const { TextArea } = Input;
 
     const editOneFilterData = useSelector(state => state.category.editFilterData);
     const stateData = useSelector((state) => state.state.getStateData);
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
     const catdata = useSelector(state => state.category.categoryData);
 
-    useEffect(()=>{console.log("stateData",stateData)},[stateData])
-    useEffect(()=>{console.log("diStrictdata",diStrictdata)},[diStrictdata])
+    useEffect(() => { console.log("id", id) }, [id])
+    useEffect(() => { console.log("langid", langid) }, [langid])
+
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
         name: '',
@@ -42,7 +46,7 @@ const AddPartnerCourses = () => {
         contactpersonphone: '',
         pincode: '',
         locations: '',
-        sequence: '',
+        // sequence: '',
         duration: '',
         cateGory: '',
         state: '',
@@ -52,9 +56,6 @@ const AddPartnerCourses = () => {
         key: '',
         thumbnail: ''
     });
-
-
-
     const [editPartnerCourseID, setEditPartnerCourseID] = useState()
 
     useEffect(() => {
@@ -66,19 +67,18 @@ const AddPartnerCourses = () => {
     }, []);
 
     useEffect(() => {
-        dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
-    }, [state.state]);
-    useEffect(() => {
+        if (state.state) {
 
+            dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
+        }
+    }, [state.state]);
+
+    useEffect(() => {
         if (location.search) {
-            dispatch(getOneCoursefilter(location.search.split('=')[1]));
+            dispatch(getOneCoursefilter(id));
             setEditPartnerCourseID(location.search.split('=')[1])
         }
     }, [location.search])
-
-    useEffect(() => {
-        console.log("editPartnerCourseID", editPartnerCourseID);
-    }, [editPartnerCourseID])
 
     useEffect(() => {
         if (editOneFilterData && editOneFilterData.data && id) {
@@ -96,7 +96,7 @@ const AddPartnerCourses = () => {
                 contactpersonphone: editOneFilterData.data.contactPersonPhone,
                 pincode: editOneFilterData.data.pincode,
                 locations: editOneFilterData.data.location,
-                sequence: editOneFilterData.data.sequence,
+                // sequence: editOneFilterData.data.sequence,
                 duration: moment(editOneFilterData.data.duration, 'HH:mm:ss'),
                 cateGory: editOneFilterData.data.courseCategory.id,
                 state: editOneFilterData.data.state,
@@ -155,10 +155,10 @@ const AddPartnerCourses = () => {
             error.locations = '*locations is required';
             flage = true;
         }
-        if (state.sequence === '') {
-            error.sequence = '*sequence is required';
-            flage = true;
-        }
+        // if (state.sequence === '') {
+        //     error.sequence = '*sequence is required';
+        //     flage = true;
+        // }
         if (state.duration === '') {
             error.duration = '*Time is required';
             flage = true;
@@ -212,12 +212,40 @@ const AddPartnerCourses = () => {
             district: state.district,
             pincode: state.pincode,
             location: state.locations,
-            sequence: parseInt(state.sequence),
+            // sequence: parseInt(state.sequence),
             mode: state.mode,
             thumbnail: state.thumbnail
         };
-        dispatch(addPartnerCourse(data));
-        history.push(`/admin/courses/partnercourses`);
+        if (!langid) {
+            dispatch(addPartnerCourse(data));
+            history.push(`/admin/courses/partnercourses`);
+        }
+        else {
+            let selectLanguageAddData = {
+                key: editOneFilterData.data.key,
+                name: state.name,
+                organization: state.organiZation,
+                detail: state.detail,
+                certificationBody: state.certificationBody,
+                eligibility: state.eligiBility,
+                component: state.component,
+                contactPersonName: state.contactpersonname,
+                contactPersonEmail: state.contactpersonemail,
+                contactPersonPhone: state.contactpersonphone,
+                pincode: state.pincode,
+                location: state.locations,
+                duration: state.duration,
+                categoryId: editOneFilterData.data.courseCategory.id,
+                state: state.state,
+                district: state.district,
+                mode: state.mode,
+                certification: state.Certification,
+                thumbnail: state.thumbnail
+            };
+            dispatch(addPartnerCourse( selectLanguageAddData,langid));
+            history.push(`/admin/courses/partnercourses`);
+        }
+
     };
 
     const onEdit = () => {
@@ -236,7 +264,7 @@ const AddPartnerCourses = () => {
             contactPersonPhone: state.contactpersonphone,
             pincode: state.pincode,
             location: state.locations,
-            sequence: parseInt(state.sequence),
+            // sequence: parseInt(state.sequence),
             duration: moment(state.duration).format('hh:mm:ss'),
             categoryId: state.cateGory,
             state: state.state,
@@ -282,17 +310,19 @@ const AddPartnerCourses = () => {
         }
         else if (name === 'mode') {
             setState({ ...state, mode: e });
-        } else if (name === 'sequence') {
-            if (e.target.value > 0) {
-                setState({ ...state, [e.target.name]: e.target.value });
-            } else {
-                setState({ ...state, [e.target.name]: 0 });
-            }
         }
+        //  else if (name === 'sequence') {
+        //     if (e.target.value > 0) {
+        //         setState({ ...state, [e.target.name]: e.target.value });
+        //     } 
+        //     else {
+        //         setState({ ...state, [e.target.name]: 0 });
+        //     }
+        // }
     };
 
 
-    const { Option } = Select;
+
     // const [typeOfJob, setTypeOfJob] = useState("");
 
     // const onChange = e => {
@@ -300,21 +330,22 @@ const AddPartnerCourses = () => {
     //     setTypeOfJob(e.target.value)
     // };
     // console.log("----",typeOfJob);
-    const { TextArea } = Input;
+
     return (
         <>
-            <PageHeader ghost title="Add Partner Courses" />
+            <PageHeader ghost
+                title={id ? "Edit Partner Courses" : "Add Partner Courses"} />
             <Main>
                 <Cards headless>
                     <Row justify="space-between">
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item name="name">
                                 <Input placeholder="Name" value={state.name} name="name" onChange={e => onChangevalue(e)} />
                                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11} className="addpartnercourses">
+                        <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                             <label htmlFor="category mb-4">Time</label>
                             <Form.Item
                                 initialValue={moment('00:00:00', 'HH:mm:ss')}
@@ -323,7 +354,7 @@ const AddPartnerCourses = () => {
                                 {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="categoryId">CategoryId</label>
                             <Form.Item name="categoryId">
                                 <Select
@@ -339,7 +370,7 @@ const AddPartnerCourses = () => {
                                 {error.cateGory && <span style={{ color: 'red' }}>{error.cateGory}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="organization">Organization</label>
                             <Form.Item name="organization">
                                 <Input
@@ -351,21 +382,21 @@ const AddPartnerCourses = () => {
                                 {error.organiZation && <span style={{ color: 'red' }}>{error.organiZation}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="detail">Detail</label>
                             <Form.Item>
                                 <TextArea name="detail" value={state.detail} onChange={e => onChangevalue(e)} />
                                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="certification">Certification Body</label>
                             <Form.Item>
                                 <TextArea value={state.certificationBody} name="certificationBody" onChange={e => onChangevalue(e)} />
                                 {error.certificationBody && <span style={{ color: 'red' }}>{error.certificationBody}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="eligibility">Eligibility</label>
                             <Form.Item name="eligibility">
                                 <Input
@@ -377,7 +408,7 @@ const AddPartnerCourses = () => {
                                 {error.eligiBility && <span style={{ color: 'red' }}>{error.eligiBility}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="component">Component</label>
                             <Form.Item name="component">
                                 <Input
@@ -389,7 +420,7 @@ const AddPartnerCourses = () => {
                                 {error.component && <span style={{ color: 'red' }}>{error.component}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonname">Contact Person Name</label>
                             <Form.Item name="contactpersonname">
                                 <Input
@@ -401,10 +432,11 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonname && <span style={{ color: 'red' }}>{error.contactpersonname}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonemail">Contact Person Email</label>
-                            <Form.Item name="contactpersonemail">
+                            <Form.Item name="contactpersonemail" >
                                 <Input
+                                    type="email"
                                     value={state.contactpersonemail}
                                     placeholder="contactpersonemail"
                                     name="contactpersonemail"
@@ -413,7 +445,7 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonemail && <span style={{ color: 'red' }}>{error.contactpersonemail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="contactpersonphone">Contact Person Phone</label>
                             <Form.Item name="contactpersonphone">
                                 <Input
@@ -425,7 +457,7 @@ const AddPartnerCourses = () => {
                                 {error.contactpersonphone && <span style={{ color: 'red' }}>{error.contactpersonphone}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="state">State</label>
                             <Form.Item name="state">
                                 <Select
@@ -446,7 +478,7 @@ const AddPartnerCourses = () => {
                                 {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="district">District</label>
                             <Form.Item name="district">
                                 <Select
@@ -467,14 +499,14 @@ const AddPartnerCourses = () => {
                                 {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="pincode">Pincode</label>
                             <Form.Item name="pincode">
                                 <Input value={state.pincode} placeholder="pincode" name="pincode" onChange={e => onChangevalue(e)} />
                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Location</label>
                             <Form.Item name="location">
                                 <Input
@@ -503,7 +535,7 @@ const AddPartnerCourses = () => {
                                 {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                             </Form.Item>
                         </Col> */}
-                        <Col lg={11}>
+                        {/* <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Sequence </label>
                             <Form.Item name="location">
                                 <Input
@@ -515,8 +547,8 @@ const AddPartnerCourses = () => {
                                 />
                                 {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                             </Form.Item>
-                        </Col>
-                        <Col lg={11}>
+                        </Col> */}
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Thumbnail</label>
                             <Form.Item >
                                 <Input
@@ -529,7 +561,7 @@ const AddPartnerCourses = () => {
                                 {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                             </Form.Item>
                         </Col>
-                        <Col lg={11} className="d-flex f-d-cloumn">
+                        <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
                             <label htmlFor="name" className="mb-5">
                                 Certification
                             </label>
@@ -549,7 +581,7 @@ const AddPartnerCourses = () => {
                         </Col>
                     </Row>
                     <div className="sDash_form-action mt-20">
-                        {editPartnerCourseID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
+                        {editPartnerCourseID && !langid ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                             Edit
                         </Button> : <Button className="btn-signin ml-10" type="primary" onClick={e => onsubmit(e)} size="medium">
                             Add

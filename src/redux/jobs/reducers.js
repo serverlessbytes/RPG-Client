@@ -53,6 +53,37 @@ const {
   GET_ALLJOBS_SUCCESS,
   GET_ALLJOBS_ERR,
 
+  GET_JOB_APPLICATION_BEGINE,
+  GET_JOB_APPLICATION_SUCCESS,
+  GET_JOB_APPLICATION_ERR,
+
+  UPDATE_IS_SELECTED_JOB_APPLICATION_BEGINE,
+  UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS,
+  UPDATE_IS_SELECTED_JOB_APPLICATION_ERR,
+
+  UPDATE_IS_HIRED_JOB_APPLICATION_BEGINE,
+  UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS,
+  UPDATE_IS_HIRED_JOB_APPLICATION_ERR,
+
+  ADD_JOB_APPLICATION_BEGINE,
+  ADD_JOB_APPLICATION_SUCCESS,
+  ADD_JOB_APPLICATION_ERR,
+
+  ADD_BULK_JOBS_BEGINE,
+  ADD_BULK_JOBS_SUCCESS,
+  ADD_BULK_JOBS_ERR,
+
+  ADD_BULK_JOBS_CATEGORY_BEGINE,
+  ADD_BULK_JOBS_CATEGORY_SUCCESS,
+  ADD_BULK_JOBS_CATEGORY_ERR,
+
+  ADD_BULK_JOBROLES_BEGINE,
+  ADD_BULK_JOBSROLES_SUCCESS,
+  ADD_BULK_JOBSROLES_ERR,
+
+  ADD_LANGUAGE_JOBPOST_BEGINE,
+  ADD_LANGUAGE_JOBPOST_SUCCESS,
+  ADD_LANGUAGE_JOBPOST_ERR,
 
 } = actions;
 
@@ -66,12 +97,30 @@ const initialState = {
   addJobRoleData: null,
   editJobRoleData: null,
   addJobPostData: null,
+  addJobPostErr: null,
   getJobPostData: null,
   getOneJobPostData: null,
-  getJobFilterData:null,
-  editJobPostData:null,
-  getEmployerData:null,
-  allJobs:null,
+  getJobFilterData: null,
+  editJobPostData: null,
+  editJobPostErr: null,
+  getEmployerData: null,
+  allJobs: null,
+  addJobRoleError: null,
+  editJobRoleError: null,
+  getJobApplicationData: null,
+  updateIsSelectedData: null,
+  updateIsHiredData: null,
+  addJobsApplicationData: null,
+  addBulkJobsData: null,
+  addBulkJobsError: null,
+  importJobCategory: null,
+  importJobCategoryError: null,
+  addJobCatogeryError: null,
+  importJobRole : null,
+  importJobRoleErr : null,
+  addLanguageJobPost:null,
+  addLanguageJobPostErr:null,
+  addJobsApplicationErr : null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -110,7 +159,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOBCATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        addJobCatogeryError: err,
         loading: false,
       };
 
@@ -128,7 +177,7 @@ const jobReducer = (state = initialState, action) => {
     case EDIT_JOBCATEGOTRY_ERR:
       return {
         ...state,
-        error: err,
+        editJobCatogeryError: err,
         loading: false,
       };
 
@@ -165,7 +214,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOBROLE_ERR:
       return {
         ...state,
-        error: err,
+        addJobRoleError: err,
         loading: false,
       };
 
@@ -183,7 +232,7 @@ const jobReducer = (state = initialState, action) => {
     case EDIT_JOBROLE_ERR:
       return {
         ...state,
-        error: err,
+        editJobRoleError: err,
         loading: false,
       };
 
@@ -201,7 +250,7 @@ const jobReducer = (state = initialState, action) => {
     case ADD_JOBPOST_ERR:
       return {
         ...state,
-        error: err,
+        addJobPostErr: err,
         loading: false,
       };
 
@@ -241,78 +290,223 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case GET_JOBSFILTER_BEGINE:
+    case GET_JOBSFILTER_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case GET_JOBSFILTER_SUCCESS:
+      return {
+        ...state,
+        getJobFilterData: data,
+        loading: false,
+      };
+
+    case GET_JOBSFILTER_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case EDIT_JOBPOST_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case EDIT_JOBPOST_SUCCESS:
+      return {
+        ...state,
+        editJobPostData: data,
+        loading: false,
+      };
+    case EDIT_JOBPOST_ERR:
+      return {
+        ...state,
+        editJobPostErr: err,
+        loading: false,
+      };
+
+    case GET_EMPLOYERDATA_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_EMPLOYERDATA_SUCCESS:
+      return {
+        ...state,
+        getEmployerData: data,
+        loading: false,
+      };
+    case GET_EMPLOYERDATA_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case GET_ALLJOBS_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_ALLJOBS_SUCCESS:
+      return {
+        ...state,
+        allJobs: data,
+        loading: false,
+      };
+    case GET_ALLJOBS_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case GET_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        getJobApplicationData: data,
+        loading: false,
+      };
+    case GET_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        updateIsSelectedData: data,
+        loading: false,
+      };
+    case UPDATE_IS_SELECTED_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case UPDATE_IS_HIRED_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UPDATE_IS_HIRED_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        updateIsHiredData: data,
+        loading: false,
+      };
+    case UPDATE_IS_HIRED_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      };
+
+    case ADD_JOB_APPLICATION_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_JOB_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        addJobsApplicationData: data,
+        loading: false,
+      };
+    case ADD_JOB_APPLICATION_ERR:
+      return {
+        ...state,
+        addJobsApplicationErr: err,
+        loading: false,
+      };
+
+    case ADD_BULK_JOBS_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBS_SUCCESS:
+      return {
+        ...state,
+        addBulkJobsData: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBS_ERR:
+      return {
+        ...state,
+        addBulkJobsError: err,
+        loading: false,
+      };
+
+    case ADD_BULK_JOBS_CATEGORY_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBS_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        importJobCategory: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBS_CATEGORY_ERR:
+      return {
+        ...state,
+        importJobCategoryError: err,
+        loading: false,
+      };
+
+    case ADD_BULK_JOBROLES_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_BULK_JOBSROLES_SUCCESS:
+      return {
+        ...state,
+        importJobRole: data,
+        loading: false,
+      };
+    case ADD_BULK_JOBSROLES_ERR:
+      return {
+        ...state,
+        importJobRoleErr: err,
+        loading: false,
+      };
+
+      case ADD_LANGUAGE_JOBPOST_BEGINE:
         return {
           ...state,
           loading: true,
         };
-      case GET_JOBSFILTER_SUCCESS:
+      case ADD_LANGUAGE_JOBPOST_SUCCESS:
         return {
           ...state,
-          getJobFilterData: data,
+          addLanguageJobPost: data,
           loading: false,
         };
-      case GET_JOBSFILTER_ERR:
+      case ADD_LANGUAGE_JOBPOST_ERR:
         return {
           ...state,
-          error: err,
+          addLanguageJobPostErr: err,
           loading: false,
         };
-
-        case EDIT_JOBPOST_BEGINE:
-          return {
-            ...state,
-            loading: true,
-          };
-        case EDIT_JOBPOST_SUCCESS:
-          return {
-            ...state,
-            editJobPostData: data,
-            loading: false,
-          };
-        case EDIT_JOBPOST_ERR:
-          return {
-            ...state,
-            error: err,
-            loading: false,
-          };
-
-          case GET_EMPLOYERDATA_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
-          case GET_EMPLOYERDATA_SUCCESS:
-            return {
-              ...state,
-              getEmployerData: data,
-              loading: false,
-            };
-          case GET_EMPLOYERDATA_ERR:
-            return {
-              ...state,
-              error: err,
-              loading: false,
-            };
-    
-     case GET_ALLJOBS_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case GET_ALLJOBS_SUCCESS:
-        return {
-          ...state,
-          allJobs: data,
-          loading: false,
-        };
-      case GET_ALLJOBS_ERR:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
-
 
     default:
       return state;

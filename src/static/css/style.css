@@ -1,5 +1,9 @@
 /* Utilitiy classes */
 
+* {
+  font-family: 'Lato', sans-serif !important;
+}
+
 .spin {
   height: 100vh;
   display: flex;
@@ -459,7 +463,8 @@ ul {
 }
 
 .ant-btn-round.ant-btn-sm {
-  height: 38px;
+  /* height: 38px; */
+  margin-right: 2px;
 }
 
 .ant-btn-white[disabled] {
@@ -754,6 +759,10 @@ ul {
 
 .sDash_fullwidth-select {
   width: 100%;
+}
+
+.select-option-typ-placeholder {
+  color: #c9bfc3 !important;
 }
 
 /* Nasted Comments Styles */
@@ -1594,9 +1603,28 @@ table thead tr th:first-child {
   text-align: left !important;
 }
 
-.cjkinL table tbody tr td:last-child {
+.cjkinL table tbody tr td:last-child {}
+
+table thead tr th:first-child {
   text-align: left !important;
 }
+
+.job-application table thead tr th:last-child {
+  text-align: left !important;
+}
+
+.scheme-rating table thead tr th:last-child {
+  text-align: left !important;
+}
+
+.course-rating table thead tr th:last-child {
+  text-align: left !important;
+}
+
+.ant-table-row .ant-table-cell {
+  text-align: left !important;
+}
+
 
 /* Full Width Table */
 
@@ -2888,6 +2916,7 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 
 .addpartnercourses .ant-picker {
   width: 100%;
+  min-width: unset !important;
 }
 
 .d-none {
@@ -2912,3 +2941,44 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .mb-0 {
   margin-bottom: 0px !important;
 }
+
+.select-btn {
+  color: #fff !important;
+  border-color: #5F63F2 !important;
+  background: #5F63F2 !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+.edit-view {
+  padding: 4px 13px !important;
+  height: 32px !important;
+  position: initial !important;
+}
+
+.pr {
+  padding-right: 5px;
+}
+
+.mb {
+  margin-bottom: 20px !important;
+}
+.For-Underline{
+  cursor: pointer;
+}
+.For-Underline:hover{
+  text-decoration: underline;
+}
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline >.ant-menu-submenu-title svg {
+  margin-right: 10px !important
+}
+/* .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-title >span {
+  margin-left: 10px !important;
+}
+
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline .ant-menu-item a{
+  margin-left: -40px;
+}
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline .ant-menu-item{
+  margin-left : 30px;
+} */

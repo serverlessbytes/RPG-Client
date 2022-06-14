@@ -20,13 +20,6 @@ const Adduser = () => {
     let history = useHistory();
     let location = useLocation();
 
-    useEffect(() => {
-        console.log("location", location);
-    }, [])
-
-    useEffect(() => {
-        console.log("id", id);
-    }, [])
     /* const [typeOfJob, setTypeOfJob] = useState("");
     const onChange = e => {
         console.log('radio checked', e.target.value);
@@ -46,10 +39,13 @@ const Adduser = () => {
     const [error, setError] = useState({})
 
     useEffect(() => {
-        if (location.search) {
-            dispatch(getOneUser(location.search.split('=')[1]))
+
+        if (id) {
+            // dispatch(getOneUser(location.search.split('=')[1]))
+            dispatch(getOneUser(id))
         }
-    }, [location.search])
+
+    }, [id])
 
     const getOneData = useSelector((state) => state.users.getOneUser)
 
@@ -102,7 +98,7 @@ const Adduser = () => {
             error.password = "Password is required";
             flage = true;
         }
-        if (!state.phone.match('[0-9]{10}')){
+        if (!state.phone.match('[0-9]{10}')) {
             error.phone = "Phone is required";
             flage = true;
         }
@@ -113,7 +109,7 @@ const Adduser = () => {
         //    }else{
         //     error.phone = "Phone is required";
         //    }
-            
+
         //     flage = true;
         // }
         if (state.userType === "") {
@@ -143,7 +139,8 @@ const Adduser = () => {
 
         if (!location.search) {
             dispatch(addUserSignup(data));
-            history.push(`/admin/user`)
+            oncancel()
+
         }
         else {
             delete data.key
@@ -152,24 +149,47 @@ const Adduser = () => {
                 id: location.search.split('=')[1],
                 isDeleted: false,
                 isActive: true,
-                avatar:"dfd",
+                avatar: "dfd",
                 //isApproved: true
 
             }
             dispatch(editProfile(data))
-            history.push(`/admin/user`)
+            oncancel()
+
         }
     }
+    // -- from goBAck Same Page
     const oncancel = () => {
-        dispatch(getOneUserSuccess([])) // for a data balnk
-        history.push(`/admin/user`)
-
+        if (window.location.pathname.includes("partner")) {
+            history.push(`/admin/user/partner`);
+        } else if (window.location.pathname.includes("employer")) {
+            history.push(`/admin/user/employer`);
+        } else if (window.location.pathname.includes("partner")) {
+            history.push(`/admin/user/partner`);
+        } else if (window.location.pathname.includes("useradmin")) {
+            history.push(`/admin/user/useradmin`);
+        } else if (window.location.pathname.includes("superadmin")) {
+            history.push(`/admin/user/superadmin`);
+        }
+        else (
+            history.push('/admin/user')
+        )
     }
+
+
+
+
+    useEffect(() => {
+        return (() => {
+            dispatch(getOneUserSuccess([])) // for a data balnk
+        })
+    }, [])
+
 
     return (
         <>
-          <PageHeader
-                title="Add User"
+            <PageHeader
+                title={id ? "Edit User" : "Add User"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
@@ -193,7 +213,7 @@ const Adduser = () => {
                                 </Space>
                             </Radio.Group>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item>
                                 <Input placeholder="User Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
@@ -205,7 +225,7 @@ const Adduser = () => {
 
                         {/* </Row>
                     <Row justify="space-between"> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="category mb-4">User Type</label>
                             <Form.Item initialValue=" Select a scheme category ">
                                 <Select size="large" placeholder="Select Category" value={state.userType} className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
@@ -221,7 +241,7 @@ const Adduser = () => {
                                 }
                             </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="email">Email</label>
                             <Form.Item>
                                 <Input placeholder="Email" value={state.email} name="email" onChange={(e) => onChangeValue(e)} />
@@ -230,7 +250,7 @@ const Adduser = () => {
                                 }
                             </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="password">Password</label>
                             <Form.Item>
                                 <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
@@ -250,7 +270,7 @@ const Adduser = () => {
                                 </Space>
                             </Radio.Group>
                         </Col> */}
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Phone</label>
                             <Form.Item>
                                 <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
@@ -270,7 +290,7 @@ const Adduser = () => {
                             </Form.Item>
                         </Col> */}
 
-                        <Col lg={11} md={11} sm={24}>
+                        <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Avatar</label>
                             <Form.Item>
                                 <Input placeholder="Avatar" name="avatar" onChange={(e) => onChangeValue(e)} />
@@ -288,11 +308,11 @@ const Adduser = () => {
 
                     <div className="sDash_form-action mt-20">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                        {id?"Edit":"Add"}
+                            {id ? "Edit" : "Add"}
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
-                           // onClick={() => history.push(`/admin/user`)}
-                           onClick={(e) => oncancel(e)}
+                            //    onClick={() => history.push(`/admin/user`)}
+                            onClick={(e) => oncancel(e)}
                         >
                             Cancel
                         </Button>

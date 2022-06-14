@@ -21,14 +21,20 @@ const {
   GET_LANGUAGE_SUCCESS,
   GET_LANGUAGE_ERR,
 
+  GET_LANGUAGE_BY_NAME_BEGINE,
+  GET_LANGUAGE_BY_NAME_SUCCESS,
+  GET_LANGUAGE_BY_NAME_ERR
+
 } = actions;
 
 const initialState = {
   data: null,
   loading: false,
   error: null,
-  postStateData:null,
-  getLanguageData:null
+  LanguageError: null,
+  postLanguageData: null,
+  getLanguageData: null,
+  getLanguage: null,
 };
 
 const languageReducer = (state = initialState, action) => {
@@ -42,13 +48,13 @@ const languageReducer = (state = initialState, action) => {
     case POST_LANGUAGE_SUCCESS:
       return {
         ...state,
-        postStateData:data,
+        postLanguageData: data,
         loading: false,
       };
     case POST_LANGUAGE_ERR:
       return {
         ...state,
-        error: err,
+        LanguageError: err,
         loading: false,
       };
     case GET_LANGUAGE_BEGINE:
@@ -59,7 +65,7 @@ const languageReducer = (state = initialState, action) => {
     case GET_LANGUAGE_SUCCESS:
       return {
         ...state,
-        getLanguageData:data,
+        getLanguageData: data,
         loading: false,
       };
     case GET_LANGUAGE_ERR:
@@ -102,7 +108,25 @@ const languageReducer = (state = initialState, action) => {
         error: err,
         loading: false,
       };
-      
+    case GET_LANGUAGE_BY_NAME_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      }
+    case GET_LANGUAGE_BY_NAME_SUCCESS:
+      return {
+        ...state,
+        getLanguage:data,
+        loading: false,
+      }
+    case GET_LANGUAGE_BY_NAME_ERR:
+      return {
+        ...state,
+        error: err,
+        loading: false,
+      }
+
+
     default:
       return state;
   }

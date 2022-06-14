@@ -5,20 +5,29 @@ import AuthStorage from "../../helper/AuthStorage";
 import actions from "./actions";
 
 const {
-    addUserSignupSuccess,
-    addUserSignupErr,
+  addUserSignupSuccess,
+  addUserSignupErr,
 
-    getAllUserSuccess,
-    getAllUserErr,
+  getAllUserSuccess,
+  getAllUserErr,
 
-    editProfileSuccess,
-    editProfileErr,
+  editProfileSuccess,
+  editProfileErr,
 
-    getOneUserSuccess,
-    getOneUserErr,
+  getOneUserSuccess,
+  getOneUserErr,
 
-    allUserSuccess,
-    allUserErr,
+  allUserSuccess,
+  allUserErr,
+
+  getUserRatingSuccess,
+  getUserRatingErr,
+
+  edituserRatingSuccess,
+  edituserRatingErr,
+
+  getOneUserRatingSuccess,
+  getOneUserRatingErr,
 
 } = actions;
 
@@ -29,6 +38,7 @@ let Type;
 export const addUserSignup = (data) => async (dispatch) => {
   await ApiPost(`user/auth/signup`, data)
     .then((res) => {
+      //console.log("res",res)
       return dispatch(addUserSignupSuccess(res))
     })
     .catch((err) => dispatch(addUserSignupErr(err)))
@@ -80,21 +90,35 @@ export const getAllUser = (perpage,pagenumber,status,type) => async (dispatch) =
       .catch((err) => dispatch(allUserErr(err)))
   }
 
-// export const getOneSchemeData = (key) => async (dispatch) => {
-//   await ApiGet(`scheme/getOneScheme${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-//     .then((res) => {
-//       return dispatch(getOneSchemeSuccess(res.data))
-//     })
-//     .catch((err) => dispatch(getOneSchemenErr(err)))
-// }
+  export const getUserRating = (perpage,pagenum) => async (dispatch) => {
+    per_page=perpage;
+    page_num=pagenum;   
+    await ApiGet(`userRating/getUserRatings?per_page=${perpage}&page_number=${pagenum}`)
+      .then((res) => {
+        return dispatch(getUserRatingSuccess(res))
+      })
+      .catch((err) => dispatch(getUserRatingErr(err)))
+  }
 
-// export const editSchemeData = (body) => async (dispatch) => {
-//   await ApiPost(`scheme/editScheme`, body)
-//     .then((res) => {
-//       dispatch(editSchemeSuccess(res.data))
-//       if (res.status === 200) {
-//         dispatch(getSchemeData(per_Page, page_Num))
-//       }
-//     })
-//     .catch((err) => dispatch(editSchemenErr(err)))
-// }
+  export const edituserRating = (body) =>  async(dispatch) =>{
+    await ApiPost (`userRating/editUserRating`,body)
+    .then((res) =>{
+      dispatch(edituserRatingSuccess(res))
+      if (res.status === 200) {  
+       return dispatch(getUserRating(per_page, page_num))
+     }
+    })
+    .catch(e => edituserRatingErr(e))
+}
+
+export const getOneUserRating = (id) => async (dispatch) => {
+  await ApiGet(`userRating/getUserRating?id=${id}`)
+    .then((res) => {
+      // console.log("res",res)
+      return dispatch(getOneUserRatingSuccess(res))
+    })
+    .catch((err) => dispatch(getOneUserRatingErr(err)))
+}
+
+
+

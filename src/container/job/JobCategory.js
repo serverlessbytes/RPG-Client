@@ -9,9 +9,22 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobcategory, editJobcategory, getJobcategory } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
-
+import { toast } from 'react-toastify';
+import actions from '../../redux/jobs/actions';
+import { set } from 'date-fns';
+import { ApiPost } from '../../helper/API/ApiData';
+import { async } from '@firebase/util';
+import ImportJobCategory from '../../components/modals/ImportJobCategory';
 const JobCategory = () => {
+    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
+        addJobcategoryErr, } = actions;
 
+    const jobData = useSelector((state) => state.job.jobCatogeryData)
+    const editJobCatogeryData = useSelector((state) => state.job.editJobCatogeryData)
+    const addJobCatogerydata = useSelector((state) => state.job.addJobCatogeryData)
+    const importJobCategoryError = useSelector((state) => state.job.importJobCategoryError)
+    const editJobCatogeryError = useSelector((state) => state.job.editJobCatogeryError)
+    const importJob = useSelector((state) => state.job.importJobCategory)
 
     const dispatch = useDispatch()
     const usersTableData = [];
@@ -19,33 +32,99 @@ const JobCategory = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [selectedJobCategory, setSelectedJobCategory] = useState();
+    const [nameTog, setNameTog] = useState(false)
+    const [importModal, setImportModal] = useState(false);
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
         };
     });
 
-    const jobData = useSelector((state) => state.job.jobCatogeryData)
+    useEffect(() => {
+        if (addJobCatogerydata && addJobCatogerydata.status === 200) {
+            dispatch(addJobcategorySuccess(null))
+            toast.success("Job Category add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addJobCatogerydata])
 
     useEffect(() => {
-        dispatch(getJobcategory()); 
+        if (importJob && importJob.status === 200) {
+            toast.success("Category imported");
+        }
+        else if (importJob && importJob.status !== 200) {
+            toast.error("Something wrong");
+        }
+    }, [importJob])
+
+    useEffect(() => {
+        if (importJobCategoryError) {
+            // console.log("addJobCatogeryError",addJobCatogeryError)
+            dispatch(addJobcategoryErr(null))
+            toast.error("Something wrong");
+        }
+    }, [importJobCategoryError])
+
+    useEffect(() => {
+        if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
+            dispatch(editJobcategorySuccess(null))
+            toast.success("Job Category update successful");
+        } else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
+            dispatch(editJobcategorySuccess(null))
+            toast.success("Job Category delete successful");
+        }
+    }, [editJobCatogeryData])
+
+    useEffect(() => {
+        if (editJobCatogeryError) {
+            dispatch(editJobcategoryErr(null))
+            toast.error("Something wrong");
+        }
+    }, [editJobCatogeryError])
+
+    useEffect(() => {
+        dispatch(getJobcategory());
     }, [])
-    useEffect(() =>{
-        console.log("jobDatajobData",jobData)
-    },[jobData])
+
+    // useEffect(() => {
+    // }, [jobCatogeryData]);
+
+    // useEffect(() => {
+    //    // console.log("jobDatajobData", jobData)
+    //    return (()=>{
+    //        dispatch(editJobcategorySuccess(null))
+    //    })
+    // }, [])
 
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
+            console.log("dataForEdit", dataForEdit)
             setSelectedJobCategory(dataForEdit)
+            console.log("selectedJobCategory", selectedJobCategory)
             form.setFieldsValue({
+                ...dataForEdit,
                 name: dataForEdit.name
             })
-            setIsModalVisible(true);
         }
+        setIsModalVisible(true);
+        setNameTog(true)
     }
 
-    const onDelete = (id) => {
+    const newJobCategory = dataForEdit => {
+        const newVal = ApiPost("job/editCategory", dataForEdit)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getJobcategory())
+                }
+                return res
+            })
+        return newVal
+    }
+
+    const onDelete = async (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
             delete dataForEdit.key
@@ -54,18 +133,22 @@ const JobCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editJobcategory(dataForEdit))
+            // dispatch(editJobcategory(dataForEdit))
+            const deleteJobcatrgory = await newJobCategory(dataForEdit)
+            if (deleteJobcatrgory.status === 200) {
+                toast.success("Job Category delete successful")
+            }
         }
     }
 
     useEffect(() => {
         if (jobData && jobData.data) {
-            console.log("-----",jobData)
-            setJobCategoryTableData(jobData.data?
+            setJobCategoryTableData(jobData.data ?
                 jobData.data.map((item) => {
-                  
+
                     return {
-                        ...item,  
+                        ...item,
+                        JobCategory: item.name,
                         action: (
                             <div className='active-jobs-table'>
                                 <div className="table-actions">
@@ -74,7 +157,7 @@ const JobCategory = () => {
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
                                         <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                            <FeatherIcon icon="x-circle" size={16} />
+                                            <FeatherIcon icon="trash-2" size={16} />
                                         </Button>
                                     </>
                                 </div>
@@ -92,11 +175,13 @@ const JobCategory = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const handleOk = () => {
         let data = form.getFieldsValue()
         if (!selectedJobCategory) {
+
             data = {
                 ...data,
                 key: uuid()
@@ -113,7 +198,9 @@ const JobCategory = () => {
             dispatch(editJobcategory(data))
         }
         form.resetFields()
+        setSelectedJobCategory()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const [state, setState] = useState({
@@ -157,7 +244,7 @@ const JobCategory = () => {
         {
             title: 'Job Category',
             dataIndex: 'name',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.JobCategory.length - b.JobCategory.length,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -166,8 +253,6 @@ const JobCategory = () => {
             width: '90px',
         },
     ];
-
-
 
     return (
         <>
@@ -179,6 +264,9 @@ const JobCategory = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Category
                         </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
+                            Import
+                        </Button>
                     </div>
                 ]}
             />
@@ -186,23 +274,35 @@ const JobCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-
-                            <Form name="sDash_select" layout="vertical">
+                            {/* --- search bar --- */}
+                            {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
                                 </Form.Item>
-                            </Form>
+                            </Form> */}
 
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={jobCategoryTableData}
                                 columns={jobTableColumns}
                                 pagination={false}
+                            // pagination={{
+                            //     defaultPageSize: users?.per_page,
+                            //     total: users?.page_count,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //     onChange: (page, pageSize) => {
+                            //       setPageNumber(page);
+                            //       setPerPage(pageSize);
+                            //     },
+                            //     // defaultPageSize: 5,
+                            //     // total: usersTableData.length,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //   }}
                             />
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {jobCategoryTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -213,18 +313,22 @@ const JobCategory = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
+            <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+                okText={nameTog ? "Edit" : "Add"}
+            >
+
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder=""
+                            placeholder="Job Category"
                             name="name"
                         />
+
                     </Form.Item>
                     {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
@@ -235,7 +339,12 @@ const JobCategory = () => {
                     </Form.Item> */}
                 </Form>
 
-            </Modal>}
+            </Modal>
+
+            {< ImportJobCategory
+                importModal={importModal}
+                handleCancel={() => setImportModal(false)}
+                modaltitle="Import Job Category" />}
         </>
     )
 }

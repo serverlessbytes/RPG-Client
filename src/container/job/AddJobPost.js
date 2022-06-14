@@ -7,53 +7,34 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { addJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
+import { addJobPost, addLanguageJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
 import actions from "../../redux/jobs/actions";
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
 import RichTextEditor from 'react-rte';
+import { set } from 'js-cookie';
+import { data } from 'browserslist';
+import { ApiPost } from '../../helper/API/ApiData';
 
 
 const AddJobPost = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get('id');
+    const langId = searchParams.get('langid');
     let history = useHistory();
     let dispatch = useDispatch();
     let location = useLocation();
     const { Option } = Select;
     const { TextArea } = Input;
-    const [editJobsID, seteditJobsID] = useState()
-
     const {
         getoneJobPostSuccess, // foe edit
+        addJobPostErr
     } = actions;
-    // function onchange(date, dateString) { //for date    
-    //     console.log(date, dateString);
-    // }
-    // const [typeOfJob, setTypeOfJob] = useState("")
 
-    // const onChange = e => {
-    //     console.log('radio checked', e.target.value);
-    //     setTypeOfJob(e.target.value)
-    // };
-
-    let jobData = useSelector((state) => state.job.jobCatogeryData) //job category
-    let jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
-    let stateData = useSelector((state) => state.state.getStateData) //state
-    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
-    let getEmployerdata = useSelector((state) => state.job.getEmployerData)
-
-    useEffect(() => { console.log("getEmployerData", getEmployerdata) }, [getEmployerdata])
-
-    useEffect(() => {
-        //console.log("location.search", location.search);
-        if (location.search.split("=")[1]) {
-            seteditJobsID(location.search.split("=")[1])
-            dispatch(getoneJobPost(location.search.split("=")[1]))
-        }
-    }, [location.search])
-    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
     const [error, setError] = useState({}); // for valadation
-
+    const [editJobsID, seteditJobsID] = useState();
+    // const [langIds, setLangIds] = useState();
     const [state, setState] = useState({
         salary: "",
         benifits: RichTextEditor.createEmptyValue(),
@@ -66,18 +47,37 @@ const AddJobPost = () => {
         vacancies: "",
         reqExperience: "",
         requirements: "",
-        jobCategoryId: "",
+        jobType: "",
         isActive: true,
-        shifts: [],
+        shifts: "",
         email: "",
         phone: "",
         type: "",
         extraType: "",
         startDate: "",
         endDate: "",
-        jobRoleId: "",
+        jobRole: "",
         key: "",
     });
+
+    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
+    const jobData = useSelector((state) => state.job.jobCatogeryData) //job category
+    const jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
+    const stateData = useSelector((state) => state.state.getStateData) //state
+    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
+    const getEmployerdata = useSelector((state) => state.job.getEmployerData)
+    // const addJobPostData = useSelector((state) => state.job.addJobPostData
+
+    // useEffect(() => { console.log("id", id) }, [id])
+    useEffect(() => { console.log("getOneJobPostData", getOneJobPostData) }, [getOneJobPostData])
+
+    useEffect(() => {
+        if (id) {
+            seteditJobsID(id)
+            dispatch(getoneJobPost(id))
+        }
+    }, [id])
+
     useEffect(() => {
         dispatch(getJobcategory()) //dispatch job category
     }, [])
@@ -94,36 +94,34 @@ const AddJobPost = () => {
         dispatch(getEmployerData()) //dipatch getEmployerData
     }, []);
 
-
-
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData.data  ) {
+        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
-                key: getOneJobPostData.data.key,
-                salary: getOneJobPostData.data.salary,
-                benifits: RichTextEditor.createValueFromString(getOneJobPostData.data.benifits, 'markdown'),
+                key: getOneJobPostData.data.data.key,
+                salary: getOneJobPostData.data.data.salary,
+                benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData?.data?.name?.id,
-                state: getOneJobPostData?.data?.state?.id,
-                district: getOneJobPostData?.data?.district?.id,
-                town: getOneJobPostData.data.town,
-                pincode: getOneJobPostData.data.pincode,
-                description: getOneJobPostData.data.description,
-                vacancies: getOneJobPostData.data.vacancies,
-                reqExperience: getOneJobPostData.data.reqExperience,
-                requirements: getOneJobPostData.data.requirements,
-                jobCategoryId: getOneJobPostData.data.jobType.id,
+                name: getOneJobPostData?.data?.data.name?.name,
+                state: getOneJobPostData?.data?.data.state?.id,
+                district: getOneJobPostData?.data?.data.district?.id,
+                town: getOneJobPostData.data.data.town,
+                pincode: getOneJobPostData.data.data.pincode,
+                description: getOneJobPostData.data.data.description,
+                vacancies: getOneJobPostData.data.data.vacancies,
+                reqExperience: getOneJobPostData.data.data.reqExperience,
+                requirements: getOneJobPostData.data.data.requirements,
+                jobType: getOneJobPostData.data.data.jobType?.name,
                 isActive: true,
-                shifts: getOneJobPostData.data.shifts,
-                email: getOneJobPostData.data.email,
-                phone: getOneJobPostData.data.phone,
-                type: getOneJobPostData.data.type,
-                extraType: getOneJobPostData.data.extraType,
-                startDate: moment(getOneJobPostData.data.startDate),
-                endDate: moment(getOneJobPostData.data.endDate),
-                jobRoleId: getOneJobPostData.data.jobRole.id,
+                shifts: getOneJobPostData.data.data.shifts,
+                email: getOneJobPostData.data.data.email,
+                phone: getOneJobPostData.data.data.phone,
+                type: getOneJobPostData.data.data.type,
+                extraType: getOneJobPostData.data.data.extraType,
+                startDate: moment(getOneJobPostData.data.data.startDate),
+                endDate: moment(getOneJobPostData.data.data.endDate),
+                jobRole: getOneJobPostData.data.data.jobRole?.id,
             })
         }
     }, [getOneJobPostData])
@@ -139,12 +137,12 @@ const AddJobPost = () => {
             error.benifits = 'Benifits is required';
             flage = true;
         }
-        if (state.jobCategoryId === '') {
-            error.jobCategoryId = 'Job category is required';
+        if (state.jobType === '') {
+            error.jobType = 'Job Category is required';
             flage = true;
         }
-        if (state.jobRoleId === '') {
-            error.jobRoleId = 'Job role is required';
+        if (state.jobRole === '') {
+            error.jobRole = 'Job Role is required';
             flage = true;
         }
         if (state.name === '') {
@@ -175,8 +173,8 @@ const AddJobPost = () => {
             error.description = 'Description is required';
             flage = true;
         }
-        if (state.req_experience === '') {
-            error.req_experience = 'Experience is required';
+        if (state.reqExperience === '') {
+            error.reqExperience = 'Experience is required';
             flage = true;
         }
         if (state.requirements === '') {
@@ -217,18 +215,15 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = e => {
-
         setState({ ...state, [e.target.name]: e.target.value });
     }
-    useEffect(() => { console.log("state", state) }, [state])
+
     const onChnageHandle = (e, name) => {
-        console.log("name", name);
-        console.log("e", e);
-        if (name === "jobCategoryId") {
-            setState({ ...state, jobCategoryId: e })
+        if (name === "jobType") {
+            setState({ ...state, jobType: e })
         }
-        else if (name === "jobRoleId") {
-            setState({ ...state, jobRoleId: e })
+        else if (name === "jobRole") {
+            setState({ ...state, jobRole: e })
         }
         else if (name === "shifts") {
             setState({ ...state, shifts: e })
@@ -261,15 +256,21 @@ const AddJobPost = () => {
     const onChangesEditorBenifit = (value) => {
         setState({ ...state, benifits: value });
     };
+
     useEffect(() => {
-        dispatch(getDistrictData(state.state)) //dipatch district
+        if (state.state) {
+
+            dispatch(getDistrictData(state.state)) //dipatch district
+        }
     }, [state.state]);
+
     const onSubmit = (e) => {
         if (validation()) {
             return;
         }
         let data = {
-            key: uuid(),
+            // key: langId ? getOneJobPostData.data.key : uuid(),
+            // key: uuid(),
             name: state.name,
             state: state.state,
             district: state.district,
@@ -289,15 +290,41 @@ const AddJobPost = () => {
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
             endDate: moment.utc(state.endDate).format(),
-            jobRoleId: state.jobRoleId,
-            jobCategoryId: state.jobCategoryId,
+            jobRole: state.jobRole,
+            jobType: state.jobType,
         };
-        dispatch(addJobPost(data))
-        onCancel()
+        if (langId) {
+            data = {
+                ...data,
+                key: getOneJobPostData.data.key,
+                jobRole: getOneJobPostData.data.jobRole.id,
+                jobType: getOneJobPostData.data.jobType.id,
+                name: getOneJobPostData.data.name.id,
+                state: getOneJobPostData.data.state.id,
+                district: getOneJobPostData.data.district.id,
+            }
+            dispatch(addLanguageJobPost(langId, data))
+            // addLanguageJobPost(langId, data)
+        }
+        else {
+            data = { ...data, key: uuid() }
+            dispatch(addJobPost(data))
+        }
+        onCancel();
     };
+
+    // const addLanguageJobPost = (languageID, body) => {
+    //     ApiPost(`job/add?langId=${languageID}`, body)
+    //         .then((res) => {
+    //             console.log("res", res);
+    //             return dispatch(addJobPostSuccess(res))
+    //         })
+    //         .catch((err) => dispatch(addJobPostErr(err)))
+    // }
+
     const onEdit = () => {
         let data = {
-            id: editJobsID,
+            // id: editJobsID,
             name: state.name,
             state: state.state,
             district: state.district,
@@ -317,21 +344,27 @@ const AddJobPost = () => {
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
             endDate: moment.utc(state.endDate).format(),
-            jobRoleId: state.jobRoleId,
-            jobCategoryId: state.jobCategoryId,
+            jobRole: state.jobRole,
+            jobType: state.jobType,
         }
-        dispatch(editJobPost(data));
+        console.log("data", data);
+        dispatch(editJobPost(editJobsID,data));
         onCancel()
     }
-    const onCancel = () => {
-        dispatch(getoneJobPostSuccess([]))
-        history.push(`/admin/job/post`);
 
+    const onCancel = () => {
+        history.push(`/admin/job/post`);
     }
+    useEffect(() => {
+        return (() => {
+            dispatch(getoneJobPostSuccess([]))
+        })
+    }, [])
+
     return (
         <>
             <PageHeader
-                title="Add Job Post"
+                title={editJobsID ? "Edit job Post" : "Add Job Post"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
@@ -346,27 +379,27 @@ const AddJobPost = () => {
                     <Cards headless>
                         <Form name="horizontal-form" layout="horizontal">
                             <Row justify="space-between">
-
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="jobCategoryId">Type of job post</label>
+                                            <label htmlFor="jobType">Type of job post</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form name="sDash_select" layout="vertical">
                                                 <Form.Item name="basic-select" >
-                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary " value={state.jobCategoryId} name="jobCategoryId" onChange={(e) => onChnageHandle(e, "jobCategoryId")} >
+                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobType} name="jobType" onChange={(e) => onChnageHandle(e, "jobType")} >
+
                                                         {jobData && jobData.data.map((items) => (
                                                             <Option value={items.id}>{items.name} </Option>
                                                         ))}
                                                     </Select>
-                                                    {error.jobCategoryId && <span style={{ color: 'red' }}>{error.jobCategoryId}</span>}
+                                                    {error.jobType && <span style={{ color: 'red' }}>{error.jobType}</span>}
                                                 </Form.Item>
                                             </Form>
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="salary">Monthly Salary Offered</label>
@@ -379,26 +412,26 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Job Role</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="Selectajobrole" initialValue="Select a job role">
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRoleId} name="jobRoleId" onChange={(e) => onChnageHandle(e, "jobRoleId")} defaultValue="Select Job Role">
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRole} name="jobRole" onChange={(e) => onChnageHandle(e, "jobRole")} defaultValue="Select Job Role">
                                                     {jobRolData && jobRolData.map((items) => (
                                                         <Option value={items.id}>{items.name} </Option>
                                                     ))}
                                                 </Select>
-                                                {error.jobRoleId && <span style={{ color: 'red' }}>{error.jobRoleId}</span>}
+                                                {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={24}>
+                                <Col lg={24} md={24} sm={24} xs={24}>
                                     {/* <Row align="middle" justify="space-between">
                                         <Col lg={4} md={9} xs={24}>
                                             <label htmlFor="benifits">Benefits</label>
@@ -418,9 +451,9 @@ const AddJobPost = () => {
                                         {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
                                     </div>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Name of the Employer</label>
@@ -439,7 +472,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="vacancies">Vacancies</label>
@@ -452,9 +485,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="state">State</label>
@@ -481,9 +514,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
-                                <Form.Item name="isactive">
-
+                                {/* <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Type of Job</label>
@@ -500,11 +531,10 @@ const AddJobPost = () => {
                                         </Col>
                                         {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                     </Row>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                </Col> */}
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="district">District</label>
@@ -531,7 +561,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="phone">Phone</label>
@@ -544,9 +574,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Town / Village</label>
@@ -559,7 +589,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="email">Email</label>
@@ -572,10 +602,9 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
-
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                                {/* </Row>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="pincode">Pincode</label>
@@ -589,7 +618,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                {/* <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="description">Description</label>
@@ -601,11 +630,11 @@ const AddJobPost = () => {
                                             </Form.Item>
                                         </Col>
                                     </Row>
-                                </Col>
-                            </Row>
+                                </Col> */}
+                                {/* </Row>
 
-                            <Row justify="space-between">
-                                <Col lg={11}>
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="shifts">Shift</label>
@@ -614,9 +643,9 @@ const AddJobPost = () => {
                                             <Form.Item name="shifts" initialValue="Select Shift">
                                                 {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
                                                 {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")} mode="multiple">
-                                                    <Option value={"DAY"}> Day </Option>
-                                                    <Option value={"NIGHT"}> Night </Option>
+                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}>
+                                                    <Option value="DAY"> Day </Option>
+                                                    <Option value="NIGHT"> Night </Option>
                                                 </Select>
                                                 {error.shifts && <span style={{ color: "red" }}>{error.shifts}</span>}
                                             </Form.Item>
@@ -624,7 +653,7 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="req_experience">Requried Experience</label>
@@ -637,10 +666,10 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            </Row>
+                                {/* </Row>
 
-                            <Row justify="space-between">
-                                <Col lg={11} className="addpartnercourses">
+                            <Row justify="space-between"> */}
+                                <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="startdata">Start Date</label>
@@ -655,23 +684,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                <Col lg={11}>
-                                    <Row align="middle" justify="space-between">
-                                        <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="requirements">Requirements</label>
-                                        </Col>
-                                        <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="requirements">
-                                                <TextArea placeholder='Requirements' value={state.requirements} name="requirements" onChange={e => onChangeValue(e)} />
-                                                {error.requirements && <span style={{ color: 'red' }}>{error.requirements}</span>}
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-
-                            <Row justify="space-between">
-                                <Col lg={11} className="addpartnercourses">
+                                <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="enddate">End Date</label>
@@ -687,28 +700,78 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                <Col lg={11}>
+                                <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="isactive">Type Of Field</label>
+                                            <label htmlFor="description">Description</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="isactive">
-                                                <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
-                                                    <Space direction="vertical">
-                                                        <Row>
-                                                            <Radio checked={state.extraType === true} value={"CONTRACTUAL"}>
-                                                                Contractual
-                                                            </Radio>
-                                                            <Radio checked={state.extraType === true} value={"ONROLL"}>
-                                                                OnRoll
-                                                            </Radio>
-                                                        </Row>
-                                                    </Space>
-
-                                                </Radio.Group>
-                                                {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
+                                            <Form.Item name="description">
+                                                <TextArea placeholder='Description' value={state.description} name="description" onChange={e => onChangeValue(e)} />
+                                                {error.description && <span style={{ color: 'red' }}>{error.description}</span>}
                                             </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="requirements">Requirements</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="requirements">
+                                                <TextArea placeholder='Requirements' value={state.requirements} name="requirements" onChange={e => onChangeValue(e)} />
+                                                {error.requirements && <span style={{ color: 'red' }}>{error.requirements}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                {/* </Row>
+
+                            <Row justify="space-between"> */}
+
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="name" className='mb-0'>Type of Job</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
+                                            <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
+                                                <Space direction="vertical">
+                                                    <Row>
+                                                        <Radio checked={state.type === "PARTTIME"} value="PARTTIME" style={{ marginBottom: "0px" }}>Part-time</Radio>
+                                                        <Radio checked={state.type === "FULLTIME"} value="FULLTIME" style={{ marginBottom: "0px" }}>Full-time</Radio>
+                                                    </Row>
+                                                </Space>
+                                            </Radio.Group>
+                                            {/* </Form.Item> */}
+                                            {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="isactive" className='mb-0'>Type Of Field</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
+                                            <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
+                                                <Space direction="vertical">
+                                                    <Row>
+                                                        <Radio checked={state.extraType === "CONTRACTUAL"} value={"CONTRACTUAL"} style={{ marginBottom: "0px" }}>
+                                                            Contractual
+                                                        </Radio>
+                                                        <Radio checked={state.extraType === "ONROLL"} value={"ONROLL"} style={{ marginBottom: "0px" }}>
+                                                            OnRoll
+                                                        </Radio>
+                                                    </Row>
+                                                </Space>
+
+                                            </Radio.Group>
+                                            {/* </Form.Item> */}
+                                            {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -724,12 +787,19 @@ const AddJobPost = () => {
 
                         </Form>
                         <div className="sDash_form-action mt-20">
-                            {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
+
+                            {editJobsID && !langId ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                Add
+                                    Add
                                 </Button>
                             }
+                            {/* { langId ?  <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
+                                    Add
+                                </Button> : <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
+                                    Add
+                                </Button>
+                            } */}
 
                             <Button
                                 className="btn-signin"

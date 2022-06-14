@@ -10,8 +10,14 @@ import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
 import { addSchemecategory, editSchemecategory, getSchemecategory } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
-
+import { toast } from 'react-toastify';
+import actions from '../../redux/schemes/actions';
+import { set } from 'js-cookie';
+import { ApiPost } from '../../helper/API/ApiData';
+import { async } from '@firebase/util';
+import ImportSchemeCategory from '../../components/modals/ImportSchemeCategory';
 const SchemeCategory = () => {
+    const { editSchemecategorySuccess, addSchemecategorySuccess, addSchemecategoryErr, editSchemecategoryErr } = actions;
 
 
     const dispatch = useDispatch()
@@ -20,6 +26,9 @@ const SchemeCategory = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [schemeCategoryTableData, setSchemeCategoryTableData] = useState([]);
     const [selectedSchemeCategory, setSelectedSchemeCategory] = useState();
+    const [nameTod, setnameTod] = useState(false)
+    const [importModal, setImportModal] = useState(false);
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -27,10 +36,60 @@ const SchemeCategory = () => {
     });
 
     const schemeData = useSelector((state) => state.scheme.schemecatogeryData)
+    const editSchemeCatogeryData = useSelector((state) => state.scheme.editSchemeCatogeryData)
+    const addSchemeCatogeryData = useSelector((state) => state.scheme.addSchemeCatogeryData)
+    const addSchemeCatogeryError = useSelector((state) => state.scheme.addSchemeCatogeryError)
+    const editSchemeCatogeryError = useSelector((state) => state.scheme.editSchemeCatogeryError)
+    const ImportCategory = useSelector((state) => state.scheme.importSchemeCategoryData);
 
     useEffect(() => {
         dispatch(getSchemecategory());
     }, [])
+
+    useEffect(() => {
+        console.log("addSchemeCatogeryData", addSchemeCatogeryData)
+    }, [addSchemeCatogeryData])
+
+    useEffect(() => {
+        if (editSchemeCatogeryData && editSchemeCatogeryData.status === 200) {
+            dispatch(editSchemecategorySuccess(null))
+            toast.success("Scheme Category update successfull");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [editSchemeCatogeryData])
+
+    useEffect(() => {
+        if (addSchemeCatogeryData && addSchemeCatogeryData.status === 200) {
+            dispatch(addSchemecategorySuccess(null))
+            toast.success("Scheme Category add successfull");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+    }, [addSchemeCatogeryData])
+
+    useEffect(() => {
+        if (addSchemeCatogeryError) {
+            dispatch(addSchemecategoryErr(null))
+            toast.error("Something wrong");
+        }
+    }, [addSchemeCatogeryError])
+
+    useEffect(() => {
+        if (editSchemeCatogeryError) {
+            dispatch(editSchemecategoryErr(null))
+            toast.error("Something wrong");
+        }
+    }, [editSchemeCatogeryError])
+
+    useEffect(() => {
+        console.log("ImportCategory", ImportCategory);
+        if (ImportCategory && ImportCategory.status === 200) {
+            toast.success("Category imported");
+        } else if (ImportCategory && ImportCategory.status !== 200) {
+            toast.error("Something wrong");
+        }
+    }, [ImportCategory])
 
     const onEdit = (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
@@ -41,9 +100,20 @@ const SchemeCategory = () => {
             })
             setIsModalVisible(true);
         }
+        setnameTod(true)
     }
 
-    const onDelete = (id) => {
+    const newSchemeCategory = dataForEdit => {
+        const newVal = ApiPost("scheme/editSchemeCategory", dataForEdit)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getSchemecategory())
+                } return res
+            })
+        return newVal
+    }
+
+    const onDelete = async (id) => {
         let dataForEdit = schemeData && schemeData.data && schemeData.data.find((item) => item.id === id)
         if (dataForEdit) {
             delete dataForEdit.key
@@ -52,18 +122,24 @@ const SchemeCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            dispatch(editSchemecategory(dataForEdit))
+            // dispatch(editSchemecategory(dataForEdit))
+            const deleteSchemesCategory = await newSchemeCategory(dataForEdit)
+            if (deleteSchemesCategory.status === 200) {
+                toast.success("Scheme Category delete successfull")
+            }
         }
     }
 
     useEffect(() => {
         if (schemeData && schemeData.data) {
-
             setSchemeCategoryTableData(schemeData.data ?
                 schemeData.data.map((item) => {
+                    console.log("item", item);
                     return {
-                        ...item,  
+                        ...item,
+                        SchemeCategory: item.name,
                         action: (
+
                             <div className='active-schemes-table'>
                                 <div className="table-actions">
                                     <>
@@ -71,7 +147,7 @@ const SchemeCategory = () => {
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
                                         <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                            <FeatherIcon icon="x-circle" size={16} />
+                                            <FeatherIcon icon="trash-2" size={16} />
                                         </Button>
                                     </>
                                 </div>
@@ -89,6 +165,8 @@ const SchemeCategory = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setnameTod(false)
+        setSelectedSchemeCategory(null)
     };
 
     const handleOk = () => {
@@ -99,7 +177,9 @@ const SchemeCategory = () => {
                 key: uuid()
             }
             dispatch(addSchemecategory(data))
-        } else {
+            setIsModalVisible(false)
+        }
+        else {
             delete selectedSchemeCategory.key
             data = {
                 id: selectedSchemeCategory.id,
@@ -111,6 +191,8 @@ const SchemeCategory = () => {
         }
         form.resetFields()
         setIsModalVisible(false);
+        setnameTod(false)
+        handleCancel()
     };
 
     const [state, setState] = useState({
@@ -129,8 +211,7 @@ const SchemeCategory = () => {
     };
 
     users?.data?.map(user => {
-        const { id, name, designation, status } = user;
-
+        // const { id, name, designation, status } = user;
         return usersTableData.push({
             Typeofbenefit: 'Agriculture & Fisheries',
             action: (
@@ -152,9 +233,9 @@ const SchemeCategory = () => {
 
     const schemeTableColumns = [
         {
-            title: 'Scheme Category',
+            title: 'SchemeCategory',
             dataIndex: 'name',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.SchemeCategory.length - b.SchemeCategory.length,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -176,6 +257,9 @@ const SchemeCategory = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Category
                         </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
+                            Import
+                        </Button>
                     </div>
                 ]}
             />
@@ -183,12 +267,12 @@ const SchemeCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-
-                            <Form name="sDash_select" layout="vertical">
+                            {/* --- search bar --- */}
+                            {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
                                 </Form.Item>
-                            </Form>
+                            </Form> */}
 
                             <Table
                                 // rowSelection={rowSelection}
@@ -199,7 +283,7 @@ const SchemeCategory = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {schemeCategoryTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -210,11 +294,13 @@ const SchemeCategory = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+
+                okText={nameTod ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
@@ -223,16 +309,14 @@ const SchemeCategory = () => {
                             name="name"
                         />
                     </Form.Item>
-                    {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder=""
-                            name="key"
-                        />
-                    </Form.Item> */}
                 </Form>
+            </Modal>
 
-            </Modal>}
+
+            {< ImportSchemeCategory
+                importModal={importModal}
+                handleCancel={() => setImportModal(false)}
+                modaltitle="Import Scheme Category" />}
         </>
     )
 }

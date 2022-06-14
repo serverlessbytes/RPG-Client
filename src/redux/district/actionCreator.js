@@ -8,6 +8,7 @@ const {
   
   postDistrictSuccess,
   getDistrictSuccess,
+  postDistrictErr,
   
 } = actions;
 
@@ -19,6 +20,7 @@ export const postDistrictData=(body) => async(dispatch)=>{
     return  dispatch(postDistrictSuccess(res))
       //dispatch(getStateData())
   })
+  .catch((err) => dispatch(postDistrictErr(err)))
 }
 
 export const getDistrictData=(data) => async(dispatch)=>{

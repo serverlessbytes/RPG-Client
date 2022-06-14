@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Dashboard from './dashboard';
@@ -10,10 +10,22 @@ import LanguageRoutes from './language';
 import schemes from './schemes';
 import Courses from './Courses';
 import district from './district';
- import user from './user'; 
+import user from './user';
+import Testimonial from './Testimonial';
+import Banner from '../../container/banner/Banner';
+import Carousel from '../../container/carousel/Carousel';
+import Employer from './employer';
+import { useDispatch } from 'react-redux';
+import { getLanguageData } from '../../redux/language/actionCreator';
+import Articial from '../../container/article/article';
+import Query from '../../container/query/query';
 
 const Admin = () => {
   const { path } = useRouteMatch();
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getLanguageData())
+  }, [])
 
   return (
     <Switch>
@@ -32,7 +44,13 @@ const Admin = () => {
         <Route path={`${path}/language`} component={LanguageRoutes} />
         <Route path={`${path}/scheme`} component={schemes} />
         <Route path={`${path}/courses`} component={Courses} />
+        <Route path={`${path}/testimonial`} component={Testimonial} />
         <Route path={`${path}/user`} component={user} />
+        <Route path={`${path}/banner`} component={Banner} />
+        <Route path={`${path}/carousel`} component={Carousel} />
+        <Route path={`${path}/employer`} component={Employer} />
+        <Route path={`${path}/article`} component={Articial} />
+        <Route path={`${path}/query`} component={Query} />
       </Suspense>
     </Switch>
   );

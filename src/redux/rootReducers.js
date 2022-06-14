@@ -8,7 +8,7 @@ import authReducer from './authentication/reducers';
 import ChangeLayoutMode from './themeLayout/reducers';
 import { teamReducer } from './team/reducers';
 //import { userReducer, userGroupReducer } from './users/reducers';
-import  userReducer  from './users/reducers';
+import userReducer from './users/reducers';
 import { sellersReducer } from './sellers/reducers';
 import { headerSearchReducer } from './headerSearch/reducers';
 import orderReducer from './orders/reducers';
@@ -39,6 +39,11 @@ import cateGoryReducer from './course/reducers';
 import jobReducer from './jobs/reducers';
 import dashboardReducer from './dashboard/reducers';
 import districtReducer from './district/reducers';
+import testimonialReducer from './testimonial/reducers';
+import bannerReducer from './banner/reducers';
+import carouselReducer from './carousel/reducers';
+import queriesReducer from './query/reducers';
+import articlesReducer from './article/reducers';
 
 
 const rootReducers = combineReducers({
@@ -81,15 +86,20 @@ const rootReducers = combineReducers({
   FileManager,
   AxiosCrud: axiosCrudReducer,
   SingleAxiosCrud: axiosSingleCrudReducer,
-  profileReducer:ProfileReducer,
-  state:stateReducer,
-  language:languageReducer,
-  scheme:schemeReducer,
-  beneFit:BenefitsReducer,
-  category:cateGoryReducer,
+  profileReducer: ProfileReducer,
+  state: stateReducer,
+  language: languageReducer,
+  scheme: schemeReducer,
+  beneFit: BenefitsReducer,
+  category: cateGoryReducer,
   job: jobReducer,
-  dashboard:dashboardReducer,
-  district:districtReducer,
+  dashboard: dashboardReducer,
+  district: districtReducer,
+  testimonial: testimonialReducer,
+  banner: bannerReducer,
+  carousel: carouselReducer,
+  queries: queriesReducer,
+  articles: articlesReducer,
 });
 
 export default rootReducers;

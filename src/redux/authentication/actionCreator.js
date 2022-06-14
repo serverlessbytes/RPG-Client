@@ -3,20 +3,22 @@ import STORAGEKEY from '../../config/APP/app.config';
 import { ApiGet, ApiPost, ApiPostNoAuth } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import actions from './actions';
+import { getLanguageByName } from '../language/actionCreator';
 
-const { 
-  loginBegin, 
-  loginSuccess, 
-  loginErr, 
-  logoutBegin, 
-  logoutSuccess, 
+const {
+  loginBegin,
+  loginSuccess,
+  loginErr,
+  logoutBegin,
+  logoutSuccess,
   logoutErr,
-  signUpErr, 
-  signUpSuccess, 
+  signUpErr,
+  signUpSuccess,
   signUpBegin,
   getUserSuccess,
-  editProfileSuccess
- } = actions;
+  editProfileSuccess,
+
+} = actions;
 
 // const login = () => {
 //   return async dispatch => {
@@ -32,34 +34,34 @@ const {
 //   };
 // };
 
-const login = (body,keepSignIn) => async (dispatch) => {
-  await ApiPostNoAuth("user/auth/login", body)
-    .then((res) => {
-      if (res.message === "user logged") {
-        if(keepSignIn) {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data, true)
-        } else {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data, false)
-        }
-        return dispatch(loginSuccess(true));
-      }
-    })
+const login = (body, keepSignIn) => async dispatch => {
+  await ApiPostNoAuth('user/auth/login', body)
+    .then(res => {
+      console.log('res  === ', res);
+      if (res.message === 'user logged') {
 
-    .catch((e) => {
-      console.log("errpor  === ",e);
-      if (e === "incorrect password") {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
-        return dispatch(loginSuccess(false));
-      }
-      else if (e === "incorrect password") {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
-        return dispatch(loginSuccess(false));
-      }
-      else {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
-        return dispatch(loginSuccess(false));
+        if (keepSignIn) {
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, true);
+        } else {
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, false);
+        }
+        dispatch(getLanguageByName())
+        return dispatch(loginSuccess(res));
       }
     })
+    .catch(e => {
+      console.log('errpor  === ', e);
+      if (e === 'incorrect password') {
+        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
+        return dispatch(loginSuccess(false));
+      } else if (e === 'incorrect password') {
+        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
+        return dispatch(loginSuccess(false));
+      } else {
+        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
+        return dispatch(loginSuccess(false));
+      }
+    });
 };
 
 const logOut = () => {
@@ -74,29 +76,24 @@ const logOut = () => {
   };
 };
 
-const signUp = (body) => async(dispatch)=>{
-  await ApiPostNoAuth("user/auth/signup", body)
-  .then((res) =>{
-    if(res.message === "user created"){
-      return dispatch(signUpSuccess(res))
+const signUp = body => async dispatch => {
+  await ApiPostNoAuth('user/auth/signup', body).then(res => {
+    if (res.message === 'user created') {
+      return dispatch(signUpSuccess(res));
     }
-  })
+  });
 };
 
-const getUser = () => async(dispatch)=>{
-  await ApiGet("user/auth/getUser")
-  .then((res) =>{
-      return dispatch(getUserSuccess(res))
-  })
-}
+const getUser = () => async dispatch => {
+  await ApiGet('user/auth/getUser').then(res => {
+    return dispatch(getUserSuccess(res));
+  });
+};
 
+const editUser = (body, id) => async dispatch => {
+  await ApiPost(`user/auth/editProfile?id=${id}`, body).then(res => {
+    return dispatch(editProfileSuccess(res));
+  });
+};
 
-const editUser = (body,id) => async(dispatch)=>{
-  await ApiPost(`user/auth/editProfile?id=${id}`,body)
-  .then((res) =>{
-      return dispatch(editProfileSuccess(res))
-  })
-}
-
-
-export { login, logOut, signUp, getUser, editUser};
+export { login, logOut, signUp, getUser, editUser };

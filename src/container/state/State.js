@@ -3,16 +3,22 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
-import { Form, Input, Modal, Select, Table } from 'antd';
+import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { getLanguageData } from '../../redux/language/actionCreator';
-import { Main, TableWrapper } from '../styled';
+import { Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
+import actions from '../../redux/state/actions';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const State = () => {
+    const {
+        postStateSuccess,postStateErr
+      } = actions;
     const dispatch = useDispatch()
     const [data, setData] = useState({
         name: '',
@@ -34,7 +40,30 @@ const State = () => {
     // }, [languageData])
 
      const stateData = useSelector((state) => state.state.getStateData)
+     const postStatedata = useSelector((state) => state.state.postStateData)
+     const postStateError = useSelector((state) => state.state.postStateErr)
      
+     useEffect(()=>{console.log("postStatedata",postStatedata)},[postStatedata])
+
+     useEffect(() => {
+        if (postStatedata && postStatedata.status  === 200) {
+            dispatch(postStateSuccess(null))
+            toast.success("State Add successful");
+            //toastAssetsAdd(true)
+            //onHide()
+        }
+        // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
+        //   dispatch(editSchemeSuccess(null))
+        //   toast.success("Jobs Update successful");
+        // }
+      }, [postStatedata])
+      
+      useEffect(()=>{
+        if(postStateError){ 
+            dispatch(postStateErr(null))
+          toast.error("Something Wrong")
+        }
+      },[postStateError])
 
     useEffect(() => {
         if (stateData && stateData.data) {
@@ -56,6 +85,15 @@ const State = () => {
     const showModal = () => {
         setIsModalVisible(true);
     };
+
+//  useEffect(() => {
+//   setData({
+//       name: "",
+//       key : "",
+//   })
+//  }, [showModal])
+ 
+
     const { Option } = Select;
     const handleOk = () => {
         let stateData = form.getFieldsValue()
@@ -65,10 +103,11 @@ const State = () => {
         }
         dispatch(postStateData(stateData))
         setIsModalVisible(false);
+        handleCancel()
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
+        form.resetFields()
     };
     useEffect(() => {
         dispatch(getStateData())
@@ -101,9 +140,21 @@ const State = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
+                    {/* <ProjectPagination>
+
+                        <Pagination
+                            onChange={() => { }}
+                            showSizeChanger
+                            onShowSizeChange={() => { }}
+                            pageSize={10}
+                            defaultCurrent={1}
+                            total={10}
+                        />
+
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
-            <Modal title="Enter State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="State" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">State</label>
                     <Form.Item name="name">

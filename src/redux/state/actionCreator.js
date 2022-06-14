@@ -5,7 +5,7 @@ import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 
 const {
-  
+
   cartUpdateBegin,
   cartUpdateSuccess,
   cartUpdateErr,
@@ -15,8 +15,9 @@ const {
   cartDeleteErr,
 
   postStateSuccess,
+  postStateErr,
   getStateSuccess,
-  
+
 } = actions;
 
 export const stateGetData = () => {
@@ -59,19 +60,20 @@ export const cartDelete = (id, chartData) => {
   };
 };
 
-export const postStateData=(body) => async(dispatch)=>{
+export const postStateData = (body) => async (dispatch) => {
   await ApiPost(`state/addState?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-  .then((res) =>{
-       dispatch(postStateSuccess(res))
+    .then((res) => {
+      dispatch(postStateSuccess(res))
       return dispatch(getStateData())
-  })
+    })
+    .catch((err) => dispatch(postStateErr(err)))
 }
 
-export const getStateData=() => async(dispatch)=>{
+export const getStateData = () => async (dispatch) => {
   await ApiGet(`state/getState?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-  .then((res) =>{
-          return dispatch(getStateSuccess(res)) 
-  })
+    .then((res) => {
+      return dispatch(getStateSuccess(res))
+    })
 }
 
 

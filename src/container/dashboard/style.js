@@ -1,12 +1,12 @@
 import Styled from 'styled-components';
 
 const EChartCard = Styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
+    // display: flex;
+    // flex-wrap: wrap;
+    // align-items: flex-end;
     .card-chunk{
-        width: 50%;
-        flex: 0 0 50%;
+        // width: 50%;
+        // flex: 0 0 50%;
     }
     @media only screen and (max-width: 379px){
         .card-chunk{
@@ -420,7 +420,7 @@ const CardGroup = Styled.div`
             ${({ theme }) => (!theme.rtl ? 'padding-left' : 'padding-right')}: 0;
             ${({ theme }) => (theme.rtl ? 'padding-left' : 'padding-right')}: 15px;
             ${({ theme }) => (!theme.rtl ? 'border-right' : 'border-left')}: 1px solid ${({ theme }) =>
-  theme['border-color-light']} !important;
+        theme['border-color-light']} !important;
             @media only screen and (max-width: 1199px){
                 ${({ theme }) => (theme.rtl ? 'padding-left' : 'padding-right')}: 0 none !important;
                 padding: ${({ theme }) => (theme.rtl ? '0 10px 0 0' : '0 0 0 10px')};
@@ -488,7 +488,7 @@ const CardGroup = Styled.div`
                     padding: 14.5px 15px;
                     text-align: ${({ theme }) => (theme.rtl ? 'left' : 'right')};;
                     ${({ theme }) => (theme.rtl ? 'border-left' : 'border-right')};: 1px solid ${({ theme }) =>
-  theme['border-color-light']};
+        theme['border-color-light']};
                     color: ${({ theme }) => theme['gray-color']};
                     &:first-child{
                         ${({ theme }) => (!theme.rtl ? 'border-left' : 'border-right')};: 0 none;
@@ -516,7 +516,7 @@ const ExList = Styled.div`
     padding: 25px 0 0;
     height: 100%;
     ${({ theme }) => (theme.rtl ? 'border-left' : 'border-right')}: 1px solid ${({ theme }) =>
-  theme['border-color-light']};
+        theme['border-color-light']};
     @media only screen and (max-width: 1599px){
         display: flex;
         align-items: center;
@@ -604,7 +604,7 @@ const OverviewCard = Styled.div`
         width: 100%;
         height: 215px;
         background:linear-gradient(45deg, ${({ theme }) => theme['secondary-color']}, ${({ theme }) =>
-  theme['warning-color']});
+        theme['warning-color']});
   ${({ theme }) => (theme.rtl ? 'right' : 'left')}:0;
         top: 0;
         z-index:-1;
@@ -1780,36 +1780,36 @@ const TopSellerWrap = Styled.div`
 `;
 
 export {
-  ChartContainer,
-  DashboardBaseStyleWrap,
-  EChartCard,
-  Focard,
-  CardBarChart,
-  CardGroup,
-  ExList,
-  OverviewCard,
-  PerformanceChartWrapper,
-  Pstates,
-  SessionChartWrapper,
-  SessionState,
-  RegionMap,
-  LadingPages,
-  RegionList,
-  CardBarChart2,
-  SocialMediaWrapper,
-  LineChartWrapper,
-  RatioCard,
-  IncomeExpenseWrapper,
-  LocationMapWrapper,
-  RevenueWrapper,
-  RevenueTableWrapper,
-  RevenueChartWrapper,
-  TrafficTableWrapper,
-  Map,
-  SentEmailWrapper,
-  RecentDealsWrapper,
-  OverviewSalesCard,
-  SalesTargetWrap,
-  SalesGrowthWrap,
-  TopSellerWrap,
+    ChartContainer,
+    DashboardBaseStyleWrap,
+    EChartCard,
+    Focard,
+    CardBarChart,
+    CardGroup,
+    ExList,
+    OverviewCard,
+    PerformanceChartWrapper,
+    Pstates,
+    SessionChartWrapper,
+    SessionState,
+    RegionMap,
+    LadingPages,
+    RegionList,
+    CardBarChart2,
+    SocialMediaWrapper,
+    LineChartWrapper,
+    RatioCard,
+    IncomeExpenseWrapper,
+    LocationMapWrapper,
+    RevenueWrapper,
+    RevenueTableWrapper,
+    RevenueChartWrapper,
+    TrafficTableWrapper,
+    Map,
+    SentEmailWrapper,
+    RecentDealsWrapper,
+    OverviewSalesCard,
+    SalesTargetWrap,
+    SalesGrowthWrap,
+    TopSellerWrap,
 };

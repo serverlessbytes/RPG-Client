@@ -1,12 +1,13 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import FeatherIcon from 'feather-icons-react';
 import propTypes from 'prop-types';
 import SubMenu from 'antd/lib/menu/SubMenu';
 
 const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
   const { path } = useRouteMatch();
+  const history = useHistory()
   const pathName = window.location.pathname;
   const pathArray = pathName.split(path);
   const mainPath = pathArray[1];
@@ -42,68 +43,73 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       overflowedIndicator={<FeatherIcon icon="more-vertical" />}
       openKeys={openKeys}
     >
-      <Menu.Item key="home">
-        <NavLink onClick={toggleCollapsed} to={`${path}`}>
+
+      <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="grid" />}>
+        {/* <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="home" />}> */}
+        <NavLink onClick={toggleCollapsed} to={`${path}`} >
           Dashboard
         </NavLink>
       </Menu.Item>
 
       {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
-      <SubMenu key="job" title="Jobs">
-        <Menu.Item key="dashboard">
-          <NavLink onClick={toggleCollapsed} to={`${path}/job/dashboard`}>
+      <SubMenu key="job" className='menu' title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}
+        icon={!topMenu && <FeatherIcon icon="codepen" />}>
+        {/* <Menu.Item key="dashboard">
+          <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
             Jobs Dashboard
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="post">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
             Jobs Post
           </NavLink>
-        </Menu.Item>
-        <Menu.Item key="applications">
-          <NavLink onClick={toggleCollapsed} to={`${path}/job/applications`}>
+        </Menu.Item >
+        {/* style={{marginLeft:"15px"}} */}
+        <Menu.Item key="applications" >
+          <NavLink onClick={toggleCollapsed} to={`${path}/job/application`}>
             Jobs Applications
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="category">
+        <Menu.Item key="category" >
           <NavLink onClick={toggleCollapsed} to={`${path}/job/category`}>
             Jobs Category
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="role">
+        <Menu.Item key="role" >
           <NavLink onClick={toggleCollapsed} to={`${path}/job/role`}>
             Jobs Role
           </NavLink>
         </Menu.Item>
       </SubMenu>
-      <Menu.Item key="state">
+
+      <Menu.Item key="state" icon={!topMenu && <FeatherIcon icon="hexagon" />}>
         <NavLink onClick={toggleCollapsed} to={`${path}/state`}>
           State
         </NavLink>
       </Menu.Item>
-      <Menu.Item key="district">
+      <Menu.Item key="district" icon={!topMenu && <FeatherIcon icon="layers" />}>
         <NavLink onClick={toggleCollapsed} to={`${path}/district`}>
           District
         </NavLink>
       </Menu.Item>
-      <Menu.Item key="language">
+      {/* <Menu.Item key="language">
         <NavLink onClick={toggleCollapsed} to={`${path}/language`}>
           Language
         </NavLink>
-      </Menu.Item>
+      </Menu.Item> */}
 
       {/* <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes"> */}
-      <SubMenu key="schemes" title="Schemes">
+      <SubMenu key="schemes" title="Schemes" onTitleClick={() => history.push(`${path}/scheme`)} icon={!topMenu && <FeatherIcon icon="hash" />}>
         <Menu.Item key="scheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
             Govt Schemes
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="addscheme">
+        {/* <Menu.Item key="addscheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme/addscheme`}>
             Add Govt Schemes
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="schemecategory">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme/schemecategory`}>
             Scheme Category
@@ -114,30 +120,148 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
             Benefits Type
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="schemerating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/scheme/schemerating`}>
+            Scheme Rating
+          </NavLink>
+        </Menu.Item>
       </SubMenu>
+
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
-      <SubMenu key="courses" title="Courses">
-        <Menu.Item key="courses">
+      <SubMenu key="courses" title="Courses" onTitleClick={() => history.push(`${path}/courses`)} icon={!topMenu && <FeatherIcon icon="command" />}>
+        <Menu.Item key="courses" >
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="partnercourses">
+        <Menu.Item key="partnercourses" >
           <NavLink onClick={toggleCollapsed} to={`${path}/courses/partnercourses`}>
             Partner Courses
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="coursecategory">
+        <Menu.Item key="coursecategory" >
           <NavLink onClick={toggleCollapsed} to={`${path}/courses/coursecategory`}>
             Course Category
           </NavLink>
         </Menu.Item>
-      </SubMenu>
-      <Menu.Item key="user">
+
+        <Menu.Item key="courserating" >
+          <NavLink onClick={toggleCollapsed} to={`${path}/courses/courserating`}>
+            Course Rating
+          </NavLink>
+        </Menu.Item>
+
+      </SubMenu >
+      {/* <Menu.Item key="testimonial">
+        <NavLink onClick={toggleCollapsed} to={`${path}/testimonial`}>
+          Testimonial
+        </NavLink>
+      </Menu.Item> */}
+
+      <SubMenu key="user" title="Users" onTitleClick={() => history.push(`${path}/user`)} icon={!topMenu && <FeatherIcon icon="users" />}>
+        {/* <Menu.Item key="user">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
+            User
+          </NavLink>
+        </Menu.Item> */}
+
+        <Menu.Item key="user">
           <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
             User
           </NavLink>
         </Menu.Item>
+        {/* <Menu.Item key="userrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/userrating`}>
+            User Rating
+          </NavLink>
+        </Menu.Item> */}
+        <Menu.Item key="partner">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/partner`}>
+            Partner
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="employer">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/employer`}>
+            Employer
+          </NavLink>
+        </Menu.Item>
+        {/* <Menu.Item key="employerrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/employerrating`}>
+            Employer Rating
+          </NavLink>
+        </Menu.Item> */}
+        <Menu.Item key="useradmin">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/useradmin`}>
+            Admin
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="superadmin">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/superadmin`}>
+            SuperAdmin
+          </NavLink>
+        </Menu.Item>
+
+        {/* <Menu.Item key="userrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/user/userrating`}>
+            User Rating
+          </NavLink>
+        </Menu.Item> */}
+      </SubMenu>
+
+      {/* 
+      <SubMenu key="employer" title="Employer" onTitleClick={() => history.push(`${path}/employer`)}>
+        <Menu.Item key="employer">
+          <NavLink onClick={toggleCollapsed} to={`${path}/employer`}>
+            Employer
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="employerrating">
+          <NavLink onClick={toggleCollapsed} to={`${path}/employer/employerrating`}>
+            Employer Rating
+          </NavLink>
+        </Menu.Item>
+      </SubMenu> */}
+
+      <SubMenu key="layout" title="Layout" icon={!topMenu && <FeatherIcon icon="layout" />}>
+        <Menu.Item key="banner">
+          <NavLink onClick={toggleCollapsed} to={`${path}/banner`} >
+            Banner
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="carousel" >
+          <NavLink onClick={toggleCollapsed} to={`${path}/carousel`} >
+            Carousel
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="testimonial">
+          <NavLink onClick={toggleCollapsed} to={`${path}/testimonial`} >
+            Testimonial
+          </NavLink>
+        </Menu.Item>
+      </SubMenu>
+
+      <Menu.Item key="article" icon={!topMenu && <FeatherIcon icon="hexagon" />}>
+        <NavLink onClick={toggleCollapsed} to={`${path}/article`}>
+          Article
+        </NavLink>
+      </Menu.Item>
+
+      <Menu.Item key="query" icon={!topMenu && <FeatherIcon icon="help-circle" />}>
+        <NavLink onClick={toggleCollapsed} to={`${path}/query`}>
+          Query
+        </NavLink>
+      </Menu.Item>
+
+      {/* <Menu.Item key="banner">
+        <NavLink onClick={toggleCollapsed} to={`${path}/banner`}>
+          Banner
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item key="carousel">
+        <NavLink onClick={toggleCollapsed} to={`${path}/carousel`}>
+          Carousel
+        </NavLink>
+      </Menu.Item> */}
     </Menu>
   );
 };

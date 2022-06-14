@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+//import JobApplication from '../../container/job/JobApplication';
 
 const Dashboard = lazy(() => import('../../container/job/JobDashboard'));
 // const Invoice = lazy(() => import('../../container/ecommerce/Invoice'));
@@ -9,6 +10,9 @@ const JobListTable = lazy(() => import('../../container/job/JobListTable'));
 const AddJobPost = lazy(() => import('../../container/job/AddJobPost'));
 const JobCategory = lazy(() => import('../../container/job/JobCategory'))
 const JobRole = lazy(() => import('../../container/job/JobRole'))
+const JobApplication = lazy(() => import('../../container/job/JobApplication'))
+const AddJobApplication = lazy(() => import('../../container/job/AddJobApplication'))
+const JobPostPage = lazy(() => import('../../container/job/JobPostPage'))
 
 const JobRoutes = () => {
   const { path } = useRouteMatch();
@@ -20,6 +24,9 @@ const JobRoutes = () => {
       <Route exact path={`${path}/new`} component={AddJobPost} />
       <Route exact path={`${path}/category`} component={JobCategory} />
       <Route exact path={`${path}/role`} component={JobRole} />
+      <Route exact path={`${path}/application`} component={JobApplication} />
+      <Route exact path={`${path}/addjobapplication`} component = {AddJobApplication}></Route>
+      <Route exact path={`${path}/view`} component = {JobPostPage}></Route>
     </Switch>
   );
 };

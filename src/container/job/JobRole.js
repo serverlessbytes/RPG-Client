@@ -9,18 +9,24 @@ import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobcategory, editJobcategory, getJobcategory, getJobroles, addJobrole, editJobrole } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
+import { toast } from 'react-toastify';
+import actions from '../../redux/jobs/actions';
+import ImportJobRole from '../../components/modals/ImportJobRole';
 
 const JobRole = () => {
-
+    const { editJobroleSuccess, editJobroleErr, addJobroleSuccess,
+        addJobroleErr, addBulkJobRolesSuccess, addBulkJobRolesErr } = actions;
 
     const dispatch = useDispatch()
     const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [importModal, setImportModel] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [jobRolesTableData, setJobRolesTableData] = useState([]);
     const [selectedJobRole, setSelectedJobCategory] = useState();
     const [isDisabled, setIsDisabled] = useState(true);
+    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -29,6 +35,57 @@ const JobRole = () => {
 
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
+    const editJobRoleData = useSelector((state) => state.job.editJobRoleData)
+    const addJobRoledata = useSelector((state) => state.job.addJobRoleData)
+    const addJobRoleError = useSelector((state) => state.job.addJobRoleError)
+    const editJobRoleError = useSelector((state) => state.job.editJobRoleError)
+    const importJobRole = useSelector((state) => state.job.importJobRole)
+    const importJobRoleErr = useSelector((state) => state.job.importJobRoleErr)
+
+    useEffect(() => {
+        if (importJobRole && importJobRole.status === 200) {
+            dispatch(addBulkJobRolesSuccess(null))
+            toast.success("Import Job Role successful");
+        }
+        else if (importJobRole && importJobRole.status !== 200) {
+            toast.error("Something wrong");
+        }
+    }, [importJobRole])
+
+    useEffect(() => {
+        if (importJobRoleErr) {
+            dispatch(addBulkJobRolesErr(null))
+            toast.error("Something wrong");
+        }
+    }, [importJobRoleErr])
+
+    useEffect(() => {
+        if (editJobRoleData && editJobRoleData.status === 200) {
+            dispatch(editJobroleSuccess(null))
+            toast.success("Job Role update successful");
+        }
+    }, [editJobRoleData])
+
+    useEffect(() => {
+        if (addJobRoledata && addJobRoledata.status === 200) {
+            dispatch(addJobroleSuccess(null))
+            toast.success("Job Role add successful");
+        }
+    }, [addJobRoledata])
+
+    useEffect(() => {
+        if (addJobRoleError) {
+            dispatch(addJobroleErr(null))
+            toast.error("Something wrong");
+        }
+    }, [addJobRoleError])
+
+    useEffect(() => {
+        if (editJobRoleError) {
+            dispatch(editJobroleErr(null))
+            toast.error("Something wrong");
+        }
+    }, [editJobRoleError])
 
     useEffect(() => {
         dispatch(getJobcategory());
@@ -36,14 +93,13 @@ const JobRole = () => {
     }, [])
 
     useEffect(() => {
-      if(!isModalVisible){
-        setIsDisabled(true)
-      }
+        if (!isModalVisible) {
+            setIsDisabled(true)
+        }
     }, [isModalVisible])
-    
 
     const onEdit = (id) => {
-        let dataForEdit = jobRolesData  && jobRolesData.find((item) => item.id === id)
+        let dataForEdit = jobRolesData && jobRolesData.find((item) => item.id === id)
         if (dataForEdit) {
             setSelectedJobCategory(dataForEdit)
             form.setFieldsValue({
@@ -51,6 +107,7 @@ const JobRole = () => {
             })
             setIsModalVisible(true);
             setIsDisabled(false);
+            setNameTog(true)
         }
     }
 
@@ -68,47 +125,54 @@ const JobRole = () => {
     }
 
     useEffect(() => {
-     if(jobData && jobData.Data){
-      setJobCategoryTableData(jobData.Data)
-     }
+        if (jobData && jobData.Data) {
+            setJobCategoryTableData(jobData.Data)
+        }
     }, [])
-    
+
 
     useEffect(() => {
-      if (jobRolesData && jobRolesData.length > 0) {
+        if (jobRolesData && jobRolesData.length > 0) {
 
-          setJobRolesTableData(jobRolesData.length > 0 ?
-            jobRolesData.map((item) => {
-                  return {
-                      ...item,  
-                      action: (
-                        <div className='active-jobs-table'>
-                        <div className="table-actions">
-                            <>
-                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                    <FeatherIcon icon="edit" size={16} />
-                                </Button>
-                                {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+            setJobRolesTableData(jobRolesData.length > 0 ?
+                jobRolesData.map((item) => {
+                    return {
+                        ...item,
+                        action: (
+                            <div className='active-jobs-table'>
+                                <div className="table-actions">
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                                     <FeatherIcon icon="x-circle" size={16} />
                                 </Button> */}
-                            </>
-                        </div>
-                    </div>
-                      )
-                  }
-              }) : [])
-      }
-  }, [jobRolesData])
+                                    </>
+                                </div>
+                            </div>
+                        )
+                    }
+                }) : [])
+        }
+    }, [jobRolesData])
 
 
     const showModal = () => {
         setIsModalVisible(true);
     };
 
+    const showImportModal = () => {
+        setImportModel(true);
+    }
+
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setNameTog(false)
     };
+
+
 
     const handleOk = () => {
         let data = form.getFieldsValue()
@@ -129,8 +193,10 @@ const JobRole = () => {
             }
             dispatch(editJobrole(data))
         }
-        // form.resetFields()
+        form.resetFields()
+        setSelectedJobCategory()
         setIsModalVisible(false);
+        setNameTog(false)
     };
 
     const [state, setState] = useState({
@@ -153,7 +219,7 @@ const JobRole = () => {
         {
             title: 'Job Roles',
             dataIndex: 'name',
-            
+
             sorter: (a, b) => a.name.length - b.name.length,
             sortDirections: ['descend', 'ascend'],
         },
@@ -163,8 +229,6 @@ const JobRole = () => {
             width: '100px',
         },
     ];
-
-
 
     return (
         <>
@@ -176,6 +240,9 @@ const JobRole = () => {
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
                             Add Role
                         </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showImportModal}>
+                            Import Role
+                        </Button>
                     </div>
                 ]}
             />
@@ -184,22 +251,35 @@ const JobRole = () => {
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
 
-                            <Form name="sDash_select" layout="vertical">
+                            {/* --- search bar --- */}
+                            {/* <Form name="sDash_select" layout="vertical">
                                 <Form.Item name="search" label="">
                                     <Input placeholder="search" style={{ width: 200 }} />
                                 </Form.Item>
-                            </Form>
+                            </Form> */}
 
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={jobRolesTableData}
                                 columns={jobTableColumns}
-                                pagination={true}
+                                pagination={false}
+                            // pagination={{
+                            //     defaultPageSize: users?.per_page,
+                            //     total: users?.page_count,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //     onChange: (page, pageSize) => {
+                            //       setPageNumber(page);
+                            //       setPerPage(pageSize);
+                            //     },
+                            //     // defaultPageSize: 5,
+                            //     // total: usersTableData.length,
+                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                            //   }}
                             />
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    <ProjectPagination>
+                    {/* <ProjectPagination>
                         {jobCategoryTableData.length ? (
                             <Pagination
                                 onChange={onHandleChange}
@@ -210,36 +290,33 @@ const JobRole = () => {
                                 total={10}
                             />
                         ) : null}
-                    </ProjectPagination>
+                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+                okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-                {isDisabled && <Form.Item initialValue="Select a job category " name="jobCategoryId">
-                                <Select size="large" placeholder="Select Category"  className="sDash_fullwidth-select">
-                                    {jobData?.data && jobData?.data?.map((items) => (
-                                        <Option value={items.id}>{items.name} </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>}
-                    <label htmlFor="name">Type of role</label>
+                    <label>Job category</label>
+                    <Form.Item initialValue="Select a job category " name="jobCategoryId">
+                        <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select">
+                            {jobData?.data && jobData?.data?.map((items) => (
+                                <Option value={items.id}>{items.name} </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    <label htmlFor="name">Job role name</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder=""
-                            // name="name"
+                            placeholder="Enter job role name"
+                        // name="name"
                         />
                     </Form.Item>
-                    {/* <label htmlFor="name">Sequence</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder=""
-                            name="key"
-                        />
-                    </Form.Item> */}
                 </Form>
+            </Modal>
 
-            </Modal>}
+            {importModal && <ImportJobRole modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModal} />}
+
         </>
     )
 }

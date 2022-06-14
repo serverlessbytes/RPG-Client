@@ -1,10 +1,16 @@
-import { Col, Modal, Row } from 'antd';
-import React from 'react'
+import { Button, Col, Modal, Row } from 'antd';
+import React, { useEffect } from 'react'
 import moment from 'moment';
+import { useHistory } from 'react-router';
 
 const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
+  let history = useHistory();
   const handleOk = () => {
     setViewModal(false);
+  };
+
+  const onEdit = (id) => {
+    history.push(`/admin/job/new?id=${id}`)
   };
 
   const handleCancel = () => {
@@ -18,6 +24,7 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
           title="Jobs Post"
           visible={viewModal}
           onOk={handleOk}
+          // okText={handleEdit}
           onCancel={handleCancel}
           width={'991px'}
         >
@@ -69,9 +76,8 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
               <span><label style={{ fontWeight: 'bold' }} >Description:</label> {data?.description}</span><br />
             </Col>
             <Col lg={8}>
-              <span><label style={{ fontWeight: 'bold' }} >Shift:</label> {data?.shifts.join(",")}</span><br />
+              <span><label style={{ fontWeight: 'bold' }} >Shift:</label> {data?.shifts}</span><br /> 
             </Col>
-
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Requried Experience:</label> {data?.reqExperience}</span><br />
             </Col>
@@ -88,9 +94,10 @@ const ViewJobPost = ({ viewModal, type, setViewModal, data }) => {
             <Col lg={8}>
               <span><label style={{ fontWeight: 'bold' }} >Type Of Field:</label> {data?.extraType}</span><br />
             </Col>
-
-            
           </Row>
+          <Button size="small" className='edit-view' style={{ float: 'right' }} onClick={() => onEdit(data?.id)} type="primary">
+            Edit
+          </Button>
           {/* <span>Type of job post:{data?.jobType?.name}</span><br /> */}
           {/* <span>Monthly Salary Offered:{data?.salary}</span><br /> */}
           {/* <span>Job Role:{data?.jobRole?.name}</span><br /> */}

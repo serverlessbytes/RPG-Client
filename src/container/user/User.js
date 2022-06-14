@@ -1,101 +1,49 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Button } from '../../components/buttons/buttons';
-import { PageHeader } from '../../components/page-headers/page-headers';
-import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
+import React, { useEffect, useState } from 'react'
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Col, Form, Input, Row, Select, Table, Tabs } from 'antd';
+import FeatherIcon from 'feather-icons-react';
+import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
-import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getSchemecategory, getSchemeData } from '../../redux/schemes/actionCreator';
-import moment from 'moment';
-import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
-import { CSVLink } from 'react-csv';
+import { Main, TableWrapper } from '../styled';
 import { ApiGet } from '../../helper/API/ApiData';
+import 'react-toastify/dist/ReactToastify.css';
+import { Button } from '../../components/buttons/buttons';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { useDispatch, useSelector } from 'react-redux';
+import Item from 'antd/lib/list/Item';
+import { isTemplateMiddle } from 'typescript';
+import StarRatings from 'react-star-ratings';
 
 
 const User = () => {
-
+    const dispatch = useDispatch()
     const { path } = useRouteMatch();
-    let history = useHistory();
-    let dispatch = useDispatch();
-    const CSVLinkRef = useRef(null)
+    const history = useHistory()
+    const [status, setStatus] = useState('active');
+    const [perPage, setPerPage] = useState(20); // forpagination
+    const [pageNumber, setPageNumber] = useState(1);
+    const [userData, setUserData] = useState()
+    const [userTable, setUserTable] = useState([])
 
-    const [usertable, setUsertable] = useState([]) //set data
-    const [state, setState] = useState([]) //set data for export
-    const [state2, setState2] = useState([]) //set data
+    const { TabPane } = Tabs;
 
-    const getAllUsers = useSelector((state) => state.users.getAllUser)
-    let alluser = useSelector((state) => state.users.allUser)
-
-    const [status, setStatus] = useState("active")
-    const callback = (key) => {
-        setStatus(key)
+    const callback = key => {
+        setStatus(key);
+        setPageNumber(1);
+    };
+    const getData = () => {
+        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=USER`)
+            .then((res) => {
+                setUserData(res)
+            })
+            .catch((err) => console.log(err))
     }
-    const [perPage, setPerPage] = useState(10)
-    const [pageNumber, setPageNumber] = useState(1)
-    const [userType, setUserType] = useState("")
-
-    useEffect(() => {
-        console.log("userType", userType)
-    }, [userType])
-
-    useEffect(() => {
-        if (state.length) {
-            CSVLinkRef?.current?.link.click()  // 
-        }
-        console.log("state", state);
-    }, [state])
-
-    useEffect(() => {
-        console.log("state2", state2);
-    }, [state2])
-
-    const selectValue = (e, name) => {
-        if (name === 'userType') {
-            setUserType(e)
-        }
-    }
-    useEffect(() => {
-        if (status) {
-            dispatch(getAllUser(perPage, pageNumber, status, userType));
-        }
-    }, [perPage, pageNumber, status]);
-
-    const onApply = () => {
-        dispatch(getAllUser(perPage, pageNumber, status, userType))
-    }
-
-    const onClear = () => {
-        //console.log("-------", e)
-        setUserType("", 'userType');
-        dispatch(getAllUser(perPage, pageNumber, status, ""))
-    }
-
-
-    const reDirect = () => {
-        history.push(`${path}/adduser`);
-    }
-
     const onEdit = (id) => {
-        history.push(`${path}/adduser?id=${id}`)
+        history.push(`${path}/adduser?id=${id}`);
     }
-
-    //setState({...state,alluser}) // all user
-
-    useEffect(() => {
-        if (alluser?.data?.data) {
-            setState(alluser.data.data)  //set a state for export word
-
-        }
-    }, [alluser])
 
     const onDelete = (id) => {
-        let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id)
-
+        let userForDelete = userData && userData.data && userData.data.data.find(item => item.id === id);
         if (userForDelete) {
             //delete userForDelete.key
             //delete userForDelete.updatedAt
@@ -106,267 +54,163 @@ const User = () => {
                 id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: "dfd",
-            }
-            console.log("userForDelete", userForDelete)
-            dispatch(editProfile(userForDelete))
+                avatar: 'dfd',
+            };
+            delete userForDelete.userTakenRatings
+            dispatch(editProfile(userForDelete));
         }
-    }
-
-    const onActive = (id) => {
-     let  users = getAllUsers && getAllUsers.data && getAllUsers.data.data.find((item)=>item.id === id)
-         let data= {
-            avatar :users.avatar,
-            email :users.email,
-            id:id,
-            isActive:true,
-            isDeleted:false,
-            name:users.name,
-            phone:users.phone,
-            userType:users.userType,
-         }
-         dispatch(editProfile(data))
-    }
-    const { TabPane } = Tabs;
-
-    const { Option } = Select;
-    const usersTableData = [];
+    };
 
     useEffect(() => {
-        if (getAllUsers && getAllUsers.data) {
-            console.log("getAllUsers", getAllUsers)
-            setUsertable(getAllUsers.data?.data?.map(item => {
+        if (userData && userData.data) {
+            setUserTable(
+                userData.data.data.map((item) => {
+                    let userRank = item.userTakenRatings.map(item => item.rating);
 
-                return ({
-                    name: item.name,
-                    email: item.email,
-                    phone: item.phone,
-                    userType: item.userType,
-                    avatar: "",
-                    action: (
-                        <div className="table-actions">
-                            {
-                                status === "active" ?
-                                <>
-                                <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                    <FeatherIcon icon="edit" size={16} />
-                                </Button>
-                                <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                    <FeatherIcon icon="trash-2" size={16} />
-                                </Button>
-                            </>:<Button className="btn-icon" type="danger" to="#" onClick={() => onActive(item.id)} shape="circle">
-                                    <FeatherIcon icon="rotate-ccw" size={16} />
-                                </Button>
-                            }
-                            
-                        </div>
-                    ),
-                });
-            })
+                    var sum = 0;
+
+                    for (var i = 0; i < userRank.length; i++) {
+                        sum += parseInt(userRank[i]);
+                    }
+
+                    var avg = sum / userRank.length;
+                    return {
+                        name: item.name,
+                        email: item.email,
+                        userTakenRatings: (
+                            <StarRatings
+                                rating={avg ? avg : 0}
+                                starRatedColor="#f57c00"
+                                numberOfStars={5}
+                                name="swayamCourse"
+                                starDimension="13px"
+                            />
+                        ),
+                        phone: item.phone,
+                        avatar: '',
+                        action: (
+                            <div className="table-actions">
+                                {status === 'active' ? (
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                            <FeatherIcon icon="trash-2" size={16} />
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button className="btn-icon" type="danger" to="#" onClick={() => onActive(item.id)} shape="circle">
+                                        <FeatherIcon icon="rotate-ccw" size={16} />
+                                    </Button>
+                                )}
+                            </div>
+                        ),
+                    };
+                })
             )
-        }
-    }, [getAllUsers])
-    useEffect(() => {
-        console.log("usertable", usertable)
-    }, [usertable])
-    const usersTableColumns = [
 
-        // {
-        //     title: 'Sequence',
-        //     dataIndex: 'Sequence',
-        //     sorter: (a, b) => a.Sequence.length - b.Sequence.length,
-        //     sortDirections: ['descend', 'ascend'],
-        // },
+        }
+    }, [userData])
+
+    useEffect(() => {
+        getData()
+    }, [perPage, pageNumber, status])
+
+
+
+    const userTableColumns = [
         {
             title: 'Name',
             dataIndex: 'name',
-            sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
-            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Email',
             dataIndex: 'email',
         },
         {
+            title: 'UserRating',
+            dataIndex: 'userTakenRatings',
+        },
+        {
             title: 'Phone',
             dataIndex: 'phone',
         },
-        {
-            title: 'UserType',
-            dataIndex: 'userType',
-        },
-        // {
-        //     title: 'Location',
-        //     dataIndex: 'Location',
-        //     sorter: (a, b) => a.status.length - b.status.length,
-        //     sortDirections: ['descend', 'ascend'],
-        // },
-        // {
-        //     title: 'Last Updated',
-        //     dataIndex: 'LastUpdated',
-        // },
+
         {
             title: 'Actions',
             dataIndex: 'action',
             width: '90px',
         },
-
     ];
 
-    const rowSelection = {
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
-
-    const exPortuser = () => {
-        dispatch(allUser(userType))
-    }
-    const allexPortuser = () => {
-        ApiGet(`user/auth/allUsers`).then((res) => {
-            setState(res?.data?.data)
-        })
-    }
 
     return (
         <>
             <PageHeader
                 ghost
-                title="Users"
-                buttons={[
-                    <div className="page-header-actions">
-                        {/* <Button size="small" type="link">
-                        Export Schemes
-                    </Button>
-                    <Button size="small" type="light">
-                        Import Schemes
-                    </Button> */}
-                        
-                        <Button onClick={exPortuser} size="small" type="info">
-                            Export User
-                        </Button>
-                        <Button onClick={allexPortuser} size="small" type="info">
-                            Export All User
-                        </Button>
-                        <Button onClick={reDirect} size="small" type="primary">
-                            Add User
-                        </Button>
-                        <CSVLink data={state} ref={CSVLinkRef} filename="User.csv" style={{ opacity: 0 }}></CSVLink>
-                        {/* <Button size="small" type="warning">
-                            Deactivate All Schemes
-                        </Button> */}
-                    </div>
-                ]}
+                title="Employer"
+            // buttons={[
+            //     <div className="page-header-actions">
+            //         <Button size="small" type="primary" onClick={allEmployerExport}>
+            //             Export All
+            //         </Button>
+            //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
+            //     </div>
+            // ]}
             />
-            <Main >
+            <Main>
                 <Cards headless>
                     <Row gutter={15}>
                         <Col xs={24}>
-                            <Row gutter={30}>
-                                <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item label="Users Type">
-                                            <Select size="large" value={userType} placeholder="Select" className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
-                                                <option value={""}>Select User</option>
-                                                <option value={"USER"}>USER</option>
-                                                <option value={"PARTNER"}>PARTNER</option>
-                                                <option value={"EMPLOYER"}>EMPLOYER</option>
-                                                <option value={"ADMIN"}>ADMIN</option>
-                                                <option value={"SUPERADMIN"}>SUPERADMIN</option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col>
-                                <Col md={6} xs={24} className="mb-25">
-                                    <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" onClick={(e) => onApply(e)}>
-                                            Apply
-                                        </Button>
-                                        <Button size="small" type="light" onClick={() => onClear()} >
-                                            Clear
-                                        </Button>
-                                    </ListButtonSizeWrapper>
-                                </Col>
-
-                            </Row>
-                            {/* <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Schemes
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Schemes
-                                </Button>
-                            </Row> */}
-                            {/* <ActiveSchemesTable type={type} /> */}
-
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Users" key="active">
+                                <TabPane tab="Active Partner" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-
-                                            <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="search" label="">
-                                                    <Input placeholder="search" style={{ width: 200 }} />
-                                                </Form.Item>
-                                            </Form>
-
                                             <Table
-                                                // rowSelection={rowSelection}
-                                                dataSource={usertable}
-                                                columns={usersTableColumns}
+                                                dataSource={userTable}
+                                                columns={userTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
-                                                    total: getAllUsers?.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    defaultPageSize: userData?.data.per_Page,
+                                                    total: userData?.data.page_count,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
+                                                        setPerPage(pageSize);
+                                                    },
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                                <TabPane tab="Inactive Users" key='inactive'>
+
+                                <TabPane tab="Inactive Partner" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
-
-                                            <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="search" label="">
-                                                    <Input placeholder="search" style={{ width: 200 }} />
-                                                </Form.Item>
-                                            </Form>
-
                                             <Table
-                                                // rowSelection={rowSelection}
-                                                dataSource={usertable}
-                                                // columns={usersTableColumns.filter(item => item.title !== "Actions")}
-                                                columns={usersTableColumns} 
+                                                dataSource={userTable}
+                                                columns={userTableColumns}
                                                 pagination={{
-                                                    defaultPageSize: getAllUsers?.data.data.per_page,
-                                                    total: getAllUsers?.data.data.page_count,
-                                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                    defaultPageSize: userData?.data.per_Page,
+                                                    total: userData?.data.page_count,
                                                     onChange: (page, pageSize) => {
                                                         setPageNumber(page);
-                                                        setPerPage(pageSize)
-                                                    }
-                                                    // defaultPageSize: 5,
-                                                    // total: usersTableData.length,
-                                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                                        setPerPage(pageSize);
+                                                    },
                                                 }}
                                             />
                                         </TableWrapper>
                                     </UserTableStyleWrapper>
                                 </TabPane>
-                            </Tabs>
+                            </Tabs >
                         </Col>
                     </Row>
                 </Cards>
             </Main>
         </>
-
     )
 }
 
 export default User
+
+
+
