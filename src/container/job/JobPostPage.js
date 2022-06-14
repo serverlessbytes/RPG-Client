@@ -123,7 +123,7 @@ function JobPostPage({ data }) {
 
                         <Row gutter={10}>
                             <Col lg={8} className="mb">
-                                <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType.name}</span><br />
+                                <span><label style={{ fontWeight: 'bold' }} className="pr">Type of job post:</label> {getOneJobPostData?.data?.jobType?.name}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
                                 <span><label style={{ fontWeight: 'bold' }} className="pr" >Monthly Salary Offered:</label> {getOneJobPostData?.data?.salary}</span><br />

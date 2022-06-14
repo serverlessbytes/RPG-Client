@@ -101,7 +101,7 @@ const AddJobPost = () => {
                 ...state,
                 key: getOneJobPostData.data.key,
                 salary: getOneJobPostData.data.salary,
-                benifits: RichTextEditor.createValueFromString(getOneJobPostData.data.benifits, 'markdown'),
+                benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
                 name: getOneJobPostData?.data?.name?.name,
                 state: getOneJobPostData?.data?.state?.id,

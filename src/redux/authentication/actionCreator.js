@@ -41,9 +41,9 @@ const login = (body, keepSignIn) => async dispatch => {
       if (res.message === 'user logged') {
 
         if (keepSignIn) {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data, true);
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, true);
         } else {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data, false);
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, false);
         }
         dispatch(getLanguageByName())
         return dispatch(loginSuccess(res));
