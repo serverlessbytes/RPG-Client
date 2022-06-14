@@ -140,11 +140,11 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.jobCategoryId === '') {
-            error.jobCategoryId = 'JobCategoryId is required';
+            error.jobCategoryId = 'Job category is required';
             flage = true;
         }
         if (state.jobRoleId === '') {
-            error.jobRoleId = 'JobRoleId is required';
+            error.jobRoleId = 'Job role is required';
             flage = true;
         }
         if (state.name === '') {
@@ -168,7 +168,7 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.pincode === '') {
-            error.pincode = 'pincode is required';
+            error.pincode = 'Pincode is required';
             flage = true;
         }
         if (state.description === '') {
@@ -183,7 +183,7 @@ const AddJobPost = () => {
             error.requirements = 'Requirements is required';
             flage = true;
         }
-        if (state.shifts === '') {
+        if (state.shifts.length <= 0) {
             error.shifts = 'Shifts is required';
             flage = true;
         }
@@ -200,11 +200,11 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.startDate === '') {
-            error.startDate = 'StartDate is required';
+            error.startDate = 'Start date is required';
             flage = true;
         }
         if (state.endDate === '') {
-            error.endDate = 'EndDate is required';
+            error.endDate = 'End date is required';
             flage = true;
         }
         if (state.extraType === '') {
@@ -482,6 +482,8 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
                                 <Col lg={11}>
+                                <Form.Item name="isactive">
+
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Type of Job</label>
@@ -498,6 +500,7 @@ const AddJobPost = () => {
                                         </Col>
                                         {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
                                     </Row>
+                                    </Form.Item>
                                 </Col>
                             </Row>
                             <Row justify="space-between">
@@ -724,7 +727,7 @@ const AddJobPost = () => {
                             {editJobsID ? <Button className="btn-signin ml-10" type="primary" onClick={e => onEdit(e)} size="medium">
                                 Edit </Button> :
                                 <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                    Submit
+                                Add
                                 </Button>
                             }
 

@@ -170,7 +170,7 @@ const JobPost = ({ match }) => {
                             Export All Jobs
                         </Button>
                         <Button size="small" onClick={() => { history.push("new") }} type="primary">
-                            Add JobPost
+                            Add Job Post
                         </Button>
                         <CSVLink headers={header} data={stateJob} ref={CSVLinkRef} filename="Job.csv" style={{ opacity: 0 }}></CSVLink>
                     </div>

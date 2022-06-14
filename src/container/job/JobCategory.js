@@ -217,7 +217,7 @@ const JobCategory = () => {
                 </Cards>
             </Main>
 
-            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}>
+            {isModalVisible && <Modal title="Add Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
                     <Form.Item name="name">
