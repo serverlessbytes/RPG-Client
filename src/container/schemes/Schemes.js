@@ -9,7 +9,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData, upadteBanner } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import { Modal } from '../../components/modals/antd-modals';
@@ -52,6 +52,7 @@ const Schemes = () => {
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [languageIds, setLanguageIds] = useState();
+  const [bannerChaked, setBannerChaked] = useState();
   const [id, setId] = useState();
 
   const [langIds, setLangIds] = useState({
@@ -72,6 +73,8 @@ const Schemes = () => {
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
+  const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
+
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -82,6 +85,10 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
+
+  // useEffect(() => {
+  //   dispatch(upadteBanner())
+  // }, [])
 
   // useEffect(() => {
   //   if (users?.data) {
@@ -245,6 +252,13 @@ const Schemes = () => {
     { label: "website", key: "website" },
 
   ];
+
+  useEffect(() => {
+    if (schemeBannerData && schemeBannerData.status === 200) {
+      dispatch(getAllSchemes())
+    }
+  }, [schemeBannerData])
+
   useEffect(() => {
     if (users?.data) { //set a state for export excel
       setState(users.data.map((item) => {
@@ -376,9 +390,9 @@ const Schemes = () => {
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
     }
-    // dispatch(editSchemeData(data));
-
   }
+
+
 
   useEffect(() => {
     dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
@@ -469,6 +483,13 @@ const Schemes = () => {
       .catch((err) => console.log("Error", err))
   }
 
+  const onChange = (checked) => {
+
+  };
+  // const onApprovedBanner = (id, isAp) => {
+  //   dispatch(upadteBanner({ id: id, bannerSelected: isAp }))
+  // }
+
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
@@ -544,11 +565,25 @@ const Schemes = () => {
             </div>
           </div>
         ),
+        chooseBanner: (
+          <div>
+            <Switch checked={item.bannerSelected} onChange={(event) => { console.log(event, "event"); dispatch(upadteBanner({ id: item.id, bannerSelected: event })) }} />
+          </div >
+        ),
 
+
+        //     status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //     <Switch checked={item.isApproved}></Switch>
+        //   </div> :
+        //    <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //  </div>
+        //   } */}
+        //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+        //     </div>
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
-
               {
                 status === "active" ?
                   <>
@@ -599,7 +634,6 @@ const Schemes = () => {
   }, [users])
 
   const schemeTableColumns = [
-
     {
       title: 'Scheme Name',
       dataIndex: 'SchemeName',
@@ -631,6 +665,11 @@ const Schemes = () => {
       dataIndex: 'selectLanguage',
       width: '90px',
     },
+    {
+      title: 'Choose banner',
+      dataIndex: 'chooseBanner',
+    },
+
     // {
     //   title: 'Approved',
     //   dataIndex: 'approved',
