@@ -40,12 +40,12 @@ const login = (body, keepSignIn) => async dispatch => {
       console.log('res  === ', res);
       if (res.message === 'user logged') {
 
-        if (keepSignIn) {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, true);
-        } else {
-          AuthStorage.setStorageData(STORAGEKEY.token, res.data.token, false);
-        }
-        dispatch(getLanguageByName())
+        // if (keepSignIn) {
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, keepSignIn);
+        // } else {
+        //   AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, false);
+        // }
+        // dispatch(getLanguageByName())
         return dispatch(loginSuccess(res));
       }
     })
