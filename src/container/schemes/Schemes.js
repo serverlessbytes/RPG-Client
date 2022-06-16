@@ -181,7 +181,7 @@ const Schemes = () => {
         }
       })
   }
-  
+
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
@@ -678,14 +678,14 @@ const Schemes = () => {
           //                 </Button> */}
           //   </div>,
           <div key="1" className="page-header-actions">
-            <Dropdown overlay={menu} trigger='click'>
+            {/* <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
                   Actions
                   <DownOutlined />
                 </Space>
               </a>
-            </Dropdown>
+            </Dropdown> */}
             <CSVLink
               headers={header}
               data={state}

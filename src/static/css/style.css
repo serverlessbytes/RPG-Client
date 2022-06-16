@@ -1681,7 +1681,10 @@ table thead tr th:first-child {
 }
 
 .table-responsive .ant-table-content .ant-table-cell {
-  white-space: nowrap;
+    white-space: nowrap;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Rich TextEditor  */

@@ -223,7 +223,7 @@ export const editSchemeRating = body => async dispatch => {
       dispatch(editSchemeRatingSuccess(res));
       console.log('res', res);
       if (res.status === 200) {
-        return dispatch(getSchemeRating(per_Page, page_Num));
+        return dispatch(getSchemeRating(per_Page, page_number));
       }
     })
     .catch(err => dispatch(editSchemeRatingErr(err)));
