@@ -24,6 +24,10 @@ function JobPostPage({ data }) {
     const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
 
     useEffect(() => {
+        console.log("getOneJobPostData", getOneJobPostData)
+    }, [getOneJobPostData])
+
+    useEffect(() => {
         if (id) {
             dispatch(getoneJobPost(id));
         } else {
@@ -52,7 +56,23 @@ function JobPostPage({ data }) {
         }
         setError(error);
         return flage;
-    } 
+    }
+
+    const onApproved = (id, isAp) => {
+        console.log('id', id)
+        // console.log('isAp', isAp)
+        let data = {
+            isApproved: !isAp,
+        };
+        console.log("data",data)
+        ApiPost(`job/updateIsApproved?jobId=${id}`,data)
+            .then(res => {
+                console.log("res",res)
+                dispatch(getoneJobPost(id));
+                toast.success(data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+            })
+            .catch(err => console.log('Error', err));
+    };
 
     const handleOk = (id, isAp) => {
         form.resetFields()
@@ -62,13 +82,12 @@ function JobPostPage({ data }) {
         if (getOneJobPostData?.data?.data?.isApproved) {
             let data = {
                 isApproved: !isAp,
-                remark : remark,
+                remark: remark,
             };
-            console.log("data",data)
+            console.log("data", data)
 
             ApiPost(`job/updateIsApproved?jobId=${id}`, data)
                 .then(res => {
-                    console.log('res', res);
                     dispatch(getoneJobPost(id));
                     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
                 })
@@ -77,22 +96,6 @@ function JobPostPage({ data }) {
         setRemark('')
         setIsModalVisible(false)
     }
-
-    const onApproved = (id, isAp) => {
-        // if (status !== 'active') {
-        //   return;
-        // }
-        let data = {
-            isApproved: !isAp,
-        };
-        ApiPost(`job/updateIsApproved?jobId=${id}`, data)
-            .then(res => {
-                // console.log('res', res);
-                dispatch(getoneJobPost(id));
-                toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
-            })
-            .catch(err);
-    };
 
     return (
         <>
@@ -113,7 +116,7 @@ function JobPostPage({ data }) {
                             <FeatherIcon icon="arrow-left" size={24} />
                         </Button>
                         {
-                            getOneJobPostData?.data?.isApproved === false ?
+                            getOneJobPostData?.data?.data?.isApproved === false ?
                                 <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneJobPostData?.data?.data?.id, getOneJobPostData?.data?.data?.isApproved)} type="light">
                                     Approved
                                 </Button>
@@ -198,7 +201,7 @@ function JobPostPage({ data }) {
                             </Col> */}
 
                         </Row>
-                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneJobPostData?.data?.id)} type="primary">
+                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneJobPostData?.data?.data?.id)} type="primary">
                             Edit
                         </Button>
 

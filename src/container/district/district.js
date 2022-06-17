@@ -19,10 +19,16 @@ import { fromUnixTime } from 'date-fns';
 
 const district = () => {
     const dispatch = useDispatch()
+    const { Option } = Select;
     const {
         postDistrictSuccess, postDistrictErr,
     } = actions;
+    const [form] = Form.useForm()
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [stateTableData, setstateTableData] = useState([])
     const [statedata, setStateData] = useState("");
     const [state, setState] = useState({
@@ -40,6 +46,9 @@ const district = () => {
             setStateData(e)
         }
     }
+    useEffect (()=>{
+        console.log('statedata', statedata)
+    },[statedata])
 
     const onChangeHandler = (e) => {
         setState({ ...state, [e.target.name]: e.target.value })
@@ -70,13 +79,8 @@ const district = () => {
     useEffect(() => {
         if (stateData && stateData.data) {
             setStateData(stateData?.data[0]?.id)
-            console.log("stateData", stateData?.data[0]?.id)
-
         }
     }, [stateData]);
-
-    //const usersTableData = [];
-    //const [languageTableData, setLanguageTableData] = useState([])
 
 
     useEffect(() => {
@@ -99,20 +103,15 @@ const district = () => {
     }
     const clearFilter = () => {
         setStateData({ statedata: "" })
+        dispatch(getDistrictData(statedata ? statedata : ""))
     }
 
-    useEffect(() => {
-        if (statedata) {
-            dispatch(getDistrictData(statedata))
-        }
-    }, [statedata])
-
-    const [form] = Form.useForm()
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-    const { Option } = Select;
+    // useEffect(() => {
+    //     if (statedata) {
+    //         dispatch(getDistrictData(statedata))
+    //     }
+    // }, [statedata])
+   
     const handleOk = () => {
         // let stateData = form.getFieldsValue()
         // stateData = {
@@ -124,7 +123,6 @@ const district = () => {
             stateId: state.stateId,
             key: uuid(),
         }
-        console.log("datat", data)
         dispatch(postDistrictData(data))
         setIsModalVisible(false);
         handleCancel()

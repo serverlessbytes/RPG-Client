@@ -17,14 +17,22 @@ import actions from "../../redux/jobs/actions";
 const JobApplication = () => {
 
     const dispatch = useDispatch();
+    const { path } = useRouteMatch();
+    const history = useHistory();
+    const { addJobApplicationSuccess, addJobApplicationErr } = actions;
+
     const [status, setStatus] = useState('all');
     const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
     const [perPage, setPerPage] = useState(20) // forpagination
     const [pageNumber, setPageNumber] = useState(1)
-    const { path } = useRouteMatch();
-    const history = useHistory();
-    const { addJobApplicationSuccess,
-        addJobApplicationErr } = actions;
+    const [jobApplication, setJobApplication] = useState({
+        jobCategory: "",
+        jobRole: "",
+    })
+
+    useEffect(()=>{
+        console.log("jobApplication",jobApplication)
+    },[jobApplication])
 
     const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
@@ -44,17 +52,17 @@ const JobApplication = () => {
             dispatch(addJobApplicationSuccess(null))
             toast.success("Jobs Application Add successful")
         }
-        else if (addJobsApplicationdata && addJobsApplicationdata.status !== 200){
-             toast.error("Something Wrong");
+        else if (addJobsApplicationdata && addJobsApplicationdata.status !== 200) {
+            toast.error("Something Wrong");
         }
-    },[addJobsApplicationdata])
+    }, [addJobsApplicationdata])
 
     useEffect(() => {
-        if(addJobsApplicationError){
+        if (addJobsApplicationError) {
             dispatch(addJobApplicationErr(null))
             toast.error("Something Wrong")
         }
-    },[addJobsApplicationError])
+    }, [addJobsApplicationError])
 
     useEffect(() => {
         console.log("addJobsApplicationData", addJobsApplicationdata);
@@ -78,12 +86,29 @@ const JobApplication = () => {
     }, [])
 
     const onselect = (id, selected) => {
-        console.log("selected", selected);
         dispatch(updateIsSelectedJobApplication(id, !selected))
     }
 
     const onHired = (id, hired) => {
         dispatch(updateIsHired(id, !hired))
+    }
+
+    const onApply = () => {
+        dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory ))
+    }
+
+    const clearFilter = () => {
+        setJobApplication({ ...jobApplication, jobCategory: "", jobRole:""  })
+        dispatch(getJobApplication(perPage, pageNumber, "" ))
+    }
+
+    const onChangeHandle = (e, name) => {
+        if (name === 'jobCategory') {
+            setJobApplication({ ...jobApplication, jobCategory: e })
+        }
+        else if (name === 'jobRole') {
+            setJobApplication({ ...jobApplication, jobRole: e })
+        }
     }
 
     useEffect(() => {
@@ -214,7 +239,7 @@ const JobApplication = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form layout="vertical">
                                         <Form.Item label="Job Role">
-                                            <Select size="large" name="jobRole" placeholder="Select Job Role" >
+                                            <Select size="large" name="jobRole" value={jobApplication.jobRole} placeholder="Select Job Role" onChange={(e) => onChangeHandle(e, 'jobRole')} >
                                                 <Option value="">Select Job Role</Option>
                                                 {jobRolesData && jobRolesData.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
@@ -226,7 +251,7 @@ const JobApplication = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form layout="vertical">
                                         <Form.Item label="Job Category">
-                                            <Select size="large" name="jobCategory" placeholder="Select Job Categoty" >
+                                            <Select size="large" name="jobCategory" value = {jobApplication.jobCategory} placeholder="Select Job Categoty" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
                                                 <Option value="">Select Job Categoty</Option>
                                                 {jobcatogerydata && jobcatogerydata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
@@ -237,10 +262,10 @@ const JobApplication = () => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button type="primary" >
+                                        <Button type="primary" onClick={() => onApply()} >
                                             Apply
                                         </Button>
-                                        <Button type="light">
+                                        <Button type="light" onClick={() => clearFilter()}>
                                             Clear
                                         </Button>
                                     </ListButtonSizeWrapper>

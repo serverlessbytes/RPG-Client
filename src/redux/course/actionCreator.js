@@ -112,7 +112,7 @@ export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive,
 }
 
 export const getOneCoursefilter = (id) => async (dispatch) => {
-  await ApiGet(`course/getCourse/${id}?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
   // await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(editCoursefilterSuccess(res))
@@ -142,7 +142,6 @@ export const addSwayamCourse = (data, langId) => async (dispatch) => {
 export const editSwayamCourse = (data) => async (dispatch) => {
   await ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
-      console.log("ressssss", res)
       dispatch(editSwayamPartnerCourseSuccess(res.data))
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
         dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive))

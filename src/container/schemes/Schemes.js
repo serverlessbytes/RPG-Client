@@ -319,6 +319,9 @@ const Schemes = () => {
       delete userForDelete.createdAt;
       delete userForDelete.schemeRatings;
       delete userForDelete.schemeRatingSum;
+      delete userForDelete.bannerSelected;
+      delete userForDelete.saved;
+      delete userForDelete.enrolled;
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,

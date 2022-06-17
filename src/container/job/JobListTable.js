@@ -20,8 +20,6 @@ import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
-import { data } from 'browserslist';
-import JobPostPage from './JobPostPage';
 import ConfirmModal from '../../components/modals/confirm_modal';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
@@ -31,13 +29,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
-  const { users } = useSelector(state => {
-    return {
-      users: state.users,
-    };
-  });
-
-  const usersTableData = [];
+ 
   const [usertable, setUsertable] = useState([]); //set data
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
@@ -52,6 +44,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [languageIds, setLanguageIDs] = useState();
   const [ids, setIDs] = useState();
 
+  const { users } = useSelector(state => {
+    return {
+      users: state.users,
+    };
+  });
   const languageData = useSelector(state => state.language.getLanguageData);
   const jobData = useSelector(state => state.job.getJobPostData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
@@ -74,6 +71,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     });
     return newVal;
   };
+
 
   const getOneJobDetailByKey = async (languageId, key ,id) => {
 
@@ -169,7 +167,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         jobType: courseDataDelete.jobType.id,
         id: id,
       };
-      // dispatch((editJobPost(data)))
+
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
         toast.success('Jobs delete successfully.');
@@ -240,7 +238,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       if (restoreJobPost.status === 200) {
         toast.success('Jobs active successfully.');
       }
-      // dispatch((editJobPost(data)))
+      
     }
   };
 
@@ -262,8 +260,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
       toast.success('Jobs Add successful');
-      //toastAssetsAdd(true)
-      //onHide()
+     
     }
   }, [addJobPostData]);
 
@@ -271,8 +268,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
       dispatch(getJobsFilterForMainSuccess(null));
       toast.success('Jobs Addd successful');
-      //toastAssetsAdd(true)
-      //onHide()
+      
     }
   }, [addLanguageJobPost]);
 
@@ -338,7 +334,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   };
 
   useEffect(() => {
-    // if (apply) {
+    
+
+
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
@@ -500,8 +498,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             dataSource={usertable}
             columns={usersTableColumns}
             pagination={{
-              defaultPageSize: getJobFilterData?.data.per_page,
-              total: getJobFilterData?.data.page_count,
+              defaultPageSize: getJobFilterData?.data?.per_page,
+              total: getJobFilterData?.data?.page_count,
               // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
               onChange: (page, pageSize) => {
                 setPageNumber(page);
