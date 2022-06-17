@@ -95,7 +95,7 @@ const AddJobPost = () => {
     }, []);
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
+        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
             console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
@@ -296,12 +296,12 @@ const AddJobPost = () => {
         if (langId) {
             data = {
                 ...data,
-                key: getOneJobPostData.data.key,
-                jobRole: getOneJobPostData.data.jobRole.id,
-                jobType: getOneJobPostData.data.jobType.id,
-                name: getOneJobPostData.data.name.id,
-                state: getOneJobPostData.data.state.id,
-                district: getOneJobPostData.data.district.id,
+                key: getOneJobPostData.data.data.key,
+                jobRole: getOneJobPostData.data.data.jobRole.id,
+                jobType: getOneJobPostData.data.data.jobType.id,
+                name: getOneJobPostData.data.data.name.id,
+                state: getOneJobPostData.data.data.state.id,
+                district: getOneJobPostData.data.data.district.id,
             }
             dispatch(addLanguageJobPost(langId, data))
             // addLanguageJobPost(langId, data)
@@ -348,7 +348,7 @@ const AddJobPost = () => {
             jobType: state.jobType,
         }
         console.log("data", data);
-        dispatch(editJobPost(editJobsID,data));
+        dispatch(editJobPost(editJobsID, data));
         onCancel()
     }
 

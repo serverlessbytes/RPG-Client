@@ -71,6 +71,9 @@ const {
   addLanguageJobPostSuccess,
   addLanguageJobPostErr,
 
+  addUpdateJobBannerSuccess,
+  addUpdateJobBannerErr,
+
 } = actions;
 
 let per_page, page_num, State, Status, Type, jobrole, search;
@@ -148,7 +151,7 @@ export const getJobPost = (perPage, pageNumber) => async (dispatch) => {
     .catch((err) => dispatch(getJobPostErr(err)))
 }
 
-export const editJobPost = (id,data) => async (dispatch) => {
+export const editJobPost = (id, data) => async (dispatch) => {
   // let id = data.id
   // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
@@ -158,7 +161,6 @@ export const editJobPost = (id,data) => async (dispatch) => {
       if (res.status === 200) {
         dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
       }
-
     })
     .catch((err) => dispatch(editJobPostErr(err)))
 }
@@ -323,12 +325,20 @@ export const addBulkJobRoles = (body) => async (dispatch) => {
 
 export const addLanguageJobPost = (languageID, body) => async (dispatch) => {
   await ApiPost(`job/add?langId=${languageID}`, body)
-      .then((res) => {
-          console.log("res", res);
-           dispatch(addLanguageJobPostSuccess(res))
-          if(res.status === 200){
-              return  dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
-          }
-      })
-      .catch((err) => dispatch(addLanguageJobPostErr(err)))
+    .then((res) => {
+      console.log("res", res);
+      dispatch(addLanguageJobPostSuccess(res))
+      if (res.status === 200) {
+        return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
+      }
+    })
+    .catch((err) => dispatch(addLanguageJobPostErr(err)))
+}
+
+export const jobBannerUpdate = (id, body) => async (dispatch) => {
+  await ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
+    .then((res) => {
+      dispatch(addUpdateJobBannerSuccess(res))
+    })
+    .catch((err) => dispatch(addUpdateJobBannerErr(err)))
 }

@@ -125,37 +125,12 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
     URL = URL.concat(`&schemeBenifit=${Benifit} `)
   }
   if (Category) {
-    URL = URL.concat(`&schemeCategory =${Category}`)
+    URL = URL.concat(`&schemeCategory=${Category}`)
   }
   if (searchBar) {
-    URL = URL.concat(`&search =${searchBar}`)
+    URL = URL.concat(`&search=${searchBar}`)
   }
-  // let apiData;
-  // if (schemeCategory && schemeBenifit) {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`,
-  //   );
-  // } else if (schemeCategory && schemeBenifit === '') {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeCategory=${schemeCategory}`,
-  //   );
-  // } else if (schemeCategory === '' && schemeBenifit) {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}`,
-  //   );
-  // } else {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`,
-  //   );
-  // }
+
   await ApiGet(URL)
     .then(res => {
       return dispatch(getSchemeSuccess(res.data));
@@ -164,7 +139,7 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
 };
 
 export const getOneSchemeData = key => async dispatch => {
-  await ApiGet(`scheme/getOneScheme?key=${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  await ApiGet(`scheme/getOneScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&key=${key}`)
     .then(res => {
       return dispatch(getOneSchemeSuccess(res.data));
     })
@@ -186,7 +161,7 @@ export const editSchemeData = body => async dispatch => {
       console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, tatus));
+        dispatch(getSchemeData(per_Page, page_Num, status));
       }
     })
     .catch(err => dispatch(editSchemeErr(err)));

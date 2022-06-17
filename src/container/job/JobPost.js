@@ -59,6 +59,12 @@ const JobPost = ({ match }) => {
     const [numberOfPage, setNumberOfPage] = useState();
     const [importModal, setImportModal] = useState(false);
 
+    useEffect(() => {
+        dispatch(getJobroles());
+    }, [])
+    useEffect(() => {
+        dispatch(getStateData()) //dipatch state 
+    }, []);
     const onChangevalue = (e, name) => {
         if (name === 'type') {
             setType({ ...type, type: e });
@@ -209,12 +215,7 @@ const JobPost = ({ match }) => {
             setImportModal(true);
         }
 
-        useEffect(() => {
-            dispatch(getJobroles());
-        }, [])
-        useEffect(() => {
-            dispatch(getStateData()) //dipatch state 
-        }, []);
+
         return (
             <>
                 <PageHeader
@@ -302,7 +303,8 @@ const JobPost = ({ match }) => {
                     </Cards>
                 </Main>
             </>
-  )};
+        )
+    };
 
     const menu = (
         <Menu

@@ -50,7 +50,6 @@ const User = () => {
             //delete userForDelete.avatar,
             userForDelete = {
                 ...userForDelete,
-
                 id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,

@@ -23,11 +23,13 @@ import actions from '../../redux/jobs/actions';
 import { data } from 'browserslist';
 import JobPostPage from './JobPostPage';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
+
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
   const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess,
-    addLanguageJobPostErr, editJobPostErr } = actions;
+    addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
@@ -62,6 +64,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const addLanguageJobPost = useSelector(state => state.job.addLanguageJobPost);
   const addLanguageJobPostError = useSelector(state => state.job.addLanguageJobPostErr);
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
+  const upadteJobBenner = useSelector(state => state.job.upadteJobBannerData); //fetch for tostify from reducer
 
   const newJobPost = data => {
     let id = data.id;
@@ -75,7 +78,16 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     return newVal;
   };
 
-  const getOneJobDetailByKey = async (languageId, key ,id) => {
+  useEffect(() => {
+    if (upadteJobBenner && upadteJobBenner.status === 200) {
+      dispatch(getJobPost(perPage, pageNumber));
+      toast.success("Job Banner Add Successfully")
+    } else if (upadteJobBenner && upadteJobBenner.status !== 200) {
+      toast.error("Something Wrong")
+    }
+  }, [upadteJobBenner])
+
+  const getOneJobDetailByKey = async (languageId, key, id) => {
 
     await ApiGet(`job/getJobByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
@@ -99,7 +111,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setIsConfirmModal(false)
   }
 
-  const languageHandalOk = (languageIds,ids) => {
+  const languageHandalOk = (languageIds, ids) => {
 
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
     // history.push(`/admin/job/new?id=${id}`);
@@ -244,6 +256,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
   };
 
+  // useEffect(() => {
+  //   if (schemeBannerData && schemeBannerData.status === 200) {
+  //     dispatch(getSchemeData(perPage, pageNumber, status))
+  //   }
+  // }, [schemeBannerData])
+
   useEffect(() => {
     dispatch(
       getJobsFilterForMain(
@@ -368,7 +386,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 <>
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
-                      getOneJobDetailByKey(langIds?.hindi, item?.key,item?.id)
+                      getOneJobDetailByKey(langIds?.hindi, item?.key, item?.id)
                       setSelectedLanguageData(item)
                     }}
                   >
@@ -378,7 +396,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
                       // setSelectedLanguageData(item)
-                      getOneJobDetailByKey(langIds?.marathi, item?.key,item?.id)
+                      getOneJobDetailByKey(langIds?.marathi, item?.key, item?.id)
                       setSelectedLanguageData(item)
                     }}
                   >
@@ -397,6 +415,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 </>
               </div>
             </div>
+          ),
+          chooseBanner: (
+            <div style={{ textAlign: "center" }}>
+              <Switch checked={item.bannerSelected} onChange={(event) => dispatch(jobBannerUpdate(item.id, { bannerSelected: event }))} />
+            </div >
           ),
           action: (
             <div className="table-actions">
@@ -475,6 +498,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       width: '90px',
     },
     {
+      title: 'Choose banner',
+      dataIndex: 'chooseBanner',
+    },
+    {
       title: 'Actions',
       dataIndex: 'action',
       // key: 'action',
@@ -528,7 +555,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
               </Button>
               <Button size="small" type="primary" onClick={() => {
                 // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                languageHandalOk(languageIds,ids)
+                languageHandalOk(languageIds, ids)
               }} >
                 {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes

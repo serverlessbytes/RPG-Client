@@ -85,6 +85,10 @@ const {
   ADD_LANGUAGE_JOBPOST_SUCCESS,
   ADD_LANGUAGE_JOBPOST_ERR,
 
+  ADD_UPADTE_JOB_BANNER_BEGINE,
+  ADD_UPADTE_JOB_BANNER_SUCCESS,
+  ADD_UPADTE_JOB_BANNER_ERR,
+
 } = actions;
 
 const initialState = {
@@ -116,11 +120,15 @@ const initialState = {
   importJobCategory: null,
   importJobCategoryError: null,
   addJobCatogeryError: null,
-  importJobRole : null,
-  importJobRoleErr : null,
-  addLanguageJobPost:null,
-  addLanguageJobPostErr:null,
-  addJobsApplicationErr : null,
+  importJobRole: null,
+  importJobRoleErr: null,
+  addLanguageJobPost: null,
+  addLanguageJobPostErr: null,
+  addJobsApplicationErr: null,
+
+  upadteJobBannerData: null,
+  upadteJObBannerError: null,
+
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -490,24 +498,41 @@ const jobReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case ADD_LANGUAGE_JOBPOST_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_LANGUAGE_JOBPOST_SUCCESS:
-        return {
-          ...state,
-          addLanguageJobPost: data,
-          loading: false,
-        };
-      case ADD_LANGUAGE_JOBPOST_ERR:
-        return {
-          ...state,
-          addLanguageJobPostErr: err,
-          loading: false,
-        };
+    case ADD_LANGUAGE_JOBPOST_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_LANGUAGE_JOBPOST_SUCCESS:
+      return {
+        ...state,
+        addLanguageJobPost: data,
+        loading: false,
+      };
+    case ADD_LANGUAGE_JOBPOST_ERR:
+      return {
+        ...state,
+        addLanguageJobPostErr: err,
+        loading: false,
+      };
 
+    case ADD_UPADTE_JOB_BANNER_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_UPADTE_JOB_BANNER_SUCCESS:
+      return {
+        ...state,
+        upadteJobBannerData: data,
+        loading: false,
+      };
+    case ADD_UPADTE_JOB_BANNER_ERR:
+      return {
+        ...state,
+        upadteJObBannerError: err,
+        loading: false,
+      };
     default:
       return state;
   }
