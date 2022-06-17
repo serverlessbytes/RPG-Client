@@ -174,7 +174,7 @@ function ViewCourse() {
                                     <label style={{ fontWeight: 'bold' }} className="pr" >Approved:</label>
                                     <Switch checked={getOneCoursedata?.data?.isApproved}  ></Switch>
                                 </div> */}
-                            </Col> 
+                            </Col>
                             {/* <Button
                                 className='edit-view'
                                 size="medium"
