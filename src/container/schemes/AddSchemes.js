@@ -25,13 +25,13 @@ const AddSchemes = () => {
   let history = useHistory();
   let location = useLocation();
 
-  useEffect(()=>{
-    console.log("langid",langId)
-  },[langId])
+  useEffect(() => {
+    console.log("langid", langId)
+  }, [langId])
 
-  useEffect(()=>{
-    console.log("ids",ids)
-  },[ids])
+  useEffect(() => {
+    console.log("ids", ids)
+  }, [ids])
 
   const dispatch = useDispatch();
   const { Option } = Select;
@@ -84,6 +84,8 @@ const AddSchemes = () => {
         detail: RichTextEditor.createValueFromString(getOneScHemeData.detail, 'markdown'),
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
+
+        key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,//name
         schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
@@ -302,22 +304,51 @@ const AddSchemes = () => {
       isActive: state.isActive,
       videoUrl: state.videoUrl,
       thumbnail: state.thumbnail,
-      id: state.id,
-      isDeleted: state.isDeleted,
-      isPublished: state.isPublished,
-      isApproved: state.isApproved,
+      // id: state.id,
+      // isDeleted: state.isDeleted,
+      // isPublished: state.isPublished,
+      // isApproved: state.isApproved,
     };
-    console.log('data', state);
-    if (!location.search) {
-      dispatch(addSchemeData(data,langId));
-      // history.push(`${path}/scheme`)
-      history.push(`/admin/scheme`);
-    } else {
-      delete data.key;
-      dispatch(editSchemeData(data));
-      history.push(`/admin/scheme`);
+    if (langId) {
+      data = {
+        ...data,
+        key: getOneScHemeData.key,
+        name: getOneScHemeData.name,
+        schemeCategory: getOneScHemeData.schemeCategory.id,//name
+        schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
+        locations: getOneScHemeData.locations.map(item => item.id),
+        website: getOneScHemeData.website,
+        type: getOneScHemeData.type,
+        benificiary: getOneScHemeData.benificiary,
+        grievanceRedress: getOneScHemeData.grievanceRedress,
+        elink: getOneScHemeData.elink,
+        spoc: getOneScHemeData.spoc,
+        isActive: getOneScHemeData.isActive,
+        videoUrl: getOneScHemeData.videoUrl,
+        thumbnail: getOneScHemeData.thumbnail,
+        // id: getOneScHemeData.id,
+        // isDeleted: getOneScHemeData.isDeleted,
+        // isPublished: getOneScHemeData.isPublished,
+        // isApproved: getOneScHemeData.isApproved,
+      }
+      dispatch(addSchemeData(data, langId))
     }
+    else {
+      data = { ...data, key: uuid() }
+      dispatch(editSchemeData(data));
+    }
+    onCancel();
   };
+  //   if (!location.search) {
+  //     dispatch(addSchemeData(data, langId));
+  //     // history.push(`${path}/scheme`)
+  //     history.push(`/admin/scheme`);
+  //   } else {
+  //     delete data.key;
+  //     dispatch(editSchemeData(data));
+  //     history.push(`/admin/scheme`);
+  //   }
+  // };
 
   return (
     <>

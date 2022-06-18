@@ -24,6 +24,7 @@ import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import { setWeekYear } from 'date-fns';
 
 
 const Schemes = () => {
@@ -54,6 +55,8 @@ const Schemes = () => {
   const [languageIds, setLanguageIds] = useState();
   const [bannerChaked, setBannerChaked] = useState();
   const [id, setId] = useState();
+  const [key, setKey] = useState();
+
 
   const [langIds, setLangIds] = useState({
     hindi: "",
@@ -124,7 +127,7 @@ const Schemes = () => {
   }, [editSchemedata])
 
   useEffect(() => {
-    if (editSchemeError) {
+    if (editSchemedata && editSchemedata.status !== 200) {
       dispatch(editSchemeErr(null))
       toast.error("Something Wrong")
     }
@@ -180,10 +183,12 @@ const Schemes = () => {
         }
       })
       .catch((e) => {
+        console.log();
         if (e.response.status) {
           setIsConfirmModal(true)
           setLanguageIds(languageId);
           setId(id)
+          setKey(key)
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
@@ -194,8 +199,9 @@ const Schemes = () => {
   }
 
   const languageHandalOk = () => {
-    history.push(`${path}/addscheme?langid=${languageIds}&id=${id}`);
+    // history.push(`${path}/addscheme?langid=${languageIds}&id=${id}`);
     // history.push(`${path}/addscheme?id=${id}&langid=${languageIds}`);
+    history.push(`${path}/addscheme?langid=${languageIds}&key=${key}`);
     // let selectLanguageAddData = {
     //   key: selectedLanguageData.key,
     //   benifitLine: selectedLanguageData.benifitLine,
@@ -215,9 +221,8 @@ const Schemes = () => {
     //   isActive: selectedLanguageData.isActive,
     //   videoUrl: selectedLanguageData.videoUrl,
     //   thumbnail: selectedLanguageData.thumbnail,
-    //   // id : selectedLanguageData.id,
     // };
-    // console.log("selectLanguageAddData",selectLanguageAddData)
+    // console.log("selectLanguageAddData", selectLanguageAddData)
     // setIsConfirmModal(false)
     // dispatch(addSchemeData(selectLanguageAddData, languageIds))
   }
@@ -250,12 +255,15 @@ const Schemes = () => {
     { label: "videoUrl", key: "videoUrl" },
     { label: "viewCount", key: "viewCount" },
     { label: "website", key: "website" },
-
   ];
 
   useEffect(() => {
     if (schemeBannerData && schemeBannerData.status === 200) {
-      dispatch(getAllSchemes())
+      dispatch(getSchemeData(perPage, pageNumber, status))
+      toast.success("Scheme Banner Add Successfully")
+    }
+    else if (schemeBannerData && schemeBannerData.status !== 200) {
+      toast.error("Something Wrong")
     }
   }, [schemeBannerData])
 
@@ -316,7 +324,8 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", userForDelete)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getAllSchemes())
+          // dispatch(getAllSchemes())
+          dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
       })
@@ -343,7 +352,7 @@ const Schemes = () => {
         isActive: false,
         isDeleted: true,
       };
-      // dispatch(editSchemeData(userForDelete));
+
       const deleteSchemes = await newSchemes(userForDelete)
       if (deleteSchemes.status === 200) {
         toast.success("schemes delete successful")
@@ -355,7 +364,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", data)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getAllSchemes())
+          // dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
       })
@@ -420,7 +429,7 @@ const Schemes = () => {
   }
 
   const onAllExportSchemes = () => {
-    dispatch(getAllSchemes())
+    dispatch(getAllSchemes(perPage, pageNumber))
     setExportTog(true)
   }
 
@@ -569,8 +578,8 @@ const Schemes = () => {
           </div>
         ),
         chooseBanner: (
-          <div>
-            <Switch checked={item.bannerSelected} onChange={(event) => { console.log(event, "event"); dispatch(upadteBanner({ id: item.id, bannerSelected: event })) }} />
+          <div style={{ textAlign: "center" }}>
+            <Switch checked={item.bannerSelected} onChange={(event) => dispatch(upadteBanner({ id: item.id, bannerSelected: event }))} />
           </div >
         ),
 
@@ -720,14 +729,14 @@ const Schemes = () => {
           //                 </Button> */}
           //   </div>,
           <div key="1" className="page-header-actions">
-            {/* <Dropdown overlay={menu} trigger='click'>
+            <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
                   Actions
                   <DownOutlined />
                 </Space>
               </a>
-            </Dropdown> */}
+            </Dropdown>
             <CSVLink
               headers={header}
               data={state}
@@ -920,7 +929,7 @@ const Schemes = () => {
               </Button>
               <Button size="small" type="primary" onClick={() => {
                 // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                languageHandalOk()
+                languageHandalOk(languageIds, key)
               }} >
                 {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes

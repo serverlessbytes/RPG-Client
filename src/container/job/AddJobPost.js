@@ -93,7 +93,8 @@ const AddJobPost = () => {
     }, []);
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
+        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
+            console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
                 key: getOneJobPostData.data.data.key,
@@ -346,7 +347,7 @@ const AddJobPost = () => {
             jobType: state.jobType,
         }
         console.log("data", data);
-        dispatch(editJobPost(editJobsID,data));
+        dispatch(editJobPost(editJobsID, data));
         onCancel()
     }
 
