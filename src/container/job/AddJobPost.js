@@ -49,7 +49,8 @@ const AddJobPost = () => {
         requirements: "",
         jobType: "",
         isActive: true,
-        shifts: "",
+        // shifts: "",
+        shifts:[],
         email: "",
         phone: "",
         type: "",
@@ -67,9 +68,6 @@ const AddJobPost = () => {
     const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
     const getEmployerdata = useSelector((state) => state.job.getEmployerData)
     // const addJobPostData = useSelector((state) => state.job.addJobPostData
-
-    // useEffect(() => { console.log("id", id) }, [id])
-    useEffect(() => { console.log("getOneJobPostData", getOneJobPostData) }, [getOneJobPostData])
 
     useEffect(() => {
         if (id) {
@@ -96,7 +94,6 @@ const AddJobPost = () => {
 
     useEffect(() => {
         if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
-            console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
                 key: getOneJobPostData.data.data.key,
@@ -296,12 +293,12 @@ const AddJobPost = () => {
         if (langId) {
             data = {
                 ...data,
-                key: getOneJobPostData.data.key,
-                jobRole: getOneJobPostData.data.jobRole.id,
-                jobType: getOneJobPostData.data.jobType.id,
-                name: getOneJobPostData.data.name.id,
-                state: getOneJobPostData.data.state.id,
-                district: getOneJobPostData.data.district.id,
+                key: getOneJobPostData.data.data.key,
+                jobRole: getOneJobPostData.data.data.jobRole.id,
+                jobType: getOneJobPostData.data.data.jobType.id,
+                name: getOneJobPostData.data.data.name.id,
+                state: getOneJobPostData.data.data.state.id,
+                district: getOneJobPostData.data.data.district.id,
             }
             dispatch(addLanguageJobPost(langId, data))
             // addLanguageJobPost(langId, data)
@@ -339,7 +336,8 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
-            shifts: state.shifts,
+            shifts: [state.shifts],
+            // shifts: state.shifts,
             email: state.email,
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
