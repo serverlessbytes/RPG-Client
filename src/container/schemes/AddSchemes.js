@@ -7,12 +7,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addSchemeData,
-  editSchemeData,
-  getOneSchemeData,
-  getSchemeBenifits,
-  getSchemecategory,
-  getState,
+  addSchemeData, editSchemeData, getOneSchemeData, getSchemeBenifits, getSchemecategory, getState,
 } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
@@ -85,7 +80,7 @@ const AddSchemes = () => {
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
 
-        key: getOneScHemeData.key,
+        // key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,//name
         schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
@@ -121,43 +116,6 @@ const AddSchemes = () => {
     setState({ ...state, documentation: value });
   };
 
-  /*    const SchemeName = (value) => {
-           setState({ ...state, schemename: value });
-       }; */
-  /*   const SchemeCategory = (value) => {
-          setState({ ...state, scheme: value });
-      }; */
-  /*   const TypeOfBenefits = (value) => {
-          setState({ ...state, schemeBenifit: value });
-      }; */
-  /*    const Location = (value) => {
-          setState({ ...state, location: value });
-      };  */
-  // const Website = (value) => {
-  //     setState({ ...state, website: value });
-  // };
-  /* const Category = (value) => {
-        setState({ ...state, category: value });
-    }; */
-  /*   const TargetBeneficiary = (value) => {
-          setState({ ...state, targetBeneficiary: value });
-      };  */
-  /* const GrievanceRedress = (value) => {
-        setState({ ...state, grievanceRedress: value });
-    }; */
-  /* const eLink = (value) => {
-        setState({ ...state, Elink: value });
-    }; */
-  /* const SPOC = (value) => {
-        setState({ ...state, spoc: value });
-    };
-    const ch = (value) => {
-        setState({ ...state, CH: value })
-    }  */
-
-  /*   const onChangeValue = (e) => {
-          setState({ ...state, [e.target.name]: e.target.value })
-      } */
 
   const selectValue = (e, name) => {
     if (name === 'schemeBenifit') {
@@ -285,8 +243,7 @@ const AddSchemes = () => {
       return;
     }
     let data = {
-      key: uuid(),
-      // sequence: parseInt(state.sequence),
+      // key: uuid(),
       benifitLine: state.benifitLine.toString('markdown'),
       detail: state.detail.toString('markdown'),
       howToApply: state.howToApply.toString('markdown'),
@@ -304,18 +261,21 @@ const AddSchemes = () => {
       isActive: state.isActive,
       videoUrl: state.videoUrl,
       thumbnail: state.thumbnail,
-      // id: state.id,
-      // isDeleted: state.isDeleted,
-      // isPublished: state.isPublished,
-      // isApproved: state.isApproved,
+      id: state.id,
+      isDeleted: state.isDeleted,
+      isPublished: state.isPublished,
+      isApproved: state.isApproved,
     };
     if (langId) {
+      // delete data.id
+      // delete data.isDeleted
+      // delete data.isPublished
+      // delete data.isApproved
       data = {
         ...data,
-        key: getOneScHemeData.key,
         name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.id,//name
-        schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
+        schemeCategory: getOneScHemeData.schemeCategory.id,
+        schemeBenifit: getOneScHemeData.schemeBenifit.id,
         locations: getOneScHemeData.locations.map(item => item.id),
         website: getOneScHemeData.website,
         type: getOneScHemeData.type,
@@ -326,16 +286,14 @@ const AddSchemes = () => {
         isActive: getOneScHemeData.isActive,
         videoUrl: getOneScHemeData.videoUrl,
         thumbnail: getOneScHemeData.thumbnail,
-        // id: getOneScHemeData.id,
-        // isDeleted: getOneScHemeData.isDeleted,
-        // isPublished: getOneScHemeData.isPublished,
-        // isApproved: getOneScHemeData.isApproved,
       }
-      dispatch(addSchemeData(data, langId))
+
+      dispatch(addSchemeData(langId, data));
+      history.push(`/admin/scheme`);
     }
     else {
-      data = { ...data, key: uuid() }
       dispatch(editSchemeData(data));
+      history.push(`/admin/scheme`);
     }
     onCancel();
   };
@@ -349,6 +307,9 @@ const AddSchemes = () => {
   //     history.push(`/admin/scheme`);
   //   }
   // };
+  const onCancel = () => {
+    history.push(`/admin/scheme`)
+  }
 
   return (
     <>
@@ -621,7 +582,8 @@ const AddSchemes = () => {
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>
               {id && !langId ? 'Edit' : 'Add'}
             </Button>
-            <Button className="btn-signin" type="light" size="medium" onClick={() => history.push(`/admin/scheme`)}>
+            <Button className="btn-signin" type="light" size="medium"
+              onClick={() => onCancel()}>
               Cancel
             </Button>
           </div>

@@ -112,9 +112,6 @@ const Schemes = () => {
 
   useEffect(() => {
     dispatch(getSchemecategory());
-  }, []);
-
-  useEffect(() => {
     dispatch(getBenefitsData());
   }, []);
 
@@ -178,7 +175,7 @@ const Schemes = () => {
     await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
       .then((res) => {
         console.log("res", res);
-        if (res.status === 200) {
+        if (res.status === 500) {
           toast.success("Course alredy exist in this language!")
         }
       })
@@ -316,7 +313,7 @@ const Schemes = () => {
     history.push(`${path}/addscheme`);
   };
 
-  const reDirectSchemes = key => {
+  const onEdit = key => {
     history.push(`${path}/addscheme?key=${key}`);
   };
 
@@ -324,7 +321,6 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", userForDelete)
       .then((res) => {
         if (res.status === 200) {
-          // dispatch(getAllSchemes())
           dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
@@ -345,6 +341,7 @@ const Schemes = () => {
       delete userForDelete.bannerSelected;
       delete userForDelete.saved;
       delete userForDelete.enrolled;
+
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,
@@ -364,7 +361,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", data)
       .then((res) => {
         if (res.status === 200) {
-          // dispatch(getSchemeData(perPage, pageNumber, status))
+          dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
       })
@@ -401,6 +398,8 @@ const Schemes = () => {
     const restoreSchemeData = await activeSchemeData(data)
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
+      dispatch(getSchemeData(perPage, pageNumber, status))
+
     }
   }
 
@@ -601,13 +600,14 @@ const Schemes = () => {
                   <>
                     <Button
                       className="btn-icon"
-                      onClick={() => reDirectSchemes(item.key)}
+                      onClick={() => onEdit(item.key)}
                       type="info"
                       to="#"
                       shape="circle"
                     >
                       <FeatherIcon icon="edit" size={16} />
                     </Button>
+
                     <Button
                       className="btn-icon"
                       type="warning"

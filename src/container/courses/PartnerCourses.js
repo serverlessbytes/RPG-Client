@@ -375,9 +375,9 @@ const PartnerCourses = () => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-         
+
           let courseRatings = item.courseRatings.map(item => item.rating)
-          
+
 
           var sum = 0;
 
@@ -421,7 +421,7 @@ const PartnerCourses = () => {
                   <>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                       
+
                         getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                         setSelectedLanguageData(item)
                       }}
@@ -431,8 +431,8 @@ const PartnerCourses = () => {
                     </Button>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                        
-                        getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
+
+                        getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                       }}
                     >
                       {/* <FeatherIcon icon="edit" size={16} /> */}
