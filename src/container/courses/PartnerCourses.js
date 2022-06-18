@@ -186,42 +186,13 @@ const PartnerCourses = () => {
     })
     setLangIds(temp)
   }, [languageData])
+
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
 
   const languageHandalOk = () => {
-
     history.push(`${path}/addpartnercourses?langid=${languageID}&id=${id}`);
-
-    // console.log("languageHandalOk ---------");
-    // console.log("languageID------------", languageID);
-    // console.log("id------------",id);
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   name: selectedLanguageData.name,
-    //   organization: selectedLanguageData.organization,
-    //   detail: selectedLanguageData.detail,
-    //   certificationBody: selectedLanguageData.certificationBody,
-    //   eligibility: selectedLanguageData.eligibility,
-    //   component: selectedLanguageData.component,
-    //   contactPersonName: selectedLanguageData.contactPersonName,
-    //   contactPersonEmail: selectedLanguageData.contactPersonEmail,
-    //   contactPersonPhone: selectedLanguageData.contactPersonPhone,
-    //   pincode: selectedLanguageData.pincode,
-    //   location: selectedLanguageData.location,
-    //   duration: selectedLanguageData.duration,
-    //   categoryId: selectedLanguageData.courseCategory.id,
-    //   state: selectedLanguageData.state,
-    //   district: selectedLanguageData.district,
-    //   mode: selectedLanguageData.mode,
-    //   certification: selectedLanguageData.certificate,
-    //   // categoryId: selectedLanguageData.id,
-    //   thumbnail: selectedLanguageData.thumbnail
-    // };
-    // console.log("selectedLanguageData", selectLanguageAddData);
-    // addLanguagePartnerCourses(selectLanguageAddData, langIds.hindi)
-    // setIsConfirmModal(false)
   }
   const addLanguagePartnerCourses = (body, languageID) => {
     ApiPost(`course/addPartnerCourse?langId=${languageID}&mode=PARTNER`, body)
@@ -279,8 +250,6 @@ const PartnerCourses = () => {
   //   }
   // }, [state]);
 
-  const usersTableData = [];
-
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
     if (name == 'category') {
@@ -294,8 +263,6 @@ const PartnerCourses = () => {
   };
 
   const viewPartnerCoursedata = id => {
-    // dispatch(getOneCoursefilter(id));
-    // setViewModal(true);
     history.push(`/admin/courses/viewpartnercourse?id=${id}`)
   };
 
@@ -313,6 +280,10 @@ const PartnerCourses = () => {
       delete activeCourseDelete.isApproved;
       delete activeCourseDelete.createdAt;
       delete activeCourseDelete.courseRatings;
+      delete activeCourseDelete.courseRatingSum;
+      delete activeCourseDelete.bannerSelected;
+      delete activeCourseDelete.saved;
+      delete activeCourseDelete.enrolled;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -326,8 +297,19 @@ const PartnerCourses = () => {
     }
   };
 
-  const onActive = id => {
-    //for inactive toactive data
+  const activePartnerCourses = dt => {
+    const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
+        }
+        return res
+      })
+    return newVal
+  }
+
+  const onActive = async id => {
+    //for inactive to active data
     let activedata = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activedata.certificate;
     let categoryId = activedata.courseCategory.id;
@@ -341,6 +323,10 @@ const PartnerCourses = () => {
       delete activedata.isApproved;
       delete activedata.createdAt;
       delete activedata.courseRatings;
+      delete activedata.courseRatingSum;
+      delete activedata.bannerSelected;
+      delete activedata.saved;
+      delete activedata.enrolled;
 
       activedata = {
         ...activedata,
@@ -350,34 +336,22 @@ const PartnerCourses = () => {
         categoryId: categoryId,
         certification: certification,
       };
-      dispatch(editPartnerCoursefilter(activedata));
+      // dispatch(editPartnerCoursefilter(activedata));
+      const restorePartnerCourses = await activePartnerCourses(activedata);
+
+      if (restorePartnerCourses.status === 200) {
+        toast.success("PartnerCourse active successful")
+      }
     }
   };
-
-  // const onApproved = (id, isAp, key) => {
-  //   if (status !== 'active') {
-  //     return;
-  //   }
-  //   let data = {
-  //     courseId: id,
-  //     key: key,
-  //     isApproved: !isAp,
-  //   };
-
-  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-  //     console.log('res', res);
-  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-  //     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-  //   });
-  // };
 
   useEffect(() => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-         
+
           let courseRatings = item.courseRatings.map(item => item.rating)
-          
+
 
           var sum = 0;
 
@@ -388,9 +362,8 @@ const PartnerCourses = () => {
           var avg = sum / courseRatings.length;
 
           return {
-            //key: id,
             CourseName: (
-              <span onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
+              <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
             CourseCategory: item.courseCategory?.name,
             courseRatings: (
@@ -403,39 +376,24 @@ const PartnerCourses = () => {
               />
             ),
             CourseType: item.mode,
-            // approved: (
-            //   <>
-            //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-            //     </div>
-            //   </>
-            // ),
-            // Language: "Hindi",
-
-
             selectLanguage: (
               <div className="">
-                {/* <div className="active-schemes-table"> */}
                 <div className="">
-                  {/* <div className="table-actions"> */}
                   <>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                       
+
                         getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                         setSelectedLanguageData(item)
                       }}
                     >
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
                       HN
                     </Button>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                        
-                        getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
+                        getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                       }}
                     >
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
                       MT
                     </Button>
 
@@ -495,21 +453,9 @@ const PartnerCourses = () => {
     }
   }, [courseData]);
 
-  // const Submit = () => { //
-  //   dispatch(getCoursefilter(state.category ? state.category : '', perPage, pageNumber, state.mode ? state.mode : '', status));
-  // };
-
-  // const clearFilter = () => {
-  //   setState({ category: '' });
-  //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-  // };
-
   useEffect(() => {
     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-    // if (state.category) {
-    //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-    // }
-  }, [perPage, pageNumber, state.mode, status]); //paganation
+  }, [perPage, pageNumber, state.mode, status]); //pagination
 
   const partnerCourseTableColumns = [
     {
@@ -685,33 +631,16 @@ const PartnerCourses = () => {
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
-              {/* <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Courses
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Courses
-                                </Button>
-                            </Row> */}
-
               <Tabs defaultActiveKey="1" onChange={callback}>
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                       <Table
-                        // rowSelection={rowSelection}
                         dataSource={partnertable}
                         columns={partnerCourseTableColumns}
                         pagination={{
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
@@ -722,6 +651,7 @@ const PartnerCourses = () => {
                     </TableWrapper>
                   </UserTableStyleWrapper>
                 </TabPane>
+
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
@@ -780,16 +710,16 @@ const PartnerCourses = () => {
             <>
               <Button size="small" type="primary" onClick={() => {
                 languageHandalCancle()
-                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+
               }}>
-                {/* <FeatherIcon icon="edit" size={16} /> */}
+
                 No
               </Button>
               <Button size="small" type="primary" onClick={() => {
-                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+
                 languageHandalOk()
               }} >
-                {/* <FeatherIcon icon="edit" size={16} /> */}
+
                 Yes
               </Button>
             </>

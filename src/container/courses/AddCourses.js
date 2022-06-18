@@ -289,7 +289,7 @@ const AddCourses = () => {
       return;
     }
     let data = {
-      key: key ? key : uuid(),
+      key: editOneSwayamCourseData.data.data.key ? editOneSwayamCourseData.data.data.key : uuid(),
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
@@ -300,6 +300,7 @@ const AddCourses = () => {
       mode: state.mode,
       thumbnail: state.thumbnail,
     };
+
     dispatch(addSwayamCourse(data, langId));
     // history.push('/admin/courses');
   };

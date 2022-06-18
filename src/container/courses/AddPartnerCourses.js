@@ -30,9 +30,6 @@ const AddPartnerCourses = () => {
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
     const catdata = useSelector(state => state.category.categoryData);
 
-   
-    useEffect(() => { console.log("editOneFilterData", editOneFilterData) }, [editOneFilterData])
-
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
         name: '',
@@ -68,7 +65,6 @@ const AddPartnerCourses = () => {
 
     useEffect(() => {
         if (state.state) {
-
             dispatch(getDistrictData(state.state)) //dipatch  getDistrictData
         }
     }, [state.state]);
@@ -94,8 +90,8 @@ const AddPartnerCourses = () => {
                 contactpersonname: editOneFilterData.data.data.contactPersonName,
                 contactpersonemail: editOneFilterData.data.data.contactPersonEmail,
                 contactpersonphone: editOneFilterData.data.data.contactPersonPhone,
-                pincode: editOneFilterData.data.pincode,
-                locations: editOneFilterData.data.location,
+                pincode: editOneFilterData.data.data.pincode,
+                locations: editOneFilterData.data.data.location,
                 // sequence: editOneFilterData.data.sequence,
                 duration: moment(editOneFilterData.data.data.duration, 'HH:mm:ss'),
                 cateGory: editOneFilterData.data.data.courseCategory.id,
@@ -108,7 +104,6 @@ const AddPartnerCourses = () => {
         }
     }, [editOneFilterData]);
     const validation = () => {
-        // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
         let error = {};
         let flage = false;
         if (state.name === '') {
@@ -235,7 +230,7 @@ const AddPartnerCourses = () => {
                 pincode: state.pincode,
                 location: state.locations,
                 duration: state.duration,
-                categoryId: editOneFilterData.data.courseCategory.id,
+                categoryId: editOneFilterData.data.data.courseCategory.id,
                 state: state.state,
                 district: state.district,
                 mode: state.mode,
@@ -279,20 +274,6 @@ const AddPartnerCourses = () => {
         history.push(`/admin/courses/partnercourses`);
     }
 
-    // const onChangevalue = (e) => {
-    //     if(e.target.name==="location"){
-    //         if (e.target.value > 0) {
-    //             setState({ ...state, [e.target.name]: e.target.value })
-    //         } else {
-    //             setState({ ...state, [e.target.name]: 0 })
-    //         }
-    //     }
-    //     else{
-    //         setState({ ...state, [e.target.name]: e.target.value })
-    //     }
-
-    // }
-
     const onChangevalue = e => {
         setState({ ...state, [e.target.name]: e.target.value });
     };
@@ -320,16 +301,6 @@ const AddPartnerCourses = () => {
         //     }
         // }
     };
-
-
-
-    // const [typeOfJob, setTypeOfJob] = useState("");
-
-    // const onChange = e => {
-    //     console.log('radio checked', e.target.value);
-    //     setTypeOfJob(e.target.value)
-    // };
-    // console.log("----",typeOfJob);
 
     return (
         <>

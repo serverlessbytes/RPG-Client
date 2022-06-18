@@ -78,8 +78,6 @@ export const editCategoryData = (body) => async (dispatch) => {
 }
 
 export const addPartnerCourse = (body,langId) => async (dispatch) => {
-  console.log("LANG ID", AuthStorage.getStorageData(STORAGEKEY.language));
-  console.log("BODY", body);
   await ApiPost(`course/addPartnerCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, body)
     .then((res) => {
       return dispatch(addPartnerCourseSuccess(res))
@@ -88,7 +86,7 @@ export const addPartnerCourse = (body,langId) => async (dispatch) => {
     .catch((err) => dispatch(addPartnerCourseErr(err)))
 }
 export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive, searchBar) => async (dispatch) => {
-  //console.log("categoryId",categoryId)
+
   category = categoryId;
   per_page = perPage;
   page_number = pageNumber;

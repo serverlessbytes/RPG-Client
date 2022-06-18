@@ -430,7 +430,6 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     if (courseData && courseData.data) {
-      console.log("----", courseData)
       setSwayamCoursetable(
         courseData.data?.data?.map(item => {
           let courseRatings = item.courseRatings.map(item => item.rating)
