@@ -289,7 +289,7 @@ const AddCourses = () => {
       return;
     }
     let data = {
-      key: editOneSwayamCourseData.data.data.key ? editOneSwayamCourseData.data.data.key : uuid(),
+      key: editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
@@ -406,7 +406,7 @@ const AddCourses = () => {
       isDeleted: false,
     };
     dispatch(editSwayamCourseModule(editData));
-    // history.push(`/admin/courses`);
+    history.push(`/admin/courses`);
   };
 
   const onRemoveData = () => {

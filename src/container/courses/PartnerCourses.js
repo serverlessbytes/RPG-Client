@@ -8,14 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {
-  addPartnerCourse,
-  editPartnerCoursefilter,
-  getallSwayamCourse,
-  getCategoryData,
-  getCoursefilter,
-  getOneCoursefilter,
-} from '../../redux/course/actionCreator';
+import {addPartnerCourse,editPartnerCoursefilter,getallSwayamCourse, getCategoryData, getCoursefilter,getOneCoursefilter,} from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -32,16 +25,7 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 
 
 const PartnerCourses = () => {
-  const {
-    addPartnerCourseSuccess,
-    addPartnerCourseErr,
-    getallSwayamCourseSuccess,
-    editPartnerCourseSuccess,
-    editPartnerCourseErr,
-    addPartnerCourseInBulkSuccess
-  } = actions;
-
-  const { Option } = Select;
+  const {addPartnerCourseSuccess,addPartnerCourseErr,getallSwayamCourseSuccess,editPartnerCourseSuccess,editPartnerCourseErr,addPartnerCourseInBulkSuccess} = actions;
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
@@ -121,10 +105,6 @@ const PartnerCourses = () => {
   }, []);
 
   useEffect(() => {
-    console.log('postPartnerCourseData', postPartnerCourseData);
-  }, [postPartnerCourseData]);
-
-  useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
       dispatch(addPartnerCourseSuccess(null));
       toast.success('Partner Course Add successful');
@@ -190,6 +170,29 @@ const PartnerCourses = () => {
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
+
+  const callback = key => {
+    setStatus(key);
+    setPageNumber(1);
+    setExportTog(false);
+  };
+
+  const onePartnercourseData = () => {
+    dispatch(getallSwayamCourse(state.mode));
+    setExportTog(true);
+  };
+
+  const onClick = ({ key }) => {
+    if (key == 'exportCourses') {
+      onePartnercourseData();
+    }
+    if (key == 'addCourses') {
+      history.push(`${path}/addpartnercourses`);
+    }
+    if (key == 'import') {
+      setImportModal(true)
+    }
+  };
 
   const languageHandalOk = () => {
     history.push(`${path}/addpartnercourses?langid=${languageID}&id=${id}`);
@@ -489,29 +492,6 @@ const PartnerCourses = () => {
   ];
 
   const { TabPane } = Tabs;
-
-  const callback = key => {
-    setStatus(key);
-    setPageNumber(1);
-    setExportTog(false);
-  };
-
-  const onePartnercourseData = () => {
-    dispatch(getallSwayamCourse(state.mode));
-    setExportTog(true);
-  };
-
-  const onClick = ({ key }) => {
-    if (key == 'exportCourses') {
-      onePartnercourseData();
-    }
-    if (key == 'addCourses') {
-      history.push(`${path}/addpartnercourses`);
-    }
-    if (key == 'import') {
-      setImportModal(true)
-    }
-  };
 
   const menu = (
     <Menu

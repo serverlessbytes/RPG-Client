@@ -1,7 +1,5 @@
 import { Button, Col, Form, Input, Modal, PageHeader, Row, Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import { getoneJobPost } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import { Main } from '../styled';
 import { useHistory } from 'react-router';
@@ -14,8 +12,6 @@ import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import FeatherIcon from 'feather-icons-react';
 
-// import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
-
 function ViewCourse() {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id');
@@ -26,10 +22,6 @@ function ViewCourse() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [remark, setRemark] = useState('');
     const [error, setError] = useState({});
-
-    useEffect(() => {
-        console.log("error", error)
-    }, [error])
 
     const getOneCoursedata = useSelector(state => state.category.editFilterData); //fetch single data from redux
 
@@ -68,7 +60,7 @@ function ViewCourse() {
             return;
         }
         form.resetFields();
-        if (getOneCoursedata?.data?.isApproved) {
+        if (getOneCoursedata?.data?.data.isApproved) {
             let data = {
                 courseId: id,
                 key: key,
@@ -119,8 +111,8 @@ function ViewCourse() {
                         </Button>
 
                         {
-                            getOneCoursedata?.data?.isApproved === false ?
-                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)} type="light">
+                            getOneCoursedata?.data?.data.isApproved === false ?
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getOneCoursedata?.data?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.data?.id)} type="light">
                                     Approved
                                 </Button>
                                 :
@@ -135,38 +127,38 @@ function ViewCourse() {
                                     <label >Thumbnail:</label>
                                 </div> */}
                                 <div className='thambail'>
-                                    <img width="100%" height="245" src={getOneCoursedata?.data?.thumbnail}
+                                    <img width="100%" height="245" src={getOneCoursedata?.data?.data?.thumbnail}
                                     // {data?.thumbnail}
                                     /></div>
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Category:</label> {getOneCoursedata?.data?.courseCategory?.name}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Category:</label> {getOneCoursedata?.data?.data?.courseCategory?.name}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme Duration:</label> {getOneCoursedata?.data?.duration}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme Duration:</label> {getOneCoursedata?.data?.data?.duration}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Job Category:</label> {getOneCoursedata?.data?.jobTypes && getOneCoursedata.data?.jobTypes.map((item, i) => (
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Job Category:</label> {getOneCoursedata?.data?.data?.jobTypes && getOneCoursedata.data?.data?.jobTypes.map((item, i) => (
                                     <span>{item.name}</span>
                                 ))}</span>
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course name:</label> {getOneCoursedata?.data?.name}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course name:</label> {getOneCoursedata?.data?.data?.name}</span><br />
                             </Col>
+                            {/* <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Senquence:</label> {getOneCoursedata?.data?.data?.sequence}</span><br />
+                            </Col> */}
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Senquence:</label> {getOneCoursedata?.data?.sequence}</span><br />
-                            </Col>
-                            <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Mode:</label> {getOneCoursedata?.data?.mode}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Mode:</label> {getOneCoursedata?.data?.data?.mode}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Certification:</label> {getOneCoursedata?.data?.certificate === true ? "Yes" : "No"}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Certification:</label> {getOneCoursedata?.data?.data?.certificate === true ? "Yes" : "No"}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Details:</label> {getOneCoursedata?.data?.detail}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Course Details:</label> {getOneCoursedata?.data?.data?.detail}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb">
@@ -184,10 +176,10 @@ function ViewCourse() {
                                 Cancel
                             </Button> */}
                         </Row>
-                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.id)} type="primary">
+                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getOneCoursedata?.data.data?.id)} type="primary">
                             Edit
                         </Button>
-                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getOneCoursedata?.data?.key, getOneCoursedata?.data?.isApproved, getOneCoursedata.data?.id)} onCancel={() => handleCancel()} okText="Add">
+                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getOneCoursedata?.data?.data?.key, getOneCoursedata?.data?.data.isApproved, getOneCoursedata.data?.data?.id)} onCancel={() => handleCancel()} okText="Add">
                             <Form form={form} layout="vertical">
                                 <label htmlFor="remark">Remark</label>
                                 <Form.Item name="remark">

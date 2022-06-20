@@ -4,13 +4,14 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import actions from '../../redux/users/actions';
 
 const Partner = () => {
   const { path } = useRouteMatch();
@@ -20,8 +21,9 @@ const Partner = () => {
   const [status, setStatus] = useState('active');
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
-  const [partnerData, setPartnerData] = useState()
+  // const [partnerData, setPartnerData] = useState()
   const [partnertable, setPartnertable] = useState([])
+  const [type, setType] = useState("PARTNER")
 
   const { TabPane } = Tabs;
 
@@ -29,20 +31,25 @@ const Partner = () => {
     setStatus(key);
     setPageNumber(1);
   };
-  const getData = () => {
-    ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=PARTNER`)
-      .then((res) => {
-        console.log("res", res);
-        setPartnerData(res)
-      })
-      .catch((err) => console.log(err))
-  }
+
+  const partnerData = useSelector(state => state.users.getAllUser);
+  const editProfileData = useSelector(state => state.users.editProfileData);
+
+  const { editProfileSuccess } = actions;
+
+  // const getData = () => {
+  //   ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=PARTNER`)
+  //     .then((res) => {
+  //       setPartnerData(res)
+  //     })
+  //     .catch((err) => console.log(err))
+  // }
 
   const onEdit = (id) => {
     history.push(`${path}/adduser?id=${id}`);
   }
 
-  const onDelete = (id) => {
+  const onDelete = async id => {
     let partnerForDelete = partnerData && partnerData.data && partnerData.data.data.find(item => item.id === id);
     if (partnerForDelete) {
       partnerForDelete = {
@@ -53,28 +60,63 @@ const Partner = () => {
         avatar: 'dfd',
       };
       delete partnerForDelete.userTakenRatings
-      console.log('partnerForDelete', partnerForDelete);
-      dispatch(editProfile(partnerForDelete));
+      // dispatch(editProfile(partnerForDelete));
+      // getData();
+      const restoreActivePartner = await activePartner(id, partnerForDelete);
+
+      if (restoreActivePartner.status === 200) {
+        toast.success("Partner Delete successful")
+      }
     }
   }
-  const onActive = (id) => {
-    console.log("-----------");
-    // let users = partnerData && partnerData.data && partnerData.data.data.find(item => item.id === id);
-    // let data = {
-    //   avatar: users.avatar,
-    //   email: users.email,
-    //   id: id,
-    //   isActive: true,
-    //   isDeleted: false,
-    //   name: users.name,
-    //   phone: users.phone,
-    //   userType: users.userType,
-    // };
-    // dispatch(editProfile(data))
+
+  const activePartner = (id, dt) => {
+    delete dt.id;
+    delete dt.userType;
+    const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
+      .then((res) => {
+        if (res.status === 200) {
+          // getData();
+          dispatch(getAllUser(perPage, pageNumber, status, type))
+
+        }
+        return res
+      })
+    return newVal
+  }
+
+  const onActive = async id => {
+    let users = partnerData && partnerData.data && partnerData.data.data.find(item => item.id === id);
+    let data = {
+      avatar: users.avatar,
+      email: users.email,
+      id: users.id,
+      isActive: true,
+      isDeleted: false,
+      name: users.name,
+      phone: users.phone,
+      userType: users.userType,
+    };
+    const restoreActivePartner = await activePartner(id, data);
+
+    if (restoreActivePartner.status === 200) {
+      toast.success("Partner active successful")
+    }
   };
 
   useEffect(() => {
-    console.log("partnerData-----------", partnerData);
+    if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
+      dispatch(editProfileSuccess(null))
+      toast.success("Partner Update successful")
+    }
+  }, [editProfileData])
+
+  useEffect(() => {
+    dispatch(getAllUser(perPage, pageNumber, status, type))
+  }, [perPage, pageNumber, status, type])
+
+
+  useEffect(() => {
     if (partnerData && partnerData.data) {
       setPartnertable(
         partnerData.data?.data?.map(item => {
@@ -109,9 +151,9 @@ const Partner = () => {
     }
   }, [partnerData])
 
-  useEffect(() => {
-    getData()
-  }, [perPage, pageNumber, status])
+  // useEffect(() => {
+  //   getData()
+  // }, [perPage, pageNumber, status])
 
 
   const usersTableColumns = [

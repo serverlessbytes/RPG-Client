@@ -44,37 +44,34 @@ const Employer = () => {
 
     useEffect(() => {
         if (getEmployer && getEmployer.data) {
-            // console.log("getAllUsers", getAllUsers)
             setUsertable(getEmployer.data?.data?.map(item => {
-
                 return ({
                     name: item.name,
                     email: item.email,
                     phone: item.phone,
-                    // action: (
-                    //     <div className="table-actions">
-                    //         {
-                    //             status === "active" ?
-                    //                 <>
-                    //                     <Button className="btn-icon" type="info" to="#"  shape="circle">
-                    //                         <FeatherIcon icon="edit" size={16} />
-                    //                     </Button>
-                    //                     <Button className="btn-icon" type="danger" to="#"  shape="circle">
-                    //                         <FeatherIcon icon="trash-2" size={16} />
-                    //                     </Button>
-                    //                 </> : <Button className="btn-icon" type="danger" to="#"  shape="circle">
-                    //                     <FeatherIcon icon="rotate-ccw" size={16} />
-                    //                 </Button>
-                    //         }
+                    action: (
+                        <div className="table-actions">
+                            {
+                                status === "active" ?
+                                    <>
+                                        <Button className="btn-icon" type="info" to="#" shape="circle">
+                                            <FeatherIcon icon="edit" size={16} />
+                                        </Button>
+                                        <Button className="btn-icon" type="danger" to="#" shape="circle">
+                                            <FeatherIcon icon="trash-2" size={16} />
+                                        </Button>
+                                    </> : <Button className="btn-icon" type="danger" to="#" shape="circle">
+                                        <FeatherIcon icon="rotate-ccw" size={16} />
+                                    </Button>
+                            }
 
-                    //     </div>
-                    // ),
+                        </div>
+                    ),
                 });
             })
             )
         }
     }, [getEmployer])
-
 
     const allEmployerExport = () => {
         setExportTog(true)
@@ -86,7 +83,6 @@ const Employer = () => {
     const callback = (data) => {
         setStatus(data)
     }
-
 
     const usersTableColumns = [
 

@@ -218,7 +218,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const onRestore = async id => {
     let jobsData =
       getJobFilterData && getJobFilterData?.data && getJobFilterData?.data.data.find(item => item.id === id);
-    console.log('jobsdataInactive', jobsData);
     if (jobsData) {
       let data = {
         name: jobsData.name.id,
@@ -269,7 +268,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         status,
       ),
     );
-  }, [perPage, pageNumber, apply, status, search]);
+  }, [perPage, pageNumber, apply, status]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {

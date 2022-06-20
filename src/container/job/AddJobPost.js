@@ -13,10 +13,6 @@ import actions from "../../redux/jobs/actions";
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
 import RichTextEditor from 'react-rte';
-import { set } from 'js-cookie';
-import { data } from 'browserslist';
-import { ApiPost } from '../../helper/API/ApiData';
-
 
 const AddJobPost = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -94,7 +90,6 @@ const AddJobPost = () => {
 
     useEffect(() => {
         if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
-            console.log("getOneJobPostData", getOneJobPostData)
             setState({
                 ...state,
                 key: getOneJobPostData.data.data.key,

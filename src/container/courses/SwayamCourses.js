@@ -5,19 +5,10 @@ import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdown, Space, Menu } from 'antd';
-import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {
-  editSwayamCourse,
-  getallSwayamCourse,
-  getCategoryData,
-  getCoursefilter,
-  getOneCourseDetailByKey,
-  getOneCoursefilter,
-  addSwayamCourse,
-} from '../../redux/course/actionCreator';
+import {editSwayamCourse,getallSwayamCourse,getCategoryData,getCoursefilter,getOneCourseDetailByKey, getOneCoursefilter,addSwayamCourse,} from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -26,11 +17,9 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ImportFileModal from '../../components/modals/ImportFileModal';
 import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
-import { async } from '@firebase/util';
 import ConfirmModal from '../../components/modals/confirm_modal';
 
 const {
@@ -40,6 +29,7 @@ const {
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleErr,
   addSwayamCourseModuleSuccess,
+  editSwayamCourseModule,
 } = actions;
 
 const SwayamCourses = () => {
@@ -48,19 +38,8 @@ const SwayamCourses = () => {
   const history = useHistory();
   const CSVLinkRef = useRef(null);
   const usersTableData = [];
+  const { TabPane } = Tabs;
   const { path } = useRouteMatch();
-
-  const languageData = useSelector(state => state.language.getLanguageData);
-  const categoryData = useSelector(state => state.category.categoryData);
-  const courseData = useSelector(state => state.category.courseFilterData);
-  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
-  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
-  const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
-  const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
-  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
-  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
-  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [data, setData] = useState({
@@ -85,7 +64,19 @@ const SwayamCourses = () => {
     marathi: ''
   });
   const [languageId, setLanguageID] = useState()
-  const [id, setID] = useState() //
+  const [id, setID] = useState() 
+
+  const languageData = useSelector(state => state.language.getLanguageData);
+  const categoryData = useSelector(state => state.category.categoryData);
+  const courseData = useSelector(state => state.category.courseFilterData);
+  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
+  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
+  const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
+  const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
+  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
+  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
+  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const header = [
     { label: 'id', key: 'id' },
@@ -329,19 +320,24 @@ const SwayamCourses = () => {
     });
   };
 
-  const onApproved = (id, isAp, key) => {
-    if (status !== 'active') {
-      return;
-    }
-    let data = {
-      courseId: id,
-      key: key,
-      isApproved: !isAp,
-    };
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-    });
+  // const onApproved = (id, isAp, key) => {
+  //   if (status !== 'active') {
+  //     return;
+  //   }
+  //   let data = {
+  //     courseId: id,
+  //     key: key,
+  //     isApproved: !isAp,
+  //   };
+  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+  //     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+  //   });
+  // };
+
+  const callback = key => {
+    setStatus(key);
+    setExportTog(false);
   };
 
   const onBannerSelect = (id, key, bannerSelected) => {
@@ -570,10 +566,6 @@ const SwayamCourses = () => {
       dataIndex: 'bannerSelected',
       // sortDirections: ['descend', 'ascend'],
     },
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    // },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -581,13 +573,6 @@ const SwayamCourses = () => {
     },
 
   ];
-
-  const { TabPane } = Tabs;
-
-  const callback = key => {
-    setStatus(key);
-    setExportTog(false);
-  };
 
   return (
     <>
@@ -664,6 +649,7 @@ const SwayamCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -709,6 +695,7 @@ const SwayamCourses = () => {
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
+
               <Tabs onChange={callback}>
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>

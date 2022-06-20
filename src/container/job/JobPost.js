@@ -18,11 +18,10 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/jobs/actions';
 import { toast } from 'react-toastify';
 import ImportJobPost from '../../components/modals/ImportJobPost';
-// import './index.css';
 import { Menu, Dropdown, message, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
-const JobPost = ({ match }) => {
+const JobPost = () => {
     const { allJobsSuccess, addBlukJobsSuccess } = actions;
     const { Option } = Select;
     const dispatch = useDispatch();
@@ -59,12 +58,6 @@ const JobPost = ({ match }) => {
     const [numberOfPage, setNumberOfPage] = useState();
     const [importModal, setImportModal] = useState(false);
 
-    useEffect(() => {
-        dispatch(getJobroles());
-    }, [])
-    useEffect(() => {
-        dispatch(getStateData()) //dipatch state 
-    }, []);
     const onChangevalue = (e, name) => {
         if (name === 'type') {
             setType({ ...type, type: e });
@@ -80,20 +73,6 @@ const JobPost = ({ match }) => {
         setStatus(key);
         setExportTog(false);
     };
-
-    useEffect(() => {
-        if (stateJob.length && exportTog) {
-            CSVLinkRef?.current?.link.click();
-            toast.success('Job data exported successfully');
-            setExportTog(false);
-        } else if (exportTog) {
-            toast.success('No data for export');
-        }
-    }, [stateJob]); //
-
-    useEffect(() => {
-        dispatch(allJobsSuccess(null));
-    }, []);
 
     const header = [
         { label: 'id', key: 'id' },
@@ -126,24 +105,7 @@ const JobPost = ({ match }) => {
         { label: 'updatedAt', key: 'updatedAt' },
     ];
 
-    useEffect(() => {
-        if (filterData?.data?.data) {
-            setStateJob(
-                filterData?.data?.data.map(item => {
-                    return {
-                        ...item,
-                        jobRole: item?.jobRole?.name,
-                        district: item?.district?.name,
-                        jobType: item?.jobType?.name,
-                        shifts: item?.shifts ? item?.shifts[0] : '',
-                        state: item?.state?.name,
-                        name: item?.name?.name,
-                    };
-                }),
-            );
-            //set a state
-        }
-    }, [filterData]);
+
 
     // const onExportJobs = () => {
     //     dispatch(getJobsFilterForMain(pagePer,numberOfPage, state?.state ? state?.state : "", type?.type ? type?.type : "", jobRole?.jobRole ? jobRole?.jobRole : "", status))
@@ -193,14 +155,6 @@ const JobPost = ({ match }) => {
             setApply(!apply);
     };
 
-    useEffect(() => {
-        dispatch(getJobroles());
-    }, []);
-
-    useEffect(() => {
-        dispatch(getStateData()); //dipatch state
-    }, []);
-
     const onClick = ({ key }) => {
         if (key == 'exportJobs') {
             onExportJobs();
@@ -215,6 +169,46 @@ const JobPost = ({ match }) => {
             setImportModal(true);
         }
 
+        useEffect(() => {
+            dispatch(getJobroles());
+        }, []);
+
+        useEffect(() => {
+            dispatch(getStateData()); //dipatch state
+        }, []);
+
+        useEffect(() => {
+            if (stateJob.length && exportTog) {
+                CSVLinkRef?.current?.link.click();
+                toast.success('Job data exported successfully');
+                setExportTog(false);
+            } else if (exportTog) {
+                toast.success('No data for export');
+            }
+        }, [stateJob]); //
+
+        useEffect(() => {
+            dispatch(allJobsSuccess(null));
+        }, []);
+
+        useEffect(() => {
+            if (filterData?.data?.data) {
+                setStateJob(
+                    filterData?.data?.data.map(item => {
+                        return {
+                            ...item,
+                            jobRole: item?.jobRole?.name,
+                            district: item?.district?.name,
+                            jobType: item?.jobType?.name,
+                            shifts: item?.shifts ? item?.shifts[0] : '',
+                            state: item?.state?.name,
+                            name: item?.name?.name,
+                        };
+                    }),
+                );
+                //set a state
+            }
+        }, [filterData]);
 
         return (
             <>

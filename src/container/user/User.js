@@ -4,16 +4,15 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
-import Item from 'antd/lib/list/Item';
-import { isTemplateMiddle } from 'typescript';
 import StarRatings from 'react-star-ratings';
-
+import { toast } from 'react-toastify';
+import actions from '../../redux/users/actions';
 
 const User = () => {
     const dispatch = useDispatch()
@@ -22,27 +21,36 @@ const User = () => {
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    const [userData, setUserData] = useState()
+    // const [userData, setUserData] = useState()
     const [userTable, setUserTable] = useState([])
+    const [type, setType] = useState("USER")
 
     const { TabPane } = Tabs;
+
+    const { editProfileSuccess, editProfileErr } = actions;
+
+    const userData = useSelector(state => state.users.getAllUser)
+    const editProfileData = useSelector(state => state.users.editProfileData)
+    const editProfileError = useSelector(state => state.users.editProfileErr)
 
     const callback = key => {
         setStatus(key);
         setPageNumber(1);
     };
-    const getData = () => {
-        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=USER`)
-            .then((res) => {
-                setUserData(res)
-            })
-            .catch((err) => console.log(err))
-    }
+
+    // const getData = () => {
+    //     ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=USER`)
+    //         .then((res) => {
+    //             setUserData(res)
+    //         })
+    //         .catch((err) => console.log(err))
+    // }
+
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
     }
 
-    const onDelete = (id) => {
+    const onDelete = async id => {
         let userForDelete = userData && userData.data && userData.data.data.find(item => item.id === id);
         if (userForDelete) {
             //delete userForDelete.key
@@ -57,8 +65,65 @@ const User = () => {
             };
             delete userForDelete.userTakenRatings
             dispatch(editProfile(userForDelete));
+            const restoreActiveUser = await activeUser(id, userForDelete);
+
+            if (restoreActiveUser.status === 200) {
+                toast.success("User Delete successful")
+            }
         }
     };
+
+    const activeUser = (id, dt) => {
+
+        delete dt.id;
+        delete dt.userType;
+        const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getAllUser(perPage, pageNumber, status, type))
+                }
+                return res
+            })
+        return newVal
+    }
+
+    const onActive = async id => {
+        let activeData = userData && userData.data && userData.data.data.find(item => item.id === id);
+        console.log("activeData", activeData)
+        if (activeData) {
+            activeData = {
+                ...activeData,
+                id: activeData.id,
+                isActive: true,
+                isDeleted: false,
+                avatar: 'dfd',
+            };
+            delete activeData.userTakenRatings
+        }
+        const restoreActiveUser = await activeUser(id, activeData);
+
+        if (restoreActiveUser.status === 200) {
+            toast.success("User active successful")
+        }
+    }
+
+    useEffect(()=>{
+        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+            dispatch(editProfileSuccess(null))
+            toast.success("User Update successful")
+        }
+    },[editProfileData])
+
+    useEffect(() => {
+        if(editProfileError){
+            dispatch(editProfileErr(null))
+            toast.error("Something Wrong")
+        }
+    },[editProfileError])
+
+    useEffect(() => {
+        dispatch(getAllUser(perPage, pageNumber, status, type))
+    }, [perPage, pageNumber, status, type])
 
     useEffect(() => {
         if (userData && userData.data) {
@@ -112,11 +177,10 @@ const User = () => {
         }
     }, [userData])
 
-    useEffect(() => {
-        getData()
-    }, [perPage, pageNumber, status])
 
-
+    // useEffect(() => {
+    //     getData()
+    // }, [perPage, pageNumber, status])
 
     const userTableColumns = [
         {
@@ -148,7 +212,7 @@ const User = () => {
         <>
             <PageHeader
                 ghost
-                title="Employer"
+                title="User"
             // buttons={[
             //     <div className="page-header-actions">
             //         <Button size="small" type="primary" onClick={allEmployerExport}>
@@ -163,7 +227,7 @@ const User = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Partner" key="active">
+                                <TabPane tab="Active User" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -182,7 +246,7 @@ const User = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive Partner" key="inactive">
+                                <TabPane tab="Inactive User" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

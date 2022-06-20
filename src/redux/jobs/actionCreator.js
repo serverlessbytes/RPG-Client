@@ -193,9 +193,9 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
   if (status) {
     URL = URL.concat(`&status=${status}`)
   }
-  // if (searchBar) {
-  //   URL = URL.concat(`&search=${searchBar}`)
-  // }
+  if (searchBar) {
+    URL = URL.concat(`&search=${searchBar}`)
+  }
 
   await ApiPost(URL)
     .then((res) => {
