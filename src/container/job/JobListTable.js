@@ -31,7 +31,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
- 
+
   const [usertable, setUsertable] = useState([]); //set data
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
@@ -85,7 +85,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [upadteJobBenner])
 
   const getOneJobDetailByKey = async (languageId, key, id) => {
-
     await ApiGet(`job/getJobByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
         console.log("res", res);
@@ -249,10 +248,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       if (restoreJobPost.status === 200) {
         toast.success('Jobs active successfully.');
       }
-      
+
     }
   };
-
   // useEffect(() => {
   //   if (schemeBannerData && schemeBannerData.status === 200) {
   //     dispatch(getSchemeData(perPage, pageNumber, status))
@@ -277,7 +275,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
       toast.success('Jobs Add successful');
-     
+
     }
   }, [addJobPostData]);
 
@@ -285,7 +283,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
       dispatch(getJobsFilterForMainSuccess(null));
       toast.success('Jobs Addd successful');
-      
+
     }
   }, [addLanguageJobPost]);
 
@@ -351,7 +349,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   };
 
   useEffect(() => {
-    
+
 
 
     setUsertable(

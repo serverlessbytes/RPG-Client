@@ -68,9 +68,9 @@ const AddCourses = () => {
     thumbnail: '',
   });
 
-  useEffect(()=>{
-    console.log("editOneSwayamCourseData",editOneSwayamCourseData)
-  },[editOneSwayamCourseData])
+  useEffect(() => {
+    console.log("editOneSwayamCourseData", editOneSwayamCourseData)
+  }, [editOneSwayamCourseData])
 
   const [moduleState, setModuleState] = useState([
     {
@@ -145,7 +145,7 @@ const AddCourses = () => {
 
   useEffect(() => {
     console.log("editOneSwayamCourseData", editOneSwayamCourseData);
-    if (editOneSwayamCourseData && editOneSwayamCourseData.data &&  editOneSwayamCourseData.data.data && id) {
+    if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
       setState({
         ...state,
         detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.data.detail, 'markdown'),
@@ -324,7 +324,6 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-
     dispatch(editSwayamCourse(data));
     history.push('/admin/courses');
   };
@@ -370,7 +369,6 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-
     const newData = moduleState.filter(item => !item.moduleId).map(item => {
       console.log("item", item)
       return {
@@ -412,7 +410,6 @@ const AddCourses = () => {
   };
 
   const onRemoveData = () => {
-
     // if (moduleState.length > 1) {
     if (id) {
       const data = moduleState[selectKey];
@@ -429,12 +426,12 @@ const AddCourses = () => {
       };
       dispatch(editSwayamCourseModule(deleteData));
     }
-    
+
     let val = [...moduleState];
     val.splice(selectKey, 1);
     setSelectKey(val.length - 1);
     setModuleState(val);
-  
+
   };
 
   const { TabPane } = Tabs;
@@ -509,7 +506,7 @@ const AddCourses = () => {
                     {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                   </Form>
                 </Col>
-            
+
                 <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
                   <Form.Item label="Job Category">
                     <Select
@@ -533,7 +530,7 @@ const AddCourses = () => {
                     {error.jobCategoryIds && <span style={{ color: 'red' }}>{error.jobCategoryIds}</span>}
                   </Form.Item>
                 </Col>
-             
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>
