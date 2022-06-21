@@ -88,11 +88,6 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
-
-  useEffect(() => {
-    console.log("users", users);
-  }, [users])
-
   // useEffect(() => {
   //   dispatch(upadteBanner())
   // }, [])
@@ -257,16 +252,6 @@ const Schemes = () => {
   ];
 
   useEffect(() => {
-    if (schemeBannerData && schemeBannerData.status === 200) {
-      dispatch(getSchemeData(perPage, pageNumber, status))
-      toast.success("Scheme Banner Add Successfully")
-    }
-    else if (schemeBannerData && schemeBannerData.status !== 200) {
-      toast.error("Something Wrong")
-    }
-  }, [schemeBannerData])
-
-  useEffect(() => {
     if (users?.data) { //set a state for export excel
       setState(users.data.map((item) => {
         return {
@@ -405,7 +390,6 @@ const Schemes = () => {
   }
 
 
-
   useEffect(() => {
     dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
   }, [perPage, pageNumber, status]);
@@ -452,7 +436,20 @@ const Schemes = () => {
     }
 
   };
-
+  const onBannerSelect = (id, bannerSelected) => {
+    if (status !== 'active') {
+      return
+    }
+    let body = {
+      id: id,
+      bannerSelected: !bannerSelected
+    }
+    ApiPost(`scheme/updateBannerSelected`, body)
+      .then(res => {
+        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+        dispatch(getSchemeData(perPage, pageNumber, status));
+      });
+  }
   const menu = (
     <Menu
       onClick={onClick}
@@ -578,10 +575,15 @@ const Schemes = () => {
           </div>
         ),
         chooseBanner: (
-          <div div style={{ textAlign: "center" }
+          <div onClick={() => onBannerSelect(item.id, item.bannerSelected)} style={{ textAlign: "center" }
           }>
-            <Switch checked={item.bannerSelected} onChange={(event) => dispatch(upadteBanner({ id: item.id, bannerSelected: event }))} />
+            <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
           </div>
+          // {
+          //         <div onClick={() => onBannerSelect(item.id, item.key, item.bannerSelected)}>
+          //           <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
+          //         </div>
+          //       }
         ),
 
 

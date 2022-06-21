@@ -316,12 +316,12 @@ const AddSchemes = () => {
   const onCancel = () => {
     history.push(`/admin/scheme`)
   }
-  useEffect(() => {
-    if (schemeDataAdd && schemeDataAdd.status === 200) {
-      dispatch(addSchemeSuccess(null))
-      toast.success("Scheme add successful");
-    }
-  }, [schemeDataAdd])
+  // useEffect(() => {
+  //   if (schemeDataAdd && schemeDataAdd.status === 200) {
+  //     dispatch(addSchemeSuccess(null))
+  //     toast.success("Scheme add successful");
+  //   }
+  // }, [schemeDataAdd])
   return (
     <>
       <PageHeader

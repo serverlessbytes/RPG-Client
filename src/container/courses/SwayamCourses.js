@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdow
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {editSwayamCourse,getallSwayamCourse,getCategoryData,getCoursefilter,getOneCourseDetailByKey, getOneCoursefilter,addSwayamCourse,} from '../../redux/course/actionCreator';
+import { editSwayamCourse, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCourseDetailByKey, getOneCoursefilter, addSwayamCourse, } from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -64,7 +64,7 @@ const SwayamCourses = () => {
     marathi: ''
   });
   const [languageId, setLanguageID] = useState()
-  const [id, setID] = useState() 
+  const [id, setID] = useState()
 
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);

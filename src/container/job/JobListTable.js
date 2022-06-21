@@ -52,7 +52,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     };
   });
   const languageData = useSelector(state => state.language.getLanguageData);
-  const jobData = useSelector(state => state.job.getJobPostData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
   const addJobPostErr = useSelector(state => state.job.addJobPostErr); //fetch for tostify from reducer for jobposterror
@@ -68,21 +67,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     delete data.id;
     const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
       if (res.status === 200) {
-        dispatch(getJobPost(perPage, pageNumber));
+        dispatch(getJobsFilterForMain(perPage, pageNumber));
         return res;
       }
     });
     return newVal;
   };
-
-  useEffect(() => {
-    if (upadteJobBenner && upadteJobBenner.status === 200) {
-      dispatch(getJobPost(perPage, pageNumber));
-      toast.success("Job Banner Add Successfully")
-    } else if (upadteJobBenner && upadteJobBenner.status !== 200) {
-      toast.error("Something Wrong")
-    }
-  }, [upadteJobBenner])
 
   const getOneJobDetailByKey = async (languageId, key, id) => {
     await ApiGet(`job/getJobByKey?langId=${languageId}&key=${key}`)
@@ -203,17 +193,17 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setLangIds(temp)
   }, [languageData])
 
-  const activeJobPost = data => {
-    let id = data.id;
-    delete data.id;
-    const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
-      if (res.status === 200) {
-        dispatch(getJobPost(perPage, pageNumber));
-      }
-      return res;
-    });
-    return newVal;
-  };
+  // const activeJobPost = data => {
+  //   let id = data.id;
+  //   delete data.id;
+  //   const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
+  //     if (res.status === 200) {
+  //       dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
+  //     }
+  //     return res;
+  //   });
+  //   return newVal;
+  // };
 
   const onRestore = async id => {
     let jobsData =
@@ -243,18 +233,32 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         jobType: jobsData.jobType.id,
         id: id,
       };
-      const restoreJobPost = await activeJobPost(data);
-      if (restoreJobPost.status === 200) {
-        toast.success('Jobs active successfully.');
-      }
-
+      delete data.id;
+      ApiPost(`job/update?jobId=${id}`, data).then(res => {
+        if (res.status === 200) {
+          dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
+        }
+      })
     }
+    //   const restoreJobPost = await activeJobPost(data);
+    //   if (restoreJobPost.status === 200) {
+    //     toast.success('Jobs active successfully.');
+    //   }
+
+    // }
   };
-  // useEffect(() => {
-  //   if (schemeBannerData && schemeBannerData.status === 200) {
-  //     dispatch(getSchemeData(perPage, pageNumber, status))
-  //   }
-  // }, [schemeBannerData])
+
+  useEffect(() => {
+    if (addLanguageJobPostError) {
+      toast.error('Something Wrong');
+    }
+  }, [addLanguageJobPostError]);
+
+  useEffect(() => {
+    if (addJobPostErr) {
+      toast.error('Something Wrong');
+    }
+  }, [addJobPostErr]);
 
   useEffect(() => {
     dispatch(
@@ -274,7 +278,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
       toast.success('Jobs Add successful');
-
     }
   }, [addJobPostData]);
 
@@ -285,18 +288,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
     }
   }, [addLanguageJobPost]);
-
-  useEffect(() => {
-    if (addLanguageJobPostError) {
-      toast.error('Something Wrong');
-    }
-  }, [addLanguageJobPostError]);
-
-  useEffect(() => {
-    if (addJobPostErr) {
-      toast.error('Something Wrong');
-    }
-  }, [addJobPostErr]);
 
   useEffect(() => {
     if (editJobPostError) {
@@ -316,12 +307,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
   }, [editJobPostData]);
 
-  useEffect(() => {
-    dispatch(getJobPost(perPage, pageNumber));
-    setPagePer(perPage);
-    setNumberOfPage(pageNumber);
-    setExportTog(false);
-  }, [perPage, pageNumber]);
+  // useEffect(() => {
+  //   dispatch(getJobsFilterForMain(perPage, pageNumber));
+  //   setPagePer(perPage);
+  //   setNumberOfPage(pageNumber);
+  //   setExportTog(false);
+  // }, [perPage, pageNumber]);
 
   const onApproved = (id, isAp) => {
     if (status !== 'active') {
@@ -346,11 +337,21 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       })
       .catch(err => console.log('Error', err));
   };
+  const onBannerSelect = (id, bannerSelected) => {
+    if (status !== 'active') {
+      return
+    }
+    let body = {
+      bannerSelected: !bannerSelected
+    }
+    ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
+      .then(res => {
+        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+        dispatch(getJobsFilterForMain(perPage, pageNumber));
+      });
+  }
 
   useEffect(() => {
-
-
-
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
@@ -397,7 +398,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                     {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT
                   </Button>
-
                   {/* <Button
                       className="btn-icon"
                       type="success"
@@ -411,9 +411,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             </div>
           ),
           chooseBanner: (
-            <div style={{ textAlign: "center" }}>
-              <Switch checked={item.bannerSelected} onChange={(event) => dispatch(jobBannerUpdate(item.id, { bannerSelected: event }))} />
-            </div >
+            <div onClick={() => onBannerSelect(item.id, item.bannerSelected)} style={{ textAlign: "center" }}>
+              <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
+            </div>
+
           ),
           action: (
             <div className="table-actions">

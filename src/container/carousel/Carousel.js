@@ -17,7 +17,7 @@ import ImportCarousel from '../../components/modals/ImportCarousel';
 const Carousel = () => {
   const dispatch = useDispatch();
 
-  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr,addBulkCarouselSuccess,addBulkCarouselErr } = actions;
+  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr, addBulkCarouselSuccess, addBulkCarouselErr } = actions;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [carouselTableData, setcarouselTableData] = useState();
@@ -49,8 +49,8 @@ const Carousel = () => {
       dispatch(addBulkCarouselSuccess(null));
       toast.success('Import Carousel successful');
     }
-    else if (addBulkCarouselData && addBulkCarouselData.status !== 200){
-     toast.error("Something Wrong")
+    else if (addBulkCarouselData && addBulkCarouselData.status !== 200) {
+      toast.error("Something Wrong")
     }
   }, [addBulkCarouselData]);
 
@@ -169,7 +169,7 @@ const Carousel = () => {
     const newVal = ApiPost(`carousel/editCarousel`, userForDelete)
       .then(res => {
         if (res.status === 200) {
-          dispatch(getCarousel(perPage,pageNumber));
+          dispatch(getCarousel(perPage, pageNumber));
         }
         return res;
       })
