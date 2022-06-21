@@ -57,6 +57,8 @@ const AddSchemes = () => {
   const SchemeBenifits = useSelector(state => state.scheme.schemeBenefitData);
   const State = useSelector(state => state.scheme.addState);
   const getOneScHemeData = useSelector(state => state.scheme.getOneSchemeData);
+  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData);
+
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -79,8 +81,7 @@ const AddSchemes = () => {
         detail: RichTextEditor.createValueFromString(getOneScHemeData.detail, 'markdown'),
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
-
-        // key: getOneScHemeData.key,
+        key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,//name
         schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
@@ -267,12 +268,13 @@ const AddSchemes = () => {
       isApproved: state.isApproved,
     };
     if (langId) {
-      // delete data.id
-      // delete data.isDeleted
-      // delete data.isPublished
-      // delete data.isApproved
+      delete data.id
+      delete data.isDeleted
+      delete data.isPublished
+      delete data.isApproved
       data = {
         ...data,
+        key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,
         schemeBenifit: getOneScHemeData.schemeBenifit.id,
@@ -287,13 +289,17 @@ const AddSchemes = () => {
         videoUrl: getOneScHemeData.videoUrl,
         thumbnail: getOneScHemeData.thumbnail,
       }
-
       dispatch(addSchemeData(langId, data));
       history.push(`/admin/scheme`);
     }
     else {
-      dispatch(editSchemeData(data));
-      history.push(`/admin/scheme`);
+      if (id) {
+        dispatch(editSchemeData(data));
+        history.push(`/admin/scheme`);
+      } else {
+        dispatch(addSchemeData(langId, data));
+        history.push(`/admin/scheme`);
+      }
     }
     onCancel();
   };
@@ -310,7 +316,12 @@ const AddSchemes = () => {
   const onCancel = () => {
     history.push(`/admin/scheme`)
   }
-
+  useEffect(() => {
+    if (schemeDataAdd && schemeDataAdd.status === 200) {
+      dispatch(addSchemeSuccess(null))
+      toast.success("Scheme add successful");
+    }
+  }, [schemeDataAdd])
   return (
     <>
       <PageHeader
@@ -369,7 +380,7 @@ const AddSchemes = () => {
                   name="schemeCategory"
                   onChange={e => selectValue(e, 'schemeCategory')}
                 >
-                  {scheme && scheme.data.map(items => <Option value={items.id}>{items.name} </Option>)}
+                  {scheme && scheme.data.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
               </Form.Item>
@@ -386,7 +397,7 @@ const AddSchemes = () => {
                   name="schemeBenifit"
                   onChange={e => selectValue(e, 'schemeBenifit')}
                 >
-                  {SchemeBenifits && SchemeBenifits.map(items => <Option value={items.id}>{items.name} </Option>)}
+                  {SchemeBenifits && SchemeBenifits.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeBenifit && <span style={{ color: 'red' }}>{error.schemeBenifit}</span>}
               </Form.Item>
@@ -485,7 +496,7 @@ const AddSchemes = () => {
                   {State &&
                     State.map(item => (
                       <>
-                        <Option value={item.id}> {item.name} </Option>
+                        <Option key={item.id} value={item.id}> {item.name} </Option>
                       </>
                     ))}
                 </Select>

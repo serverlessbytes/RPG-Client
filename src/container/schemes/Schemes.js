@@ -70,7 +70,7 @@ const Schemes = () => {
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
   const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
-  // const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
+  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
   const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
   const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
@@ -88,6 +88,10 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
+
+  useEffect(() => {
+    console.log("users", users);
+  }, [users])
 
   // useEffect(() => {
   //   dispatch(upadteBanner())
@@ -141,13 +145,11 @@ const Schemes = () => {
   }, [schemeModulData])
 
   useEffect(() => {
-    if (addSchemeData && addSchemeData.status === 200) {
+    if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
       toast.success("Scheme add successful");
-      //toastAssetsAdd(true)
-      //onHide()
     }
-  }, [addSchemeData])
+  }, [schemeDataAdd])
 
   useEffect(() => {
     if (addSchemeError) {
@@ -175,7 +177,7 @@ const Schemes = () => {
     await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
       .then((res) => {
         console.log("res", res);
-        if (res.status === 500) {
+        if (res.status === 200) {
           toast.success("Course alredy exist in this language!")
         }
       })
@@ -399,7 +401,6 @@ const Schemes = () => {
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
       dispatch(getSchemeData(perPage, pageNumber, status))
-
     }
   }
 
@@ -577,9 +578,10 @@ const Schemes = () => {
           </div>
         ),
         chooseBanner: (
-          <div style={{ textAlign: "center" }}>
+          <div div style={{ textAlign: "center" }
+          }>
             <Switch checked={item.bannerSelected} onChange={(event) => dispatch(upadteBanner({ id: item.id, bannerSelected: event }))} />
-          </div >
+          </div>
         ),
 
 
