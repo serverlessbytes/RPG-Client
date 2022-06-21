@@ -53,7 +53,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
 
       {/* <SubMenu key="dashboard" icon={!topMenu && <FeatherIcon icon="home" />} title="Jobs"> */}
       <SubMenu key="job" className='menu' title="Jobs" onTitleClick={() => history.push(`${path}/job/post`)}
-        icon={!topMenu && <FeatherIcon icon="codepen" />}>
+        icon={!topMenu && <FeatherIcon icon="codepen"  style={{marginRight:"10px"}}/>}>
         {/* <Menu.Item key="dashboard">
           <NavLink onClick={toggleCollapsed} to={`${path}/job/post`}>
             Jobs Dashboard
@@ -99,7 +99,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </Menu.Item> */}
 
       {/* <SubMenu key="schemes" icon={!topMenu && <FeatherIcon icon="home" />} title="Schemes"> */}
-      <SubMenu key="schemes" title="Schemes" onTitleClick={() => history.push(`${path}/scheme`)} icon={!topMenu && <FeatherIcon icon="hash" />}>
+      <SubMenu key="schemes" title="Schemes" onTitleClick={() => history.push(`${path}/scheme`)} icon={!topMenu && <FeatherIcon icon="hash" style={{marginRight:"10px"}}/>}>
         <Menu.Item key="scheme">
           <NavLink onClick={toggleCollapsed} to={`${path}/scheme`}>
             Govt Schemes
@@ -128,7 +128,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       </SubMenu>
 
       {/* <SubMenu key="courses" icon={!topMenu && <FeatherIcon icon="home" />} title="Courses"> */}
-      <SubMenu key="courses" title="Courses" onTitleClick={() => history.push(`${path}/courses`)} icon={!topMenu && <FeatherIcon icon="command" />}>
+      <SubMenu key="courses" title="Courses" onTitleClick={() => history.push(`${path}/courses`)} icon={!topMenu && <FeatherIcon icon="command" style={{marginRight:"10px"}}/>}>
         <Menu.Item key="courses" >
           <NavLink onClick={toggleCollapsed} to={`${path}/courses`}>
             Swayam Courses
@@ -158,7 +158,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </NavLink>
       </Menu.Item> */}
 
-      <SubMenu key="user" title="Users" onTitleClick={() => history.push(`${path}/user`)} icon={!topMenu && <FeatherIcon icon="users" />}>
+      <SubMenu key="user" title="Users" onTitleClick={() => history.push(`${path}/user`)} icon={!topMenu && <FeatherIcon icon="users" style={{marginRight:"10px"}}/>}>
         {/* <Menu.Item key="user">
           <NavLink onClick={toggleCollapsed} to={`${path}/user`}>
             User
@@ -222,7 +222,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
         </Menu.Item>
       </SubMenu> */}
 
-      <SubMenu key="layout" title="Layout" icon={!topMenu && <FeatherIcon icon="layout" />}>
+      <SubMenu key="layout" title="Layout" icon={!topMenu && <FeatherIcon icon="layout" style={{marginRight:"10px"}}/>}>
         <Menu.Item key="banner">
           <NavLink onClick={toggleCollapsed} to={`${path}/banner`} >
             Banner
