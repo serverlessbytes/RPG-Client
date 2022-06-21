@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {addPartnerCourse,editPartnerCoursefilter,getallSwayamCourse, getCategoryData, getCoursefilter,getOneCoursefilter,} from '../../redux/course/actionCreator';
+import { addPartnerCourse, editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter, } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -25,16 +25,18 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 
 
 const PartnerCourses = () => {
-  const {addPartnerCourseSuccess,addPartnerCourseErr,getallSwayamCourseSuccess,editPartnerCourseSuccess,editPartnerCourseErr,addPartnerCourseInBulkSuccess} = actions;
+  const { addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr, addPartnerCourseInBulkSuccess } = actions;
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
   const CSVLinkRef = useRef(null);
+  const { TabPane } = Tabs;
 
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState({
     category: '',
     mode: 'PARTNER',
+    search : ''
   });
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
@@ -52,7 +54,7 @@ const PartnerCourses = () => {
   });
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
-
+  
   const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -241,11 +243,11 @@ const PartnerCourses = () => {
     dispatch(getCategoryData());
   }, []);
 
-  useEffect(() => {
-    if (catdata && catdata.data && catdata.data.length > 0) {
-      setState({ ...state, category: catdata.data[0].id });
-    }
-  }, [catdata]);
+  // useEffect(() => {
+  //   if (catdata && catdata.data && catdata.data.length > 0) {
+  //     setState({ ...state, category: catdata.data[0].id });
+  //   }
+  // }, [catdata]);
 
   // useEffect(() => { //
   //   if (state && state.category && activeCoursetog) {
@@ -253,14 +255,20 @@ const PartnerCourses = () => {
   //   }
   // }, [state]);
 
+  useEffect(() => {
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+  }, [perPage, pageNumber, state.mode, status]); //pagination
+
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
     if (name == 'category') {
       setState({ ...state, category: e });
-    } else if (name == 'mode') {
-      setState({ ...state, mode: e });
+    }
+    else if(name == 'search'){
+      setState({ ...state, search: e})
     }
   };
+
   const onEdit = id => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
@@ -310,6 +318,16 @@ const PartnerCourses = () => {
       })
     return newVal
   }
+
+  const Submit = () => {
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status,state.search));
+  };
+  const clearFilter = () => {
+    setState({ ...state, category: '', search: ''});
+    // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status,''));
+
+  };
 
   const onActive = async id => {
     //for inactive to active data
@@ -456,10 +474,6 @@ const PartnerCourses = () => {
     }
   }, [courseData]);
 
-  useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-  }, [perPage, pageNumber, state.mode, status]); //pagination
-
   const partnerCourseTableColumns = [
     {
       title: 'Course Name',
@@ -490,8 +504,6 @@ const PartnerCourses = () => {
     },
 
   ];
-
-  const { TabPane } = Tabs;
 
   const menu = (
     <Menu
@@ -574,7 +586,7 @@ const PartnerCourses = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                {/* <Col md={6} xs={24} className="mb-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Category">
                       <Select
@@ -585,29 +597,29 @@ const PartnerCourses = () => {
                         placeholder="Select Category"
                         onChange={e => onChangehandle(e, 'category')}
                       >
+                        <Option value="">Select Category</Option>
                         {catdata && catdata.data.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
-                </Col> */}
-                {/* <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item label="Mode">
-                                            <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode} onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
-                                                <Option value="ONLINE">Online</Option>
-                                                <Option value="OFFLINE">Offline</Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
+                </Col>
+
+                <Col md={6} xs={24} className="mb-25">
+                  <Form name="sDash_select" layout="vertical">
+                    <Form.Item label="Search">
+                      <Input placeholder="search" value={state.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                    </Form.Item>
+                  </Form>
+                </Col>
+
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    {/* <Button size="small" type="primary" onClick={e => Submit(e)}>
+                    <Button size="small" type="primary" onClick={e => Submit(e)}>
                       Apply
                     </Button>
-                    <Button size="small" type="light" onClick= {e => clearFilter(e)}>
+                    <Button size="small" type="light" onClick={e => clearFilter(e)}>
                       Clear
-                    </Button> */}
+                    </Button>
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
@@ -635,11 +647,11 @@ const PartnerCourses = () => {
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      <Form name="sDash_select" layout="vertical">
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}

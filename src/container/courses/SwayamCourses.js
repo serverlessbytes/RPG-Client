@@ -93,10 +93,6 @@ const SwayamCourses = () => {
   ];
 
   useEffect(() => {
-    console.log("courseData", courseData)
-  }, [courseData])
-
-  useEffect(() => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click(); // for export
       toast.success('Swayam course data exported successfully');
@@ -285,13 +281,14 @@ const SwayamCourses = () => {
       }
     }
   };
+
   const Submit = () => {
     dispatch(
       getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "",)
     );
   };
   const clearFilter = () => {
-    setData({ ...data, category: '', search: '' });
+    setData({ ...data, category: '', search: '', mode: '' });
     dispatch(getCoursefilter('', perPage, pageNumber, '', status));
   };
 

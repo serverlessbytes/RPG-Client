@@ -17,7 +17,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import { async } from '@firebase/util';
 import ImportSchemeCategory from '../../components/modals/ImportSchemeCategory';
 const SchemeCategory = () => {
-    const { editSchemecategorySuccess, addSchemecategorySuccess, addSchemecategoryErr, editSchemecategoryErr } = actions;
+    const { editSchemecategorySuccess, addSchemecategorySuccess, addSchemecategoryErr, editSchemecategoryErr,addSchemeCategoryInBulkSuccess } = actions;
 
 
     const dispatch = useDispatch()
@@ -45,10 +45,6 @@ const SchemeCategory = () => {
     useEffect(() => {
         dispatch(getSchemecategory());
     }, [])
-
-    useEffect(() => {
-        console.log("addSchemeCatogeryData", addSchemeCatogeryData)
-    }, [addSchemeCatogeryData])
 
     useEffect(() => {
         if (editSchemeCatogeryData && editSchemeCatogeryData.status === 200) {
@@ -83,9 +79,9 @@ const SchemeCategory = () => {
     }, [editSchemeCatogeryError])
 
     useEffect(() => {
-        console.log("ImportCategory", ImportCategory);
         if (ImportCategory && ImportCategory.status === 200) {
             toast.success("Category imported");
+            dispatch(addSchemeCategoryInBulkSuccess(null))
         } else if (ImportCategory && ImportCategory.status !== 200) {
             toast.error("Something wrong");
         }
@@ -134,7 +130,6 @@ const SchemeCategory = () => {
         if (schemeData && schemeData.data) {
             setSchemeCategoryTableData(schemeData.data ?
                 schemeData.data.map((item) => {
-                    console.log("item", item);
                     return {
                         ...item,
                         SchemeCategory: item.name,

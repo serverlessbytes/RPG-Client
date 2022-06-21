@@ -45,8 +45,8 @@ const AddJobPost = () => {
         requirements: "",
         jobType: "",
         isActive: true,
-        // shifts: "",
-        shifts:[],
+        shifts: "",
+        // shifts:[],
         email: "",
         phone: "",
         type: "",
@@ -96,7 +96,7 @@ const AddJobPost = () => {
                 salary: getOneJobPostData.data.data.salary,
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData?.data?.data.name?.name,
+                name: getOneJobPostData?.data?.data.name?.id, //
                 state: getOneJobPostData?.data?.data.state?.id,
                 district: getOneJobPostData?.data?.data.district?.id,
                 town: getOneJobPostData.data.data.town,
@@ -105,7 +105,7 @@ const AddJobPost = () => {
                 vacancies: getOneJobPostData.data.data.vacancies,
                 reqExperience: getOneJobPostData.data.data.reqExperience,
                 requirements: getOneJobPostData.data.data.requirements,
-                jobType: getOneJobPostData.data.data.jobType?.name,
+                jobType: getOneJobPostData.data.data.jobType?.id, //
                 isActive: true,
                 shifts: getOneJobPostData.data.data.shifts,
                 email: getOneJobPostData.data.data.email,
@@ -222,7 +222,6 @@ const AddJobPost = () => {
             setState({ ...state, shifts: e })
         }
         else if (name === "startDate") {
-            console.log("timeeewee", moment.utc(e).format())
             setState({ ...state, startDate: e })
         }
         else if (name === "endDate") {
@@ -252,7 +251,6 @@ const AddJobPost = () => {
 
     useEffect(() => {
         if (state.state) {
-
             dispatch(getDistrictData(state.state)) //dipatch district
         }
     }, [state.state]);
@@ -306,15 +304,6 @@ const AddJobPost = () => {
         onCancel();
     };
 
-    // const addLanguageJobPost = (languageID, body) => {
-    //     ApiPost(`job/add?langId=${languageID}`, body)
-    //         .then((res) => {
-    //             console.log("res", res);
-    //             return dispatch(addJobPostSuccess(res))
-    //         })
-    //         .catch((err) => dispatch(addJobPostErr(err)))
-    // }
-
     const onEdit = () => {
         let data = {
             // id: editJobsID,
@@ -332,8 +321,8 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
-            shifts: [state.shifts],
-            // shifts: state.shifts,
+            // shifts: [state.shifts],
+            shifts: state.shifts,
             email: state.email,
             phone: state.phone,
             startDate: moment.utc(state.startDate).format(),
@@ -341,7 +330,6 @@ const AddJobPost = () => {
             jobRole: state.jobRole,
             jobType: state.jobType,
         }
-        console.log("data", data);
         dispatch(editJobPost(editJobsID, data));
         onCancel()
     }

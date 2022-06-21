@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Form, Pagination, Row, Select, Switch, Table } from 'antd';
+import { Switch, Table } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
-import { ListButtonSizeWrapper, ProjectPagination, TableWrapper } from '../styled';
+import { TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import {
-  addJobPost,
-  editJobPost,
-  getJobPost,
-  getJobsFilterForMain,
-  getoneJobPost,
-  jobApproved,
-} from '../../redux/jobs/actionCreator';
+import { addJobPost, editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost } from '../../redux/jobs/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
@@ -26,14 +19,12 @@ import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
   // props from JobPost
-  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess,
-    addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
-  const { path } = useRouteMatch();
+  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
   const [usertable, setUsertable] = useState([]); //set data
-  const [perPage, setPerPage] = useState(20); // forpagination
+  const [perPage, setPerPage] = useState(10); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
@@ -87,7 +78,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const getOneJobDetailByKey = async (languageId, key, id) => {
     await ApiGet(`job/getJobByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
-        console.log("res", res);
         if (res.status === 200) {
           toast.success("Jobs alredy exist in this language!")
         }
@@ -103,42 +93,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }
 
   const languageHandalCancle = () => {
-    console.log("languageHandalCancle");
     setIsConfirmModal(false)
   }
 
   const languageHandalOk = (languageIds, ids) => {
-
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
-    // history.push(`/admin/job/new?id=${id}`);
-
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   name: selectedLanguageData.name.id,
-    //   state: selectedLanguageData.state.id,
-    //   district: selectedLanguageData.district.id,
-    //   town: selectedLanguageData.town,
-    //   pincode: selectedLanguageData.pincode,
-    //   description: selectedLanguageData.description,
-    //   vacancies: selectedLanguageData.vacancies,
-    //   reqExperience: selectedLanguageData.reqExperience,
-    //   salary: selectedLanguageData.salary,
-    //   benifits: selectedLanguageData.benifits,
-    //   requirements: selectedLanguageData.requirements,
-    //   type: selectedLanguageData.type,
-    //   extraType: selectedLanguageData.extraType,
-    //   isActive: selectedLanguageData.isActive,
-    //   shifts: selectedLanguageData.shifts,
-    //   email: selectedLanguageData.email,
-    //   phone: selectedLanguageData.phone,
-    //   startDate: selectedLanguageData.startDate,
-    //   endDate: selectedLanguageData.endDate,
-    //   jobRole: selectedLanguageData.jobRole.id,
-    //   jobType: selectedLanguageData.jobType.id,
-    // };
-    // console.log(selectLanguageAddData, "selectedLanguageData");
-    // addLanguageJobPost(selectLanguageAddData, languageIds)
-    // setIsConfirmModal(false)
   }
   // const addLanguageJobPost = (body, languageID) => {
   //   ApiPost(`job/add?langId=${languageID}`, body)
@@ -257,17 +216,19 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   // }, [schemeBannerData])
 
   useEffect(() => {
-    dispatch(
-      getJobsFilterForMain(
-        perPage,
-        pageNumber,
-        state?.state ? state?.state : '',
-        type?.type ? type?.type : '',
-        jobRole?.jobRole ? jobRole?.jobRole : '',
-        // search.search ? search.search : '',
-        status,
-      ),
-    );
+    if (status) {
+      dispatch(
+        getJobsFilterForMain(
+          perPage,
+          pageNumber,
+          state?.state ? state?.state : '',
+          type?.type ? type?.type : '',
+          jobRole?.jobRole ? jobRole?.jobRole : '',
+          // search.search ? search.search : '',
+          status,
+        ),
+      );
+    }
   }, [perPage, pageNumber, apply, status]);
 
   useEffect(() => {
@@ -317,40 +278,36 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [editJobPostData]);
 
   useEffect(() => {
-    dispatch(getJobPost(perPage, pageNumber));
+    // dispatch(getJobPost(perPage, pageNumber));
     setPagePer(perPage);
     setNumberOfPage(pageNumber);
     setExportTog(false);
   }, [perPage, pageNumber]);
 
-  const onApproved = (id, isAp) => {
-    if (status !== 'active') {
-      return;
-    }
-    let data = {
-      isApproved: !isAp,
-    };
-    ApiPost(`job/updateIsApproved?jobId=${id}`, data)
-      .then(res => {
-        console.log('res', res);
-        toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
-        dispatch(
-          getJobsFilterForMain(
-            perPage,
-            pageNumber,
-            state.state ? state.state : '',
-            type.type ? type.type : '',
-            jobRole.jobRole ? jobRole.jobRole : '',
-          ),
-        );
-      })
-      .catch(err => console.log('Error', err));
-  };
+  // const onApproved = (id, isAp) => {
+  //   if (status !== 'active') {
+  //     return;
+  //   }
+  //   let data = {
+  //     isApproved: !isAp,
+  //   };
+  //   ApiPost(`job/updateIsApproved?jobId=${id}`, data)
+  //     .then(res => {
+  //       toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+  //       dispatch(
+  //         getJobsFilterForMain(
+  //           perPage,
+  //           pageNumber,
+  //           state.state ? state.state : '',
+  //           type.type ? type.type : '',
+  //           jobRole.jobRole ? jobRole.jobRole : '',
+  //         ),
+  //       );
+  //     })
+  //     .catch(err => console.log('Error', err));
+  // };
 
   useEffect(() => {
-
-
-
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
@@ -374,9 +331,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           // status: status,
           selectLanguage: (
             <div className="">
-              {/* <div className="active-schemes-table"> */}
               <div className="">
-                {/* <div className="table-actions"> */}
                 <>
                   <Button size="small" type="primary" shape='round'
                     onClick={() => {
@@ -384,7 +339,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                       setSelectedLanguageData(item)
                     }}
                   >
-                    {/* <FeatherIcon icon="edit" size={16} /> */}
                     HN
                   </Button>
                   <Button size="small" type="primary" shape='round'
@@ -394,10 +348,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                       setSelectedLanguageData(item)
                     }}
                   >
-                    {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT
                   </Button>
-
                   {/* <Button
                       className="btn-icon"
                       type="success"
@@ -482,10 +434,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       title: 'Vacancies',
       dataIndex: 'vacancies',
     },
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    // },
     {
       title: 'Select Language',
       dataIndex: 'selectLanguage',
@@ -509,8 +457,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       name: record.name,
     }),
   };
-
-  const { Option } = Select;
 
   return (
     <>
