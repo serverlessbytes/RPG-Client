@@ -4,41 +4,125 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import actions from '../../redux/users/actions';
+import { getAllUser } from '../../redux/users/actionCreator';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SuperAdmin = () => {
-  const history = useHistory()
-  const { path } = useRouteMatch()
+  const { TabPane } = Tabs;
+  const history = useHistory();
+  const { path } = useRouteMatch();
+  const dispatch = useDispatch();
+
   const [status, setStatus] = useState('active');
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
-  const [superAdminData, setSuperAdminData] = useState()
-  const [superAdminTable, setSuperAdminTable] = useState([])
+  const [superAdminTable, setSuperAdminTable] = useState([]);
+  const [type, setType] = useState('SUPERADMIN');
+
+  const { editProfileSuccess, editProfileErr } = actions;
+
+  const superAdminData = useSelector(state => state.users.getAllUser)
+  const editProfileData = useSelector(state => state.users.editProfileData)
+  const editProfileError = useSelector(state => state.users.editProfileErr)
+
+  // const getData = () => {
+  //   ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=SUPERADMIN`)
+  //     .then((res) => {
+  //       setSuperAdminData(res)
+  //     })
+  //     .catch((err) => console.log(err))
+  // }
 
   const callback = key => {
     setStatus(key),
       setPageNumber(1)
   }
-  const { TabPane } = Tabs
 
-  const getData = () => {
-    ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=SUPERADMIN`)
-      .then((res) => {
-        setSuperAdminData(res)
-        console.log("res", res);
-      })
-      .catch((err) => console.log(err))
-  }
   const onEdit = (id) => {
     history.push(`${path}/adduser?id=${id}`);
   }
 
+  const activeSuperAdmin = (id, dt) => {
+    delete dt.id;
+    delete dt.userType;
+    const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getAllUser(perPage, pageNumber, status, type))
+        }
+        return res
+      })
+    return newVal
+  }
+
+  const onDelete = async id => {
+    let superAdminDataForDelete = superAdminData && superAdminData.data && superAdminData.data.data.find(item => item.id === id);
+
+    if (superAdminDataForDelete) {
+      superAdminDataForDelete = {
+        ...superAdminDataForDelete,
+        id: superAdminDataForDelete.id,
+        isActive: false,
+        isDeleted: true,
+        avatar: 'dfd',
+      };
+      delete superAdminDataForDelete.userTakenRatings
+
+      const restoreActiveSuperAdmin = await activeSuperAdmin(id, superAdminDataForDelete);
+      if (restoreActiveSuperAdmin.status === 200) {
+        toast.success("SuperAdmin Delete successful")
+      }
+    }
+  };
+
+  const onActive = async id => {
+    let superAdmindata = superAdminData && superAdminData.data && superAdminData.data.data.find(item => item.id === id);
+    let data = {
+      avatar: superAdmindata.avatar,
+      email: superAdmindata.email,
+      id: superAdmindata.id,
+      isActive: true,
+      isDeleted: false,
+      name: superAdmindata.name,
+      phone: superAdmindata.phone,
+      userType: superAdmindata.userType,
+    };
+
+    const restoreActiveSuperAdmin = await activeSuperAdmin(id, data);
+    if (restoreActiveSuperAdmin.status === 200) {
+      toast.success("SuperAdmin Active successful")
+    }
+  };
 
   useEffect(() => {
-    console.log("----- superadmin", superAdminData);
+    if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
+      dispatch(editProfileSuccess(null))
+      toast.success("SuperAdmin Update successful")
+    }
+  }, [editProfileData])
+
+  useEffect(() => {
+    if (editProfileError) {
+      dispatch(editProfileErr(null))
+      toast.error("Something Wrong")
+    }
+  }, [editProfileError])
+
+  useEffect(() => {
+    dispatch(getAllUser(perPage, pageNumber, status, type))
+  }, [perPage, pageNumber, status, type])
+
+  // useEffect(() => {
+  //   getData()
+  // }, [perPage, pageNumber, status])
+
+  useEffect(() => {
     if (superAdminData && superAdminData.data) {
       setSuperAdminTable(
         superAdminData.data.data.map((item) => {
@@ -71,10 +155,6 @@ const SuperAdmin = () => {
 
     }
   }, [superAdminData])
-  useEffect(() => {
-    getData()
-  }, [perPage, pageNumber, status])
-
 
   const superAdminTableColumns = [
     {
@@ -103,7 +183,7 @@ const SuperAdmin = () => {
     <>
       <PageHeader
         ghost
-        title="Admin"
+        title="Super Admin"
       // buttons={[
       //     <div className="page-header-actions">
       //         <Button size="small" type="primary" onClick={allEmployerExport}>
@@ -118,7 +198,7 @@ const SuperAdmin = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Tabs onChange={callback}>
-                <TabPane tab="Active Partner" key="active">
+                <TabPane tab="Active Super-Admin" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table
@@ -137,7 +217,7 @@ const SuperAdmin = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Partner" key="inactive">
+                <TabPane tab="Inactive Super-Admin" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table

@@ -61,6 +61,10 @@ const {
   ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS,
   ADD_SCHEME_CATEGORY_IN_BULK_ERR,
 
+  ADD_UPADTE_BANNER_BEGINE,
+  ADD_UPADTE_BANNER_SUCCESS,
+  ADD_UPADTE_BANNER_ERR,
+
 } = actions;
 
 const initialState = {
@@ -81,15 +85,18 @@ const initialState = {
   editSchemeCatogeryError: null,
   addSchemeInBulk: null,
   addSchemeInBulkErr: null,
-  schemeRatingData : null,
-  editSchemeRatingData : null,
-  getOneSchemeRatingData : null,
+  schemeRatingData: null,
+  editSchemeRatingData: null,
+  getOneSchemeRatingData: null,
 
-  importSchemeCategoryBegin:null,
-  importSchemeCategoryData:null,
-  importSchemeCategoryError:null,
+  importSchemeCategoryBegin: null,
+  importSchemeCategoryData: null,
+  importSchemeCategoryError: null,
   addSchemeBenefitBulkData: null,
-  getBenefitData : null,
+  getBenefitData: null,
+
+  upadteBannerData: null,
+  upadteBannerError: null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -375,24 +382,41 @@ const schemeReducer = (state = initialState, action) => {
       };
 
 
-          case ADD_SCHEME_CATEGORY_IN_BULK_BEGINE:
-            return {
-              ...state,
-              loading: true,
-            };
+    case ADD_SCHEME_CATEGORY_IN_BULK_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
 
-            case ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS:
-              return {
-                ...state,
-                importSchemeCategoryData: data,
-                loading: false,
-              };
-            case ADD_SCHEME_CATEGORY_IN_BULK_ERR:
-              return {
-                ...state,
-                importSchemeCategoryError: err,
-                loading: false,
-              };
+    case ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS:
+      return {
+        ...state,
+        importSchemeCategoryData: data,
+        loading: false,
+      };
+    case ADD_SCHEME_CATEGORY_IN_BULK_ERR:
+      return {
+        ...state,
+        importSchemeCategoryError: err,
+        loading: false,
+      };
+    case ADD_UPADTE_BANNER_BEGINE:
+      return {
+        ...state,
+        loading: true
+      }
+    case ADD_UPADTE_BANNER_SUCCESS:
+      return {
+        ...state,
+        upadteBannerData: data,
+        loading: false,
+      }
+    case ADD_UPADTE_BANNER_ERR:
+      return {
+        ...state,
+        upadteBannerError: err,
+        loading: false,
+      }
 
     default:
       return state;

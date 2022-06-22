@@ -25,6 +25,10 @@ function PartnerCourseView() {
 
     const getPartnerCourseData = useSelector(state => state.category.editFilterData)
 
+    useEffect(()=>{
+        console.log("getPartnerCourseData",getPartnerCourseData)
+    },[getPartnerCourseData])
+
     useEffect(() => {
         if (id) {
             dispatch(getOneCoursefilter(id));
@@ -52,7 +56,7 @@ function PartnerCourseView() {
             return;
         }
         form.resetFields();
-        if (getPartnerCourseData?.data?.isApproved) {
+        if (getPartnerCourseData?.data?.data?.isApproved) {
             let data = {
                 courseId: id,
                 key: key,
@@ -113,8 +117,8 @@ function PartnerCourseView() {
                             <FeatherIcon icon="arrow-left" size={24} />
                         </Button>
                         {
-                            getPartnerCourseData?.data?.isApproved === false ?
-                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getPartnerCourseData?.data?.key, getPartnerCourseData?.data?.isApproved, getPartnerCourseData.data?.id)} type="light">
+                            getPartnerCourseData?.data?.data?.isApproved === false ?
+                                <Button size="small" className='edit-view' style={{ float: 'right', bottom: '-5px' }} onClick={() => onApproved(getPartnerCourseData?.data?.data?.key, getPartnerCourseData?.data?.isApproved, getPartnerCourseData.data?.data?.id)} type="light">
                                     Approved
                                 </Button>
                                 :
@@ -128,63 +132,63 @@ function PartnerCourseView() {
                                     {/* <label >Thumbnail:</label> */}
                                 </div>
                                 <div className='thambail'>
-                                    <img width="100%" height="245" src={getPartnerCourseData?.data?.thumbnail}
+                                    <img width="100%" height="245" src={getPartnerCourseData?.data?.data?.thumbnail}
                                     // {data?.thumbnail}
                                     /></div>
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Name:</label> {getPartnerCourseData?.data?.name}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Name:</label> {getPartnerCourseData?.data?.data?.name}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Time:</label> {getPartnerCourseData?.data?.duration}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Time:</label> {getPartnerCourseData?.data?.data?.duration}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >CategoryId:</label> {getPartnerCourseData?.data?.courseCategory?.name} </span>
-                            </Col>
-
-                            <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Organization:</label> {getPartnerCourseData?.data?.organization}</span><br />
-                            </Col>
-                            <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Detail:</label> {getPartnerCourseData?.data?.detail}</span><br />
-                            </Col>
-                            <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Certification Body:</label> {getPartnerCourseData?.data?.certificationBody}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >CategoryId:</label> {getPartnerCourseData?.data?.data?.courseCategory?.name} </span>
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Eligibility:</label> {getPartnerCourseData?.data?.eligibility} </span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Organization:</label> {getPartnerCourseData?.data?.data?.organization}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Component:</label> {getPartnerCourseData?.data?.component}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Detail:</label> {getPartnerCourseData?.data?.data?.detail}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Name:</label> {getPartnerCourseData?.data?.contactPersonName}</span><br />
-                            </Col>
-
-                            <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Email:</label> {getPartnerCourseData?.data?.contactPersonEmail}</span><br />
-                            </Col>
-                            <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Phone:</label> {getPartnerCourseData?.data?.contactPersonPhone}</span><br />
-                            </Col>
-                            <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >State:</label> {getPartnerCourseData?.data?.state}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Certification Body:</label> {getPartnerCourseData?.data?.data?.certificationBody}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >District:</label> {getPartnerCourseData?.data?.district}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Eligibility:</label> {getPartnerCourseData?.data?.data?.eligibility} </span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Pincode:</label> {getPartnerCourseData?.data?.pincode}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Component:</label> {getPartnerCourseData?.data?.data?.component}</span><br />
                             </Col>
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Location:</label> {getPartnerCourseData?.data?.location}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Name:</label> {getPartnerCourseData?.data?.data?.contactPersonName}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb">
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Certification:</label> {getPartnerCourseData?.data?.certificate === true ? 'Yes' : 'No'}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Email:</label> {getPartnerCourseData?.data?.data?.contactPersonEmail}</span><br />
+                            </Col>
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Contact Person Phone:</label> {getPartnerCourseData?.data?.data?.contactPersonPhone}</span><br />
+                            </Col>
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >State:</label> {getPartnerCourseData?.data?.data?.state}</span><br />
+                            </Col>
+
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >District:</label> {getPartnerCourseData?.data?.data?.district}</span><br />
+                            </Col>
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Pincode:</label> {getPartnerCourseData?.data?.data?.pincode}</span><br />
+                            </Col>
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Location:</label> {getPartnerCourseData?.data?.data?.location}</span><br />
+                            </Col>
+
+                            <Col lg={8} className="mb">
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Certification:</label> {getPartnerCourseData?.data?.data?.certificate === true ? 'Yes' : 'No'}</span><br />
                             </Col>
                             {/* <Col lg={8} className="mb">
                                 <div onClick={() => onApproved(getPartnerCourseData?.data?.key, getPartnerCourseData?.data?.isApproved, getPartnerCourseData.data?.id)}>
@@ -203,10 +207,10 @@ function PartnerCourseView() {
                         >
                             Cancel
                         </Button> */}
-                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getPartnerCourseData?.data.id)} type="primary">
+                        <Button size="small" className='edit-view' style={{ float: 'left', bottom: '-5px' }} onClick={() => onEdit(getPartnerCourseData?.data?.data?.id)} type="primary">
                             Edit
                         </Button>
-                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getPartnerCourseData?.data?.key, getPartnerCourseData?.data?.isApproved, getPartnerCourseData.data?.id)} onCancel={() => handleCancel()} okText="Add">
+                        <Modal title="Remark" visible={isModalVisible} onOk={() => handleOk(getPartnerCourseData?.data?.data?.key, getPartnerCourseData?.data?.data?.isApproved, getPartnerCourseData.data?.data?.id)} onCancel={() => handleCancel()} okText="Add">
                             <Form form={form} layout="vertical">
                                 <label htmlFor="remark">Remark</label>
                                 <Form.Item name="remark">

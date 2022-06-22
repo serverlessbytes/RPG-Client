@@ -5,19 +5,10 @@ import FeatherIcon from 'feather-icons-react';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdown, Space, Menu } from 'antd';
-import ActiveSchemesTable from '../schemes/ActiveSchemesTable';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {
-  editSwayamCourse,
-  getallSwayamCourse,
-  getCategoryData,
-  getCoursefilter,
-  getOneCourseDetailByKey,
-  getOneCoursefilter,
-  addSwayamCourse,
-} from '../../redux/course/actionCreator';
+import { editSwayamCourse, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCourseDetailByKey, getOneCoursefilter, addSwayamCourse, } from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -26,11 +17,9 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ImportFileModal from '../../components/modals/ImportFileModal';
 import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
-import { async } from '@firebase/util';
 import ConfirmModal from '../../components/modals/confirm_modal';
 
 const {
@@ -40,6 +29,7 @@ const {
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleErr,
   addSwayamCourseModuleSuccess,
+  editSwayamCourseModule,
 } = actions;
 
 const SwayamCourses = () => {
@@ -48,19 +38,8 @@ const SwayamCourses = () => {
   const history = useHistory();
   const CSVLinkRef = useRef(null);
   const usersTableData = [];
+  const { TabPane } = Tabs;
   const { path } = useRouteMatch();
-
-  const languageData = useSelector(state => state.language.getLanguageData);
-  const categoryData = useSelector(state => state.category.categoryData);
-  const courseData = useSelector(state => state.category.courseFilterData);
-  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
-  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
-  const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
-  const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
-  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
-  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
-  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [data, setData] = useState({
@@ -85,7 +64,19 @@ const SwayamCourses = () => {
     marathi: ''
   });
   const [languageId, setLanguageID] = useState()
-  const [id, setID] = useState() //
+  const [id, setID] = useState()
+
+  const languageData = useSelector(state => state.language.getLanguageData);
+  const categoryData = useSelector(state => state.category.categoryData);
+  const courseData = useSelector(state => state.category.courseFilterData);
+  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
+  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
+  const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
+  const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
+  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
+  const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
+  const allCategoryData = useSelector(state => state.category.getAllCourse);
 
   const header = [
     { label: 'id', key: 'id' },
@@ -100,10 +91,6 @@ const SwayamCourses = () => {
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
-
-  // useEffect(()=>{
-  //   console.log("languageId",languageId)
-  // },[languageId])
 
   useEffect(() => {
     if (state.length && exportTog) {
@@ -241,10 +228,11 @@ const SwayamCourses = () => {
   };
 
   const activeSwayamCourses = dt => {
-    const newVal = ApiPost("course/editSwayamCourse", dt)
+    const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getCategoryData())
+          dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+
         }
         return res
       })
@@ -266,8 +254,9 @@ const SwayamCourses = () => {
     setLangIds(temp)
   }, [languageData])
 
-  const onActive = id => {
+  const onActive = async id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
+
     if (activeCourse) {
       let dt = {
         key: activeCourse.key,
@@ -285,20 +274,21 @@ const SwayamCourses = () => {
         isDeleted: false,
         // courseRatings : activeCourse.courseRatings,
       };
-      const restoreSwayamCourses = activeSwayamCourses(dt)
+      const restoreSwayamCourses = await activeSwayamCourses(dt);
+
       if (restoreSwayamCourses.status === 200) {
         toast.success("SwayamCourse active successful")
       }
-      // dispatch(editSwayamCourse(dt));
     }
   };
+
   const Submit = () => {
     dispatch(
       getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "",)
     );
   };
   const clearFilter = () => {
-    setData({ ...data, category: '', search: '' });
+    setData({ ...data, category: '', search: '', mode: '' });
     dispatch(getCoursefilter('', perPage, pageNumber, '', status));
   };
 
@@ -327,20 +317,41 @@ const SwayamCourses = () => {
     });
   };
 
-  const onApproved = (id, isAp, key) => {
+  // const onApproved = (id, isAp, key) => {
+  //   if (status !== 'active') {
+  //     return;
+  //   }
+  //   let data = {
+  //     courseId: id,
+  //     key: key,
+  //     isApproved: !isAp,
+  //   };
+  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+  //     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+  //   });
+  // };
+
+  const callback = key => {
+    setStatus(key);
+    setExportTog(false);
+  };
+
+  const onBannerSelect = (id, key, bannerSelected) => {
     if (status !== 'active') {
       return;
     }
     let data = {
       courseId: id,
       key: key,
-      isApproved: !isAp,
+      bannerSelected: !bannerSelected,
     };
-    ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-      toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
+    ApiPost(`course/updateBannerSelected?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
+      toast.success(res.data.bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
     });
-  };
+
+  }
 
   const getOneCourseDetailByKey = async (languageId, key, id) => {
     await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
@@ -368,24 +379,6 @@ const SwayamCourses = () => {
   }
   const languageHandalOk = () => {
     history.push(`${path}/addcourses?langid=${languageId}&id=${id}`);
-    // console.log("handleOk---------*");
-    // console.log("languageId-------------",languageId);
-    // console.log("ID-------------",id);
-
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   detail: selectedLanguageData.detail,
-    //   name: selectedLanguageData.name,
-    //   categoryId: selectedLanguageData.courseCategory.id,
-    //   duration: selectedLanguageData.duration,
-    //   jobCategoryIds: selectedLanguageData.jobTypes.map((item) => item.id),
-    //   certification: selectedLanguageData.certificate,
-    //   mode: selectedLanguageData.mode,
-    //   thumbnail: selectedLanguageData.thumbnail,
-    // };
-    // console.log("selectLanguage =====>", selectLanguageAddData);
-    // dispatch(addSwayamCourse(selectLanguageAddData,languageId))
-    // setIsConfirmModal(false)
   }
 
   const onClick = ({ key }) => {
@@ -460,44 +453,30 @@ const SwayamCourses = () => {
             // CourseName: item.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
-            // approved: (
-            //   <>
-            //     {/* {
-            //     status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-            //     <Switch checked={item.isApproved}></Switch>
-            //   </div> :
-            //    <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-            //    <Switch checked={false}></Switch>
-            //  </div>
-            //   } */}
-            //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-            //     </div>
-            //   </>
-            // ),
-            // CourseDuration:item.
-            //State: item.state,
-            // CourseType: item.mode,
-            // Language: "Hindi",
+            bannerSelected: (
+              <>
+                {
+                  <div onClick={() => onBannerSelect(item.id, item.key, item.bannerSelected)}>
+                    <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
+                  </div>
+                }
+              </>
+            ),
 
             selectLanguage: (
               <div className="">
-                {/* <div className="active-schemes-table"> */}
 
-                {/* <div className="table-actions"> */}
                 <>
                   <Button size="small" type="primary" shape='round' onClick={() => {
-                    // setSelectedLanguageData(item)
                     getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                   }}>
-                    {/* <FeatherIcon icon="edit" size={16} /> */}
                     HN
                   </Button>
+
                   <Button size="small" type="primary" shape='round' onClick={() => {
                     // selectedLanguageData(item)
                     getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }} >
-                    {/* <FeatherIcon icon="edit" size={16} /> */}
                     MT
                   </Button>
 
@@ -579,15 +558,11 @@ const SwayamCourses = () => {
       dataIndex: 'selectLanguage',
       width: '90px',
     },
-    // {
-    //     title: 'Language',
-    //     dataIndex: 'Location',
-    //     sortDirections: ['descend', 'ascend'],
-    // },
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    // },
+    {
+      title: 'Banner selected',
+      dataIndex: 'bannerSelected',
+      // sortDirections: ['descend', 'ascend'],
+    },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -595,13 +570,6 @@ const SwayamCourses = () => {
     },
 
   ];
-
-  const { TabPane } = Tabs;
-
-  const callback = key => {
-    setStatus(key);
-    setExportTog(false);
-  };
 
   return (
     <>
@@ -678,6 +646,7 @@ const SwayamCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -723,6 +692,7 @@ const SwayamCourses = () => {
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
+
               <Tabs onChange={callback}>
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
@@ -746,15 +716,12 @@ const SwayamCourses = () => {
                         pagination={{
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                             setExportTog(false);
                           },
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+
                         }}
                       // pagination={false}
                       />
@@ -785,39 +752,18 @@ const SwayamCourses = () => {
                         // rowSelection={rowSelection}
                         dataSource={SwayamCourse}
                         columns={swayamCourseTableColumns}
-                        // pagination={{
-                        //   defaultPageSize: 15,
-                        //   total: usersTableData.length,
-                        //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                        // }}
                         pagination={{
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                             setExportTog(false);
                           },
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-
-                      // pagination={false}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  {/* <ProjectPagination>
-                    <Pagination
-                      onChange={() => { }}
-                      showSizeChanger
-                      onShowSizeChange={() => { }}
-                      pageSize={10}
-                      defaultCurrent={1}
-                      total={10}
-                    />
-                  </ProjectPagination> */}
                 </TabPane>
               </Tabs>
             </Col>

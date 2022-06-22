@@ -8,14 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import {
-  addPartnerCourse,
-  editPartnerCoursefilter,
-  getallSwayamCourse,
-  getCategoryData,
-  getCoursefilter,
-  getOneCoursefilter,
-} from '../../redux/course/actionCreator';
+import { addPartnerCourse, editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter, } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -32,25 +25,18 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 
 
 const PartnerCourses = () => {
-  const {
-    addPartnerCourseSuccess,
-    addPartnerCourseErr,
-    getallSwayamCourseSuccess,
-    editPartnerCourseSuccess,
-    editPartnerCourseErr,
-    addPartnerCourseInBulkSuccess
-  } = actions;
-
-  const { Option } = Select;
+  const { addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr, addPartnerCourseInBulkSuccess } = actions;
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
   const CSVLinkRef = useRef(null);
+  const { TabPane } = Tabs;
 
   const [viewModal, setViewModal] = useState(false);
   const [state, setState] = useState({
     category: '',
     mode: 'PARTNER',
+    search : ''
   });
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
@@ -68,7 +54,7 @@ const PartnerCourses = () => {
   });
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
-
+  
   const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -119,10 +105,6 @@ const PartnerCourses = () => {
       dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
     };
   }, []);
-
-  useEffect(() => {
-    console.log('postPartnerCourseData', postPartnerCourseData);
-  }, [postPartnerCourseData]);
 
   useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
@@ -186,42 +168,36 @@ const PartnerCourses = () => {
     })
     setLangIds(temp)
   }, [languageData])
+
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
 
+  const callback = key => {
+    setStatus(key);
+    setPageNumber(1);
+    setExportTog(false);
+  };
+
+  const onePartnercourseData = () => {
+    dispatch(getallSwayamCourse(state.mode));
+    setExportTog(true);
+  };
+
+  const onClick = ({ key }) => {
+    if (key == 'exportCourses') {
+      onePartnercourseData();
+    }
+    if (key == 'addCourses') {
+      history.push(`${path}/addpartnercourses`);
+    }
+    if (key == 'import') {
+      setImportModal(true)
+    }
+  };
+
   const languageHandalOk = () => {
-
     history.push(`${path}/addpartnercourses?langid=${languageID}&id=${id}`);
-
-    // console.log("languageHandalOk ---------");
-    // console.log("languageID------------", languageID);
-    // console.log("id------------",id);
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   name: selectedLanguageData.name,
-    //   organization: selectedLanguageData.organization,
-    //   detail: selectedLanguageData.detail,
-    //   certificationBody: selectedLanguageData.certificationBody,
-    //   eligibility: selectedLanguageData.eligibility,
-    //   component: selectedLanguageData.component,
-    //   contactPersonName: selectedLanguageData.contactPersonName,
-    //   contactPersonEmail: selectedLanguageData.contactPersonEmail,
-    //   contactPersonPhone: selectedLanguageData.contactPersonPhone,
-    //   pincode: selectedLanguageData.pincode,
-    //   location: selectedLanguageData.location,
-    //   duration: selectedLanguageData.duration,
-    //   categoryId: selectedLanguageData.courseCategory.id,
-    //   state: selectedLanguageData.state,
-    //   district: selectedLanguageData.district,
-    //   mode: selectedLanguageData.mode,
-    //   certification: selectedLanguageData.certificate,
-    //   // categoryId: selectedLanguageData.id,
-    //   thumbnail: selectedLanguageData.thumbnail
-    // };
-    // console.log("selectedLanguageData", selectLanguageAddData);
-    // addLanguagePartnerCourses(selectLanguageAddData, langIds.hindi)
-    // setIsConfirmModal(false)
   }
   const addLanguagePartnerCourses = (body, languageID) => {
     ApiPost(`course/addPartnerCourse?langId=${languageID}&mode=PARTNER`, body)
@@ -267,11 +243,11 @@ const PartnerCourses = () => {
     dispatch(getCategoryData());
   }, []);
 
-  useEffect(() => {
-    if (catdata && catdata.data && catdata.data.length > 0) {
-      setState({ ...state, category: catdata.data[0].id });
-    }
-  }, [catdata]);
+  // useEffect(() => {
+  //   if (catdata && catdata.data && catdata.data.length > 0) {
+  //     setState({ ...state, category: catdata.data[0].id });
+  //   }
+  // }, [catdata]);
 
   // useEffect(() => { //
   //   if (state && state.category && activeCoursetog) {
@@ -279,23 +255,25 @@ const PartnerCourses = () => {
   //   }
   // }, [state]);
 
-  const usersTableData = [];
+  useEffect(() => {
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
+  }, [perPage, pageNumber, state.mode, status]); //pagination
 
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
     if (name == 'category') {
       setState({ ...state, category: e });
-    } else if (name == 'mode') {
-      setState({ ...state, mode: e });
+    }
+    else if(name == 'search'){
+      setState({ ...state, search: e})
     }
   };
+
   const onEdit = id => {
     history.push(`${path}/addpartnercourses?id=${id}`);
   };
 
   const viewPartnerCoursedata = id => {
-    // dispatch(getOneCoursefilter(id));
-    // setViewModal(true);
     history.push(`/admin/courses/viewpartnercourse?id=${id}`)
   };
 
@@ -313,6 +291,10 @@ const PartnerCourses = () => {
       delete activeCourseDelete.isApproved;
       delete activeCourseDelete.createdAt;
       delete activeCourseDelete.courseRatings;
+      delete activeCourseDelete.courseRatingSum;
+      delete activeCourseDelete.bannerSelected;
+      delete activeCourseDelete.saved;
+      delete activeCourseDelete.enrolled;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -326,8 +308,29 @@ const PartnerCourses = () => {
     }
   };
 
-  const onActive = id => {
-    //for inactive toactive data
+  const activePartnerCourses = dt => {
+    const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
+        }
+        return res
+      })
+    return newVal
+  }
+
+  const Submit = () => {
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status,state.search));
+  };
+  const clearFilter = () => {
+    setState({ ...state, category: '', search: ''});
+    // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status,''));
+
+  };
+
+  const onActive = async id => {
+    //for inactive to active data
     let activedata = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activedata.certificate;
     let categoryId = activedata.courseCategory.id;
@@ -341,6 +344,10 @@ const PartnerCourses = () => {
       delete activedata.isApproved;
       delete activedata.createdAt;
       delete activedata.courseRatings;
+      delete activedata.courseRatingSum;
+      delete activedata.bannerSelected;
+      delete activedata.saved;
+      delete activedata.enrolled;
 
       activedata = {
         ...activedata,
@@ -350,34 +357,22 @@ const PartnerCourses = () => {
         categoryId: categoryId,
         certification: certification,
       };
-      dispatch(editPartnerCoursefilter(activedata));
+      // dispatch(editPartnerCoursefilter(activedata));
+      const restorePartnerCourses = await activePartnerCourses(activedata);
+
+      if (restorePartnerCourses.status === 200) {
+        toast.success("PartnerCourse active successful")
+      }
     }
   };
-
-  // const onApproved = (id, isAp, key) => {
-  //   if (status !== 'active') {
-  //     return;
-  //   }
-  //   let data = {
-  //     courseId: id,
-  //     key: key,
-  //     isApproved: !isAp,
-  //   };
-
-  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-  //     console.log('res', res);
-  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-  //     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-  //   });
-  // };
 
   useEffect(() => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-         
+
           let courseRatings = item.courseRatings.map(item => item.rating)
-          
+
 
           var sum = 0;
 
@@ -388,9 +383,8 @@ const PartnerCourses = () => {
           var avg = sum / courseRatings.length;
 
           return {
-            //key: id,
             CourseName: (
-              <span onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
+              <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
             CourseCategory: item.courseCategory?.name,
             courseRatings: (
@@ -403,39 +397,24 @@ const PartnerCourses = () => {
               />
             ),
             CourseType: item.mode,
-            // approved: (
-            //   <>
-            //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-            //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-            //     </div>
-            //   </>
-            // ),
-            // Language: "Hindi",
-
-
             selectLanguage: (
               <div className="">
-                {/* <div className="active-schemes-table"> */}
                 <div className="">
-                  {/* <div className="table-actions"> */}
                   <>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                       
+
                         getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                         setSelectedLanguageData(item)
                       }}
                     >
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
                       HN
                     </Button>
                     <Button size="small" type="primary" shape='round'
                       onClick={() => {
-                        
-                        getOneCourseDetailByKey(langIds?.marathi, item?.key,item?.id)
+                        getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                       }}
                     >
-                      {/* <FeatherIcon icon="edit" size={16} /> */}
                       MT
                     </Button>
 
@@ -495,22 +474,6 @@ const PartnerCourses = () => {
     }
   }, [courseData]);
 
-  // const Submit = () => { //
-  //   dispatch(getCoursefilter(state.category ? state.category : '', perPage, pageNumber, state.mode ? state.mode : '', status));
-  // };
-
-  // const clearFilter = () => {
-  //   setState({ category: '' });
-  //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-  // };
-
-  useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-    // if (state.category) {
-    //   dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-    // }
-  }, [perPage, pageNumber, state.mode, status]); //paganation
-
   const partnerCourseTableColumns = [
     {
       title: 'Course Name',
@@ -541,31 +504,6 @@ const PartnerCourses = () => {
     },
 
   ];
-
-  const { TabPane } = Tabs;
-
-  const callback = key => {
-    setStatus(key);
-    setPageNumber(1);
-    setExportTog(false);
-  };
-
-  const onePartnercourseData = () => {
-    dispatch(getallSwayamCourse(state.mode));
-    setExportTog(true);
-  };
-
-  const onClick = ({ key }) => {
-    if (key == 'exportCourses') {
-      onePartnercourseData();
-    }
-    if (key == 'addCourses') {
-      history.push(`${path}/addpartnercourses`);
-    }
-    if (key == 'import') {
-      setImportModal(true)
-    }
-  };
 
   const menu = (
     <Menu
@@ -648,7 +586,7 @@ const PartnerCourses = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Row gutter={30}>
-                {/* <Col md={6} xs={24} className="mb-25">
+                <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Category">
                       <Select
@@ -659,59 +597,42 @@ const PartnerCourses = () => {
                         placeholder="Select Category"
                         onChange={e => onChangehandle(e, 'category')}
                       >
+                        <Option value="">Select Category</Option>
                         {catdata && catdata.data.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
-                </Col> */}
-                {/* <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item label="Mode">
-                                            <Select size="large" className="sDash_fullwidth-select" name="mode" value={state.mode} onChange={(e) => onChangehandle(e, "mode")} placeholder="Select Mode Type">
-                                                <Option value="ONLINE">Online</Option>
-                                                <Option value="OFFLINE">Offline</Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
+                </Col>
+
+                <Col md={6} xs={24} className="mb-25">
+                  <Form name="sDash_select" layout="vertical">
+                    <Form.Item label="Search">
+                      <Input placeholder="search" value={state.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                    </Form.Item>
+                  </Form>
+                </Col>
+
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
-                    {/* <Button size="small" type="primary" onClick={e => Submit(e)}>
+                    <Button size="small" type="primary" onClick={e => Submit(e)}>
                       Apply
                     </Button>
-                    <Button size="small" type="light" onClick= {e => clearFilter(e)}>
+                    <Button size="small" type="light" onClick={e => clearFilter(e)}>
                       Clear
-                    </Button> */}
+                    </Button>
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
-              {/* <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Courses
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Courses
-                                </Button>
-                            </Row> */}
-
               <Tabs defaultActiveKey="1" onChange={callback}>
                 <TabPane tab="Active Courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                       <Table
-                        // rowSelection={rowSelection}
                         dataSource={partnertable}
                         columns={partnerCourseTableColumns}
                         pagination={{
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
@@ -722,14 +643,15 @@ const PartnerCourses = () => {
                     </TableWrapper>
                   </UserTableStyleWrapper>
                 </TabPane>
+
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      <Form name="sDash_select" layout="vertical">
+                      {/* <Form name="sDash_select" layout="vertical">
                         <Form.Item name="search" label="">
                           <Input placeholder="search" style={{ width: 200 }} />
                         </Form.Item>
-                      </Form>
+                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}
@@ -780,16 +702,16 @@ const PartnerCourses = () => {
             <>
               <Button size="small" type="primary" onClick={() => {
                 languageHandalCancle()
-                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
+
               }}>
-                {/* <FeatherIcon icon="edit" size={16} /> */}
+
                 No
               </Button>
               <Button size="small" type="primary" onClick={() => {
-                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
+
                 languageHandalOk()
               }} >
-                {/* <FeatherIcon icon="edit" size={16} /> */}
+
                 Yes
               </Button>
             </>

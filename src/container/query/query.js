@@ -186,8 +186,8 @@ const query = () => {
             }
             // dispatch(editQueries(userForDelete))
 
-            const deletebanner = await newQuery(userForDelete)
-            if (deletebanner.status === 200) {
+            const deleteQuery = await newQuery(userForDelete)
+            if (deleteQuery.status === 200) {
                 toast.success("Query delete successful")
             }
             else if (deletebanner.status !== 200) {
@@ -195,6 +195,26 @@ const query = () => {
             }
         }
     }
+
+    const onActive = async id => {
+        let getActiveQueriesdata = getQueriesData && getQueriesData.data && getQueriesData.data.data.find(item => item.id === id);
+        
+            let data = {
+                id: getActiveQueriesdata.id,
+                name: getActiveQueriesdata.name,
+                body: getActiveQueriesdata.body,
+                email: getActiveQueriesdata.email,
+                isActive: true,
+                // isDeleted: true,
+                isResolved: false,
+            }
+        
+        const restoreQuery = await newQuery(data);
+
+        if (restoreQuery.status === 200) {
+            toast.success("Query active successful")
+        }
+    };
 
     // const viewArticle = (id) => {
     //     history.push(`/admin/article/articleview?id=${id}`)
@@ -215,14 +235,23 @@ const query = () => {
                     action: (
                         <div className='active-schemes-table'>
                             <div className="table-actions">
-                                <>
-                                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                                        <FeatherIcon icon="edit" size={16} />
-                                    </Button>
-                                    <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                        <FeatherIcon icon="trash-2" size={16} />
-                                    </Button>
-                                </>
+                                {
+                                    status === 'active' ? (
+                                        <>
+                                            <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                                                <FeatherIcon icon="edit" size={16} />
+                                            </Button>
+                                            <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                                <FeatherIcon icon="trash-2" size={16} />
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Button className="btn-icon" type="danger" to="#" onClick={() => onActive(item.id)} shape="circle">
+                                            <FeatherIcon icon="rotate-ccw" size={16} />
+                                        </Button>
+                                    )
+                                }
+
                             </div>
                         </div>
                     )

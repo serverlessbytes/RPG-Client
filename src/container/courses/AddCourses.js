@@ -30,21 +30,12 @@ const AddCourses = () => {
 
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
-  // const langid = searchParams.get('langid');
   const langId = searchParams.get('langid');
   const key = searchParams.get('key');
   const history = useHistory();
   const { Option } = Select;
   const { TextArea } = Input;
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("langId", langId)
-  }, [langId])
-
-  useEffect(() => {
-    console.log("id", id)
-  }, [id])
 
   const {
     addSwayamPartnerCourseSuccess,
@@ -76,6 +67,10 @@ const AddCourses = () => {
     key: '',
     thumbnail: '',
   });
+
+  useEffect(() => {
+    console.log("editOneSwayamCourseData", editOneSwayamCourseData)
+  }, [editOneSwayamCourseData])
 
   const [moduleState, setModuleState] = useState([
     {
@@ -142,34 +137,27 @@ const AddCourses = () => {
     }
   }, [userData]);
 
-  // useEffect(()=>{
-  //   console.log("-------",addSwayamCourseData)
-  // },[addSwayamCourseData])
-
   useEffect(() => {
     if (addSwayamCourseData && 'data' in addSwayamCourseData) {
-      // moduleState[0].course = addSwayamCourseData.data.id;
-      // moduleState[0].course = addSwayamCourseData.data.id;
       moduleState.course = addSwayamCourseData.data.id;
-      // console.log("==========",moduleState[0].course)
     }
   }, [addSwayamCourseData]);
 
   useEffect(() => {
     console.log("editOneSwayamCourseData", editOneSwayamCourseData);
-    if (editOneSwayamCourseData && editOneSwayamCourseData.data && id) {
+    if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
       setState({
         ...state,
-        detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.detail, 'markdown'),
-        name: editOneSwayamCourseData.data.name,
-        categoryId: editOneSwayamCourseData.data.courseCategory?.id,
-        duration: moment(editOneSwayamCourseData.data.duration, 'HH:mm:ss'),
-        jobCategoryIds: editOneSwayamCourseData.data.jobTypes.map(item => item.id),
-        certification: editOneSwayamCourseData.data.certificate,
-        sequence: editOneSwayamCourseData.data.sequence,
-        mode: editOneSwayamCourseData.data.mode,
-        key: editOneSwayamCourseData.data.key,
-        thumbnail: editOneSwayamCourseData.data.thumbnail,
+        detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.data.detail, 'markdown'),
+        name: editOneSwayamCourseData.data.data.name,
+        categoryId: editOneSwayamCourseData.data.data.courseCategory?.id,
+        duration: moment(editOneSwayamCourseData.data.data.duration, 'HH:mm:ss'),
+        jobCategoryIds: editOneSwayamCourseData?.data?.data.jobTypes.map(item => item.id),
+        certification: editOneSwayamCourseData.data.data.certificate,
+        sequence: editOneSwayamCourseData.data.data.sequence,
+        mode: editOneSwayamCourseData.data.data.mode,
+        key: editOneSwayamCourseData.data.data.key,
+        thumbnail: editOneSwayamCourseData.data.data.thumbnail,
       });
     }
   }, [editOneSwayamCourseData]);
@@ -221,7 +209,7 @@ const AddCourses = () => {
   };
 
   const validation = () => {
-    // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
+
     let error = {};
     let flage = false;
     if (state.name === '') {
@@ -301,7 +289,7 @@ const AddCourses = () => {
       return;
     }
     let data = {
-      key: key ? key : uuid(),
+      key: editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),
       detail: state.detail.toString('markdown'),
       name: state.name,
       categoryId: state.categoryId,
@@ -312,6 +300,7 @@ const AddCourses = () => {
       mode: state.mode,
       thumbnail: state.thumbnail,
     };
+
     dispatch(addSwayamCourse(data, langId));
     // history.push('/admin/courses');
   };
@@ -335,7 +324,6 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-    console.log('data', data);
     dispatch(editSwayamCourse(data));
     history.push('/admin/courses');
   };
@@ -381,7 +369,6 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-
     const newData = moduleState.filter(item => !item.moduleId).map(item => {
       console.log("item", item)
       return {
@@ -419,11 +406,10 @@ const AddCourses = () => {
       isDeleted: false,
     };
     dispatch(editSwayamCourseModule(editData));
-    // history.push(`/admin/courses`);
+    history.push(`/admin/courses`);
   };
 
   const onRemoveData = () => {
-    console.log("selectKey ===", selectKey);
     // if (moduleState.length > 1) {
     if (id) {
       const data = moduleState[selectKey];
@@ -439,17 +425,13 @@ const AddCourses = () => {
         isDeleted: true,
       };
       dispatch(editSwayamCourseModule(deleteData));
-      // let val = [...moduleState];
-      // val.splice(selectKey, 1);
-      // setModuleState(val);
     }
-    // else{
+
     let val = [...moduleState];
     val.splice(selectKey, 1);
     setSelectKey(val.length - 1);
     setModuleState(val);
-    // }
-    // }
+
   };
 
   const { TabPane } = Tabs;
@@ -470,16 +452,6 @@ const AddCourses = () => {
           <Tabs activeKey={defaultSelect} onChange={callback}>
             <TabPane tab="Course Details" key="1">
               <Row justify="space-between">
-                {/* <Col lg={11} className="d-flex f-d-cloumn">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Language">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select Language">
-                                                <Option value="1">Einglish</Option>
-                                                <Option value="2">Hindi</Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Name of the Course</label>
                   <Form.Item>
@@ -534,18 +506,7 @@ const AddCourses = () => {
                     {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                   </Form>
                 </Col>
-                {/* <Col lg={11}>
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item  label="Job Category">
-                                            <Select size="large" className="sDash_fullwidth-select" onChange={(e)=>{onChange(e,"jobCategoryIds")}} value={state.jobCategoryIds} name="jobCategoryIds" placeholder="Select job category">
-                                                {jobCategoryData && jobCategoryData.data && jobCategoryData.data.map((item,i)=>(
-                                                    <Option value={item.id} key={i}>{item.name}</Option>
-                                                ))}
-                                            </Select>
-                                            {error.jobCategoryIds && <span style={{ color: 'red' }}>{error.jobCategoryIds}</span>}
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
+
                 <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
                   <Form.Item label="Job Category">
                     <Select
@@ -569,21 +530,7 @@ const AddCourses = () => {
                     {error.jobCategoryIds && <span style={{ color: 'red' }}>{error.jobCategoryIds}</span>}
                   </Form.Item>
                 </Col>
-                {/* <Col lg={11} md={11} sm={24} xs={24}>
-                  <label htmlFor="name">Senquence</label>
-                  <Form.Item>
-                    <Input
-                      type="number"
-                      value={state.sequence}
-                      onChange={e => {
-                        onChange(e, 'sequence');
-                      }}
-                      name="sequence"
-                      placeholder="Enter Senquence"
-                    />
-                  </Form.Item>
-                  {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
-                </Col> */}
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>

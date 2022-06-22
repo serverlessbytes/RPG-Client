@@ -20,9 +20,9 @@ const Courses = () => {
             <Route exact path={`${path}/partnercourses/addpartnercourses`} component={AddPartnerCourses} />
             <Route exact path={`${path}/coursecategory`} component={CourseCategory} />
             <Route exact path={`${path}/addcourses`} component={AddCourses} />
-            <Route exact path= {`${path}/courserating`} component={CourseRating} />
-            <Route exact path= {`${path}/viewcourse`} component={ViewCourse} />
-            <Route exact path= {`${path}/viewpartnercourse`} component={PartnerCourseView} />
+            <Route exact path={`${path}/courserating`} component={CourseRating} />
+            <Route exact path={`${path}/viewcourse`} component={ViewCourse} />
+            <Route exact path={`${path}/viewpartnercourse`} component={PartnerCourseView} />
         </Switch>
     )
 }

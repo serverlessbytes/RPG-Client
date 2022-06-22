@@ -4,12 +4,15 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet } from '../../helper/API/ApiData';
+import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import actions from '../../redux/users/actions';
+
 
 const Employer = () => {
     const dispatch = useDispatch()
@@ -18,32 +21,39 @@ const Employer = () => {
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    const [employerData, setEmployerData] = useState()
+    // const [employerData, setEmployerData] = useState()
     const [employerTable, setEmployerTable] = useState([])
+    const [type, setType] = useState("EMPLOYER")
 
     const { TabPane } = Tabs;
+
+    const { editProfileSuccess, editProfileErr } = actions;
+
+    const employerData = useSelector(state => state.users.getAllUser)
+    const editProfileData = useSelector(state => state.users.editProfileData)
+    const editProfileError = useSelector(state => state.users.editProfileErr)
 
     const callback = key => {
         setStatus(key);
         setPageNumber(1);
     };
-    const getData = () => {
-        ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=EMPLOYER`)
-            .then((res) => {
-                setEmployerData(res)
-                console.log("res", res);
-            })
-            .catch((err) => console.log(err))
-    }
+    // const getData = () => {
+    //     ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=EMPLOYER`)
+    //         .then((res) => {
+    //             setEmployerData(res)
+    //             console.log("res", res);
+    //         })
+    //         .catch((err) => console.log(err))
+    // }
+
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
     }
-    const onDelete = (id) => {
+
+    const onDelete = async id => {
         let employerForDelete = employerData && employerData.data && employerData.data.data.find(item => item.id === id);
-        if (userForDelete) {
-            //delete userForDelete.key
-            //delete userForDelete.updatedAt
-            //delete userForDelete.avatar,
+
+        if (employerForDelete) {
             employerForDelete = {
                 ...employerForDelete,
                 id: employerForDelete.id,
@@ -52,12 +62,67 @@ const Employer = () => {
                 avatar: 'dfd',
             };
             delete employerForDelete.userTakenRatings
-            console.log('employerForDelete', employerForDelete);
-            dispatch(editProfile(employerForDelete));
+            // dispatch(editProfile(employerForDelete));
+            // getData();
+            const restoreActiveEmployer = await activeEmployer(id, employerForDelete);
+
+            if (restoreActiveEmployer.status === 200) {
+                toast.success("Employer Delete successful")
+            }
         }
     };
+
+    const activeEmployer = (id, dt) => {
+        delete dt.id;
+        delete dt.userType;
+        const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getAllUser(perPage, pageNumber, status, type))
+                }
+                return res
+            })
+        return newVal
+    }
+
+    const onActive = async id => {
+        let employerdata = employerData && employerData.data && employerData.data.data.find(item => item.id === id);
+        let data = {
+            avatar: employerdata.avatar,
+            email: employerdata.email,
+            id: employerdata.id,
+            isActive: true,
+            isDeleted: false,
+            name: employerdata.name,
+            phone: employerdata.phone,
+            userType: employerdata.userType,
+        };
+        const restoreActiveEmployer = await activeEmployer(id, data);
+
+        if (restoreActiveEmployer.status === 200) {
+            toast.success("Employer active successful")
+        }
+    };
+
+    useEffect(()=>{
+        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+            dispatch(editProfileSuccess(null))
+            toast.success("Employer Update successful")
+        }
+    },[editProfileData])
+
     useEffect(() => {
-        console.log("----- employerData", employerData);
+        if(editProfileError){
+            dispatch(editProfileErr(null))
+            toast.error("Something Wrong")
+        }
+    },[editProfileError])
+
+    useEffect(() => {
+        dispatch(getAllUser(perPage, pageNumber, status, type))
+    }, [perPage, pageNumber, status, type])
+
+    useEffect(() => {
         if (employerData && employerData.data) {
             setEmployerTable(
                 employerData.data.data.map((item) => {
@@ -91,11 +156,9 @@ const Employer = () => {
         }
     }, [employerData])
 
-    useEffect(() => {
-        getData()
-    }, [perPage, pageNumber, status])
-
-
+    // useEffect(() => {
+    //     getData();
+    // }, [perPage, pageNumber, status])
 
     const employerTableColumns = [
         {
@@ -138,7 +201,7 @@ const Employer = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Partner" key="active">
+                                <TabPane tab="Active Employer" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -157,7 +220,7 @@ const Employer = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive Partner" key="inactive">
+                                <TabPane tab="Inactive Employer" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

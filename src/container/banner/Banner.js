@@ -51,22 +51,15 @@ const Banner = () => {
     }
 
     useEffect(() => {
-        if(getBannerData){
-
-            console.log("getBannerData", getBannerData)
-        }
-    }, [getBannerData])
-
-    useEffect(() => {
-        dispatch(GetBanner(perPage,pageNumber));
-    }, [perPage,pageNumber])
+        dispatch(GetBanner(perPage, pageNumber));
+    }, [perPage, pageNumber])
 
     useEffect(() => {
         if (addBulkbannerData && addBulkbannerData.status === 200) {
             dispatch(addBulkBannerSuccess(null))
             toast.success("Import Banner successful")
         }
-        else if(addBulkbannerData && addBulkbannerData.status !== 200){
+        else if (addBulkbannerData && addBulkbannerData.status !== 200) {
             toast.error("Something Wrong")
         }
     }, [addBulkbannerData])
@@ -170,21 +163,23 @@ const Banner = () => {
     }, [])
 
     const onEdit = (id) => {
+        
         let dataForEdit = getBannerData && getBannerData.data && getBannerData.data.data.find((item) => item.id === id)
 
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
         }
         dispatch(getOneBanner(dataForEdit.id))
-        setIsModalVisible(true)
-        setNameTog(true)
+        setIsModalVisible(true);
+        setNameTog(true);
+      
     }
 
     const newBanner = userForDelete => {
         const newval = ApiPost("banner/editBanner", userForDelete)
             .then((res) => {
                 if (res.status === 200) {
-                    dispatch(GetBanner(perPage,pageNumber))
+                    dispatch(GetBanner(perPage, pageNumber))
                 }
                 return res;
             })
@@ -215,7 +210,7 @@ const Banner = () => {
 
     useEffect(() => {
         if (getBannerData && getBannerData.data) {
-            setBannerTableData(getBannerData && getBannerData.data &&getBannerData.data.data.map((item) => {
+            setBannerTableData(getBannerData && getBannerData.data && getBannerData.data.data.map((item) => {
                 return {
                     title: item.title,
                     imageUrl: item.imageUrl,
@@ -341,7 +336,7 @@ const Banner = () => {
                         </Form.Item>
                     </Form>
                 </Modal>}
-                {importModel && <Importbanner modaltitle = "Import Banner" handleCancel = {() => setImportModel(false)} importModel= {importModel}  />}
+            {importModel && <Importbanner modaltitle="Import Banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }

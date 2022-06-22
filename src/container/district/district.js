@@ -1,12 +1,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
-import FeatherIcon from 'feather-icons-react';
 import { Button } from '../../components/buttons/buttons';
 import { Col, Form, Input, Modal, Pagination, Row, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
-import { getLanguageData } from '../../redux/language/actionCreator';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
@@ -15,14 +13,19 @@ import { getDistrictData, postDistrictData } from '../../redux/district/actionCr
 import actions from '../../redux/district/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { fromUnixTime } from 'date-fns';
 
 const district = () => {
     const dispatch = useDispatch()
+    const { Option } = Select;
     const {
         postDistrictSuccess, postDistrictErr,
     } = actions;
+    const [form] = Form.useForm()
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [stateTableData, setstateTableData] = useState([])
     const [statedata, setStateData] = useState("");
     const [state, setState] = useState({
@@ -70,13 +73,9 @@ const district = () => {
     useEffect(() => {
         if (stateData && stateData.data) {
             setStateData(stateData?.data[0]?.id)
-            console.log("stateData", stateData?.data[0]?.id)
-
+            dispatch(getDistrictData(stateData?.data[0]?.id))
         }
     }, [stateData]);
-
-    //const usersTableData = [];
-    //const [languageTableData, setLanguageTableData] = useState([])
 
 
     useEffect(() => {
@@ -99,32 +98,22 @@ const district = () => {
     }
     const clearFilter = () => {
         setStateData({ statedata: "" })
+        dispatch(getDistrictData(statedata ? statedata : ""))
     }
 
-    useEffect(() => {
-        if (statedata) {
-            dispatch(getDistrictData(statedata))
-        }
-    }, [statedata])
-
-    const [form] = Form.useForm()
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-    const { Option } = Select;
+    // useEffect(() => {
+    //     if (statedata) {
+    //         dispatch(getDistrictData(statedata))
+    //     }
+    // }, [statedata])
+   
     const handleOk = () => {
-        // let stateData = form.getFieldsValue()
-        // stateData = {
-        //     ...stateData,
-        //     key: uuid()
-        // }
+      
         let data = {
             name: state.name,
             stateId: state.stateId,
             key: uuid(),
         }
-        console.log("datat", data)
         dispatch(postDistrictData(data))
         setIsModalVisible(false);
         handleCancel()
@@ -132,8 +121,9 @@ const district = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false);
-        form.resetFields()
+        form.resetFields();
     };
+
     useEffect(() => {
         dispatch(getStateData())
     }, []);
@@ -160,15 +150,15 @@ const district = () => {
                     <Row gutter={30}>
 
                         <Col md={6} xs={24} className="mb-md-25">
-                            <Form name="sDash_select" layout="vertical">
+                            <Form layout="vertical">
                                 <Form.Item label="State" >
                                     <Select
                                         size="large"
                                         className={statedata ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                                         name="state"
                                         value={statedata}
-                                        placeholder="Select State"
                                         onChange={(e) => onstatedata(e, "state")}
+                                        placeholder="Select State"
                                     >
                                         <Option value="">Select State</Option>
                                         {
@@ -238,7 +228,7 @@ const district = () => {
                             defaultValue={data.key}
                         />
                     </Form.Item> */}
-                    <Form.Item label="State">
+                    <Form.Item name='stateId' label="State">
                         <Select placeholder="Select State" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
                             <Option value='' >Select State</Option>
                             {

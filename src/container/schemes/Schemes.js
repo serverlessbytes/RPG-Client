@@ -2,19 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Menu, Dropdown, Space } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData, upadteBanner } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
-import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
-import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
@@ -24,7 +22,6 @@ import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
-
 
 const Schemes = () => {
   const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
@@ -52,7 +49,10 @@ const Schemes = () => {
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [languageIds, setLanguageIds] = useState();
+  const [bannerChaked, setBannerChaked] = useState();
   const [id, setId] = useState();
+  const [key, setKey] = useState();
+
 
   const [langIds, setLangIds] = useState({
     hindi: "",
@@ -66,12 +66,14 @@ const Schemes = () => {
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
   const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
-  // const addSchemeData = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
+  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
   const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
   const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
+  const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
+
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -82,6 +84,9 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, search: e })
     ]
   };
+  // useEffect(() => {
+  //   dispatch(upadteBanner())
+  // }, [])
 
   // useEffect(() => {
   //   if (users?.data) {
@@ -102,9 +107,6 @@ const Schemes = () => {
 
   useEffect(() => {
     dispatch(getSchemecategory());
-  }, []);
-
-  useEffect(() => {
     dispatch(getBenefitsData());
   }, []);
 
@@ -117,7 +119,7 @@ const Schemes = () => {
   }, [editSchemedata])
 
   useEffect(() => {
-    if (editSchemeError) {
+    if (editSchemedata && editSchemedata.status !== 200) {
       dispatch(editSchemeErr(null))
       toast.error("Something Wrong")
     }
@@ -134,13 +136,11 @@ const Schemes = () => {
   }, [schemeModulData])
 
   useEffect(() => {
-    if (addSchemeData && addSchemeData.status === 200) {
+    if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
       toast.success("Scheme add successful");
-      //toastAssetsAdd(true)
-      //onHide()
     }
-  }, [addSchemeData])
+  }, [schemeDataAdd])
 
   useEffect(() => {
     if (addSchemeError) {
@@ -167,7 +167,6 @@ const Schemes = () => {
   const getOneSchemeDetailByKey = async (languageId, key, id) => {
     await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
       .then((res) => {
-        console.log("res", res);
         if (res.status === 200) {
           toast.success("Course alredy exist in this language!")
         }
@@ -177,6 +176,7 @@ const Schemes = () => {
           setIsConfirmModal(true)
           setLanguageIds(languageId);
           setId(id)
+          setKey(key)
           // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
@@ -187,34 +187,8 @@ const Schemes = () => {
   }
 
   const languageHandalOk = () => {
-    history.push(`${path}/addscheme?langid=${languageIds}&id=${id}`);
-    // history.push(`${path}/addscheme?id=${id}&langid=${languageIds}`);
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   benifitLine: selectedLanguageData.benifitLine,
-    //   detail: selectedLanguageData.detail,
-    //   howToApply: selectedLanguageData.howToApply,
-    //   documentation: selectedLanguageData.documentation,
-    //   name: selectedLanguageData.name,
-    //   locations: selectedLanguageData.locations.map((item) => item.id),
-    //   schemeCategory: selectedLanguageData.schemeCategory.id,
-    //   schemeBenifit: selectedLanguageData.schemeBenifit.id,
-    //   website: selectedLanguageData.website,
-    //   type: selectedLanguageData.type,
-    //   benificiary: selectedLanguageData.benificiary,
-    //   grievanceRedress: selectedLanguageData.grievanceRedress,
-    //   elink: selectedLanguageData.elink,
-    //   spoc: selectedLanguageData.spoc,
-    //   isActive: selectedLanguageData.isActive,
-    //   videoUrl: selectedLanguageData.videoUrl,
-    //   thumbnail: selectedLanguageData.thumbnail,
-    //   // id : selectedLanguageData.id,
-    // };
-    // console.log("selectLanguageAddData",selectLanguageAddData)
-    // setIsConfirmModal(false)
-    // dispatch(addSchemeData(selectLanguageAddData, languageIds))
+    history.push(`${path}/addscheme?langid=${languageIds}&key=${key}`);
   }
-
 
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
@@ -243,8 +217,8 @@ const Schemes = () => {
     { label: "videoUrl", key: "videoUrl" },
     { label: "viewCount", key: "viewCount" },
     { label: "website", key: "website" },
-
   ];
+
   useEffect(() => {
     if (users?.data) { //set a state for export excel
       setState(users.data.map((item) => {
@@ -294,7 +268,7 @@ const Schemes = () => {
     history.push(`${path}/addscheme`);
   };
 
-  const reDirectSchemes = key => {
+  const onEdit = key => {
     history.push(`${path}/addscheme?key=${key}`);
   };
 
@@ -302,7 +276,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", userForDelete)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getAllSchemes())
+          dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
       })
@@ -311,7 +285,6 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
-    console.log("userForDelete", userForDelete,)
     if (userForDelete) {
       delete userForDelete.key;
       delete userForDelete.updatedAt;
@@ -319,6 +292,10 @@ const Schemes = () => {
       delete userForDelete.createdAt;
       delete userForDelete.schemeRatings;
       delete userForDelete.schemeRatingSum;
+      delete userForDelete.bannerSelected;
+      delete userForDelete.saved;
+      delete userForDelete.enrolled;
+
       userForDelete = {
         ...userForDelete,
         schemeBenifit: userForDelete.schemeBenifit.id,
@@ -326,7 +303,7 @@ const Schemes = () => {
         isActive: false,
         isDeleted: true,
       };
-      // dispatch(editSchemeData(userForDelete));
+
       const deleteSchemes = await newSchemes(userForDelete)
       if (deleteSchemes.status === 200) {
         toast.success("schemes delete successful")
@@ -338,7 +315,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", data)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getAllSchemes())
+          dispatch(getSchemeData(perPage, pageNumber, status))
         }
         return res
       })
@@ -375,10 +352,10 @@ const Schemes = () => {
     const restoreSchemeData = await activeSchemeData(data)
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
+      dispatch(getSchemeData(perPage, pageNumber, status))
     }
-    // dispatch(editSchemeData(data));
-
   }
+
 
   useEffect(() => {
     dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
@@ -403,7 +380,7 @@ const Schemes = () => {
   }
 
   const onAllExportSchemes = () => {
-    dispatch(getAllSchemes())
+    dispatch(getAllSchemes(perPage, pageNumber))
     setExportTog(true)
   }
 
@@ -426,7 +403,20 @@ const Schemes = () => {
     }
 
   };
-
+  const onBannerSelect = (id, bannerSelected) => {
+    if (status !== 'active') {
+      return
+    }
+    let body = {
+      id: id,
+      bannerSelected: !bannerSelected
+    }
+    ApiPost(`scheme/updateBannerSelected`, body)
+      .then(res => {
+        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+        dispatch(getSchemeData(perPage, pageNumber, status));
+      });
+  }
   const menu = (
     <Menu
       onClick={onClick}
@@ -462,23 +452,29 @@ const Schemes = () => {
 
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
-        console.log("res", res)
         toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
         dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
       })
       .catch((err) => console.log("Error", err))
   }
 
+  const onChange = (checked) => {
+
+  };
+  // const onApprovedBanner = (id, isAp) => {
+  //   dispatch(upadteBanner({ id: id, bannerSelected: isAp }))
+  // }
+
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
-      // console.log("schemeratings",schemeratings)
+      
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
       }
       var avg = sum / schemeratings.length;
-      // console.log(avg);
+ 
       return ({
         SchemeName: (
           <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>
@@ -544,23 +540,44 @@ const Schemes = () => {
             </div>
           </div>
         ),
+        chooseBanner: (
+          <div onClick={() => onBannerSelect(item.id, item.bannerSelected)} style={{ textAlign: "center" }
+          }>
+            <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
+          </div>
+          // {
+          //         <div onClick={() => onBannerSelect(item.id, item.key, item.bannerSelected)}>
+          //           <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
+          //         </div>
+          //       }
+        ),
 
+
+        //     status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //     <Switch checked={item.isApproved}></Switch>
+        //   </div> :
+        //    <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //  </div>
+        //   } */}
+        //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
+        //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
+        //     </div>
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
-
               {
                 status === "active" ?
                   <>
                     <Button
                       className="btn-icon"
-                      onClick={() => reDirectSchemes(item.key)}
+                      onClick={() => onEdit(item.key)}
                       type="info"
                       to="#"
                       shape="circle"
                     >
                       <FeatherIcon icon="edit" size={16} />
                     </Button>
+
                     <Button
                       className="btn-icon"
                       type="warning"
@@ -599,7 +616,6 @@ const Schemes = () => {
   }, [users])
 
   const schemeTableColumns = [
-
     {
       title: 'Scheme Name',
       dataIndex: 'SchemeName',
@@ -631,6 +647,11 @@ const Schemes = () => {
       dataIndex: 'selectLanguage',
       width: '90px',
     },
+    {
+      title: 'Choose banner',
+      dataIndex: 'chooseBanner',
+    },
+
     // {
     //   title: 'Approved',
     //   dataIndex: 'approved',
@@ -678,14 +699,14 @@ const Schemes = () => {
           //                 </Button> */}
           //   </div>,
           <div key="1" className="page-header-actions">
-            {/* <Dropdown overlay={menu} trigger='click'>
+            <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
                   Actions
                   <DownOutlined />
                 </Space>
               </a>
-            </Dropdown> */}
+            </Dropdown>
             <CSVLink
               headers={header}
               data={state}
@@ -878,7 +899,7 @@ const Schemes = () => {
               </Button>
               <Button size="small" type="primary" onClick={() => {
                 // getOneCourseDetailByKey(langIds?.marathi, item?.key)
-                languageHandalOk()
+                languageHandalOk(languageIds, key)
               }} >
                 {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes

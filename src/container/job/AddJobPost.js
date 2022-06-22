@@ -13,10 +13,6 @@ import actions from "../../redux/jobs/actions";
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
 import RichTextEditor from 'react-rte';
-import { set } from 'js-cookie';
-import { data } from 'browserslist';
-import { ApiPost } from '../../helper/API/ApiData';
-
 
 const AddJobPost = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -50,6 +46,7 @@ const AddJobPost = () => {
         jobType: "",
         isActive: true,
         shifts: "",
+        // shifts:[],
         email: "",
         phone: "",
         type: "",
@@ -67,9 +64,6 @@ const AddJobPost = () => {
     const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
     const getEmployerdata = useSelector((state) => state.job.getEmployerData)
     // const addJobPostData = useSelector((state) => state.job.addJobPostData
-
-    // useEffect(() => { console.log("id", id) }, [id])
-    useEffect(() => { console.log("getOneJobPostData", getOneJobPostData) }, [getOneJobPostData])
 
     useEffect(() => {
         if (id) {
@@ -95,15 +89,14 @@ const AddJobPost = () => {
     }, []);
 
     useEffect(() => {
-        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data ) {
-            console.log("getOneJobPostData", getOneJobPostData)
+        if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
             setState({
                 ...state,
                 key: getOneJobPostData.data.data.key,
                 salary: getOneJobPostData.data.data.salary,
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData?.data?.data.name?.name,
+                name: getOneJobPostData?.data?.data.name?.id, //
                 state: getOneJobPostData?.data?.data.state?.id,
                 district: getOneJobPostData?.data?.data.district?.id,
                 town: getOneJobPostData.data.data.town,
@@ -112,7 +105,7 @@ const AddJobPost = () => {
                 vacancies: getOneJobPostData.data.data.vacancies,
                 reqExperience: getOneJobPostData.data.data.reqExperience,
                 requirements: getOneJobPostData.data.data.requirements,
-                jobType: getOneJobPostData.data.data.jobType?.name,
+                jobType: getOneJobPostData.data.data.jobType?.id, //
                 isActive: true,
                 shifts: getOneJobPostData.data.data.shifts,
                 email: getOneJobPostData.data.data.email,
@@ -229,7 +222,6 @@ const AddJobPost = () => {
             setState({ ...state, shifts: e })
         }
         else if (name === "startDate") {
-            console.log("timeeewee", moment.utc(e).format())
             setState({ ...state, startDate: e })
         }
         else if (name === "endDate") {
@@ -259,7 +251,6 @@ const AddJobPost = () => {
 
     useEffect(() => {
         if (state.state) {
-
             dispatch(getDistrictData(state.state)) //dipatch district
         }
     }, [state.state]);
@@ -296,12 +287,12 @@ const AddJobPost = () => {
         if (langId) {
             data = {
                 ...data,
-                key: getOneJobPostData.data.key,
-                jobRole: getOneJobPostData.data.jobRole.id,
-                jobType: getOneJobPostData.data.jobType.id,
-                name: getOneJobPostData.data.name.id,
-                state: getOneJobPostData.data.state.id,
-                district: getOneJobPostData.data.district.id,
+                key: getOneJobPostData.data.data.key,
+                jobRole: getOneJobPostData.data.data.jobRole.id,
+                jobType: getOneJobPostData.data.data.jobType.id,
+                name: getOneJobPostData.data.data.name.id,
+                state: getOneJobPostData.data.data.state.id,
+                district: getOneJobPostData.data.data.district.id,
             }
             dispatch(addLanguageJobPost(langId, data))
             // addLanguageJobPost(langId, data)
@@ -312,15 +303,6 @@ const AddJobPost = () => {
         }
         onCancel();
     };
-
-    // const addLanguageJobPost = (languageID, body) => {
-    //     ApiPost(`job/add?langId=${languageID}`, body)
-    //         .then((res) => {
-    //             console.log("res", res);
-    //             return dispatch(addJobPostSuccess(res))
-    //         })
-    //         .catch((err) => dispatch(addJobPostErr(err)))
-    // }
 
     const onEdit = () => {
         let data = {
@@ -339,6 +321,7 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
+            // shifts: [state.shifts],
             shifts: state.shifts,
             email: state.email,
             phone: state.phone,
@@ -347,8 +330,7 @@ const AddJobPost = () => {
             jobRole: state.jobRole,
             jobType: state.jobType,
         }
-        console.log("data", data);
-        dispatch(editJobPost(editJobsID,data));
+        dispatch(editJobPost(editJobsID, data));
         onCancel()
     }
 

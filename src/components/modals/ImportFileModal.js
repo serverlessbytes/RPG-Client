@@ -33,11 +33,6 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const [schemeCategoryID, setSchemeCategoryID] = useState('');
   const [schemeBanefitID, setSchemeBanefitID] = useState('');
 
-
-  useEffect(() => {
-    console.log("selectedStateArray", selectedStateArray)
-  }, [selectedStateArray])
-
   //   SCHEME CATEGORY
   useEffect(() => {
     SchemeCategoryFromRedux.forEach(element => {

@@ -59,6 +59,10 @@ const actions = {
   GET_ONESCHEME_RATING_SUCCESS: 'GET_ONESCHEME_RATING_SUCCESS',
   GET_ONESCHEME_RATING_ERR: 'GET_ONESCHEME_RATING_ERR',
 
+  ADD_UPADTE_BANNER_BEGINE: 'ADD_UPADTE_BANNER_BEGINE',
+  ADD_UPADTE_BANNER_SUCCESS: 'ADD_UPADTE_BANNER_SUCCESS',
+  ADD_UPADTE_BANNER_ERR: 'ADD_UPADTE_BANNER_ERR',
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -334,24 +338,40 @@ const actions = {
   },
 
   addSchemeCategoryInBulkBegin: () => {
-    return{
+    return {
       type: actions.ADD_SCHEME_CATEGORY_IN_BULK_BEGINE
     }
   },
 
   addSchemeCategoryInBulkSuccess: (data) => {
-    return{
+    return {
       type: actions.ADD_SCHEME_CATEGORY_IN_BULK_SUCCESS,
       data
     }
   },
 
   addSchemeCategoryInBulkErr: (err) => {
-    return{
+    return {
       type: actions.ADD_SCHEME_CATEGORY_IN_BULK_ERR,
       err
     }
-  }
-
+  },
+  addUpadateSchemeBegin: () => {
+    return {
+      type: actions.ADD_UPADTE_BANNER_BEGINE
+    }
+  },
+  addUpadateSchemeSuccess: (data) => {
+    return {
+      type: actions.ADD_UPADTE_BANNER_SUCCESS,
+      data
+    }
+  },
+  addUpadateSchemeErr: (err) => {
+    return {
+      type: actions.ADD_UPADTE_BANNER_ERR,
+      err
+    }
+  },
 };
 export default actions;

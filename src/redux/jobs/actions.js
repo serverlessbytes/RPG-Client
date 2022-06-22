@@ -83,6 +83,10 @@ const actions = {
   ADD_LANGUAGE_JOBPOST_SUCCESS: "ADD_LANGUAGE_JOBPOST_SUCCESS",
   ADD_LANGUAGE_JOBPOST_ERR: "ADD_LANGUAGE_JOBPOSTERR",
 
+  ADD_UPADTE_JOB_BANNER_BEGINE: 'ADD_UPADTE_JOB_BANNER_BEGINE',
+  ADD_UPADTE_JOB_BANNER_SUCCESS: 'ADD_UPADTE_JOB_BANNER_SUCCESS',
+  ADD_UPADTE_JOB_BANNER_ERR: 'ADD_UPADTE_JOB_BANNER_ERR',
+
 
   getJobcategoryBegin: () => {
     return {
@@ -497,7 +501,6 @@ const actions = {
       type: actions.ADD_LANGUAGE_JOBPOST_BEGINE,
     };
   },
-
   addLanguageJobPostSuccess: data => {
     return {
       type: actions.ADD_LANGUAGE_JOBPOST_SUCCESS,
@@ -508,6 +511,23 @@ const actions = {
   addLanguageJobPostErr: err => {
     return {
       type: actions.ADD_LANGUAGE_JOBPOST_ERR,
+      err,
+    };
+  },
+  addUpdateJobBannerBegin: () => {
+    return {
+      type: actions.ADD_UPADTE_JOB_BANNER_BEGINE,
+    };
+  },
+  addUpdateJobBannerSuccess: data => {
+    return {
+      type: actions.ADD_UPADTE_JOB_BANNER_SUCCESS,
+      data,
+    };
+  },
+  addUpdateJobBannerErr: err => {
+    return {
+      type: actions.ADD_UPADTE_JOB_BANNER_ERR,
       err,
     };
   },

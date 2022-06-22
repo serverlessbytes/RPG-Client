@@ -7,12 +7,7 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { Main } from '../styled';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addSchemeData,
-  editSchemeData,
-  getOneSchemeData,
-  getSchemeBenifits,
-  getSchemecategory,
-  getState,
+  addSchemeData, editSchemeData, getOneSchemeData, getSchemeBenifits, getSchemecategory, getState,
 } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
@@ -25,13 +20,13 @@ const AddSchemes = () => {
   let history = useHistory();
   let location = useLocation();
 
-  useEffect(()=>{
-    console.log("langid",langId)
-  },[langId])
+  useEffect(() => {
+    console.log("langid", langId)
+  }, [langId])
 
-  useEffect(()=>{
-    console.log("ids",ids)
-  },[ids])
+  useEffect(() => {
+    console.log("ids", ids)
+  }, [ids])
 
   const dispatch = useDispatch();
   const { Option } = Select;
@@ -62,6 +57,8 @@ const AddSchemes = () => {
   const SchemeBenifits = useSelector(state => state.scheme.schemeBenefitData);
   const State = useSelector(state => state.scheme.addState);
   const getOneScHemeData = useSelector(state => state.scheme.getOneSchemeData);
+  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData);
+
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -84,6 +81,7 @@ const AddSchemes = () => {
         detail: RichTextEditor.createValueFromString(getOneScHemeData.detail, 'markdown'),
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
+        key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,//name
         schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
@@ -119,43 +117,6 @@ const AddSchemes = () => {
     setState({ ...state, documentation: value });
   };
 
-  /*    const SchemeName = (value) => {
-           setState({ ...state, schemename: value });
-       }; */
-  /*   const SchemeCategory = (value) => {
-          setState({ ...state, scheme: value });
-      }; */
-  /*   const TypeOfBenefits = (value) => {
-          setState({ ...state, schemeBenifit: value });
-      }; */
-  /*    const Location = (value) => {
-          setState({ ...state, location: value });
-      };  */
-  // const Website = (value) => {
-  //     setState({ ...state, website: value });
-  // };
-  /* const Category = (value) => {
-        setState({ ...state, category: value });
-    }; */
-  /*   const TargetBeneficiary = (value) => {
-          setState({ ...state, targetBeneficiary: value });
-      };  */
-  /* const GrievanceRedress = (value) => {
-        setState({ ...state, grievanceRedress: value });
-    }; */
-  /* const eLink = (value) => {
-        setState({ ...state, Elink: value });
-    }; */
-  /* const SPOC = (value) => {
-        setState({ ...state, spoc: value });
-    };
-    const ch = (value) => {
-        setState({ ...state, CH: value })
-    }  */
-
-  /*   const onChangeValue = (e) => {
-          setState({ ...state, [e.target.name]: e.target.value })
-      } */
 
   const selectValue = (e, name) => {
     if (name === 'schemeBenifit') {
@@ -283,8 +244,7 @@ const AddSchemes = () => {
       return;
     }
     let data = {
-      key: uuid(),
-      // sequence: parseInt(state.sequence),
+      // key: uuid(),
       benifitLine: state.benifitLine.toString('markdown'),
       detail: state.detail.toString('markdown'),
       howToApply: state.howToApply.toString('markdown'),
@@ -307,18 +267,61 @@ const AddSchemes = () => {
       isPublished: state.isPublished,
       isApproved: state.isApproved,
     };
-    console.log('data', state);
-    if (!location.search) {
-      dispatch(addSchemeData(data,langId));
-      // history.push(`${path}/scheme`)
-      history.push(`/admin/scheme`);
-    } else {
-      delete data.key;
-      dispatch(editSchemeData(data));
+    if (langId) {
+      delete data.id
+      delete data.isDeleted
+      delete data.isPublished
+      delete data.isApproved
+      data = {
+        ...data,
+        key: getOneScHemeData.key,
+        name: getOneScHemeData.name,
+        schemeCategory: getOneScHemeData.schemeCategory.id,
+        schemeBenifit: getOneScHemeData.schemeBenifit.id,
+        locations: getOneScHemeData.locations.map(item => item.id),
+        website: getOneScHemeData.website,
+        type: getOneScHemeData.type,
+        benificiary: getOneScHemeData.benificiary,
+        grievanceRedress: getOneScHemeData.grievanceRedress,
+        elink: getOneScHemeData.elink,
+        spoc: getOneScHemeData.spoc,
+        isActive: getOneScHemeData.isActive,
+        videoUrl: getOneScHemeData.videoUrl,
+        thumbnail: getOneScHemeData.thumbnail,
+      }
+      dispatch(addSchemeData(langId, data));
       history.push(`/admin/scheme`);
     }
+    else {
+      if (id) {
+        dispatch(editSchemeData(data));
+        history.push(`/admin/scheme`);
+      } else {
+        dispatch(addSchemeData(langId, data));
+        history.push(`/admin/scheme`);
+      }
+    }
+    onCancel();
   };
-
+  //   if (!location.search) {
+  //     dispatch(addSchemeData(data, langId));
+  //     // history.push(`${path}/scheme`)
+  //     history.push(`/admin/scheme`);
+  //   } else {
+  //     delete data.key;
+  //     dispatch(editSchemeData(data));
+  //     history.push(`/admin/scheme`);
+  //   }
+  // };
+  const onCancel = () => {
+    history.push(`/admin/scheme`)
+  }
+  // useEffect(() => {
+  //   if (schemeDataAdd && schemeDataAdd.status === 200) {
+  //     dispatch(addSchemeSuccess(null))
+  //     toast.success("Scheme add successful");
+  //   }
+  // }, [schemeDataAdd])
   return (
     <>
       <PageHeader
@@ -377,7 +380,7 @@ const AddSchemes = () => {
                   name="schemeCategory"
                   onChange={e => selectValue(e, 'schemeCategory')}
                 >
-                  {scheme && scheme.data.map(items => <Option value={items.id}>{items.name} </Option>)}
+                  {scheme && scheme.data.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
               </Form.Item>
@@ -394,7 +397,7 @@ const AddSchemes = () => {
                   name="schemeBenifit"
                   onChange={e => selectValue(e, 'schemeBenifit')}
                 >
-                  {SchemeBenifits && SchemeBenifits.map(items => <Option value={items.id}>{items.name} </Option>)}
+                  {SchemeBenifits && SchemeBenifits.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeBenifit && <span style={{ color: 'red' }}>{error.schemeBenifit}</span>}
               </Form.Item>
@@ -493,7 +496,7 @@ const AddSchemes = () => {
                   {State &&
                     State.map(item => (
                       <>
-                        <Option value={item.id}> {item.name} </Option>
+                        <Option key={item.id} value={item.id}> {item.name} </Option>
                       </>
                     ))}
                 </Select>
@@ -590,7 +593,8 @@ const AddSchemes = () => {
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>
               {id && !langId ? 'Edit' : 'Add'}
             </Button>
-            <Button className="btn-signin" type="light" size="medium" onClick={() => history.push(`/admin/scheme`)}>
+            <Button className="btn-signin" type="light" size="medium"
+              onClick={() => onCancel()}>
               Cancel
             </Button>
           </div>

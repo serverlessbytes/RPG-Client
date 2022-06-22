@@ -4,27 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Main } from '../styled';
-// import getSchemecategory from '../../redux/schemes/actionCreator'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { addUserSignup, editProfile, getOneUser } from '../../redux/users/actionCreator';
 import actions from "../../redux/users/actions";
 
 const Adduser = () => {
-    const {
-        getOneUserSuccess, // foe edit
-    } = actions;
+    
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id')
-    const { path } = useRouteMatch();
     let history = useHistory();
     let location = useLocation();
-
-    /* const [typeOfJob, setTypeOfJob] = useState("");
-    const onChange = e => {
-        console.log('radio checked', e.target.value);
-        setTypeOfJob(e.target.value)
-    }; */
     const dispatch = useDispatch();
     const { Option } = Select;
 
@@ -38,37 +28,10 @@ const Adduser = () => {
     });
     const [error, setError] = useState({})
 
-    useEffect(() => {
-
-        if (id) {
-            // dispatch(getOneUser(location.search.split('=')[1]))
-            dispatch(getOneUser(id))
-        }
-
-    }, [id])
+    const {getOneUserSuccess} = actions;
 
     const getOneData = useSelector((state) => state.users.getOneUser)
-
-    useEffect(() => {
-        if (getOneData && getOneData.data) {
-            console.log("getOneData", getOneData)
-            setState({
-                ...state,
-                name: getOneData.data.name,
-                email: getOneData.data.email,
-                password: getOneData.data.password,
-                phone: getOneData.data.phone,
-                userType: getOneData.data.userType,
-                avatar: getOneData.data.avatar,
-            })
-        }
-    }, [getOneData])
-
-
-    useEffect(() => {
-        console.log("STATE", state);
-    }, [state])
-
+   
     const selectValue = (e, name) => {
         if (name === "userType") {
             setState({
@@ -83,7 +46,7 @@ const Adduser = () => {
     }
 
     const validation = () => {
-        // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
+    
         let error = {}
         let flage = false
         if (state.name === "") {
@@ -120,7 +83,6 @@ const Adduser = () => {
         return flage
     }
 
-
     const onSubmit = () => {
         if (validation()) {
             return;
@@ -151,13 +113,12 @@ const Adduser = () => {
                 isActive: true,
                 avatar: "dfd",
                 //isApproved: true
-
             }
             dispatch(editProfile(data))
             oncancel()
-
         }
     }
+    
     // -- from goBAck Same Page
     const oncancel = () => {
         if (window.location.pathname.includes("partner")) {
@@ -176,14 +137,31 @@ const Adduser = () => {
         )
     }
 
-
-
-
     useEffect(() => {
         return (() => {
-            dispatch(getOneUserSuccess([])) // for a data balnk
+            dispatch(getOneUserSuccess([])) // for a data blank
         })
     }, [])
+
+    useEffect(() => {
+        if (id) {
+            dispatch(getOneUser(id))
+        }
+    }, [id])
+
+    useEffect(() => {
+        if (getOneData && getOneData.data) {
+            setState({
+                ...state,
+                name: getOneData.data.name,
+                email: getOneData.data.email,
+                password: getOneData.data.password,
+                phone: getOneData.data.phone,
+                userType: getOneData.data.userType,
+                avatar: getOneData.data.avatar,
+            })
+        }
+    }, [getOneData])
 
 
     return (

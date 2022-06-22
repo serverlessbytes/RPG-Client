@@ -50,7 +50,11 @@ const {
 
   addSchemeCategoryInBulkBegin,
   addSchemeCategoryInBulkSuccess,
-  addSchemeCategoryInBulkErr
+  addSchemeCategoryInBulkErr,
+
+  addUpadateSchemeBegin,
+  addUpadateSchemeSuccess,
+  addUpadateSchemeErr,
 
 } = actions;
 let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, page_Num;
@@ -98,7 +102,7 @@ export const getSchemeBenifits = () => async dispatch => {
     .catch(err => dispatch(getSchemeBenifitsErr(err)));
 };
 
-export const addSchemeData = (data,langID) => async dispatch => {
+export const addSchemeData = (langID, data) => async dispatch => {
   await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then(res => {
       return dispatch(addSchemeSuccess(res));
@@ -121,37 +125,12 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
     URL = URL.concat(`&schemeBenifit=${Benifit} `)
   }
   if (Category) {
-    URL = URL.concat(`&schemeCategory =${Category}`)
+    URL = URL.concat(`&schemeCategory=${Category}`)
   }
   if (searchBar) {
-    URL = URL.concat(`&search =${searchBar}`)
+    URL = URL.concat(`&search=${searchBar}`)
   }
-  // let apiData;
-  // if (schemeCategory && schemeBenifit) {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}&schemeCategory=${schemeCategory}`,
-  //   );
-  // } else if (schemeCategory && schemeBenifit === '') {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeCategory=${schemeCategory}`,
-  //   );
-  // } else if (schemeCategory === '' && schemeBenifit) {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}&schemeBenifit=${schemeBenifit}`,
-  //   );
-  // } else {
-  //   apiData = ApiGet(
-  //     `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(
-  //       STORAGEKEY.language,
-  //     )}&per_page=${perPage}&page_number=${pageNumber}&status=${status}`,
-  //   );
-  // }
+
   await ApiGet(URL)
     .then(res => {
       return dispatch(getSchemeSuccess(res.data));
@@ -160,7 +139,7 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
 };
 
 export const getOneSchemeData = key => async dispatch => {
-  await ApiGet(`scheme/getOneScheme?key=${key}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+  await ApiGet(`scheme/getOneScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&key=${key}`)
     .then(res => {
       return dispatch(getOneSchemeSuccess(res.data));
     })
@@ -182,7 +161,7 @@ export const editSchemeData = body => async dispatch => {
       console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num,tatus));
+        dispatch(getSchemeData(per_Page, page_Num, status));
       }
     })
     .catch(err => dispatch(editSchemeErr(err)));
@@ -195,7 +174,7 @@ export const addSchemeInBulkImport = body => async dispatch => {
       console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num,status));
+        dispatch(getSchemeData(per_Page, page_Num, status));
       }
     })
     .catch(err => {
@@ -239,15 +218,25 @@ export const getOneSchemeRating = (id) => async dispatch => {
 
 export const addSchemeCategoryInBulk = (body) => async (dispatch) => {
   await ApiPost(`scheme/addSchemeCategoryInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-  .then(res => {
-    dispatch(addSchemeCategoryInBulkSuccess(res));
-    console.log('res', res);
-    if (res.status === 200) {
-      // redirect after click edit button on listing call getSchemeData
-      dispatch(getSchemecategory());
-    }
-  })
-  .catch(err => {
-    dispatch(addSchemeCategoryInBulkErr(err))
-  });
+    .then(res => {
+      dispatch(addSchemeCategoryInBulkSuccess(res));
+      console.log('res', res);
+      if (res.status === 200) {
+        // redirect after click edit button on listing call getSchemeData
+        dispatch(getSchemecategory());
+      }
+    })
+    .catch(err => {
+      dispatch(addSchemeCategoryInBulkErr(err))
+    });
+}
+
+export const upadteBanner = (body) => async (dispatch) => {
+  await ApiPost(`scheme/updateBannerSelected`, body)
+    .then(res => {
+      dispatch(addUpadateSchemeSuccess(res));
+    })
+    .catch(err => {
+      dispatch(addUpadateSchemeErr(err))
+    })
 }
