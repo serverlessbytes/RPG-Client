@@ -36,7 +36,7 @@ const PartnerCourses = () => {
   const [state, setState] = useState({
     category: '',
     mode: 'PARTNER',
-    search : ''
+    search: ''
   });
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
@@ -54,7 +54,7 @@ const PartnerCourses = () => {
   });
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
-  
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -264,8 +264,8 @@ const PartnerCourses = () => {
     if (name == 'category') {
       setState({ ...state, category: e });
     }
-    else if(name == 'search'){
-      setState({ ...state, search: e})
+    else if (name == 'search') {
+      setState({ ...state, search: e })
     }
   };
 
@@ -295,6 +295,8 @@ const PartnerCourses = () => {
       delete activeCourseDelete.bannerSelected;
       delete activeCourseDelete.saved;
       delete activeCourseDelete.enrolled;
+      delete activeCourseDelete.hindi;
+      delete activeCourseDelete.marathi;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -320,12 +322,12 @@ const PartnerCourses = () => {
   }
 
   const Submit = () => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status,state.search));
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search));
   };
   const clearFilter = () => {
-    setState({ ...state, category: '', search: ''});
+    setState({ ...state, category: '', search: '' });
     // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status,''));
+    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, ''));
 
   };
 
@@ -348,6 +350,8 @@ const PartnerCourses = () => {
       delete activedata.bannerSelected;
       delete activedata.saved;
       delete activedata.enrolled;
+      delete activedata.hindi;
+      delete activedata.marathi;
 
       activedata = {
         ...activedata,
@@ -370,10 +374,7 @@ const PartnerCourses = () => {
     if (courseData && courseData.data) {
       setPartnertable(
         courseData.data?.data?.map(item => {
-
           let courseRatings = item.courseRatings.map(item => item.rating)
-
-
           var sum = 0;
 
           for (var i = 0; i < courseRatings.length; i++) {

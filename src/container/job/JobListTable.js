@@ -24,7 +24,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   let dispatch = useDispatch();
 
   const [usertable, setUsertable] = useState([]); //set data
-  const [perPage, setPerPage] = useState(10); // forpagination
+  const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
@@ -284,7 +284,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     };
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then(res => {
-        console.log('res', res);
         toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
         dispatch(
           getJobsFilterForMain(

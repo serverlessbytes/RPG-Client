@@ -97,12 +97,10 @@ const Adduser = () => {
             //avatar: state.avatar ?? 'any',
             //avatar: state.avatar,
         }
-        console.log("data", state);
 
         if (!location.search) {
             dispatch(addUserSignup(data));
-            oncancel()
-
+            oncancel();
         }
         else {
             delete data.key

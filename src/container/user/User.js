@@ -64,7 +64,6 @@ const User = () => {
                 avatar: 'dfd',
             };
             delete userForDelete.userTakenRatings
-            dispatch(editProfile(userForDelete));
             const restoreActiveUser = await activeUser(id, userForDelete);
 
             if (restoreActiveUser.status === 200) {
@@ -89,7 +88,6 @@ const User = () => {
 
     const onActive = async id => {
         let activeData = userData && userData.data && userData.data.data.find(item => item.id === id);
-        console.log("activeData", activeData)
         if (activeData) {
             activeData = {
                 ...activeData,
@@ -206,7 +204,6 @@ const User = () => {
             width: '90px',
         },
     ];
-
 
     return (
         <>
