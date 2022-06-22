@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import FeatherIcon from 'feather-icons-react';
-import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
+import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Menu, Dropdown, Space } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
@@ -12,9 +12,7 @@ import { useRouteMatch } from 'react-router-dom';
 import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData, upadteBanner } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
-import { Modal } from '../../components/modals/antd-modals';
 import ViewModal from './ViewModal';
-import { constants } from 'redux-firestore';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import actions from '../../redux/schemes/actions';
@@ -24,8 +22,6 @@ import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
-import { setWeekYear } from 'date-fns';
-
 
 const Schemes = () => {
   const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
@@ -171,13 +167,11 @@ const Schemes = () => {
   const getOneSchemeDetailByKey = async (languageId, key, id) => {
     await ApiGet(`scheme/getOneScheme?langId=${languageId}&key=${key}`)
       .then((res) => {
-        console.log("res", res);
         if (res.status === 200) {
           toast.success("Course alredy exist in this language!")
         }
       })
       .catch((e) => {
-        console.log();
         if (e.response.status) {
           setIsConfirmModal(true)
           setLanguageIds(languageId);
@@ -193,34 +187,8 @@ const Schemes = () => {
   }
 
   const languageHandalOk = () => {
-    // history.push(`${path}/addscheme?langid=${languageIds}&id=${id}`);
-    // history.push(`${path}/addscheme?id=${id}&langid=${languageIds}`);
     history.push(`${path}/addscheme?langid=${languageIds}&key=${key}`);
-    // let selectLanguageAddData = {
-    //   key: selectedLanguageData.key,
-    //   benifitLine: selectedLanguageData.benifitLine,
-    //   detail: selectedLanguageData.detail,
-    //   howToApply: selectedLanguageData.howToApply,
-    //   documentation: selectedLanguageData.documentation,
-    //   name: selectedLanguageData.name,
-    //   locations: selectedLanguageData.locations.map((item) => item.id),
-    //   schemeCategory: selectedLanguageData.schemeCategory.id,
-    //   schemeBenifit: selectedLanguageData.schemeBenifit.id,
-    //   website: selectedLanguageData.website,
-    //   type: selectedLanguageData.type,
-    //   benificiary: selectedLanguageData.benificiary,
-    //   grievanceRedress: selectedLanguageData.grievanceRedress,
-    //   elink: selectedLanguageData.elink,
-    //   spoc: selectedLanguageData.spoc,
-    //   isActive: selectedLanguageData.isActive,
-    //   videoUrl: selectedLanguageData.videoUrl,
-    //   thumbnail: selectedLanguageData.thumbnail,
-    // };
-    // console.log("selectLanguageAddData", selectLanguageAddData)
-    // setIsConfirmModal(false)
-    // dispatch(addSchemeData(selectLanguageAddData, languageIds))
   }
-
 
   const onApply = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
@@ -317,7 +285,6 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
-    console.log("userForDelete", userForDelete,)
     if (userForDelete) {
       delete userForDelete.key;
       delete userForDelete.updatedAt;
@@ -485,7 +452,6 @@ const Schemes = () => {
 
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
-        console.log("res", res)
         toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
         dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
       })
@@ -502,13 +468,13 @@ const Schemes = () => {
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
-      // console.log("schemeratings",schemeratings)
+      
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
       }
       var avg = sum / schemeratings.length;
-      // console.log(avg);
+ 
       return ({
         SchemeName: (
           <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>

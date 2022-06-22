@@ -26,7 +26,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
   const [courseCategoryID, setCourseCategoryID] = useState('');
-  const [jobCategoryID, setJobCategoryID] = useState([]);
+  const [jobCategoryID, setJobCategoryID] = useState();
 
   //  CATEGORY
   useEffect(() => {
@@ -40,7 +40,6 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   }, [CourseCategoryFromRedux]);
 
   useEffect(() => {
-    console.log('jobCategoryData', jobCategoryData);
     if (jobCategoryData && 'data' in jobCategoryData) {
       jobCategoryData.data.forEach(element => {
         element['label'] = element.name;
@@ -112,20 +111,15 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     return flage;
   };
 
-
-  useEffect(() => {
-    console.log("fileData", fileData);
-  }, [fileData])
-
-
   const handleOk = () => {
     if (validation()) {
       return;
     }
     if (fileData) {
       fileData.forEach(e => {
-        console.log("*-------------*");
-        e['jobCategoryIds'] = jobCategoryID;
+
+        e['categoryId'] = jobCategoryID;
+        e['jobCategoryIds'] = [jobCategoryID];
         e['language'] = language;
         // e['createdByUser'] = userData.id;
         // e['modifiedByUser'] = userData.id;
@@ -137,6 +131,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     //   dispatch(addSwayamCourseInBulk(fileData));
     //   handleCancel();
     // }
+    
     if (fileData) {
       dispatch(addSwayamCourseInBulk(fileData));
       handleCancel();
@@ -183,13 +178,14 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
 
                 <Form.Item label="Job Category">
                   <Select
-                    mode="multiple"
+                    // mode="multiple"
                     options={jobCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
                     name="jobCategoryID"
                     onChange={e => {
-                      setJobCategoryID([...jobCategoryID, e]);
+                      // setJobCategoryID([...jobCategoryID, e]);
+                      setJobCategoryID(e);
                     }}
                     placeholder="Select job Category"
                   >

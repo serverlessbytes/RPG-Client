@@ -174,7 +174,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       return;
     }
     if (fileData) {
-
       fileData.forEach(e => {
         e['vacancies'] = +e.vacancies;
         // e['language'] = language;
@@ -211,7 +210,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
           <Row gutter={30}>
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
-                {/* <Input placeholder="File upload" name="name" type="file" onChange={(e)=>{console.log(';e',e)}} /> */}
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}

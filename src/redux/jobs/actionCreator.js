@@ -2,7 +2,6 @@ import { async } from "@firebase/util";
 import STORAGEKEY from "../../config/APP/app.config";
 import { ApiGet, ApiPatch, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
-import schemes from "../../routes/admin/schemes";
 import actions from "./actions";
 
 const {
@@ -81,7 +80,7 @@ let per_page, page_num, State, Status, Type, jobrole, search;
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-      //console.log("log",res);
+     
       return dispatch(getJobcategorySuccess(res))
     })
     .catch((err) => dispatch(getJobcategoryErr(err)))
@@ -135,7 +134,6 @@ export const editJobrole = (body) => async (dispatch) => {
 export const addJobPost = (body) => async (dispatch) => {
   await ApiPost(`job/add?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
-      //console.log("res",res)
       return dispatch(addJobPostSuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
     })
@@ -145,7 +143,6 @@ export const addJobPost = (body) => async (dispatch) => {
 export const getJobPost = (perPage, pageNumber) => async (dispatch) => {
   await ApiPost(`job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`)
     .then((res) => {
-      //console.log("res",res)
       return dispatch(getJobPostSuccess(res))
     })
     .catch((err) => dispatch(getJobPostErr(err)))
@@ -157,7 +154,6 @@ export const editJobPost = (id, data) => async (dispatch) => {
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
       dispatch(editJobPostSuccess(res))
-      // console.log("ress---",res)
       if (res.status === 200) {
         dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
       }
@@ -219,7 +215,6 @@ export const allJobs = (type) => async (dispatch) => {
   }
   await ApiPost(URL)
     .then((res) => {
-      // console.log("res",res)
       return dispatch(allJobsSuccess(res))
     })
     .catch((err) => dispatch(allJobsErr(err)))
@@ -228,7 +223,6 @@ export const allJobs = (type) => async (dispatch) => {
 export const jobApproved = (id, body) => async (dispatch) => {
   await ApiPost(`job/updateIsApproved?jobId=${id}`, body)
     .then((res) => {
-
     })
     .catch((err) => console.log("Error", err))
 }
@@ -278,7 +272,6 @@ export const addJobApplication = (body) => async (dispatch) => {
   await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
       return dispatch(addJobApplicationSuccess(res))
-      //return dispatch(getJobPost(perPage,pageNumber))
     })
     .catch((err) => dispatch(addJobApplicationErr(err)))
 }
@@ -288,9 +281,7 @@ export const addBulkJobs = (body) => async (dispatch) => {
   await ApiPost(`job/addBulkJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     // await ApiPost(`job/addBulkJobs`, body)
     .then((res) => {
-      //console.log("res",res)
       return dispatch(addBlukJobsSuccess(res))
-      //return dispatch(getJobPost(perPage,pageNumber))
     })
     .catch(err => {
       let newError = {
@@ -302,12 +293,10 @@ export const addBulkJobs = (body) => async (dispatch) => {
     )
 }
 
-
 export const addBulkJobCategory = (body) => async (dispatch) => {
   dispatch(addBlukJobCategoyBegin(true))
   await ApiPost(`job/addBulkJobCategory`, body)
     .then((res) => {
-      //console.log("res",res)
       dispatch(addBlukJobCategoySuccess(res))
       //return dispatch(getJobPost(perPage,pageNumber))
       if (res.status === 200) {
@@ -324,7 +313,6 @@ export const addBulkJobCategory = (body) => async (dispatch) => {
 export const addBulkJobRoles = (body) => async (dispatch) => {
   await ApiPost(`job/addBulkJobRoles`, body)
     .then((res) => {
-      //console.log("res",res)
       dispatch(addBulkJobRolesSuccess(res))
       if (res.status === 200) {
         return dispatch(getJobroles())
@@ -336,7 +324,6 @@ export const addBulkJobRoles = (body) => async (dispatch) => {
 export const addLanguageJobPost = (languageID, body) => async (dispatch) => {
   await ApiPost(`job/add?langId=${languageID}`, body)
     .then((res) => {
-      console.log("res", res);
       dispatch(addLanguageJobPostSuccess(res))
       if (res.status === 200) {
         return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
