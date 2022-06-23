@@ -295,6 +295,7 @@ const Schemes = () => {
       delete userForDelete.bannerSelected;
       delete userForDelete.saved;
       delete userForDelete.enrolled;
+     
 
       userForDelete = {
         ...userForDelete,

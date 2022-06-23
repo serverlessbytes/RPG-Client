@@ -29,9 +29,6 @@ let perpage, pagenum;
 
 export const GetBanner = (per_page, page_num) => async (dispatch) => {
 
-  // console.log("per_page",per_page)
-  // console.log("page_num",page_num)
-
   perpage = per_page;
   pagenum = page_num;
 
@@ -43,7 +40,12 @@ export const GetBanner = (per_page, page_num) => async (dispatch) => {
 }
 
 export const addBanner = (body) => async (dispatch) => {
-  await ApiPost(`banner/addBanner?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+
+  const formData = new FormData();
+  formData.append('imageUrl', body.imageUrl);
+  formData.append('title', body.title);
+
+  await ApiPost(`banner/addBanner?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       dispatch(addBannerSuccess(res))
     })
@@ -73,7 +75,6 @@ export const editBanner = (data) => async (dispatch) => {
 export const addBulkBanner = (body) => async (dispatch) => {
   await ApiPost(`banner/addBulkBanner`, body)
     .then((res) => {
-      // console.log("res", res)
       dispatch(addBulkBannerSuccess(res))
       if (res.status === 200) {
         return dispatch(GetBanner(perpage, pagenum))

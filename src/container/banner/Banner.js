@@ -33,9 +33,8 @@ const Banner = () => {
     const [nameTog, setNameTog] = useState(false)
     const [data, setData] = useState({
         title: "",
-        imageUrl: ""
+        imageUrl: null
     });
-
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -48,6 +47,10 @@ const Banner = () => {
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+    }
+
+    const handleChangee = (e,name) => {
+        setData({ ...data, [name]: e.target.files[0]})
     }
 
     useEffect(() => {
@@ -101,7 +104,6 @@ const Banner = () => {
 
     useEffect(() => {
         if (getOneBannerdata && getOneBannerdata.data) {
-            console.log("getOneBannerdata", getOneBannerdata)
             setData({
                 ...data,
                 title: getOneBannerdata.data.title,
@@ -120,6 +122,8 @@ const Banner = () => {
     }
 
     const handleOk = () => {
+        // const fd = new FormData();
+        // // fd.append(data.imageUrl,data.imageUrl.name);
         if (!selectedBanner) {
             let Data = {
                 title: data.title,
@@ -140,7 +144,6 @@ const Banner = () => {
                 isActive: true,
                 isDeleted: false,
             }
-            //console.log("data",dataEdit)
             dispatch(editBanner(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -325,13 +328,22 @@ const Banner = () => {
                             />
                         </Form.Item>
                         <label htmlFor="imgUrl">Image URL</label>
-                        <Form.Item>
+                        {/* <Form.Item>
                             <Input
                                 type="text"
                                 placeholder="Enter image URL"
                                 name="imageUrl"
                                 value={data.imageUrl}
                                 onChange={(e) => handleChange(e)}
+                            />
+                        </Form.Item> */}
+                          <Form.Item>
+                            <Input
+                                type="file"
+                                placeholder="Enter image URL"
+                                name="imageUrl"
+                                defaultValue={data.imageUrl}
+                                onChange={(e) => handleChangee(e,"imageUrl")}
                             />
                         </Form.Item>
                     </Form>
