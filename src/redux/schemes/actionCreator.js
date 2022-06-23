@@ -57,7 +57,7 @@ const {
   addUpadateSchemeErr,
 
 } = actions;
-let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, page_Num;
+let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, hindi, marathi;
 export const getSchemecategory = () => async dispatch => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then(res => {
@@ -110,13 +110,16 @@ export const addSchemeData = (langID, data) => async dispatch => {
     .catch(err => dispatch(addSchemeErr(err)));
 };
 
-export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, searchBar) => async dispatch => {
+export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, searchBar, hindiID, marathiID) => async dispatch => {
   per_Page = perPage;
   page_number = pageNumber;
   status = Status;
   schemeBenifit = Benifit;
   schemeCategory = Category
   search = searchBar
+  hindi = hindiID
+  marathi = marathiID
+
   let URL = `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (Status) {
     URL = URL.concat(`&status=${Status} `)
@@ -129,6 +132,12 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
   }
   if (searchBar) {
     URL = URL.concat(`&search=${searchBar}`)
+  }
+  if (hindiID) {
+    URL = URL.concat(`&hindi=${hindiID}`)
+  }
+  if (marathiID) {
+    URL = URL.concat(`&marathi=${marathiID}`)
   }
 
   await ApiGet(URL)
@@ -157,7 +166,7 @@ export const editSchemeData = body => async dispatch => {
   // await ApiPost(`scheme/editScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
   await ApiPost(`scheme/editScheme`, body)
     .then(res => {
-     return dispatch(editSchemeSuccess(res));
+      return dispatch(editSchemeSuccess(res));
       // console.log('res', res);
       // if (res.status === 200) {
       //   // redirect after click edit button on listing call getSchemeData
@@ -171,10 +180,10 @@ export const addSchemeInBulkImport = body => async dispatch => {
   await ApiPost(`scheme/addSchemeInBulk`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
-      if (res.status === 200) {
-        // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, status));
-      }
+      // if (res.status === 200) {
+      //   // redirect after click edit button on listing call getSchemeData
+      //   dispatch(getSchemeData(per_Page, page_Num, status));
+      // }
     })
     .catch(err => {
       let newErr = {

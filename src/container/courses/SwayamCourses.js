@@ -59,11 +59,19 @@ const SwayamCourses = () => {
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   // const [searchValue, setSearchValue] = useState()
   const [languageOneDataGet, setLanguageOneDataGet] = useState()
+  const [languageID, setlanguageID] = useState({
+    marathi: "",
+    hindi: "",
+  })
+
+
   const [langIds, setLangIds] = useState({
     hindi: '',
     marathi: ''
   });
   const [languageId, setLanguageID] = useState()
+
+
   const [id, setID] = useState()
 
   const languageData = useSelector(state => state.language.getLanguageData);
@@ -244,11 +252,13 @@ const SwayamCourses = () => {
       hindi: '',
       marathi: ''
     }
+    console.log(languageData, "languageData");
     languageData && languageData.data && languageData.data.map((item) => {
       if (item.name === "marathi") {
         temp.marathi = item.id
       } else if (item.name === "Hindi") {
         temp.hindi = item.id
+
       }
     })
     setLangIds(temp)

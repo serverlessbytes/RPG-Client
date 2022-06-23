@@ -40,7 +40,8 @@ const JobPost = () => {
     const [pagePer, setPagePer] = useState();
     const [numberOfPage, setNumberOfPage] = useState();
     const [importModal, setImportModal] = useState(false);
-
+    const [perPage, setPerPage] = useState(20); // forpagination
+    const [pageNumber, setPageNumber] = useState(1);
 
     const jobRolesData = useSelector(state => state.job.jobRoleData);
     const allJobsData = useSelector(state => state.job.allJobs);
@@ -106,14 +107,7 @@ const JobPost = () => {
     const onExportJobs = () => {
         dispatch(
             getJobsFilterForMain(
-                pagePer,
-                numberOfPage,
-                state?.state ? state?.state : '',
-                type?.type ? type?.type : '',
-                jobRole?.jobRole ? jobRole?.jobRole : '',
-                status,
-                search,
-            ),
+                pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search),
         );
         setExportTog(true);
         //CSVLinkRef?.current?.link.click()
@@ -164,6 +158,7 @@ const JobPost = () => {
         if (addJobPostModulData && addJobPostModulData.status === 200) {
             toast.success("Job Post Import Successful")
             dispatch(addBlukJobsSuccess(null));
+            dispatch(getJobsFilterForMain(perPage, pageNumber));
         }
         if (addJobPostModulData && addJobPostModulData.status !== 200) {
             toast.error("Somthingwent wrong")

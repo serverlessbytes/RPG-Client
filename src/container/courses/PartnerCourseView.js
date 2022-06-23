@@ -25,9 +25,9 @@ function PartnerCourseView() {
 
     const getPartnerCourseData = useSelector(state => state.category.editFilterData)
 
-    useEffect(()=>{
-        console.log("getPartnerCourseData",getPartnerCourseData)
-    },[getPartnerCourseData])
+    useEffect(() => {
+        console.log("getPartnerCourseData", getPartnerCourseData)
+    }, [getPartnerCourseData])
 
     useEffect(() => {
         if (id) {

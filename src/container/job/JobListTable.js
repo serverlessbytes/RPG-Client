@@ -37,6 +37,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [languageIds, setLanguageIDs] = useState();
   const [ids, setIDs] = useState();
 
+
   const { users } = useSelector(state => {
     return {
       users: state.users,
@@ -207,6 +208,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     // }
   };
 
+
   useEffect(() => {
     if (addLanguageJobPostError) {
       toast.error('Something Wrong');
@@ -220,7 +222,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }, [addJobPostErr]);
 
   useEffect(() => {
-    if (status) {
+    if (status && langIds.hindi && langIds.marathi) {
+      console.log("langIds", langIds);
       dispatch(
         getJobsFilterForMain(
           perPage,
@@ -230,10 +233,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           jobRole?.jobRole ? jobRole?.jobRole : '',
           // search.search ? search.search : '',
           status,
+          "",
+          langIds.hindi,
+          langIds.marathi,
         ),
       );
     }
-  }, [perPage, pageNumber, apply, status]);
+  }, [perPage, pageNumber, apply, status, langIds]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
@@ -337,7 +343,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             <div className="">
               <div className="">
                 <>
-                  <Button size="small" type="primary" shape='round'
+                  <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                     onClick={() => {
                       getOneJobDetailByKey(langIds?.hindi, item?.key, item?.id)
                       setSelectedLanguageData(item)
@@ -345,7 +351,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   >
                     HN
                   </Button>
-                  <Button size="small" type="primary" shape='round'
+                  <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                     onClick={() => {
                       // setSelectedLanguageData(item)
                       getOneJobDetailByKey(langIds?.marathi, item?.key, item?.id)

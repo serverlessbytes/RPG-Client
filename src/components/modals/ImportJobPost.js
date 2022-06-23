@@ -170,12 +170,12 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   };
 
   const handleOk = () => {
-    if (validation()) {
-      return;
-    }
+    // if (validation()) {
+    //   return;
+    // }
     if (fileData) {
       fileData.forEach(e => {
-        e['vacancies'] = +e.vacancies;
+        // e['vacancies'] = +e.vacancies;
         // e['language'] = language;
         // e['state'] = stateID;
         // e['name'] = employertID;
@@ -189,7 +189,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
         // e['key'] = uuid();
       });
     }
-
     if (fileData) {
       dispatch(addBulkJobs(fileData));
       handleCancel();
