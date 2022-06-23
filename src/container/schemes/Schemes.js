@@ -75,6 +75,7 @@ const Schemes = () => {
   const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
 
 
+
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
@@ -129,6 +130,8 @@ const Schemes = () => {
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
+      dispatch(getSchemeData(perPage, pageNumber))
+
     }
     else if (schemeModulData && schemeModulData.status !== 200) {
       toast.error("somthimg went wromg")
@@ -295,7 +298,8 @@ const Schemes = () => {
       delete userForDelete.bannerSelected;
       delete userForDelete.saved;
       delete userForDelete.enrolled;
-     
+      delete userForDelete.hindi;
+      delete userForDelete.marathi;
 
       userForDelete = {
         ...userForDelete,
@@ -357,10 +361,10 @@ const Schemes = () => {
     }
   }
 
-
   useEffect(() => {
-    dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
-  }, [perPage, pageNumber, status]);
+    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi)); //for listing
+  }, [perPage, pageNumber, status, langIds]);
+
   const { TabPane } = Tabs;
 
   const callback = key => {
@@ -469,13 +473,13 @@ const Schemes = () => {
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
-      
+
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
       }
       var avg = sum / schemeratings.length;
- 
+
       return ({
         SchemeName: (
           <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>
@@ -510,7 +514,7 @@ const Schemes = () => {
               {/* <div className="table-actions"> */}
 
               <>
-                <Button size="small" type="primary" shape='round'
+                <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                   onClick={() => {
                     setSelectedLanguageData(item)
                     getOneSchemeDetailByKey(langIds?.hindi, item?.key, item?.id)
@@ -520,7 +524,7 @@ const Schemes = () => {
                   HN
                 </Button>
 
-                <Button size="small" type="primary" shape='round'
+                <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                   onClick={() => {
                     getOneSchemeDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }}

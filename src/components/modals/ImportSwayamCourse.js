@@ -121,6 +121,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         e['categoryId'] = jobCategoryID;
         e['jobCategoryIds'] = [jobCategoryID];
         e['language'] = language;
+
         // e['createdByUser'] = userData.id;
         // e['modifiedByUser'] = userData.id;
         // e['categoryId'] = courseCategoryID;
@@ -131,7 +132,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     //   dispatch(addSwayamCourseInBulk(fileData));
     //   handleCancel();
     // }
-    
+
     if (fileData) {
       dispatch(addSwayamCourseInBulk(fileData));
       handleCancel();

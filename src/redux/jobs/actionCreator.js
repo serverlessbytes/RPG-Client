@@ -75,12 +75,12 @@ const {
 
 } = actions;
 
-let per_page, page_num, State, Status, Type, jobrole, search;
+let per_page, page_num, State, Status, Type, jobrole, search, hindi, marathi;
 
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-     
+
       return dispatch(getJobcategorySuccess(res))
     })
     .catch((err) => dispatch(getJobcategoryErr(err)))
@@ -169,13 +169,17 @@ export const getoneJobPost = (data) => async (dispatch) => {
     .catch((err) => dispatch(getoneJobPostErr(err)))
 }
 
-export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status, searchBar) => async (dispatch) => {
+export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status, searchBar, hindiID, marathiID) => async (dispatch) => {
   per_page = perPage,
     page_num = pageNumber,
     State = state, Type = type,
     jobrole = jobRole,
     Status = status,
-    search = searchBar;
+    search = searchBar,
+    hindi = hindiID,
+    marathi = marathiID;
+  console.log("marathiID", marathiID);
+  console.log("hindiID", hindiID);
   let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (state) {
     URL = URL.concat(`&state=${state}`)
@@ -192,7 +196,12 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
   if (searchBar) {
     URL = URL.concat(`&search=${searchBar}`)
   }
-
+  if (hindiID) {
+    URL = URL.concat(`&hindi=${hindiID}`)
+  }
+  if (marathiID) {
+    URL = URL.concat(`&marathi=${marathiID}`)
+  }
   await ApiPost(URL)
     .then((res) => {
       return dispatch(getJobsFilterForMainSuccess(res))

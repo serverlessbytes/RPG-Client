@@ -89,12 +89,17 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const convertToJson = csv => {
     var lines = csv.split('\n');
+    console.log("lines", lines);
     var result = [];
+    console.log("result", result);
     var headers = lines[0].split(',');
+    console.log("headers", headers);
 
     for (var i = 1; i < lines.length - 1; i++) {
       var obj = {};
+      console.log("obj", obj);
       var currentline = lines[i].split(',');
+      console.log("currentline", currentline);
 
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
@@ -103,28 +108,28 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     }
     return result;
   };
-  const validation = () => {
-    let error = {};
-    let flage = false;
-    if (schemeCategoryID === '') {
-      error.schemeCategory = 'SchemeCategory is required';
-      flage = true;
-    }
-    if (schemeBanefitID === '') {
-      error.schemeBanefitID = 'SchemeBanefit is required';
-      flage = true;
-    }
-    if (selectedStateArray.length == 0) {
-      error.locations = 'Locations is required';
-      flage = true;
-    }
-    if (!FileData) {
-      error.name = 'File is required';
-      flage = true;
-    }
-    seterror(error);
-    return flage;
-  };
+  // const validation = () => {
+  //   let error = {};
+  //   let flage = false;
+  //   if (schemeCategoryID === '') {
+  //     error.schemeCategory = 'SchemeCategory is required';
+  //     flage = true;
+  //   }
+  //   if (schemeBanefitID === '') {
+  //     error.schemeBanefitID = 'SchemeBanefit is required';
+  //     flage = true;
+  //   }
+  //   if (selectedStateArray.length == 0) {
+  //     error.locations = 'Locations is required';
+  //     flage = true;
+  //   }
+  //   if (!FileData) {
+  //     error.name = 'File is required';
+  //     flage = true;
+  //   }
+  //   seterror(error);
+  //   return flage;
+  // };
   const handleOk = () => {
     // if (validation()) {
     //   return;

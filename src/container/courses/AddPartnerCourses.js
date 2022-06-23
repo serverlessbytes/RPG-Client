@@ -155,30 +155,30 @@ const AddPartnerCourses = () => {
         //     flage = true;
         // }
         if (state.duration === '') {
-            error.duration = '*Time is required';
+            error.duration = 'Time is required';
             flage = true;
         }
         if (state.cateGory === '') {
-            error.cateGory = '*CategoryId is required';
+            error.cateGory = 'CategoryId is required';
             flage = true;
         }
         if (state.state === '') {
-            error.state = '*state is required';
+            error.state = 'state is required';
             flage = true;
         }
         if (state.district === '') {
-            error.district = '*District is required';
+            error.district = 'District is required';
             flage = true;
         }
         if (state.mode === '') {
-            error.mode = '*Mode is required';
+            error.mode = 'Mode is required';
             flage = true;
         }
         if (state.Certification === '') {
-            error.Certification = '*Certification is required';
+            error.Certification = 'Certification is required';
             flage = true;
         } if (state.thumbnail === '') {
-            error.thumbnail = '*Thumbnail is required';
+            error.thumbnail = 'Thumbnail is required';
             flage = true;
         }
 
@@ -237,7 +237,7 @@ const AddPartnerCourses = () => {
                 certification: state.Certification,
                 thumbnail: state.thumbnail
             };
-            dispatch(addPartnerCourse( selectLanguageAddData,langid));
+            dispatch(addPartnerCourse(selectLanguageAddData, langid));
             history.push(`/admin/courses/partnercourses`);
         }
 
