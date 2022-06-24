@@ -120,6 +120,10 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     }
   };
 
+  useEffect(() => {
+    console.log("fileData", fileData);
+  }, [fileData])
+
   const convertToJson = csv => {
     var lines = csv.split('\n');
     var result = [];
@@ -192,6 +196,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
     if (fileData) {
       dispatch(addBulkJobs(fileData));
       handleCancel();
+      setFileData('')
     }
   };
 

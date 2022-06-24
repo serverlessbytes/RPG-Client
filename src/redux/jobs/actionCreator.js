@@ -148,15 +148,15 @@ export const getJobPost = (perPage, pageNumber) => async (dispatch) => {
     .catch((err) => dispatch(getJobPostErr(err)))
 }
 
-export const editJobPost = (id, data) => async (dispatch) => {
+export const editJobPost = (id, data, hindiID, marathiID) => async (dispatch) => {
   // let id = data.id
   // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
       dispatch(editJobPostSuccess(res))
-      if (res.status === 200) {
-        dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
-      }
+      // if (res.status === 200) {
+      //   dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
+      // }
     })
     .catch((err) => dispatch(editJobPostErr(err)))
 }
@@ -178,8 +178,6 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
     search = searchBar,
     hindi = hindiID,
     marathi = marathiID;
-  console.log("marathiID", marathiID);
-  console.log("hindiID", hindiID);
   let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (state) {
     URL = URL.concat(`&state=${state}`)
@@ -330,12 +328,12 @@ export const addBulkJobRoles = (body) => async (dispatch) => {
     .catch((err) => dispatch(addBulkJobRolesErr(err)))
 }
 
-export const addLanguageJobPost = (languageID, body) => async (dispatch) => {
+export const addLanguageJobPost = (languageID, body, hindiID, marathiID) => async (dispatch) => {
   await ApiPost(`job/add?langId=${languageID}`, body)
     .then((res) => {
       dispatch(addLanguageJobPostSuccess(res))
       if (res.status === 200) {
-        return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
+        return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
       }
     })
     .catch((err) => dispatch(addLanguageJobPostErr(err)))

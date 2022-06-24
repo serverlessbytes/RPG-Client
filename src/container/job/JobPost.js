@@ -42,12 +42,19 @@ const JobPost = () => {
     const [importModal, setImportModal] = useState(false);
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
+    const [langIds, setLangIds] = useState({
+        hindi: "",
+        marathi: "",
+    });
 
+
+    const languageData = useSelector(state => state.language.getLanguageData);
     const jobRolesData = useSelector(state => state.job.jobRoleData);
     const allJobsData = useSelector(state => state.job.allJobs);
     const stateData = useSelector(state => state.state.getStateData); //state
     const filterData = useSelector(state => state.job.getJobFilterData);
     const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
+
 
     const onChangevalue = (e, name) => {
         if (name === 'type') {
@@ -97,6 +104,20 @@ const JobPost = () => {
         { label: 'updatedAt', key: 'updatedAt' },
     ];
 
+    useEffect(() => {
+        let temp = {
+            hindi: '',
+            marathi: ''
+        }
+        languageData && languageData.data && languageData.data.map((item) => {
+            if (item.name === "marathi") {
+                temp.marathi = item.id
+            } else if (item.name === "Hindi") {
+                temp.hindi = item.id
+            }
+        })
+        setLangIds(temp)
+    }, [languageData])
 
 
     // const onExportJobs = () => {
@@ -104,10 +125,11 @@ const JobPost = () => {
     //     setExportTog(true)
     //     //CSVLinkRef?.current?.link.click()
     // };
+
     const onExportJobs = () => {
         dispatch(
             getJobsFilterForMain(
-                pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search),
+                pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
         );
         setExportTog(true);
         //CSVLinkRef?.current?.link.click()
@@ -158,7 +180,7 @@ const JobPost = () => {
         if (addJobPostModulData && addJobPostModulData.status === 200) {
             toast.success("Job Post Import Successful")
             dispatch(addBlukJobsSuccess(null));
-            dispatch(getJobsFilterForMain(perPage, pageNumber));
+            dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
         }
         if (addJobPostModulData && addJobPostModulData.status !== 200) {
             toast.error("Somthingwent wrong")

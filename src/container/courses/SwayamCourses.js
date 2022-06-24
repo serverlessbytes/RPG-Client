@@ -59,19 +59,15 @@ const SwayamCourses = () => {
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   // const [searchValue, setSearchValue] = useState()
   const [languageOneDataGet, setLanguageOneDataGet] = useState()
-  const [languageID, setlanguageID] = useState({
-    marathi: "",
-    hindi: "",
-  })
-
-
   const [langIds, setLangIds] = useState({
     hindi: '',
     marathi: ''
   });
+  useEffect(() => {
+    console.log("langIds", langIds);
+  }, [langIds])
+
   const [languageId, setLanguageID] = useState()
-
-
   const [id, setID] = useState()
 
   const languageData = useSelector(state => state.language.getLanguageData);
@@ -169,18 +165,20 @@ const SwayamCourses = () => {
   }, []);
 
   useEffect(() => {
-    if (status && data.category) {
-      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-    } else {
-      Submit();
+    // if (status && data.category && langIds.hindi && langIds.marathi) {
+    if (status && langIds.hindi && langIds.marathi) {
+      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     }
-  }, [status, perPage, pageNumber]);
+    // else {
+    //   Submit();
+    // }
+  }, [status, perPage, pageNumber, langIds]);
 
-  useEffect(() => {
-    if (data.category && activeCoursetog) {
-      Submit();
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data.category && activeCoursetog) {
+  //     Submit();
+  //   }
+  // }, [data]);
 
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
@@ -209,7 +207,7 @@ const SwayamCourses = () => {
   //    return newSawyamCourse
   //  }
 
-  const onDelete = async id => {
+  const onDelete = async (id) => {
     const singleData = courseData.data.data.find(item => item.id === id);
     if (singleData) {
       let dt = {
@@ -227,11 +225,11 @@ const SwayamCourses = () => {
         isActive: false,
         isDeleted: true,
       };
-      dispatch(editSwayamCourse(dt));
-      //   const deleteSwayamCourses = await newSawyamCourse(dt);
-      //   if (deleteSwayamCourses.status === 200) {
-      //     toast.success("SwayamCourse delete successful")
-      //   }
+      dispatch(editSwayamCourse(dt, langIds.hindi, langIds.marathi));
+      // const deleteSwayamCourses = await newSawyamCourse(dt);
+      // if (deleteSwayamCourses.status === 200) {
+      //   toast.success("SwayamCourse delete successful")
+      // }
     }
   };
 
@@ -239,8 +237,7 @@ const SwayamCourses = () => {
     const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-
+          dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
         }
         return res
       })
@@ -252,7 +249,7 @@ const SwayamCourses = () => {
       hindi: '',
       marathi: ''
     }
-    console.log(languageData, "languageData");
+
     languageData && languageData.data && languageData.data.map((item) => {
       if (item.name === "marathi") {
         temp.marathi = item.id
@@ -291,15 +288,15 @@ const SwayamCourses = () => {
       }
     }
   };
-
   const Submit = () => {
     dispatch(
-      getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "",)
+      getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "", langIds.hindi, langIds.marathi)
     );
+    setExportTog(false);
   };
   const clearFilter = () => {
     setData({ ...data, category: '', search: '', mode: '' });
-    dispatch(getCoursefilter('', perPage, pageNumber, '', status));
+    dispatch(getCoursefilter('', perPage, pageNumber, '', status, "", langIds.hindi, langIds.marathi));
   };
 
   const viewSwayamCoursedata = id => {
@@ -310,7 +307,7 @@ const SwayamCourses = () => {
 
   const onExportCourse = () => {
     // dispatch(getallSwayamCourse(data.mode))
-    dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+    dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     setExportTog(true);
     // if (state.length > 0) {
     //   setTimeout(() => {
@@ -358,7 +355,7 @@ const SwayamCourses = () => {
     };
     ApiPost(`course/updateBannerSelected?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
       toast.success(res.data.bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
-      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
+      dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     });
 
   }
@@ -477,13 +474,13 @@ const SwayamCourses = () => {
               <div className="">
 
                 <>
-                  <Button size="small" type="primary" shape='round' onClick={() => {
+                  <Button size="small" type={item.hindi ? "success" : "primary"} shape='round' onClick={() => {
                     getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                   }}>
                     HN
                   </Button>
 
-                  <Button size="small" type="primary" shape='round' onClick={() => {
+                  <Button size="small" type={item.marathi ? "success" : "primary"} shape='round' onClick={() => {
                     // selectedLanguageData(item)
                     getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }} >
@@ -689,10 +686,7 @@ const SwayamCourses = () => {
                     <Button
                       size="small"
                       type="primary"
-                      onClick={() => {
-                        Submit();
-                        setExportTog(false);
-                      }}
+                      onClick={() => Submit()}
                     >
                       Apply
                     </Button>

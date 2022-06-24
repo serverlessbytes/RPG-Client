@@ -59,7 +59,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     delete data.id;
     const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
       if (res.status === 200) {
-        dispatch(getJobsFilterForMain(perPage, pageNumber));
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi,));
         return res;
       }
     });
@@ -127,7 +127,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         jobType: courseDataDelete.jobType.id,
         id: id,
       };
-
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
         toast.success('Jobs delete successfully.');
@@ -196,7 +195,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       delete data.id;
       ApiPost(`job/update?jobId=${id}`, data).then(res => {
         if (res.status === 200) {
-          dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
+          dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive", "", langIds.hindi, langIds.marathi,));
         }
       })
     }
@@ -298,6 +297,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             state.state ? state.state : '',
             type.type ? type.type : '',
             jobRole.jobRole ? jobRole.jobRole : '',
+            "", "",
+            langIds.hindi,
+            langIds.marathi,
           ),
         );
       })
@@ -313,7 +315,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
       .then(res => {
         toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
-        dispatch(getJobsFilterForMain(perPage, pageNumber));
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
       });
   }
 

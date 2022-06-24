@@ -30,7 +30,7 @@ const AddJobPost = () => {
 
     const [error, setError] = useState({}); // for valadation
     const [editJobsID, seteditJobsID] = useState();
-    // const [langIds, setLangIds] = useState();
+    const [langIds, setLangIds] = useState();
     const [state, setState] = useState({
         salary: "",
         benifits: RichTextEditor.createEmptyValue(),
@@ -57,6 +57,7 @@ const AddJobPost = () => {
         key: "",
     });
 
+    const languageData = useSelector(state => state.language.getLanguageData);
     const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
     const jobData = useSelector((state) => state.job.jobCatogeryData) //job category
     const jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
@@ -64,6 +65,21 @@ const AddJobPost = () => {
     const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
     const getEmployerdata = useSelector((state) => state.job.getEmployerData)
     // const addJobPostData = useSelector((state) => state.job.addJobPostData
+
+    useEffect(() => {
+        let temp = {
+            hindi: '',
+            marathi: ''
+        }
+        languageData && languageData.data && languageData.data.map((item) => {
+            if (item.name === "marathi") {
+                temp.marathi = item.id
+            } else if (item.name === "Hindi") {
+                temp.hindi = item.id
+            }
+        })
+        setLangIds(temp)
+    }, [languageData])
 
     useEffect(() => {
         if (id) {
@@ -87,6 +103,7 @@ const AddJobPost = () => {
     useEffect(() => {
         dispatch(getEmployerData()) //dipatch getEmployerData
     }, []);
+
 
     useEffect(() => {
         if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
@@ -210,7 +227,6 @@ const AddJobPost = () => {
     const onChangeValue = e => {
         setState({ ...state, [e.target.name]: e.target.value });
     }
-
     const onChnageHandle = (e, name) => {
         if (name === "jobType") {
             setState({ ...state, jobType: e })
@@ -294,7 +310,7 @@ const AddJobPost = () => {
                 state: getOneJobPostData.data.data.state.id,
                 district: getOneJobPostData.data.data.district.id,
             }
-            dispatch(addLanguageJobPost(langId, data))
+            dispatch(addLanguageJobPost(langId, data, langIds.hindi, langIds.marathi))
             // addLanguageJobPost(langId, data)
         }
         else {
@@ -330,7 +346,7 @@ const AddJobPost = () => {
             jobRole: state.jobRole,
             jobType: state.jobType,
         }
-        dispatch(editJobPost(editJobsID, data));
+        dispatch(editJobPost(editJobsID, data, langIds.hindi, langIds.marathi));
         onCancel()
     }
 

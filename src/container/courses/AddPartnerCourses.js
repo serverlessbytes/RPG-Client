@@ -25,6 +25,7 @@ const AddPartnerCourses = () => {
     const { Option } = Select;
     const { TextArea } = Input;
 
+    const languageData = useSelector(state => state.language.getLanguageData);
     const editOneFilterData = useSelector(state => state.category.editFilterData);
     const stateData = useSelector((state) => state.state.getStateData);
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
@@ -54,6 +55,25 @@ const AddPartnerCourses = () => {
         thumbnail: ''
     });
     const [editPartnerCourseID, setEditPartnerCourseID] = useState()
+    const [langIds, setLangIds] = useState({
+        hindi: '',
+        marathi: ''
+    });
+
+    useEffect(() => {
+        let temp = {
+            hindi: '',
+            marathi: ''
+        }
+        languageData && languageData.data && languageData.data.map((item) => {
+            if (item.name === "marathi") {
+                temp.marathi = item.id
+            } else if (item.name === "Hindi") {
+                temp.hindi = item.id
+            }
+        })
+        setLangIds(temp)
+    }, [languageData])
 
     useEffect(() => {
         dispatch(getCategoryData());
@@ -212,8 +232,8 @@ const AddPartnerCourses = () => {
             thumbnail: state.thumbnail
         };
         if (!langid) {
-            dispatch(addPartnerCourse(data));
-            history.push(`/admin/courses/partnercourses`);
+            dispatch(addPartnerCourse(data, langIds.hindi, langIds.marathi));
+            handalCancle()
         }
         else {
             let selectLanguageAddData = {
@@ -229,7 +249,7 @@ const AddPartnerCourses = () => {
                 contactPersonPhone: state.contactpersonphone,
                 pincode: state.pincode,
                 location: state.locations,
-                duration: state.duration,
+                duration: moment(state.duration).format('hh:mm:ss'),
                 categoryId: editOneFilterData.data.data.courseCategory.id,
                 state: state.state,
                 district: state.district,
@@ -238,13 +258,11 @@ const AddPartnerCourses = () => {
                 thumbnail: state.thumbnail
             };
             dispatch(addPartnerCourse(selectLanguageAddData, langid));
-            history.push(`/admin/courses/partnercourses`);
+            handalCancle()
         }
-
     };
 
     const onEdit = () => {
-
         let data = {
             courseId: id,
             key: state.key,
@@ -270,7 +288,13 @@ const AddPartnerCourses = () => {
             isActive: true,
             isDeleted: false
         }
-        dispatch(editPartnerCoursefilter(data));
+        console.log("langIds.hindi12", langIds.hindi);
+        dispatch(editPartnerCoursefilter(data, langIds.hindi, langIds.marathi));
+        handalCancle()
+    }
+
+
+    const handalCancle = () => {
         history.push(`/admin/courses/partnercourses`);
     }
 
@@ -561,9 +585,7 @@ const AddPartnerCourses = () => {
                             className="btn-signin"
                             type="light"
                             size="medium"
-                            onClick={() => {
-                                history.push(`/admin/courses/partnercourses`);
-                            }}
+                            onClick={() => handalCancle()}
                         >
                             Cancel
                         </Button>

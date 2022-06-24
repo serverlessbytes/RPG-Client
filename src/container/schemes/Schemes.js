@@ -112,6 +112,12 @@ const Schemes = () => {
   }, []);
 
   useEffect(() => {
+    if (status && langIds.hindi && langIds.marathi) {
+      dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi)); //for listing
+    }
+  }, [perPage, pageNumber, status, langIds]);
+
+  useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
       dispatch(editSchemeSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
@@ -130,8 +136,7 @@ const Schemes = () => {
     if (schemeModulData && schemeModulData.status === 200) {
       toast.success("Scheme Import sucessful")
       dispatch(addSchemeInBulk(null))
-      dispatch(getSchemeData(perPage, pageNumber))
-
+      dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
     else if (schemeModulData && schemeModulData.status !== 200) {
       toast.error("somthimg went wromg")
@@ -184,7 +189,6 @@ const Schemes = () => {
         }
       })
   }
-
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
@@ -192,9 +196,8 @@ const Schemes = () => {
   const languageHandalOk = () => {
     history.push(`${path}/addscheme?langid=${languageIds}&key=${key}`);
   }
-
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : "", langIds.hindi, langIds.marathi));
   };
   const header = [
     { label: "id", key: "id" },
@@ -279,7 +282,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", userForDelete)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getSchemeData(perPage, pageNumber, status))
+          dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
         }
         return res
       })
@@ -320,7 +323,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", data)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getSchemeData(perPage, pageNumber, status))
+          dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
         }
         return res
       })
@@ -357,13 +360,10 @@ const Schemes = () => {
     const restoreSchemeData = await activeSchemeData(data)
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
-      dispatch(getSchemeData(perPage, pageNumber, status))
+      dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
 
-  useEffect(() => {
-    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi)); //for listing
-  }, [perPage, pageNumber, status, langIds]);
 
   const { TabPane } = Tabs;
 
@@ -380,7 +380,7 @@ const Schemes = () => {
   }
 
   const onExportschemes = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
     setExportTog(true)
   }
 
@@ -391,7 +391,7 @@ const Schemes = () => {
 
   const clearFilter = () => {
     setSchemeCategory({ ...schemeCategory, category: "", benefit: "", search: "" })
-    dispatch(getSchemeData(perPage, pageNumber, status));
+    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
   }
   const onClick = ({ key }) => {
     if (key == 'exportSchemes') {
@@ -419,7 +419,7 @@ const Schemes = () => {
     ApiPost(`scheme/updateBannerSelected`, body)
       .then(res => {
         toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
-        dispatch(getSchemeData(perPage, pageNumber, status));
+        dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
       });
   }
   const menu = (
@@ -458,7 +458,7 @@ const Schemes = () => {
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
         toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
-        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
       })
       .catch((err) => console.log("Error", err))
   }
