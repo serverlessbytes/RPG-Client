@@ -35,6 +35,8 @@ const Banner = () => {
         title: "",
         imageUrl: null
     });
+    const [fileError, setFileError] = useState('');
+    const [formErrors, setFormErrors] = useState();
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -47,10 +49,23 @@ const Banner = () => {
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        setFormErrors({ ...formErrors, title: "" });
     }
 
-    const handleChangee = (e,name) => {
-        setData({ ...data, [name]: e.target.files[0]})
+    const fileUpload = (e, name) => {
+        let firsttemp = e.target.files[0].name?.split('.');
+        let fileexten = ['jpeg', 'jpg', 'png']
+        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+            setData({ ...data, [name]: e.target.files[0] })
+            setFormErrors({ ...formErrors, imageUrl: "" });
+        }
+        else {
+            // setData({...data,
+            // })
+            setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+            setData({ ...data, imageUrl: '' })
+            // setFileError('Please select valid document file')
+        }
     }
 
     useEffect(() => {
@@ -121,9 +136,26 @@ const Banner = () => {
         setImportModel(true);
     }
 
+    const validation = () => {
+        let flag = false;
+        const error = {};
+
+        if (!data.title) {
+            error.title = "Please enter title"
+            flag = true
+        }
+        if (!data.imageUrl) {
+            error.imageUrl = "Please select document file"
+            flag = true
+        }
+        setFormErrors(error);
+        return flag
+    }
+
     const handleOk = () => {
-        // const fd = new FormData();
-        // // fd.append(data.imageUrl,data.imageUrl.name);
+        if (validation()) {
+            return
+        };
         if (!selectedBanner) {
             let Data = {
                 title: data.title,
@@ -137,6 +169,9 @@ const Banner = () => {
             })
         }
         else {
+            if (validation()) {
+                return
+            }
             let dataEdit = {
                 id: selectedBanner.id,
                 title: data.title,
@@ -155,8 +190,10 @@ const Banner = () => {
             title: "",
             imageUrl: ""
         })
-        setSelectedBanner(null)
-        setNameTog(false)
+        setSelectedBanner(null);
+        setNameTog(false);
+        setFormErrors('');
+        setFileError('');
     };
 
     useEffect(() => {
@@ -166,16 +203,14 @@ const Banner = () => {
     }, [])
 
     const onEdit = (id) => {
-        
         let dataForEdit = getBannerData && getBannerData.data && getBannerData.data.data.find((item) => item.id === id)
-
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
         }
         dispatch(getOneBanner(dataForEdit.id))
         setIsModalVisible(true);
         setNameTog(true);
-      
+
     }
 
     const newBanner = userForDelete => {
@@ -326,7 +361,9 @@ const Banner = () => {
                                 value={data.title}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
                         </Form.Item>
+
                         <label htmlFor="imgUrl">Image URL</label>
                         {/* <Form.Item>
                             <Input
@@ -337,15 +374,18 @@ const Banner = () => {
                                 onChange={(e) => handleChange(e)}
                             />
                         </Form.Item> */}
-                          <Form.Item>
+
+                        <Form.Item>
                             <Input
                                 type="file"
                                 placeholder="Enter image URL"
                                 name="imageUrl"
                                 defaultValue={data.imageUrl}
-                                onChange={(e) => handleChangee(e,"imageUrl")}
+                                onChange={(e) => fileUpload(e, "imageUrl")}
                             />
+                            {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
                         </Form.Item>
+                        {/* {fileError !== '' && <label style={{ color: 'red' }}>{fileError}</label>} */}
                     </Form>
                 </Modal>}
             {importModel && <Importbanner modaltitle="Import Banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}

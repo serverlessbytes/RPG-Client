@@ -22,7 +22,7 @@ import { useHistory } from 'react-router';
 const article = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const {addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr } = actions;
+    const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [articleTableData, setarticleTableData] = useState([]); // for table
@@ -36,6 +36,7 @@ const article = () => {
         videoUrl: "",
         body: "",
     });
+    const [formErrors, setFormErrors] = useState();
 
     const getArticlesData = useSelector((state) => state.articles.getArticlesData);
     const getArticleByIdData = useSelector((state) => state.articles.getArticleByIdData);
@@ -48,7 +49,60 @@ const article = () => {
         setArticleData({ ...articledata, [e.target.name]: e.target.value })
     }
 
-    useEffect(() => { console.log("editArticlesData", editArticlesData) }, [editArticlesData])
+    const fileUpload = (e, name) => {
+        let firsttemp = e.target.files[0].name?.split('.');
+        let fileexten = ['jpeg', 'jpg', 'png']
+
+        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+            setArticleData({ ...articledata, [name]: e.target.files[0] })
+            setFormErrors({ ...formErrors, imageUrl: "" });
+        }
+        else {
+            setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+            setArticleData({ ...articledata, imageUrl: '' })
+        }
+    }
+
+    const fileUploadVideo = (e, name) => {
+
+        let firsttemp = e.target.files[0].name?.split('.');
+       
+        let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
+
+        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+            setArticleData({ ...articledata, [name]: e.target.files[0] })
+            setFormErrors({ ...formErrors, videoUrl: "" });
+        }
+        else {
+            setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
+            setArticleData({ ...articledata, videoUrl: '' })
+        }
+    }
+
+    const validation = () => {
+        let flag = false;
+        const error = {};
+
+        if (!articledata.title) {
+            error.title = "Please enter title"
+            flag = true
+        }
+        if (!articledata.imageUrl) {
+            error.imageUrl = "Please select document file"
+            flag = true
+        }
+        if (!articledata.videoUrl) {
+            error.videoUrl = "Please select document file"
+            flag = true
+        }
+        if (!articledata.body) {
+            error.body = "Please enter  body"
+            flag = true
+        }
+        setFormErrors(error);
+        return flag
+    }
+
 
     useEffect(() => {
         dispatch(getArticles(perPage, pageNumber));
@@ -103,6 +157,9 @@ const article = () => {
 
     const handleOk = () => {
         if (!selectedArticle) {
+            if (validation()) {
+                return
+            }
             let Data = {
                 title: articledata.title,
                 imageUrl: articledata.imageUrl,
@@ -118,16 +175,19 @@ const article = () => {
             handleCancel();
         }
         else {
+            if (validation()) {
+                return
+            }
             let dataEdit = {
                 id: selectedArticle.id,
                 title: articledata.title,
                 imageUrl: articledata.imageUrl,
                 videoUrl: articledata.videoUrl,
-                body:articledata.body,
+                body: articledata.body,
                 isActive: true,
                 isDeleted: false,
             }
-            //console.log("data",dataEdit)
+           
             dispatch(editArticles(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -321,30 +381,35 @@ const article = () => {
                                 value={articledata.title}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
+
                         </Form.Item>
                         <label htmlFor="imgUrl">Image URL</label>
                         <Form.Item>
                             <Input
-                                type="text"
+                                type="file"
                                 placeholder="Enter image URL"
                                 name="imageUrl"
-                                value={articledata.imageUrl}
-                                onChange={(e) => handleChange(e)}
+                                defalutValue={articledata.imageUrl}
+                                onChange={(e) => fileUpload(e, "imageUrl")}
                             />
+                            {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
+
                         </Form.Item>
 
-                        <label htmlFor="imgUrl">Video URL</label>
+                        <label htmlFor="videoUrl">Video URL</label>
                         <Form.Item>
                             <Input
-                                type="text"
+                                type="file"
                                 placeholder="Enter Video URL"
                                 name="videoUrl"
-                                value={articledata.videoUrl}
-                                onChange={(e) => handleChange(e)}
+                                defalutValue={articledata.videoUrl}
+                                onChange={(e) => fileUploadVideo(e,"videoUrl")}
                             />
+                            {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>}
                         </Form.Item>
 
-                        <label htmlFor="imgUrl">Body</label>
+                        <label htmlFor="body">Body</label>
                         <Form.Item>
                             <Input
                                 type="text"
@@ -353,6 +418,7 @@ const article = () => {
                                 value={articledata.body}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

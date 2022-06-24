@@ -30,6 +30,7 @@ const Carousel = () => {
   const [perPage, setPerPage] = useState(10)
   const [pageNumber, setPageNumber] = useState(1)
   const [importModel, setImportModel] = useState(false);
+  const [formErrors, setFormErrors] = useState();
 
   const getCarouseldata = useSelector(state => state.carousel.getCarouselData);
   const getOneCarouselData = useSelector(state => state.carousel.getOneCarouselData);
@@ -40,9 +41,6 @@ const Carousel = () => {
   const addBulkCarouselData = useSelector(state => state.carousel.addBulkCarouselData);
   const addBulkCarouselError = useSelector(state => state.carousel.addBulkCarouselError);
 
-  // useEffect(() => {
-  //   console.log("getCarouseldata", getCarouseldata)
-  // }, [getCarouseldata])
 
   useEffect(() => {
     if (addBulkCarouselData && addBulkCarouselData.status === 200) {
@@ -105,7 +103,10 @@ const Carousel = () => {
       title: '',
       imageUrl: '',
     });
+    setFormErrors('');
+    // setFileError('');
   };
+
   useEffect(() => {
     return () => {
       dispatch(getOneCarouselSuccess(null));
@@ -114,7 +115,38 @@ const Carousel = () => {
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, title: "" });
   };
+
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0].name?.split('.');
+    let fileexten = ['jpeg', 'jpg', 'png']
+
+    if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+      setData({ ...data, [name]: e.target.files[0] })
+      setFormErrors({ ...formErrors, imageUrl: "" });
+    }
+    else {
+      setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+      setData({ ...data, imageUrl: '' })
+    }
+  }
+
+  const validation = () => {
+    let flag = false;
+    const error = {};
+
+    if (!data.title) {
+      error.title = "Please enter title"
+      flag = true
+    }
+    if (!data.imageUrl) {
+      error.imageUrl = "Please select document file"
+      flag = true
+    }
+    setFormErrors(error);
+    return flag
+  }
 
   useEffect(() => {
     dispatch(getCarousel(perPage, pageNumber));
@@ -122,7 +154,6 @@ const Carousel = () => {
 
   useEffect(() => {
     if (getOneCarouselData && getOneCarouselData.data) {
-      console.log('getOneCarouselData', getOneCarouselData);
       setData({
         imageUrl: getOneCarouselData.data.imageUrl,
         title: getOneCarouselData.data.title,
@@ -141,7 +172,12 @@ const Carousel = () => {
   };
 
   const handleOk = () => {
+
     if (!selectedCarousel) {
+      if (validation()) {
+        return
+      }
+
       let Data = {
         title: data.title,
         imageUrl: data.imageUrl,
@@ -149,7 +185,12 @@ const Carousel = () => {
       dispatch(addCarousel(Data));
       setIsModalVisible(false);
       handleCancel();
-    } else {
+    } 
+
+    else {
+      if (validation()) {
+        return
+      }
       let dataEdit = {
         id: selectedCarousel.id,
         title: data.title,
@@ -157,7 +198,7 @@ const Carousel = () => {
         isActive: true,
         isDeleted: false,
       };
-      //console.log("data",dataEdit)
+      
       dispatch(editCarousel(dataEdit));
       setIsModalVisible(false);
       handleCancel();
@@ -181,9 +222,7 @@ const Carousel = () => {
 
   const onDelete = async id => {
     let dataForDelete = getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.find(item => item.id === id);
-    console.log('dataForDelete', dataForDelete);
     if (dataForDelete) {
-      console.log('dataForDelete', dataForDelete);
       let userForDelete = {
         id: dataForDelete.id,
         title: dataForDelete.title,
@@ -316,16 +355,19 @@ const Carousel = () => {
             <label htmlFor="title">Title</label>
             <Form.Item>
               <Input placeholder="Enter title" name="title" onChange={e => handleChange(e)} value={data.title} />
+              {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
             </Form.Item>
+
             <label htmlFor="imgUrl">Image URL</label>
             <Form.Item>
               <Input
-                type="text"
+                type="file"
                 placeholder="Enter image URL"
                 name="imageUrl"
-                value={data.imageUrl}
-                onChange={e => handleChange(e)}
+                defalutValue={data.imageUrl}
+                onChange={e => fileUpload(e, "imageUrl")}
               />
+              {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
             </Form.Item>
           </Form>
         </Modal>

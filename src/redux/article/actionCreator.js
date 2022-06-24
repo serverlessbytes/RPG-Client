@@ -57,6 +57,13 @@ export const getArticleById = (id) => async (dispatch) => {
 }
 
 export const addArticle = (body) => async (dispatch) => {
+    // console.log("body",body)
+    // const formData = new FormData();
+    // formData.append('body', body.body);
+    // formData.append('videoUrl', body.videoUrl);
+    // formData.append('imageUrl', body.imageUrl);
+    // formData.append('title', body.title);
+
     await ApiPost(`article/addArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
         .then((res) => {
             dispatch(addArticleSuccess(res))

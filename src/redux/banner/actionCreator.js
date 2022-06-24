@@ -62,7 +62,14 @@ export const getOneBanner = (data) => async (dispatch) => {
 }
 
 export const editBanner = (data) => async (dispatch) => {
-  await ApiPost(`banner/editBanner`, data)
+  const formData = new FormData();
+  formData.append('imageUrl', data.imageUrl);
+  formData.append('title', data.title);
+  formData.append('id', data.id);
+  formData.append('isActive', data.isActive);
+  formData.append('isDeleted', data.isDeleted);
+
+  await ApiPost(`banner/editBanner`, formData)
     .then((res) => {
       dispatch(editBannerSuccess(res))
       if (res.status === 200) {

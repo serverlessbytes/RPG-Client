@@ -37,7 +37,10 @@ export const getCarousel = (per_page,page_num) => async (dispatch) => {
 }
 
 export const addCarousel = (body) => async (dispatch) => {
-  await ApiPost(`carousel/addCarousel?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,body)
+  const formData = new FormData();
+  formData.append('imageUrl', body.imageUrl);
+  formData.append('title', body.title);
+  await ApiPost(`carousel/addCarousel?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,formData)
     .then((res) => {
        dispatch(addCarouselSuccess(res))
     })
@@ -54,7 +57,15 @@ export const getOneCarousel = (data) => async (dispatch) => {
 }
 
 export const editCarousel = (data) => async (dispatch) => {
-  await ApiPost(`carousel/editCarousel`,data)
+
+  const formData = new FormData();
+  formData.append('imageUrl', data.imageUrl);
+  formData.append('title', data.title);
+  formData.append('id', data.id);
+  formData.append('isActive', data.isActive);
+  formData.append('isDeleted', data.isDeleted);
+
+  await ApiPost(`carousel/editCarousel`,formData)
     .then((res) => {
         dispatch(editCarouselSuccess(res))
       if (res.status === 200){
