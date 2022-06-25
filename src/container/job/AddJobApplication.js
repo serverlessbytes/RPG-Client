@@ -18,12 +18,17 @@ const AddJobApplication = () => {
     const { Option } = Select;
 
     const [jobApplication, setJobApplication] = useState({
-        resume_url: "",
-        certification_url: "",
+        resume_url: null,
+        certification_url: null,
         experience: "",
         currently_working: "",
-        job_id : "",
+        job_id: "",
     });
+
+
+    useEffect(() => {
+        dispatch(allJobs())
+    }, [])
 
     const onChangeValue = (e) => {
         if (e.target.name === 'currently_working') {
@@ -37,10 +42,10 @@ const AddJobApplication = () => {
         }
     }
 
-    const selectValue = (e,name) => {
-        if (name === "job_id" ){
+    const selectValue = (e, name) => {
+        if (name === "job_id") {
             setJobApplication({
-                ...jobApplication,job_id : e
+                ...jobApplication, job_id: e
             })
         }
     }
@@ -48,30 +53,38 @@ const AddJobApplication = () => {
 
     const allJobsData = useSelector((state) => state.job.allJobs)
 
-    useEffect(() => {
-        dispatch(allJobs())
-    }, [])
-
+    const onFileSelecte = (e, name) => {
+        let extensions = e.target.files[0].name?.split('.')
+        let extensionsValidation = ['docx', 'pdf']
+        if (extensionsValidation.includes(extensions[extensions.length - 1])) {
+            setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
+            setError({ ...error, resume_url: "" });
+        }
+        else {
+            setError({ ...error, resume_url: 'Please select valid document file' })
+            setJobApplication({ ...jobApplication, resume_url: '' })
+        }
+    }
     const validation = () => {
 
         let error = {}
         let flage = false
-        if (jobApplication.resume_url === "") {
-            error.resume_url = "Resume URL is required";
-            flage = true;
-        }
+        // if (jobApplication.resume_url === "") {
+        //     error.resume_url = "Resume URL is required";
+        //     flage = true;
+        // }
         if (jobApplication.experience === "") {
             error.experience = "Experience is required";
             flage = true;
         }
-        if (jobApplication.certification_url === "") {
-            error.certification_url = "Certification URL is required";
-            flage = true;
-        }
-        // if (jobApplication.currently_working === "") {
-        //     error.currently_working = "Currently Working is required";
+        // if (jobApplication.certification_url === "") {
+        //     error.certification_url = "Certification URL is required";
         //     flage = true;
         // }
+        if (jobApplication.currently_working === "") {
+            error.currently_working = "Currently Working is required";
+            flage = true;
+        }
         if (jobApplication.job_id === "") {
             error.job_id = "Job Id is required";
             flage = true;
@@ -91,7 +104,7 @@ const AddJobApplication = () => {
     const oncancel = () => {
         history.push(`/admin/job/application`)
     }
-  
+
     return (
         <>
             <PageHeader
@@ -103,7 +116,9 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="resume_url">Resume URL</label>
                             <Form.Item>
-                                <Input placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} />
+                                {/* <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} /> */}
+                                <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
+
                                 {
                                     error.resume_url && <span style={{ color: "red" }}>{error.resume_url}</span>
                                 }
@@ -113,7 +128,7 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="certification_url">Certification URL</label>
                             <Form.Item>
-                                <Input placeholder="Certification URL" name="certification_url" onChange={(e) => onChangeValue(e)} />
+                                <Input type="file" accept=".pdf,.doc" placeholder="Certification URL" name="certification_url" onChange={(e) => onChangeValue(e, "certification_url")} />
                                 {
                                     error.certification_url && <span style={{ color: "red" }}>{error.certification_url}</span>
                                 }
@@ -139,7 +154,7 @@ const AddJobApplication = () => {
 
                     <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
-                        <label htmlFor="job_id">Jobs Id</label>
+                            <label htmlFor="job_id">Jobs Id</label>
                             <Form.Item >
                                 <Select
                                     size="large"
@@ -148,8 +163,8 @@ const AddJobApplication = () => {
                                     name="job_id"
                                     onChange={e => selectValue(e, 'job_id')}
                                 >
-                                    {allJobsData && allJobsData.data && allJobsData.data.data.map((items) => 
-                                    <Option value={items.id}>{items.name.name}</Option>)}
+                                    {allJobsData && allJobsData.data && allJobsData.data.data.map((items) =>
+                                        <Option value={items.id}>{items.name.name}</Option>)}
                                 </Select>
                                 {error.job_id && <span style={{ color: 'red' }}>{error.job_id}</span>}
                             </Form.Item>
@@ -161,8 +176,8 @@ const AddJobApplication = () => {
                             {/* {id?"Edit":"Add"} */}Add
                         </Button>
                         <Button className="btn-signin" type="light" size="medium"
-                        //    onClick={() => history.push(`/admin/user`)}
-                           onClick={(e) => oncancel(e)}
+                            //    onClick={() => history.push(`/admin/user`)}
+                            onClick={(e) => oncancel(e)}
                         >
                             Cancel
                         </Button>

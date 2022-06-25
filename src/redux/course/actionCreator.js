@@ -129,7 +129,6 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
     .then((res) => {
       //getCoursefilter(categoryId,perPage,pageNumber,mode)
       dispatch(editPartnerCourseSuccess(res.data))
-      console.log("hindiID12", hindiID);
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
         dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, "", hindiID, marathiID))
       }

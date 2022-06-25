@@ -122,10 +122,10 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
 
   let URL = `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (Status) {
-    URL = URL.concat(`&status=${Status} `)
+    URL = URL.concat(`&status=${Status}`)
   }
   if (Benifit) {
-    URL = URL.concat(`&schemeBenifit=${Benifit} `)
+    URL = URL.concat(`&schemeBenifit=${Benifit}`)
   }
   if (Category) {
     URL = URL.concat(`&schemeCategory=${Category}`)

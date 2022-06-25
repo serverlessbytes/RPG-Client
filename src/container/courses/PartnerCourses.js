@@ -52,6 +52,11 @@ const PartnerCourses = () => {
     hindi: '',
     marathi: ''
   });
+
+  useEffect(() => {
+    console.log("langIds", langIds);
+  }, [langIds])
+
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
 
@@ -256,7 +261,9 @@ const PartnerCourses = () => {
   // }, [state]);
 
   useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, "", langIds.hindi, langIds.marathi));
+    if (status && langIds.hindi && langIds.marathi) {
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, "", langIds.hindi, langIds.marathi));
+    }
   }, [perPage, pageNumber, state.mode, status, langIds]); //pagination
 
   const onChangehandle = (e, name) => {
@@ -281,7 +288,6 @@ const PartnerCourses = () => {
     let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activeCourseDelete.certificate;
     let categoryId = activeCourseDelete.courseCategory.id;
-
     if (activeCourseDelete) {
       delete activeCourseDelete.id;
       delete activeCourseDelete.certificate;
@@ -306,11 +312,9 @@ const PartnerCourses = () => {
         categoryId: categoryId,
         certification: certification,
       };
-      console.log("langIds.marathi--", langIds.marathi);
-      dispatch(editPartnerCoursefilter(activeCourseDelete, state.category, perPage, pageNumber, state.mode, langIds.hindi, langIds.marathi));
+      dispatch(editPartnerCoursefilter(activeCourseDelete, langIds.hindi, langIds.marathi));
     }
   };
-
   const activePartnerCourses = dt => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
@@ -322,13 +326,13 @@ const PartnerCourses = () => {
     return newVal
   }
 
-  // const Submit = () => {
-  //   dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search, langIds.hindi, langIds.marathi));
-  // };
+  const Submit = () => {
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search, langIds.hindi, langIds.marathi));
+  };
   const clearFilter = () => {
     setState({ ...state, category: '', search: '' });
     // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-    // dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, '', langIds.hindi, langIds.marathi));
+    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, '', langIds.hindi, langIds.marathi));
   };
 
   const onActive = async id => {

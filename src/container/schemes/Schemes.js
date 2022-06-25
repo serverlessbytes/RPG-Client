@@ -360,7 +360,7 @@ const Schemes = () => {
     const restoreSchemeData = await activeSchemeData(data)
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
-      dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
+      // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
 

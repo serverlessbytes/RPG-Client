@@ -30,9 +30,9 @@ const JobApplication = () => {
         jobRole: "",
     })
 
-    useEffect(()=>{
-        console.log("jobApplication",jobApplication)
-    },[jobApplication])
+    useEffect(() => {
+        console.log("jobApplication", jobApplication)
+    }, [jobApplication])
 
     const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
@@ -94,12 +94,12 @@ const JobApplication = () => {
     }
 
     const onApply = () => {
-        dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory ))
+        dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
     }
 
     const clearFilter = () => {
-        setJobApplication({ ...jobApplication, jobCategory: "", jobRole:""  })
-        dispatch(getJobApplication(perPage, pageNumber, "" ))
+        setJobApplication({ ...jobApplication, jobCategory: "", jobRole: "" })
+        dispatch(getJobApplication(perPage, pageNumber, ""))
     }
 
     const onChangeHandle = (e, name) => {
@@ -251,7 +251,7 @@ const JobApplication = () => {
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form layout="vertical">
                                         <Form.Item label="Job Category">
-                                            <Select size="large" name="jobCategory" value = {jobApplication.jobCategory} placeholder="Select Job Categoty" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
+                                            <Select size="large" name="jobCategory" value={jobApplication.jobCategory} placeholder="Select Job Categoty" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
                                                 <Option value="">Select Job Categoty</Option>
                                                 {jobcatogerydata && jobcatogerydata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>

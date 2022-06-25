@@ -20,13 +20,6 @@ const AddSchemes = () => {
   let history = useHistory();
   let location = useLocation();
 
-  useEffect(() => {
-    console.log("langid", langId)
-  }, [langId])
-
-  useEffect(() => {
-    console.log("ids", ids)
-  }, [ids])
 
   const dispatch = useDispatch();
   const { Option } = Select;
