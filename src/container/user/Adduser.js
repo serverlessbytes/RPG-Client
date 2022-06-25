@@ -45,6 +45,22 @@ const Adduser = () => {
         setState({ ...state, [e.target.name]: e.target.value })
     }
 
+    const fileUpload = (e, name) => {
+        let firsttemp = e.target.files[0].name?.split('.');
+        let fileexten = ['jpeg', 'jpg', 'png']
+        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+            setState({ ...state, [name]: e.target.files[0] })
+            setError({ ...error, avatar: "" });
+        }
+        else {
+            // setData({...data,
+            // })
+            setError({ ...error, avatar: 'Please select valid document file' })
+            setState({ ...state, avatar: '' })
+            // setFileError('Please select valid document file')
+        }
+        }
+
     const validation = () => {
     
         let error = {}
@@ -63,6 +79,10 @@ const Adduser = () => {
         }
         if (!state.phone.match('[0-9]{10}')) {
             error.phone = "Phone is required";
+            flage = true;
+        }
+        if(!state.avatar){
+            error.avatar = "Avatar is required";
             flage = true;
         }
 
@@ -109,7 +129,8 @@ const Adduser = () => {
                 id: location.search.split('=')[1],
                 isDeleted: false,
                 isActive: true,
-                avatar: "dfd",
+                // avatar: "dfd",
+                avatar: state.avatar,
                 //isApproved: true
             }
             dispatch(editProfile(data))
@@ -269,10 +290,10 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Avatar</label>
                             <Form.Item>
-                                <Input placeholder="Avatar" name="avatar" onChange={(e) => onChangeValue(e)} />
-                                {/* {
+                                <Input type = 'file'  placeholder="Avatar" name="avatar" onChange={(e) => fileUpload(e ,"avatar")} />
+                                {
                                     error.avatar && <span style={{ color: "red" }}>{error.avatar}</span>
-                                } */}
+                                }
                             </Form.Item>
                         </Col>
                     </Row>

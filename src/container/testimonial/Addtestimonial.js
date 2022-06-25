@@ -85,35 +85,44 @@ const Addtestimonial = () => {
     }
 
     const fileUpload = (e, name) => {
-   
-        let firsttemp = e.target.files[0].name?.split('.');
-    
-        let fileexten = ['jpeg', 'jpg', 'png']
 
-        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-            setData({ ...data, [name]: e.target.files[0] })
-            setError({ ...error, imageUrl: "" });
+        let firsttemp = e.target.files[0]?.name?.split('.');
+
+        if (firsttemp) {
+            let fileexten = ['jpeg', 'jpg', 'png']
+            if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+                setData({ ...data, [name]: e.target.files[0] })
+                setError({ ...error, imageUrl: "" });
+            }
+            else {
+                setError({ ...error, imageUrl: 'Please select valid document file' })
+                setData({ ...data, imageUrl: '' })
+            }
         }
         else {
-            setError({ ...error, imageUrl: 'Please select valid document file' })
-            setData({ ...data, imageUrl: '' })
-          }
+            setError({ ...error, imageUrl: 'Please select document file' })
+        }
+
     }
 
     const fileUploadVideo = (e, name) => {
-    
-        let firsttemp = e.target.files[0].name?.split('.');
-        
-        let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
 
-        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-            setData({ ...data, [name]: e.target.files[0] })
-            setError({ ...error, videoUrl: "" });
+        let firsttemp = e.target.files[0]?.name?.split('.');
+
+        if (firsttemp) {
+            let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
+            if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+                setData({ ...data, [name]: e.target.files[0] })
+                setError({ ...error, videoUrl: "" });
+            }
+            else {
+                setError({ ...error, videoUrl: 'Please select valid document file' })
+                setData({ ...data, videoUrl: '' })
+            }
         }
         else {
-            setError({ ...error, videoUrl: 'Please select valid document file' })
-            setData({ ...data, videoUrl: '' })
-          }
+            setError({ ...error, videoUrl: 'Please select document file' })
+        }
     }
 
     // useEffect(() => {

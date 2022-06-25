@@ -53,18 +53,23 @@ const Banner = () => {
     }
 
     const fileUpload = (e, name) => {
-        let firsttemp = e.target.files[0].name?.split('.');
-        let fileexten = ['jpeg', 'jpg', 'png']
-        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-            setData({ ...data, [name]: e.target.files[0] })
-            setFormErrors({ ...formErrors, imageUrl: "" });
+        let firsttemp = e.target.files[0]?.name?.split('.');
+        if (firsttemp) {
+            let fileexten = ['jpeg', 'jpg', 'png']
+            if (fileexten?.includes(firsttemp[firsttemp?.length - 1])) {
+                setData({ ...data, [name]: e.target.files[0] })
+                setFormErrors({ ...formErrors, imageUrl: "" });
+            }
+            else {
+                // setData({...data,
+                // })
+                setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+                setData({ ...data, imageUrl: '' })
+                // setFileError('Please select valid document file')
+            }
         }
         else {
-            // setData({...data,
-            // })
-            setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
-            setData({ ...data, imageUrl: '' })
-            // setFileError('Please select valid document file')
+            setFormErrors({ ...formErrors, imageUrl: 'Please select document file' })
         }
     }
 
