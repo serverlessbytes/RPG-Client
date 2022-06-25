@@ -54,6 +54,8 @@ const AddCourses = () => {
   const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
   const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
+  const languageData = useSelector(state => state.language.getLanguageData);
+
 
   const [state, setState] = useState({
     detail: RichTextEditor.createEmptyValue(),
@@ -67,6 +69,27 @@ const AddCourses = () => {
     key: '',
     thumbnail: '',
   });
+  const [langIds, setLangIds] = useState({
+    hindi: '',
+    marathi: ''
+  });
+
+  useEffect(() => {
+    let temp = {
+      hindi: '',
+      marathi: ''
+    }
+
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        temp.hindi = item.id
+
+      }
+    })
+    setLangIds(temp)
+  }, [languageData])
 
   useEffect(() => {
     console.log("editOneSwayamCourseData", editOneSwayamCourseData)
@@ -103,12 +126,12 @@ const AddCourses = () => {
     // }
   }, [addSwayamCourseData])
 
-  useEffect(() => {
-    if (addSwayamCourseDataErr) {
-      dispatch(addSwayamPartnerCourseErr())
-      toast.error("Something Wrong")
-    }
-  }, [addSwayamCourseDataErr])
+  // useEffect(() => {
+  //   if (addSwayamCourseDataErr) {
+  //     dispatch(addSwayamPartnerCourseErr())
+  //     // toast.error("Something Wrong")
+  //   }
+  // }, [addSwayamCourseDataErr])
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -300,9 +323,12 @@ const AddCourses = () => {
       mode: state.mode,
       thumbnail: state.thumbnail,
     };
-
     dispatch(addSwayamCourse(data, langId));
+    handalCancle()
     // history.push('/admin/courses');
+    if (addSwayamCourseData.status !== 200) {
+      toast.error("Something Wrong")
+    }
   };
 
   const onEdit = () => {
@@ -324,8 +350,8 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-    dispatch(editSwayamCourse(data));
-    history.push('/admin/courses');
+    dispatch(editSwayamCourse(data, langIds.hindi, langIds.marathi));
+    handalCancle()
   };
 
   const addData = () => {
@@ -343,6 +369,7 @@ const AddCourses = () => {
       modifiedByUser: userData && userData.data && userData.data.id,
     });
     setModuleState(val);
+    handalCancle()
   };
 
   const moduleChange = (e, i, name) => {
@@ -392,7 +419,6 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-
     const data = moduleState[selectKey];
     const editData = {
       name: data.name,
@@ -405,9 +431,14 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-    dispatch(editSwayamCourseModule(editData));
+    dispatch(editSwayamCourseModule(editData,));
     history.push(`/admin/courses`);
+    handalCancle()
   };
+
+  const handalCancle = () => {
+    history.push('/admin/courses')
+  }
 
   const onRemoveData = () => {
     // if (moduleState.length > 1) {
@@ -804,7 +835,7 @@ const AddCourses = () => {
                   className="btn-signin ml-10"
                   type="light"
                   size="medium"
-                  onClick={() => history.push('/admin/courses')}
+                  onClick={() => handalCancle()}
                 >
                   Cancel
                 </Button>

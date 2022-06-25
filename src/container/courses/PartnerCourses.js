@@ -256,8 +256,8 @@ const PartnerCourses = () => {
   // }, [state]);
 
   useEffect(() => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status));
-  }, [perPage, pageNumber, state.mode, status]); //pagination
+    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, "", langIds.hindi, langIds.marathi));
+  }, [perPage, pageNumber, state.mode, status, langIds]); //pagination
 
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
@@ -306,7 +306,8 @@ const PartnerCourses = () => {
         categoryId: categoryId,
         certification: certification,
       };
-      dispatch(editPartnerCoursefilter(activeCourseDelete, state.category, perPage, pageNumber, state.mode));
+      console.log("langIds.marathi--", langIds.marathi);
+      dispatch(editPartnerCoursefilter(activeCourseDelete, state.category, perPage, pageNumber, state.mode, langIds.hindi, langIds.marathi));
     }
   };
 
@@ -314,21 +315,20 @@ const PartnerCourses = () => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status));
+          dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status, "", langIds.hindi, langIds.marathi));
         }
         return res
       })
     return newVal
   }
 
-  const Submit = () => {
-    dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search));
-  };
+  // const Submit = () => {
+  //   dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search, langIds.hindi, langIds.marathi));
+  // };
   const clearFilter = () => {
     setState({ ...state, category: '', search: '' });
     // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
-    dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, ''));
-
+    // dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, '', langIds.hindi, langIds.marathi));
   };
 
   const onActive = async id => {
@@ -363,7 +363,6 @@ const PartnerCourses = () => {
       };
       // dispatch(editPartnerCoursefilter(activedata));
       const restorePartnerCourses = await activePartnerCourses(activedata);
-
       if (restorePartnerCourses.status === 200) {
         toast.success("PartnerCourse active successful")
       }
@@ -402,7 +401,7 @@ const PartnerCourses = () => {
               <div className="">
                 <div className="">
                   <>
-                    <Button size="small" type="primary" shape='round'
+                    <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                       onClick={() => {
 
                         getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
@@ -411,7 +410,7 @@ const PartnerCourses = () => {
                     >
                       HN
                     </Button>
-                    <Button size="small" type="primary" shape='round'
+                    <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                       onClick={() => {
                         getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                       }}
