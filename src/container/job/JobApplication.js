@@ -30,10 +30,6 @@ const JobApplication = () => {
         jobRole: "",
     })
 
-    useEffect(() => {
-        console.log("jobApplication", jobApplication)
-    }, [jobApplication])
-
     const getJobApplicationData = useSelector((state) => state.job.getJobApplicationData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const jobcatogerydata = useSelector((state) => state.job.jobCatogeryData)

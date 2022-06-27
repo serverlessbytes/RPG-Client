@@ -41,14 +41,14 @@ export const getTestimonial = (per_page, page_num) => async (dispatch) => {
 }
 
 export const addTestimonial = (body) => async (dispatch) => {
-  console.log("body",body);
+  console.log("body", body);
   const formData = new FormData();
   formData.append('imageUrl', body.imageUrl);
   formData.append('videoUrl', body.videoUrl);
   formData.append('role', body.role);
   formData.append('name', body.name);
   formData.append('message', body.message);
-  console.log("formData",formData);
+  console.log("formData", formData);
   await ApiPost(`testimonial/addTestimonial?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       dispatch(addTestimonialSuccess(res))
@@ -87,7 +87,7 @@ export const editTestimonial = (body) => async (dispatch) => {
 export const addBulkTestimonial = (body) => async (dispatch) => {
   await ApiPost(`testimonial/addBulkTestimonial`, body)
     .then((res) => {
-       dispatch(addBulkTestimonialSuccess(res))
+      dispatch(addBulkTestimonialSuccess(res))
       if (res.status === 200) {
         return dispatch(getTestimonial(perPage, pageNum))
       }

@@ -22,13 +22,13 @@ const Testimonial = () => {
     const { path } = useRouteMatch();
 
     const { addTestimonialSuccess, addTestimonialErr, editTestimonialSuccess,
-        editTestimonialErr,addBulkTestimonialSuccess,addBulkTestimonialErr,
+        editTestimonialErr, addBulkTestimonialSuccess, addBulkTestimonialErr,
     } = actions;
 
     const [testiMonialtable, setTestiMonial] = useState([]);
     const [perPage, setPerPage] = useState(10)
     const [pageNum, setPageNum] = useState(1)
-    const [importModel,setImportModel] = useState(false)
+    const [importModel, setImportModel] = useState(false)
 
     const getAllUsers = useSelector((state) => state.testimonial.getTestimonialData)
     const addTestimonialdata = useSelector((state) => state.testimonial.addTestimonialData)
@@ -43,7 +43,7 @@ const Testimonial = () => {
             dispatch(addBulkTestimonialSuccess(null))
             toast.success("Import Testimonial successful");
         }
-        else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200){
+        else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200) {
             toast.error("Something Wrong")
         }
     }, [addBulkTestimonialData])

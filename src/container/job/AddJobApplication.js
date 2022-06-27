@@ -17,14 +17,16 @@ const AddJobApplication = () => {
     const dispatch = useDispatch();
     const { Option } = Select;
 
+    const allJobsData = useSelector((state) => state.job.allJobs)
+
     const [jobApplication, setJobApplication] = useState({
-        resume_url: null,
-        certification_url: null,
+        resume_url: "",
+        certification_url: "",
         experience: "",
         currently_working: "",
         job_id: "",
     });
-
+    const [error, setError] = useState({})
 
     useEffect(() => {
         dispatch(allJobs())
@@ -49,38 +51,58 @@ const AddJobApplication = () => {
             })
         }
     }
-    const [error, setError] = useState({})
 
-    const allJobsData = useSelector((state) => state.job.allJobs)
 
     const onFileSelecte = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
-        let extensionsValidation = ['docx', 'pdf']
-        if (extensionsValidation.includes(extensions[extensions.length - 1])) {
-            setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
-            setError({ ...error, resume_url: "" });
+        if (extensions) {
+            let extensionsValidation = ['docx', 'pdf']
+            if (extensionsValidation.includes(extensions[extensions.length - 1])) {
+                setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
+                setError({ ...error, resume_url: "" });
+            }
+            else {
+                setError({ ...error, resume_url: 'Please select valid document file' })
+                setJobApplication({ ...jobApplication, resume_url: '' })
+            }
         }
         else {
-            setError({ ...error, resume_url: 'Please select valid document file' })
-            setJobApplication({ ...jobApplication, resume_url: '' })
+            setError({ ...error, imageUrl: 'Please select document file' })
         }
     }
-    const validation = () => {
+    const onChnagecertificationUrl = (e, name) => {
+        let extensions = e.target.files[0].name?.split('.')
+        if (extensions) {
+            let extensionsValidation = ['docx', 'pdf']
+            if (extensionsValidation.includes(extensions[extensions.length - 1])) {
+                setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
+                setError({ ...error, certification_url: "" });
+            }
+            else {
+                setError({ ...error, certification_url: 'Please select valid document file' })
+                setJobApplication({ ...jobApplication, certification_url: '' })
+            }
+        }
+        else {
+            setError({ ...error, imageUrl: 'Please select document file' })
+        }
+    }
 
+    const validation = () => {
         let error = {}
         let flage = false
-        // if (jobApplication.resume_url === "") {
-        //     error.resume_url = "Resume URL is required";
-        //     flage = true;
-        // }
+        if (jobApplication.resume_url === "") {
+            error.resume_url = "Resume URL is required";
+            flage = true;
+        }
         if (jobApplication.experience === "") {
             error.experience = "Experience is required";
             flage = true;
         }
-        // if (jobApplication.certification_url === "") {
-        //     error.certification_url = "Certification URL is required";
-        //     flage = true;
-        // }
+        if (jobApplication.certification_url === "") {
+            error.certification_url = "Certification URL is required";
+            flage = true;
+        }
         if (jobApplication.currently_working === "") {
             error.currently_working = "Currently Working is required";
             flage = true;
@@ -100,11 +122,9 @@ const AddJobApplication = () => {
         dispatch(addJobApplication(jobApplication))
         oncancel();
     }
-
     const oncancel = () => {
         history.push(`/admin/job/application`)
     }
-
     return (
         <>
             <PageHeader
@@ -117,8 +137,7 @@ const AddJobApplication = () => {
                             <label htmlFor="resume_url">Resume URL</label>
                             <Form.Item>
                                 {/* <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} /> */}
-                                <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
-
+                                <Input type="file" accept=".doc,.docx,.pdf" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
                                 {
                                     error.resume_url && <span style={{ color: "red" }}>{error.resume_url}</span>
                                 }
@@ -128,7 +147,7 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="certification_url">Certification URL</label>
                             <Form.Item>
-                                <Input type="file" accept=".pdf,.doc" placeholder="Certification URL" name="certification_url" onChange={(e) => onChangeValue(e, "certification_url")} />
+                                <Input type="file" accept=".doc,.docx,.pdf" placeholder="Certification URL" name="certification_url" onChange={(e) => onChnagecertificationUrl(e, "certification_url")} />
                                 {
                                     error.certification_url && <span style={{ color: "red" }}>{error.certification_url}</span>
                                 }

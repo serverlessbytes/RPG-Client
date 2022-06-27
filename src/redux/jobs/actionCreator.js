@@ -276,7 +276,14 @@ export const updateIsHired = (id, value) => async (dispatch) => {
 }
 
 export const addJobApplication = (body) => async (dispatch) => {
-  await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  console.log("body", body);
+  const formData = new FormData();
+  formData.append('resumeUrl', body.certification_url);
+  formData.append('certificationUrl', body.certification_url);
+  formData.append('experience', body.experience);
+  formData.append('jobId', body.job_id);
+  console.log("formData", formData);
+  await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       return dispatch(addJobApplicationSuccess(res))
     })

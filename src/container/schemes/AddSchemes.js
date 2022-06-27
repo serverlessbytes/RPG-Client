@@ -44,9 +44,9 @@ const AddSchemes = () => {
     thumbnail: '',
   });
 
-  useEffect(()=>{
-    console.log("state",state)
-  },[state])
+  useEffect(() => {
+    console.log("state", state)
+  }, [state])
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
