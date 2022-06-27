@@ -26,7 +26,7 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
     page_num = pagenum;
     await ApiGet(`article/getArticles?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perpage}&page_number=${pagenum}`)
         .then((res) => {
-            console.log("res", res)
+           
             return dispatch(getArticlesSuccess(res))
         })
         .catch((err) => {
@@ -34,7 +34,12 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
         })
 }
 export const editArticles = (body) => async (dispatch) => {
-    await ApiPost(`article/editArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    const formData = new FormData();
+    formData.append('body', body.body);
+    formData.append('videoUrl', body.videoUrl);
+    formData.append('imageUrl', body.imageUrl);
+    formData.append('title', body.title);
+    await ApiPost(`article/editArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
         .then((res) => {
             dispatch(editArticlesSuccess(res))
             if (res.status === 200) {
@@ -58,13 +63,13 @@ export const getArticleById = (id) => async (dispatch) => {
 
 export const addArticle = (body) => async (dispatch) => {
     // console.log("body",body)
-    // const formData = new FormData();
-    // formData.append('body', body.body);
-    // formData.append('videoUrl', body.videoUrl);
-    // formData.append('imageUrl', body.imageUrl);
-    // formData.append('title', body.title);
+    const formData = new FormData();
+    formData.append('body', body.body);
+    formData.append('videoUrl', body.videoUrl);
+    formData.append('imageUrl', body.imageUrl);
+    formData.append('title', body.title);
 
-    await ApiPost(`article/addArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+    await ApiPost(`article/addArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
         .then((res) => {
             dispatch(addArticleSuccess(res))
             if (res.status === 200) {

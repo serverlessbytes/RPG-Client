@@ -119,17 +119,23 @@ const Carousel = () => {
   };
 
   const fileUpload = (e, name) => {
-    let firsttemp = e.target.files[0].name?.split('.');
-    let fileexten = ['jpeg', 'jpg', 'png']
+    let firsttemp = e.target.files[0]?.name?.split('.');
 
-    if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-      setData({ ...data, [name]: e.target.files[0] })
-      setFormErrors({ ...formErrors, imageUrl: "" });
+    if (firsttemp) {
+      let fileexten = ['jpeg', 'jpg', 'png']
+      if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setData({ ...data, [name]: e.target.files[0] })
+        setFormErrors({ ...formErrors, imageUrl: "" });
+      }
+      else {
+        setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+        setData({ ...data, imageUrl: '' })
+      }
     }
     else {
-      setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
-      setData({ ...data, imageUrl: '' })
+      setFormErrors({ ...formErrors, imageUrl: 'Please select document file' })
     }
+
   }
 
   const validation = () => {
@@ -185,7 +191,7 @@ const Carousel = () => {
       dispatch(addCarousel(Data));
       setIsModalVisible(false);
       handleCancel();
-    } 
+    }
 
     else {
       if (validation()) {
@@ -198,7 +204,7 @@ const Carousel = () => {
         isActive: true,
         isDeleted: false,
       };
-      
+
       dispatch(editCarousel(dataEdit));
       setIsModalVisible(false);
       handleCancel();

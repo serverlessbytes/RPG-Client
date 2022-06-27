@@ -20,7 +20,6 @@ const AddSchemes = () => {
   let history = useHistory();
   let location = useLocation();
 
-
   const dispatch = useDispatch();
   const { Option } = Select;
 
@@ -44,6 +43,10 @@ const AddSchemes = () => {
     videoUrl: '',
     thumbnail: '',
   });
+
+  useEffect(()=>{
+    console.log("state",state)
+  },[state])
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
@@ -67,7 +70,6 @@ const AddSchemes = () => {
 
   useEffect(() => {
     if (getOneScHemeData && id) {
-      console.log('getOneScHemeData', getOneScHemeData);
       setState({
         ...state,
         benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
@@ -155,6 +157,24 @@ const AddSchemes = () => {
       setState({ ...state, [e.target.name]: e.target.value });
     }
   };
+
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0]?.name?.split('.');
+    if (firsttemp) {
+      let fileexten = ['jpeg', 'jpg', 'png']
+      if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setState({ ...state, [name]: e.target.files[0] })
+        setError({ ...error, thumbnail: "" });
+      }
+      else {
+        setError({ ...error, thumbnail: 'Please select valid document file' })
+        setState({ ...state, thumbnail: '' })
+      }
+    }
+    else {
+      setError({ ...error, thumbnail: 'Please select document file' })
+    }
+  }
 
   const validation = () => {
     // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
@@ -525,6 +545,7 @@ const AddSchemes = () => {
                 </Form.Item>
               </Form>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="GrievanceRedress">Grievance Redress</label>
               <Form.Item>
@@ -537,6 +558,7 @@ const AddSchemes = () => {
                 {error.grievanceRedress && <span style={{ color: 'red' }}>{error.grievanceRedress}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
               <label htmlFor="E-Link">E Link</label>
               <Form.Item>
@@ -544,6 +566,7 @@ const AddSchemes = () => {
                 {error.elink && <span style={{ color: 'red' }}>{error.elink}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="SPOC">SPOC</label>
               <Form.Item>
@@ -561,14 +584,17 @@ const AddSchemes = () => {
                 {error.videoUrl && <span style={{ color: 'red' }}>{error.videoUrl}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="thumbnail">ThumbNail</label>
               <Form.Item>
                 <Input
+                  type="file"
                   placeholder="ThumbNail"
-                  value={state.thumbnail}
+                  // value={state.thumbnail}
                   name="thumbnail"
-                  onChange={e => onChangeValue(e)}
+                  // onChange={e => onChangeValue(e)}
+                  onChange={e => fileUpload(e, "thumbnail")}
                 />
                 {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
               </Form.Item>

@@ -33,7 +33,7 @@ const article = () => {
     const [articledata, setArticleData] = useState({
         title: "",
         imageUrl: "",
-        videoUrl: "",
+        videoUrl: "dfd",
         body: "",
     });
     const [formErrors, setFormErrors] = useState();
@@ -69,14 +69,14 @@ const article = () => {
        
         let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
 
-        if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-            setArticleData({ ...articledata, [name]: e.target.files[0] })
-            setFormErrors({ ...formErrors, videoUrl: "" });
-        }
-        else {
-            setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
-            setArticleData({ ...articledata, videoUrl: '' })
-        }
+        // if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        //     setArticleData({ ...articledata, [name]: e.target.files[0] })
+        //     setFormErrors({ ...formErrors, videoUrl: "" });
+        // }
+        // else {
+        //     setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
+        //     setArticleData({ ...articledata, videoUrl: '' })
+        // }
     }
 
     const validation = () => {
@@ -91,10 +91,10 @@ const article = () => {
             error.imageUrl = "Please select document file"
             flag = true
         }
-        if (!articledata.videoUrl) {
-            error.videoUrl = "Please select document file"
-            flag = true
-        }
+        // if (!articledata.videoUrl) {
+        //     error.videoUrl = "Please select document file"
+        //     flag = true
+        // }
         if (!articledata.body) {
             error.body = "Please enter  body"
             flag = true
@@ -406,7 +406,7 @@ const article = () => {
                                 defalutValue={articledata.videoUrl}
                                 onChange={(e) => fileUploadVideo(e,"videoUrl")}
                             />
-                            {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>}
+                            {/* {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>} */}
                         </Form.Item>
 
                         <label htmlFor="body">Body</label>

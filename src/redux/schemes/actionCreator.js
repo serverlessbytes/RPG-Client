@@ -103,7 +103,28 @@ export const getSchemeBenifits = () => async dispatch => {
 };
 
 export const addSchemeData = (langID, data) => async dispatch => {
-  await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+
+  const formData = new FormData();
+  formData.append('benificiary', data.benificiary);
+  formData.append('benifitLine', data.benifitLine);
+  formData.append('detail', data.detail);
+  formData.append('documentation', data.documentation);
+  formData.append('elink', data.elink);
+  formData.append('grievanceRedress', data.grievanceRedress);
+  formData.append('howToApply', data.howToApply);
+  formData.append('isActive', data.isActive);
+  // formData.append('locations', data.locations);
+  formData.append("locations", JSON.stringify(data.locations));
+  formData.append('name', data.name);
+  formData.append('schemeBenifit', data.schemeBenifit);
+  formData.append('spoc', data.spoc);
+  formData.append('thumbnail', data.thumbnail);
+  formData.append('type', data.type);
+  formData.append('videoUrl', data.videoUrl);
+  formData.append('website', data.website);
+  formData.append('schemeCategory', data.schemeCategory);
+
+  await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then(res => {
       // return dispatch(addSchemeSuccess(res));
     })
