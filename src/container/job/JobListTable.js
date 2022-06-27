@@ -125,6 +125,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         endDate: courseDataDelete.endDate,
         jobRole: courseDataDelete.jobRole.id,
         jobType: courseDataDelete.jobType.id,
+        application_form: courseDataDelete.application_form,
+        recommended_and_forwarded: courseDataDelete.recommended_and_forwarded,
+        application_process: courseDataDelete.application_process,
+        medical_superintendent: courseDataDelete.medical_superintendent,
+        hospital_expenses_estimation_certificate: courseDataDelete.hospital_expenses_estimation_certificate,
         id: id,
       };
       const deleteJobPost = await newJobPost(data);
@@ -222,7 +227,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
   useEffect(() => {
     if (status && langIds.hindi && langIds.marathi) {
-      console.log("langIds", langIds);
       dispatch(
         getJobsFilterForMain(
           perPage,

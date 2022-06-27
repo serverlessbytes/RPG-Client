@@ -69,6 +69,7 @@ const AddCourses = () => {
     key: '',
     thumbnail: '',
   });
+
   const [langIds, setLangIds] = useState({
     hindi: '',
     marathi: ''
@@ -90,10 +91,6 @@ const AddCourses = () => {
     })
     setLangIds(temp)
   }, [languageData])
-
-  useEffect(() => {
-    console.log("editOneSwayamCourseData", editOneSwayamCourseData)
-  }, [editOneSwayamCourseData])
 
   const [moduleState, setModuleState] = useState([
     {
@@ -167,7 +164,6 @@ const AddCourses = () => {
   }, [addSwayamCourseData]);
 
   useEffect(() => {
-    console.log("editOneSwayamCourseData", editOneSwayamCourseData);
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
       setState({
         ...state,
@@ -226,6 +222,25 @@ const AddCourses = () => {
       setState({ ...state, [e.target.name]: e.target.value });
     }
   };
+
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0]?.name?.split('.');
+
+    if (firsttemp) {
+      let fileexten = ['jpeg', 'jpg', 'png']
+      if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setState({ ...state, [name]: e.target.files[0] })
+        setError({ ...error, thumbnail: "" });
+      }
+      else {
+        setError({ ...error, thumbnail: 'Please select valid document file' })
+        setState({ ...state, thumbnail: '' })
+      }
+    }
+    else {
+      setError({ ...error, thumbnail: 'Please select document file' })
+    }
+  }
 
   const onChangesEditorDetail = (e, name) => {
     setState({ ...state, [name]: e });
@@ -397,7 +412,7 @@ const AddCourses = () => {
       return;
     }
     const newData = moduleState.filter(item => !item.moduleId).map(item => {
-      console.log("item", item)
+
       return {
         key: item.key,
         name: item.name,
@@ -566,10 +581,11 @@ const AddCourses = () => {
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>
                     <Input
-                      type="string"
-                      value={state.thumbnail}
+                      // type="string"
+                      type= "file"
+                      // value={state.thumbnail}
                       onChange={e => {
-                        onChange(e, 'thumbnail');
+                        fileUpload(e, 'thumbnail');
                       }}
                       name="thumbnail"
                       placeholder="Enter thumbnail"

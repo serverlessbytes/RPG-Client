@@ -43,10 +43,6 @@ const AddSchemes = () => {
     videoUrl: '',
     thumbnail: '',
   });
-
-  useEffect(()=>{
-    console.log("state",state)
-  },[state])
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
@@ -177,7 +173,6 @@ const AddSchemes = () => {
   }
 
   const validation = () => {
-    // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
     let error = {};
     let flage = false;
     if (state.name === '') {

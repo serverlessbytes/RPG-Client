@@ -39,6 +39,9 @@ export const editArticles = (body) => async (dispatch) => {
     formData.append('videoUrl', body.videoUrl);
     formData.append('imageUrl', body.imageUrl);
     formData.append('title', body.title);
+    formData.append('id', body.id);
+    formData.append('isActive', body.isActive);
+   
     await ApiPost(`article/editArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
         .then((res) => {
             dispatch(editArticlesSuccess(res))
@@ -62,7 +65,6 @@ export const getArticleById = (id) => async (dispatch) => {
 }
 
 export const addArticle = (body) => async (dispatch) => {
-    // console.log("body",body)
     const formData = new FormData();
     formData.append('body', body.body);
     formData.append('videoUrl', body.videoUrl);

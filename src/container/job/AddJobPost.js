@@ -55,6 +55,11 @@ const AddJobPost = () => {
         endDate: "",
         jobRole: "",
         key: "",
+        application_form: "",
+        recommended_and_forwarded: "",
+        application_process: "",
+        medical_superintendent: "",
+        hospital_expenses_estimation_certificate: ""
     });
 
     const languageData = useSelector(state => state.language.getLanguageData);
@@ -113,7 +118,7 @@ const AddJobPost = () => {
                 salary: getOneJobPostData.data.data.salary,
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
-                name: getOneJobPostData?.data?.data.name?.id, //
+                name: getOneJobPostData?.data?.data.name?.id,
                 state: getOneJobPostData?.data?.data.state?.id,
                 district: getOneJobPostData?.data?.data.district?.id,
                 town: getOneJobPostData.data.data.town,
@@ -122,7 +127,7 @@ const AddJobPost = () => {
                 vacancies: getOneJobPostData.data.data.vacancies,
                 reqExperience: getOneJobPostData.data.data.reqExperience,
                 requirements: getOneJobPostData.data.data.requirements,
-                jobType: getOneJobPostData.data.data.jobType?.id, //
+                jobType: getOneJobPostData.data.data.jobType?.id,
                 isActive: true,
                 shifts: getOneJobPostData.data.data.shifts,
                 email: getOneJobPostData.data.data.email,
@@ -132,6 +137,11 @@ const AddJobPost = () => {
                 startDate: moment(getOneJobPostData.data.data.startDate),
                 endDate: moment(getOneJobPostData.data.data.endDate),
                 jobRole: getOneJobPostData.data.data.jobRole?.id,
+                application_form: getOneJobPostData.data.data.application_form,
+                application_process: getOneJobPostData.data.data.application_process,
+                medical_superintendent: getOneJobPostData.data.data.medical_superintendent,
+                recommended_and_forwarded: getOneJobPostData.data.data.recommended_and_forwarded,
+                hospital_expenses_estimation_certificate: getOneJobPostData.data.data.hospital_expenses_estimation_certificate,
             })
         }
     }, [getOneJobPostData])
@@ -219,6 +229,26 @@ const AddJobPost = () => {
             error.extraType = 'Type Of Field is required';
             flage = true;
         }
+        if (state.application_form === '') {
+            error.application_form = 'Application Form is required';
+            flage = true;
+        }
+        if (state.recommended_and_forwarded === '') {
+            error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+            flage = true;
+        }
+        if (state.application_process === '') {
+            error.application_process = 'Application Process is required';
+            flage = true;
+        }
+        if (state.medical_superintendent === '') {
+            error.medical_superintendent = 'Medical Superintendent is required';
+            flage = true;
+        }
+        if (state.hospital_expenses_estimation_certificate === '') {
+            error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+            flage = true;
+        }
 
         setError(error);
         return flage;
@@ -299,6 +329,11 @@ const AddJobPost = () => {
             endDate: moment.utc(state.endDate).format(),
             jobRole: state.jobRole,
             jobType: state.jobType,
+            application_form: state.application_form,
+            recommended_and_forwarded: state.recommended_and_forwarded,
+            application_process: state.application_process,
+            medical_superintendent: state.medical_superintendent,
+            hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
         };
         if (langId) {
             data = {
@@ -309,6 +344,7 @@ const AddJobPost = () => {
                 name: getOneJobPostData.data.data.name.id,
                 state: getOneJobPostData.data.data.state.id,
                 district: getOneJobPostData.data.data.district.id,
+
             }
             dispatch(addLanguageJobPost(langId, data, langIds.hindi, langIds.marathi))
             // addLanguageJobPost(langId, data)
@@ -345,6 +381,11 @@ const AddJobPost = () => {
             endDate: moment.utc(state.endDate).format(),
             jobRole: state.jobRole,
             jobType: state.jobType,
+            application_form: state.application_form,
+            recommended_and_forwarded: state.recommended_and_forwarded,
+            application_process: state.application_process,
+            medical_superintendent: state.medical_superintendent,
+            hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
         }
         dispatch(editJobPost(editJobsID, data, langIds.hindi, langIds.marathi));
         onCancel()
@@ -616,22 +657,6 @@ const AddJobPost = () => {
                                     </Row>
                                 </Col>
 
-                                {/* <Col lg={11} md={11} sm={24} xs={24}>
-                                    <Row align="middle" justify="space-between">
-                                        <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="description">Description</label>
-                                        </Col>
-                                        <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="description">
-                                                <TextArea placeholder='Description' value={state.description} name="description" onChange={e => onChangeValue(e)} />
-                                                {error.description && <span style={{ color: 'red' }}>{error.description}</span>}
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Col> */}
-                                {/* </Row>
-
-                            <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -743,11 +768,12 @@ const AddJobPost = () => {
                                                     </Row>
                                                 </Space>
                                             </Radio.Group>
-                                            {/* </Form.Item> */}
                                             {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
+                                            {/* </Form.Item> */}
                                         </Col>
                                     </Row>
                                 </Col>
+
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
@@ -768,11 +794,80 @@ const AddJobPost = () => {
                                                 </Space>
 
                                             </Radio.Group>
-                                            {/* </Form.Item> */}
                                             {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
+                                            {/* </Form.Item> */}
                                         </Col>
                                     </Row>
                                 </Col>
+
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="application_form">Application Form</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="application_form">
+                                                <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
+                                                {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="recommended_and_forwarded">Recommended and Forwarded</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="recommended_and_forwarded">
+                                                <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
+                                                {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="application_process">Application Process</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="application_process">
+                                                <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
+                                                {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="medical_superintendent">Medical Superintendent</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="medical_superintendent">
+                                                <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
+                                                {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+
+                                <Col lg={11} md={11} sm={24} xs={24}>
+                                    <Row align="middle" justify="space-between">
+                                        <Col lg={8} md={9} xs={24}>
+                                            <label htmlFor="hospital_expenses_estimation_certificate">Hospital Expenses Estimate Certificate</label>
+                                        </Col>
+                                        <Col lg={16} md={15} xs={24}>
+                                            <Form.Item name="hospital_expenses_estimation_certificate">
+                                                <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
+                                                {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+
                             </Row>
 
                             {/* <div style={{ marginBottom: "20px" }}>

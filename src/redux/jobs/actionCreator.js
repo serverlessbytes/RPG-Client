@@ -153,7 +153,7 @@ export const editJobPost = (id, data, hindiID, marathiID) => async (dispatch) =>
   // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
-      dispatch(editJobPostSuccess(res))
+     return dispatch(editJobPostSuccess(res))
       // if (res.status === 200) {
       //   dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
       // }

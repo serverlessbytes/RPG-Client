@@ -63,21 +63,21 @@ const article = () => {
         }
     }
 
-    const fileUploadVideo = (e, name) => {
+    // const fileUploadVideo = (e, name) => {
 
-        let firsttemp = e.target.files[0].name?.split('.');
+    //     let firsttemp = e.target.files[0].name?.split('.');
        
-        let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
+    //     let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
 
-        // if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-        //     setArticleData({ ...articledata, [name]: e.target.files[0] })
-        //     setFormErrors({ ...formErrors, videoUrl: "" });
-        // }
-        // else {
-        //     setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
-        //     setArticleData({ ...articledata, videoUrl: '' })
-        // }
-    }
+    //     // if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+    //     //     setArticleData({ ...articledata, [name]: e.target.files[0] })
+    //     //     setFormErrors({ ...formErrors, videoUrl: "" });
+    //     // }
+    //     // else {
+    //     //     setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
+    //     //     setArticleData({ ...articledata, videoUrl: '' })
+    //     // }
+    // }
 
     const validation = () => {
         let flag = false;
@@ -185,9 +185,8 @@ const article = () => {
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
                 isActive: true,
-                isDeleted: false,
+                isDeleted : false,
             }
-           
             dispatch(editArticles(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -400,11 +399,10 @@ const article = () => {
                         <label htmlFor="videoUrl">Video URL</label>
                         <Form.Item>
                             <Input
-                                type="file"
                                 placeholder="Enter Video URL"
                                 name="videoUrl"
-                                defalutValue={articledata.videoUrl}
-                                onChange={(e) => fileUploadVideo(e,"videoUrl")}
+                                value={articledata.videoUrl}
+                                onChange={(e) => handleChange(e)}
                             />
                             {/* {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>} */}
                         </Form.Item>
