@@ -41,14 +41,14 @@ export const getTestimonial = (per_page, page_num) => async (dispatch) => {
 }
 
 export const addTestimonial = (body) => async (dispatch) => {
-  console.log("body", body);
   const formData = new FormData();
   formData.append('imageUrl', body.imageUrl);
   formData.append('videoUrl', body.videoUrl);
   formData.append('role', body.role);
   formData.append('name', body.name);
   formData.append('message', body.message);
-  console.log("formData", formData);
+
+
   await ApiPost(`testimonial/addTestimonial?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       dispatch(addTestimonialSuccess(res))
@@ -67,6 +67,7 @@ export const getoneTestimonialData = (data) => async (dispatch) => {
 
 
 export const editTestimonial = (body) => async (dispatch) => {
+
   let id = body.id;
   const formData = new FormData();
   formData.append('imageUrl', body.imageUrl);
@@ -74,6 +75,10 @@ export const editTestimonial = (body) => async (dispatch) => {
   formData.append('role', body.role);
   formData.append('name', body.name);
   formData.append('message', body.message);
+  formData.append('id', body.id);
+  formData.append('isActive', body.isActive);
+  formData.append('isDeleted', body.isDeleted);
+
   await ApiPost(`testimonial/editTestimonial?id=${id}`, formData)
     .then((res) => {
       dispatch(editTestimonialSuccess(res))

@@ -137,7 +137,17 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
 }
 
 export const addSwayamCourse = (data, langId) => async (dispatch) => {
-  await ApiPost(`course/addSwayamCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+  const formData = new FormData();
+  formData.append('categoryId', data.categoryId);
+  formData.append('certification', data.certification);
+  formData.append('detail', data.detail);
+  formData.append('duration', data.duration);
+  formData.append('jobCategoryIds', JSON.stringify(data.jobCategoryIds));
+  formData.append('mode', data.mode);
+  formData.append('name', data.name);
+  formData.append('thumbnail', data.thumbnail);
+
+  await ApiPost(`course/addSwayamCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })
@@ -145,6 +155,7 @@ export const addSwayamCourse = (data, langId) => async (dispatch) => {
 }
 
 export const editSwayamCourse = (data, hindiID, marathiID) => async (dispatch) => {
+
   await ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       dispatch(editSwayamPartnerCourseSuccess(res.data))
@@ -212,7 +223,6 @@ export const addCourseRating = (body) => async (dispatch) => {
 }
 
 export const getCourseRatingData = (perpage, pagenumber) => async (dispatch) => {
-  // console.log("page_number",page_number)
   per_page = perpage;
   page_number = pagenumber;
   await ApiGet(`courseRating/getCourseRatings?per_page=${perpage}&page_number=${pagenumber}`)

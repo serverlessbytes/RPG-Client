@@ -105,25 +105,25 @@ const Addtestimonial = () => {
 
     }
 
-    const fileUploadVideo = (e, name) => {
+    // const fileUploadVideo = (e, name) => {
 
-        let firsttemp = e.target.files[0]?.name?.split('.');
+    //     let firsttemp = e.target.files[0]?.name?.split('.');
 
-        if (firsttemp) {
-            let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
-            if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-                setData({ ...data, [name]: e.target.files[0] })
-                setError({ ...error, videoUrl: "" });
-            }
-            else {
-                setError({ ...error, videoUrl: 'Please select valid document file' })
-                setData({ ...data, videoUrl: '' })
-            }
-        }
-        else {
-            setError({ ...error, videoUrl: 'Please select document file' })
-        }
-    }
+    //     if (firsttemp) {
+    //         let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
+    //         if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+    //             setData({ ...data, [name]: e.target.files[0] })
+    //             setError({ ...error, videoUrl: "" });
+    //         }
+    //         else {
+    //             setError({ ...error, videoUrl: 'Please select valid document file' })
+    //             setData({ ...data, videoUrl: '' })
+    //         }
+    //     }
+    //     else {
+    //         setError({ ...error, videoUrl: 'Please select document file' })
+    //     }
+    // }
 
     // useEffect(() => {
     //     if (location.search) {
@@ -230,7 +230,7 @@ const Addtestimonial = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="videoUrl">VideoUrl</label>
                             <Form.Item>
-                                <Input type="file" placeholder="VideoURL" defalutValue={data.videoUrl} onChange={(e) => fileUploadVideo(e, "videoUrl")} name="videoUrl" />
+                                <Input placeholder="VideoURL" value={data.videoUrl} onChange={(e) => handleChange(e)} name="videoUrl" />
                                 {
                                     error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>
                                 }
