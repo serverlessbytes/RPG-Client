@@ -153,7 +153,7 @@ const AddJobPost = () => {
             error.salary = 'Salary is required';
             flage = true;
         }
-        if (state.benifits === '') {
+        if (state.benifits.toString('markdown').length <= 2) {
             error.benifits = 'Benifits is required';
             flage = true;
         }
@@ -753,7 +753,7 @@ const AddJobPost = () => {
 
                             <Row justify="space-between"> */}
 
-                                <Col lg={11} md={11} sm={24} xs={24}>
+                                <Col lg={11} md={11} sm={24} xs={24} className='' style={{ marginBottom: "24px" }}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name" className='mb-0'>Type of Job</label>

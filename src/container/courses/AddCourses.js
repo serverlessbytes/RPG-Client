@@ -125,7 +125,7 @@ const AddCourses = () => {
 
   // useEffect(() => {
   //   if (addSwayamCourseDataErr) {
-  //     dispatch(addSwayamPartnerCourseErr())
+  //     dispatch(addSwayamPartnerCourseErr(null))
   //     // toast.error("Something Wrong")
   //   }
   // }, [addSwayamCourseDataErr])
@@ -263,10 +263,10 @@ const AddCourses = () => {
       flage = true;
     }
     if (state.duration === '') {
-      error.duration = 'Course duration body is required';
+      error.duration = 'Course duration is required';
       flage = true;
     }
-    if (state.jobCategoryIds === '') {
+    if (!state.jobCategoryIds.length) {
       error.jobCategoryIds = 'Job Category is required';
       flage = true;
     }
@@ -275,15 +275,15 @@ const AddCourses = () => {
     //   flage = true;
     // }
     if (state.certification === '') {
-      error.certification = 'Certification name is required';
+      error.certification = 'Certification is required';
       flage = true;
     }
     if (state.mode === '') {
-      error.mode = 'Mode name is required';
+      error.mode = 'Mode is required';
       flage = true;
     }
     if (state.thumbnail === '') {
-      error.mode = 'Thumbnail is required';
+      error.thumbnail = 'Thumbnail is required';
       flage = true;
     }
 
@@ -341,7 +341,7 @@ const AddCourses = () => {
     dispatch(addSwayamCourse(data, langId));
     handalCancle()
     // history.push('/admin/courses');
-    if (addSwayamCourseData.status !== 200) {
+    if (addSwayamCourseData?.status !== 200) {
       toast.error("Something Wrong")
     }
   };
@@ -502,7 +502,7 @@ const AddCourses = () => {
                   <label htmlFor="name">Name of the Course</label>
                   <Form.Item>
                     <Input
-                      placeholder="Scheme Name"
+                      placeholder="Course Name"
                       value={state.name}
                       onChange={e => {
                         onChange(e);
@@ -512,6 +512,7 @@ const AddCourses = () => {
                     {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                   </Form.Item>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item name="basic-select" label="Course Category">
@@ -548,8 +549,8 @@ const AddCourses = () => {
                         }}
                         placeholder="Course Duration"
                       />
+                      {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                     </Form.Item>
-                    {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                   </Form>
                 </Col>
 
@@ -582,7 +583,7 @@ const AddCourses = () => {
                   <Form.Item>
                     <Input
                       // type="string"
-                      type= "file"
+                      type="file"
                       // value={state.thumbnail}
                       onChange={e => {
                         fileUpload(e, 'thumbnail');
@@ -590,8 +591,8 @@ const AddCourses = () => {
                       name="thumbnail"
                       placeholder="Enter thumbnail"
                     />
+                    {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                   </Form.Item>
-                  {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                 </Col>
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
@@ -610,8 +611,8 @@ const AddCourses = () => {
                         <Option value="OFFLINE"> Offline </Option>
                         <Option value="BOTH"> Both </Option>
                       </Select>
+                      {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                     </Form.Item>
-                    {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                   </Form>
                 </Col>
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">

@@ -113,8 +113,8 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('grievanceRedress', data.grievanceRedress);
   formData.append('howToApply', data.howToApply);
   formData.append('isActive', data.isActive);
-  // formData.append('locations', data.locations);
-  formData.append("locations", JSON.stringify(data.locations));
+  formData.append('locations', data.locations);
+  // formData.append("locations", JSON.stringify(data.locations));
   formData.append('name', data.name);
   formData.append('schemeBenifit', data.schemeBenifit);
   formData.append('spoc', data.spoc);

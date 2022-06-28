@@ -41,6 +41,7 @@ export const editArticles = (body) => async (dispatch) => {
     formData.append('title', body.title);
     formData.append('id', body.id);
     formData.append('isActive', body.isActive);
+    formData.append('isDeleted', body.isDeleted);
    
     await ApiPost(`article/editArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
         .then((res) => {

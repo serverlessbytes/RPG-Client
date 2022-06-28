@@ -11,6 +11,7 @@ import {
 } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
+import TextArea from 'antd/lib/input/TextArea';
 
 const AddSchemes = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -42,7 +43,17 @@ const AddSchemes = () => {
     // sequence: '',
     videoUrl: '',
     thumbnail: '',
+    application_form: "",
+    recommended_and_forwarded: "",
+    application_process: "",
+    medical_superintendent: "",
+    hospital_expenses_estimation_certificate: ""
   });
+
+  useEffect(() => {
+    console.log("state", state)
+  }, [state])
+
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
@@ -243,6 +254,26 @@ const AddSchemes = () => {
       error.thumbnail = 'ThumbNail is required';
       flage = true;
     }
+    if (state.application_form === '') {
+      error.application_form = 'Application Form is required';
+      flage = true;
+    }
+    if (state.recommended_and_forwarded === '') {
+      error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+      flage = true;
+    }
+    if (state.application_process === '') {
+      error.application_process = 'Application Process is required';
+      flage = true;
+    }
+    if (state.medical_superintendent === '') {
+      error.medical_superintendent = 'Medical Superintendent is required';
+      flage = true;
+    }
+    if (state.hospital_expenses_estimation_certificate === '') {
+      error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+      flage = true;
+    }
     setError(error);
     return flage;
   };
@@ -274,6 +305,11 @@ const AddSchemes = () => {
       isDeleted: state.isDeleted,
       isPublished: state.isPublished,
       isApproved: state.isApproved,
+      application_form: state.application_form,
+      recommended_and_forwarded: state.recommended_and_forwarded,
+      application_process: state.application_process,
+      medical_superintendent: state.medical_superintendent,
+      hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
     };
     if (langId) {
       delete data.id
@@ -569,9 +605,7 @@ const AddSchemes = () => {
                 {error.spoc && <span style={{ color: 'red' }}>{error.spoc}</span>}
               </Form.Item>
             </Col>
-            {/* </Row>
-
-                    <Row justify="space-between"> */}
+           
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
               <label htmlFor="videoUrl">VideoUrl</label>
               <Form.Item>
@@ -594,6 +628,47 @@ const AddSchemes = () => {
                 {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
               </Form.Item>
             </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="application_form">Application Form</label>
+              <Form.Item name="application_form">
+                <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
+                {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="recommended_and_forwarded">Recommended and Forwarded</label>
+              <Form.Item name="recommended_and_forwarded">
+                <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
+                {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="application_process">Application Process</label>
+              <Form.Item name="application_process">
+                <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
+                {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="medical_superintendent">Medical Superintendent</label>
+              <Form.Item name="medical_superintendent">
+                <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
+                {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="hospital_expenses_estimation_certificate">Hospital Expenses Estimate Certificate</label>
+              <Form.Item name="hospital_expenses_estimation_certificate">
+                <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
+                {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
+              </Form.Item>
+            </Col>
+
           </Row>
 
           {/* <div>
