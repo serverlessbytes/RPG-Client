@@ -153,7 +153,7 @@ export const editJobPost = (id, data, hindiID, marathiID) => async (dispatch) =>
   // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
-     return dispatch(editJobPostSuccess(res))
+      return dispatch(editJobPostSuccess(res))
       // if (res.status === 200) {
       //   dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
       // }
@@ -276,13 +276,13 @@ export const updateIsHired = (id, value) => async (dispatch) => {
 }
 
 export const addJobApplication = (body) => async (dispatch) => {
-  console.log("body", body);
+  
   const formData = new FormData();
   formData.append('resumeUrl', body.certification_url);
   formData.append('certificationUrl', body.certification_url);
   formData.append('experience', body.experience);
   formData.append('jobId', body.job_id);
-  console.log("formData", formData);
+
   await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then((res) => {
       return dispatch(addJobApplicationSuccess(res))

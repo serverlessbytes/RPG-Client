@@ -43,6 +43,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       users: state.users,
     };
   });
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
@@ -234,15 +235,14 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           state?.state ? state?.state : '',
           type?.type ? type?.type : '',
           jobRole?.jobRole ? jobRole?.jobRole : '',
-          // search.search ? search.search : '',
           status,
-          "",
+          search ? search : '',
           langIds.hindi,
           langIds.marathi,
         ),
       );
     }
-  }, [perPage, pageNumber, apply, status, langIds]);
+  }, [perPage, pageNumber, apply, status, langIds, search]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {

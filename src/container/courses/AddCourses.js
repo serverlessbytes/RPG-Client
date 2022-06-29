@@ -68,6 +68,11 @@ const AddCourses = () => {
     mode: '',
     key: '',
     thumbnail: '',
+    application_form: "",
+    recommended_and_forwarded: "",
+    application_process: "",
+    medical_superintendent: "",
+    hospital_expenses_estimation_certificate: ""
   });
 
   const [langIds, setLangIds] = useState({
@@ -286,6 +291,26 @@ const AddCourses = () => {
       error.thumbnail = 'Thumbnail is required';
       flage = true;
     }
+    if (state.application_form === '') {
+      error.application_form = 'Application Form is required';
+      flage = true;
+    }
+    if (state.recommended_and_forwarded === '') {
+      error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+      flage = true;
+    }
+    if (state.application_process === '') {
+      error.application_process = 'Application Process is required';
+      flage = true;
+    }
+    if (state.medical_superintendent === '') {
+      error.medical_superintendent = 'Medical Superintendent is required';
+      flage = true;
+    }
+    if (state.hospital_expenses_estimation_certificate === '') {
+      error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+      flage = true;
+    }
 
     setError(error);
     return flage;
@@ -337,6 +362,11 @@ const AddCourses = () => {
       // sequence: parseInt(state.sequence),
       mode: state.mode,
       thumbnail: state.thumbnail,
+      application_form: state.application_form,
+      recommended_and_forwarded: state.recommended_and_forwarded,
+      application_process: state.application_process,
+      medical_superintendent: state.medical_superintendent,
+      hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
     };
     dispatch(addSwayamCourse(data, langId));
     handalCancle()
@@ -538,6 +568,7 @@ const AddCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course Duration">
@@ -594,6 +625,7 @@ const AddCourses = () => {
                     {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                   </Form.Item>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -615,6 +647,7 @@ const AddCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
                     Certification
@@ -635,7 +668,58 @@ const AddCourses = () => {
                   </Radio.Group>
                   {error.certification && <span style={{ color: 'red' }}>{error.certification}</span>}
                 </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Application Form
+                  </label>
+                  <Form.Item name="application_form">
+                    <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChange(e, "application_form")} />
+                    {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Recommended and Forwarded
+                  </label>
+                  <Form.Item name="recommended_and_forwarded">
+                    <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChange(e, "recommended_and_forwarded")} />
+                    {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Application Process
+                  </label>
+                  <Form.Item name="application_process">
+                    <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChange(e, "application_process")} />
+                    {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Medical Superintendent
+                  </label>
+                  <Form.Item name="medical_superintendent">
+                    <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChange(e, "medical_superintendent")} />
+                    {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="hospital_expenses_estimation_certificate" className="mb-5">
+                    Hospital Expenses Estimate Certificate
+                  </label>
+                  <Form.Item name="hospital_expenses_estimation_certificate">
+                    <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChange(e, "hospital_expenses_estimation_certificate")} />
+                    {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
+                  </Form.Item>
+                </Col>
               </Row>
+
               <label htmlFor="coursedetails">Course Details</label>
               <div className="group">
                 <RichTextEditor
@@ -645,6 +729,9 @@ const AddCourses = () => {
                 />
                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
               </div>
+
+
+
               <div className="sDash_form-action mt-20">
                 {id && !langId ? (
                   <Button className="btn-signin ml-10" onClick={() => onEdit()} type="primary" size="medium">
