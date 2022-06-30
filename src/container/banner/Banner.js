@@ -281,12 +281,14 @@ const Banner = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            // sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.title.localeCompare(b.title),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'imageUrl',
             dataIndex: 'imageUrl',
+            sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Actions',

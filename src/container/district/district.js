@@ -88,7 +88,7 @@ const district = () => {
         {
             title: 'District',
             dataIndex: 'name',
-            sorter: (a, b) => a.name.length - b.name.length,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
         }
     ];

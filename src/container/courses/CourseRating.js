@@ -160,14 +160,20 @@ const CourseRating = () => {
         {
             title: 'Rating',
             dataIndex: 'rating',
+            sorter: (a, b) => a.rating - b.rating,
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'User',
             dataIndex: 'createdByUser',
+            sorter: (a, b) => a.createdByUser.localeCompare(b.createdByUser),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Comment',
             dataIndex: 'comment',
+            sorter: (a, b) => a.comment.localeCompare(b.comment),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Action',

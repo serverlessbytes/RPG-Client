@@ -242,7 +242,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         ),
       );
     }
-  }, [perPage, pageNumber, apply, status, langIds, search]);
+  }, [perPage, pageNumber, apply, status, langIds]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
@@ -327,11 +327,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
-          user: (
+          name: (
             <span className='For-Underline' onClick={() => viewJobdata(item.id)}>
               {item?.name?.name}
             </span>
           ),
+          // name : item.name.name,
           email: item.email,
           company: item.description,
           position: item.jobRole?.name,
@@ -420,36 +421,41 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const usersTableColumns = [
     {
       title: 'User',
-      dataIndex: 'user',
-      // key: 'user',
-      sorter: (a, b) => a?.user?.length - b?.user?.length,
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => a.name.length - b.name.length,
       sortDirections: ['descend', 'ascend'],
+      // sorter: (a, b) => a.user.localeCompare(b.user),
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      sorter: (a, b) => a.email.length - b.email.length,
+      // sorter: (a, b) => a.email.length - b.email.length,
+      sorter: (a, b) => a.email.localeCompare(b.email),
       sortDirections: ['descend', 'ascend'],
       // key: 'email',
     },
     {
       title: 'Company',
       dataIndex: 'company',
-      // key: 'company',
+      sorter: (a, b) => a.company.localeCompare(b.company),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Position',
       dataIndex: 'position',
-      // key: 'position',
+      sorter: (a, b) => a.position.localeCompare(b.position),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Join Date',
       dataIndex: 'joinDate',
-      // key: 'joinDate',
     },
     {
       title: 'Vacancies',
       dataIndex: 'vacancies',
+      sorter: (a, b) => a.vacancies - b.vacancies,
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Select Language',
@@ -468,6 +474,15 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     },
   ];
 
+  // const handleTableChange = (newPagination, filters, sorter) => {
+  //   usertable({
+  //     sortField: sorter.field,
+  //     sortOrder: sorter.order,
+  //     // pagination: newPagination,
+  //     // ...filters,
+  //   });
+  // };
+
   const rowSelection = {
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -483,6 +498,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             rowSelection={rowSelection}
             dataSource={usertable}
             columns={usersTableColumns}
+            // onChange={handleTableChange}
             pagination={{
               defaultPageSize: getJobFilterData?.data?.per_page,
               total: getJobFilterData?.data?.page_count,

@@ -20,6 +20,7 @@ const JobApplication = () => {
     const { path } = useRouteMatch();
     const history = useHistory();
     const { addJobApplicationSuccess, addJobApplicationErr } = actions;
+    const { TabPane } = Tabs;
 
     const [status, setStatus] = useState('all');
     const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
@@ -35,8 +36,6 @@ const JobApplication = () => {
     const jobcatogerydata = useSelector((state) => state.job.jobCatogeryData)
     const addJobsApplicationdata = useSelector((state) => state.job.addJobsApplicationData)
     const addJobsApplicationError = useSelector((state) => state.job.addJobsApplicationErr)
-
-    // useEffect(() => { console.log("jobcatogerydata", jobcatogerydata) }, [jobcatogerydata])
 
     const callback = (key) => {
         setStatus(key);
@@ -59,10 +58,6 @@ const JobApplication = () => {
             toast.error("Something Wrong")
         }
     }, [addJobsApplicationError])
-
-    useEffect(() => {
-        console.log("addJobsApplicationData", addJobsApplicationdata);
-    }, [addJobsApplicationdata])
 
     useEffect(() => {
         if (status !== "all") {
@@ -182,11 +177,14 @@ const JobApplication = () => {
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Email',
             dataIndex: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Phone Number',
@@ -195,6 +193,8 @@ const JobApplication = () => {
         {
             title: 'JobRole',
             dataIndex: 'jobRole',
+            sorter: (a, b) => a.jobRole.localeCompare(b.jobRole),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Select',
@@ -207,7 +207,7 @@ const JobApplication = () => {
         // },
     ];
 
-    const { TabPane } = Tabs;
+    
     return (
         <>
             <PageHeader

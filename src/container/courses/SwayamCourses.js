@@ -21,6 +21,7 @@ import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import moment from 'moment';
 
 const {
   getallSwayamCourseSuccess,
@@ -63,10 +64,6 @@ const SwayamCourses = () => {
     hindi: '',
     marathi: ''
   });
-  useEffect(() => {
-    console.log("langIds", langIds);
-  }, [langIds])
-
   const [languageId, setLanguageID] = useState()
   const [id, setID] = useState()
 
@@ -165,20 +162,11 @@ const SwayamCourses = () => {
   }, []);
 
   useEffect(() => {
-    // if (status && data.category && langIds.hindi && langIds.marathi) {
+
     if (status && langIds.hindi && langIds.marathi) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     }
-    // else {
-    //   Submit();
-    // }
   }, [status, perPage, pageNumber, langIds]);
-
-  // useEffect(() => {
-  //   if (data.category && activeCoursetog) {
-  //     Submit();
-  //   }
-  // }, [data]);
 
   const onChangehandle = (e, name) => {
     setActiveCourseTog(false);
@@ -226,10 +214,6 @@ const SwayamCourses = () => {
         isDeleted: true,
       };
       dispatch(editSwayamCourse(dt, langIds.hindi, langIds.marathi));
-      // const deleteSwayamCourses = await newSawyamCourse(dt);
-      // if (deleteSwayamCourses.status === 200) {
-      //   toast.success("SwayamCourse delete successful")
-      // }
     }
   };
 
@@ -300,8 +284,6 @@ const SwayamCourses = () => {
   };
 
   const viewSwayamCoursedata = id => {
-    // dispatch(getOneCoursefilter(key));
-    // setViewModal(true);
     history.push(`/admin/courses/viewcourse?id=${id}`)
   };
 
@@ -542,11 +524,14 @@ const SwayamCourses = () => {
     {
       title: 'Course Name',
       dataIndex: 'CourseName',
+      sorter: (a, b) => a.SchemeCategory?.length - b.SchemeCategory?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Course Category',
       dataIndex: 'CourseCategory',
+      sorter: (a, b) => a.CourseCategory.localeCompare(b.CourseCategory),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Course Rating',
@@ -712,11 +697,6 @@ const SwayamCourses = () => {
                         // rowSelection={rowSelection}
                         dataSource={SwayamCourse}
                         columns={swayamCourseTableColumns}
-                        // pagination={{
-                        //   defaultPageSize: 15,
-                        //   total: usersTableData.length,
-                        //   showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                        // }}
                         pagination={{
                           defaultPageSize: courseData?.data.per_page,
                           total: courseData?.data.page_count,
@@ -731,26 +711,11 @@ const SwayamCourses = () => {
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  {/* <ProjectPagination>
-                    <Pagination
-                      onChange={() => { }}
-                      showSizeChanger
-                      onShowSizeChange={() => { }}
-                      pageSize={10}
-                      defaultCurrent={1}
-                      total={10}
-                    />
-                  </ProjectPagination> */}
                 </TabPane>
+
                 <TabPane tab="Inactive Courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      {/* --- search bar --- */}
-                      {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
 
                       <Table
                         // rowSelection={rowSelection}

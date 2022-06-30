@@ -1,10 +1,10 @@
-import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
-import { Main, ProjectPagination, TableWrapper } from '../styled';
+import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCategoryData, getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
@@ -254,31 +254,11 @@ const CourseCategory = () => {
         }
     }, [getcategoryData])
 
-    // getcategoryData && getcategoryData.data.map((item) => {
-    //     return usersTableData.push({
-    //         Category: item.name,
-    //         // Sequence: '7',
-    //         action: (
-    //             <div className='active-schemes-table'>
-    //                 <div className="table-actions">
-    //                     <>
-    //                         <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
-    //                             <FeatherIcon icon="edit" size={16} />
-    //                         </Button>
-    //                         <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-    //                             <FeatherIcon icon="trash-2" size={16} />
-    //                         </Button>
-    //                     </>
-    //                 </div>
-    //             </div>
-    //         ),
-    //     });
-    // });
-
     const coursetableColumns = [
         {
             title: 'Category',
             dataIndex: 'Category',
+            sorter: (a, b) => a.Category.localeCompare(b.Category),
             sortDirections: ['descend', 'ascend'],
         },
         {

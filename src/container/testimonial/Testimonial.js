@@ -160,16 +160,20 @@ const Testimonial = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Role',
             dataIndex: 'role',
+            sorter: (a, b) => a.role.localeCompare(b.role),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Message',
             dataIndex: 'message',
+            sorter: (a, b) => a.message.localeCompare(b.message),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Actions',

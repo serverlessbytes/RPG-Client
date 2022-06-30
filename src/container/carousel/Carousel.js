@@ -282,13 +282,13 @@ const Carousel = () => {
     {
       title: 'Title',
       dataIndex: 'title',
-      sorter: (a, b) => a.title.length - b.title.length,
+      sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'ImageUrl',
       dataIndex: 'imageUrl',
-      sorter: (a, b) => a.imageUrl.length - b.imageUrl.length,
+      sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
       sortDirections: ['descend', 'ascend'],
     },
     {

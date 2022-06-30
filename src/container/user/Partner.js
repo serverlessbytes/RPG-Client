@@ -160,10 +160,14 @@ const Partner = () => {
     {
       title: 'Name',
       dataIndex: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Email',
       dataIndex: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Phone',

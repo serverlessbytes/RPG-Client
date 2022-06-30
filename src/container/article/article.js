@@ -11,13 +11,9 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/article/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import { addArticle, editArticles, getArticleById, getArticles } from '../../redux/article/actionCreator';
 import { useHistory } from 'react-router';
-
-//import { data, data } from 'browserslist';
 
 const article = () => {
     const dispatch = useDispatch();
@@ -62,22 +58,6 @@ const article = () => {
             setArticleData({ ...articledata, imageUrl: '' })
         }
     }
-
-    // const fileUploadVideo = (e, name) => {
-
-    //     let firsttemp = e.target.files[0].name?.split('.');
-       
-    //     let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
-
-    //     // if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-    //     //     setArticleData({ ...articledata, [name]: e.target.files[0] })
-    //     //     setFormErrors({ ...formErrors, videoUrl: "" });
-    //     // }
-    //     // else {
-    //     //     setFormErrors({ ...formErrors, videoUrl: 'Please select valid document file' })
-    //     //     setArticleData({ ...articledata, videoUrl: '' })
-    //     // }
-    // }
 
     const validation = () => {
         let flag = false;
@@ -257,11 +237,12 @@ const article = () => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
             setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item) => {
                 return {
-                    title: (
-                        <span className='For-Underline' onClick={() => viewArticle(item.id)}>
-                            {item.title}
-                        </span>
-                    ),
+                    // title: (
+                    //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
+                    //         {item.title}
+                    //     </span>
+                    // ),
+                    title : item.title,
                     body: item.body,
                     imageUrl: item.imageUrl,
                     videoUrl: item.videoUrl,
@@ -289,21 +270,26 @@ const article = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            // sorter: (a, b) => a.getArticlesData.data.data.length - b.getArticlesData.data.data.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.title.length - b.title.length,
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Body',
             dataIndex: 'body',
-
+            sorter: (a, b) => a.body.localeCompare(b.body),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'ImageUrl',
             dataIndex: 'imageUrl',
+            sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'VideoUrl',
             dataIndex: 'videoUrl',
+            sorter: (a, b) => a.videoUrl.localeCompare(b.videoUrl),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Actions',
@@ -347,18 +333,6 @@ const article = () => {
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {schemeCategoryTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

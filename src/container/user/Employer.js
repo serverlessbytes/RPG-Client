@@ -104,19 +104,19 @@ const Employer = () => {
         }
     };
 
-    useEffect(()=>{
-        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+    useEffect(() => {
+        if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
             toast.success("Employer Update successful")
         }
-    },[editProfileData])
+    }, [editProfileData])
 
     useEffect(() => {
-        if(editProfileError){
+        if (editProfileError) {
             dispatch(editProfileErr(null))
             toast.error("Something Wrong")
         }
-    },[editProfileError])
+    }, [editProfileError])
 
     useEffect(() => {
         dispatch(getAllUser(perPage, pageNumber, status, type))
@@ -164,10 +164,14 @@ const Employer = () => {
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Email',
             dataIndex: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Phone',

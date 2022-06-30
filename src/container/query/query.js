@@ -131,7 +131,6 @@ const query = () => {
                 // isDeleted: false,
                 isResolved: true,
             }
-            //console.log("data",dataEdit)
             dispatch(editQueries(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -265,17 +264,20 @@ const query = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            // sorter: (a, b) => a.getArticlesData.data.data.length - b.getArticlesData.data.data.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Email',
             dataIndex: 'email',
-
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Body',
             dataIndex: 'body',
+            sorter: (a, b) => a.body.localeCompare(b.body),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Actions',

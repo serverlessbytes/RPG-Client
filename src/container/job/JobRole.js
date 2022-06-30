@@ -130,7 +130,6 @@ const JobRole = () => {
         }
     }, [])
 
-
     useEffect(() => {
         if (jobRolesData && jobRolesData.length > 0) {
 
@@ -157,7 +156,6 @@ const JobRole = () => {
         }
     }, [jobRolesData])
 
-
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -172,11 +170,8 @@ const JobRole = () => {
         setNameTog(false)
     };
 
-
-
     const handleOk = () => {
         let data = form.getFieldsValue()
-        console.log(data)
         if (!selectedJobRole) {
             data = {
                 ...data,
@@ -214,13 +209,11 @@ const JobRole = () => {
         setState({ ...state, current, pageSize });
     };
 
-
     const jobTableColumns = [
         {
             title: 'Job Roles',
             dataIndex: 'name',
-
-            sorter: (a, b) => a.name.length - b.name.length,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
         },
         {

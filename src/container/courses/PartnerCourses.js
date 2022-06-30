@@ -53,10 +53,6 @@ const PartnerCourses = () => {
     marathi: ''
   });
 
-  useEffect(() => {
-    console.log("langIds", langIds);
-  }, [langIds])
-
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
 
@@ -482,11 +478,15 @@ const PartnerCourses = () => {
     {
       title: 'Course Name',
       dataIndex: 'CourseName',
+      // sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
+      sorter: (a, b) => a.CourseName.length - b.CourseName.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Course Category',
       dataIndex: 'CourseCategory',
+      sorter: (a, b) => a.CourseCategory.localeCompare(b.CourseCategory),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Course Ratings',

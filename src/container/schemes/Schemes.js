@@ -624,24 +624,33 @@ const Schemes = () => {
     {
       title: 'Scheme Name',
       dataIndex: 'SchemeName',
-      sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
+      sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Type Of Benefits',
       dataIndex: 'TypeOfBenefits',
+      // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
+      sorter: (a, b) => a.TypeOfBenefits.localeCompare(b.TypeOfBenefits),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Target Beneficiary',
       dataIndex: 'TargetBeneficiary',
+      sorter: (a, b) => a.TargetBeneficiary.localeCompare(b.TargetBeneficiary),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Scheme Ratings',
       dataIndex: 'schemeRatings',
+      // sorter: (a, b) => a.avg - b.avg,
+      // sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Website',
       dataIndex: 'Website',
+      sorter: (a, b) => a.Website.localeCompare(b.Website),
+      sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Last Updated',

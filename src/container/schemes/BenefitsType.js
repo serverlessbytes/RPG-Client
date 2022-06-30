@@ -33,10 +33,6 @@ const BenefitsType = () => {
     const addSchemeBenefitBulkData = useSelector(state => state.beneFit.addSchemeBenefitBulkData)
     const addSchemeBenefitBulkError = useSelector(state => state.beneFit.addSchemeBenefitBulkErr)
 
-    useEffect(() => {
-        console.log("addSchemeBenefitBulkData", addSchemeBenefitBulkData)
-    }, [addSchemeBenefitBulkData])
-
     const dispatch = useDispatch();
 
     const [form] = Form.useForm();
@@ -226,7 +222,7 @@ const BenefitsType = () => {
         {
             title: 'Type Of Benefit',
             dataIndex: 'Typeofbenefit',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.Typeofbenefit.localeCompare(b.Typeofbenefit),
             sortDirections: ['descend', 'ascend'],
         },
         {

@@ -153,20 +153,27 @@ const SchemeRating = () => {
             title: 'Scheme',
             dataIndex: 'scheme',
             // key: 'user',
-            sorter: (a, b) => a?.scheme?.length - b?.scheme?.length,
+            // sorter: (a, b) => a?.scheme?.length - b?.scheme?.length,
+            sorter: (a, b) => a.scheme.localeCompare(b.scheme),
             sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Rating',
             dataIndex: 'rating',
+            sorter: (a, b) => a?.rating - b?.rating,
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'User',
             dataIndex: 'createdByUser',
+            sorter: (a, b) => a.createdByUser.localeCompare(b.createdByUser),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Comment',
             dataIndex: 'comment',
+            sorter: (a, b) => a.comment.localeCompare(b.comment),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Action',

@@ -19,31 +19,23 @@ const State = () => {
     const {
         postStateSuccess,postStateErr
       } = actions;
+
     const dispatch = useDispatch()
+    const usersTableData = [];
+    const [form] = Form.useForm()
+    const { Option } = Select;
+
+    //const [languageTableData, setLanguageTableData] = useState([])
+    const [stateTableData, setstateTableData] = useState([])
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [data, setData] = useState({
         name: '',
         key: ''
     })
 
-
-    const usersTableData = [];
-    //const [languageTableData, setLanguageTableData] = useState([])
-    const [stateTableData, setstateTableData] = useState([])
-
-    // const languageData = useSelector((state) => state.language.getLanguageData)
-
-    // useEffect(() => {
-    //     if (languageData && languageData.data) {
-    //         setLanguageTableData(languageData.data)
-    //     }
-    //     console.log("languageData", languageData);
-    // }, [languageData])
-
      const stateData = useSelector((state) => state.state.getStateData)
      const postStatedata = useSelector((state) => state.state.postStateData)
      const postStateError = useSelector((state) => state.state.postStateErr)
-     
-     useEffect(()=>{console.log("postStatedata",postStatedata)},[postStatedata])
 
      useEffect(() => {
         if (postStatedata && postStatedata.status  === 200) {
@@ -70,31 +62,25 @@ const State = () => {
             setstateTableData(stateData.data)
         }
     }, [stateData])
+
+    useEffect(() => {
+        dispatch(getStateData())
+    }, []);
+
     const languagesTableColumns = [
         {
             title: 'State',
             dataIndex: 'name',
-            sorter: (a, b) => a.name.length - b.name.length,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
         }
     ];
-
-
-    const [form] = Form.useForm()
-    const [isModalVisible, setIsModalVisible] = useState(false);
+   
     const showModal = () => {
         setIsModalVisible(true);
     };
 
-//  useEffect(() => {
-//   setData({
-//       name: "",
-//       key : "",
-//   })
-//  }, [showModal])
- 
 
-    const { Option } = Select;
     const handleOk = () => {
         let stateData = form.getFieldsValue()
         stateData = {
@@ -109,9 +95,6 @@ const State = () => {
         setIsModalVisible(false);
         form.resetFields()
     };
-    useEffect(() => {
-        dispatch(getStateData())
-    }, []);
 
     return (
         <>
