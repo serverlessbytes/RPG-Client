@@ -41,6 +41,7 @@ const AddJobApplication = () => {
         }
         else {
             setJobApplication({ ...jobApplication, [e.target.name]: e.target.value })
+            setError({...error,[e.target.name] : ""}) 
         }
     }
 
@@ -49,6 +50,7 @@ const AddJobApplication = () => {
             setJobApplication({
                 ...jobApplication, job_id: e
             })
+            setError({...error, job_id : ""}) 
         }
     }
 

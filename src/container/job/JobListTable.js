@@ -389,9 +389,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             <div className="table-actions">
               {status === 'active' ? (
                 <>
-                  <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                  {/* <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                     <FeatherIcon icon="edit" size={16} />
-                  </Button>
+                  </Button> */}
                   <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                     <FeatherIcon icon="trash-2" size={16} />
                   </Button>
@@ -442,7 +442,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Position',
+      title: 'Job Role',
       dataIndex: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
       sortDirections: ['descend', 'ascend'],
@@ -463,13 +463,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       width: '90px',
     },
     {
-      title: 'Choose banner',
+      title: 'Select Banner',
       dataIndex: 'chooseBanner',
     },
     {
       title: 'Actions',
       dataIndex: 'action',
-      // key: 'action',
       width: '90px',
     },
   ];

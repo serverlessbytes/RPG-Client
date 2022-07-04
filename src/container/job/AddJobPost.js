@@ -149,6 +149,8 @@ const AddJobPost = () => {
     const validation = () => {
         let error = {};
         let flage = false;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
         if (state.salary === '') {
             error.salary = 'Salary is required';
             flage = true;
@@ -189,6 +191,10 @@ const AddJobPost = () => {
             error.pincode = 'Pincode is required';
             flage = true;
         }
+        if (state.pincode && state.pincode.length < 6) {
+            error.pincode = 'Please enter valid Pincode';
+            flage = true;
+        }
         if (state.description === '') {
             error.description = 'Description is required';
             flage = true;
@@ -209,9 +215,17 @@ const AddJobPost = () => {
             error.email = 'Email is required';
             flage = true;
         }
-        if (state.phone === '') {
-            error.phone = 'Phone is required';
+        if (state.email && !state.email.match(regex)) {
+            error.email = 'Please enter a valid email address';
             flage = true;
+        }
+        if (state.phone === '') {
+            error.phone = 'Phone number is required';
+            flage = true;
+        }
+        if (state.phone && state.phone.length < 10) {
+            error.phone = 'Please enter valid phone number';
+            flage = true
         }
         if (state.type === '') {
             error.type = 'Type is required';
@@ -254,33 +268,61 @@ const AddJobPost = () => {
         return flage;
     };
 
-    const onChangeValue = e => {
-        setState({ ...state, [e.target.name]: e.target.value });
+    const onChangeValue = (e, name) => {
+      
+        const regexphone = /^[0-9\b]+$/;
+        const regexpincode = /^[0-9]*$/;
+        if (name === "phone") {
+            if (e.target.value === '' || regexphone.test(e.target.value)) {
+                setState({ ...state, [e.target.name]: e.target.value });
+                setError({...error,phone:""});
+            }
+        } else if (e.target.name === "pincode") {
+            if (e.target.value === '' || regexpincode.test(e.target.value)) {
+                setState({ ...state, [e.target.name]: e.target.value });
+                setError({...error,pincode:""});
+
+            }
+        }
+        else {
+            setState({ ...state, [e.target.name]: e.target.value });
+            setError({...error,[e.target.name]:""});
+        }
     }
+
     const onChnageHandle = (e, name) => {
         if (name === "jobType") {
             setState({ ...state, jobType: e })
+            setError({...error,jobType:""});
+
         }
         else if (name === "jobRole") {
             setState({ ...state, jobRole: e })
+            setError({...error,jobRole:""});
         }
         else if (name === "shifts") {
             setState({ ...state, shifts: e })
+            setError({...error,shifts:""});
         }
         else if (name === "startDate") {
             setState({ ...state, startDate: e })
+            setError({...error,startDate:""});
         }
         else if (name === "endDate") {
             setState({ ...state, endDate: e })
+            setError({...error,endDate:""});
         }
         else if (name === "state") {
             setState({ ...state, state: e })
+            setError({...error,state:""});
         }
         else if (name === "district") {
             setState({ ...state, district: e })
+            setError({...error,district:""});
         }
         else if (name === "name") {
             setState({ ...state, name: e })
+            setError({...error,name:""});
         }
         else if (e.target.name === "vacancies") {
             if (e.target.value > 0) {
@@ -288,11 +330,14 @@ const AddJobPost = () => {
             } else {
                 setState({ ...state, [e.target.name]: 0 })
             }
+            setError({...error,vacancies:""});
         }
     }
 
     const onChangesEditorBenifit = (value) => {
         setState({ ...state, benifits: value });
+        setError({...error,benifits:""});
+
     };
 
     useEffect(() => {
@@ -607,7 +652,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="phone">
-                                                <Input placeholder="Phone" value={state.phone} name="phone" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Phone" value={state.phone} name="phone" maxLength={10} onChange={e => onChangeValue(e, "phone")} />
                                                 {error.phone && <span style={{ color: 'red' }}>{error.phone}</span>}
                                             </Form.Item>
                                         </Col>
@@ -650,7 +695,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="pincode">
-                                                <Input placeholder="pincode" value={state.pincode} name="pincode" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="pincode" value={state.pincode} name="pincode" maxLength={6} onChange={e => onChangeValue(e)} />
                                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                                             </Form.Item>
                                         </Col>

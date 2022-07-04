@@ -37,8 +37,8 @@ const JobPost = () => {
     const [search, setSearch] = useState('')
     const [status, setStatus] = useState('active');
     const [exportTog, setExportTog] = useState(false);
-    const [pagePer, setPagePer] = useState();
-    const [numberOfPage, setNumberOfPage] = useState();
+    const [pagePer, setPagePer] = useState(20);
+    const [numberOfPage, setNumberOfPage] = useState(1);
     const [importModal, setImportModal] = useState(false);
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
@@ -86,7 +86,6 @@ const JobPost = () => {
         { label: 'description', key: 'description' },
         { label: 'email', key: 'email' },
         { label: 'endDate', key: 'endDate' },
-        { label: 'state', key: 'state' },
         { label: 'extraType', key: 'extraType' },
         { label: 'hiredNumber', key: 'hiredNumber' },
         { label: 'isActive', key: 'isActive' },
@@ -101,7 +100,11 @@ const JobPost = () => {
         { label: 'type', key: 'type' },
         { label: 'vacancies', key: 'vacancies' },
         { label: 'viewCount', key: 'viewCount' },
-        { label: 'updatedAt', key: 'updatedAt' },
+        { label: 'application_form', key: 'application_form' },
+        { label: 'application_process', key: 'application_process' },
+        { label: 'hospital_expenses_estimation_certificate', key: 'hospital_expenses_estimation_certificate' },
+        { label: 'medical_superintendent', key: 'medical_superintendent' },
+        { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
     ];
 
     useEffect(() => {
@@ -132,8 +135,9 @@ const JobPost = () => {
                 pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
         );
         setExportTog(true);
-        //CSVLinkRef?.current?.link.click()
+        // CSVLinkRef?.current?.link.click()
     };
+
     const allexPortJobs = () => {
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
             .then(res => {
@@ -148,11 +152,17 @@ const JobPost = () => {
                             shifts: item?.shifts ? item?.shifts[0] : '',
                             state: item?.state?.name,
                             name: item?.name?.name,
+                            application_form: item?.application_form,
+                            application_process: item?.application_process,
+                            hospital_expenses_estimation_certificate: item?.hospital_expenses_estimation_certificate,
+                            medical_superintendent: item?.medical_superintendent,
+                            recommended_and_forwarded: item?.recommended_and_forwarded,
                         };
                     }),
                 );
             });
     };
+
     const onClear = (e) => {
         setType({ type: '' });
         setJobRole({ jobRole: '' });
@@ -222,6 +232,11 @@ const JobPost = () => {
                         shifts: item?.shifts ? item?.shifts[0] : '',
                         state: item?.state?.name,
                         name: item?.name?.name,
+                        application_form: item?.application_form,
+                        application_process: item?.application_process,
+                        hospital_expenses_estimation_certificate: item?.hospital_expenses_estimation_certificate,
+                        medical_superintendent: item?.medical_superintendent,
+                        recommended_and_forwarded: item?.recommended_and_forwarded,
                     };
                 }),
             );
