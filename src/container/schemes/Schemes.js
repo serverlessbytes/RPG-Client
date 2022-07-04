@@ -385,7 +385,7 @@ const Schemes = () => {
   }
 
   const onAllExportSchemes = () => {
-    dispatch(getAllSchemes(perPage, pageNumber))
+    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     setExportTog(true)
   }
 
@@ -721,11 +721,17 @@ const Schemes = () => {
                 </Space>
               </a>
             </Dropdown>
+            {console.log("state", state)}
+            {console.log("header", header)}
+            {console.log("CSVLinkRef", CSVLinkRef)}
             <CSVLink
               headers={header}
+              // separator={";"}
+              // enclosingCharacter={`:`}
               data={state}
               ref={CSVLinkRef}
               filename="Scheme.csv"
+              target="_blank"
               style={{ opacity: 0 }}
             ></CSVLink>
           </div>

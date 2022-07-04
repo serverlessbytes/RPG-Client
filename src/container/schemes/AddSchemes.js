@@ -108,15 +108,20 @@ const AddSchemes = () => {
 
   const onChangesEditorBenifit = value => {
     setState({ ...state, benifitLine: value });
+    setError({ ...error, benifitLine: "" })
   };
   const onChangesEditorSchemeSummary = value => {
     setState({ ...state, detail: value });
+    setError({ ...error, detail: "" })
   };
   const onChangesEditorHowToApply = value => {
     setState({ ...state, howToApply: value });
+    setError({ ...error, howToApply: "" })
+
   };
   const onChangesEditorDocumentation = value => {
     setState({ ...state, documentation: value });
+    setError({ ...error, documentation: "" })
   };
 
 
@@ -126,27 +131,32 @@ const AddSchemes = () => {
         ...state,
         schemeBenifit: e,
       });
+      setError({ ...error, schemeBenifit: "" })
     } else if (name === 'schemeCategory') {
       setState({ ...state, schemeCategory: e });
+      setError({ ...error, schemeCategory: "" })
     } else if (name === 'type') {
       setState({ ...state, type: e });
+      setError({ ...error, type: "" })
     }
     // else if (name === "locations") {
     //     setState({ ...state, locations: [...state.locations, e ]});
     // }
     else if (name === 'locations') {
       setState({ ...state, locations: e });
+      setError({ ...error, locations: "" })
+
     }
   };
-
   const onChangeValue = e => {
-    //let re = /^[0-9\b]+$/;
+    setError({ ...error, [e.target.name]: "" })
     if (e.target.name === 'isActive') {
       setState({
         ...state,
-        [e.target.name]: e.target.checked,
+        [e.target.name]: e.target.checked
       });
     }
+
     // else if (e.target.name === 'sequence') {
     //   if (e.target.value > 0) {
     //     setState({ ...state, [e.target.name]: e.target.value });
@@ -160,6 +170,7 @@ const AddSchemes = () => {
     //         setState({ ...state, [e.target.name]: e.target.value })
     //     }
     // }
+
     else {
       setState({ ...state, [e.target.name]: e.target.value });
     }
@@ -186,10 +197,20 @@ const AddSchemes = () => {
   const validation = () => {
     let error = {};
     let flage = false;
+    let urlReg = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+    let stringReg = /^[ A-Za-z]/;
+    let a = stringReg.test(state.name)
+    console.log("a", a);
     if (state.name === '') {
       error.name = 'Scheme Name is required';
       flage = true;
     }
+    else if (!stringReg.test(state.name)) {
+      error.name = 'Name must be string';
+      flage = true;
+    }
+
     if (state.schemeCategory === '') {
       error.schemeCategory = 'schemeCategory is required';
       flage = true;
@@ -230,6 +251,10 @@ const AddSchemes = () => {
       error.website = 'website is required';
       flage = true;
     }
+    else if (!urlReg.test(state.website)) {
+      error.website = 'Enter Valid Website Name';
+      flage = true;
+    }
     if (state.type === '') {
       error.type = 'type is required';
       flage = true;
@@ -242,12 +267,20 @@ const AddSchemes = () => {
       error.elink = 'elink is required';
       flage = true;
     }
+    else if (!urlReg.test(state.elink)) {
+      error.elink = 'Enter Valid elink Name';
+      flage = true;
+    }
     if (state.spoc === '') {
       error.spoc = 'spoc is required';
       flage = true;
     }
     if (state.videoUrl === '') {
       error.videoUrl = 'VideoUrl is required';
+      flage = true;
+    }
+    else if (!videoUrlReg.test(state.videoUrl)) {
+      error.elink = 'Enter Valid videoUrl';
       flage = true;
     }
     if (state.thumbnail === '') {
@@ -388,7 +421,6 @@ const AddSchemes = () => {
                  // </div>
              ]} */
       />
-
       <Main>
         <Cards headless>
           <Row justify="space-between">
@@ -406,7 +438,7 @@ const AddSchemes = () => {
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="name">Scheme Name</label>
               <Form.Item>
-                <Input placeholder="Scheme Name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
+                <Input type="name" placeholder="Scheme Name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
@@ -474,7 +506,7 @@ const AddSchemes = () => {
             {error.benifitLine && <span style={{ color: 'red' }}>{error.benifitLine}</span>}
           </div>
 
-          <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
+          <label htmlFor="TargetBeneficiary">Target beneficiary</label>
           <Form.Item>
             <Input
               placeholder="Target Beneficiary"
@@ -551,7 +583,7 @@ const AddSchemes = () => {
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="Website">Website</label>
               <Form.Item>
-                <Input placeholder="Website" value={state.website} name="website" onChange={e => onChangeValue(e)} />
+                <Input type='url' placeholder=" Website" value={state.website} name="website" onChange={e => onChangeValue(e)} />
                 {error.website && <span style={{ color: 'red' }}>{error.website}</span>}
               </Form.Item>
             </Col>
@@ -605,7 +637,7 @@ const AddSchemes = () => {
                 {error.spoc && <span style={{ color: 'red' }}>{error.spoc}</span>}
               </Form.Item>
             </Col>
-           
+
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
               <label htmlFor="videoUrl">VideoUrl</label>
               <Form.Item>
