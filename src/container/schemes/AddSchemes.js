@@ -50,10 +50,6 @@ const AddSchemes = () => {
     hospital_expenses_estimation_certificate: ""
   });
 
-  useEffect(() => {
-    console.log("state", state)
-  }, [state])
-
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
@@ -201,7 +197,7 @@ const AddSchemes = () => {
     let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
     let stringReg = /^[ A-Za-z]/;
     let a = stringReg.test(state.name)
-    console.log("a", a);
+
     if (state.name === '') {
       error.name = 'Scheme Name is required';
       flage = true;
@@ -280,7 +276,7 @@ const AddSchemes = () => {
       flage = true;
     }
     else if (!videoUrlReg.test(state.videoUrl)) {
-      error.elink = 'Enter Valid videoUrl';
+      error.videoUrl = 'Enter Valid videoUrl';
       flage = true;
     }
     if (state.thumbnail === '') {

@@ -35,6 +35,7 @@ const query = () => {
         email: "",
         body: "",
     });
+    const [formErrors, setFormErrors] = useState();
 
     const getQueriesData = useSelector((state) => state.queries.getQueriesData);
     const addQueriesData = useSelector((state) => state.queries.addQueriesData);
@@ -45,6 +46,7 @@ const query = () => {
 
     const handleChange = (e) => {
         setQueryData({ ...queryData, [e.target.name]: e.target.value })
+        setFormErrors({...formErrors, [e.target.name]:""})
     }
 
     useEffect(() => {
@@ -106,7 +108,36 @@ const query = () => {
         // setExportTog(false);
     };
 
+    const validation = () => {
+        let flag = false;
+        const error = {};
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+        if (queryData.email === '') {
+            error.email = 'Email is required';
+            flag = true;
+        }
+        if (queryData.email && !queryData.email.match(regex)) {
+            error.email = 'Please enter a valid email address';
+            flag = true;
+        }
+        if (queryData.name === '') {
+            error.name = 'Name is required';
+            flag = true;
+        }
+        if (queryData.body === '') {
+            error.body = 'Body is required';
+            flag = true;
+        }
+
+        setFormErrors(error);
+        return flag
+    }
+
     const handleOk = () => {
+        if (validation()) {
+            return
+        }
         if (!selectedQuery) {
             let Data = {
                 name: queryData.name,
@@ -122,6 +153,9 @@ const query = () => {
             handleCancel();
         }
         else {
+            if (validation()) {
+                return
+            }
             let dataEdit = {
                 id: selectedQuery.id,
                 name: queryData.name,
@@ -197,17 +231,17 @@ const query = () => {
 
     const onActive = async id => {
         let getActiveQueriesdata = getQueriesData && getQueriesData.data && getQueriesData.data.data.find(item => item.id === id);
-        
-            let data = {
-                id: getActiveQueriesdata.id,
-                name: getActiveQueriesdata.name,
-                body: getActiveQueriesdata.body,
-                email: getActiveQueriesdata.email,
-                isActive: true,
-                // isDeleted: true,
-                isResolved: false,
-            }
-        
+
+        let data = {
+            id: getActiveQueriesdata.id,
+            name: getActiveQueriesdata.name,
+            body: getActiveQueriesdata.body,
+            email: getActiveQueriesdata.email,
+            isActive: true,
+            // isDeleted: true,
+            isResolved: false,
+        }
+
         const restoreQuery = await newQuery(data);
 
         if (restoreQuery.status === 200) {
@@ -364,6 +398,7 @@ const query = () => {
                                 value={queryData.name}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.name && <span style={{ color: "red" }}>{formErrors.name}</span>}
                         </Form.Item>
 
                         <label htmlFor="email">Email</label>
@@ -375,6 +410,7 @@ const query = () => {
                                 value={queryData.email}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.email && <span style={{ color: "red" }}>{formErrors.email}</span>}
                         </Form.Item>
 
                         <label htmlFor="body">Body</label>
@@ -386,6 +422,7 @@ const query = () => {
                                 value={queryData.body}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

@@ -47,31 +47,12 @@ const JobPost = () => {
         marathi: "",
     });
 
-
     const languageData = useSelector(state => state.language.getLanguageData);
     const jobRolesData = useSelector(state => state.job.jobRoleData);
     const allJobsData = useSelector(state => state.job.allJobs);
     const stateData = useSelector(state => state.state.getStateData); //state
     const filterData = useSelector(state => state.job.getJobFilterData);
     const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
-
-
-    const onChangevalue = (e, name) => {
-        if (name === 'type') {
-            setType({ ...type, type: e });
-        } else if (name === 'jobRole') {
-            setJobRole({ ...jobRole, jobRole: e });
-        } else if (name === 'state') {
-            setState({ ...jobRole, state: e });
-        } else if (name === "search") {
-            setSearch(e)
-        }
-    };
-
-    const callback = key => {
-        setStatus(key);
-        setExportTog(false);
-    };
 
     const header = [
         { label: 'id', key: 'id' },
@@ -107,43 +88,29 @@ const JobPost = () => {
         { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
     ];
 
-    useEffect(() => {
-        let temp = {
-            hindi: '',
-            marathi: ''
+    const onChangevalue = (e, name) => {
+        if (name === 'type') {
+            setType({ ...type, type: e });
+        } else if (name === 'jobRole') {
+            setJobRole({ ...jobRole, jobRole: e });
+        } else if (name === 'state') {
+            setState({ ...jobRole, state: e });
+        } else if (name === "search") {
+            setSearch(e)
         }
-        languageData && languageData.data && languageData.data.map((item) => {
-            if (item.name === "marathi") {
-                temp.marathi = item.id
-            } else if (item.name === "Hindi") {
-                temp.hindi = item.id
-            }
-        })
-        setLangIds(temp)
-    }, [languageData])
+    };
 
-
-    // const onExportJobs = () => {
-    //     dispatch(getJobsFilterForMain(pagePer,numberOfPage, state?.state ? state?.state : "", type?.type ? type?.type : "", jobRole?.jobRole ? jobRole?.jobRole : "", status))
-    //     setExportTog(true)
-    //     //CSVLinkRef?.current?.link.click()
-    // };
-
-    const onExportJobs = () => {
-        dispatch(
-            getJobsFilterForMain(
-                pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
-        );
-        setExportTog(true);
-        // CSVLinkRef?.current?.link.click()
+    const callback = key => {
+        setStatus(key);
+        setExportTog(false);
     };
 
     const allexPortJobs = () => {
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
             .then(res => {
+                setExportTog(true); 
                 setStateJob(
                     res?.data?.data.map(item => {
-                        setExportTog(true);
                         return {
                             ...item,
                             jobRole: item?.jobRole?.name,
@@ -187,6 +154,30 @@ const JobPost = () => {
     }
 
     useEffect(() => {
+        let temp = {
+            hindi: '',
+            marathi: ''
+        }
+        languageData && languageData.data && languageData.data.map((item) => {
+            if (item.name === "marathi") {
+                temp.marathi = item.id
+            } else if (item.name === "Hindi") {
+                temp.hindi = item.id
+            }
+        })
+        setLangIds(temp)
+    }, [languageData])
+
+    const onExportJobs = () => {
+        // dispatch(
+        //     getJobsFilterForMain(
+        //         pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
+        // );
+        setExportTog(true);
+        // CSVLinkRef?.current?.link.click()
+    };
+
+    useEffect(() => {
         if (addJobPostModulData && addJobPostModulData.status === 200) {
             toast.success("Job Post Import Successful")
             dispatch(addBlukJobsSuccess(null));
@@ -214,7 +205,7 @@ const JobPost = () => {
         } else if (exportTog) {
             toast.success('No data for export');
         }
-    }, [stateJob]); //
+    }, [stateJob, exportTog]); //
 
     useEffect(() => {
         dispatch(allJobsSuccess(null));
@@ -418,6 +409,7 @@ const JobPost = () => {
                                         apply={apply}
                                         status={status}
                                         search={search}
+                                        getJobData={setStateJob}
                                         setPagePer={setPagePer}
                                         setNumberOfPage={setNumberOfPage}
                                         setExportTog={setExportTog}
