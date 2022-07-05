@@ -144,8 +144,7 @@ const AddSchemes = () => {
     // }
     else if (name === 'locations') {
       setState({ ...state, locations: e });
-      setError({ ...error, locations: "" })
-
+      // setError({ ...error, locations: [] })
     }
   };
   const onChangeValue = e => {
@@ -280,7 +279,7 @@ const AddSchemes = () => {
       flage = true;
     }
     else if (!videoUrlReg.test(state.videoUrl)) {
-      error.elink = 'Enter Valid videoUrl';
+      error.videoUrl = 'Enter Valid videoUrl';
       flage = true;
     }
     if (state.thumbnail === '') {
@@ -367,13 +366,16 @@ const AddSchemes = () => {
         thumbnail: getOneScHemeData.thumbnail,
       }
       dispatch(addSchemeData(langId, data));
+      console.log("data", data);
       history.push(`/admin/scheme`);
     }
     else {
       if (id) {
+        console.log("data", data);
         dispatch(editSchemeData(data));
         history.push(`/admin/scheme`);
       } else {
+        console.log("data", data);
         dispatch(addSchemeData(langId, data));
         history.push(`/admin/scheme`);
       }

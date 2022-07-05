@@ -209,10 +209,10 @@ const Schemes = () => {
     { label: "benifitLine", key: "benifitLine" },
     { label: "createdAt", key: "createdAt" },
     { label: "detail", key: "detail" },
-    { label: "documentation", key: "documentation" },
+    // { label: "documentation", key: "documentation" },
     { label: "elink", key: "elink" },
     { label: "grievanceRedress", key: "grievanceRedress" },
-    { label: "howToApply", key: "howToApply" },
+    // { label: "howToApply", key: "howToApply" },
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
     { label: "key", key: "key" },
@@ -385,7 +385,7 @@ const Schemes = () => {
   }
 
   const onAllExportSchemes = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
+    dispatch(getAllSchemes(perPage, pageNumber))
     setExportTog(true)
   }
 
@@ -730,7 +730,7 @@ const Schemes = () => {
               // enclosingCharacter={`:`}
               data={state}
               ref={CSVLinkRef}
-              filename="Scheme.csv"
+              filename={"Scheme.csv"}
               target="_blank"
               style={{ opacity: 0 }}
             ></CSVLink>

@@ -38,6 +38,11 @@ const PartnerCourses = () => {
     mode: 'PARTNER',
     search: ''
   });
+
+  useEffect(() => {
+    console.log("state", state);
+  }, [state])
+
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
   const [partnertable, setPartnertable] = useState([]); //set data
@@ -460,7 +465,8 @@ const PartnerCourses = () => {
                     <Button className="btn-icon" type="success" onClick={() => onActive(item.id)} shape="circle">
                       <FeatherIcon icon="rotate-ccw" size={16} />
                     </Button>
-                  )}
+                  )
+                  }
 
                   {/* <Button className="btn-icon" type="info" to="#" shape="circle">
                                 <FeatherIcon icon="edit" size={16} />
@@ -708,14 +714,12 @@ const PartnerCourses = () => {
                 languageHandalCancle()
 
               }}>
-
                 No
               </Button>
               <Button size="small" type="primary" onClick={() => {
 
                 languageHandalOk()
               }} >
-
                 Yes
               </Button>
             </>

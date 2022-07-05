@@ -52,7 +52,12 @@ const AddPartnerCourses = () => {
         mode: 'PARTNER',
         Certification: '',
         key: '',
-        thumbnail: ''
+        thumbnail: '',
+        application_form: "",
+        recommended_and_forwarded: "",
+        application_process: "",
+        medical_superintendent: "",
+        hospital_expenses_estimation_certificate: "",
     });
     const [editPartnerCourseID, setEditPartnerCourseID] = useState()
     const [langIds, setLangIds] = useState({
@@ -229,7 +234,12 @@ const AddPartnerCourses = () => {
             location: state.locations,
             // sequence: parseInt(state.sequence),
             mode: state.mode,
-            thumbnail: state.thumbnail
+            thumbnail: state.thumbnail,
+            application_form: "",
+            recommended_and_forwarded: "",
+            application_process: "",
+            medical_superintendent: "",
+            hospital_expenses_estimation_certificate: "",
         };
         if (!langid) {
             dispatch(addPartnerCourse(data, langIds.hindi, langIds.marathi));

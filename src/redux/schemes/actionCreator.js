@@ -1,4 +1,5 @@
 import { async } from '@firebase/util';
+import { stringify } from 'rc-field-form/es/useWatch';
 import STORAGEKEY from '../../config/APP/app.config';
 import { ApiGet, ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
@@ -113,7 +114,7 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('grievanceRedress', data.grievanceRedress);
   formData.append('howToApply', data.howToApply);
   formData.append('isActive', data.isActive);
-  formData.append('locations', data.locations);
+  formData.append('locations', JSON.stringify(data.locations));
   // formData.append("locations", JSON.stringify(data.locations));
   formData.append('name', data.name);
   formData.append('schemeBenifit', data.schemeBenifit);
@@ -123,7 +124,6 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('videoUrl', data.videoUrl);
   formData.append('website', data.website);
   formData.append('schemeCategory', data.schemeCategory);
-
   await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then(res => {
       // return dispatch(addSchemeSuccess(res));
