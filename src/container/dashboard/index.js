@@ -186,9 +186,9 @@ const Dashboard = () => {
       <Main>
         <h3>Users</h3>
 
-        <Row gutter={25}>
+        <Row gutter={25} className='justify-content-between'>
 
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -207,7 +207,7 @@ const Dashboard = () => {
             </Cards>
           </Col>
 
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -225,7 +225,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -243,7 +243,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -261,7 +261,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               {/* <EChartCard> */}
               <div className="card-chunk">
