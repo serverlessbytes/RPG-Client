@@ -29,7 +29,7 @@ const article = () => {
     const [articledata, setArticleData] = useState({
         title: "",
         imageUrl: "",
-        videoUrl: "dfd",
+        videoUrl: "",
         body: "",
     });
     const [formErrors, setFormErrors] = useState();
@@ -43,6 +43,7 @@ const article = () => {
 
     const handleChange = (e) => {
         setArticleData({ ...articledata, [e.target.name]: e.target.value })
+        setFormErrors({ ...formErrors, [e.target.name]: "" });
     }
 
     const fileUpload = (e, name) => {
@@ -62,6 +63,7 @@ const article = () => {
     const validation = () => {
         let flag = false;
         const error = {};
+        let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
 
         if (!articledata.title) {
             error.title = "Please enter title"
@@ -71,12 +73,15 @@ const article = () => {
             error.imageUrl = "Please select document file"
             flag = true
         }
-        // if (!articledata.videoUrl) {
-        //     error.videoUrl = "Please select document file"
-        //     flag = true
-        // }
+        if (!articledata.videoUrl) {
+            error.videoUrl = "Please select document file"
+            flag = true
+        }else if (!videoUrlReg.test(articledata.videoUrl)) {
+            error.videoUrl = 'Enter Valid Video URL';
+            flag = true;
+          }
         if (!articledata.body) {
-            error.body = "Please enter  body"
+            error.body = "Please enter body"
             flag = true
         }
         setFormErrors(error);
@@ -235,13 +240,14 @@ const article = () => {
 
     useEffect(() => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
-            setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item) => {
+            setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item,id) => {
                 return {
                     // title: (
                     //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
                     //         {item.title}
                     //     </span>
                     // ),
+                    srno : id + 1,
                     title : item.title,
                     body: item.body,
                     imageUrl: item.imageUrl,
@@ -267,6 +273,12 @@ const article = () => {
     }, [getArticlesData])
 
     const articleTableColumns = [
+        {
+            title: 'SR.NO',
+            dataIndex: 'srno',
+            sorter: (a, b) => a.title.length - b.title.length,
+            sortDirections: ['descend', 'ascend'],
+        },
         {
             title: 'Title',
             dataIndex: 'title',
@@ -378,7 +390,7 @@ const article = () => {
                                 value={articledata.videoUrl}
                                 onChange={(e) => handleChange(e)}
                             />
-                            {/* {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>} */}
+                            {formErrors?.videoUrl && <span style={{ color: "red" }}>{formErrors.videoUrl}</span>}
                         </Form.Item>
 
                         <label htmlFor="body">Body</label>

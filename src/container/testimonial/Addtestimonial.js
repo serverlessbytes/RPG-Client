@@ -48,8 +48,9 @@ const Addtestimonial = () => {
     }, [getOneDataTestimoial])
 
     const validation = () => {
-        let error = {}
-        let flag = false
+        let error = {};
+        let flag = false;
+        let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
 
         if (data.name === "") {
             error.name = "Name is required";
@@ -64,7 +65,10 @@ const Addtestimonial = () => {
         if (data.videoUrl === "") {
             error.videoUrl = "Video URL is required";
             flag = true;
-        }
+        } else if (!videoUrlReg.test(data.videoUrl)) {
+            error.videoUrl = 'Enter Valid Video URL';
+            flag = true;
+          }
 
         if (data.imageUrl === "") {
             error.imageUrl = "Image URL is required";
@@ -82,6 +86,7 @@ const Addtestimonial = () => {
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        setError({...error,[e.target.name]:""})
     }
 
     const fileUpload = (e, name) => {

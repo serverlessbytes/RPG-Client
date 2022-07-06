@@ -272,6 +272,7 @@ const AddJobPost = () => {
       
         const regexphone = /^[0-9\b]+$/;
         const regexpincode = /^[0-9]*$/;
+        
         if (name === "phone") {
             if (e.target.value === '' || regexphone.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
@@ -281,6 +282,12 @@ const AddJobPost = () => {
             if (e.target.value === '' || regexpincode.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
                 setError({...error,pincode:""});
+
+            }
+        }else if(e.target.name === "salary"){
+            if (e.target.value === '' || regexphone.test(e.target.value)) {
+                setState({ ...state, [e.target.name]: e.target.value });
+                setError({...error,salary:""});
 
             }
         }

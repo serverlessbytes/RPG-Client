@@ -721,9 +721,7 @@ const Schemes = () => {
                 </Space>
               </a>
             </Dropdown>
-            {console.log("state", state)}
-            {console.log("header", header)}
-            {console.log("CSVLinkRef", CSVLinkRef)}
+      
             <CSVLink
               headers={header}
               // separator={";"}

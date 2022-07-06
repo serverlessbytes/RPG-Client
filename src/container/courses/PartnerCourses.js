@@ -304,6 +304,11 @@ const PartnerCourses = () => {
       delete activeCourseDelete.enrolled;
       delete activeCourseDelete.hindi;
       delete activeCourseDelete.marathi;
+      // delete activeCourseDelete.application_form;
+      // delete activeCourseDelete.recommended_and_forwarded;
+      // delete activeCourseDelete.application_process;
+      // delete activeCourseDelete.medical_superintendent;
+      // delete activeCourseDelete.hospital_expenses_estimation_certificate;
 
       activeCourseDelete = {
         ...activeCourseDelete,
@@ -330,9 +335,9 @@ const PartnerCourses = () => {
   const Submit = () => {
     dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, state.search, langIds.hindi, langIds.marathi));
   };
+
   const clearFilter = () => {
     setState({ ...state, category: '', search: '' });
-    // dispatch(getCoursefilter('', perPage, pageNumber, '', status));
     dispatch(getCoursefilter('', perPage, pageNumber, state.mode ? state.mode : '', status, '', langIds.hindi, langIds.marathi));
   };
 
@@ -357,6 +362,11 @@ const PartnerCourses = () => {
       delete activedata.enrolled;
       delete activedata.hindi;
       delete activedata.marathi;
+      // delete activedata.application_form;
+      // delete activedata.recommended_and_forwarded;
+      // delete activedata.application_process;
+      // delete activedata.medical_superintendent;
+      // delete activedata.hospital_expenses_estimation_certificate;
 
       activedata = {
         ...activedata,
@@ -687,6 +697,7 @@ const PartnerCourses = () => {
           </Row>
         </Cards>
       </Main>
+
       {viewModal && (
         <ViewPartnerCourse
           viewModal={viewModal}

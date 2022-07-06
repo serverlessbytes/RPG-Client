@@ -33,6 +33,7 @@ const JobCategory = () => {
     const [selectedJobCategory, setSelectedJobCategory] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
+    // const [error, setError] = useState({})
 
     const { users } = useSelector(state => {
         return {
@@ -162,7 +163,23 @@ const JobCategory = () => {
         setNameTog(false)
     };
 
+    // const validation = () => {
+    //     let error = {};
+    //     let flag = false;
+    //     let data = form.getFieldsValue();
+    
+    //     if (data === "") {
+    //         error.name = "JobCategory is required";
+    //         flag = true;
+    //     }
+    //     setError(error);
+    //     return flag
+    // }
+
     const handleOk = () => {
+        // if (validation) {
+        //     return;
+        // }
         let data = form.getFieldsValue()
         if (!selectedJobCategory) {
             data = {
@@ -246,6 +263,9 @@ const JobCategory = () => {
                             placeholder="Job Category"
                             name="name"
                         />
+                    {/* {
+                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                    } */}
                     </Form.Item>
                 </Form>
             </Modal>

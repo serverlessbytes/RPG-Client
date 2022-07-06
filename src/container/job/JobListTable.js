@@ -17,7 +17,12 @@ import ConfirmModal from '../../components/modals/confirm_modal';
 import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
 
 
-const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
+const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search, getJobData }) => {
+
+  useEffect(() => {
+    console.log("getJobData", getJobData)
+  }, [getJobData])
+
   // props from JobPost
   const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
   let history = useHistory();
@@ -139,6 +144,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       }
     }
   };
+
   const onEdit = id => {
     history.push(`/admin/job/new?id=${id}`);
   };
@@ -324,6 +330,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   }
 
   useEffect(() => {
+    if (getJobFilterData?.data?.data) {
+      getJobData(getJobFilterData?.data?.data)
+    }
     setUsertable(
       getJobFilterData?.data?.data?.map(item => {
         return {
@@ -337,6 +346,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           company: item.description,
           position: item.jobRole?.name,
           joinDate: moment(item.startDate).format('DD-MM-YYYY'),
+          // joinDate: item.startDate,
           vacancies: item.vacancies,
           // approved: (
           //   <>
@@ -389,9 +399,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             <div className="table-actions">
               {status === 'active' ? (
                 <>
-                  {/* <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                  <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                     <FeatherIcon icon="edit" size={16} />
-                  </Button> */}
+                  </Button>
                   <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                     <FeatherIcon icon="trash-2" size={16} />
                   </Button>
@@ -413,10 +423,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   );
 
   const viewJobdata = id => {
-    // dispatch(getoneJobPost(key));
-    //setViewModal(true);
     history.push(`/admin/job/view?id=${id}`)
   };
+
+  const User = () => {
+
+  }
 
   const usersTableColumns = [
     {
@@ -426,6 +438,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       sorter: (a, b) => a.name.length - b.name.length,
       sortDirections: ['descend', 'ascend'],
       // sorter: (a, b) => a.user.localeCompare(b.user),
+      
     },
     {
       title: 'Email',
@@ -450,6 +463,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     {
       title: 'Join Date',
       dataIndex: 'joinDate',
+      sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
     },
     {
       title: 'Vacancies',
