@@ -78,6 +78,8 @@ const SwayamCourses = () => {
   const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
   const allCategoryData = useSelector(state => state.category.getAllCourse);
+  const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
+
 
   const header = [
     { label: 'id', key: 'id' },
@@ -92,6 +94,13 @@ const SwayamCourses = () => {
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
+
+  useEffect(() => {
+    console.log("courseModuleData?.data?.isDeleted", courseModuleData);
+    if (courseModuleData?.status === 200) {
+      { courseModuleData?.data?.isDeleted ? toast.error("courseModule Delete Successfully") : toast.success("courseModule Updated Successfully") }
+    }
+  }, [courseModuleData])
 
   useEffect(() => {
     if (state.length && exportTog) {
@@ -132,6 +141,7 @@ const SwayamCourses = () => {
       toast.success('Swayam Course Update successful');
     }
   }, [editSwayamCourseData]);
+
 
   useEffect(() => {
     if (editSwayamCourseErr) {
@@ -195,30 +205,60 @@ const SwayamCourses = () => {
   //    return newSawyamCourse
   //  }
 
+  useEffect(() => {
+    console.log("courseData", courseData);
+  }, [courseData])
+
   const onDelete = async (id) => {
     const singleData = courseData.data.data.find(item => item.id === id);
     if (singleData) {
-      let dt = {
-        key: singleData.key,
-        courseId: id,
-        detail: singleData.detail,
-        thumbnail: singleData.thumbnail,
-        name: singleData.name,
-        categoryId: singleData.courseCategory.id,
-        duration: singleData.duration,
-        jobCategoryIds: singleData.jobTypes.map(item => item.id),
-        certification: singleData.certificate,
-        // sequence: parseInt(singleData.sequence),
-        mode: singleData.mode,
-        isActive: false,
-        isDeleted: true,
-      };
-      dispatch(editSwayamCourse(dt, langIds.hindi, langIds.marathi));
+
+      let formData = new FormData();
+      formData.append('key', singleData.key);
+      formData.append('courseId', id);
+      formData.append('detail', singleData.detail.toString('markdown'));
+      formData.append('name', singleData.name);
+      formData.append('categoryId', singleData.courseCategory.id);
+      formData.append('duration', moment(singleData.duration).format('HH:mm:ss'));
+      formData.append('jobCategoryIds', JSON.stringify(singleData.jobTypes.map(item => item.id)));
+      formData.append('certification', singleData.certificate);
+      formData.append('application_form', singleData.application_form);
+      formData.append('recommended_and_forwarded', singleData.recommended_and_forwarded);
+      formData.append('application_process', singleData.application_process);
+      formData.append('medical_superintendent', singleData.medical_superintendent);
+      formData.append('hospital_expenses_estimation_certificate', singleData.hospital_expenses_estimation_certificate);
+      formData.append('thumbnail', singleData.thumbnail);
+      formData.append('mode', singleData.mode);
+      formData.append('isActive', true);
+      formData.append('isDeleted', false);
+      console.log("state.id", singleData.id)
+      // let dt = {
+      //   key: singleData.key,
+      //   courseId: id,
+      //   detail: singleData.detail,
+      //   name: singleData.name,
+      //   categoryId: singleData.courseCategory.id,
+      //   detail: singleData.detail,
+      //   duration: singleData.duration,
+      //   jobCategoryIds: singleData.jobTypes.map(item => item.id),
+      //   certification: singleData.certificate,
+
+      //   application_form: singleData.application_form,
+      //   recommended_and_forwarded: singleData.application_form,
+      //   application_process: singleData.application_process,
+      //   medical_superintendent: singleData.medical_superintendent,
+      //   hospital_expenses_estimation_certificate: singleData.hospital_expenses_estimation_certificate,
+
+      //   thumbnail: singleData.thumbnail,
+      //   mode: singleData.mode,
+      //   isActive: false,
+      //   isDeleted: true,
+      // };
+      dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     }
   };
-
-  const activeSwayamCourses = dt => {
-    const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
+  const activeSwayamCourses = formData => {
+    const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
       .then((res) => {
         if (res.status === 200) {
           dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
@@ -227,13 +267,62 @@ const SwayamCourses = () => {
       })
     return newVal
   }
+  useEffect(() => {
+    console.log("courseData--", courseData);
+  }, [courseData])
+
+
+  const onActive = async id => {
+    const activeCourse = courseData.data.data.find(item => item.id === id);
+
+    if (activeCourse) {
+      // let dt = {
+      //   key: activeCourse.key,
+      //   courseId: activeCourse.id,
+      //   detail: activeCourse.detail,
+      //   thumbnail: activeCourse.thumbnail,
+      //   name: activeCourse.name,
+      //   categoryId: activeCourse.courseCategory.id,
+      //   duration: activeCourse.duration,
+      //   jobCategoryIds: activeCourse.jobTypes.map(item => item.id),
+      //   certification: activeCourse.certificate,
+      //   // sequence: parseInt(activeCourse.sequence),
+      //   mode: activeCourse.mode,
+      //   isActive: true,
+      //   isDeleted: false,
+      //   // courseRatings : activeCourse.courseRatings,
+      // };
+      let formData = new FormData();
+      formData.append('key', activeCourse.key,);
+      formData.append('courseId', activeCourse.id);
+      formData.append('detail', activeCourse.detail.toString('markdown'));
+      formData.append('name', activeCourse.name);
+      formData.append('categoryId', activeCourse.courseCategory.id);
+      formData.append('duration', activeCourse.duration);
+      formData.append('jobCategoryIds', JSON.stringify(activeCourse.jobTypes.map(item => item.id)));
+      formData.append('certification', activeCourse.certificate);
+      formData.append('application_form', activeCourse.application_form);
+      formData.append('recommended_and_forwarded', activeCourse.recommended_and_forwarded);
+      formData.append('application_process', activeCourse.application_process);
+      formData.append('medical_superintendent', activeCourse.medical_superintendent);
+      formData.append('hospital_expenses_estimation_certificate', activeCourse.hospital_expenses_estimation_certificate);
+      formData.append('thumbnail', activeCourse.thumbnail);
+      formData.append('mode', activeCourse.mode);
+      formData.append('isActive', true);
+      formData.append('isDeleted', false);
+      console.log("state.id", activeCourse.id)
+      const restoreSwayamCourses = await activeSwayamCourses(FormData);
+      if (restoreSwayamCourses.status === 200) {
+        toast.success("SwayamCourse active successful")
+      }
+    }
+  };
 
   useEffect(() => {
     let temp = {
       hindi: '',
       marathi: ''
     }
-
     languageData && languageData.data && languageData.data.map((item) => {
       if (item.name === "marathi") {
         temp.marathi = item.id
@@ -245,33 +334,6 @@ const SwayamCourses = () => {
     setLangIds(temp)
   }, [languageData])
 
-  const onActive = async id => {
-    const activeCourse = courseData.data.data.find(item => item.id === id);
-
-    if (activeCourse) {
-      let dt = {
-        key: activeCourse.key,
-        courseId: activeCourse.id,
-        detail: activeCourse.detail,
-        thumbnail: activeCourse.thumbnail,
-        name: activeCourse.name,
-        categoryId: activeCourse.courseCategory.id,
-        duration: activeCourse.duration,
-        jobCategoryIds: activeCourse.jobTypes.map(item => item.id),
-        certification: activeCourse.certificate,
-        // sequence: parseInt(activeCourse.sequence),
-        mode: activeCourse.mode,
-        isActive: true,
-        isDeleted: false,
-        // courseRatings : activeCourse.courseRatings,
-      };
-      const restoreSwayamCourses = await activeSwayamCourses(dt);
-
-      if (restoreSwayamCourses.status === 200) {
-        toast.success("SwayamCourse active successful")
-      }
-    }
-  };
   const Submit = () => {
     dispatch(
       getCoursefilter(data.category ? data.category : '', perPage, pageNumber, data.mode ? data.mode : '', status, data.search ? data.search : "", langIds.hindi, langIds.marathi)

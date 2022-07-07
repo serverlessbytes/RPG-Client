@@ -25,6 +25,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import firebaseAuth from '../../redux/firebase/auth/reducers';
 
 const AddCourses = () => {
 
@@ -56,23 +57,21 @@ const AddCourses = () => {
   const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
   const languageData = useSelector(state => state.language.getLanguageData);
 
-
   const [state, setState] = useState({
-    detail: RichTextEditor.createEmptyValue(),
-    name: '',
-    categoryId: '',
-    duration: '',
-    jobCategoryIds: [],
-    certification: '',
-    sequence: '',
-    mode: '',
     key: '',
-    thumbnail: '',
+    name: '',
+    detail: RichTextEditor.createEmptyValue(),
+    duration: '',
+    categoryId: '',
+    certification: '',
+    jobCategoryIds: [],
+    mode: '',
     application_form: "",
     recommended_and_forwarded: "",
     application_process: "",
     medical_superintendent: "",
-    hospital_expenses_estimation_certificate: ""
+    hospital_expenses_estimation_certificate: "",
+    thumbnail: '',
   });
 
   const [langIds, setLangIds] = useState({
@@ -116,6 +115,7 @@ const AddCourses = () => {
     return (() => { dispatch(addSwayamPartnerCourseSuccess(null)) } //for clear a Modules
     )
   }, [])
+
 
   useEffect(() => {
     if (addSwayamCourseData && addSwayamCourseData.status === 200) {
@@ -167,6 +167,10 @@ const AddCourses = () => {
       moduleState.course = addSwayamCourseData.data.id;
     }
   }, [addSwayamCourseData]);
+  useEffect(() => {
+    console.log("editOneSwayamCourseData", editOneSwayamCourseData);
+  }, [editOneSwayamCourseData])
+
 
   useEffect(() => {
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
@@ -177,11 +181,15 @@ const AddCourses = () => {
         categoryId: editOneSwayamCourseData.data.data.courseCategory?.id,
         duration: moment(editOneSwayamCourseData.data.data.duration, 'HH:mm:ss'),
         jobCategoryIds: editOneSwayamCourseData?.data?.data.jobTypes.map(item => item.id),
-        certification: editOneSwayamCourseData.data.data.certificate,
-        sequence: editOneSwayamCourseData.data.data.sequence,
-        mode: editOneSwayamCourseData.data.data.mode,
-        key: editOneSwayamCourseData.data.data.key,
         thumbnail: editOneSwayamCourseData.data.data.thumbnail,
+        mode: editOneSwayamCourseData.data.data.mode,
+        certification: editOneSwayamCourseData.data.data.certificate,
+        application_form: editOneSwayamCourseData.data.data.application_form,
+        recommended_and_forwarded: editOneSwayamCourseData.data.data.recommended_and_forwarded,
+        application_process: editOneSwayamCourseData.data.data.application_process,
+        medical_superintendent: editOneSwayamCourseData.data.data.medical_superintendent,
+        hospital_expenses_estimation_certificate: editOneSwayamCourseData.data.data.hospital_expenses_estimation_certificate,
+        key: editOneSwayamCourseData.data.data.key,
       });
     }
   }, [editOneSwayamCourseData]);
@@ -311,7 +319,6 @@ const AddCourses = () => {
       error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
       flage = true;
     }
-
     setError(error);
     return flage;
   };
@@ -351,52 +358,57 @@ const AddCourses = () => {
     if (validation()) {
       return;
     }
-    let data = {
-      key: editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),
-      detail: state.detail.toString('markdown'),
-      name: state.name,
-      categoryId: state.categoryId,
-      duration: moment(state.duration).format('HH:mm:ss'),
-      jobCategoryIds: state.jobCategoryIds,
-      certification: state.certification,
-      // sequence: parseInt(state.sequence),
-      mode: state.mode,
-      thumbnail: state.thumbnail,
-      application_form: state.application_form,
-      recommended_and_forwarded: state.recommended_and_forwarded,
-      application_process: state.application_process,
-      medical_superintendent: state.medical_superintendent,
-      hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-    };
-    dispatch(addSwayamCourse(data, langId));
+    let formData = new FormData();
+    formData.append('key', editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),);
+    formData.append('name', state.name);
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    formData.append('categoryId', state.categoryId);
+    formData.append('certification', state.certification);
+    formData.append('jobCategoryIds', JSON.stringify(state.jobCategoryIds));
+    formData.append('mode', state.mode);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('thumbnail', state.thumbnail);
+    dispatch(addSwayamCourse(formData, addSwayamCourse));
     handalCancle()
-    // history.push('/admin/courses');
-    if (addSwayamCourseData?.status !== 200) {
-      toast.error("Something Wrong")
-    }
   };
+  useEffect(() => {
+    if (addSwayamCourseData?.status === 200) {
+      toast.success("Add swayamCoures Successfully")
+    }
+  }, [addSwayamCourseData])
 
   const onEdit = () => {
     if (validation()) {
       return;
     }
-    let data = {
-      key: state.key,
-      courseId: id,
-      detail: state.detail.toString('markdown'),
-      name: state.name,
-      categoryId: state.categoryId,
-      duration: moment(state.duration).format('HH:mm:ss'),
-      jobCategoryIds: state.jobCategoryIds,
-      certification: state.certification,
-      // sequence: parseInt(state.sequence),
-      mode: state.mode,
-      thumbnail: state.thumbnail,
-      isActive: true,
-      isDeleted: false,
-    };
-    dispatch(editSwayamCourse(data, langIds.hindi, langIds.marathi));
+    let formData = new FormData();
+    formData.append('key', state.key);
+    formData.append('courseId', id);
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('name', state.name);
+    formData.append('categoryId', state.categoryId);
+    formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    formData.append('jobCategoryIds', JSON.stringify(state.jobCategoryIds));
+    formData.append('certification', state.certification);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('thumbnail', state.thumbnail);
+    formData.append('mode', state.mode);
+    formData.append('isActive', true);
+    formData.append('isDeleted', false);
+    console.log("state.id", state.id)
+
+    dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     handalCancle()
+    console.log("formData", formData);
   };
 
   const addData = () => {
@@ -477,7 +489,6 @@ const AddCourses = () => {
       isDeleted: false,
     };
     dispatch(editSwayamCourseModule(editData,));
-    history.push(`/admin/courses`);
     handalCancle()
   };
 
@@ -501,6 +512,7 @@ const AddCourses = () => {
         isDeleted: true,
       };
       dispatch(editSwayamCourseModule(deleteData));
+      handalCancle()
     }
 
     let val = [...moduleState];
@@ -725,10 +737,9 @@ const AddCourses = () => {
                 <RichTextEditor
                   placeholder="Type your message..."
                   value={state.detail}
-                  onChange={e => onChangesEditorDetail(e, 'detail')}
-                />
-                {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
+                  onChange={e => onChangesEditorDetail(e, 'detail')} />
               </div>
+              {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
 
 
 
@@ -946,7 +957,6 @@ const AddCourses = () => {
               </div>
             </TabPane>
 
-            {/* ************Dont'delete this****************** */}
 
             {/* <TabPane tab="Q&A" key="3">
               <PageHeader

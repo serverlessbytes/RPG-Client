@@ -58,6 +58,10 @@ const Schemes = () => {
     hindi: "",
     marathi: "",
   })
+  useEffect(() => {
+    console.log("state123", state);
+  }, [state])
+
 
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   const languageData = useSelector(state => state.language.getLanguageData);
@@ -209,12 +213,13 @@ const Schemes = () => {
     { label: "benifitLine", key: "benifitLine" },
     { label: "createdAt", key: "createdAt" },
     { label: "detail", key: "detail" },
-    // { label: "documentation", key: "documentation" },
+    { label: "documentation", key: "documentation" },
     { label: "elink", key: "elink" },
     { label: "grievanceRedress", key: "grievanceRedress" },
-    // { label: "howToApply", key: "howToApply" },
+    { label: "howToApply", key: "howToApply" },
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
+    { label: "type", key: "type" },
     { label: "key", key: "key" },
     // { label: "sequence", key: "sequence" },
     { label: "spoc", key: "spoc" },
@@ -223,6 +228,11 @@ const Schemes = () => {
     { label: "videoUrl", key: "videoUrl" },
     { label: "viewCount", key: "viewCount" },
     { label: "website", key: "website" },
+    { label: 'application_form', key: 'application_form' },
+    { label: 'application_process', key: 'application_process' },
+    { label: 'hospital_expenses_estimation_certificate', key: 'hospital_expenses_estimation_certificate' },
+    { label: 'medical_superintendent', key: 'medical_superintendent' },
+    { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
   ];
 
   useEffect(() => {
@@ -721,15 +731,14 @@ const Schemes = () => {
                 </Space>
               </a>
             </Dropdown>
-      
+
             <CSVLink
-              headers={header}
               // separator={";"}
               // enclosingCharacter={`:`}
+              headers={header}
               data={state}
               ref={CSVLinkRef}
-              filename={"Scheme.csv"}
-              target="_blank"
+              filename="Scheme.csv"
               style={{ opacity: 0 }}
             ></CSVLink>
           </div>

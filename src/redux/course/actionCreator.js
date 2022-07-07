@@ -3,6 +3,8 @@ import { ApiGet, ApiGetNoAuth, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import { async } from '@firebase/util';
+import { toast } from 'react-toastify';
+
 
 const {
 
@@ -22,6 +24,7 @@ const {
   addSwayamCourseModuleErr,
   getSwayamCourseModuleSuccess,
   editSwayamCourseModuleSuccess,
+  editSwayamCourseModuleErr,
   getallSwayamCourseSuccess,
   addSwayamPartnerCourseErr,
   addPartnerCourseInBulkBegin,
@@ -166,18 +169,19 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
 }
 
 export const addSwayamCourse = (data, langId) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append('categoryId', data.categoryId);
-  formData.append('certification', data.certification);
-  formData.append('detail', data.detail);
-  formData.append('duration', data.duration);
-  formData.append('jobCategoryIds', JSON.stringify(data.jobCategoryIds));
-  formData.append('mode', data.mode);
-  formData.append('name', data.name);
-  formData.append('thumbnail', data.thumbnail);
+  // const formData = new FormData();
+  // formData.append('categoryId', data.categoryId);
+  // formData.append('certification', data.certification);
+  // formData.append('detail', data.detail);
+  // formData.append('duration', data.duration);
+  // formData.append('jobCategoryIds', JSON.stringify(data.jobCategoryIds));
+  // formData.append('mode', data.mode);
+  // formData.append('name', data.name);
+  // formData.append('thumbnail', data.thumbnail);
 
-  await ApiPost(`course/addSwayamCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
+  await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
+      console.log("res", res);
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })
     .catch((err) => dispatch(addSwayamPartnerCourseErr(err)))
@@ -213,7 +217,11 @@ export const getSwayamCourseModule = (id) => async (dispatch) => {
 export const editSwayamCourseModule = (data) => async (dispatch) => {
   await ApiPost(`course/editSwayamCourseModules?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
-      return dispatch(editSwayamCourseModuleSuccess(res))
+      if (res.status === 200) {
+        return dispatch(editSwayamCourseModuleSuccess(res))
+      }
+    }).catch((err) => {
+      dispatch(editSwayamCourseModuleErr(err))
     })
 }
 

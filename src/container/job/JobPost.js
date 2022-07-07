@@ -108,7 +108,7 @@ const JobPost = () => {
     const allexPortJobs = () => {
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
             .then(res => {
-                setExportTog(true); 
+                setExportTog(true);
                 setStateJob(
                     res?.data?.data.map(item => {
                         return {

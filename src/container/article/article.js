@@ -76,10 +76,10 @@ const article = () => {
         if (!articledata.videoUrl) {
             error.videoUrl = "Please select document file"
             flag = true
-        }else if (!videoUrlReg.test(articledata.videoUrl)) {
+        } else if (!videoUrlReg.test(articledata.videoUrl)) {
             error.videoUrl = 'Enter Valid Video URL';
             flag = true;
-          }
+        }
         if (!articledata.body) {
             error.body = "Please enter body"
             flag = true
@@ -170,7 +170,7 @@ const article = () => {
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
                 isActive: true,
-                isDeleted : false,
+                isDeleted: false,
             }
             dispatch(editArticles(dataEdit))
             setIsModalVisible(false)
@@ -240,15 +240,16 @@ const article = () => {
 
     useEffect(() => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
-            setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item,id) => {
+            setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item, id) => {
                 return {
                     // title: (
                     //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
                     //         {item.title}
                     //     </span>
                     // ),
-                    srno : id + 1,
-                    title : item.title,
+                    priority: item.priority,
+                    srno: id + 1,
+                    title: item.title,
                     body: item.body,
                     imageUrl: item.imageUrl,
                     videoUrl: item.videoUrl,
@@ -273,6 +274,13 @@ const article = () => {
     }, [getArticlesData])
 
     const articleTableColumns = [
+        {
+            title: 'Priority',
+            dataIndex: 'priority',
+            sorter: (a, b) => a.title.length - b.title.length,
+            sortDirections: ['descend', 'ascend'],
+        },
+
         {
             title: 'SR.NO',
             dataIndex: 'srno',

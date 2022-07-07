@@ -33,6 +33,7 @@ function ViewCourse() {
         }
     }, [id])
 
+
     const onEdit = (id) => {
         history.push(`/admin/courses/addcourses?id=${id}`)
     }
