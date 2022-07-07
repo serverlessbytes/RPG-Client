@@ -213,6 +213,7 @@ const SwayamCourses = () => {
     const singleData = courseData.data.data.find(item => item.id === id);
     if (singleData) {
 
+
       let formData = new FormData();
       formData.append('key', singleData.key);
       formData.append('courseId', id);
@@ -229,8 +230,8 @@ const SwayamCourses = () => {
       formData.append('hospital_expenses_estimation_certificate', singleData.hospital_expenses_estimation_certificate);
       formData.append('thumbnail', singleData.thumbnail);
       formData.append('mode', singleData.mode);
-      formData.append('isActive', true);
-      formData.append('isDeleted', false);
+      formData.append('isActive', false);
+      formData.append('isDeleted', true);
       console.log("state.id", singleData.id)
       // let dt = {
       //   key: singleData.key,
@@ -258,6 +259,7 @@ const SwayamCourses = () => {
     }
   };
   const activeSwayamCourses = formData => {
+    console.log("formData", formData);
     const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
       .then((res) => {
         if (res.status === 200) {
@@ -274,26 +276,10 @@ const SwayamCourses = () => {
 
   const onActive = async id => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
-
+    console.log("activeCourse", activeCourse)
     if (activeCourse) {
-      // let dt = {
-      //   key: activeCourse.key,
-      //   courseId: activeCourse.id,
-      //   detail: activeCourse.detail,
-      //   thumbnail: activeCourse.thumbnail,
-      //   name: activeCourse.name,
-      //   categoryId: activeCourse.courseCategory.id,
-      //   duration: activeCourse.duration,
-      //   jobCategoryIds: activeCourse.jobTypes.map(item => item.id),
-      //   certification: activeCourse.certificate,
-      //   // sequence: parseInt(activeCourse.sequence),
-      //   mode: activeCourse.mode,
-      //   isActive: true,
-      //   isDeleted: false,
-      //   // courseRatings : activeCourse.courseRatings,
-      // };
       let formData = new FormData();
-      formData.append('key', activeCourse.key,);
+      formData.append('key', activeCourse.key);
       formData.append('courseId', activeCourse.id);
       formData.append('detail', activeCourse.detail.toString('markdown'));
       formData.append('name', activeCourse.name);
@@ -310,8 +296,7 @@ const SwayamCourses = () => {
       formData.append('mode', activeCourse.mode);
       formData.append('isActive', true);
       formData.append('isDeleted', false);
-      console.log("state.id", activeCourse.id)
-      const restoreSwayamCourses = await activeSwayamCourses(FormData);
+      const restoreSwayamCourses = await activeSwayamCourses(formData);
       if (restoreSwayamCourses.status === 200) {
         toast.success("SwayamCourse active successful")
       }

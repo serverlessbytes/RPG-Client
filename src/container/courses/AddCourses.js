@@ -404,7 +404,6 @@ const AddCourses = () => {
     formData.append('mode', state.mode);
     formData.append('isActive', true);
     formData.append('isDeleted', false);
-    console.log("state.id", state.id)
 
     dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     handalCancle()
