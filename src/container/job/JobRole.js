@@ -12,6 +12,7 @@ import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
 import ImportJobRole from '../../components/modals/ImportJobRole';
+import { ApiPost } from '../../helper/API/ApiData';
 
 const JobRole = () => {
     const { editJobroleSuccess, editJobroleErr, addJobroleSuccess,
@@ -27,6 +28,10 @@ const JobRole = () => {
     const [selectedJobRole, setSelectedJobCategory] = useState();
     const [isDisabled, setIsDisabled] = useState(true);
     const [nameTog, setNameTog] = useState(false)
+    const [jobCategoryId, setJobCategoryId] = useState('')
+    const [name, setName] = useState('')
+    const [error, setError] = useState('')
+
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -103,7 +108,8 @@ const JobRole = () => {
         if (dataForEdit) {
             setSelectedJobCategory(dataForEdit)
             form.setFieldsValue({
-                name: dataForEdit.name
+                name: dataForEdit.name,
+                jobCategoryId: dataForEdit.jobType.name,
             })
             setIsModalVisible(true);
             setIsDisabled(false);
@@ -111,16 +117,35 @@ const JobRole = () => {
         }
     }
 
-    const onDelete = (id) => {
-        let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
-        if (dataForEdit) {
-            delete dataForEdit.key
-            dataForEdit = {
-                ...dataForEdit,
-                isActive: false,
-                isDeleted: true
+    const newJobRole = dataForDelete => {
+        const newVal = ApiPost("job/editRole", dataForDelete)
+            .then((res) => {
+                if (res.status === 200) {
+                    dispatch(getJobroles())
+                }
+                return res
+            })
+        return newVal
+    }
+
+
+    const onDelete = async (id) => {
+        let dataForDelete = jobRolesData && jobRolesData.find((item) => item.id === id)
+        if (dataForDelete) {
+            delete dataForDelete.key,
+                delete dataForDelete.id,
+                delete dataForDelete.jobType,
+                dataForDelete = {
+                    ...dataForDelete,
+                    jobId: id,
+                    isActive: false,
+                    isDeleted: true
+                }
+            // dispatch(editJobrole(dataForDelete))
+            const deleteJobRole = await newJobRole(dataForDelete)
+            if (deleteJobRole.status === 200) {
+                toast.success("Job Role delete successful")
             }
-            dispatch(editJobrole(dataForEdit))
         }
     }
 
@@ -144,9 +169,9 @@ const JobRole = () => {
                                         <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                                             <FeatherIcon icon="edit" size={16} />
                                         </Button>
-                                        {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
-                                    <FeatherIcon icon="x-circle" size={16} />
-                                </Button> */}
+                                        <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                                            <FeatherIcon icon="trash-2" size={16} />
+                                        </Button>
                                     </>
                                 </div>
                             </div>
@@ -168,11 +193,35 @@ const JobRole = () => {
         form.resetFields()
         setIsModalVisible(false);
         setNameTog(false)
+        setError("")
     };
 
+    const validation = (data) => {
+
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "Name is required";
+            flag = true;
+        }
+        if (!data.jobCategoryId) {
+            error.jobCategoryId = "jobCategory is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
+
     const handleOk = () => {
+
         let data = form.getFieldsValue()
         if (!selectedJobRole) {
+            if (validation(data)) {
+                return
+            }
+            setName(data.name)
+            setJobCategoryId(data.jobCategoryId)
             data = {
                 ...data,
                 key: uuid()
@@ -290,21 +339,28 @@ const JobRole = () => {
             <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
+
                     <label>Job category</label>
-                    <Form.Item initialValue="Select a job category " name="jobCategoryId">
+                    <Form.Item name="jobCategoryId" className='mb-0'>
                         <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select">
                             {jobData?.data && jobData?.data?.map((items) => (
                                 <Option value={items.id}>{items.name} </Option>
                             ))}
                         </Select>
                     </Form.Item>
+                    {error?.jobCategoryId && <span style={{ color: "red" }}>{error.jobCategoryId}</span>}
+
+
+
                     <label htmlFor="name">Job role name</label>
-                    <Form.Item name="name">
+                    <Form.Item name="name" className='mb-0'>
                         <Input
                             placeholder="Enter job role name"
                         // name="name"
                         />
                     </Form.Item>
+                    {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
+
                 </Form>
             </Modal>
 

@@ -113,8 +113,8 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('grievanceRedress', data.grievanceRedress);
   formData.append('howToApply', data.howToApply);
   formData.append('isActive', data.isActive);
-  formData.append('locations', data.locations);
-  // formData.append("locations", JSON.stringify(data.locations));
+  // formData.append('locations', data.locations);
+  formData.append("locations", JSON.stringify(data.locations));
   formData.append('name', data.name);
   formData.append('schemeBenifit', data.schemeBenifit);
   formData.append('spoc', data.spoc);
@@ -123,6 +123,12 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('videoUrl', data.videoUrl);
   formData.append('website', data.website);
   formData.append('schemeCategory', data.schemeCategory);
+  formData.append('application_form', data.application_form);
+  formData.append('recommended_and_forwarded', data.recommended_and_forwarded);
+  formData.append('medical_superintendent', data.medical_superintendent);
+  formData.append('hospital_expenses_estimation_certificate', data.hospital_expenses_estimation_certificate);
+  formData.append('application_process', data.application_process);
+
 
   await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then(res => {

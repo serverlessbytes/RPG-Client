@@ -33,7 +33,8 @@ const JobCategory = () => {
     const [selectedJobCategory, setSelectedJobCategory] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
-    // const [error, setError] = useState({})
+    const [error, setError] = useState('')
+    const [data, setData] = useState('')
 
     const { users } = useSelector(state => {
         return {
@@ -161,20 +162,20 @@ const JobCategory = () => {
         form.resetFields()
         setIsModalVisible(false);
         setNameTog(false)
+        setError("")
     };
 
-    // const validation = () => {
-    //     let error = {};
-    //     let flag = false;
-    //     let data = form.getFieldsValue();
-    
-    //     if (data === "") {
-    //         error.name = "JobCategory is required";
-    //         flag = true;
-    //     }
-    //     setError(error);
-    //     return flag
-    // }
+    const validation = (data) => {
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "JobCategory is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
 
     const handleOk = () => {
         // if (validation) {
@@ -182,6 +183,10 @@ const JobCategory = () => {
         // }
         let data = form.getFieldsValue()
         if (!selectedJobCategory) {
+            if (validation(data)) {
+                return
+            }
+            setData(data.name)
             data = {
                 ...data,
                 key: uuid()
@@ -258,15 +263,15 @@ const JobCategory = () => {
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
-                    <Form.Item name="name">
+                    <Form.Item name="name" className='mb-0'>
                         <Input
                             placeholder="Job Category"
                             name="name"
                         />
-                    {/* {
-                        error.name && <span style={{ color: "red" }}>{error.name}</span>
-                    } */}
                     </Form.Item>
+                    {
+                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                    }
                 </Form>
             </Modal>
 

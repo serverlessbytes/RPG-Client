@@ -32,6 +32,7 @@ const district = () => {
         name: '',
         stateId: ''
     })
+    const [error, setError] = useState('')
 
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
@@ -46,10 +47,13 @@ const district = () => {
 
     const onChangeHandler = (e) => {
         setState({ ...state, [e.target.name]: e.target.value })
+        setError({ ...error, [e.target.name]: "" })
     }
     const onChnageValue = (e, name) => {
         if (name === "stateId") {
             setState({ ...state, stateId: e })
+            setError({ ...error, stateId: "" })
+
         }
     }
 
@@ -106,9 +110,29 @@ const district = () => {
     //         dispatch(getDistrictData(statedata))
     //     }
     // }, [statedata])
-   
+
+    const validation = (data) => {
+
+        let error = {};
+        let flag = false;
+
+        if (!state.name) {
+            error.name = "State is required";
+            flag = true;
+        }
+        if (!state.stateId) {
+            error.stateId = "District is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
+
     const handleOk = () => {
-      
+        if (validation()) {
+            return
+        }
+
         let data = {
             name: state.name,
             stateId: state.stateId,
@@ -122,6 +146,11 @@ const district = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
         form.resetFields();
+        setState({
+            name: "",
+            stateId: "",
+        })
+        setError("");
     };
 
     useEffect(() => {
@@ -219,6 +248,7 @@ const district = () => {
                             //defaultValue={data.name}
                             onChange={(e) => { onChangeHandler(e) }}
                         />
+                        {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
                     </Form.Item>
                     {/* <label htmlFor="name">Key</label>
                     <Form.Item name="key">
@@ -238,6 +268,7 @@ const district = () => {
                             }
 
                         </Select>
+                        {error?.stateId && <span style={{ color: "red" }}>{error.stateId}</span>}
                     </Form.Item>
                 </Form>
 

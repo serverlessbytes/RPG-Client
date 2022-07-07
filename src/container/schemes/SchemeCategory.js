@@ -6,28 +6,25 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
-import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
 import { addSchemecategory, editSchemecategory, getSchemecategory } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/schemes/actions';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import ImportSchemeCategory from '../../components/modals/ImportSchemeCategory';
 const SchemeCategory = () => {
     const { editSchemecategorySuccess, addSchemecategorySuccess, addSchemecategoryErr, editSchemecategoryErr, addSchemeCategoryInBulkSuccess } = actions;
 
 
     const dispatch = useDispatch()
-    const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [schemeCategoryTableData, setSchemeCategoryTableData] = useState([]);
     const [selectedSchemeCategory, setSelectedSchemeCategory] = useState();
     const [nameTod, setnameTod] = useState(false)
     const [importModal, setImportModal] = useState(false);
+    const [error, setError] = useState('')
 
     const { users } = useSelector(state => {
         return {
@@ -162,11 +159,27 @@ const SchemeCategory = () => {
         setIsModalVisible(false);
         setnameTod(false)
         setSelectedSchemeCategory(null)
+        setError('')
     };
+
+    const validation = (data) => {
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "Category is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
 
     const handleOk = () => {
         let data = form.getFieldsValue()
         if (!selectedSchemeCategory) {
+            if (validation(data)) {
+                return
+            }
             data = {
                 ...data,
                 key: uuid()
@@ -259,12 +272,13 @@ const SchemeCategory = () => {
                 okText={nameTod ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
-                    <Form.Item name="name">
+                    <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder=""
+                            placeholder="Enter Category"
                             name="name"
                         />
                     </Form.Item>
+                    { error.name && <span style={{ color: "red" }}>{error.name}</span>}
                 </Form>
             </Modal>
 
