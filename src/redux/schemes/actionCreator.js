@@ -124,6 +124,13 @@ export const addSchemeData = (langID, data) => async dispatch => {
   formData.append('videoUrl', data.videoUrl);
   formData.append('website', data.website);
   formData.append('schemeCategory', data.schemeCategory);
+  formData.append('application_form', data.application_form);
+  formData.append('recommended_and_forwarded', data.recommended_and_forwarded);
+  formData.append('medical_superintendent', data.medical_superintendent);
+  formData.append('hospital_expenses_estimation_certificate', data.hospital_expenses_estimation_certificate);
+  formData.append('application_process', data.application_process);
+
+
   await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
     .then(res => {
       // return dispatch(addSchemeSuccess(res));

@@ -174,12 +174,12 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   };
 
   const handleOk = () => {
-    // if (validation()) {
-    //   return;
-    // }
+    if (validation()) {
+      return;
+    }
     if (fileData) {
       fileData.forEach(e => {
-        // e['vacancies'] = +e.vacancies;
+        e['vacancies'] = +e.vacancies;
         // e['language'] = language;
         // e['state'] = stateID;
         // e['name'] = employertID;

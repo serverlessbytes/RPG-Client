@@ -35,6 +35,7 @@ const CourseCategory = () => {
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
     const [courseCategory, setCourseCategory] = useState()
+    const [error, setError] = useState('')
 
     const { users } = useSelector(state => {
         return {
@@ -110,6 +111,7 @@ const CourseCategory = () => {
         setIsModalVisible(false);
         setNameTog(false)
         setDataForEdit(null)
+        setError('')
     };
 
     const newCourseCategory = dataForDelete => {
@@ -144,8 +146,6 @@ const CourseCategory = () => {
 
     const onEdit = (id) => {
         let dataForEdit = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        // useEffect(()=>{},[dataForEdit])
-        // console.log("dataForEdit",dataForEdit)
         if (dataForEdit) {
             setDataForEdit(dataForEdit)
             form.setFieldsValue({
@@ -156,6 +156,18 @@ const CourseCategory = () => {
         // dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
         setNameTog(true)
+    }
+
+    const validation = (data) => {
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "Benefit Type is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
     }
 
     const handleOk = () => {
@@ -173,6 +185,9 @@ const CourseCategory = () => {
             handleCancel()
         }
         else {
+            if (validation(data)) {
+                return
+            }
             data = {
                 ...data,
                 key: uuid()
@@ -330,12 +345,15 @@ const CourseCategory = () => {
             >
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of Category</label>
-                    <Form.Item name="name">
+                    <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder=""
+                            placeholder="Type of Category"
                             name="name"
                         />
                     </Form.Item>
+                    {
+                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                    }
                     {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
                         <Input

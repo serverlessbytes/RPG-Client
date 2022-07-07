@@ -169,15 +169,6 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
 }
 
 export const addSwayamCourse = (data, langId) => async (dispatch) => {
-  // const formData = new FormData();
-  // formData.append('categoryId', data.categoryId);
-  // formData.append('certification', data.certification);
-  // formData.append('detail', data.detail);
-  // formData.append('duration', data.duration);
-  // formData.append('jobCategoryIds', JSON.stringify(data.jobCategoryIds));
-  // formData.append('mode', data.mode);
-  // formData.append('name', data.name);
-  // formData.append('thumbnail', data.thumbnail);
 
   await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
