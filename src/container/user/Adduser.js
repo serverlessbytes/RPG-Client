@@ -17,7 +17,7 @@ const Adduser = () => {
     let location = useLocation();
     const dispatch = useDispatch();
     const { Option } = Select;
-
+    const {getOneUserSuccess} = actions;
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -27,8 +27,6 @@ const Adduser = () => {
         avatar: "",
     });
     const [error, setError] = useState({})
-
-    const {getOneUserSuccess} = actions;
 
     const getOneData = useSelector((state) => state.users.getOneUser)
    

@@ -426,6 +426,7 @@ const JobPost = () => {
                                         setPagePer={setPagePer}
                                         setNumberOfPage={setNumberOfPage}
                                         setExportTog={setExportTog}
+                                        getJobData={setStateJob}
                                     />}
                                 </TabPane>
                             </Tabs>

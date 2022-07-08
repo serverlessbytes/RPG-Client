@@ -37,14 +37,13 @@ const {
 const login = (body, keepSignIn) => async dispatch => {
   await ApiPostNoAuth('user/auth/login', body)
     .then(res => {
-      console.log('res  === ', res);
       if (res.message === 'user logged') {
 
-        // if (keepSignIn) {
+        if (keepSignIn) {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, keepSignIn);
-        // } else {
-        //   AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, false);
-        // }
+        } else {
+          AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, false);
+        }
         // dispatch(getLanguageByName())
         return dispatch(loginSuccess(res));
       }
@@ -90,9 +89,20 @@ const getUser = () => async dispatch => {
   });
 };
 
-const editUser = (body, id) => async dispatch => {
-  await ApiPost(`user/auth/editProfile?id=${id}`, body).then(res => {
-    return dispatch(editProfileSuccess(res));
+const editUser = (data, id) => async dispatch => {
+  // console.log("body",body)
+  const formData = new FormData();
+  formData.append('avatar', data.avatar);
+  formData.append('email', data.email);
+  formData.append('isActive', data.isActive);
+  formData.append('isDeleted', data.isDeleted);
+  formData.append('name', data.name);
+  formData.append('phone', data.phone);
+  await ApiPost(`user/auth/editProfile?id=${id}`, formData).then(res => {
+    dispatch(editProfileSuccess(res))
+    if (res.status === 200) {
+      dispatch(getUser())
+    }
   });
 };
 
