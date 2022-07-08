@@ -63,13 +63,18 @@ const State = () => {
         dispatch(getStateData())
     }, []);
 
-    const languagesTableColumns = [
+    const stateTableColumns = [
         {
             title: 'State',
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
-        }
+        },
+        {
+            title: '',
+            dataIndex: '',
+            width: '1px',
+        },
     ];
 
     const showModal = () => {
@@ -130,7 +135,7 @@ const State = () => {
                             <Table
                                 //rowSelection={rowSelection}
                                 dataSource={stateTableData}
-                                columns={languagesTableColumns}
+                                columns={stateTableColumns}
                                 pagination={false}
                             />
 

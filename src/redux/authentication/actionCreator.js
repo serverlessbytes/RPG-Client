@@ -17,6 +17,7 @@ const {
   signUpBegin,
   getUserSuccess,
   editProfileSuccess,
+  editProfileErr,
 
 } = actions;
 
@@ -90,7 +91,7 @@ const getUser = () => async dispatch => {
 };
 
 const editUser = (data, id) => async dispatch => {
-  // console.log("body",body)
+  
   const formData = new FormData();
   formData.append('avatar', data.avatar);
   formData.append('email', data.email);
@@ -103,7 +104,8 @@ const editUser = (data, id) => async dispatch => {
     if (res.status === 200) {
       dispatch(getUser())
     }
-  });
+  })
+  .catch((err) => dispatch(editProfileErr(err)))
 };
 
 export { login, logOut, signUp, getUser, editUser };

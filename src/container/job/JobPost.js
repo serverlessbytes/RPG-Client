@@ -28,15 +28,17 @@ const JobPost = () => {
     const history = useHistory();
     const { TabPane } = Tabs;
     const CSVLinkRef = useRef(null);
+    const CSVLinkRefAll = useRef(null);
 
     const [stateJob, setStateJob] = useState([]); //set data for job
+    const [stateJobAll, setStateJobAll] = useState([]); //set data for job
     const [apply, setApply] = useState(false);
     const [state, setState] = useState('');
     const [type, setType] = useState('');
     const [jobRole, setJobRole] = useState('');
     const [search, setSearch] = useState('')
     const [status, setStatus] = useState('active');
-    const [exportTog, setExportTog] = useState(false);
+    const [exportTog, setExportTog] = useState('');
     const [pagePer, setPagePer] = useState(20);
     const [numberOfPage, setNumberOfPage] = useState(1);
     const [importModal, setImportModal] = useState(false);
@@ -55,6 +57,39 @@ const JobPost = () => {
     const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
 
     const header = [
+        { label: 'id', key: 'id' },
+        { label: 'name', key: 'name.name' },
+        { label: 'jobRole', key: 'jobRole.name' },
+        { label: 'district', key: 'district.name' },
+        { label: 'jobType', key: 'jobType.name' },
+        { label: 'shifts', key: 'shifts' },
+        { label: 'state', key: 'state.name' },
+        { label: 'benifits', key: 'benifits' },
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'description', key: 'description' },
+        { label: 'email', key: 'email' },
+        { label: 'endDate', key: 'endDate' },
+        { label: 'extraType', key: 'extraType' },
+        { label: 'hiredNumber', key: 'hiredNumber' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isApproved', key: 'isApproved' },
+        { label: 'key', key: 'key' },
+        { label: 'phone', key: 'phone' },
+        { label: 'reqExperience', key: 'reqExperience' },
+        { label: 'requirements', key: 'requirements' },
+        { label: 'salary', key: 'salary' },
+        { label: 'startDate', key: 'startDate' },
+        { label: 'town', key: 'town' },
+        { label: 'type', key: 'type' },
+        { label: 'vacancies', key: 'vacancies' },
+        { label: 'viewCount', key: 'viewCount' },
+        { label: 'application_form', key: 'application_form' },
+        { label: 'application_process', key: 'application_process' },
+        { label: 'hospital_expenses_estimation_certificate', key: 'hospital_expenses_estimation_certificate' },
+        { label: 'medical_superintendent', key: 'medical_superintendent' },
+        { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
+    ];
+    const headerAll = [
         { label: 'id', key: 'id' },
         { label: 'name', key: 'name' },
         { label: 'jobRole', key: 'jobRole' },
@@ -108,8 +143,7 @@ const JobPost = () => {
     const allexPortJobs = () => {
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
             .then(res => {
-                setExportTog(true);
-                setStateJob(
+                setStateJobAll(
                     res?.data?.data.map(item => {
                         return {
                             ...item,
@@ -127,6 +161,7 @@ const JobPost = () => {
                         };
                     }),
                 );
+                setExportTog("all");
             });
     };
 
@@ -169,11 +204,12 @@ const JobPost = () => {
     }, [languageData])
 
     const onExportJobs = () => {
-        // dispatch(
-        //     getJobsFilterForMain(
-        //         pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
-        // );
-        setExportTog(true);
+        dispatch(
+            getJobsFilterForMain(
+                pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
+        );
+        setExportTog('single');
+
         // CSVLinkRef?.current?.link.click()
     };
 
@@ -198,14 +234,18 @@ const JobPost = () => {
     }, []);
 
     useEffect(() => {
-        if (stateJob.length && exportTog) {
+        if (stateJob.length && exportTog === 'single') {
             CSVLinkRef?.current?.link.click();
             toast.success('Job data exported successfully');
-            setExportTog(false);
-        } else if (exportTog) {
+            setExportTog('');
+        } else if (stateJob.length && exportTog === 'all') {
+            CSVLinkRefAll?.current?.link.click();
+            toast.success('Job data exported successfully');
+            setExportTog('');
+        } else if (!stateJob.length && exportTog) {
             toast.success('No data for export');
         }
-    }, [stateJob, exportTog]); //
+    }, [exportTog]); //
 
     useEffect(() => {
         dispatch(allJobsSuccess(null));
@@ -312,6 +352,13 @@ const JobPost = () => {
                             headers={header}
                             data={stateJob}
                             ref={CSVLinkRef}
+                            filename="Job.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
+                        <CSVLink
+                            headers={headerAll}
+                            data={stateJobAll}
+                            ref={CSVLinkRefAll}
                             filename="Job.csv"
                             style={{ opacity: 0 }}
                         ></CSVLink>

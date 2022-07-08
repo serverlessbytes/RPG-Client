@@ -58,7 +58,7 @@ const AddJobApplication = () => {
     const onFileSelecte = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
         if (extensions) {
-            let extensionsValidation = ['docx', 'pdf']
+            let extensionsValidation = ['docx', 'pdf','csv','xlsx']
             if (extensionsValidation.includes(extensions[extensions.length - 1])) {
                 setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
                 setError({ ...error, resume_url: "" });
@@ -75,7 +75,7 @@ const AddJobApplication = () => {
     const onChnagecertificationUrl = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
         if (extensions) {
-            let extensionsValidation = ['docx', 'pdf']
+            let extensionsValidation = ['docx', 'pdf','csv','xlsx']
             if (extensionsValidation.includes(extensions[extensions.length - 1])) {
                 setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
                 setError({ ...error, certification_url: "" });
@@ -139,7 +139,7 @@ const AddJobApplication = () => {
                             <label htmlFor="resume_url">Resume URL</label>
                             <Form.Item>
                                 {/* <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} /> */}
-                                <Input type="file" accept=".doc,.docx,.pdf" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
+                                <Input type="file"  placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
                                 {
                                     error.resume_url && <span style={{ color: "red" }}>{error.resume_url}</span>
                                 }
@@ -149,7 +149,7 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="certification_url">Certification URL</label>
                             <Form.Item>
-                                <Input type="file" accept=".doc,.docx,.pdf" placeholder="Certification URL" name="certification_url" onChange={(e) => onChnagecertificationUrl(e, "certification_url")} />
+                                <Input type="file" placeholder="Certification URL" name="certification_url" onChange={(e) => onChnagecertificationUrl(e, "certification_url")} />
                                 {
                                     error.certification_url && <span style={{ color: "red" }}>{error.certification_url}</span>
                                 }

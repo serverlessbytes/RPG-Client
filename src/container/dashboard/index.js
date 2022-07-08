@@ -1,9 +1,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Row, Col, Skeleton } from 'antd';
-import FeatherIcon from 'feather-icons-react';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
 import { CardBarChart2, EChartCard } from './style';
 import Heading from '../../components/heading/heading';
@@ -19,7 +17,6 @@ import {
   getTopMostViewedJobs,
   getTopMostViewedSchemes,
 } from '../../redux/dashboard/actionCreator';
-import { getUser } from '../../redux/authentication/actionCreator';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 

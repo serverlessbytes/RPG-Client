@@ -15,8 +15,8 @@ const initState = {
   error: null,
   signup:null,
   getUserData:null,
-  editUserData:null
-
+  editUserData:null,
+  editProfileErr:null
 };
 
 /**
@@ -98,12 +98,6 @@ const AuthReducer = (state = initState, action) => {
         getUserData: data,
       };
 
-      case EDIT_PROFILE_ERR:
-        return {
-          ...state,
-          error: err,
-          loading: false,
-        };
         case EDIT_PROFILE_BEGIN:
         return {
           ...state,
@@ -116,6 +110,12 @@ const AuthReducer = (state = initState, action) => {
           error: err,
           editUserData: data,
         };
+        case EDIT_PROFILE_ERR:
+          return {
+            ...state,
+            editProfileErr: err,
+            loading: false,
+          };
 
       
     default:

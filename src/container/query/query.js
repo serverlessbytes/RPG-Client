@@ -25,7 +25,7 @@ const query = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [queryTableData, setQueryTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(5); // forpagination
+    const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuery, setSelectedQuery] = useState();//For Edit
     const [nameTog, setNameTog] = useState(false)
