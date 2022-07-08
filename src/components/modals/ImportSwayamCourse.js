@@ -117,22 +117,13 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     }
     if (fileData) {
       fileData.forEach(e => {
-
-        e['categoryId'] = jobCategoryID;
         e['jobCategoryIds'] = [jobCategoryID];
-        e['language'] = language;
-
-        // e['createdByUser'] = userData.id;
-        // e['modifiedByUser'] = userData.id;
-        // e['categoryId'] = courseCategoryID;
-        // e['key'] = uuid();
       });
     }
     // if (fileData && courseCategoryID && jobCategoryID.length > 0) {
     //   dispatch(addSwayamCourseInBulk(fileData));
     //   handleCancel();
     // }
-
     if (fileData) {
       dispatch(addSwayamCourseInBulk(fileData));
       handleCancel();

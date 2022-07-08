@@ -54,8 +54,9 @@ const AddCourses = () => {
   const userData = useSelector(state => state.auth.getUserData);
   const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
-  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
   const languageData = useSelector(state => state.language.getLanguageData);
+
+
 
   const [state, setState] = useState({
     key: '',
@@ -78,6 +79,15 @@ const AddCourses = () => {
     hindi: '',
     marathi: ''
   });
+
+
+  // useEffect(() => {
+  //   if (addSwayamCourseData.status === 200) {
+  //     console.log("addSwayamCourseData", addSwayamCourseData);
+
+  //   }
+  // }, [addSwayamCourseData])
+
 
   useEffect(() => {
     let temp = {
@@ -118,10 +128,10 @@ const AddCourses = () => {
 
 
   useEffect(() => {
-    if (addSwayamCourseData && addSwayamCourseData.status === 200) {
-      toast.success("Swayam Course Modules Add successful");
-      dispatch(addSwayamPartnerCourseSuccess(null))
-    }
+    // if (addSwayamCourseModualData && addSwayamCourseModualData.status === 200) {
+    //   toast.success("Swayam Course Modules Add successful");
+    //   dispatch(addSwayamPartnerCourseSuccess(null))
+    // }
     // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
     //   dispatch(editSchemeSuccess(null))
     //   toast.success("Jobs Update successful");
@@ -202,13 +212,14 @@ const AddCourses = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
-      setSwyamModuleId(false);
-      //toast.success("Swayam Course Add successful");
-      setDefaultSelect('2');
-    }
-  }, [addSwayamCourseData]);
+
+  // useEffect(() => {
+  //   if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
+  //     setSwyamModuleId(false);
+  //     //toast.success("Swayam Course Add successful");
+  //     // setDefaultSelect('2');
+  //   }
+  // }, [addSwayamCourseData]);
 
   useEffect(() => {
     dispatch(getCategoryData());
@@ -283,10 +294,6 @@ const AddCourses = () => {
       error.jobCategoryIds = 'Job Category is required';
       flage = true;
     }
-    // if (state.sequence === '') {
-    //   error.sequence = 'Senquence is required';
-    //   flage = true;
-    // }
     if (state.certification === '') {
       error.certification = 'Certification is required';
       flage = true;
@@ -374,10 +381,10 @@ const AddCourses = () => {
     formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
     formData.append('thumbnail', state.thumbnail);
     dispatch(addSwayamCourse(formData, addSwayamCourse));
-    handalCancle()
   };
   useEffect(() => {
     if (addSwayamCourseData?.status === 200) {
+      setDefaultSelect('2')
       toast.success("Add swayamCoures Successfully")
     }
   }, [addSwayamCourseData])
@@ -407,25 +414,30 @@ const AddCourses = () => {
 
     dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     handalCancle()
-    console.log("formData", formData);
   };
+
+  useEffect(() => {
+    console.log("selectKey", selectKey);
+  }, [selectKey])
 
   const addData = () => {
     let val = [...moduleState];
+    console.log("val", val);
     val.push({
       key: uuid(),
       name: '',
       detail: '',
       duration: '',
       videoUrl: '',
-      // sequence: null,
+      moduleId: "",
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: userData && userData.data && userData.data.id,
       modifiedByUser: userData && userData.data && userData.data.id,
     });
     setModuleState(val);
-    handalCancle()
+    console.log("val.length ", val.length);
+    setSelectKey(val.length);
   };
 
   const moduleChange = (e, i, name) => {
@@ -439,10 +451,12 @@ const AddCourses = () => {
     } else if (name === 'duration') {
       value[i].duration = e;
       setModuleState(value);
-    } else if (name === 'sequence') {
-      value[i].sequence = e.target.value;
-      setModuleState(value);
-    } else if (name === 'detail') {
+    }
+    // else if (name === 'sequence') {
+    //   value[i].sequence = e.target.value;
+    //   setModuleState(value);
+    // } 
+    else if (name === 'detail') {
       value[i].detail = e.target.value;
       setModuleState(value);
     }
@@ -453,7 +467,6 @@ const AddCourses = () => {
       return;
     }
     const newData = moduleState.filter(item => !item.moduleId).map(item => {
-
       return {
         key: item.key,
         name: item.name,
@@ -496,22 +509,19 @@ const AddCourses = () => {
   }
 
   const onRemoveData = () => {
-    // if (moduleState.length > 1) {
     if (id) {
       const data = moduleState[selectKey];
       const deleteData = {
+        key: data.key,
         name: data.name,
         detail: data.detail,
         duration: moment(data.duration).format('HH:mm:s'),
         videoUrl: data.videoUrl,
-        sequence: data.sequence,
-        key: data.key,
-        moduleId: data.moduleId,
+        moduleId: data.modifiedByUser,
         isActive: false,
         isDeleted: true,
       };
       dispatch(editSwayamCourseModule(deleteData));
-      handalCancle()
     }
 
     let val = [...moduleState];
@@ -526,6 +536,7 @@ const AddCourses = () => {
   const moduleCallback = key => {
     setSelectKey(key);
   };
+
   const callback = key => {
     setDefaultSelect(key);
   };
@@ -762,6 +773,7 @@ const AddCourses = () => {
                 </Button>
               </div>
             </TabPane>
+
             <TabPane tab="Modules" disabled={swyamModuleId} key="2">
               <Tabs tabPosition={'left'} onChange={moduleCallback}>
                 {moduleState.length ? (
@@ -810,7 +822,7 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24} xs={24}>
+                        {/* <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="sequence">Sequence</label>
                           <Form.Item>
                             <Input
@@ -824,7 +836,7 @@ const AddCourses = () => {
                               <label style={{ color: 'red' }}>{moduleError[`sequence${i + 1}`]}</label>
                             )}
                           </Form.Item>
-                        </Col>
+                        </Col> */}
                         <Col lg={24}>
                           <label htmlFor="detail">Module Detail</label>
                           <Form.Item>

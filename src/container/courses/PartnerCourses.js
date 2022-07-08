@@ -284,7 +284,6 @@ const PartnerCourses = () => {
   const viewPartnerCoursedata = id => {
     history.push(`/admin/courses/viewpartnercourse?id=${id}`)
   };
-
   const onDelete = id => {
     let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activeCourseDelete.certificate;
@@ -362,12 +361,11 @@ const PartnerCourses = () => {
       delete activedata.enrolled;
       delete activedata.hindi;
       delete activedata.marathi;
-      // delete activedata.application_form;
-      // delete activedata.recommended_and_forwarded;
-      // delete activedata.application_process;
-      // delete activedata.medical_superintendent;
-      // delete activedata.hospital_expenses_estimation_certificate;
-
+      delete activedata.application_form;
+      delete activedata.recommended_and_forwarded;
+      delete activedata.application_process;
+      delete activedata.medical_superintendent;
+      delete activedata.hospital_expenses_estimation_certificate
       activedata = {
         ...activedata,
         isActive: true,

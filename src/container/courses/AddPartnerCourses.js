@@ -325,7 +325,6 @@ const AddPartnerCourses = () => {
             contactPersonPhone: state.contactpersonphone,
             pincode: state.pincode,
             location: state.locations,
-            // sequence: parseInt(state.sequence),
             duration: moment(state.duration).format('hh:mm:ss'),
             categoryId: state.cateGory,
             state: state.state,

@@ -25,29 +25,52 @@ const AddSchemes = () => {
   const { Option } = Select;
 
   const [state, setState] = useState({
-    benifitLine: RichTextEditor.createEmptyValue(),
-    detail: RichTextEditor.createEmptyValue(),
-    howToApply: RichTextEditor.createEmptyValue(),
-    documentation: RichTextEditor.createEmptyValue(),
+    // benifitLine: RichTextEditor.createEmptyValue(),
+    // detail: RichTextEditor.createEmptyValue(),
+    // howToApply: RichTextEditor.createEmptyValue(),
+    // documentation: RichTextEditor.createEmptyValue(),
+    // name: '',
+    // schemeCategory: '',
+    // schemeBenifit: '',
+    // locations: [],
+    // website: '',
+    // type: '',
+    // benificiary: '',
+    // grievanceRedress: '',
+    // elink: '',
+    // spoc: '',
+    // isActive: true,
+    // // sequence: '',
+    // videoUrl: '',
+    // thumbnail: '',
+    // application_form: "",
+    // recommended_and_forwarded: "",
+    // application_process: "",
+    // medical_superintendent: "",
+    // hospital_expenses_estimation_certificate: ""
+    key: '',
     name: '',
     schemeCategory: '',
     schemeBenifit: '',
-    locations: [],
+    benifitLine: RichTextEditor.createEmptyValue(),
+    benificiary: '',
+    videoUrl: '',
+    detail: RichTextEditor.createEmptyValue(),
+    howToApply: RichTextEditor.createEmptyValue(),
+    documentation: RichTextEditor.createEmptyValue(),
     website: '',
     type: '',
-    benificiary: '',
-    grievanceRedress: '',
     elink: '',
+    grievanceRedress: '',
     spoc: '',
     isActive: true,
-    // sequence: '',
-    videoUrl: '',
+    locations: [],
+    application_form: '',
+    recommended_and_forwarded: '',
+    application_process: '',
+    medical_superintendent: '',
+    hospital_expenses_estimation_certificate: '',
     thumbnail: '',
-    application_form: "",
-    recommended_and_forwarded: "",
-    application_process: "",
-    medical_superintendent: "",
-    hospital_expenses_estimation_certificate: ""
   });
 
   useEffect(() => {
@@ -74,6 +97,9 @@ const AddSchemes = () => {
       dispatch(getOneSchemeData(id));
     }
   }, [id]);
+  useEffect(() => {
+    console.log("getOneScHemeData", getOneScHemeData);
+  }, [getOneScHemeData])
 
   useEffect(() => {
     if (getOneScHemeData && id) {
@@ -85,8 +111,8 @@ const AddSchemes = () => {
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
         key: getOneScHemeData.key,
         name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.id,//name
-        schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
+        schemeCategory: getOneScHemeData.schemeCategory.id,
+        schemeBenifit: getOneScHemeData.schemeBenifit.id,
         locations: getOneScHemeData.locations.map(item => item.id),
         website: getOneScHemeData.website,
         type: getOneScHemeData.type,
@@ -95,13 +121,17 @@ const AddSchemes = () => {
         elink: getOneScHemeData.elink,
         spoc: getOneScHemeData.spoc,
         isActive: getOneScHemeData.isActive,
-        // sequence: getOneScHemeData.sequence,
         videoUrl: getOneScHemeData.videoUrl,
         thumbnail: getOneScHemeData.thumbnail,
         id: getOneScHemeData.id,
         isDeleted: getOneScHemeData.isDeleted,
         isPublished: getOneScHemeData.isPublished,
         isApproved: getOneScHemeData.isApproved,
+        application_form: getOneScHemeData.application_form,
+        application_process: getOneScHemeData.application_process,
+        hospital_expenses_estimation_certificate: getOneScHemeData.hospital_expenses_estimation_certificate,
+        medical_superintendent: getOneScHemeData.medical_superintendent,
+        recommended_and_forwarded: getOneScHemeData.recommended_and_forwarded,
       });
     }
   }, [getOneScHemeData]);
@@ -196,8 +226,8 @@ const AddSchemes = () => {
   const validation = () => {
     let error = {};
     let flage = false;
-    let urlReg = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-    let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+    // let urlReg = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
     let stringReg = /^[ A-Za-z]/;
     let a = stringReg.test(state.name)
     console.log("a", a);
@@ -250,10 +280,10 @@ const AddSchemes = () => {
       error.website = 'website is required';
       flage = true;
     }
-    else if (!urlReg.test(state.website)) {
-      error.website = 'Enter Valid Website Name';
-      flage = true;
-    }
+    // else if (!urlReg.test(state.website)) {
+    //   error.website = 'Enter Valid Website Name';
+    //   flage = true;
+    // }
     if (state.type === '') {
       error.type = 'type is required';
       flage = true;
@@ -266,10 +296,10 @@ const AddSchemes = () => {
       error.elink = 'elink is required';
       flage = true;
     }
-    else if (!urlReg.test(state.elink)) {
-      error.elink = 'Enter Valid elink Name';
-      flage = true;
-    }
+    // else if (!urlReg.test(state.elink)) {
+    //   error.elink = 'Enter Valid elink Name';
+    //   flage = true;
+    // }
     if (state.spoc === '') {
       error.spoc = 'spoc is required';
       flage = true;
@@ -278,10 +308,10 @@ const AddSchemes = () => {
       error.videoUrl = 'VideoUrl is required';
       flage = true;
     }
-    else if (!videoUrlReg.test(state.videoUrl)) {
-      error.videoUrl = 'Enter Valid videoUrl';
-      flage = true;
-    }
+    // else if (!videoUrlReg.test(state.videoUrl)) {
+    //   error.videoUrl = 'Enter Valid videoUrl';
+    //   flage = true;
+    // }
     if (state.thumbnail === '') {
       error.thumbnail = 'ThumbNail is required';
       flage = true;
@@ -311,76 +341,121 @@ const AddSchemes = () => {
   };
 
   const onSubmit = () => {
-    if (validation()) {
-      return;
-    }
-    let data = {
-      // key: uuid(),
-      benifitLine: state.benifitLine.toString('markdown'),
-      detail: state.detail.toString('markdown'),
-      howToApply: state.howToApply.toString('markdown'),
-      documentation: state.documentation.toString('markdown'),
-      name: state.name,
-      locations: state.locations,
-      schemeCategory: state.schemeCategory,
-      schemeBenifit: state.schemeBenifit,
-      website: state.website,
-      type: state.type,
-      benificiary: state.benificiary,
-      grievanceRedress: state.grievanceRedress,
-      elink: state.elink,
-      spoc: state.spoc,
-      isActive: state.isActive,
-      videoUrl: state.videoUrl,
-      thumbnail: state.thumbnail,
-      id: state.id,
-      isDeleted: state.isDeleted,
-      isPublished: state.isPublished,
-      isApproved: state.isApproved,
-      application_form: state.application_form,
-      recommended_and_forwarded: state.recommended_and_forwarded,
-      application_process: state.application_process,
-      medical_superintendent: state.medical_superintendent,
-      hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-    };
+    // if (validation()) {
+    //   return;
+    // }
+    let formData = new FormData();
+    formData.append('benifitLine', state.benifitLine.toString('markdown'));
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('howToApply', state.howToApply.toString('markdown'));
+    formData.append('documentation', state.documentation.toString('markdown'));
+    formData.append('name', state.name);
+    formData.append('locations', JSON.stringify(state.locations));
+    formData.append('schemeCategory', state.schemeCategory);
+    formData.append('schemeBenifit', state.schemeBenifit);
+    formData.append('website', state.website);
+    formData.append('type', state.type,);
+    formData.append('benificiary', state.benificiary);
+    formData.append('grievanceRedress', state.grievanceRedress);
+    formData.append('elink', state.elink);
+    formData.append('spoc', state.spoc);
+    formData.append('isActive', state.isActive);
+    formData.append('thumbnail', state.thumbnail);
+    // formData.append('isDeleted', state.isDeleted);
+    // formData.append('isPublished', state.isPublished);
+    // formData.append('isApproved', state.isApproved);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('videoUrl', state.videoUrl);
+    // let data = {
+    //   // key: uuid(),
+    //   benifitLine: state.benifitLine.toString('markdown'),
+    //   detail: state.detail.toString('markdown'),
+    //   howToApply: state.howToApply.toString('markdown'),
+    //   documentation: state.documentation.toString('markdown'),
+    //   name: state.name,
+    //   locations: state.locations,
+    //   schemeCategory: state.schemeCategory,
+    //   schemeBenifit: state.schemeBenifit,
+    //   website: state.website,
+    //   type: state.type,
+    //   benificiary: state.benificiary,
+    //   grievanceRedress: state.grievanceRedress,
+    //   elink: state.elink,
+    //   spoc: state.spoc,
+    //   isActive: state.isActive,
+    //   videoUrl: state.videoUrl,
+    //   thumbnail: state.thumbnail,
+    //   id: state.id,
+    //   isDeleted: state.isDeleted,
+    //   isPublished: state.isPublished,
+    //   isApproved: state.isApproved,
+    //   application_form: state.application_form,
+    //   recommended_and_forwarded: state.recommended_and_forwarded,
+    //   application_process: state.application_process,
+    //   medical_superintendent: state.medical_superintendent,
+    //   hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
+    // };
+    console.log();
     if (langId) {
-      delete data.id
-      delete data.isDeleted
-      delete data.isPublished
-      delete data.isApproved
-      data = {
-        ...data,
-        key: getOneScHemeData.key,
-        name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.id,
-        schemeBenifit: getOneScHemeData.schemeBenifit.id,
-        locations: getOneScHemeData.locations.map(item => item.id),
-        website: getOneScHemeData.website,
-        type: getOneScHemeData.type,
-        benificiary: getOneScHemeData.benificiary,
-        grievanceRedress: getOneScHemeData.grievanceRedress,
-        elink: getOneScHemeData.elink,
-        spoc: getOneScHemeData.spoc,
-        isActive: getOneScHemeData.isActive,
-        videoUrl: getOneScHemeData.videoUrl,
-        thumbnail: getOneScHemeData.thumbnail,
-      }
-      dispatch(addSchemeData(langId, data));
-      console.log("data", data);
+      // formData.append('name', getOneScHemeData.name);
+      // formData.append('schemeCategory', getOneScHemeData.schemeCategory.id);
+      // formData.append('schemeBenifit', getOneScHemeData.schemeBenifit.id);
+      // formData.append('locations', getOneScHemeData.locations.map(item => item.id));
+      // formData.append('website', getOneScHemeData.website);
+      // formData.append('type', getOneScHemeData.type);
+      // formData.append('benificiary', getOneScHemeData.benificiary);
+      // formData.append('grievanceRedress', getOneScHemeData.grievanceRedress);
+      // formData.append('elink', getOneScHemeData.elink);
+      // formData.append('spoc', getOneScHemeData.spoc);
+      // formData.append('isActive', getOneScHemeData.isActive);
+      // formData.append('videoUrl', getOneScHemeData.videoUrl);
+      // formData.append('thumbnail', getOneScHemeData.thumbnail);
+
+
+      // delete data.id
+      // delete data.isDeleted
+      // delete data.isPublished
+      // delete data.isApproved
+      // data = {
+      //   ...data,
+      //   key: getOneScHemeData.key,
+      //   name: getOneScHemeData.name,
+      //   schemeCategory: getOneScHemeData.schemeCategory.id,
+      //   schemeBenifit: getOneScHemeData.schemeBenifit.id,
+      //   locations: getOneScHemeData.locations.map(item => item.id),
+      //   website: getOneScHemeData.website,
+      //   type: getOneScHemeData.type,
+      //   benificiary: getOneScHemeData.benificiary,
+      //   grievanceRedress: getOneScHemeData.grievanceRedress,
+      //   elink: getOneScHemeData.elink,
+      //   spoc: getOneScHemeData.spoc,
+      //   isActive: getOneScHemeData.isActive,
+      //   videoUrl: getOneScHemeData.videoUrl,
+      //   thumbnail: getOneScHemeData.thumbnail,
+      // }
+      formData.append('key', uuid());
+      dispatch(addSchemeData(langId, formData));
       history.push(`/admin/scheme`);
     }
     else {
       if (id) {
-        console.log("data", data);
-        dispatch(editSchemeData(data));
+        formData.append('id', state.id);
+        formData.append('isDeleted', state.isDeleted);
+        formData.append('isPublished', state.isPublished);
+        formData.append('isApproved', state.isApproved);
+        dispatch(editSchemeData(formData));
         history.push(`/admin/scheme`);
       } else {
-        console.log("data", data);
-        dispatch(addSchemeData(langId, data));
+        formData.append('key', uuid());
+        dispatch(addSchemeData(langId, formData));
         history.push(`/admin/scheme`);
       }
     }
-    onCancel();
+    // onCancel();
   };
   //   if (!location.search) {
   //     dispatch(addSchemeData(data, langId));
@@ -716,6 +791,7 @@ const AddSchemes = () => {
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>
               {id && !langId ? 'Edit' : 'Add'}
             </Button>
+
             <Button className="btn-signin" type="light" size="medium"
               onClick={() => onCancel()}>
               Cancel

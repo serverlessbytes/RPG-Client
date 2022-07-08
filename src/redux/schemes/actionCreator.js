@@ -104,34 +104,7 @@ export const getSchemeBenifits = () => async dispatch => {
 };
 
 export const addSchemeData = (langID, data) => async dispatch => {
-
-  const formData = new FormData();
-  formData.append('benificiary', data.benificiary);
-  formData.append('benifitLine', data.benifitLine);
-  formData.append('detail', data.detail);
-  formData.append('documentation', data.documentation);
-  formData.append('elink', data.elink);
-  formData.append('grievanceRedress', data.grievanceRedress);
-  formData.append('howToApply', data.howToApply);
-  formData.append('isActive', data.isActive);
-  formData.append('locations', JSON.stringify(data.locations));
-  // formData.append("locations", JSON.stringify(data.locations));
-  formData.append('name', data.name);
-  formData.append('schemeBenifit', data.schemeBenifit);
-  formData.append('spoc', data.spoc);
-  formData.append('thumbnail', data.thumbnail);
-  formData.append('type', data.type);
-  formData.append('videoUrl', data.videoUrl);
-  formData.append('website', data.website);
-  formData.append('schemeCategory', data.schemeCategory);
-  formData.append('application_form', data.application_form);
-  formData.append('recommended_and_forwarded', data.recommended_and_forwarded);
-  formData.append('medical_superintendent', data.medical_superintendent);
-  formData.append('hospital_expenses_estimation_certificate', data.hospital_expenses_estimation_certificate);
-  formData.append('application_process', data.application_process);
-
-
-  await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
+  await ApiPost(`scheme/addScheme?langId=${langID ? langID : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then(res => {
       // return dispatch(addSchemeSuccess(res));
     })
@@ -147,7 +120,6 @@ export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, se
   search = searchBar
   hindi = hindiID
   marathi = marathiID
-
   let URL = `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (Status) {
     URL = URL.concat(`&status=${Status}`)

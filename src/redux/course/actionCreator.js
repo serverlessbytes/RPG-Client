@@ -168,11 +168,9 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
     .catch((err) => dispatch(editPartnerCourseErr(err)))
 }
 
-export const addSwayamCourse = (data, langId) => async (dispatch) => {
-
+export const addSwayamCourse = (data) => async (dispatch) => {
   await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
-      console.log("res", res);
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })
     .catch((err) => dispatch(addSwayamPartnerCourseErr(err)))
@@ -226,7 +224,7 @@ export const getallSwayamCourse = (mode) => async (dispatch) => {
 export const addPartnerCourseInBulk = (body) => async (dispatch) => {
   dispatch(addPartnerCourseInBulkBegin(true))
   // await ApiPost(`course/addPartnerCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-  await ApiPost(`course/addPartnerCourse`, body)
+  await ApiPost(`course/addPartnerCourseInBulk`, body)
     .then((res) => {
       return dispatch(addPartnerCourseInBulkSuccess(res))
     }).catch(e => dispatch(addPartnerCourseInBulkErr(e)))

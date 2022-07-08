@@ -80,7 +80,6 @@ const SwayamCourses = () => {
   const allCategoryData = useSelector(state => state.category.getAllCourse);
   const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
 
-
   const header = [
     { label: 'id', key: 'id' },
     { label: 'name', key: 'name' },
@@ -121,10 +120,9 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
       dispatch(addSwayamCourseModuleSuccess(null));
-      toast.success('Swayam Course Add successful');
+      toast.success("Swayam course modules add successful");
     }
   }, [addSwayamCourseModuleData]);
-
   useEffect(() => {
     if (addSwayamCourseModuleError) {
       dispatch(addSwayamCourseModuleErr(null));
@@ -135,10 +133,10 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
       dispatch(editSwayamPartnerCourseSuccess(null));
-      toast.success('Swayam Course Delete successful');
+      toast.success('Swayam course delete successful');
     } else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
       dispatch(editSwayamPartnerCourseSuccess(null));
-      toast.success('Swayam Course Update successful');
+      toast.success('Swayam course update successful');
     }
   }, [editSwayamCourseData]);
 
