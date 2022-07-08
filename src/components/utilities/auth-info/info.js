@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar } from 'antd';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import FeatherIcon from 'feather-icons-react';
 import { InfoWraper, NavAuth, UserDropDwon } from './auth-info-style';
 import Message from './message';
@@ -11,11 +11,10 @@ import Support from './support';
 import { Popover } from '../../popup/popup';
 import { Dropdown } from '../../dropdown/dropdown';
 import { logOut } from '../../../redux/authentication/actionCreator';
+import { getUser } from '../../../redux/authentication/actionCreator';
 import Heading from '../../heading/heading';
 import AuthStorage from '../../../helper/AuthStorage';
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-
-
 
 const AuthInfo = () => {
 
@@ -29,17 +28,25 @@ const AuthInfo = () => {
   const SignOut = e => {
     e.preventDefault();
     dispatch(logOut());
+    localStorage.clear();
     AuthStorage.deauthenticateUser()
   };
 
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
+  const getEmployerData = useSelector(state => state.auth.getUserData);
+ 
   const userContent = (
     <UserDropDwon>
       <div className="user-dropdwon">
         <figure className="user-dropdwon__info">
-          <img src={require('../../../static/img/avatar/chat-auth.png')} alt="" />
+          {/* <img src={require('../../../static/img/avatar/chat-auth.png')} alt="" /> */}
+          <img src={getEmployerData?.data?.avatar  } alt="" width="46px" height="46px"/>
           <figcaption>
-            <Heading as="h5">Abdullah Bin Talha</Heading>
-            <p>UI Expert</p>
+            <Heading as="h5">{getEmployerData?.data?.name}</Heading>
+            <p>{getEmployerData?.data?.userType}</p>
           </figcaption>
         </figure>
         <ul className="user-dropdwon__links">

@@ -1,7 +1,6 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import uuid from 'react-uuid';
 import * as XLSX from 'xlsx';
 import STORAGEKEY from '../../config/APP/app.config';
 import AuthStorage from '../../helper/AuthStorage';
@@ -39,10 +38,10 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   const [districtID, setDistrictID] = useState('');
   const [employertID, setEmployerID] = useState('');
 
-  useEffect(() => {
-    dispatch(getJobcategory());
-    dispatch(getEmployerData());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getJobcategory());
+  //   dispatch(getEmployerData());
+  // }, []);
 
   useEffect(() => {
     if (stateID) dispatch(getDistrictData(stateID));
@@ -100,6 +99,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   }, [JobRole]);
 
   const readUploadFile = e => {
+
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       const file = e.target.files[0];
@@ -119,10 +119,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       // e.target.value = '';
     }
   };
-
-  useEffect(() => {
-    console.log("fileData", fileData);
-  }, [fileData])
 
   const convertToJson = csv => {
     var lines = csv.split('\n');

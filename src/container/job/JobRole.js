@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
+import { Form, Input, Modal, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';

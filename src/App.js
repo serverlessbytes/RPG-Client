@@ -33,7 +33,6 @@ const ProviderConfig = ({ basename }) => {
     };
   });
 
-  //useEffect(()=>{"isLoggedIn",isLoggedIn},[isLoggedIn])
   const history = useHistory();
   const route = useContext(RouterContext);
   const dispatch = useDispatch();

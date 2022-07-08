@@ -46,27 +46,30 @@ const MyProfile = () => {
     }
   }, [userData])
 
-  useEffect(() => {
-    if (data)
-      console.log("data=====", data)
-  }, [data])
-
   const onChangeHandler = (e) => {
     setData({...data, [e.target.name]: e.target.value })
   }
-  useEffect(() => {
-    if(data){
-      console.log(data.avatar);
-    }
-  }, [data])
   
-
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0].name?.split('.');
+    let fileexten = ['jpeg', 'jpg', 'png']
+    if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setData({ ...data, [name]: e.target.files[0] })
+        // setError({ ...error, avatar: "" });
+    }
+    else {
+        // setData({...data,
+        // })
+        // setError({ ...error, avatar: 'Please select valid document file' })
+        setData({ ...data, avatar: '' })
+        // setFileError('Please select valid document file')
+    }
+    }
 
   const editProfile = () => {
     data.isActive=true
     data.isDeleted=false
 
-    console.log('data',data)
     dispatch(editUser(data,id))
   }
 
@@ -138,9 +141,11 @@ const MyProfile = () => {
                     {/* rules={[{ type: 'email' }]}
                     > */}
                     <Input placeholder="Enter avatar"
+                    type = "file"
                     name="avatar"
-                    onChange={(e) => onChangeHandler(e)}
-                      value={data.avatar} />
+                    onChange={(e) => fileUpload(e,"avatar")}
+                    // value={data.avatar}
+                     />
                   </Form.Item>
                 </Col>
               </Row>

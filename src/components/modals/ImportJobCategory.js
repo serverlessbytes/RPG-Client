@@ -1,6 +1,6 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { importCourseCategory } from '../../redux/course/actionCreator';
 import { addBulkJobCategory } from '../../redux/jobs/actionCreator';
@@ -64,7 +64,7 @@ const ImportJobCategory = ({ importModal, handleCancel, modaltitle }) => {
     if (validation()) {
       return;
     }
-   
+
     if (FileData) {
       dispatch(addBulkJobCategory(FileData));
       handleCancel();

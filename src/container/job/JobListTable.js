@@ -19,21 +19,19 @@ import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search, getJobData }) => {
 
-  useEffect(() => {
-    console.log("getJobData", getJobData)
-  }, [getJobData])
-
   // props from JobPost
   const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
   const [usertable, setUsertable] = useState([]); //set data
+  const [filterData, setFilterData] = useState([]); //set data
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
   const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [isAscend, setIsAscend] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [langIds, setLangIds] = useState({
     hindi: '',
@@ -329,12 +327,18 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       });
   }
 
-  useEffect(() => {
+  useEffect (() => {
     if (getJobFilterData?.data?.data) {
-      getJobData(getJobFilterData?.data?.data)
+      setFilterData(getJobFilterData?.data?.data)
+    }
+  },[getJobFilterData])
+
+  useEffect(() => {
+    if (filterData.length) {
+      getJobData(filterData)
     }
     setUsertable(
-      getJobFilterData?.data?.data?.map(item => {
+      filterData.map(item => {
         return {
           name: (
             <span className='For-Underline' onClick={() => viewJobdata(item.id)}>
@@ -419,15 +423,21 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         };
       }),
     );
-  }, [getJobFilterData],
-  );
+  }, [filterData,isAscend]);
 
   const viewJobdata = id => {
     history.push(`/admin/job/view?id=${id}`)
   };
 
-  const User = () => {
-
+  const sorting = () =>{
+    if (isAscend) {
+      // setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.length - a.name.name.length))
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.localeCompare(a.name.name)))
+    } else {
+      // setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => a.name.name.length - b.name.name.length))
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => a.name.name.localeCompare(b.name.name)))
+    }
+    setIsAscend(!isAscend)
   }
 
   const usersTableColumns = [
@@ -435,7 +445,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       title: 'User',
       dataIndex: 'name',
       key: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => sorting(),  
+      // sorter: (a, b) => a.name.length - b.name.length,  
       sortDirections: ['descend', 'ascend'],
       // sorter: (a, b) => a.user.localeCompare(b.user),
       
@@ -443,13 +454,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     {
       title: 'Email',
       dataIndex: 'email',
-      // sorter: (a, b) => a.email.length - b.email.length,
       sorter: (a, b) => a.email.localeCompare(b.email),
       sortDirections: ['descend', 'ascend'],
       // key: 'email',
     },
     {
-      title: 'Company',
+      title: 'Description',
       dataIndex: 'company',
       sorter: (a, b) => a.company.localeCompare(b.company),
       sortDirections: ['descend', 'ascend'],

@@ -51,9 +51,9 @@ const Dashboard = () => {
     }
   }, [topTenCourseData]);
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getUser());
+  // }, []);
 
   useEffect(() => {
     if (userProfile) {
