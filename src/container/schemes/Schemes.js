@@ -288,8 +288,8 @@ const Schemes = () => {
     history.push(`${path}/addscheme?key=${key}`);
   };
 
-  const newSchemes = userForDelete => {
-    const newVal = ApiPost("scheme/editScheme", userForDelete)
+  const newSchemes = formData => {
+    const newVal = ApiPost("scheme/editScheme", formData)
       .then((res) => {
         if (res.status === 200) {
           dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
@@ -301,36 +301,60 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
-    if (userForDelete) {
-      delete userForDelete.key;
-      delete userForDelete.updatedAt;
-      delete userForDelete.viewCount;
-      delete userForDelete.createdAt;
-      delete userForDelete.schemeRatings;
-      delete userForDelete.schemeRatingSum;
-      delete userForDelete.bannerSelected;
-      delete userForDelete.saved;
-      delete userForDelete.enrolled;
-      delete userForDelete.hindi;
-      delete userForDelete.marathi;
-
-      userForDelete = {
-        ...userForDelete,
-        schemeBenifit: userForDelete.schemeBenifit.id,
-        schemeCategory: userForDelete.schemeCategory.id,
-        isActive: false,
-        isDeleted: true,
-      };
-
-      const deleteSchemes = await newSchemes(userForDelete)
-      if (deleteSchemes.status === 200) {
-        toast.success("schemes delete successful")
-      }
+    let formData = new FormData();
+    formData.append('benifitLine', userForDelete.benifitLine.toString('markdown'));
+    formData.append('detail', userForDelete.detail.toString('markdown'));
+    formData.append('howToApply', userForDelete.howToApply.toString('markdown'));
+    formData.append('documentation', userForDelete.documentation.toString('markdown'));
+    formData.append('name', userForDelete.name);
+    formData.append('locations', JSON.stringify(userForDelete.locations));
+    formData.append('schemeCategory', userForDelete.schemeCategory.id);
+    formData.append('schemeBenifit', userForDelete.schemeBenifit.id);
+    formData.append('website', userForDelete.website);
+    formData.append('type', userForDelete.type,);
+    formData.append('benificiary', userForDelete.benificiary);
+    formData.append('grievanceRedress', userForDelete.grievanceRedress);
+    formData.append('elink', userForDelete.elink);
+    formData.append('spoc', userForDelete.spoc);
+    formData.append('isActive', false);
+    formData.append('thumbnail', userForDelete.thumbnail);
+    formData.append('application_form', userForDelete.application_form);
+    formData.append('recommended_and_forwarded', userForDelete.recommended_and_forwarded);
+    formData.append('application_process', userForDelete.application_process);
+    formData.append('medical_superintendent', userForDelete.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', userForDelete.hospital_expenses_estimation_certificate);
+    formData.append('videoUrl', userForDelete.videoUrl);
+    formData.append('id', userForDelete.id);
+    formData.append('isDeleted', true);
+    formData.append('isPublished', userForDelete.isPublished);
+    formData.append('isApproved', userForDelete.isApproved);
+    // if (userForDelete) {
+    //   delete userForDelete.key;
+    //   delete userForDelete.updatedAt;
+    //   delete userForDelete.viewCount;
+    //   delete userForDelete.createdAt;
+    //   delete userForDelete.schemeRatings;
+    //   delete userForDelete.schemeRatingSum;
+    //   delete userForDelete.bannerSelected;
+    //   delete userForDelete.saved;
+    //   delete userForDelete.enrolled;
+    //   delete userForDelete.hindi;
+    //   delete userForDelete.marathi;
+    //   userForDelete = {
+    //     ...userForDelete,
+    //     schemeBenifit: userForDelete.schemeBenifit.id,
+    //     schemeCategory: userForDelete.schemeCategory.id,
+    //     isActive: false,
+    //     isDeleted: true,
+    //   };
+    const deleteSchemes = await newSchemes(formData)
+    if (deleteSchemes.status === 200) {
+      toast.success("schemes delete successful")
     }
-  };
+  }
 
-  const activeSchemeData = data => {
-    const newVal = ApiPost("scheme/editScheme", data)
+  const activeSchemeData = formData => {
+    const newVal = ApiPost("scheme/editScheme", formData)
       .then((res) => {
         if (res.status === 200) {
           dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
@@ -342,32 +366,57 @@ const Schemes = () => {
 
   const onRestore = async (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
+    let formData = new FormData();
+    formData.append('benifitLine', userForactive.benifitLine.toString('markdown'));
+    formData.append('detail', userForactive.detail.toString('markdown'));
+    formData.append('howToApply', userForactive.howToApply.toString('markdown'));
+    formData.append('documentation', userForactive.documentation.toString('markdown'));
+    formData.append('id', userForactive.id);
+    formData.append('name', userForactive.name);
+    formData.append('schemeCategory', userForactive.schemeCategory.id);
+    formData.append('benificiary', userForactive.benificiary);
+    formData.append('locations', JSON.stringify(userForactive.locations));
+    formData.append('thumbnail', userForactive.thumbnail);
+    formData.append('videoUrl', userForactive.videoUrl);
+    formData.append('website', userForactive.website);
+    formData.append('schemeBenifit', userForactive.schemeBenifit.id);
+    formData.append('type', userForactive.type,);
+    formData.append('grievanceRedress', userForactive.grievanceRedress);
+    formData.append('elink', userForactive.elink);
+    formData.append('spoc', userForactive.spoc);
+    formData.append('isActive', true);
+    formData.append('isDeleted', false);
+    formData.append('isPublished', true);
+    formData.append('isApproved', true);
+    formData.append('application_form', userForactive.application_form);
+    formData.append('recommended_and_forwarded', userForactive.recommended_and_forwarded);
+    formData.append('application_process', userForactive.application_process);
+    formData.append('medical_superintendent', userForactive.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', userForactive.hospital_expenses_estimation_certificate);
     let data = {
-      id: userForactive.id,
-      // sequence: userForactive.sequence,
-      name: userForactive.name,
-      schemeCategory: userForactive.schemeCategory.id,
-      schemeBenifit: userForactive.schemeBenifit.id,
-      benifitLine: userForactive.benifitLine,
-      benificiary: userForactive.benificiary,
-      locations: userForactive.locations,
-      detail: userForactive.detail,
-      howToApply: userForactive.howToApply,
-      documentation: userForactive.documentation,
-      thumbnail: userForactive.thumbnail,
-      videoUrl: userForactive.videoUrl,
-      website: userForactive.website,
-      type: userForactive.type,
-      elink: userForactive.elink,
-      grievanceRedress: userForactive.grievanceRedress,
-      spoc: userForactive.spoc,
+      // id: userForactive.id,
+      // name: userForactive.name,
+      // schemeCategory: userForactive.schemeCategory.id,
+      // schemeBenifit: userForactive.schemeBenifit.id,
+      // benifitLine: userForactive.benifitLine,
+      // benificiary: userForactive.benificiary,
+      // locations: userForactive.locations,
+      // detail: userForactive.detail,
+      // howToApply: userForactive.howToApply,
+      // documentation: userForactive.documentation,
+      // thumbnail: userForactive.thumbnail,
+      // videoUrl: userForactive.videoUrl,
+      // website: userForactive.website,
+      // type: userForactive.type,
+      // elink: userForactive.elink,
+      // grievanceRedress: userForactive.grievanceRedress,
+      // spoc: userForactive.spoc,
       isActive: true,
       isDeleted: false,
       isPublished: true,
       isApproved: true,
-      //key:key,
     }
-    const restoreSchemeData = await activeSchemeData(data)
+    const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
       toast.success("Schemes active successful")
       // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))

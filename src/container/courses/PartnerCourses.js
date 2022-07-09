@@ -39,10 +39,6 @@ const PartnerCourses = () => {
     search: ''
   });
 
-  useEffect(() => {
-    console.log("state", state);
-  }, [state])
-
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
   const [partnertable, setPartnertable] = useState([]); //set data
@@ -71,6 +67,8 @@ const PartnerCourses = () => {
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
   const addPartnerCourseModulData = useSelector(state => state.category.addPartnerCourseInBulkData)
+
+
 
   useEffect(() => {
     if (data.length && exportTog) {
@@ -127,12 +125,16 @@ const PartnerCourses = () => {
   }, [postPartnerCourseDataerr]);
 
   useEffect(() => {
-    if (editPartnerCourseData && editPartnerCourseData.isActive === false) {
-      dispatch(editPartnerCourseSuccess(null));
-      toast.success('Partner Course Delete successful');
-    } else if (editPartnerCourseData && editPartnerCourseData.isActive === true) {
+    console.log("editPartnerCourseData", editPartnerCourseData);
+  }, [editPartnerCourseData])
+
+  useEffect(() => {
+    if (editPartnerCourseData && editPartnerCourseData.data.isDeleted === false) {
       dispatch(editPartnerCourseSuccess(null));
       toast.success('Partner Course Update successful');
+    } else if (editPartnerCourseData && editPartnerCourseData.data.isDeleted === true) {
+      dispatch(editPartnerCourseSuccess(null));
+      toast.success('Partner Course Delete successful');
     }
   }, [editPartnerCourseData]);
 
@@ -303,12 +305,6 @@ const PartnerCourses = () => {
       delete activeCourseDelete.enrolled;
       delete activeCourseDelete.hindi;
       delete activeCourseDelete.marathi;
-      // delete activeCourseDelete.application_form;
-      // delete activeCourseDelete.recommended_and_forwarded;
-      // delete activeCourseDelete.application_process;
-      // delete activeCourseDelete.medical_superintendent;
-      // delete activeCourseDelete.hospital_expenses_estimation_certificate;
-
       activeCourseDelete = {
         ...activeCourseDelete,
         isActive: false,
@@ -320,9 +316,11 @@ const PartnerCourses = () => {
       dispatch(editPartnerCoursefilter(activeCourseDelete, langIds.hindi, langIds.marathi));
     }
   };
+
   const activePartnerCourses = dt => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
+        console.log();
         if (res.status === 200) {
           dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status, "", langIds.hindi, langIds.marathi));
         }
@@ -341,11 +339,9 @@ const PartnerCourses = () => {
   };
 
   const onActive = async id => {
-    //for inactive to active data
     let activedata = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
     let certification = activedata.certificate;
     let categoryId = activedata.courseCategory.id;
-
     if (activedata) {
       delete activedata.id;
       delete activedata.certificate;
@@ -361,11 +357,6 @@ const PartnerCourses = () => {
       delete activedata.enrolled;
       delete activedata.hindi;
       delete activedata.marathi;
-      delete activedata.application_form;
-      delete activedata.recommended_and_forwarded;
-      delete activedata.application_process;
-      delete activedata.medical_superintendent;
-      delete activedata.hospital_expenses_estimation_certificate
       activedata = {
         ...activedata,
         isActive: true,
@@ -416,7 +407,6 @@ const PartnerCourses = () => {
                   <>
                     <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                       onClick={() => {
-
                         getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
                         setSelectedLanguageData(item)
                       }}

@@ -170,7 +170,6 @@ const SwayamCourses = () => {
   }, []);
 
   useEffect(() => {
-
     if (status && langIds.hindi && langIds.marathi) {
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     }

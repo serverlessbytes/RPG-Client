@@ -13,6 +13,7 @@ import { getCategoryData } from '../../redux/course/actionCreator';
 import { useLocation } from 'react-router';
 import { getStateData } from '../../redux/state/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
+import { toast } from 'react-toastify';
 
 const AddPartnerCourses = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -30,6 +31,13 @@ const AddPartnerCourses = () => {
     const stateData = useSelector((state) => state.state.getStateData);
     const diStrictdata = useSelector((state) => state.district.getDistrictData); // district  
     const catdata = useSelector(state => state.category.categoryData);
+    const postPartnerCourseData = useSelector(state => state.category.postPartnerCourseData);
+    const postPartnerCourseError = useSelector(state => state.category.postPartnerCourseDataerr);
+    const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
+    const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
+
+
+
 
     const [error, setError] = useState({}); // for valadation
     const [state, setState] = useState({
@@ -64,6 +72,7 @@ const AddPartnerCourses = () => {
         hindi: '',
         marathi: ''
     });
+
 
     useEffect(() => {
         let temp = {
@@ -117,7 +126,6 @@ const AddPartnerCourses = () => {
                 contactpersonphone: editOneFilterData.data.data.contactPersonPhone,
                 pincode: editOneFilterData.data.data.pincode,
                 locations: editOneFilterData.data.data.location,
-                // sequence: editOneFilterData.data.sequence,
                 duration: moment(editOneFilterData.data.data.duration, 'HH:mm:ss'),
                 cateGory: editOneFilterData.data.data.courseCategory.id,
                 state: editOneFilterData.data.data.state,
@@ -138,7 +146,6 @@ const AddPartnerCourses = () => {
         let error = {};
         let flage = false;
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
         if (state.name === '') {
             error.name = 'Course Name is required';
             flage = true;
@@ -251,106 +258,198 @@ const AddPartnerCourses = () => {
         if (validation()) {
             return;
         }
-        let data = {
-            key: uuid(),
-            name: state.name,
-            detail: state.detail,
-            duration: moment(state.duration).format('hh:mm:ss'),
-            categoryId: state.cateGory,
-            certificationBody: state.certificationBody,
-            certification: state.Certification,
-            organization: state.organiZation,
-            eligibility: state.eligiBility,
-            component: state.component,
-            contactPersonName: state.contactpersonname,
-            contactPersonEmail: state.contactpersonemail,
-            contactPersonPhone: state.contactpersonphone,
-            state: state.state,
-            district: state.district,
-            pincode: state.pincode,
-            location: state.locations,
-            // sequence: parseInt(state.sequence),
-            mode: state.mode,
-            thumbnail: state.thumbnail,
-            application_form: state.application_form,
-            recommended_and_forwarded: state.recommended_and_forwarded,
-            application_process: state.application_process,
-            medical_superintendent: state.medical_superintendent,
-            hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-        };
+        let formData = new FormData();
+        formData.append('key', uuid());
+        formData.append('name', state.name);
+        formData.append('detail', state.detail);
+        formData.append('duration', moment(state.duration).format('hh:mm:ss'));
+        formData.append('categoryId', state.cateGory);
+        formData.append('certificationBody', state.certificationBody);
+        formData.append('certification', state.Certification);
+        formData.append('organization', state.organiZation);
+        formData.append('eligibility', state.eligiBility);
+        formData.append('component', state.component);
+        formData.append('contactPersonName', state.contactpersonname);
+        formData.append('contactPersonEmail', state.contactpersonemail);
+        formData.append('contactPersonPhone', state.contactpersonphone);
+        formData.append('state', state.state);
+        formData.append('district', state.district);
+        formData.append('pincode', state.pincode);
+        formData.append('location', state.locations);
+        formData.append('mode', state.mode);
+        formData.append('thumbnail', state.thumbnail);
+        formData.append('application_form', state.application_form);
+        formData.append('application_process', state.application_process);
+        formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+        formData.append('medical_superintendent', state.medical_superintendent);
+        formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+        // let data = {
+        //     key: uuid(),
+        //     name: state.name,
+        //     detail: state.detail,
+        //     duration: moment(state.duration).format('hh:mm:ss'),
+        //     categoryId: state.cateGory,
+        //     certificationBody: state.certificationBody,
+        //     certification: state.Certification,
+        //     organization: state.organiZation,
+        //     eligibility: state.eligiBility,
+        //     component: state.component,
+        //     contactPersonName: state.contactpersonname,
+        //     contactPersonEmail: state.contactpersonemail,
+        //     contactPersonPhone: state.contactpersonphone,
+        //     state: state.state,
+        //     district: state.district,
+        //     pincode: state.pincode,
+        //     location: state.locations,
+        //     // sequence: parseInt(state.sequence),
+        //     mode: state.mode,
+        //     thumbnail: state.thumbnail,
+        //     application_form: state.application_form,
+        //     recommended_and_forwarded: state.recommended_and_forwarded,
+        //     application_process: state.application_process,
+        //     medical_superintendent: state.medical_superintendent,
+        //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
+        // };
         if (!langid) {
-            dispatch(addPartnerCourse(data, langIds.hindi, langIds.marathi));
-            handalCancle()
+            dispatch(addPartnerCourse(formData));
         }
         else {
-            let selectLanguageAddData = {
-                key: editOneFilterData.data.data.key,
-                name: state.name,
-                organization: state.organiZation,
-                detail: state.detail,
-                certificationBody: state.certificationBody,
-                eligibility: state.eligiBility,
-                component: state.component,
-                contactPersonName: state.contactpersonname,
-                contactPersonEmail: state.contactpersonemail,
-                contactPersonPhone: state.contactpersonphone,
-                pincode: state.pincode,
-                location: state.locations,
-                duration: moment(state.duration).format('hh:mm:ss'),
-                categoryId: editOneFilterData.data.data.courseCategory.id,
-                state: state.state,
-                district: state.district,
-                mode: state.mode,
-                certification: state.Certification,
-                thumbnail: state.thumbnail,
+            let formData = new FormData();
+            formData.append('key', editOneFilterData.data.data.key);
+            formData.append('name', state.name);
+            formData.append('organization', state.organiZation);
+            formData.append('detail', state.detail);
+            formData.append('certificationBody', state.certificationBody);
+            formData.append('eligibility', state.eligiBility);
+            formData.append('component', state.component);
+            formData.append('contactPersonName', state.contactpersonname);
+            formData.append('contactPersonEmail', state.contactpersonemail);
+            formData.append('contactPersonPhone', state.contactpersonphone);
+            formData.append('pincode', state.pincode);
+            formData.append('location', state.locations);
+            formData.append('duration', moment(state.duration).format('hh:mm:ss'));
+            formData.append('categoryId', editOneFilterData.data.data.courseCategory.id);
+            formData.append('state', state.state);
+            formData.append('district', state.district);
+            formData.append('mode', state.mode);
+            formData.append('certification', state.Certification);
+            formData.append('thumbnail', state.thumbnail);
+            formData.append('application_form', state.application_form);
+            formData.append('application_process', state.application_process);
+            formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+            formData.append('medical_superintendent', state.medical_superintendent);
+            formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
 
-            };
-            dispatch(addPartnerCourse(selectLanguageAddData, langid));
-            handalCancle()
+            // let selectLanguageAddData = {
+            //     key: editOneFilterData.data.data.key,
+            //     name: state.name,
+            //     organization: state.organiZation,
+            //     detail: state.detail,
+            //     certificationBody: state.certificationBody,
+            //     eligibility: state.eligiBility,
+            //     component: state.component,
+            //     contactPersonName: state.contactpersonname,
+            //     contactPersonEmail: state.contactpersonemail,
+            //     contactPersonPhone: state.contactpersonphone,
+            //     pincode: state.pincode,
+            //     location: state.locations,
+            //     duration: moment(state.duration).format('hh:mm:ss'),
+            //     categoryId: editOneFilterData.data.data.courseCategory.id,
+            //     state: state.state,
+            //     district: state.district,
+            //     mode: state.mode,
+            //     certification: state.Certification,
+            //     thumbnail: state.thumbnail,
+            //     application_form: state.application_form,
+            //     recommended_and_forwarded: state.recommended_and_forwarded,
+            //     application_process: state.application_process,
+            //     medical_superintendent: state.medical_superintendent,
+            //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
+            // };
+            dispatch(addPartnerCourse(formData, langid));
         }
     };
 
+
+    // useEffect(() => {
+    //     if () {
+    //         handalCancle()
+    //     }
+    // }, [editPartnerCourseData])
+
     const onEdit = () => {
-        let data = {
-            courseId: id,
-            key: state.key,
-            name: state.name,
-            organization: state.organiZation,
-            detail: state.detail,
-            certificationBody: state.certificationBody,
-            eligibility: state.eligiBility,
-            component: state.component,
-            contactPersonName: state.contactpersonname,
-            contactPersonEmail: state.contactpersonemail,
-            contactPersonPhone: state.contactpersonphone,
-            pincode: state.pincode,
-            location: state.locations,
-            duration: moment(state.duration).format('hh:mm:ss'),
-            categoryId: state.cateGory,
-            state: state.state,
-            district: state.district,
-            mode: state.mode,
-            certification: state.Certification,
-            thumbnail: state.thumbnail,
-            isActive: true,
-            isDeleted: false,
-            application_form: state.application_form,
-            recommended_and_forwarded: state.recommended_and_forwarded,
-            application_process: state.application_process,
-            medical_superintendent: state.medical_superintendent,
-            hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-        }
-        dispatch(editPartnerCoursefilter(data, langIds.hindi, langIds.marathi));
-        handalCancle()
+        let formData = new FormData();
+        formData.append('courseId', id);
+        formData.append('key', state.key);
+        formData.append('name', state.name);
+        formData.append('organization', state.organiZation);
+        formData.append('detail', state.detail);
+        formData.append('certificationBody', state.certificationBody);
+        formData.append('eligibility', state.eligiBility);
+        formData.append('component', state.component);
+        formData.append('contactPersonName', state.contactpersonname);
+        formData.append('contactPersonEmail', state.contactpersonemail);
+        formData.append('contactPersonPhone', state.contactpersonphone);
+        formData.append('pincode', state.pincode);
+        formData.append('location', state.locations);
+        formData.append('duration', moment(state.duration).format('hh:mm:ss'));
+        formData.append('categoryId', editOneFilterData.data.data.courseCategory.id);
+        formData.append('state', state.state);
+        formData.append('district', state.district);
+        formData.append('mode', state.mode);
+        formData.append('certification', state.Certification);
+        formData.append('thumbnail', state.thumbnail);
+        formData.append('isActive', true);
+        formData.append('isDeleted', false);
+        formData.append('application_form', state.application_form);
+        formData.append('application_process', state.application_process);
+        formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+        formData.append('medical_superintendent', state.medical_superintendent);
+        formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+        // let data = {
+        //     courseId: id,
+        //     key: state.key,
+        //     name: state.name,
+        //     organization: state.organiZation,
+        //     detail: state.detail,
+        //     certificationBody: state.certificationBody,
+        //     eligibility: state.eligiBility,
+        //     component: state.component,
+        //     contactPersonName: state.contactpersonname,
+        //     contactPersonEmail: state.contactpersonemail,
+        //     contactPersonPhone: state.contactpersonphone,
+        //     pincode: state.pincode,
+        //     location: state.locations,
+        //     duration: moment(state.duration).format('hh:mm:ss'),
+        //     categoryId: state.cateGory,
+        //     state: state.state,
+        //     district: state.district,
+        //     mode: state.mode,
+        //     certification: state.Certification,
+        //     thumbnail: state.thumbnail,
+        //     isActive: true,
+        //     isDeleted: false,
+        //     application_form: state.application_form,
+        //     recommended_and_forwarded: state.recommended_and_forwarded,
+        //     application_process: state.application_process,
+        //     medical_superintendent: state.medical_superintendent,
+        //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
+        // }
+        dispatch(editPartnerCoursefilter(formData, langIds.hindi, langIds.marathi));
     }
 
+    // For -- After Add and Edit partnerCourse redirect page 
+    useEffect(() => {
+        if (postPartnerCourseData && postPartnerCourseData.status === 200 || editPartnerCourseData && editPartnerCourseData.status === 200) {
+            handalCancle()
+        }
+    }, [postPartnerCourseData, editPartnerCourseData])
 
     const handalCancle = () => {
         history.push(`/admin/courses/partnercourses`);
     }
 
     const onChangevalue = (e, name) => {
-
         const regexphone = /^[0-9\b]+$/;
         const regexpincode = /^[0-9]*$/;
 
@@ -611,6 +710,29 @@ const AddPartnerCourses = () => {
                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                             </Form.Item>
                         </Col>
+                        {/* <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
+                            <label htmlFor="location">Location</label>
+                            <Form.Item initialValue="Select a location">
+                                <Select
+                                    size="large"
+                                    placeholder="Location"
+                                    className="sDash_fullwidth-select"
+                                    value={state.locations}
+                                    name="location"
+                                    onChange={e => onChangevalue(e)}
+                                    mode="multiple"
+                                >
+
+                                    {State &&
+                                        State.map(item => (
+                                            <>
+                                                <Option key={item.id} value={item.id}> {item.name} </Option>
+                                            </>
+                                        ))}
+                                </Select>
+                                {error.locations && <span style={{ color: 'red' }}>{error.locations}</span>}
+                            </Form.Item>
+                        </Col> */}
 
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="location">Location</label>

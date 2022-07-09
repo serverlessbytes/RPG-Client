@@ -45,7 +45,7 @@ const AddCourses = () => {
 
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [selectKey, setSelectKey] = useState(0);
+  const [selectKey, setSelectKey] = useState('1');
   const [moduleError, setModuleError] = useState([]);
   const [defaultSelect, setDefaultSelect] = useState('1');
   const categoryData = useSelector(state => state.category.categoryData);
@@ -113,7 +113,6 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      // sequence: '',
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: '',
@@ -417,7 +416,8 @@ const AddCourses = () => {
   };
 
   useEffect(() => {
-    console.log("selectKey", selectKey);
+    console.log("selectKey", typeof (selectKey));
+    console.log();
   }, [selectKey])
 
   const addData = () => {
@@ -436,8 +436,7 @@ const AddCourses = () => {
       modifiedByUser: userData && userData.data && userData.data.id,
     });
     setModuleState(val);
-    console.log("val.length ", val.length);
-    setSelectKey(val.length);
+    setSelectKey(val.length.toString());
   };
 
   const moduleChange = (e, i, name) => {
@@ -488,29 +487,29 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-    const data = moduleState[selectKey];
+    const data = moduleState[parseInt(selectKey)];
+    console.log("data", data);
     const editData = {
+      key: data.key,
       name: data.name,
       detail: data.detail,
       duration: moment(data.duration).format('HH:mm:s'),
       videoUrl: data.videoUrl,
-      sequence: data.sequence,
-      key: data.key,
       moduleId: data.moduleId,
       isActive: true,
       isDeleted: false,
     };
     dispatch(editSwayamCourseModule(editData,));
+    setSelectKey(val.length.toString());
     handalCancle()
   };
 
-  const handalCancle = () => {
-    history.push('/admin/courses')
-  }
-
   const onRemoveData = () => {
     if (id) {
-      const data = moduleState[selectKey];
+      const data = moduleState[parseInt(selectKey)];
+      console.log("parseInt(selectKey)", typeof (parseInt(selectKey)));
+      console.log("moduleState", moduleState);
+      console.log("data", data);
       const deleteData = {
         key: data.key,
         name: data.name,
@@ -523,13 +522,15 @@ const AddCourses = () => {
       };
       dispatch(editSwayamCourseModule(deleteData));
     }
-
     let val = [...moduleState];
-    val.splice(selectKey, 1);
-    setSelectKey(val.length - 1);
+    val.splice(parseInt(selectKey), 1);
+    setSelectKey(val.length.toString());
     setModuleState(val);
-
   };
+
+  const handalCancle = () => {
+    history.push('/admin/courses')
+  }
 
   const { TabPane } = Tabs;
 
@@ -775,10 +776,10 @@ const AddCourses = () => {
             </TabPane>
 
             <TabPane tab="Modules" disabled={swyamModuleId} key="2">
-              <Tabs tabPosition={'left'} onChange={moduleCallback}>
+              <Tabs tabPosition={'left'} activeKey={selectKey} onChange={moduleCallback}>
                 {moduleState.length ? (
                   moduleState.map((item, i) => (
-                    <TabPane tab={`Module ${i + 1}`} key={`${i}`}>
+                    <TabPane tab={`Module ${i + 1}`} key={`${i + 1}`}>
                       <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="name">Name of the Module</label>

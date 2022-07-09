@@ -341,9 +341,9 @@ const AddSchemes = () => {
   };
 
   const onSubmit = () => {
-    // if (validation()) {
-    //   return;
-    // }
+    if (validation()) {
+      return;
+    }
     let formData = new FormData();
     formData.append('benifitLine', state.benifitLine.toString('markdown'));
     formData.append('detail', state.detail.toString('markdown'));

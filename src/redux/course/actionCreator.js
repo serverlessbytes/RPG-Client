@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 
 
 const {
-
   postCategorySuccess,
   postCategoryDataErr,
   getcategorySuccess,
@@ -80,38 +79,12 @@ export const editCategoryData = (body) => async (dispatch) => {
     })
 }
 
-export const addPartnerCourse = (data, langId) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append('application_form', data.application_form);
-  formData.append('application_process', data.application_process);
-  formData.append('categoryId', data.categoryId);
-  formData.append('certification', data.certification);
-  formData.append('certificationBody', data.certificationBody);
-  formData.append('component', data.component);
-  formData.append('contactPersonEmail', data.contactPersonEmail);
-  formData.append('contactPersonName', data.contactPersonName);
-  formData.append('contactPersonPhone', data.contactPersonPhone);
-  formData.append('detail', data.detail);
-  formData.append('district', data.district);
-  formData.append('duration', data.duration);
-  formData.append('eligibility', data.eligibility);
-  formData.append('hospital_expenses_estimation_certificate', data.hospital_expenses_estimation_certificate);
-  formData.append('key', data.key);
-  formData.append('location', data.location);
-  formData.append('medical_superintendent', data.medical_superintendent);
-  formData.append('mode', data.mode);
-  formData.append('name', data.name);
-  formData.append('organization', data.organization);
-  formData.append('pincode', data.pincode);
-  formData.append('recommended_and_forwarded', data.recommended_and_forwarded);
-  formData.append('state', data.state);
-  formData.append('thumbnail', data.thumbnail);
-
-  await ApiPost(`course/addPartnerCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, formData)
+export const addPartnerCourse = (data, languageId) => async (dispatch) => {
+  await ApiPost(`course/addPartnerCourse?langId=${languageId ? languageId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, data)
     .then((res) => {
       return dispatch(addPartnerCourseSuccess(res))
-      // if(res.status === 200){
-      //   dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive,search,hindi,marathi ))
+      // if (res.status === 200) {
+      //   dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, search, hindi, marathi))
       // }
       // return dispatch(getCoursefilter(categoryId, perPage, pageNumber, mode, inactive))
     })
@@ -160,7 +133,7 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
   await ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       //getCoursefilter(categoryId,perPage,pageNumber,mode)
-      dispatch(editPartnerCourseSuccess(res.data))
+      dispatch(editPartnerCourseSuccess(res))
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
         dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, "", hindiID, marathiID))
       }
