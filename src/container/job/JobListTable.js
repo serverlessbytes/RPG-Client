@@ -332,8 +332,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       getJobData(filterData)
     }
     setUsertable(
-      filterData.map(item => {
+      filterData.map((item, i) => {
         return {
+          key: i,
           name: (
             <span className='For-Underline' onClick={() => viewJobdata(item.id)}>
               {item?.name?.name}

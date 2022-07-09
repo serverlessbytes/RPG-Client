@@ -120,13 +120,9 @@ const PartnerCourses = () => {
   useEffect(() => {
     if (postPartnerCourseDataerr) {
       dispatch(addPartnerCourseErr(null));
-      toast.error('Something Wrong');
+      // toast.error('Something Wrong');
     }
   }, [postPartnerCourseDataerr]);
-
-  useEffect(() => {
-    console.log("editPartnerCourseData", editPartnerCourseData);
-  }, [editPartnerCourseData])
 
   useEffect(() => {
     if (editPartnerCourseData && editPartnerCourseData.data.isDeleted === false) {
@@ -137,14 +133,6 @@ const PartnerCourses = () => {
       toast.success('Partner Course Delete successful');
     }
   }, [editPartnerCourseData]);
-
-  useEffect(() => {
-    if (editPartnerCourseError) {
-      dispatch(editPartnerCourseErr(null));
-      toast.error('Something Wrong');
-    }
-  }, [editPartnerCourseError]);
-
 
   const getOneCourseDetailByKey = async (languageId, key, id) => {
     await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
