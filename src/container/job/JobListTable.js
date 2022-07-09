@@ -14,13 +14,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import ConfirmModal from '../../components/modals/confirm_modal';
-import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
-
 
 const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search, getJobData }) => {
-
   // props from JobPost
-  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
+  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
@@ -162,17 +159,17 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setLangIds(temp)
   }, [languageData])
 
-  // const activeJobPost = data => {
-  //   let id = data.id;
-  //   delete data.id;
-  //   const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
-  //     if (res.status === 200) {
-  //       dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
-  //     }
-  //     return res;
-  //   });
-  //   return newVal;
-  // };
+  const activeJobPost = data => {
+    let id = data.id;
+    delete data.id;
+    const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
+      if (res.status === 200) {
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
+      }
+      return res;
+    });
+    return newVal;
+  };
 
   const onRestore = async id => {
     let jobsData =
@@ -200,21 +197,18 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         endDate: jobsData.endDate,
         jobRole: jobsData.jobRole.id,
         jobType: jobsData.jobType.id,
+        application_form: jobsData.application_form,
+        recommended_and_forwarded: jobsData.recommended_and_forwarded,
+        application_process: jobsData.application_process,
+        medical_superintendent: jobsData.medical_superintendent,
+        hospital_expenses_estimation_certificate: jobsData.hospital_expenses_estimation_certificate,
         id: id,
       };
-      delete data.id;
-      ApiPost(`job/update?jobId=${id}`, data).then(res => {
-        if (res.status === 200) {
-          dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive", "", langIds.hindi, langIds.marathi,));
-        }
-      })
+      const restoreJobPost = await activeJobPost(data);
+      if (restoreJobPost.status === 200) {
+        toast.success('Jobs active successfully.');
+      }
     }
-    //   const restoreJobPost = await activeJobPost(data);
-    //   if (restoreJobPost.status === 200) {
-    //     toast.success('Jobs active successfully.');
-    //   }
-
-    // }
   };
 
 
@@ -327,11 +321,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       });
   }
 
-  useEffect (() => {
+  useEffect(() => {
     if (getJobFilterData?.data?.data) {
       setFilterData(getJobFilterData?.data?.data)
     }
-  },[getJobFilterData])
+  }, [getJobFilterData])
 
   useEffect(() => {
     if (filterData.length) {
@@ -423,19 +417,26 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         };
       }),
     );
-  }, [filterData,isAscend]);
+  }, [filterData, isAscend]);
 
   const viewJobdata = id => {
     history.push(`/admin/job/view?id=${id}`)
   };
 
-  const sorting = () =>{
+  const sorting = () => {
     if (isAscend) {
-      // setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.length - a.name.name.length))
-      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.localeCompare(a.name.name)))
-    } else {
-      // setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => a.name.name.length - b.name.name.length))
       setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => a.name.name.localeCompare(b.name.name)))
+    } else {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.localeCompare(a.name.name)))
+    }
+    setIsAscend(!isAscend)
+  }
+
+  const sortingForDate = () => {
+    if (isAscend) {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix()))
+    } else {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix()))
     }
     setIsAscend(!isAscend)
   }
@@ -445,11 +446,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       title: 'User',
       dataIndex: 'name',
       key: 'name',
-      sorter: (a, b) => sorting(),  
-      // sorter: (a, b) => a.name.length - b.name.length,  
+      sorter: (a, b) => sorting(),
       sortDirections: ['descend', 'ascend'],
-      // sorter: (a, b) => a.user.localeCompare(b.user),
-      
     },
     {
       title: 'Email',
@@ -473,7 +471,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     {
       title: 'Join Date',
       dataIndex: 'joinDate',
-      sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
+      // sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
+      sorter: (a, b) => sortingForDate()
     },
     {
       title: 'Vacancies',
@@ -497,15 +496,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     },
   ];
 
-  // const handleTableChange = (newPagination, filters, sorter) => {
-  //   usertable({
-  //     sortField: sorter.field,
-  //     sortOrder: sorter.order,
-  //     // pagination: newPagination,
-  //     // ...filters,
-  //   });
-  // };
-
   const rowSelection = {
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -521,7 +511,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             rowSelection={rowSelection}
             dataSource={usertable}
             columns={usersTableColumns}
-            // onChange={handleTableChange}
             pagination={{
               defaultPageSize: getJobFilterData?.data?.per_page,
               total: getJobFilterData?.data?.page_count,
@@ -535,6 +524,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           />
         </TableWrapper>
       </UserTableStyleWrapper>
+
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}

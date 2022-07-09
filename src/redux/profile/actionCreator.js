@@ -92,8 +92,7 @@ const postDelete = (data, key) => {
 
 const getProfileData =() => async(dispatch)=>{
   await ApiGet("user/auth/getUser")
-  .then ((res) => {
-    
+  .then ((res) => { 
     return dispatch(getProfileDataSuccess(res))
   })
 }

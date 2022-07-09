@@ -88,13 +88,18 @@ const district = () => {
         }
     }, [diStrict])
 
-    const languagesTableColumns = [
+    const districtTableColumns = [
         {
             title: 'District',
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
-        }
+        },
+        {
+            title: '',
+            dataIndex: '',
+            width: '1px',
+        },
     ];
 
     const onApply = () => {
@@ -174,10 +179,7 @@ const district = () => {
 
             <Main >
                 <Cards headless>
-
-
                     <Row gutter={30}>
-
                         <Col md={6} xs={24} className="mb-md-25">
                             <Form layout="vertical">
                                 <Form.Item label="State" >
@@ -211,14 +213,12 @@ const district = () => {
                         </Col>
                     </Row>
 
-
-
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
                                 //rowSelection={rowSelection}
                                 dataSource={stateTableData}
-                                columns={languagesTableColumns}
+                                columns={districtTableColumns}
                                 pagination={false}
                             />
 
