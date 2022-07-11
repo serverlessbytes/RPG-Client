@@ -33,7 +33,7 @@ const EmailSent = ({dnone, emailSendTitle}) => {
     dispatch(deviceFilterData(value));
   };
 
-  const labels = ['Total Sent', 'Opened', 'Not Opened'];
+  const labels = ['Total sent', 'Opened', 'Not opened'];
   const icons = ['Sent', 'Opened', 'NotOpen'];
   const types = ['success', 'primary', 'warning'];
   const datasets = [

@@ -118,7 +118,7 @@ const Dashboard = () => {
 
   const schemesColumns = [
     {
-      title: 'Schemes Name',
+      title: 'Schemes name',
       dataIndex: 'name',
       key: 'name',
     },
@@ -417,7 +417,7 @@ const Dashboard = () => {
             >
               <SalesLeaderBoard
                 dnone={'d-none'}
-                tableheader={'Top 10 Jobs viewes'}
+                tableheader={'Top 10 jobs viewes'}
                 columns={jobColumns}
                 data={tenJobData}
               />

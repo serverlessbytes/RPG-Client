@@ -206,7 +206,7 @@ const JobRole = () => {
             flag = true;
         }
         if (!data.jobCategoryId) {
-            error.jobCategoryId = "jobCategory is required";
+            error.jobCategoryId = "Jobcategory is required";
             flag = true;
         }
         setError(error);
@@ -260,7 +260,7 @@ const JobRole = () => {
 
     const jobTableColumns = [
         {
-            title: 'Job Roles',
+            title: 'Job roles',
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
@@ -276,14 +276,14 @@ const JobRole = () => {
         <>
             <PageHeader
                 ghost
-                title="Job Roles"
+                title="Job roles"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Role
+                            Add role
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showImportModal}>
-                            Import Role
+                            Import role
                         </Button>
                     </div>
                 ]}
@@ -336,23 +336,22 @@ const JobRole = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Job Role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Job role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
 
                     <label>Job category</label>
                     <Form.Item name="jobCategoryId" className='mb-0'>
-                        <Select size="large" placeholder="Select Category" className="sDash_fullwidth-select">
+                        <Select size="large" placeholder="Select category" className="sDash_fullwidth-select">
                             {jobData?.data && jobData?.data?.map((items) => (
                                 <Option value={items.id}>{items.name} </Option>
                             ))}
                         </Select>
                     </Form.Item>
                     {error?.jobCategoryId && <span style={{ color: "red" }}>{error.jobCategoryId}</span>}
-
-
-
-                    <label htmlFor="name">Job role name</label>
+                </Form>
+                <Form name="login" form={form} layout="vertical" style={{marginTop:'15px'}}>
+                <label htmlFor="name" className='mt-3'>Job role name</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
                             placeholder="Enter job role name"
@@ -360,7 +359,6 @@ const JobRole = () => {
                         />
                     </Form.Item>
                     {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
-
                 </Form>
             </Modal>
 

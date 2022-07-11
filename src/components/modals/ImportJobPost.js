@@ -94,20 +94,13 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
           visible={importModal}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={'991px'}
+          width={'500px'}
         >
-          <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
-              <Form.Item name="name">
-                <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
-                {Error ? <span style={{ color: 'red' }}>{Error}</span> :
-                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
-              </Form.Item>
-            </Col>
-            <Col md={12} xs={24} className="mb-25"></Col>
-            <Col md={12} xs={24} className="mb-25">
-            </Col>
-          </Row>
+          <Form.Item name="name">
+            <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+            {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+              error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+          </Form.Item>
         </Modal>
       </Col>
     </>

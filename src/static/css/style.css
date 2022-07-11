@@ -3005,3 +3005,9 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .ejKGCx table thead tr th:last-child {
   text-align: center !important;
 }
+
+.experience-input::-webkit-outer-spin-button,
+.experience-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

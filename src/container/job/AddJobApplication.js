@@ -41,7 +41,26 @@ const AddJobApplication = () => {
         }
         else {
             setJobApplication({ ...jobApplication, [e.target.name]: e.target.value })
-            setError({...error,[e.target.name] : ""}) 
+            setError({ ...error, [e.target.name]: "" })
+        }
+    }
+
+    const onChnageHandle = (e, name) => {
+        const input = document.getElementById('experience')
+        input.onkeydown = (e) => {
+            if (e.which === 38 || e.which === 40) {
+                e.preventDefault();
+            }
+        }
+        if (name === 'experience') {
+            if (e.target.value > 0) {
+                console.log('e if', e.target.value)
+                setJobApplication({ ...jobApplication, [e.target.name]: e.target.value })
+            } else {
+                console.log('e else', e.target.value)
+                setJobApplication({ ...jobApplication, [e.target.name]: 0 })
+            }
+            setError({ ...error, [e.target.name]: "" })
         }
     }
 
@@ -50,7 +69,7 @@ const AddJobApplication = () => {
             setJobApplication({
                 ...jobApplication, job_id: e
             })
-            setError({...error, job_id : ""}) 
+            setError({ ...error, job_id: "" })
         }
     }
 
@@ -58,7 +77,7 @@ const AddJobApplication = () => {
     const onFileSelecte = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
         if (extensions) {
-            let extensionsValidation = ['docx', 'pdf','csv','xlsx']
+            let extensionsValidation = ['docx', 'pdf', 'csv', 'xlsx']
             if (extensionsValidation.includes(extensions[extensions.length - 1])) {
                 setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
                 setError({ ...error, resume_url: "" });
@@ -75,7 +94,7 @@ const AddJobApplication = () => {
     const onChnagecertificationUrl = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
         if (extensions) {
-            let extensionsValidation = ['docx', 'pdf','csv','xlsx']
+            let extensionsValidation = ['docx', 'pdf', 'csv', 'xlsx']
             if (extensionsValidation.includes(extensions[extensions.length - 1])) {
                 setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
                 setError({ ...error, certification_url: "" });
@@ -94,7 +113,7 @@ const AddJobApplication = () => {
         let error = {}
         let flage = false
         if (jobApplication.resume_url === "") {
-            error.resume_url = "Resume URL is required";
+            error.resume_url = "Resume is required";
             flage = true;
         }
         if (jobApplication.experience === "") {
@@ -102,7 +121,7 @@ const AddJobApplication = () => {
             flage = true;
         }
         if (jobApplication.certification_url === "") {
-            error.certification_url = "Certification URL is required";
+            error.certification_url = "Certification is required";
             flage = true;
         }
         if (jobApplication.currently_working === "") {
@@ -110,7 +129,7 @@ const AddJobApplication = () => {
             flage = true;
         }
         if (jobApplication.job_id === "") {
-            error.job_id = "Job Id is required";
+            error.job_id = "Job is required";
             flage = true;
         }
         setError(error);
@@ -130,16 +149,16 @@ const AddJobApplication = () => {
     return (
         <>
             <PageHeader
-                title="Add JobApplication"
+                title="Add Job Application"
             />
             <Main >
                 <Cards headless>
                     <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="resume_url">Resume URL</label>
+                            <label htmlFor="resume_url">Resume</label>
                             <Form.Item>
                                 {/* <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} /> */}
-                                <Input type="file"  placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
+                                <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
                                 {
                                     error.resume_url && <span style={{ color: "red" }}>{error.resume_url}</span>
                                 }
@@ -147,7 +166,7 @@ const AddJobApplication = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="certification_url">Certification URL</label>
+                            <label htmlFor="certification_url">Certification</label>
                             <Form.Item>
                                 <Input type="file" placeholder="Certification URL" name="certification_url" onChange={(e) => onChnagecertificationUrl(e, "certification_url")} />
                                 {
@@ -158,14 +177,14 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="experience">Experience</label>
                             <Form.Item>
-                                <Input placeholder="Experience" name="experience" onChange={(e) => onChangeValue(e)} />
+                                <Input type="number" className='experience-input' placeholder="Experience" id='experience' name="experience" onChange={(e) => onChnageHandle(e, "experience")} />
                                 {error.experience && <span style={{ color: "red" }}>{error.experience}</span>}
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <div>
                                 <label htmlFor="visible" className="ml-10">
-                                    currently Working
+                                    Currently Working
                                 </label>
                                 <Checkbox id="visible" name="currently_working" onChange={e => onChangeValue(e)}></Checkbox>
                             </div>
@@ -175,11 +194,11 @@ const AddJobApplication = () => {
 
                     <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="job_id">Jobs Id</label>
+                            <label htmlFor="job_id">Job</label>
                             <Form.Item >
                                 <Select
                                     size="large"
-                                    placeholder="Select Job Id"
+                                    placeholder="Select Job"
                                     className="sDash_fullwidth-select"
                                     name="job_id"
                                     onChange={e => selectValue(e, 'job_id')}

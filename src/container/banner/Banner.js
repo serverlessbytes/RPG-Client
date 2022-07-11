@@ -12,9 +12,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/banner/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import Importbanner from '../../components/modals/ImportBanner';
 
 //import { data, data } from 'browserslist';
@@ -27,7 +25,7 @@ const Banner = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [importModel, setImportModel] = useState(false);
     const [bannerTableData, setBannerTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(20)
     const [pageNumber, setPageNumber] = useState(1)
     const [selectedBanner, setSelectedBanner] = useState();
     const [nameTog, setNameTog] = useState(false)
@@ -97,7 +95,7 @@ const Banner = () => {
     useEffect(() => {
         if (addBannerdata && addBannerdata.status === 200) {
             dispatch(addBannerSuccess(null))
-            toast.success("Banner add successful")
+            toast.success("Banner added successfully")
         }
     }, [addBannerdata])
 
@@ -111,7 +109,7 @@ const Banner = () => {
     useEffect(() => {
         if (editBannerdata && editBannerdata.status === 200) {
             dispatch(editBannerSuccess(null))
-            toast.success("Banner update successful")
+            toast.success("Banner updated successfully")
         }
     }, [editBannerdata])
 
@@ -246,7 +244,7 @@ const Banner = () => {
 
             const deletebanner = await newBanner(userForDelete)
             if (deletebanner.status === 200) {
-                toast.success("Banner delete successful")
+                toast.success("Banner deleted successfully")
             }
         }
     }
@@ -285,7 +283,7 @@ const Banner = () => {
             sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'imageUrl',
+            title: 'Image url',
             dataIndex: 'imageUrl',
             sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
             sortDirections: ['descend', 'ascend'],
@@ -305,11 +303,11 @@ const Banner = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            Add Banner
+                            Add banner
                         </Button>
 
                         <Button size="small" type="primary" onClick={showImportModal}>
-                            Import Banner
+                            Import banner
                         </Button>
                     </div>
                 ]}
@@ -371,21 +369,11 @@ const Banner = () => {
                             {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
                         </Form.Item>
 
-                        <label htmlFor="imgUrl">Image URL</label>
-                        {/* <Form.Item>
-                            <Input
-                                type="text"
-                                placeholder="Enter image URL"
-                                name="imageUrl"
-                                value={data.imageUrl}
-                                onChange={(e) => handleChange(e)}
-                            />
-                        </Form.Item> */}
-
+                        <label htmlFor="imgUrl">Image url</label>
                         <Form.Item>
                             <Input
                                 type="file"
-                                placeholder="Enter image URL"
+                                placeholder="Enter image url"
                                 name="imageUrl"
                                 defaultValue={data.imageUrl}
                                 onChange={(e) => fileUpload(e, "imageUrl")}

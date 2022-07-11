@@ -243,7 +243,7 @@ const district = () => {
                     <label htmlFor="name">District</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder="Enter District"
+                            placeholder="Enter district"
                             name="name"
                             //defaultValue={data.name}
                             onChange={(e) => { onChangeHandler(e) }}
@@ -259,8 +259,8 @@ const district = () => {
                         />
                     </Form.Item> */}
                     <Form.Item name='stateId' label="State">
-                        <Select placeholder="Select State" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
-                            <Option value='' >Select State</Option>
+                        <Select placeholder="Select state" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
+                            <Option value='' >Select state</Option>
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>

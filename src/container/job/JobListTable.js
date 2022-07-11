@@ -135,7 +135,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       };
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
-        toast.success('Jobs delete successfully.');
+        toast.success('Job deleted successfully');
       }
     }
   };
@@ -206,7 +206,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       };
       const restoreJobPost = await activeJobPost(data);
       if (restoreJobPost.status === 200) {
-        toast.success('Jobs active successfully.');
+        toast.success('Job active successfully');
       }
     }
   };
@@ -245,14 +245,14 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
-      toast.success('Jobs Add successful');
+      toast.success('Job added successfully');
     }
   }, [addJobPostData]);
 
   useEffect(() => {
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
       dispatch(getJobsFilterForMainSuccess(null));
-      toast.success('Jobs Addd successful');
+      toast.success('Jobs Add successful');
 
     }
   }, [addLanguageJobPost]);
@@ -271,7 +271,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
     else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
       dispatch(editJobPostSuccess(null))
-      toast.success("Jobs Update successful");
+      toast.success("Job updated successfully");
     }
   }, [editJobPostData]);
 
@@ -316,7 +316,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
     ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unselected successful');
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
       });
   }
@@ -463,13 +463,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Job Role',
+      title: 'Job role',
       dataIndex: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Join Date',
+      title: 'Join date',
       dataIndex: 'joinDate',
       // sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
       sorter: (a, b) => sortingForDate()
@@ -481,12 +481,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
     {
-      title: 'Select Banner',
+      title: 'Select banner',
       dataIndex: 'chooseBanner',
     },
     {

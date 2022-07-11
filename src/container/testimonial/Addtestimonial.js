@@ -63,15 +63,15 @@ const Addtestimonial = () => {
         }
 
         if (data.videoUrl === "") {
-            error.videoUrl = "Video URL is required";
+            error.videoUrl = "Video url is required";
             flag = true;
         } else if (!videoUrlReg.test(data.videoUrl)) {
-            error.videoUrl = 'Enter Valid Video URL';
+            error.videoUrl = 'Enter valid video url';
             flag = true;
           }
 
         if (data.imageUrl === "") {
-            error.imageUrl = "Image URL is required";
+            error.imageUrl = "Image is required";
             flag = true;
         }
 
@@ -207,7 +207,7 @@ const Addtestimonial = () => {
     return (
         <>
             <PageHeader
-                title={id ? "Edit Testimonial" : "Add Testimonial"}
+                title={id ? "Edit testimonial" : "Add testimonial"}
             />
             <Main >
                 <Cards headless>
@@ -233,9 +233,9 @@ const Addtestimonial = () => {
                             </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="videoUrl">VideoUrl</label>
+                            <label htmlFor="videoUrl">Video url</label>
                             <Form.Item>
-                                <Input placeholder="VideoURL" value={data.videoUrl} onChange={(e) => handleChange(e)} name="videoUrl" />
+                                <Input placeholder="Videourl" value={data.videoUrl} onChange={(e) => handleChange(e)} name="videoUrl" />
                                 {
                                     error.videoUrl && <span style={{ color: "red" }}>{error.videoUrl}</span>
                                 }
@@ -243,7 +243,7 @@ const Addtestimonial = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="imageUrl">ImageUrl</label>
+                            <label htmlFor="imageUrl">Image</label>
                             <Form.Item>
                                 <Input type="file" placeholder="ImageURL" defalutValue={data.imageUrl} onChange={(e) => fileUpload(e, "imageUrl")} name="imageUrl" />
                                 {

@@ -148,7 +148,7 @@ const State = () => {
                     <label htmlFor="name">State</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder="Enter State"
+                            placeholder="Enter state"
                             name="name"
                             defaultValue={data.name}
                         // onChange={(e)=>{onChangeHandler(e)}}

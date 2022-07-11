@@ -11,9 +11,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/query/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import { useHistory } from 'react-router';
 import { addQueries, editQueries, getQueries, getQueriesFromId } from '../../redux/query/actionCreator';
 
@@ -56,7 +54,7 @@ const query = () => {
     useEffect(() => {
         if (addQueriesData && addQueriesData.status === 200) {
             dispatch(addQueriesSuccess(null))
-            toast.success("Query add successful")
+            toast.success("Query added successfully")
         }
         else if (addQueriesData && addQueriesData.status !== 200) {
             toast.error("Something Wrong")
@@ -73,7 +71,7 @@ const query = () => {
     useEffect(() => {
         if (editQueriesData && editQueriesData.status === 200) {
             dispatch(editQueriesSuccess(null))
-            toast.success("Query update successful")
+            toast.success("Query updated successfully")
         } else if (editQueriesData && editQueriesData.status !== 200) {
             toast.error("Something Wrong")
         }
@@ -221,7 +219,7 @@ const query = () => {
 
             const deleteQuery = await newQuery(userForDelete)
             if (deleteQuery.status === 200) {
-                toast.success("Query delete successful")
+                toast.success("Query deleted successfully")
             }
             else if (deletebanner.status !== 200) {
                 toast.error("Something Wrong")
@@ -245,7 +243,7 @@ const query = () => {
         const restoreQuery = await newQuery(data);
 
         if (restoreQuery.status === 200) {
-            toast.success("Query active successful")
+            toast.success("Query actived successfully")
         }
     };
 
@@ -327,7 +325,7 @@ const query = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            Add Query
+                            Add query
                         </Button>
                     </div>
                 ]}
@@ -338,7 +336,7 @@ const query = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback} >
-                                <TabPane tab="Active Query" key="active">
+                                <TabPane tab="Active query" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive pb-30">
                                             <Table
@@ -357,7 +355,7 @@ const query = () => {
                                     </UserTableStyleWrapper>
 
                                 </TabPane>
-                                <TabPane tab="Inactive Query" key="inactive">
+                                <TabPane tab="Inactive query" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -393,7 +391,7 @@ const query = () => {
                         <label htmlFor="name">Name</label>
                         <Form.Item>
                             <Input
-                                placeholder="Enter Name"
+                                placeholder="Enter name"
                                 name="name"
                                 value={queryData.name}
                                 onChange={(e) => handleChange(e)}
@@ -405,7 +403,7 @@ const query = () => {
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Email"
+                                placeholder="Enter email"
                                 name="email"
                                 value={queryData.email}
                                 onChange={(e) => handleChange(e)}
@@ -417,7 +415,7 @@ const query = () => {
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Body"
+                                placeholder="Enter body"
                                 name="body"
                                 value={queryData.body}
                                 onChange={(e) => handleChange(e)}

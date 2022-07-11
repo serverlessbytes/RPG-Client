@@ -206,7 +206,7 @@ const Admin = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Admin" key="active">
+                                <TabPane tab="Active admin" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -225,7 +225,7 @@ const Admin = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive Admin" key="inactive">
+                                <TabPane tab="Inactive admin" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

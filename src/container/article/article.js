@@ -215,6 +215,7 @@ const article = () => {
 
     const onDelete = async (id) => {
         let dataForDelete = getArticlesData && getArticlesData.data && getArticlesData.data.data.find((item) => item.id === id)
+        console.log('dataForDelete',dataForDelete)
         if (dataForDelete) {
             let userForDelete = {
                 id: dataForDelete.id,
@@ -242,15 +243,10 @@ const article = () => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
             setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item, id) => {
                 return {
-                    // title: (
-                    //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
-                    //         {item.title}
-                    //     </span>
-                    // ),
                     priority: item.priority,
                     srno: id + 1,
                     title: item.title,
-                    body: item.body,
+                    // body: item.body,
                     imageUrl: item.imageUrl,
                     videoUrl: item.videoUrl,
                     action: (
@@ -282,7 +278,7 @@ const article = () => {
         },
 
         {
-            title: 'SR.NO',
+            title: 'Srno',
             dataIndex: 'srno',
             sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
@@ -293,20 +289,20 @@ const article = () => {
             sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
         },
+        // {
+        //     title: 'Body',
+        //     dataIndex: 'body',
+        //     sorter: (a, b) => a.body.localeCompare(b.body),
+        //     sortDirections: ['descend', 'ascend']
+        // },
         {
-            title: 'Body',
-            dataIndex: 'body',
-            sorter: (a, b) => a.body.localeCompare(b.body),
-            sortDirections: ['descend', 'ascend']
-        },
-        {
-            title: 'ImageUrl',
+            title: 'Image url',
             dataIndex: 'imageUrl',
             sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'VideoUrl',
+            title: 'Video url',
             dataIndex: 'videoUrl',
             sorter: (a, b) => a.videoUrl.localeCompare(b.videoUrl),
             sortDirections: ['descend', 'ascend']
@@ -326,7 +322,7 @@ const article = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            Add Article
+                            Add article
                         </Button>
                     </div>
                 ]}
@@ -377,11 +373,11 @@ const article = () => {
                             {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
 
                         </Form.Item>
-                        <label htmlFor="imgUrl">Image URL</label>
+                        <label htmlFor="imgUrl">Image url</label>
                         <Form.Item>
                             <Input
                                 type="file"
-                                placeholder="Enter image URL"
+                                placeholder="Enter image url"
                                 name="imageUrl"
                                 defalutValue={articledata.imageUrl}
                                 onChange={(e) => fileUpload(e, "imageUrl")}
@@ -390,10 +386,10 @@ const article = () => {
 
                         </Form.Item>
 
-                        <label htmlFor="videoUrl">Video URL</label>
+                        <label htmlFor="videoUrl">Video url</label>
                         <Form.Item>
                             <Input
-                                placeholder="Enter Video URL"
+                                placeholder="Enter video url"
                                 name="videoUrl"
                                 value={articledata.videoUrl}
                                 onChange={(e) => handleChange(e)}
@@ -405,7 +401,7 @@ const article = () => {
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Body"
+                                placeholder="Enter body"
                                 name="body"
                                 value={articledata.body}
                                 onChange={(e) => handleChange(e)}

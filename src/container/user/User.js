@@ -61,7 +61,7 @@ const User = () => {
                 id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: userForDelete.avatar,
             };
             delete userForDelete.userTakenRatings
             const restoreActiveUser = await activeUser(id, userForDelete);
@@ -189,7 +189,7 @@ const User = () => {
             sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'UserRating',
+            title: 'User rating',
             dataIndex: 'userTakenRatings',
         },
         {
@@ -223,7 +223,7 @@ const User = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active User" key="active">
+                                <TabPane tab="Active user" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -242,7 +242,7 @@ const User = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive User" key="inactive">
+                                <TabPane tab="Inactive user" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

@@ -34,7 +34,7 @@ const AuthInfo = () => {
 
   useEffect(() => {
     dispatch(getUser());
-  }, []);
+  },[]);
 
   const getEmployerData = useSelector(state => state.auth.getUserData);
  
@@ -77,7 +77,7 @@ const AuthInfo = () => {
           </li>
         </ul>
         <Link className="user-dropdwon__bottomAction" onClick={SignOut} to="#">
-          <FeatherIcon icon="log-out" /> Sign Out
+          <FeatherIcon icon="log-out" /> Sign out
         </Link>
       </div>
     </UserDropDwon>
@@ -119,7 +119,8 @@ const AuthInfo = () => {
      >
         <Popover placement="bottomRight" content={userContent} action="click">
           <Link to="#" className="head-example">
-            <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" />
+            {/* <Avatar src="https://cdn0.iconfinder.com/data/icons/user-pictures/100/matureman1-512.png" /> */}
+            <Avatar src={getEmployerData?.data?.avatar} />
           </Link>
         </Popover>
       </div>
