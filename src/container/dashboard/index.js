@@ -91,12 +91,21 @@ const Dashboard = () => {
   }, [topTenJobsData]);
 
   useEffect(() => {
-    dispatch(getDashBoardCourseData());
+    // dispatch(getDashBoardCourseData());
     dispatch(getDashBoardUserData());
+    // dispatch(getTopMostViewedCourses());
+    // dispatch(getTopMostViewedSchemes());
+    // dispatch(getTopMostViewedJobs());
+  }, []);
+
+  useEffect(() => {
+    if(AuthStorage.getStorageData(STORAGEKEY.language)){
+    dispatch(getDashBoardCourseData());
     dispatch(getTopMostViewedCourses());
     dispatch(getTopMostViewedSchemes());
     dispatch(getTopMostViewedJobs());
-  }, []);
+    }
+  },[AuthStorage.getStorageData(STORAGEKEY.language)])
 
   const courseColumns = [
     {

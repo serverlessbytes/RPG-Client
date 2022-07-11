@@ -135,7 +135,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       };
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
-        toast.success('Job deleted successfully');
+        toast.success('Job deleted');
       }
     }
   };
@@ -206,7 +206,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       };
       const restoreJobPost = await activeJobPost(data);
       if (restoreJobPost.status === 200) {
-        toast.success('Job active successfully');
+        toast.success('Job actived');
       }
     }
   };
@@ -214,13 +214,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
   useEffect(() => {
     if (addLanguageJobPostError) {
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addLanguageJobPostError]);
 
   useEffect(() => {
     if (addJobPostErr) {
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addJobPostErr]);
 
@@ -245,14 +245,15 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
-      toast.success('Job added successfully');
+      toast.success('Job added');
     }
   }, [addJobPostData]);
 
   useEffect(() => {
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
-      dispatch(getJobsFilterForMainSuccess(null));
-      toast.success('Jobs Add successful');
+      // dispatch(getJobsFilterForMainSuccess(null));
+      dispatch(addLanguageJobPostSuccess(null));
+      toast.success('Job added');
 
     }
   }, [addLanguageJobPost]);
@@ -260,18 +261,18 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   useEffect(() => {
     if (editJobPostError) {
       dispatch(editJobPostErr(null))
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [editJobPostError]);
 
   useEffect(() => {
     if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
       dispatch(editJobPostSuccess(null));
-      toast.success('Jobs Delete successful');
+      toast.success('Jobs Deleted');
     }
     else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
       dispatch(editJobPostSuccess(null))
-      toast.success("Job updated successfully");
+      toast.success("Job updated");
     }
   }, [editJobPostData]);
 
@@ -291,7 +292,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     };
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then(res => {
-        toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+        toast.success(res.data.isApproved ? 'Approved successfully' : 'Disapproved successfully ');
         dispatch(
           getJobsFilterForMain(
             perPage,
@@ -316,7 +317,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
     ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unselected successful');
+        toast.success(!bannerSelected ? 'Banner Selected' : 'Banner deselected');
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
       });
   }
@@ -521,7 +522,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 setPerPage(pageSize);
               },
             }}
-          // pagination={false}
           />
         </TableWrapper>
       </UserTableStyleWrapper>

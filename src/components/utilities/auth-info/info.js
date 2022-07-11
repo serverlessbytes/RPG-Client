@@ -4,10 +4,6 @@ import { Link } from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux';
 import FeatherIcon from 'feather-icons-react';
 import { InfoWraper, NavAuth, UserDropDwon } from './auth-info-style';
-import Message from './message';
-import Notification from './notification';
-import Settings from './settings';
-import Support from './support';
 import { Popover } from '../../popup/popup';
 import { Dropdown } from '../../dropdown/dropdown';
 import { logOut } from '../../../redux/authentication/actionCreator';
@@ -28,8 +24,7 @@ const AuthInfo = () => {
   const SignOut = e => {
     e.preventDefault();
     dispatch(logOut());
-    localStorage.clear();
-    AuthStorage.deauthenticateUser()
+    AuthStorage.deauthenticateUser();
   };
 
   useEffect(() => {

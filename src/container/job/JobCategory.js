@@ -45,7 +45,7 @@ const JobCategory = () => {
     useEffect(() => {
         if (addJobCatogerydata && addJobCatogerydata.status === 200) {
             dispatch(addJobcategorySuccess(null))
-            toast.success("Job Category add successful");
+            toast.success("Job category added");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -56,31 +56,31 @@ const JobCategory = () => {
             toast.success("Category imported");
         }
         else if (importJob && importJob.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [importJob])
 
     useEffect(() => {
         if (importJobCategoryError) {
             dispatch(addJobcategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [importJobCategoryError])
 
     useEffect(() => {
         if (editJobCatogeryData && editJobCatogeryData.data && editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
-            toast.success("Job Category update successful");
+            toast.success("Job category updated");
         } else if (editJobCatogeryData && editJobCatogeryData.data && !editJobCatogeryData.data.isActive) {
             dispatch(editJobcategorySuccess(null))
-            toast.success("Job Category delete successful");
+            toast.success("Job category deleted");
         }
     }, [editJobCatogeryData])
 
     useEffect(() => {
         if (editJobCatogeryError) {
             dispatch(editJobcategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [editJobCatogeryError])
 
@@ -124,7 +124,7 @@ const JobCategory = () => {
             // dispatch(editJobcategory(dataForEdit))
             const deleteJobcatrgory = await newJobCategory(dataForEdit)
             if (deleteJobcatrgory.status === 200) {
-                toast.success("Job Category delete successful")
+                toast.success("Job category deleted")
             }
         }
     }
