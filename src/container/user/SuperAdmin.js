@@ -185,7 +185,7 @@ const SuperAdmin = () => {
     <>
       <PageHeader
         ghost
-        title="Super Admin"
+        title="Super admin"
       // buttons={[
       //     <div className="page-header-actions">
       //         <Button size="small" type="primary" onClick={allEmployerExport}>
@@ -200,7 +200,7 @@ const SuperAdmin = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Tabs onChange={callback}>
-                <TabPane tab="Active Super-Admin" key="active">
+                <TabPane tab="Active Super admin" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table
@@ -219,7 +219,7 @@ const SuperAdmin = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Super-Admin" key="inactive">
+                <TabPane tab="Inactive Super admin" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table

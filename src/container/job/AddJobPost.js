@@ -160,11 +160,11 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.jobType === '') {
-            error.jobType = 'Job Category is required';
+            error.jobType = 'Job category is required';
             flage = true;
         }
         if (state.jobRole === '') {
-            error.jobRole = 'Job Role is required';
+            error.jobRole = 'Job role is required';
             flage = true;
         }
         if (state.name === '') {
@@ -192,7 +192,7 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.pincode && state.pincode.length < 6) {
-            error.pincode = 'Please enter valid Pincode';
+            error.pincode = 'Please enter valid pincode';
             flage = true;
         }
         if (state.description === '') {
@@ -240,27 +240,27 @@ const AddJobPost = () => {
             flage = true;
         }
         if (state.extraType === '') {
-            error.extraType = 'Type Of Field is required';
+            error.extraType = 'Type of field is required';
             flage = true;
         }
         if (state.application_form === '') {
-            error.application_form = 'Application Form is required';
+            error.application_form = 'Application form is required';
             flage = true;
         }
         if (state.recommended_and_forwarded === '') {
-            error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+            error.recommended_and_forwarded = 'Recommended and forwarded is required';
             flage = true;
         }
         if (state.application_process === '') {
-            error.application_process = 'Application Process is required';
+            error.application_process = 'Application process is required';
             flage = true;
         }
         if (state.medical_superintendent === '') {
-            error.medical_superintendent = 'Medical Superintendent is required';
+            error.medical_superintendent = 'Medical superintendent is required';
             flage = true;
         }
         if (state.hospital_expenses_estimation_certificate === '') {
-            error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+            error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
             flage = true;
         }
 
@@ -269,67 +269,67 @@ const AddJobPost = () => {
     };
 
     const onChangeValue = (e, name) => {
-      
+
         const regexphone = /^[0-9\b]+$/;
         const regexpincode = /^[0-9]*$/;
-        
+
         if (name === "phone") {
             if (e.target.value === '' || regexphone.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
-                setError({...error,phone:""});
+                setError({ ...error, phone: "" });
             }
         } else if (e.target.name === "pincode") {
             if (e.target.value === '' || regexpincode.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
-                setError({...error,pincode:""});
+                setError({ ...error, pincode: "" });
 
             }
-        }else if(e.target.name === "salary"){
+        } else if (e.target.name === "salary") {
             if (e.target.value === '' || regexphone.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
-                setError({...error,salary:""});
+                setError({ ...error, salary: "" });
 
             }
         }
         else {
             setState({ ...state, [e.target.name]: e.target.value });
-            setError({...error,[e.target.name]:""});
+            setError({ ...error, [e.target.name]: "" });
         }
     }
 
     const onChnageHandle = (e, name) => {
         if (name === "jobType") {
             setState({ ...state, jobType: e })
-            setError({...error,jobType:""});
+            setError({ ...error, jobType: "" });
 
         }
         else if (name === "jobRole") {
             setState({ ...state, jobRole: e })
-            setError({...error,jobRole:""});
+            setError({ ...error, jobRole: "" });
         }
         else if (name === "shifts") {
             setState({ ...state, shifts: e })
-            setError({...error,shifts:""});
+            setError({ ...error, shifts: "" });
         }
         else if (name === "startDate") {
             setState({ ...state, startDate: e })
-            setError({...error,startDate:""});
+            setError({ ...error, startDate: "" });
         }
         else if (name === "endDate") {
             setState({ ...state, endDate: e })
-            setError({...error,endDate:""});
+            setError({ ...error, endDate: "" });
         }
         else if (name === "state") {
             setState({ ...state, state: e })
-            setError({...error,state:""});
+            setError({ ...error, state: "" });
         }
         else if (name === "district") {
             setState({ ...state, district: e })
-            setError({...error,district:""});
+            setError({ ...error, district: "" });
         }
         else if (name === "name") {
             setState({ ...state, name: e })
-            setError({...error,name:""});
+            setError({ ...error, name: "" });
         }
         else if (e.target.name === "vacancies") {
             if (e.target.value > 0) {
@@ -337,13 +337,13 @@ const AddJobPost = () => {
             } else {
                 setState({ ...state, [e.target.name]: 0 })
             }
-            setError({...error,vacancies:""});
+            setError({ ...error, vacancies: "" });
         }
     }
 
     const onChangesEditorBenifit = (value) => {
         setState({ ...state, benifits: value });
-        setError({...error,benifits:""});
+        setError({ ...error, benifits: "" });
 
     };
 
@@ -455,7 +455,7 @@ const AddJobPost = () => {
     return (
         <>
             <PageHeader
-                title={editJobsID ? "Edit job Post" : "Add Job Post"}
+                title={editJobsID ? "Edit job post" : "Add job post"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
@@ -477,12 +477,17 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="basic-select" >
-                                                    <Select size="large" className="sDash_fullwidth-select" placeholder="Salary" value={state.jobType} name="jobType" onChange={(e) => onChnageHandle(e, "jobType")} >
-
-                                                        {jobData && jobData.data.map((items) => (
-                                                            <Option value={items.id}>{items.name} </Option>
-                                                        ))}
+                                                <Form.Item>
+                                                    <Select
+                                                        size="large"
+                                                        className={state.jobType ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="jobType"
+                                                        value={state.jobType}
+                                                        placeholder="Select JobType"
+                                                        onChange={e => onChnageHandle(e, "jobType")}
+                                                    >
+                                                        <Option value="">Select jobtype</Option>
+                                                        {jobData && jobData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.jobType && <span style={{ color: 'red' }}>{error.jobType}</span>}
                                                 </Form.Item>
@@ -493,11 +498,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="salary">Monthly Salary Offered</label>
+                                            <label htmlFor="salary">Monthly salary offered</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="salary">
-                                                <Input placeholder="Salary " value={state.salary} name="salary" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="salary " value={state.salary} name="salary" onChange={e => onChangeValue(e)} />
                                                 {error.salary && <span style={{ color: 'red' }}>{error.salary}</span>}
                                             </Form.Item>
                                         </Col>
@@ -508,36 +513,42 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="name">Job Role</label>
+                                            <label htmlFor="name">Job role</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="Selectajobrole" initialValue="Select a job role">
+                                            {/* <Form.Item name="Selectajobrole" initialValue="Select a job role">
                                                 <Select size="large" className="sDash_fullwidth-select" value={state.jobRole} name="jobRole" onChange={(e) => onChnageHandle(e, "jobRole")} defaultValue="Select Job Role">
                                                     {jobRolData && jobRolData.map((items) => (
                                                         <Option value={items.id}>{items.name} </Option>
                                                     ))}
                                                 </Select>
                                                 {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
-                                            </Form.Item>
+                                            </Form.Item> */}
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item>
+                                                    {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
+                                                    <Select
+                                                        size="large"
+                                                        className={state.jobRole ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="jobRole"
+                                                        value={state.jobRole}
+                                                        placeholder="Select JobRole"
+                                                        onChange={e => onChnageHandle(e, "jobRole")}
+                                                    >
+                                                        <Option value="">Select jobrole</Option>
+                                                        {jobRolData && jobRolData.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                    </Select>
+                                                    {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
+                                                </Form.Item>
+                                            </Form>
                                         </Col>
                                     </Row>
                                 </Col>
                                 <Col lg={24} md={24} sm={24} xs={24}>
-                                    {/* <Row align="middle" justify="space-between">
-                                        <Col lg={4} md={9} xs={24}>
-                                            <label htmlFor="benifits">Benefits</label>
-                                        </Col>
-                                        <Col lg={20} md={15} xs={24}>
-                                            <Form.Item name="AnyotherBenefitsE" initialValue="">
-                                                <RichTextEditor placeholder="Benefits" name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
-                                                {error.benifits && <span style={{ color: 'red' }}>{error.benifits}</span>}
-                                            </Form.Item>
-                                        </Col>
-                                    </Row> */}
                                     <div style={{ marginBottom: "20px" }}>
                                         <label htmlFor="Documentation">Benefits</label>
                                         <div className="group" style={{ marginBottom: "0px" }}>
-                                            <RichTextEditor placeholder="Type your message..." name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
+                                            <RichTextEditor placeholder="Benefits" name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
                                         </div>
                                         {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
                                     </div>
@@ -547,19 +558,25 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="name">Name of the Employer</label>
+                                            <label htmlFor="name">Name of the employer</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="name" initialValue="">
-                                                {/* <Input placeholder="Enter Employer Name" value={state.name} name='name' onChange={(e) => onChangeValue(e)} /> */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.name} name="name" onChange={(e) => onChnageHandle(e, "name")} defaultValue="Select Job Role">
-                                                    {getEmployerdata && getEmployerdata.data && getEmployerdata.data?.data.map((items) => (
-                                                        <Option value={items.id}>{items.name} </Option>
-                                                    ))}
-
-                                                </Select>
-                                                {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
-                                            </Form.Item>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item>
+                                                    <Select
+                                                        size="large"
+                                                        className={state.name ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="name"
+                                                        value={state.name}
+                                                        placeholder="Select name"
+                                                        onChange={e => onChnageHandle(e, "name")}
+                                                    >
+                                                        <Option value="">Select name</Option>
+                                                        {getEmployerdata && getEmployerdata.data && getEmployerdata.data?.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                    </Select>
+                                                    {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                                                </Form.Item>
+                                            </Form>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -570,7 +587,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="vacancies" initialValue="">
-                                                <Input type="number" placeholder="vacancies" value={state.vacancies} name='vacancies' onChange={(e) => onChnageHandle(e)} />
+                                                <Input type="number" className='experience-input' placeholder="vacancies" value={state.vacancies} name='vacancies' onChange={(e) => onChnageHandle(e)} />
                                                 {error.vacancies && <span style={{ color: 'red' }}>{error.vacancies}</span>}
                                             </Form.Item>
                                         </Col>
@@ -584,71 +601,48 @@ const AddJobPost = () => {
                                             <label htmlFor="state">State</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="state">
-                                                {/* <Input placeholder="State" value={state.state} name="state" onChange={(e) => onChangeValue(e)} /> */}
-                                                <Select
-                                                    size="large"
-                                                    className="sDash_fullwidth-select"
-                                                    name="state"
-                                                    value={state.state}
-                                                    placeholder="Select State"
-                                                    onChange={(e) => onChnageHandle(e, "state")}
-                                                >
-                                                    {
-                                                        stateData && stateData.data.map((item) => (
-                                                            <Option value={item.id}> {item.name} </Option>
-                                                        ))
-                                                    }
-                                                </Select>
-                                                {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
-                                            </Form.Item>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item>
+                                                    <Select
+                                                        size="large"
+                                                        className={state.state ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="state"
+                                                        value={state.state}
+                                                        placeholder="Select State"
+                                                        onChange={e => onChnageHandle(e, "state")}
+                                                    >
+                                                        <Option value="">Select state</Option>
+                                                        {stateData && stateData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                    </Select>
+                                                    {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
+                                                </Form.Item>
+                                            </Form>
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* <Col lg={11} md={11} sm={24} xs={24}>
-                                    <Row align="middle" justify="space-between">
-                                        <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="name">Type of Job</label>
-                                        </Col>
-                                        <Col lg={16} md={15} xs={24}>
-                                            <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
-                                                <Space direction="vertical">
-                                                    <Row>
-                                                        <Radio checked={state.type === true} value={"PARTTIME"}>Part-time</Radio>
-                                                        <Radio checked={state.type === true} value={"FULLTIME"}>Full-time</Radio>
-                                                    </Row>
-                                                </Space>
-                                            </Radio.Group>
-                                        </Col>
-                                        {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
-                                    </Row>
-                                </Col> */}
-                                {/* </Row>
-                            <Row justify="space-between"> */}
+            
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="district">District</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="district" >
-                                                {/* <Input placeholder="District" value={state.district} name="district" onChange={(e) => onChangeValue(e)} /> */}
-                                                <Select
-                                                    size="large"
-                                                    className="sDash_fullwidth-select"
-                                                    name="district"
-                                                    value={state.district}
-                                                    placeholder="Select District"
-                                                    onChange={(e) => onChnageHandle(e, "district")}
-                                                >
-                                                    {
-                                                        diStrictdata && diStrictdata.data.map((item) => (
-                                                            <Option value={item.id}> {item.name} </Option>
-                                                        ))
-                                                    }
-                                                </Select>
-                                                {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
-                                            </Form.Item>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item>
+                                                    <Select
+                                                        size="large"
+                                                        className={state.district ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="district"
+                                                        value={state.district}
+                                                        placeholder="Select district"
+                                                        onChange={e => onChnageHandle(e, "district")}
+                                                    >
+                                                        <Option value="">Select district</Option>
+                                                        {diStrictdata && diStrictdata.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                    </Select>
+                                                    {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
+                                                </Form.Item>
+                                            </Form>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -670,11 +664,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="name">Town / Village</label>
+                                            <label htmlFor="name">Town / village</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="TownVillage" initialValue="">
-                                                <Input placeholder="Enter Town / Village" value={state.town} name="town" onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="Enter Town / village" value={state.town} name="town" onChange={(e) => onChangeValue(e)} />
                                                 {error.town && <span style={{ color: 'red' }}>{error.town}</span>}
                                             </Form.Item>
                                         </Col>
@@ -702,7 +696,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="pincode">
-                                                <Input placeholder="pincode" value={state.pincode} name="pincode" maxLength={6} onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Pincode" value={state.pincode} name="pincode" maxLength={6} onChange={e => onChangeValue(e)} />
                                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                                             </Form.Item>
                                         </Col>
@@ -715,15 +709,25 @@ const AddJobPost = () => {
                                             <label htmlFor="shifts">Shift</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            <Form.Item name="shifts" initialValue="Select Shift">
-                                                {/* <Input placeholder="Shift" name="shifts" onChange={e => onChangeValue(e)} />
-                                                {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>} */}
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.shifts} name="shifts" onChange={(e) => onChnageHandle(e, "shifts")}>
-                                                    <Option value="DAY"> Day </Option>
-                                                    <Option value="NIGHT"> Night </Option>
-                                                </Select>
-                                                {error.shifts && <span style={{ color: "red" }}>{error.shifts}</span>}
-                                            </Form.Item>
+                                            <Form name="sDash_select" layout="vertical">
+                                                <Form.Item>
+                                                    <Select
+                                                        size="large"
+                                                        className={state.shifts ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
+                                                        name="shifts"
+                                                        value={state.shifts}
+                                                        placeholder="Select shift"
+                                                        onChange={e => onChnageHandle(e, "shifts")}
+                                                    >
+                                                        <Option value="">Select shift</Option>
+                                                        <Option value="DAY"> Day </Option>
+                                                        <Option value="NIGHT"> Night </Option>
+
+                                                    </Select>
+                                                    {error.shifts && <span style={{ color: 'red' }}>{error.shifts}</span>}
+                                                </Form.Item>
+                                            </Form>
+
                                         </Col>
                                     </Row>
                                 </Col>
@@ -731,11 +735,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="req_experience">Requried Experience</label>
+                                            <label htmlFor="req_experience">Requried experience</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="reqExperience">
-                                                <Input placeholder="Requried Experience" value={state.reqExperience} name="reqExperience" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Requried experience" value={state.reqExperience} name="reqExperience" onChange={e => onChangeValue(e)} />
                                                 {error.reqExperience && <span style={{ color: 'red' }}>{error.reqExperience}</span>}
                                             </Form.Item>
                                         </Col>
@@ -747,7 +751,7 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="startdata">Start Date</label>
+                                            <label htmlFor="startdata">Start date</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="startdata">
@@ -762,7 +766,7 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="enddate">End Date</label>
+                                            <label htmlFor="enddate">End date</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="endDate">
@@ -829,7 +833,7 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="isactive" className='mb-0'>Type Of Field</label>
+                                            <label htmlFor="isactive" className='mb-0'>Type of field</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
@@ -855,11 +859,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="application_form">Application Form</label>
+                                            <label htmlFor="application_form">Application form</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="application_form">
-                                                <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
                                                 {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
                                             </Form.Item>
                                         </Col>
@@ -868,11 +872,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="recommended_and_forwarded">Recommended and Forwarded</label>
+                                            <label htmlFor="recommended_and_forwarded">Recommended and forwarded</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="recommended_and_forwarded">
-                                                <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
                                                 {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
                                             </Form.Item>
                                         </Col>
@@ -882,11 +886,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="application_process">Application Process</label>
+                                            <label htmlFor="application_process">Application process</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="application_process">
-                                                <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
                                                 {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
                                             </Form.Item>
                                         </Col>
@@ -895,11 +899,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="medical_superintendent">Medical Superintendent</label>
+                                            <label htmlFor="medical_superintendent">Medical superintendent</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="medical_superintendent">
-                                                <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
                                                 {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
                                             </Form.Item>
                                         </Col>
@@ -909,11 +913,11 @@ const AddJobPost = () => {
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle" justify="space-between">
                                         <Col lg={8} md={9} xs={24}>
-                                            <label htmlFor="hospital_expenses_estimation_certificate">Hospital Expenses Estimate Certificate</label>
+                                            <label htmlFor="hospital_expenses_estimation_certificate">Hospital expenses estimate certificate</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="hospital_expenses_estimation_certificate">
-                                                <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
+                                                <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
                                                 {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
                                             </Form.Item>
                                         </Col>
@@ -921,14 +925,6 @@ const AddJobPost = () => {
                                 </Col>
 
                             </Row>
-
-                            {/* <div style={{ marginBottom: "20px" }}>
-                                <label htmlFor="benifits">Benefit 1-Line</label>
-                                <div className="group" style={{ marginBottom: "0px" }}>
-                                    <RichTextEditor placeholder="Type your message..." name="benifits" value={state.benifits} onChange={onChangesEditorBenifit} />
-                                </div>
-                                {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
-                            </div> */}
 
                         </Form>
                         <div className="sDash_form-action mt-20">
@@ -939,20 +935,10 @@ const AddJobPost = () => {
                                     Add
                                 </Button>
                             }
-                            {/* { langId ?  <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                    Add
-                                </Button> : <Button className="btn-signin ml-10" type="primary" onClick={e => onSubmit(e)} size="medium">
-                                    Add
-                                </Button>
-                            } */}
-
                             <Button
                                 className="btn-signin"
                                 type="light"
                                 size="medium"
-                                // onClick={() => {
-                                //     history.push(`/admin/job/post`);
-                                // }}
                                 onClick={() => onCancel()}
                             >
                                 Cancel

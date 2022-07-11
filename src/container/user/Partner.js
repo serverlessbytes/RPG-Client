@@ -200,7 +200,7 @@ const Partner = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Tabs onChange={callback}>
-                <TabPane tab="Active Partner" key="active">
+                <TabPane tab="Active partner" key="active">
                   <UserTableStyleWrapper>
 
                     <TableWrapper className="table-responsive">
@@ -220,7 +220,7 @@ const Partner = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Partner" key="inactive">
+                <TabPane tab="Inactive partner" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table

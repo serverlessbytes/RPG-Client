@@ -170,7 +170,7 @@ const JobCategory = () => {
         let flag = false;
 
         if (!data.name) {
-            error.name = "JobCategory is required";
+            error.name = "Jobcategory is required";
             flag = true;
         }
         setError(error);
@@ -210,7 +210,7 @@ const JobCategory = () => {
 
     const jobTableColumns = [
         {
-            title: 'Job Category',
+            title: 'Job category',
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
@@ -226,11 +226,11 @@ const JobCategory = () => {
         <>
             <PageHeader
                 ghost
-                title="Job Category"
+                title="Job category"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Category
+                            Add category
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
                             Import
@@ -259,13 +259,13 @@ const JobCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Job Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Job category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Category</label>
+                    <label htmlFor="name">Type of category</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder="Job Category"
+                            placeholder="Type of category"
                             name="name"
                         />
                     </Form.Item>
@@ -278,7 +278,7 @@ const JobCategory = () => {
             {< ImportJobCategory
                 importModal={importModal}
                 handleCancel={() => setImportModal(false)}
-                modaltitle="Import Job Category" />}
+                modaltitle="Import job category" />}
         </>
     )
 }

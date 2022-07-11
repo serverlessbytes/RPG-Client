@@ -280,15 +280,15 @@ const JobPost = () => {
             onClick={onClick}
             items={[
                 {
-                    label: 'Export Jobs',
+                    label: 'Export jobs',
                     key: 'exportJobs',
                 },
                 {
-                    label: 'Export All Jobs',
+                    label: 'Export all jobs',
                     key: 'exportAllJobs',
                 },
                 {
-                    label: 'Add Job Post',
+                    label: 'Add job post',
                     key: 'addJobPost',
                 },
                 {
@@ -379,10 +379,10 @@ const JobPost = () => {
                                                 value={type.type}
                                                 className={type.type ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                                 name="type"
-                                                placeholder="Select Type"
+                                                placeholder="Select type"
                                                 onChange={e => onChangevalue(e, 'type')}
                                             >
-                                                <Option value="">Select Type</Option>
+                                                <Option value="">Select type</Option>
                                                 <Option value="PARTTIME">Part-Time</Option>
                                                 <Option value="FULLTIME">Full-time</Option>
                                             </Select>
@@ -398,10 +398,10 @@ const JobPost = () => {
                                                 className={state.state ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                                 name="state"
                                                 value={state.state}
-                                                placeholder="Select State"
+                                                placeholder="Select state"
                                                 onChange={e => onChangevalue(e, 'state')}
                                             >
-                                                <Option value="">Select State</Option>
+                                                <Option value="">Select state</Option>
                                                 {stateData && stateData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
                                             </Select>
                                         </Form.Item>
@@ -409,16 +409,16 @@ const JobPost = () => {
                                 </Col>
                                 <Col md={5} xs={24} className="mb-25">
                                     <Form layout="vertical">
-                                        <Form.Item label="Job Role">
+                                        <Form.Item label="Job role">
                                             <Select
                                                 size="large"
                                                 value={jobRole.jobRole}
                                                 className={jobRole.jobRole ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                                 name="jobRole"
-                                                placeholder="Select Job Role"
+                                                placeholder="Select job role"
                                                 onChange={e => onChangevalue(e, 'jobRole')}
                                             >
-                                                <Option value="">Select Job Role</Option>
+                                                <Option value="">Select job role</Option>
                                                 {jobRolesData && jobRolesData.map(items => <Option value={items.id}>{items.name} </Option>)}
                                             </Select>
                                         </Form.Item>
@@ -427,7 +427,7 @@ const JobPost = () => {
                                 <Col md={5} xs={24} className="mb-25">
                                     <Form name="sDash_select" layout="vertical">
                                         <Form.Item label="Search">
-                                            <Input placeholder="search" name='search' value={search} onChange={(e) => onChangevalue(e.target.value, "search")} />
+                                            <Input placeholder="Search" name='search' value={search} onChange={(e) => onChangevalue(e.target.value, "search")} />
                                         </Form.Item>
                                     </Form>
                                 </Col>
@@ -448,7 +448,7 @@ const JobPost = () => {
                             </Row>
 
                             <Tabs defaultActiveKey="1" onChange={callback}>
-                                <TabPane tab="Active Jobs" key="active">
+                                <TabPane tab="Active jobs" key="active">
                                     {status === "active" && <JobListTable
                                         state={state}
                                         type={type}
@@ -462,7 +462,7 @@ const JobPost = () => {
                                         setExportTog={setExportTog}
                                     />}
                                 </TabPane>
-                                <TabPane tab="Inactive Jobs" key="inactive">
+                                <TabPane tab="Inactive jobs" key="inactive">
                                     {status === "inactive" && <JobListTable
                                         state={state}
                                         type={type}

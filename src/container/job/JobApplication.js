@@ -187,11 +187,11 @@ const JobApplication = () => {
             sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'Phone Number',
+            title: 'Phone number',
             dataIndex: 'phone',
         },
         {
-            title: 'JobRole',
+            title: 'Job role',
             dataIndex: 'jobRole',
             sorter: (a, b) => a.jobRole.localeCompare(b.jobRole),
             sortDirections: ['descend', 'ascend'],
@@ -200,11 +200,6 @@ const JobApplication = () => {
             title: 'Select',
             dataIndex: 'Select',
         },
-        // {
-        //     title: 'Actions',
-        //     dataIndex: 'action',
-        //     width: '90px',
-        // },
     ];
 
     
@@ -212,7 +207,7 @@ const JobApplication = () => {
         <>
             <PageHeader
                 ghost
-                title="Job Application"
+                title="Job application"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button
@@ -222,7 +217,7 @@ const JobApplication = () => {
                                 history.push(`addjobapplication`);
                             }}
                         >
-                            Add JobApplication
+                            Add job application
                         </Button>
                     </div>,
                 ]}
@@ -234,9 +229,9 @@ const JobApplication = () => {
                             <Row gutter={30}>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form layout="vertical">
-                                        <Form.Item label="Job Role">
-                                            <Select size="large" name="jobRole" value={jobApplication.jobRole} placeholder="Select Job Role" onChange={(e) => onChangeHandle(e, 'jobRole')} >
-                                                <Option value="">Select Job Role</Option>
+                                        <Form.Item label="Job role">
+                                            <Select size="large" name="jobRole" value={jobApplication.jobRole} placeholder="Select job role" onChange={(e) => onChangeHandle(e, 'jobRole')} >
+                                                <Option value="">Select job role</Option>
                                                 {jobRolesData && jobRolesData.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}
@@ -246,9 +241,9 @@ const JobApplication = () => {
                                 </Col>
                                 <Col md={6} xs={24} className="mb-25">
                                     <Form layout="vertical">
-                                        <Form.Item label="Job Category">
-                                            <Select size="large" name="jobCategory" value={jobApplication.jobCategory} placeholder="Select Job Categoty" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
-                                                <Option value="">Select Job Categoty</Option>
+                                        <Form.Item label="Job category">
+                                            <Select size="large" name="jobCategory" value={jobApplication.jobCategory} placeholder="Select Job Category" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
+                                                <Option value="">Select job category</Option>
                                                 {jobcatogerydata && jobcatogerydata.data.map((items) => (
                                                     <Option value={items.id}>{items.name} </Option>
                                                 ))}

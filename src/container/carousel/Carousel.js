@@ -62,7 +62,7 @@ const Carousel = () => {
   useEffect(() => {
     if (addCarouseldata && addCarouseldata.status === 200) {
       dispatch(addCarouselSuccess(null));
-      toast.success('Carousel add successful');
+      toast.success('Carousel added successfully');
     }
   }, [addCarouseldata]);
 
@@ -76,7 +76,7 @@ const Carousel = () => {
   useEffect(() => {
     if (editCarouselData && editCarouselData.status === 200) {
       dispatch(editCarouselSuccess(null));
-      toast.success('Carousel update successful');
+      toast.success('Carousel updated successfully');
     }
   }, [editCarouselData]);
 
@@ -239,7 +239,7 @@ const Carousel = () => {
       // dispatch(editCarousel(userForDelete))
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
-        toast.success('Carousel deleted successful');
+        toast.success('Carousel deleted successfully');
       }
     }
   };
@@ -286,7 +286,7 @@ const Carousel = () => {
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'ImageUrl',
+      title: 'Image url',
       dataIndex: 'imageUrl',
       sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
       sortDirections: ['descend', 'ascend'],
@@ -306,7 +306,7 @@ const Carousel = () => {
         buttons={[
           <div key="1" className="page-header-actions">
             <Button size="small" type="primary" onClick={showModal}>
-              Add Carousel
+              Add carousel
             </Button>
             <Button size="small" type="primary" onClick={showImportModal}>
               Import carousel
@@ -364,11 +364,11 @@ const Carousel = () => {
               {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
             </Form.Item>
 
-            <label htmlFor="imgUrl">Image URL</label>
+            <label htmlFor="imgUrl">Image url</label>
             <Form.Item>
               <Input
                 type="file"
-                placeholder="Enter image URL"
+                placeholder="Enter image url"
                 name="imageUrl"
                 defalutValue={data.imageUrl}
                 onChange={e => fileUpload(e, "imageUrl")}
@@ -379,7 +379,7 @@ const Carousel = () => {
         </Modal>
       )}
 
-      {importModel && <ImportCarousel modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModel} />}
+      {importModel && <ImportCarousel modaltitle="Import carousel" handleCancel={() => setImportModel(false)} importModel={importModel} />}
     </>
   );
 };

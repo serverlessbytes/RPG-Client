@@ -155,7 +155,7 @@ const MyProfile = () => {
     <>
       <PageHeader
         ghost
-        title="My Profile"
+        title="My profile"
         buttons={[
           // <div key="1" className="page-header-actions">
           //   <Button size="small" type="primary">
@@ -178,7 +178,7 @@ const MyProfile = () => {
               {/* <Form name="login" form={form} onFinish={handleSubmit} layout="vertical"> */}
               <Row align="middle" justify="space-around">
                 <Col lg={10}>
-                  <label htmlFor="name">User Name</label>
+                  <label htmlFor="name">User name</label>
                   <Form.Item>
                     <Input
                       name="name"
@@ -193,11 +193,11 @@ const MyProfile = () => {
                 </Col>
 
                 <Col lg={10}>
-                  <label htmlFor="email">User Email</label>
+                  <label htmlFor="email">User email</label>
                   <Form.Item>
                     {/* rules={[{ type: 'email' }]}
                     > */}
-                    <Input placeholder="Enter Email"
+                    <Input placeholder="Enter email"
                       name="email"
                       onChange={(e) => onChangeHandler(e)}
                       value={data.email} />
@@ -208,9 +208,9 @@ const MyProfile = () => {
 
               <Row align="middle" justify="space-around">
                 <Col lg={10}>
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="phone">Phone number</label>
                   <Form.Item>
-                    <Input placeholder="Enter Phone Number"
+                    <Input placeholder="Enter phone number"
                       name='phone'
                       onChange={(e) => onChangeHandler(e, "phone")}
                       value={data.phone}
@@ -237,7 +237,7 @@ const MyProfile = () => {
               </Row>
               {/* </Form> */}
             </Col>
-            <Button onClick={() => editProfile()}>Update Profile</Button>
+            <Button onClick={() => editProfile()}>Update profile</Button>
           </Row>
         </Cards>
       </Main>

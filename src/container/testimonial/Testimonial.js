@@ -58,7 +58,7 @@ const Testimonial = () => {
     useEffect(() => {
         if (addTestimonialdata && addTestimonialdata.status === 200) {
             dispatch(addTestimonialSuccess(null))
-            toast.success("Testimonial add successful");
+            toast.success("Testimonial added successfully");
         }
     }, [addTestimonialdata])
 
@@ -72,7 +72,7 @@ const Testimonial = () => {
     useEffect(() => {
         if (editTestimonialdata && editTestimonialdata.status === 200) {
             dispatch(editTestimonialSuccess(null))
-            toast.success("Testimonial update successful");
+            toast.success("Testimonial updated successfully");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -119,7 +119,7 @@ const Testimonial = () => {
             // dispatch(editTestimonial(userForDelete))
             const deleteTestimonial = await newTestimonial(userForDelete)
             if (deleteTestimonial.status === 200) {
-                toast.success("Testimonial delete successful")
+                toast.success("Testimonial deleted successfully")
             }
         }
     }
@@ -190,10 +190,10 @@ const Testimonial = () => {
                 buttons={[
                     <div className="page-header-actions">
                         <Button onClick={reDirect} size="small" type="primary">
-                            Add Testimonial
+                            Add testimonial
                         </Button>
                         <Button onClick={reDirectModel} size="small" type="primary">
-                            Import Testimonial
+                            Import testimonial
                         </Button>
                     </div>
                 ]}
@@ -230,7 +230,7 @@ const Testimonial = () => {
                     </UserTableStyleWrapper>
                 </Cards>
             </Main>
-            {importModel && <ImportTestimonial modaltitle="Import Testimonial" handleCancel={() => setImportModel(false)} importModel={importModel} />}
+            {importModel && <ImportTestimonial modaltitle="Import testimonial" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }
