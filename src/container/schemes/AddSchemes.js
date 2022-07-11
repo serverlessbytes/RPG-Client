@@ -228,110 +228,109 @@ const AddSchemes = () => {
     // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
     let stringReg = /^[ A-Za-z]/;
     let a = stringReg.test(state.name)
-    console.log("a", a);
-    if (state.name === '') {
-      error.name = 'Scheme Name is required';
+
+    if (!state.name) {
+      error.name = 'Scheme name is required';
       flage = true;
     }
     else if (!stringReg.test(state.name)) {
       error.name = 'Name must be string';
       flage = true;
     }
-
-    if (state.schemeCategory === '') {
-      error.schemeCategory = 'schemeCategory is required';
+    if (!state.schemeCategory) {
+      error.schemeCategory = 'Scheme category is required';
       flage = true;
     }
-    // if (state.sequence === '') {
+    // if (state.sequence) {
     //   error.sequence = 'sequence is required';
     //   flage = true;
     // }
-    if (state.schemeBenifit === '') {
-      error.schemeBenifit = 'schemeBenifit is required';
+    if (!state.schemeBenifit) {
+      error.schemeBenifit = 'Scheme benifit is required';
       flage = true;
     }
     if (state.benifitLine.toString('markdown').length <= 2) {
-      error.benifitLine = 'benifitLine is required';
+      error.benifitLine = 'Benifit 1-line is required';
       flage = true;
     }
-    if (state.benificiary === '') {
-      error.benificiary = 'benificiary is required';
+    if (!state.benificiary) {
+      error.benificiary = 'Benificiary is required';
       flage = true;
     }
     if (state.detail.toString('markdown').length <= 2) {
-      error.detail = 'detail is required';
+      error.detail = 'Scheme summary is required';
       flage = true;
     }
     if (state.howToApply.toString('markdown').length <= 2) {
-      error.howToApply = 'howToApply is required';
+      error.howToApply = 'How to apply is required';
       flage = true;
     }
     if (state.documentation.toString('markdown').length <= 2) {
-      error.documentation = 'documentation is required';
+      error.documentation = 'Documentation is required';
       flage = true;
     }
     if (state.locations.length < 1) {
-      error.locations = 'locations is required';
+      error.locations = 'Locations is required';
       flage = true;
     }
-    if (state.website === '') {
-      error.website = 'website is required';
+    if (!state.website) {
+      error.website = 'Website is required';
       flage = true;
     }
     else if (!urlReg.test(state.website)) {
-      error.website = 'Enter Valid Website Name';
+      error.website = 'Enter valid website';
       flage = true;
     }
-    if (state.type === '') {
-      error.type = 'type is required';
+    if (!state.type) {
+      error.type = 'Type is required';
       flage = true;
     }
-    if (state.grievanceRedress === '') {
-      error.grievanceRedress = 'grievanceRedress is required';
+    if (!state.grievanceRedress) {
+      error.grievanceRedress = 'Grievance redress is required';
       flage = true;
     }
-    if (state.elink === '') {
-      error.elink = 'elink is required';
+    if (!state.elink) {
+      error.elink = 'E link is required';
       flage = true;
     }
     else if (!urlReg.test(state.elink)) {
-      error.elink = 'Enter Valid elink Name';
+      error.elink = 'Enter valid elink';
       flage = true;
     }
-    if (state.spoc === '') {
-      error.spoc = 'spoc is required';
+    if (!state.spoc) {
+      error.spoc = 'SOPC is required';
       flage = true;
     }
-    if (state.videoUrl === '') {
-      error.videoUrl = 'VideoUrl is required';
+    if (!state.videoUrl) {
+      error.videoUrl = 'Video url is required';
       flage = true;
     }
     // else if (!videoUrlReg.test(state.videoUrl)) {
     //   error.videoUrl = 'Enter Valid videoUrl';
     //   flage = true;
     // }
-    if (state.thumbnail === '') {
-      error.thumbnail = 'ThumbNail is required';
+    if (!state.thumbnail) {
+      error.thumbnail = 'Thumbnail is required';
       flage = true;
     }
-    if (state.application_form === '') {
-      error.application_form = 'Application Form is required';
+    if (!state.application_form) {
+      error.application_form = 'Application form is required';
       flage = true;
     }
-    if (state.recommended_and_forwarded === '') {
-      error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+    if (!state.recommended_and_forwarded) {
+      error.recommended_and_forwarded = 'Recommended and forwarded is required';
       flage = true;
     }
-    if (state.application_process === '') {
-      error.application_process = 'Application Process is required';
+    if (!state.application_process) {
+      error.application_process = 'Application process is required';
       flage = true;
     }
-    if (state.medical_superintendent === '') {
-      error.medical_superintendent = 'Medical Superintendent is required';
+    if (!state.medical_superintendent) {
+      error.medical_superintendent = 'Medical superintendent is required';
       flage = true;
     }
-    if (state.hospital_expenses_estimation_certificate === '') {
-      error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+    if (!state.hospital_expenses_estimation_certificate) {
+      error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
       flage = true;
     }
     setError(error);
@@ -712,19 +711,19 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-              <label htmlFor="videoUrl">videoUrl</label>
+              <label htmlFor="videoUrl">video url</label>
               <Form.Item>
-                <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={e => onChangeValue(e)} />
+                <Input placeholder="video url" value={state.videoUrl} name="videoUrl" onChange={e => onChangeValue(e)} />
                 {error.videoUrl && <span style={{ color: 'red' }}>{error.videoUrl}</span>}
               </Form.Item>
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="thumbnail">thumbNail</label>
+              <label htmlFor="thumbnail">Thumbnail</label>
               <Form.Item>
                 <Input
                   type="file"
-                  placeholder="thumbNail"
+                  placeholder="thumbnail"
                   // value={state.thumbnail}
                   name="thumbnail"
                   // onChange={e => onChangeValue(e)}

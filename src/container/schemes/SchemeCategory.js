@@ -46,7 +46,7 @@ const SchemeCategory = () => {
     useEffect(() => {
         if (editSchemeCatogeryData && editSchemeCatogeryData.status === 200) {
             dispatch(editSchemecategorySuccess(null))
-            toast.success("Scheme Category update successfull");
+            toast.success("Scheme category updated");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -55,7 +55,7 @@ const SchemeCategory = () => {
     useEffect(() => {
         if (addSchemeCatogeryData && addSchemeCatogeryData.status === 200) {
             dispatch(addSchemecategorySuccess(null))
-            toast.success("Scheme Category add successfull");
+            toast.success("Scheme category added");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -64,14 +64,14 @@ const SchemeCategory = () => {
     useEffect(() => {
         if (addSchemeCatogeryError) {
             dispatch(addSchemecategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [addSchemeCatogeryError])
 
     useEffect(() => {
         if (editSchemeCatogeryError) {
             dispatch(editSchemecategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [editSchemeCatogeryError])
 
@@ -80,7 +80,7 @@ const SchemeCategory = () => {
             toast.success("Category imported");
             dispatch(addSchemeCategoryInBulkSuccess(null))
         } else if (ImportCategory && ImportCategory.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [ImportCategory])
 
@@ -118,7 +118,7 @@ const SchemeCategory = () => {
             // dispatch(editSchemecategory(dataForEdit))
             const deleteSchemesCategory = await newSchemeCategory(dataForEdit)
             if (deleteSchemesCategory.status === 200) {
-                toast.success("Scheme Category delete successfull")
+                toast.success("Scheme category deleted")
             }
         }
     }
@@ -205,7 +205,7 @@ const SchemeCategory = () => {
 
     const schemeTableColumns = [
         {
-            title: 'SchemeCategory',
+            title: 'Scheme category',
             dataIndex: 'SchemeCategory',
             sorter: (a, b) => a.SchemeCategory.localeCompare(b.SchemeCategory),
             sortDirections: ['descend', 'ascend'],
@@ -221,11 +221,11 @@ const SchemeCategory = () => {
         <>
             <PageHeader
                 ghost
-                title="Scheme Category"
+                title="Scheme category"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => showModal()}>
-                            Add Category
+                            Add category
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => setImportModal(true)}>
                             Import
@@ -268,17 +268,17 @@ const SchemeCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Scheme Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Scheme category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTod ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Category</label>
+                    <label htmlFor="name">Type of category</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder="Enter Category"
+                            placeholder="Scheme category"
                             name="name"
                         />
                     </Form.Item>
-                    { error.name && <span style={{ color: "red" }}>{error.name}</span>}
+                    {error.name && <span style={{ color: "red" }}>{error.name}</span>}
                 </Form>
             </Modal>
 
@@ -286,7 +286,7 @@ const SchemeCategory = () => {
             {< ImportSchemeCategory
                 importModal={importModal}
                 handleCancel={() => setImportModal(false)}
-                modaltitle="Import Scheme Category" />}
+                modaltitle="Import scheme category" />}
         </>
     )
 }

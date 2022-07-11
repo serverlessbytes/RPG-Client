@@ -97,7 +97,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     console.log("courseModuleData?.data?.isDeleted", courseModuleData);
     if (courseModuleData?.status === 200) {
-      { courseModuleData?.data?.isDeleted ? toast.success("courseModule delete successfully") : toast.success("courseModule Updated Successfully") }
+      { courseModuleData?.data?.isDeleted ? toast.success("course module deleted") : toast.success("course module Updated") }
     }
   }, [courseModuleData])
 
@@ -111,7 +111,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (addSwayamCourseModuleError) {
       dispatch(addSwayamCourseModuleErr(null));
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addSwayamCourseModuleError]);
 
@@ -119,7 +119,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click(); // for export
-      toast.success('Swayam course data exported successfully');
+      toast.success('Swayam course data exported');
       setExportTog(false);
     } else if (exportTog) {
       toast.success('No swayam data for export');
@@ -136,17 +136,17 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
       dispatch(editSwayamPartnerCourseSuccess(null));
-      toast.success('Swayam course delete successful');
+      toast.success('Swayam course deleted');
     } else if (editSwayamCourseData && editSwayamCourseData.isActive === true) {
       dispatch(editSwayamPartnerCourseSuccess(null));
-      toast.success('Swayam course update successful');
+      toast.success('Swayam course updated');
     }
   }, [editSwayamCourseData]);
 
 
   useEffect(() => {
     if (editSwayamCourseErr) {
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [editSwayamCourseErr]);
 
@@ -205,15 +205,9 @@ const SwayamCourses = () => {
   //    return newSawyamCourse
   //  }
 
-  useEffect(() => {
-    console.log("courseData", courseData);
-  }, [courseData])
-
   const onDelete = async (id) => {
     const singleData = courseData.data.data.find(item => item.id === id);
     if (singleData) {
-
-
       let formData = new FormData();
       formData.append('key', singleData.key);
       formData.append('courseId', id);
@@ -233,28 +227,6 @@ const SwayamCourses = () => {
       formData.append('isActive', false);
       formData.append('isDeleted', true);
       console.log("state.id", singleData.id)
-      // let dt = {
-      //   key: singleData.key,
-      //   courseId: id,
-      //   detail: singleData.detail,
-      //   name: singleData.name,
-      //   categoryId: singleData.courseCategory.id,
-      //   detail: singleData.detail,
-      //   duration: singleData.duration,
-      //   jobCategoryIds: singleData.jobTypes.map(item => item.id),
-      //   certification: singleData.certificate,
-
-      //   application_form: singleData.application_form,
-      //   recommended_and_forwarded: singleData.application_form,
-      //   application_process: singleData.application_process,
-      //   medical_superintendent: singleData.medical_superintendent,
-      //   hospital_expenses_estimation_certificate: singleData.hospital_expenses_estimation_certificate,
-
-      //   thumbnail: singleData.thumbnail,
-      //   mode: singleData.mode,
-      //   isActive: false,
-      //   isDeleted: true,
-      // };
       dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     }
   };
@@ -383,7 +355,7 @@ const SwayamCourses = () => {
       bannerSelected: !bannerSelected,
     };
     ApiPost(`course/updateBannerSelected?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-      toast.success(res.data.bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+      toast.success(res.data.bannerSelected ? 'Banner selected' : 'Banner deselected');
       dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
     });
 
@@ -438,15 +410,15 @@ const SwayamCourses = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Export Course',
+          label: 'Export course',
           key: 'exportCourse',
         },
         {
-          label: 'Export All Course',
+          label: 'Export all course',
           key: 'exportAllCourse',
         },
         {
-          label: 'Add Course',
+          label: 'Add course',
           key: 'addCourse',
         },
         {
@@ -569,23 +541,23 @@ const SwayamCourses = () => {
 
   const swayamCourseTableColumns = [
     {
-      title: 'Course Name',
+      title: 'Course name',
       dataIndex: 'CourseName',
       sorter: (a, b) => a.SchemeCategory?.length - b.SchemeCategory?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Course Category',
+      title: 'Course category',
       dataIndex: 'CourseCategory',
       sorter: (a, b) => a.CourseCategory.localeCompare(b.CourseCategory),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Course Rating',
+      title: 'Course rating',
       dataIndex: 'courseRatings',
     },
     {
-      title: 'Course Duration (HH:MM)',
+      title: 'Course duration (HH:MM)',
       dataIndex: 'CourseDuration',
     },
     {
@@ -593,12 +565,12 @@ const SwayamCourses = () => {
       dataIndex: 'Certification',
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
     {
-      title: 'Banner selected',
+      title: 'Banner select',
       dataIndex: 'bannerSelected',
       // sortDirections: ['descend', 'ascend'],
     },
@@ -614,7 +586,7 @@ const SwayamCourses = () => {
     <>
       <PageHeader
         ghost
-        title="Swayam Courses"
+        title="Swayam courses"
         buttons={[
           <div key="1" className="page-header-actions">
             {/* <Button size="small" onClick={() => onExportCourse()} type="info">
@@ -668,16 +640,17 @@ const SwayamCourses = () => {
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item label="Course Category">
+                    <Form.Item label="Course category">
                       <Select
                         name="category"
                         size="large"
-                        className="sDash_fullwidth-select"
+                        className={data.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
+                        // className="sDash_fullwidth-select"
                         value={data.category}
-                        placeholder="Select Category"
+                        placeholder="Select category"
                         onChange={e => onChangehandle(e, 'category')}
                       >
-                        <Option value="">Select Category</Option>
+                        <Option value="">Select category</Option>
                         {categoryData &&
                           categoryData.data &&
                           categoryData.data.map(items => <Option value={items?.id}>{items?.name} </Option>)}
@@ -691,13 +664,14 @@ const SwayamCourses = () => {
                     <Form.Item label="Mode">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                        className={data.mode ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
+                        // className="sDash_fullwidth-select"
                         name="mode"
                         value={data.mode}
-                        placeholder="Select Mode"
+                        placeholder="Select mode"
                         onChange={e => onChangehandle(e, 'mode')}
                       >
-                        <Option value="">Select Mode</Option>
+                        <Option value="">Select mode</Option>
                         <Option value="BOTH">Both</Option>
                         <Option value="ONLINE">Online</Option>
                         <Option value="OFFLINE">Offline</Option>
@@ -709,7 +683,7 @@ const SwayamCourses = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" value={data.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                      <Input placeholder="search" value={data.search} name='Search' onChange={e => onChangehandle(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>
@@ -730,7 +704,7 @@ const SwayamCourses = () => {
               </Row>
 
               <Tabs onChange={callback}>
-                <TabPane tab="Active Courses" key="active">
+                <TabPane tab="Active courses" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
                       {/* --- search bar --- */}
@@ -760,7 +734,7 @@ const SwayamCourses = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Courses" key="inactive">
+                <TabPane tab="Inactive courses" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
 

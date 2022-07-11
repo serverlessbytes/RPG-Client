@@ -45,16 +45,16 @@ const BenefitsType = () => {
     useEffect(() => {
         if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status === 200) {
             dispatch(addSchemeBenefitBulkSuccess(null))
-            toast.success("Scheme imported  ");
+            toast.success("Scheme imported ");
         } else if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [addSchemeBenefitBulkData])
 
     useEffect(() => {
         if (addSchemeBenefitBulkError) {
             dispatch(addSchemeBenefitBulkErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrongs");
         }
     }, [addSchemeBenefitBulkError])
 
@@ -62,7 +62,7 @@ const BenefitsType = () => {
         if (postBenefitsdata && postBenefitsdata.status === 200) {
             dispatch(getBenefitsData())
             dispatch(postBenefitsSuccess(null))
-            toast.success("Scheme Benifit add successful.");
+            toast.success("Scheme benifit added");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -75,14 +75,14 @@ const BenefitsType = () => {
     useEffect(() => {
         if (postBenefitsError) {
             dispatch(postBenefitsErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [postBenefitsError])
 
     useEffect(() => {
         if (editBenefitData && editBenefitData.status === 200) {
             dispatch(editBenefitsSuccess(null))
-            toast.success("Scheme Benifit update successful.");
+            toast.success("Scheme benifit updated");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -91,7 +91,7 @@ const BenefitsType = () => {
     useEffect(() => {
         if (editBenefitError) {
             dispatch(editBenefitsErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [editBenefitError])
 
@@ -118,7 +118,7 @@ const BenefitsType = () => {
             // dispatch(editBenefitsData(dataForDelete))
             const deleteBenifts = await newBenefites(dataForDelete)
             if (deleteBenifts.status === 200) {
-                toast.success("Scheme Benifit delete successful.")
+                toast.success("Scheme benifit deleted")
             }
         }
     }
@@ -158,7 +158,7 @@ const BenefitsType = () => {
         let flag = false;
 
         if (!data.name) {
-            error.name = "Benefit Type is required";
+            error.name = "Benefit type is required";
             flag = true;
         }
         setError(error);
@@ -233,7 +233,7 @@ const BenefitsType = () => {
 
     const usersTableColumns = [
         {
-            title: 'Type Of Benefit',
+            title: 'Type of benefit',
             dataIndex: 'Typeofbenefit',
             sorter: (a, b) => a.Typeofbenefit.localeCompare(b.Typeofbenefit),
             sortDirections: ['descend', 'ascend'],
@@ -248,11 +248,11 @@ const BenefitsType = () => {
         <>
             <PageHeader
                 ghost
-                title="Type of Benefits"
+                title="Type of benefits"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Benefits
+                            Add benefits
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={importModel}>
                             Import
@@ -298,10 +298,10 @@ const BenefitsType = () => {
             <Modal title="Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Benefit</label>
+                    <label htmlFor="name">Type of benefit</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder="Type of Benefit"
+                            placeholder="Type of benefit"
                             name="name"
                         />
                     </Form.Item>
@@ -315,7 +315,7 @@ const BenefitsType = () => {
             {
                 <ImportSchemeBenefits
                     importModal={importModal}
-                    modaltitle="Import Scheme-Benefits"
+                    modaltitle="Import scheme-benefits"
                     handleCancel={() => setImportModal(false)}
                 />
             }

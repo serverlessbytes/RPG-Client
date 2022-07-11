@@ -121,7 +121,7 @@ const Schemes = () => {
     if (editSchemedata && editSchemedata.status === 200) {
       dispatch(editSchemeSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
-      toast.success("Scheme update successfully");
+      toast.success("Scheme updated");
     }
   }, [editSchemedata])
 
@@ -134,7 +134,7 @@ const Schemes = () => {
 
   useEffect(() => {
     if (schemeModulData && schemeModulData.status === 200) {
-      toast.success("Scheme import successfully")
+      toast.success("Scheme import")
       dispatch(addSchemeInBulk(null))
       dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
@@ -147,7 +147,7 @@ const Schemes = () => {
     console.log("schemeDataAdd", schemeDataAdd);
     if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
-      toast.success("Scheme added scheme successfully");
+      toast.success("Scheme added");
       dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
   }, [schemeDataAdd])
@@ -266,7 +266,7 @@ const Schemes = () => {
   useEffect(() => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
-      toast.success("Scheme data exported successfully")
+      toast.success("Scheme data exported")
     } else if (exportTog) {
       toast.success("No scheme data for export")
     }
@@ -416,7 +416,7 @@ const Schemes = () => {
     }
     const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
-      toast.success("Scheme active successfully")
+      toast.success("Scheme active")
       // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
@@ -475,7 +475,7 @@ const Schemes = () => {
     }
     ApiPost(`scheme/updateBannerSelected`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner selected successfully' : 'Banner unSelected  successfully');
+        toast.success(!bannerSelected ? 'Banner selected ' : 'Banner deselected');
         dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
       });
   }
@@ -484,15 +484,15 @@ const Schemes = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Export Schemes',
+          label: 'Export schemes',
           key: 'exportSchemes',
         },
         {
-          label: 'Export All Scheme',
+          label: 'Export all scheme',
           key: 'exportAllScheme',
         },
         {
-          label: 'Add Scheme',
+          label: 'Add scheme',
           key: 'addScheme',
         },
         {
@@ -514,7 +514,7 @@ const Schemes = () => {
 
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
-        toast.success(data.isApproved ? "Scheme approved successfully" : "Scheme disapproved successfully")
+        toast.success(data.isApproved ? "Scheme approved" : "Scheme disapproved")
         dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
       })
       .catch((err) => console.log("Error", err))
@@ -679,47 +679,47 @@ const Schemes = () => {
 
   const schemeTableColumns = [
     {
-      title: 'Scheme Name',
+      title: 'Scheme name',
       dataIndex: 'SchemeName',
       sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Type Of Benefits',
+      title: 'Type of benefits',
       dataIndex: 'TypeOfBenefits',
       // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
       sorter: (a, b) => a.TypeOfBenefits.localeCompare(b.TypeOfBenefits),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Target Beneficiary',
+      title: 'Target beneficiary',
       dataIndex: 'TargetBeneficiary',
       sorter: (a, b) => a.TargetBeneficiary.localeCompare(b.TargetBeneficiary),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Scheme Ratings',
+      title: 'Scheme ratings',
       dataIndex: 'schemeRatings',
       // sorter: (a, b) => a.avg - b.avg,
       // sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Website',
+      title: 'Web site',
       dataIndex: 'Website',
       sorter: (a, b) => a.Website.localeCompare(b.Website),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Last Updated',
+      title: 'Last updated',
       dataIndex: 'LastUpdated',
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
     {
-      title: 'Choose banner',
+      title: 'Select banner',
       dataIndex: 'chooseBanner',
     },
 
@@ -878,7 +878,7 @@ const Schemes = () => {
                              <ActiveSchemesTable type ={type}/> */}
 
               <Tabs onChange={callback}>
-                <TabPane tab="Active Schemes" key="active">
+                <TabPane tab="Active schemes" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
 
@@ -920,7 +920,7 @@ const Schemes = () => {
                     />
                   </ProjectPagination> */}
                 </TabPane>
-                <TabPane tab="Inactive Schemes" key="inactive">
+                <TabPane tab="Inactive schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       {/* --- search bar --- */}
@@ -983,7 +983,7 @@ const Schemes = () => {
       )}
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
-      {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Schemes" />}
+      {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import schemes" />}
     </>
   );
 };

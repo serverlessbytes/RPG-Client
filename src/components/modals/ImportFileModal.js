@@ -224,7 +224,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
           <Row>
             <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
-                <Form.Item label="Select Locations">
+                <Form.Item label="Select locations">
                   <Select
                     mode="multiple"
                     options={stateArray}
@@ -234,9 +234,9 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                     onChange={e => {
                       stateSelected(e);
                     }}
-                    placeholder="Select Locations"
+                    placeholder="Select locations"
                   >
-                    <Option value="">Select Locations</Option>
+                    <Option value="">Select locations</Option>
                   </Select>
                   {error && error.locations && <span style={{ color: 'red' }}>{error.locations}</span>}
                 </Form.Item>

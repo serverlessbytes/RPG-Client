@@ -79,13 +79,7 @@ const AddCourses = () => {
     hindi: '',
     marathi: ''
   });
-  const [perticulerKey, setPerticulerKey] = useState()
   const [index, setIndex] = useState()
-
-  useEffect(() => {
-    console.log("index", index);
-  }, [index])
-
 
   // useEffect(() => {
   //   if (addSwayamCourseData.status === 200) {
@@ -182,10 +176,6 @@ const AddCourses = () => {
       moduleState.course = addSwayamCourseData.data.id;
     }
   }, [addSwayamCourseData]);
-  useEffect(() => {
-    console.log("editOneSwayamCourseData", editOneSwayamCourseData);
-  }, [editOneSwayamCourseData])
-
 
   useEffect(() => {
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
@@ -217,7 +207,11 @@ const AddCourses = () => {
     }
   }, [id]);
 
-
+  useEffect(() => {
+    dispatch(getCategoryData());
+    dispatch(getJobcategory());
+    dispatch(getUser());
+  }, []);
   // useEffect(() => {
   //   if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
   //     setSwyamModuleId(false);
@@ -225,12 +219,6 @@ const AddCourses = () => {
   //     // setDefaultSelect('2');
   //   }
   // }, [addSwayamCourseData]);
-
-  useEffect(() => {
-    dispatch(getCategoryData());
-    dispatch(getJobcategory());
-    dispatch(getUser());
-  }, []);
 
   const onChange = (e, name) => {
     if (name === 'categoryId') {
@@ -262,12 +250,12 @@ const AddCourses = () => {
         setError({ ...error, thumbnail: "" });
       }
       else {
-        setError({ ...error, thumbnail: 'Please select valid document file' })
+        setError({ ...error, thumbnail: 'Select valid document file' })
         setState({ ...state, thumbnail: '' })
       }
     }
     else {
-      setError({ ...error, thumbnail: 'Please select document file' })
+      setError({ ...error, thumbnail: 'Select document file' })
     }
   }
 
@@ -279,11 +267,11 @@ const AddCourses = () => {
 
     let error = {};
     let flage = false;
-    if (state.name === '') {
+    if (!state.name) {
       error.name = 'Course name is required';
       flage = true;
     }
-    if (state.categoryId === '') {
+    if (!state.categoryId) {
       error.categoryId = 'Course category is required';
       flage = true;
     }
@@ -291,44 +279,44 @@ const AddCourses = () => {
       error.detail = 'Detail is required';
       flage = true;
     }
-    if (state.duration === '') {
+    if (!state.duration) {
       error.duration = 'Course duration is required';
       flage = true;
     }
     if (!state.jobCategoryIds.length) {
-      error.jobCategoryIds = 'Job Category is required';
+      error.jobCategoryIds = 'Job category is required';
       flage = true;
     }
-    if (state.certification === '') {
+    if (!state.certification) {
       error.certification = 'Certification is required';
       flage = true;
     }
-    if (state.mode === '') {
+    if (!state.mode) {
       error.mode = 'Mode is required';
       flage = true;
     }
-    if (state.thumbnail === '') {
+    if (!state.thumbnail) {
       error.thumbnail = 'Thumbnail is required';
       flage = true;
     }
-    if (state.application_form === '') {
-      error.application_form = 'Application Form is required';
+    if (!state.application_form) {
+      error.application_form = 'Application form is required';
       flage = true;
     }
-    if (state.recommended_and_forwarded === '') {
-      error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+    if (!state.recommended_and_forwarded) {
+      error.recommended_and_forwarded = 'Recommended and forwarded is required';
       flage = true;
     }
-    if (state.application_process === '') {
-      error.application_process = 'Application Process is required';
+    if (!state.application_process) {
+      error.application_process = 'Application process is required';
       flage = true;
     }
-    if (state.medical_superintendent === '') {
-      error.medical_superintendent = 'Medical Superintendent is required';
+    if (!state.medical_superintendent) {
+      error.medical_superintendent = 'Medical superintendent is required';
       flage = true;
     }
-    if (state.hospital_expenses_estimation_certificate === '') {
-      error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+    if (!state.hospital_expenses_estimation_certificate) {
+      error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
       flage = true;
     }
     setError(error);
@@ -341,23 +329,23 @@ const AddCourses = () => {
     if (moduleState.length) {
       moduleState.map((item, i) => {
         if (item.name === '') {
-          error[`name${i + 1}`] = 'Please enter module name';
+          error[`name${i + 1}`] = 'Enter module name';
           flage = true;
         }
         if (item.videoUrl === '') {
-          error[`videoUrl${i + 1}`] = 'Please enter video url';
+          error[`videoUrl${i + 1}`] = 'Enter video url';
           flage = true;
         }
         if (item.duration === '') {
-          error[`duration${i + 1}`] = 'Please enter module duration';
+          error[`duration${i + 1}`] = 'Enter module duration';
           flage = true;
         }
         if (item.sequence === '') {
-          error[`sequence${i + 1}`] = 'Please enter sequence';
+          error[`sequence${i + 1}`] = 'Enter sequence';
           flage = true;
         }
         if (item.detail === '') {
-          error[`detail${i + 1}`] = 'Please enter module detail';
+          error[`detail${i + 1}`] = 'E  nter module detail';
           flage = true;
         }
       });
@@ -500,8 +488,8 @@ const AddCourses = () => {
     dispatch(editSwayamCourseModule(editData));
   };
 
-  const onRemoveData = (item) => {
-    console.log('item', item)
+  const onRemoveData = (itemData) => {
+    // console.log('item------', item)
     if (id) {
       const data = moduleState[selectKey - 1];
       const deleteData = {
@@ -516,11 +504,9 @@ const AddCourses = () => {
       };
       dispatch(editSwayamCourseModule(deleteData));
     }
-    console.log("perticulerKey", perticulerKey);
-    let deleteModulData = moduleState.filter((item) => item.key !== perticulerKey)
-    console.log("deleteModulData", deleteModulData);
+    let deleteModulData = moduleState.filter((item) => item.key !== itemData.key)
     setModuleState(deleteModulData);
-    setSelectKey(deleteModulData.length);
+    setSelectKey(selectKey - 1);
   };
   useEffect(() => {
     console.log("moduleState.key", moduleState.key);
@@ -537,7 +523,6 @@ const AddCourses = () => {
 
 
   let moduleCallback = (key) => {
-    setPerticulerKey(moduleState.find((item, index) => index == (key - 1)).key);
     setSelectKey(key);
   };
 
@@ -865,7 +850,7 @@ const AddCourses = () => {
                             className="btn-signin ml-10"
                             type="danger"
                             size="medium"
-                            onClick={() => onRemoveData(item)}
+                            onClick={() => onRemoveData(item, i)}
                           >
                             Delete
                           </Button>

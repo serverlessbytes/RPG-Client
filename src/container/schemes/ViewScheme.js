@@ -53,7 +53,7 @@ function ViewScheme() {
         };
         ApiPost(`scheme/updateIsApproved?`, data)
             .then((res) => {
-                toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
+                toast.success(data.isApproved ? "Schem Approved" : "Scheme disapproved")
                 dispatch(getOneSchemeData(key));
             })
             .catch((err) => console.log("Error", err))
@@ -74,7 +74,7 @@ function ViewScheme() {
             };
             ApiPost(`scheme/updateIsApproved?`, Data)
                 .then((res) => {
-                    toast.success(Data.isApproved ? "Approved successful" : "Disapproved successful ")
+                    toast.success(Data.isApproved ? "Schem Approved" : "Scheme disapproved")
                     dispatch(getOneSchemeData(key));
                 })
                 .catch((err) => console.log("Error", err))
