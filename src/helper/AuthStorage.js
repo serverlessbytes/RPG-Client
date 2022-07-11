@@ -33,11 +33,13 @@ class AuthStorage {
         localStorage.removeItem(STORAGEKEY.userId);
         localStorage.removeItem(STORAGEKEY.userName);
         localStorage.removeItem(STORAGEKEY.userData);
+        localStorage.removeItem(STORAGEKEY.language);
 
         sessionStorage.removeItem(STORAGEKEY.token);
         sessionStorage.removeItem(STORAGEKEY.userId);
         sessionStorage.removeItem(STORAGEKEY.userName);
         sessionStorage.removeItem(STORAGEKEY.userData);
+        sessionStorage.removeItem(STORAGEKEY.language);
     }
 
     static deleteKey(key) {

@@ -91,7 +91,7 @@ const getUser = () => async dispatch => {
 };
 
 const editUser = (data, id) => async dispatch => {
-  
+
   const formData = new FormData();
   formData.append('avatar', data.avatar);
   formData.append('email', data.email);
@@ -105,7 +105,7 @@ const editUser = (data, id) => async dispatch => {
       dispatch(getUser())
     }
   })
-  .catch((err) => dispatch(editProfileErr(err)))
+    .catch((err) => dispatch(editProfileErr(err)))
 };
 
 export { login, logOut, signUp, getUser, editUser };

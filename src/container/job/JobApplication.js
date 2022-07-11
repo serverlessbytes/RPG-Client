@@ -45,17 +45,17 @@ const JobApplication = () => {
     useEffect(() => {
         if (addJobsApplicationdata && addJobsApplicationdata.status === 200) {
             dispatch(addJobApplicationSuccess(null))
-            toast.success("Jobs Application Add successful")
+            toast.success("Job application added")
         }
         else if (addJobsApplicationdata && addJobsApplicationdata.status !== 200) {
-            toast.error("Something Wrong");
+            toast.error("Something went wrong");
         }
     }, [addJobsApplicationdata])
 
     useEffect(() => {
         if (addJobsApplicationError) {
             dispatch(addJobApplicationErr(null))
-            toast.error("Something Wrong")
+            toast.error("something went wrong")
         }
     }, [addJobsApplicationError])
 

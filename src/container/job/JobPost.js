@@ -215,12 +215,12 @@ const JobPost = () => {
 
     useEffect(() => {
         if (addJobPostModulData && addJobPostModulData.status === 200) {
-            toast.success("Job Post Import Successful")
+            toast.success("Job import")
             dispatch(addBlukJobsSuccess(null));
             dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
         }
         if (addJobPostModulData && addJobPostModulData.status !== 200) {
-            toast.error("Somthingwent wrong")
+            toast.error("Somthing went wrong")
             dispatch(addBlukJobsSuccess(null))
         }
     }, [addJobPostModulData]);
@@ -236,11 +236,11 @@ const JobPost = () => {
     useEffect(() => {
         if (stateJob.length && exportTog === 'single') {
             CSVLinkRef?.current?.link.click();
-            toast.success('Job data exported successfully');
+            toast.success('Job exported');
             setExportTog('');
         } else if (stateJob.length && exportTog === 'all') {
             CSVLinkRefAll?.current?.link.click();
-            toast.success('Job data exported successfully');
+            toast.success('Jobs exported');
             setExportTog('');
         } else if (!stateJob.length && exportTog) {
             toast.success('No data for export');
