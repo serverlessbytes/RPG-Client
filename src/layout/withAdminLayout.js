@@ -132,23 +132,6 @@ const ThemeLayout = WrappedComponent => {
         });
       };
 
-      const handleChange = e => {
-        if (e) {
-          AuthStorage.setStorageData(STORAGEKEY.language, e, true);
-          this.setState({ lang: e });
-          window.location.reload(false);
-        }
-      };
-
-      const footerStyle = {
-        padding: '20px 30px 18px',
-        color: 'rgba(0, 0, 0, 0.65)',
-        fontSize: '14px',
-        background: 'rgba(255, 255, 255, .90)',
-        width: '100%',
-        boxShadow: '0 -5px 10px rgba(146,153,184, 0.05)',
-      };
-
       const SideBarStyle = {
         margin: '63px 0 0 0',
         padding: '15px 15px 55px 15px',

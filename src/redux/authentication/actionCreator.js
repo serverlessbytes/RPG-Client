@@ -45,7 +45,7 @@ const login = (body, keepSignIn) => async dispatch => {
         } else {
           AuthStorage.setStorageData(STORAGEKEY.token, res.data?.token, false);
         }
-        // dispatch(getLanguageByName())
+        dispatch(getLanguageByName())
         return dispatch(loginSuccess(res));
       }
     })
