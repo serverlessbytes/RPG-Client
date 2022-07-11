@@ -83,8 +83,6 @@ const AddSchemes = () => {
   const SchemeBenifits = useSelector(state => state.scheme.schemeBenefitData);
   const State = useSelector(state => state.scheme.addState);
   const getOneScHemeData = useSelector(state => state.scheme.getOneSchemeData);
-  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData);
-
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -174,7 +172,7 @@ const AddSchemes = () => {
     // }
     else if (name === 'locations') {
       setState({ ...state, locations: e });
-      // setError({ ...error, locations: [] })
+      setError({ ...error, locations: "" })
     }
   };
   const onChangeValue = e => {
@@ -226,7 +224,7 @@ const AddSchemes = () => {
   const validation = () => {
     let error = {};
     let flage = false;
-    // let urlReg = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    let urlReg = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
     // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
     let stringReg = /^[ A-Za-z]/;
     let a = stringReg.test(state.name)
@@ -280,10 +278,10 @@ const AddSchemes = () => {
       error.website = 'website is required';
       flage = true;
     }
-    // else if (!urlReg.test(state.website)) {
-    //   error.website = 'Enter Valid Website Name';
-    //   flage = true;
-    // }
+    else if (!urlReg.test(state.website)) {
+      error.website = 'Enter Valid Website Name';
+      flage = true;
+    }
     if (state.type === '') {
       error.type = 'type is required';
       flage = true;
@@ -296,10 +294,10 @@ const AddSchemes = () => {
       error.elink = 'elink is required';
       flage = true;
     }
-    // else if (!urlReg.test(state.elink)) {
-    //   error.elink = 'Enter Valid elink Name';
-    //   flage = true;
-    // }
+    else if (!urlReg.test(state.elink)) {
+      error.elink = 'Enter Valid elink Name';
+      flage = true;
+    }
     if (state.spoc === '') {
       error.spoc = 'spoc is required';
       flage = true;
@@ -361,15 +359,15 @@ const AddSchemes = () => {
     formData.append('spoc', state.spoc);
     formData.append('isActive', state.isActive);
     formData.append('thumbnail', state.thumbnail);
-    // formData.append('isDeleted', state.isDeleted);
-    // formData.append('isPublished', state.isPublished);
-    // formData.append('isApproved', state.isApproved);
     formData.append('application_form', state.application_form);
     formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
     formData.append('application_process', state.application_process);
     formData.append('medical_superintendent', state.medical_superintendent);
     formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
     formData.append('videoUrl', state.videoUrl);
+    // formData.append('isDeleted', state.isDeleted);
+    // formData.append('isPublished', state.isPublished);
+    // formData.append('isApproved', state.isApproved);
     // let data = {
     //   // key: uuid(),
     //   benifitLine: state.benifitLine.toString('markdown'),
@@ -399,7 +397,6 @@ const AddSchemes = () => {
     //   medical_superintendent: state.medical_superintendent,
     //   hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
     // };
-    console.log();
     if (langId) {
       // formData.append('name', getOneScHemeData.name);
       // formData.append('schemeCategory', getOneScHemeData.schemeCategory.id);
@@ -414,7 +411,6 @@ const AddSchemes = () => {
       // formData.append('isActive', getOneScHemeData.isActive);
       // formData.append('videoUrl', getOneScHemeData.videoUrl);
       // formData.append('thumbnail', getOneScHemeData.thumbnail);
-
 
       // delete data.id
       // delete data.isDeleted
@@ -437,7 +433,7 @@ const AddSchemes = () => {
       //   videoUrl: getOneScHemeData.videoUrl,
       //   thumbnail: getOneScHemeData.thumbnail,
       // }
-      formData.append('key', uuid());
+      formData.append('key', state.key);
       dispatch(addSchemeData(langId, formData));
       history.push(`/admin/scheme`);
     }
@@ -455,8 +451,8 @@ const AddSchemes = () => {
         history.push(`/admin/scheme`);
       }
     }
-    // onCancel();
   };
+
   //   if (!location.search) {
   //     dispatch(addSchemeData(data, langId));
   //     // history.push(`${path}/scheme`)
@@ -480,7 +476,7 @@ const AddSchemes = () => {
     <>
       <PageHeader
         ghost
-        title={id ? "Edit Scheme" : "Add Scheme"}
+        title={id ? "Edit scheme" : "Add scheme"}
       /*    buttons={[
                  // <div key="1" className="page-header-actions">
                  //     <Button size="small" type="link">
@@ -513,26 +509,25 @@ const AddSchemes = () => {
                             </Radio.Group>
                         </Col> */}
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="name">Scheme Name</label>
+              <label htmlFor="name">Scheme name</label>
               <Form.Item>
-                <Input type="name" placeholder="Scheme Name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
+                <Input type="name" placeholder="Scheme name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
 
-            {/* </Row>
-                    <Row justify="space-between"> */}
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="category mb-4">Scheme Category</label>
+              <label htmlFor="category mb-4">Scheme category</label>
               <Form.Item initialValue=" Select a scheme category ">
                 <Select
                   size="large"
-                  placeholder="Select Category"
+                  className={state.schemeCategory ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                   value={state.schemeCategory}
-                  className="sDash_fullwidth-select"
                   name="schemeCategory"
+                  placeholder="Select scheme category"
                   onChange={e => selectValue(e, 'schemeCategory')}
                 >
+                  <Option value="">Select scheme category</Option>
                   {scheme && scheme.data.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
@@ -540,17 +535,18 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="Benefits">Type of Benefits</label>
+              <label htmlFor="Benefits">Type of benefits</label>
               <Form.Item initialValue="Type of Benefits">
                 <Select
                   size="large"
-                  placeholder="Select Benefits"
                   value={state.schemeBenifit}
-                  className="sDash_fullwidth-select"
+                  placeholder="Select scheme benefits"
+                  className={state.schemeBenifit ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                   name="schemeBenifit"
                   onChange={e => selectValue(e, 'schemeBenifit')}
                 >
-                  {SchemeBenifits && SchemeBenifits.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
+                  <Option value="">Select scheme benefits</Option>
+                  {SchemeBenifits && SchemeBenifits.map(items => (<> <Option key={items.id} value={items.id}>{items.name} </Option> </>))}
                 </Select>
                 {error.schemeBenifit && <span style={{ color: 'red' }}>{error.schemeBenifit}</span>}
               </Form.Item>
@@ -571,7 +567,7 @@ const AddSchemes = () => {
             </Col> */}
           </Row>
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
+            <label htmlFor="Benefit-1-Line">Benefit 1-line</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
                 placeholder="Type your message..."
@@ -586,7 +582,7 @@ const AddSchemes = () => {
           <label htmlFor="TargetBeneficiary">Target beneficiary</label>
           <Form.Item>
             <Input
-              placeholder="Target Beneficiary"
+              placeholder="Target beneficiary"
               value={state.benificiary}
               name="benificiary"
               onChange={e => onChangeValue(e)}
@@ -595,10 +591,10 @@ const AddSchemes = () => {
           </Form.Item>
 
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="SchemeSummary">Scheme Summary</label>
+            <label htmlFor="SchemeSummary">Scheme summary</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
-                placeholder="Scheme Summary"
+                placeholder="Scheme summary"
                 name="detail"
                 value={state.detail}
                 onChange={onChangesEditorSchemeSummary}
@@ -608,10 +604,10 @@ const AddSchemes = () => {
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="HowtoApply">How to Apply</label>
+            <label htmlFor="HowtoApply">How to apply</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
-                placeholder="How to Apply"
+                placeholder="How to apply"
                 name="howToApply"
                 value={state.howToApply}
                 onChange={onChangesEditorHowToApply}
@@ -673,10 +669,10 @@ const AddSchemes = () => {
                     className={state.type ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                     value={state.type}
                     name="type"
-                    placeholder="Select Type"
+                    placeholder="Select type"
                     onChange={e => selectValue(e, 'type')}
                   >
-                    <Option value="">Select Type</Option>
+                    <Option value="">Select type</Option>
                     <Option value="ONLINE">Online </Option>
                     <Option value="OFFLINE">Offline</Option>
                   </Select>
@@ -687,10 +683,10 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="GrievanceRedress">Grievance Redress</label>
+              <label htmlFor="GrievanceRedress">Grievance redress</label>
               <Form.Item>
                 <Input
-                  placeholder="Grievance Redress"
+                  placeholder="Grievance redress"
                   value={state.grievanceRedress}
                   name="grievanceRedress"
                   onChange={e => onChangeValue(e)}
@@ -700,9 +696,9 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-              <label htmlFor="E-Link">E Link</label>
+              <label htmlFor="E-Link">E link</label>
               <Form.Item>
-                <Input placeholder="E Link" name="elink" value={state.elink} onChange={e => onChangeValue(e)} />
+                <Input placeholder="E link" name="elink" value={state.elink} onChange={e => onChangeValue(e)} />
                 {error.elink && <span style={{ color: 'red' }}>{error.elink}</span>}
               </Form.Item>
             </Col>
@@ -716,7 +712,7 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-              <label htmlFor="videoUrl">VideoUrl</label>
+              <label htmlFor="videoUrl">videoUrl</label>
               <Form.Item>
                 <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={e => onChangeValue(e)} />
                 {error.videoUrl && <span style={{ color: 'red' }}>{error.videoUrl}</span>}
@@ -724,11 +720,11 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="thumbnail">ThumbNail</label>
+              <label htmlFor="thumbnail">thumbNail</label>
               <Form.Item>
                 <Input
                   type="file"
-                  placeholder="ThumbNail"
+                  placeholder="thumbNail"
                   // value={state.thumbnail}
                   name="thumbnail"
                   // onChange={e => onChangeValue(e)}
@@ -739,41 +735,41 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="application_form">Application Form</label>
+              <label htmlFor="application_form">Application form</label>
               <Form.Item name="application_form">
-                <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
+                <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
                 {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
               </Form.Item>
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="recommended_and_forwarded">Recommended and Forwarded</label>
+              <label htmlFor="recommended_and_forwarded">Recommended and forwarded</label>
               <Form.Item name="recommended_and_forwarded">
-                <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
+                <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
                 {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
               </Form.Item>
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="application_process">Application Process</label>
+              <label htmlFor="application_process">Application process</label>
               <Form.Item name="application_process">
-                <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
+                <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
                 {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
               </Form.Item>
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="medical_superintendent">Medical Superintendent</label>
+              <label htmlFor="medical_superintendent">Medical superintendent</label>
               <Form.Item name="medical_superintendent">
-                <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
+                <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
                 {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
               </Form.Item>
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="hospital_expenses_estimation_certificate">Hospital Expenses Estimate Certificate</label>
+              <label htmlFor="hospital_expenses_estimation_certificate">Hospital expenses estimate certificate</label>
               <Form.Item name="hospital_expenses_estimation_certificate">
-                <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
+                <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
                 {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
               </Form.Item>
             </Col>

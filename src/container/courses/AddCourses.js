@@ -45,7 +45,7 @@ const AddCourses = () => {
 
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [selectKey, setSelectKey] = useState('1');
+  const [selectKey, setSelectKey] = useState(1);
   const [moduleError, setModuleError] = useState([]);
   const [defaultSelect, setDefaultSelect] = useState('1');
   const categoryData = useSelector(state => state.category.categoryData);
@@ -79,6 +79,12 @@ const AddCourses = () => {
     hindi: '',
     marathi: ''
   });
+  const [perticulerKey, setPerticulerKey] = useState()
+  const [index, setIndex] = useState()
+
+  useEffect(() => {
+    console.log("index", index);
+  }, [index])
 
 
   // useEffect(() => {
@@ -410,15 +416,9 @@ const AddCourses = () => {
     formData.append('mode', state.mode);
     formData.append('isActive', true);
     formData.append('isDeleted', false);
-
     dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     handalCancle()
   };
-
-  useEffect(() => {
-    console.log("selectKey", typeof (selectKey));
-    console.log();
-  }, [selectKey])
 
   const addData = () => {
     let val = [...moduleState];
@@ -436,7 +436,7 @@ const AddCourses = () => {
       modifiedByUser: userData && userData.data && userData.data.id,
     });
     setModuleState(val);
-    setSelectKey(val.length.toString());
+    setSelectKey(val.length);
   };
 
   const moduleChange = (e, i, name) => {
@@ -472,7 +472,6 @@ const AddCourses = () => {
         detail: item.detail,
         duration: moment(item.duration).format('HH:mm:ss'),
         videoUrl: item.videoUrl,
-        // sequence: parseInt(item.sequence),
         course: item.course,
         language: item.language,
         createdByUser: item.createdByUser,
@@ -487,8 +486,7 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-    const data = moduleState[parseInt(selectKey)];
-    console.log("data", data);
+    const data = moduleState[selectKey - 1];
     const editData = {
       key: data.key,
       name: data.name,
@@ -499,42 +497,47 @@ const AddCourses = () => {
       isActive: true,
       isDeleted: false,
     };
-    dispatch(editSwayamCourseModule(editData,));
-    setSelectKey(val.length.toString());
-    handalCancle()
+    dispatch(editSwayamCourseModule(editData));
   };
 
-  const onRemoveData = () => {
+  const onRemoveData = (item) => {
+    console.log('item', item)
     if (id) {
-      const data = moduleState[parseInt(selectKey)];
-      console.log("parseInt(selectKey)", typeof (parseInt(selectKey)));
-      console.log("moduleState", moduleState);
-      console.log("data", data);
+      const data = moduleState[selectKey - 1];
       const deleteData = {
         key: data.key,
         name: data.name,
         detail: data.detail,
         duration: moment(data.duration).format('HH:mm:s'),
         videoUrl: data.videoUrl,
-        moduleId: data.modifiedByUser,
+        moduleId: data.moduleId,
         isActive: false,
         isDeleted: true,
       };
       dispatch(editSwayamCourseModule(deleteData));
     }
-    let val = [...moduleState];
-    val.splice(parseInt(selectKey), 1);
-    setSelectKey(val.length.toString());
-    setModuleState(val);
+    console.log("perticulerKey", perticulerKey);
+    let deleteModulData = moduleState.filter((item) => item.key !== perticulerKey)
+    console.log("deleteModulData", deleteModulData);
+    setModuleState(deleteModulData);
+    setSelectKey(deleteModulData.length);
   };
+  useEffect(() => {
+    console.log("moduleState.key", moduleState.key);
+  }, [moduleState.key])
 
   const handalCancle = () => {
     history.push('/admin/courses')
   }
 
   const { TabPane } = Tabs;
+  useEffect(() => {
+    console.log("selectKey", selectKey);
+  }, [selectKey])
 
-  const moduleCallback = key => {
+
+  let moduleCallback = (key) => {
+    setPerticulerKey(moduleState.find((item, index) => index == (key - 1)).key);
     setSelectKey(key);
   };
 
@@ -776,7 +779,7 @@ const AddCourses = () => {
             </TabPane>
 
             <TabPane tab="Modules" disabled={swyamModuleId} key="2">
-              <Tabs tabPosition={'left'} activeKey={selectKey} onChange={moduleCallback}>
+              <Tabs tabPosition={'left'} activeKey={selectKey.toString()} onChange={moduleCallback}>
                 {moduleState.length ? (
                   moduleState.map((item, i) => (
                     <TabPane tab={`Module ${i + 1}`} key={`${i + 1}`}>
@@ -862,7 +865,7 @@ const AddCourses = () => {
                             className="btn-signin ml-10"
                             type="danger"
                             size="medium"
-                            onClick={() => onRemoveData()}
+                            onClick={() => onRemoveData(item)}
                           >
                             Delete
                           </Button>

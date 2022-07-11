@@ -58,10 +58,6 @@ const Schemes = () => {
     hindi: "",
     marathi: "",
   })
-  useEffect(() => {
-    console.log("state123", state);
-  }, [state])
-
 
   // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   const languageData = useSelector(state => state.language.getLanguageData);
@@ -125,39 +121,41 @@ const Schemes = () => {
     if (editSchemedata && editSchemedata.status === 200) {
       dispatch(editSchemeSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
-      toast.success("Scheme update successful");
+      toast.success("Scheme update successfully");
     }
   }, [editSchemedata])
 
   useEffect(() => {
     if (editSchemedata && editSchemedata.status !== 200) {
       dispatch(editSchemeErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [editSchemeError])
 
   useEffect(() => {
     if (schemeModulData && schemeModulData.status === 200) {
-      toast.success("Scheme Import sucessful")
+      toast.success("Scheme import successfully")
       dispatch(addSchemeInBulk(null))
       dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
     else if (schemeModulData && schemeModulData.status !== 200) {
-      toast.error("somthimg went wromg")
+      toast.error("Something went wrong")
     }
   }, [schemeModulData])
 
   useEffect(() => {
+    console.log("schemeDataAdd", schemeDataAdd);
     if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
-      toast.success("Scheme add successful");
+      toast.success("Scheme added scheme successfully");
+      dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
   }, [schemeDataAdd])
 
   useEffect(() => {
     if (addSchemeError) {
       dispatch(addSchemeErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [addSchemeError])
 
@@ -349,7 +347,7 @@ const Schemes = () => {
     //   };
     const deleteSchemes = await newSchemes(formData)
     if (deleteSchemes.status === 200) {
-      toast.success("schemes delete successful")
+      toast.success("Schemes delete successfully")
     }
   }
 
@@ -418,7 +416,7 @@ const Schemes = () => {
     }
     const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
-      toast.success("Schemes active successful")
+      toast.success("Scheme active successfully")
       // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
@@ -477,7 +475,7 @@ const Schemes = () => {
     }
     ApiPost(`scheme/updateBannerSelected`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
+        toast.success(!bannerSelected ? 'Banner selected successfully' : 'Banner unSelected  successfully');
         dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
       });
   }
@@ -516,7 +514,7 @@ const Schemes = () => {
 
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
-        toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
+        toast.success(data.isApproved ? "Scheme approved successfully" : "Scheme disapproved successfully")
         dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
       })
       .catch((err) => console.log("Error", err))
@@ -735,7 +733,6 @@ const Schemes = () => {
       width: '90px',
     },
   ];
-
   const rowSelection = {
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -800,16 +797,16 @@ const Schemes = () => {
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
-                    <Form.Item label="Scheme Category">
+                    <Form.Item label="Scheme category">
                       <Select
                         size="large"
                         className={schemeCategory.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         name="category"
                         value={schemeCategory.category}
                         onChange={e => onChnageValue(e, 'category')}
-                        placeholder="Select Scheme Category"
+                        placeholder="Select scheme category"
                       >
-                        <Option value="">Select Scheme Category</Option>
+                        <Option value="">Select scheme category</Option>
                         {schemeData && schemeData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
@@ -817,16 +814,16 @@ const Schemes = () => {
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
-                    <Form.Item label="Scheme Benefits">
+                    <Form.Item label="Scheme benefits">
                       <Select
                         size="large"
                         className={schemeCategory.benefit ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         value={schemeCategory.benefit}
                         name="benefits"
                         onChange={e => onChnageValue(e, 'benefits')}
-                        placeholder="Select Scheme Benefits"
+                        placeholder="Select scheme benefits"
                       >
-                        <Option value="">Select Scheme Benefits</Option>
+                        <Option value="">Select scheme benefits</Option>
                         {getBenefitData &&
                           getBenefitData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
@@ -836,7 +833,7 @@ const Schemes = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" name='search' value={schemeCategory.search} onChange={e => onChnageValue(e.target.value, 'search')} />
+                      <Input placeholder="Search" name='search' value={schemeCategory.search} onChange={e => onChnageValue(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>

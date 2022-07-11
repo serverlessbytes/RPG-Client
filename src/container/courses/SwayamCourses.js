@@ -97,9 +97,24 @@ const SwayamCourses = () => {
   useEffect(() => {
     console.log("courseModuleData?.data?.isDeleted", courseModuleData);
     if (courseModuleData?.status === 200) {
-      { courseModuleData?.data?.isDeleted ? toast.error("courseModule Delete Successfully") : toast.success("courseModule Updated Successfully") }
+      { courseModuleData?.data?.isDeleted ? toast.success("courseModule delete successfully") : toast.success("courseModule Updated Successfully") }
     }
   }, [courseModuleData])
+
+  // useEffect(() => {
+  //   if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
+  //     toast.success("Swayam course modules add successful");
+  //     dispatch(addSwayamCourseModuleSuccess(null));
+  //   }
+  // }, [addSwayamCourseModuleData]);
+
+  useEffect(() => {
+    if (addSwayamCourseModuleError) {
+      dispatch(addSwayamCourseModuleErr(null));
+      toast.error('Something Wrong');
+    }
+  }, [addSwayamCourseModuleError]);
+
 
   useEffect(() => {
     if (state.length && exportTog) {
@@ -117,18 +132,6 @@ const SwayamCourses = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
-      dispatch(addSwayamCourseModuleSuccess(null));
-      toast.success("Swayam course modules add successful");
-    }
-  }, [addSwayamCourseModuleData]);
-  useEffect(() => {
-    if (addSwayamCourseModuleError) {
-      dispatch(addSwayamCourseModuleErr(null));
-      toast.error('Something Wrong');
-    }
-  }, [addSwayamCourseModuleError]);
 
   useEffect(() => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {
