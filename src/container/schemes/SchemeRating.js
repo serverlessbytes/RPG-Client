@@ -29,8 +29,7 @@ const SchemeRating = () => {
         rating: "",
         comment: ""
     });
-    const [error, setError] = useState({
-    })
+    const [error, setError] = useState({})
 
 
     const schemeRatingData = useSelector((state) => state.scheme.schemeRatingData)
@@ -65,6 +64,7 @@ const SchemeRating = () => {
             });
         return newVal;
     };
+
     const validation = () => {
         let error = {};
         let flage = false;
@@ -76,8 +76,9 @@ const SchemeRating = () => {
             error.comment = " comment is required";
             flage = true;
         }
+        setError(error);
+        return flage;
     }
-
     const onDelete = async id => {
         let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
         if (schemeRatingForDelete) {
@@ -97,9 +98,6 @@ const SchemeRating = () => {
     }
 
     const onEdit = (id) => {
-        if (validation()) {
-            return
-        }
         setIsModalVisible(true)
         let schemeRatingForEdit = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
         if (schemeRatingForEdit) {
@@ -110,9 +108,7 @@ const SchemeRating = () => {
         }
     }
     const handleOk = () => {
-        if (validation()) {
-            return
-        }
+
         if (selectedSchemeRating) {
             let Data = {
                 id: selectedSchemeRating.id,
@@ -121,6 +117,7 @@ const SchemeRating = () => {
                 isActive: true,
                 isDeleted: false,
             }
+            const [error, setError] = useState({});
             dispatch(editSchemeRating(Data))
             setIsModalVisible(false)
         }
