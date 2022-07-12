@@ -4,7 +4,7 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { Button } from '../../components/buttons/buttons';
@@ -60,12 +60,10 @@ const Partner = () => {
         avatar: 'dfd',
       };
       delete partnerForDelete.userTakenRatings
-      // dispatch(editProfile(partnerForDelete));
-      // getData();
       const restoreActivePartner = await activePartner(id, partnerForDelete);
 
       if (restoreActivePartner.status === 200) {
-        toast.success("Partner Delete successful")
+        toast.success("Partner deleted")
       }
     }
   }
@@ -76,7 +74,6 @@ const Partner = () => {
     const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
       .then((res) => {
         if (res.status === 200) {
-          // getData();
           dispatch(getAllUser(perPage, pageNumber, status, type))
 
         }
@@ -100,14 +97,14 @@ const Partner = () => {
     const restoreActivePartner = await activePartner(id, data);
 
     if (restoreActivePartner.status === 200) {
-      toast.success("Partner active successful")
+      toast.success("Partner actived")
     }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("Partner Update successful")
+      toast.success("Partner Updated")
     }
   }, [editProfileData])
 
@@ -151,11 +148,6 @@ const Partner = () => {
     }
   }, [partnerData])
 
-  // useEffect(() => {
-  //   getData()
-  // }, [perPage, pageNumber, status])
-
-
   const usersTableColumns = [
     {
       title: 'Name',
@@ -186,14 +178,6 @@ const Partner = () => {
       <PageHeader
         ghost
         title="Partner"
-      // buttons={[
-      //     <div className="page-header-actions">
-      //         <Button size="small" type="primary" onClick={allEmployerExport}>
-      //             Export All
-      //         </Button>
-      //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-      //     </div>
-      // ]}
       />
       <Main>
         <Cards headless>
@@ -241,7 +225,6 @@ const Partner = () => {
               </Tabs >
             </Col>
           </Row>
-
         </Cards>
       </Main>
 

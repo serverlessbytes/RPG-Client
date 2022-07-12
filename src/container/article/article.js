@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Col, Form, Input, Modal, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -31,8 +31,10 @@ const article = () => {
         imageUrl: "",
         videoUrl: "",
         body: "",
+        priority: "",
     });
     const [formErrors, setFormErrors] = useState();
+    const [priotity, setPriority] = useState(false);
 
     const getArticlesData = useSelector((state) => state.articles.getArticlesData);
     const getArticleByIdData = useSelector((state) => state.articles.getArticleByIdData);
@@ -42,6 +44,12 @@ const article = () => {
     const editArticlesError = useSelector((state) => state.articles.editArticlesErr);
 
     const handleChange = (e) => {
+        // const input = document.getElementById('priorty')
+        // input.onkeydown = (e) => {
+        //     console.log('e', e)
+        //     if (e.which === 38 || e.which === 40) {
+        //         e.preventDefault();
+        //     }}
         setArticleData({ ...articledata, [e.target.name]: e.target.value })
         setFormErrors({ ...formErrors, [e.target.name]: "" });
     }
@@ -84,6 +92,10 @@ const article = () => {
             error.body = "Please enter body"
             flag = true
         }
+        if (!articledata.priority) {
+            error.priority = "Please enter priority"
+            flag = true
+        }
         setFormErrors(error);
         return flag
     }
@@ -96,30 +108,30 @@ const article = () => {
     useEffect(() => {
         if (addArticleData && addArticleData.status === 200) {
             dispatch(addArticleSuccess(null))
-            toast.success("Article add successful")
+            toast.success("Article added")
         }
     }, [addArticleData])
 
     useEffect(() => {
         if (addArticleError) {
             dispatch(addArticleErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addArticleError])
 
     useEffect(() => {
         if (editArticlesData && editArticlesData.status === 200) {
             dispatch(editArticlesSuccess(null))
-            toast.success("Article update successful")
+            toast.success("Article updated")
         } else if (editArticlesData && editArticlesData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editArticlesData])
 
     useEffect(() => {
         if (editArticlesError) {
             dispatch(editArticlesErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editArticlesError])
 
@@ -138,6 +150,7 @@ const article = () => {
 
     const showModal = () => {
         setIsModalVisible(true);
+        setPriority(false);
     };
 
     const handleOk = () => {
@@ -169,6 +182,7 @@ const article = () => {
                 imageUrl: articledata.imageUrl,
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
+                priority: articledata.priority,
                 isActive: true,
                 isDeleted: false,
             }
@@ -187,9 +201,11 @@ const article = () => {
         })
         setSelectedArticle(null)
         setNameTog(false)
+        setFormErrors("");
     };
 
     const onEdit = (id) => {
+        setPriority(true);
         let dataForEdit = getArticlesData && getArticlesData.data && getArticlesData.data.data.find((item) => item.id === id)
         if (dataForEdit) {
             setSelectedArticle(dataForEdit)
@@ -215,7 +231,6 @@ const article = () => {
 
     const onDelete = async (id) => {
         let dataForDelete = getArticlesData && getArticlesData.data && getArticlesData.data.data.find((item) => item.id === id)
-        console.log('dataForDelete',dataForDelete)
         if (dataForDelete) {
             let userForDelete = {
                 id: dataForDelete.id,
@@ -225,12 +240,11 @@ const article = () => {
                 videoUrl: dataForDelete.videoUrl,
                 isActive: false,
                 isDeleted: true,
+                priority: dataForDelete.priority,
             }
-            // dispatch(editArticles(userForDelete))
-
             const deletebanner = await newArticle(userForDelete)
             if (deletebanner.status === 200) {
-                toast.success("Article delete successful")
+                toast.success("Article deleted")
             }
         }
     }
@@ -246,7 +260,7 @@ const article = () => {
                     priority: item.priority,
                     srno: id + 1,
                     title: item.title,
-                    // body: item.body,
+                    body: item.body,
                     imageUrl: item.imageUrl,
                     videoUrl: item.videoUrl,
                     action: (
@@ -276,7 +290,6 @@ const article = () => {
             sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
         },
-
         {
             title: 'Srno',
             dataIndex: 'srno',
@@ -286,15 +299,15 @@ const article = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            sorter: (a, b) => a.title.length - b.title.length,
+            sorter: (a, b) => a.title.localeCompare(b.title),
             sortDirections: ['descend', 'ascend'],
         },
-        // {
-        //     title: 'Body',
-        //     dataIndex: 'body',
-        //     sorter: (a, b) => a.body.localeCompare(b.body),
-        //     sortDirections: ['descend', 'ascend']
-        // },
+        {
+            title: 'Body',
+            dataIndex: 'body',
+            sorter: (a, b) => a.body.localeCompare(b.body),
+            sortDirections: ['descend', 'ascend']
+        },
         {
             title: 'Image url',
             dataIndex: 'imageUrl',
@@ -373,6 +386,7 @@ const article = () => {
                             {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
 
                         </Form.Item>
+
                         <label htmlFor="imgUrl">Image url</label>
                         <Form.Item>
                             <Input
@@ -408,6 +422,27 @@ const article = () => {
                             />
                             {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
+
+                        {
+                            priotity ?
+                                <>
+                                    <label htmlFor="priority">Priority</label>
+                                    <Form.Item>
+                                        <Input
+                                            // type="text"
+                                            type="number"
+                                            placeholder="Enter priority"
+                                            name="priority"
+                                            // value={articledata.body}
+                                            onChange={(e) => handleChange(e, "priority")}
+                                            className='experience-input'
+                                            id='priority'
+                                        />
+                                        {formErrors?.priority && <span style={{ color: "red" }}>{formErrors.priority}</span>}
+                                    </Form.Item>
+                                </> : ""
+                        }
+
                     </Form>
                 </Modal>}
         </>

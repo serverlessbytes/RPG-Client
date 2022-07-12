@@ -4,7 +4,7 @@ import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
-import { Main, ProjectPagination, TableWrapper } from '../styled';
+import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobcategory, editJobcategory, getJobcategory, getJobroles, addJobrole, editJobrole } from '../../redux/jobs/actionCreator';
@@ -19,7 +19,6 @@ const JobRole = () => {
         addJobroleErr, addBulkJobRolesSuccess, addBulkJobRolesErr } = actions;
 
     const dispatch = useDispatch()
-    const usersTableData = [];
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [importModal, setImportModel] = useState(false);
@@ -50,45 +49,45 @@ const JobRole = () => {
     useEffect(() => {
         if (importJobRole && importJobRole.status === 200) {
             dispatch(addBulkJobRolesSuccess(null))
-            toast.success("Import Job Role successful");
+            toast.success("Import job role");
         }
         else if (importJobRole && importJobRole.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [importJobRole])
 
     useEffect(() => {
         if (importJobRoleErr) {
             dispatch(addBulkJobRolesErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [importJobRoleErr])
 
     useEffect(() => {
         if (editJobRoleData && editJobRoleData.status === 200) {
             dispatch(editJobroleSuccess(null))
-            toast.success("Job Role update successful");
+            toast.success("Job role updated");
         }
     }, [editJobRoleData])
 
     useEffect(() => {
         if (addJobRoledata && addJobRoledata.status === 200) {
             dispatch(addJobroleSuccess(null))
-            toast.success("Job Role add successful");
+            toast.success("Job role added");
         }
     }, [addJobRoledata])
 
     useEffect(() => {
         if (addJobRoleError) {
             dispatch(addJobroleErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [addJobRoleError])
 
     useEffect(() => {
         if (editJobRoleError) {
             dispatch(editJobroleErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [editJobRoleError])
 
@@ -144,7 +143,7 @@ const JobRole = () => {
             // dispatch(editJobrole(dataForDelete))
             const deleteJobRole = await newJobRole(dataForDelete)
             if (deleteJobRole.status === 200) {
-                toast.success("Job Role delete successful")
+                toast.success("Job role deleted")
             }
         }
     }
@@ -243,21 +242,6 @@ const JobRole = () => {
         setNameTog(false)
     };
 
-    const [state, setState] = useState({
-        projects: usersTableData,
-        current: 0,
-        pageSize: 0,
-    });
-
-    const onShowSizeChange = (current, pageSize) => {
-        setState({ ...state, current, pageSize });
-    };
-
-    const onHandleChange = (current, pageSize) => {
-        // You can create pagination in here
-        setState({ ...state, current, pageSize });
-    };
-
     const jobTableColumns = [
         {
             title: 'Job roles',
@@ -292,47 +276,15 @@ const JobRole = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-
-                            {/* --- search bar --- */}
-                            {/* <Form name="sDash_select" layout="vertical">
-                                <Form.Item name="search" label="">
-                                    <Input placeholder="search" style={{ width: 200 }} />
-                                </Form.Item>
-                            </Form> */}
-
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={jobRolesTableData}
                                 columns={jobTableColumns}
                                 pagination={false}
-                            // pagination={{
-                            //     defaultPageSize: users?.per_page,
-                            //     total: users?.page_count,
-                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                            //     onChange: (page, pageSize) => {
-                            //       setPageNumber(page);
-                            //       setPerPage(pageSize);
-                            //     },
-                            //     // defaultPageSize: 5,
-                            //     // total: usersTableData.length,
-                            //     // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                            //   }}
                             />
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {jobCategoryTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

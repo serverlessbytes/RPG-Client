@@ -60,17 +60,14 @@ const district = () => {
     useEffect(() => {
         if (postDistrictdataa && postDistrictdataa.status === 200) {
             dispatch(postDistrictSuccess(null))
-            // dispatch(getJobsFilterForMainSuccess(null))
-            toast.success("District Add successful");
-            //toastAssetsAdd(true)
-            //onHide()
+            toast.success("District added");
         }
     }, [postDistrictdataa])
 
     useEffect(() => {
         if (postDistrictDataError) {
             dispatch(postDistrictErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [postDistrictDataError])
 
@@ -224,18 +221,6 @@ const district = () => {
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-
-                        <Pagination
-                            onChange={() => { }}
-                            showSizeChanger
-                            onShowSizeChange={() => { }}
-                            pageSize={10}
-                            defaultCurrent={1}
-                            total={10}
-                        />
-
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
             <Modal title="District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
@@ -250,14 +235,6 @@ const district = () => {
                         />
                         {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
                     </Form.Item>
-                    {/* <label htmlFor="name">Key</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder="Enter Key"
-                            name="key"
-                            defaultValue={data.key}
-                        />
-                    </Form.Item> */}
                     <Form.Item name='stateId' label="State">
                         <Select placeholder="Select state" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
                             <Option value='' >Select state</Option>

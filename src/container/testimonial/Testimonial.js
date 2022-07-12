@@ -1,11 +1,11 @@
-import { Form, Input, Table } from 'antd';
+import {Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button } from '../../components/buttons/buttons'
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers'
-import { editTestimonial, getTestimonial } from '../../redux/testimonial/actionCreator';
+import {getTestimonial } from '../../redux/testimonial/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
@@ -41,47 +41,45 @@ const Testimonial = () => {
     useEffect(() => {
         if (addBulkTestimonialData && addBulkTestimonialData.status === 200) {
             dispatch(addBulkTestimonialSuccess(null))
-            toast.success("Import Testimonial successful");
+            toast.success("Import testimonial");
         }
         else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkTestimonialData])
 
     useEffect(() => {
         if (addBulkTestimonialError) {
             dispatch(addBulkTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkTestimonialError])
 
     useEffect(() => {
         if (addTestimonialdata && addTestimonialdata.status === 200) {
             dispatch(addTestimonialSuccess(null))
-            toast.success("Testimonial added successfully");
+            toast.success("Testimonial added");
         }
     }, [addTestimonialdata])
 
     useEffect(() => {
         if (addTestimonialDataError) {
             dispatch(addTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addTestimonialDataError])
 
     useEffect(() => {
         if (editTestimonialdata && editTestimonialdata.status === 200) {
             dispatch(editTestimonialSuccess(null))
-            toast.success("Testimonial updated successfully");
-            //toastAssetsAdd(true)
-            //onHide()
+            toast.success("Testimonial updated");
         }
     }, [editTestimonialdata])
 
     useEffect(() => {
         if (editTestimonialDataError) {
             dispatch(editTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editTestimonialDataError])
 
@@ -119,7 +117,7 @@ const Testimonial = () => {
             // dispatch(editTestimonial(userForDelete))
             const deleteTestimonial = await newTestimonial(userForDelete)
             if (deleteTestimonial.status === 200) {
-                toast.success("Testimonial deleted successfully")
+                toast.success("Testimonial deleted")
             }
         }
     }
@@ -204,13 +202,6 @@ const Testimonial = () => {
 
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive">
-
-                            {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                            <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                    </Form> */}
-
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={testiMonialtable}
@@ -223,8 +214,6 @@ const Testimonial = () => {
                                         setPerPage(pageSize)
                                     }
                                 }}
-                            // size="middle"
-                            // pagination={false}
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>

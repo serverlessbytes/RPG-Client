@@ -22,7 +22,6 @@ const Admin = () => {
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    // const [adminData, setAdminData] = useState()
     const [adminTable, setAdminTable] = useState([])
     const [type, setType] = useState("ADMIN")
 
@@ -79,7 +78,7 @@ const Admin = () => {
             // getData();
             const restoreActiveAdmin = await activeAdmin(id, adminDataForDelete);
             if (restoreActiveAdmin.status === 200) {
-                toast.success("Admin Delete successful")
+                toast.success("Admin deleted")
             }
         }
     };
@@ -99,21 +98,21 @@ const Admin = () => {
         const restoreActiveAdmin = await activeAdmin(id, data);
 
         if (restoreActiveAdmin.status === 200) {
-            toast.success("Admin active successful")
+            toast.success("Admin actived")
         }
     };
 
     useEffect(() => {
         if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
-            toast.success("Admin Update successful")
+            toast.success("Admin updated")
         }
     }, [editProfileData])
 
     useEffect(() => {
         if (editProfileError) {
             dispatch(editProfileErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editProfileError])
 

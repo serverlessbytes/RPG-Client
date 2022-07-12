@@ -1,5 +1,5 @@
-import { Button, Col, Input, Row, Form, Select, Radio, Space, DatePicker, TimePicker } from 'antd';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Button, Col, Input, Row, Form, Select, Radio, Space, DatePicker } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { Main } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { HorizontalFormStyleWrap } from '../forms/overview/Style';
@@ -502,31 +502,21 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="salary">
-                                                <Input placeholder="salary " value={state.salary} name="salary" onChange={e => onChangeValue(e)} />
+                                                <Input placeholder="Salary " value={state.salary} name="salary" onChange={e => onChangeValue(e)} />
                                                 {error.salary && <span style={{ color: 'red' }}>{error.salary}</span>}
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-                            <Row justify="space-between"> */}
+                              
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="name">Job role</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            {/* <Form.Item name="Selectajobrole" initialValue="Select a job role">
-                                                <Select size="large" className="sDash_fullwidth-select" value={state.jobRole} name="jobRole" onChange={(e) => onChnageHandle(e, "jobRole")} defaultValue="Select Job Role">
-                                                    {jobRolData && jobRolData.map((items) => (
-                                                        <Option value={items.id}>{items.name} </Option>
-                                                    ))}
-                                                </Select>
-                                                {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
-                                            </Form.Item> */}
                                             <Form name="sDash_select" layout="vertical">
                                                 <Form.Item>
-                                                    {/* <Input placeholder="State" name="state" onChange={(e) => onChangeHandle(e)} /> */}
                                                     <Select
                                                         size="large"
                                                         className={state.jobRole ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
@@ -553,8 +543,6 @@ const AddJobPost = () => {
                                         {error.benifits && <span style={{ color: "red" }}>{error.benifits}</span>}
                                     </div>
                                 </Col>
-                                {/* </Row>
-                            <Row justify="space-between"> */}
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -587,7 +575,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="vacancies" initialValue="">
-                                                <Input type="number" className='experience-input' placeholder="vacancies" value={state.vacancies} name='vacancies' onChange={(e) => onChnageHandle(e)} />
+                                                <Input type="number" className='experience-input' placeholder="Vacancies" value={state.vacancies} name='vacancies' onChange={(e) => onChnageHandle(e)} />
                                                 {error.vacancies && <span style={{ color: 'red' }}>{error.vacancies}</span>}
                                             </Form.Item>
                                         </Col>
@@ -659,8 +647,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-                            <Row justify="space-between"> */}
+                           
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -668,7 +655,7 @@ const AddJobPost = () => {
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
                                             <Form.Item name="TownVillage" initialValue="">
-                                                <Input placeholder="Enter Town / village" value={state.town} name="town" onChange={(e) => onChangeValue(e)} />
+                                                <Input placeholder="Enter town/village" value={state.town} name="town" onChange={(e) => onChangeValue(e)} />
                                                 {error.town && <span style={{ color: 'red' }}>{error.town}</span>}
                                             </Form.Item>
                                         </Col>
@@ -687,8 +674,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-                            <Row justify="space-between"> */}
+                            
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -745,9 +731,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-
-                            <Row justify="space-between"> */}
+           
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -805,9 +789,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-
-                            <Row justify="space-between"> */}
+              
 
                                 <Col lg={11} md={11} sm={24} xs={24} className='' style={{ marginBottom: "24px" }}>
                                     <Row align="middle" justify="space-between">

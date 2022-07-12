@@ -36,20 +36,14 @@ const State = () => {
     useEffect(() => {
         if (postStatedata && postStatedata.status === 200) {
             dispatch(postStateSuccess(null))
-            toast.success("State Add successful");
-            //toastAssetsAdd(true)
-            //onHide()
+            toast.success("State added");
         }
-        // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-        //   dispatch(editSchemeSuccess(null))
-        //   toast.success("Jobs Update successful");
-        // }
     }, [postStatedata])
 
     useEffect(() => {
         if (postStateError) {
             dispatch(postStateErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [postStateError])
 

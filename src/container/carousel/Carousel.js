@@ -6,7 +6,7 @@ import { Main, TableWrapper } from '../styled';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCarousel, carousel, editCarousel, getCarousel, getOneCarousel } from '../../redux/carousel/actionCreator';
+import { addCarousel, editCarousel, getCarousel, getOneCarousel } from '../../redux/carousel/actionCreator';
 import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/carousel/actions';
 import { toast } from 'react-toastify';
@@ -45,45 +45,45 @@ const Carousel = () => {
   useEffect(() => {
     if (addBulkCarouselData && addBulkCarouselData.status === 200) {
       dispatch(addBulkCarouselSuccess(null));
-      toast.success('Import Carousel successful');
+      toast.success('Import carousel');
     }
     else if (addBulkCarouselData && addBulkCarouselData.status !== 200) {
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [addBulkCarouselData]);
 
   useEffect(() => {
     if (addBulkCarouselError) {
       dispatch(addBulkCarouselErr(null));
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addBulkCarouselError]);
 
   useEffect(() => {
     if (addCarouseldata && addCarouseldata.status === 200) {
       dispatch(addCarouselSuccess(null));
-      toast.success('Carousel added successfully');
+      toast.success('Carousel added');
     }
   }, [addCarouseldata]);
 
   useEffect(() => {
     if (addCarouselError) {
       dispatch(addCarouselErr(null));
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addCarouselError]);
 
   useEffect(() => {
     if (editCarouselData && editCarouselData.status === 200) {
       dispatch(editCarouselSuccess(null));
-      toast.success('Carousel updated successfully');
+      toast.success('Carousel updated');
     }
   }, [editCarouselData]);
 
   useEffect(() => {
     if (editCarouselError) {
       dispatch(editCarouselErr(null));
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [editCarouselError]);
 
@@ -239,7 +239,7 @@ const Carousel = () => {
       // dispatch(editCarousel(userForDelete))
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
-        toast.success('Carousel deleted successfully');
+        toast.success('Carousel deleted');
       }
     }
   };
@@ -334,18 +334,6 @@ const Carousel = () => {
               />
             </TableWrapper>
           </UserTableStyleWrapper>
-          {/* <ProjectPagination>
-
-                        <Pagination
-                            onChange={() => { }}
-                            showSizeChanger
-                            onShowSizeChange={() => { }}
-                            pageSize={10}
-                            defaultCurrent={1}
-                            total={10}
-                        />
-
-                    </ProjectPagination> */}
         </Cards>
       </Main>
 

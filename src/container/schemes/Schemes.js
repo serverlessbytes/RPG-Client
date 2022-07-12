@@ -144,7 +144,6 @@ const Schemes = () => {
   }, [schemeModulData])
 
   useEffect(() => {
-    console.log("schemeDataAdd", schemeDataAdd);
     if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
       toast.success("Scheme added scheme successfully");
@@ -837,20 +836,7 @@ const Schemes = () => {
                     </Form.Item>
                   </Form>
                 </Col>
-                {/* <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Location">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                                                <Option value="2">  All India </Option>
-                                                <Option value="3">  Andra Pradesh  </Option>
-                                                <Option value="4">  Assam  </Option>
-                                                <Option value="5">  Chandigarh  </Option>
-                                                <Option value="6">  Dadar and Nagar Haveli   </Option>
-                                                <Option value="7">   Daman and Diu   </Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
+
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
                     <Button size="small" type="primary"

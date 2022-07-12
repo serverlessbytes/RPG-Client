@@ -4,11 +4,11 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { getAllUser } from '../../redux/users/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import StarRatings from 'react-star-ratings';
 import { toast } from 'react-toastify';
@@ -67,7 +67,7 @@ const User = () => {
             const restoreActiveUser = await activeUser(id, userForDelete);
 
             if (restoreActiveUser.status === 200) {
-                toast.success("User Delete successful")
+                toast.success("User deleted")
             }
         }
     };
@@ -101,21 +101,21 @@ const User = () => {
         const restoreActiveUser = await activeUser(id, activeData);
 
         if (restoreActiveUser.status === 200) {
-            toast.success("User active successful")
+            toast.success("User actived")
         }
     }
 
     useEffect(()=>{
         if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
             dispatch(editProfileSuccess(null))
-            toast.success("User Update successful")
+            toast.success("User Updated")
         }
     },[editProfileData])
 
     useEffect(() => {
         if(editProfileError){
             dispatch(editProfileErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     },[editProfileError])
 
@@ -209,14 +209,6 @@ const User = () => {
             <PageHeader
                 ghost
                 title="User"
-            // buttons={[
-            //     <div className="page-header-actions">
-            //         <Button size="small" type="primary" onClick={allEmployerExport}>
-            //             Export All
-            //         </Button>
-            //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-            //     </div>
-            // ]}
             />
             <Main>
                 <Cards headless>
