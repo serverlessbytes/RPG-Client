@@ -54,7 +54,6 @@ const AddJobApplication = () => {
         }
         if (name === 'experience') {
             if (e.target.value > 0) {
-                console.log('e if', e.target.value)
                 setJobApplication({ ...jobApplication, [e.target.name]: e.target.value })
             } else {
                 console.log('e else', e.target.value)
@@ -75,16 +74,16 @@ const AddJobApplication = () => {
 
 
     const onFileSelecte = (e, name) => {
-        let extensions = e.target.files[0].name?.split('.')
-        if (extensions) {
+        let extensions = e.target.files[0]?.name?.split('.')
+        if (extensions?.length > 0) {
             let extensionsValidation = ['docx', 'pdf', 'csv', 'xlsx']
             if (extensionsValidation.includes(extensions[extensions.length - 1])) {
                 setJobApplication({ ...jobApplication, [name]: e.target.files[0] })
-                setError({ ...error, resume_url: "" });
+                setError({ ...error, [name]: "" });
             }
             else {
                 setError({ ...error, resume_url: 'Please select valid document file' })
-                setJobApplication({ ...jobApplication, resume_url: '' })
+                setJobApplication({ ...jobApplication, [name]: "" })
             }
         }
         else {
@@ -203,8 +202,8 @@ const AddJobApplication = () => {
                                     name="job_id"
                                     onChange={e => selectValue(e, 'job_id')}
                                 >
-                                    {allJobsData && allJobsData.data && allJobsData.data.data.map((items) =>
-                                        <Option value={items.id}>{items.name.name}</Option>)}
+                                    {allJobsData && allJobsData.data && allJobsData.data.data.map((items, i) =>
+                                        <Option key={i} value={items.id}>{items.name.name}</Option>)}
                                 </Select>
                                 {error.job_id && <span style={{ color: 'red' }}>{error.job_id}</span>}
                             </Form.Item>

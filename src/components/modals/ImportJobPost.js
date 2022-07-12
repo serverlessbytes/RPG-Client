@@ -20,9 +20,10 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
 
   //  CATEGORY
 
-  const readUploadFile = e => {
+  const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      seterror({ ...error, name: '' })
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -70,7 +71,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
 
   const handleOk = () => {
     if (validation()) {
-      return;
+      return
     }
     if (fileData) {
       fileData.forEach(e => {
@@ -97,7 +98,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
           width={'500px'}
         >
           <Form.Item name="name">
-            <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+            <Input placeholder="File upload" name="name" type="file" onChange={(e) => readUploadFile(e)} />
             {Error ? <span style={{ color: 'red' }}>{Error}</span> :
               error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
           </Form.Item>

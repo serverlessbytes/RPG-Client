@@ -144,7 +144,6 @@ const Schemes = () => {
   }, [schemeModulData])
 
   useEffect(() => {
-    console.log("schemeDataAdd", schemeDataAdd);
     if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
       toast.success("Scheme added");

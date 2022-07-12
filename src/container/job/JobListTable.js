@@ -5,8 +5,8 @@ import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { addJobPost, editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost } from '../../redux/jobs/actionCreator';
-import { useHistory, useRouteMatch } from 'react-router';
+import { getJobsFilterForMain } from '../../redux/jobs/actionCreator';
+import { useHistory } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -25,7 +25,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [filterData, setFilterData] = useState([]); //set data
   const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
-  const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [isAscend, setIsAscend] = useState(false);
@@ -91,14 +90,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const languageHandalOk = (languageIds, ids) => {
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
   }
-  // const addLanguageJobPost = (body, languageID) => {
-  //   ApiPost(`job/add?langId=${languageID}`, body)
-  //     .then((res) => {
-  //       console.log("res", res);
-  //       return dispatch(addJobPostSuccess(res))
-  //     })
-  //     .catch((err) => dispatch(addJobPostErr(err)))
-  // }
 
   const onDelete = async id => {
     let courseDataDelete =
