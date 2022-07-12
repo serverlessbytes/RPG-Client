@@ -58,7 +58,7 @@ const Admin = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -71,14 +71,15 @@ const Admin = () => {
                 id: adminDataForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: adminDataForDelete.avatar,
             };
             delete adminDataForDelete.userTakenRatings
-            // dispatch(editProfile(employerForDelete));
-            // getData();
+            console.log('adminDataForDelete',adminDataForDelete)
             const restoreActiveAdmin = await activeAdmin(id, adminDataForDelete);
             if (restoreActiveAdmin.status === 200) {
                 toast.success("Admin deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -99,6 +100,8 @@ const Admin = () => {
 
         if (restoreActiveAdmin.status === 200) {
             toast.success("Admin actived")
+        }else {
+            toast.error("Something went wrong")
         }
     };
 

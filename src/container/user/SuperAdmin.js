@@ -57,7 +57,7 @@ const SuperAdmin = () => {
           dispatch(getAllUser(perPage, pageNumber, status, type))
         }
         return res
-      })
+      }).catch(error => error)
     return newVal
   }
 
@@ -70,14 +70,17 @@ const SuperAdmin = () => {
         id: superAdminDataForDelete.id,
         isActive: false,
         isDeleted: true,
-        avatar: 'dfd',
+        avatar: superAdminDataForDelete.avatar ,
       };
       delete superAdminDataForDelete.userTakenRatings
+      console.log('superAdminDataForDelete', superAdminDataForDelete)
 
       const restoreActiveSuperAdmin = await activeSuperAdmin(id, superAdminDataForDelete);
       if (restoreActiveSuperAdmin.status === 200) {
         toast.success("Superadmin deleted")
-      }
+      }else {
+        toast.error("Something went wrong")
+    }
     }
   };
 
@@ -97,7 +100,9 @@ const SuperAdmin = () => {
     const restoreActiveSuperAdmin = await activeSuperAdmin(id, data);
     if (restoreActiveSuperAdmin.status === 200) {
       toast.success("Superadmin actived")
-    }
+    }else {
+      toast.error("Something went wrong")
+  }
   };
 
   useEffect(() => {

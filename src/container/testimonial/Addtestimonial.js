@@ -50,7 +50,8 @@ const Addtestimonial = () => {
     const validation = () => {
         let error = {};
         let flag = false;
-        let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+        // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+        let videoUrlReg = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})?$/
 
         if (data.name === "") {
             error.name = "Name is required";
@@ -110,33 +111,6 @@ const Addtestimonial = () => {
 
     }
 
-    // const fileUploadVideo = (e, name) => {
-
-    //     let firsttemp = e.target.files[0]?.name?.split('.');
-
-    //     if (firsttemp) {
-    //         let fileexten = ['mp4', 'mkv', 'avi', 'wmv', 'flv']
-    //         if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
-    //             setData({ ...data, [name]: e.target.files[0] })
-    //             setError({ ...error, videoUrl: "" });
-    //         }
-    //         else {
-    //             setError({ ...error, videoUrl: 'Please select valid document file' })
-    //             setData({ ...data, videoUrl: '' })
-    //         }
-    //     }
-    //     else {
-    //         setError({ ...error, videoUrl: 'Please select document file' })
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     if (location.search) {
-    //         dispatch(getoneTestimonialData(location.search.split('=')[1]))
-    //         // dispatch(getoneTestimonialData(id))
-    //     }
-    // }, [location.search])
-
     useEffect(() => {
         if (id) {
             dispatch(getoneTestimonialData(id))
@@ -150,8 +124,6 @@ const Addtestimonial = () => {
         let Data = {
             name: data.name,
             role: data.role,
-            // videoUrl : data.videoUrl,
-            // imageUrl :data.imageUrl,
             message: data.message,
         }
 

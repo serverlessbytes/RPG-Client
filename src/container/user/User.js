@@ -65,9 +65,11 @@ const User = () => {
             };
             delete userForDelete.userTakenRatings
             const restoreActiveUser = await activeUser(id, userForDelete);
-
+            console.log('restoreActiveUser', restoreActiveUser)
             if (restoreActiveUser.status === 200) {
                 toast.success("User deleted")
+            } else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -82,7 +84,7 @@ const User = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -94,7 +96,7 @@ const User = () => {
                 id: activeData.id,
                 isActive: true,
                 isDeleted: false,
-                avatar: 'dfd',
+                avatar:activeData.avatar,
             };
             delete activeData.userTakenRatings
         }
@@ -102,22 +104,24 @@ const User = () => {
 
         if (restoreActiveUser.status === 200) {
             toast.success("User actived")
+        } else {
+            toast.error("Something went wrong")
         }
     }
 
-    useEffect(()=>{
-        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+    useEffect(() => {
+        if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
-            toast.success("User Updated")
+            toast.success("User updated")
         }
-    },[editProfileData])
+    }, [editProfileData])
 
     useEffect(() => {
-        if(editProfileError){
+        if (editProfileError) {
             dispatch(editProfileErr(null))
             toast.error("Something went wrong")
         }
-    },[editProfileError])
+    }, [editProfileError])
 
     useEffect(() => {
         dispatch(getAllUser(perPage, pageNumber, status, type))
