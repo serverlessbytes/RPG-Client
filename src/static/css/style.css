@@ -2885,7 +2885,7 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 
 .group {
   border: 1px solid #ddd;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .ml-10 {

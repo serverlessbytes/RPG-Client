@@ -683,7 +683,7 @@ const SwayamCourses = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" value={data.search} name='Search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                      <Input placeholder="S earch" value={data.search} name='Search' onChange={e => onChangehandle(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>

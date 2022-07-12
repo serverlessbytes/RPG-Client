@@ -29,6 +29,9 @@ const SchemeRating = () => {
         rating: "",
         comment: ""
     });
+    const [error, setError] = useState({
+    })
+
 
     const schemeRatingData = useSelector((state) => state.scheme.schemeRatingData)
     const getOneSchemeRatingData = useSelector((state) => state.scheme.getOneSchemeRatingData)
@@ -41,7 +44,7 @@ const SchemeRating = () => {
     useEffect(() => {
         if (editSchemeRatingData && editSchemeRatingData.status === 200) {
             dispatch(editSchemeRatingSuccess(null))
-            toast.success('SchemeRating updated successful');
+            toast.success('Scheme rating updated ');
         }
     }, [editSchemeRatingData])
 
@@ -62,6 +65,18 @@ const SchemeRating = () => {
             });
         return newVal;
     };
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (!data.rating) {
+            error.rating = "rating is required";
+            flage = true;
+        }
+        if (!data.comment) {
+            error.comment = " comment is required";
+            flage = true;
+        }
+    }
 
     const onDelete = async id => {
         let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
@@ -76,12 +91,15 @@ const SchemeRating = () => {
             // dispatch(editSchemeRating(data))
             const deleteSchemeRating = await newScheme(data);
             if (deleteSchemeRating.status === 200) {
-                toast.success('SchemeRating deleted successful');
+                toast.success('Scheme rating deleted    ');
             }
         }
     }
 
     const onEdit = (id) => {
+        if (validation()) {
+            return
+        }
         setIsModalVisible(true)
         let schemeRatingForEdit = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
         if (schemeRatingForEdit) {
@@ -91,8 +109,10 @@ const SchemeRating = () => {
             dispatch(getOneSchemeRating(schemeRatingForEdit.id))
         }
     }
-
     const handleOk = () => {
+        if (validation()) {
+            return
+        }
         if (selectedSchemeRating) {
             let Data = {
                 id: selectedSchemeRating.id,
@@ -227,6 +247,7 @@ const SchemeRating = () => {
                                 value={data.rating}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.rating && <span style={{ color: 'red' }}>{error.rating}</span>}
                         </Form.Item>
                         <label htmlFor="Comment">Comment</label>
                         <Form.Item>
@@ -237,6 +258,7 @@ const SchemeRating = () => {
                                 value={data.comment}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.comment && <span style={{ color: 'red' }}>{error.comment}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

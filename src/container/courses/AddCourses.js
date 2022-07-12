@@ -87,8 +87,6 @@ const AddCourses = () => {
 
   //   }
   // }, [addSwayamCourseData])
-
-
   useEffect(() => {
     let temp = {
       hindi: '',
@@ -113,7 +111,7 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
+      course: '',
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: '',
       modifiedByUser: '',
@@ -135,6 +133,8 @@ const AddCourses = () => {
     //   dispatch(editSchemeSuccess(null))
     //   toast.success("Jobs Update successful");
     // }
+    // if (addSwayamCourseData && 'data' in addSwayamCourseData)
+    //   setModuleState({ ...moduleState, course: addSwayamCourseData.data.id })
   }, [addSwayamCourseData])
 
   // useEffect(() => {
@@ -223,20 +223,27 @@ const AddCourses = () => {
   const onChange = (e, name) => {
     if (name === 'categoryId') {
       setState({ ...state, [name]: e });
+      setError({ ...error, categoryId: "" })
     } else if (name === 'jobCategoryIds') {
       setState({ ...state, [name]: e });
+      setError({ ...error, jobCategoryIds: "" })
     } else if (name === 'duration') {
       setState({ ...state, [name]: e });
+      setError({ ...error, duration: "" })
     } else if (name === 'mode') {
       setState({ ...state, [name]: e });
+      setError({ ...error, mode: "" })
     } else if (name === 'sequence') {
       if (e.target.value > 0) {
         setState({ ...state, [e.target.name]: e.target.value });
+        setError({ ...error, [e.target.name]: "" })
       } else {
         setState({ ...state, [e.target.name]: 0 });
+        setError({ ...error, [e.target.name]: "" })
       }
     } else {
       setState({ ...state, [e.target.name]: e.target.value });
+      setError({ ...error, [e.target.name]: "" })
     }
   };
 
@@ -261,6 +268,8 @@ const AddCourses = () => {
 
   const onChangesEditorDetail = (e, name) => {
     setState({ ...state, [name]: e });
+    setError({ ...error, [name]: "" })
+
   };
 
   const validation = () => {
@@ -276,7 +285,7 @@ const AddCourses = () => {
       flage = true;
     }
     if (state.detail.toString('markdown').length <= 2) {
-      error.detail = 'Detail is required';
+      error.detail = 'Course detail is required';
       flage = true;
     }
     if (!state.duration) {
@@ -329,23 +338,23 @@ const AddCourses = () => {
     if (moduleState.length) {
       moduleState.map((item, i) => {
         if (item.name === '') {
-          error[`name${i + 1}`] = 'Enter module name';
+          error[`name${i + 1}`] = 'Module name required';
           flage = true;
         }
         if (item.videoUrl === '') {
-          error[`videoUrl${i + 1}`] = 'Enter video url';
+          error[`videoUrl${i + 1}`] = 'Video url required';
           flage = true;
         }
         if (item.duration === '') {
-          error[`duration${i + 1}`] = 'Enter module duration';
+          error[`duration${i + 1}`] = 'Module duration required';
           flage = true;
         }
         if (item.sequence === '') {
-          error[`sequence${i + 1}`] = 'Enter sequence';
+          error[`sequence${i + 1}`] = 'Squence required';
           flage = true;
         }
         if (item.detail === '') {
-          error[`detail${i + 1}`] = 'E  nter module detail';
+          error[`detail${i + 1}`] = 'Module detail required';
           flage = true;
         }
       });
@@ -378,7 +387,7 @@ const AddCourses = () => {
   useEffect(() => {
     if (addSwayamCourseData?.status === 200) {
       setDefaultSelect('2')
-      toast.success("Add swayamCoures Successfully")
+      toast.success("SwayamCoures added")
     }
   }, [addSwayamCourseData])
 
@@ -410,7 +419,6 @@ const AddCourses = () => {
 
   const addData = () => {
     let val = [...moduleState];
-    console.log("val", val);
     val.push({
       key: uuid(),
       name: '',
@@ -432,20 +440,20 @@ const AddCourses = () => {
     if (name === 'name') {
       value[i].name = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, name: "" })
     } else if (name === 'videoUrl') {
       value[i].videoUrl = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, videoUrl: "" })
     } else if (name === 'duration') {
       value[i].duration = e;
       setModuleState(value);
+      setModuleError({ ...moduleError, duration: "" })
     }
-    // else if (name === 'sequence') {
-    //   value[i].sequence = e.target.value;
-    //   setModuleState(value);
-    // } 
     else if (name === 'detail') {
       value[i].detail = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, detail: "" })
     }
   };
 
@@ -460,7 +468,7 @@ const AddCourses = () => {
         detail: item.detail,
         duration: moment(item.duration).format('HH:mm:ss'),
         videoUrl: item.videoUrl,
-        course: item.course,
+        course: id ? id : addSwayamCourseData.data.id,
         language: item.language,
         createdByUser: item.createdByUser,
         modifiedByUser: item.modifiedByUser,
@@ -533,17 +541,17 @@ const AddCourses = () => {
   return (
     <>
       <PageHeader ghost
-        title={id ? "Edit Swayam Courses" : "Add Swayam Courses"} />
+        title={id ? "Edit swayam courses" : "Add swayam courses"} />
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>
-            <TabPane tab="Course Details" key="1">
+            <TabPane tab="Course details" key="1">
               <Row justify="space-between">
                 <Col lg={11} md={11} sm={24} xs={24}>
-                  <label htmlFor="name">Name of the Course</label>
+                  <label htmlFor="name">Name of the course</label>
                   <Form.Item>
                     <Input
-                      placeholder="Course Name"
+                      placeholder="Course name"
                       value={state.name}
                       onChange={e => {
                         onChange(e);
@@ -556,17 +564,18 @@ const AddCourses = () => {
 
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item name="basic-select" label="Course Category">
+                    <Form.Item name="basic-select" label="Course category">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                        className={state.categoryId ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                         onChange={e => {
                           onChange(e, 'categoryId');
                         }}
                         value={state.categoryId}
                         name="categoryId"
-                        placeholder="Select Category"
+                        placeholder="Select course category"
                       >
+                        <Option value="">Select course category</Option>
                         {categoryData &&
                           categoryData.data &&
                           categoryData.data.map((item, i) => (
@@ -582,14 +591,14 @@ const AddCourses = () => {
 
                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item label="Course Duration">
+                    <Form.Item label="Course duration">
                       <TimePicker
                         name="duration"
                         value={state.duration}
                         onChange={e => {
                           onChange(e, 'duration');
                         }}
-                        placeholder="Course Duration"
+                        placeholder="Course duration"
                       />
                       {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                     </Form.Item>
@@ -597,7 +606,7 @@ const AddCourses = () => {
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
-                  <Form.Item label="Job Category">
+                  <Form.Item label="Job category">
                     <Select
                       size="large"
                       mode="multiple"
@@ -606,7 +615,7 @@ const AddCourses = () => {
                         onChange(e, 'jobCategoryIds');
                       }}
                       className="sDash_fullwidth-select"
-                      placeholder="Select Category"
+                      placeholder="Job category"
                     >
                       {jobCategoryData &&
                         jobCategoryData.data &&
@@ -631,7 +640,7 @@ const AddCourses = () => {
                         fileUpload(e, 'thumbnail');
                       }}
                       name="thumbnail"
-                      placeholder="Enter thumbnail"
+                      placeholder="Thumbnail"
                     />
                     {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                   </Form.Item>
@@ -647,9 +656,9 @@ const AddCourses = () => {
                         onChange={e => {
                           onChange(e, 'mode');
                         }}
-                        className="sDash_fullwidth-select"
+                        className={state.mode ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                         placeholder="Select mode"
-                      >
+                      > <Option value="">Select mode</Option>
                         <Option value="ONLINE"> Online </Option>
                         <Option value="OFFLINE"> Offline </Option>
                         <Option value="BOTH"> Both </Option>
@@ -682,56 +691,56 @@ const AddCourses = () => {
 
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
-                    Application Form
+                    Application form
                   </label>
                   <Form.Item name="application_form">
-                    <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChange(e, "application_form")} />
+                    <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChange(e, "application_form")} />
                     {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
                   </Form.Item>
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
-                    Recommended and Forwarded
+                    Recommended and forwarded
                   </label>
                   <Form.Item name="recommended_and_forwarded">
-                    <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChange(e, "recommended_and_forwarded")} />
+                    <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChange(e, "recommended_and_forwarded")} />
                     {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
                   </Form.Item>
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
-                    Application Process
+                    Application process
                   </label>
                   <Form.Item name="application_process">
-                    <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChange(e, "application_process")} />
+                    <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChange(e, "application_process")} />
                     {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
                   </Form.Item>
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
-                    Medical Superintendent
+                    Medical superintendent
                   </label>
                   <Form.Item name="medical_superintendent">
-                    <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChange(e, "medical_superintendent")} />
+                    <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChange(e, "medical_superintendent")} />
                     {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
                   </Form.Item>
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="hospital_expenses_estimation_certificate" className="mb-5">
-                    Hospital Expenses Estimate Certificate
+                    Hospital expenses estimate certificate
                   </label>
                   <Form.Item name="hospital_expenses_estimation_certificate">
-                    <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChange(e, "hospital_expenses_estimation_certificate")} />
+                    <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChange(e, "hospital_expenses_estimation_certificate")} />
                     {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
                   </Form.Item>
                 </Col>
               </Row>
 
-              <label htmlFor="coursedetails">Course Details</label>
+              <label htmlFor="coursedetails">Course details</label>
               <div className="group">
                 <RichTextEditor
                   placeholder="Type your message..."
@@ -770,13 +779,13 @@ const AddCourses = () => {
                     <TabPane tab={`Module ${i + 1}`} key={`${i + 1}`}>
                       <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
-                          <label htmlFor="name">Name of the Module</label>
+                          <label htmlFor="name">Name of module</label>
                           <Form.Item>
                             <Input
                               name="name"
                               value={item.name}
                               onChange={e => moduleChange(e, i, 'name')}
-                              placeholder="Name of the Module"
+                              placeholder="Name of module"
                             />
                             {moduleError && moduleError[`name${i + 1}`] && (
                               <label style={{ color: 'red' }}>{moduleError[`name${i + 1}`]}</label>
@@ -784,10 +793,10 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
-                          <label htmlFor="videourl">Video URL</label>
+                          <label htmlFor="videourl">Video url</label>
                           <Form.Item>
                             <Input
-                              placeholder="Video URL"
+                              placeholder="Video url"
                               name="videoUrl"
                               onChange={e => moduleChange(e, i, 'videoUrl')}
                               value={item.videoUrl}
@@ -798,7 +807,7 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
-                          <label htmlFor="moduleduration">Module Duration</label>
+                          <label htmlFor="moduleduration">Module duration</label>
                           <Form.Item>
                             <TimePicker
                               name="duration"
@@ -827,7 +836,7 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col> */}
                         <Col lg={24}>
-                          <label htmlFor="detail">Module Detail</label>
+                          <label htmlFor="detail" className='module_detail'>Module detail</label>
                           <Form.Item>
                             <TextArea name="detail" onChange={e => moduleChange(e, i, 'detail')} value={item.detail} />
                             {moduleError && moduleError[`detail${i + 1}`] && (

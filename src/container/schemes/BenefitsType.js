@@ -46,15 +46,13 @@ const BenefitsType = () => {
         if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status === 200) {
             dispatch(addSchemeBenefitBulkSuccess(null))
             toast.success("Scheme imported ");
-        } else if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status !== 200) {
-            toast.error("Something went wrong");
         }
     }, [addSchemeBenefitBulkData])
 
     useEffect(() => {
         if (addSchemeBenefitBulkError) {
             dispatch(addSchemeBenefitBulkErr(null))
-            toast.error("Something went wrongs");
+            toast.error("Benifit already exists");
         }
     }, [addSchemeBenefitBulkError])
 
@@ -75,7 +73,7 @@ const BenefitsType = () => {
     useEffect(() => {
         if (postBenefitsError) {
             dispatch(postBenefitsErr(null))
-            toast.error("Something went wrong");
+            toast.error("Benifit already exists");
         }
     }, [postBenefitsError])
 
@@ -167,6 +165,9 @@ const BenefitsType = () => {
 
     const handleOk = () => {
         let data = form.getFieldsValue() //get value from form field
+        if (validation(data)) {
+            return
+        }
         if (dataForEdit) {
             //delete data.key;
             data = {
@@ -179,9 +180,6 @@ const BenefitsType = () => {
         }
         else {
             let data = form.getFieldsValue()
-            if (validation(data)) {
-                return
-            }
             data = {
                 ...data,
                 key: uuid()
@@ -315,7 +313,7 @@ const BenefitsType = () => {
             {
                 <ImportSchemeBenefits
                     importModal={importModal}
-                    modaltitle="Import scheme-benefits"
+                    modaltitle="Import scheme benefits"
                     handleCancel={() => setImportModal(false)}
                 />
             }

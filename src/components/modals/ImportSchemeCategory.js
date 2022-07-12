@@ -1,6 +1,6 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { addSchemeCategoryInBulk } from '../../redux/schemes/actionCreator';
 
@@ -9,11 +9,16 @@ const ImportSchemeCategory = ({ importModal, handleCancel, modaltitle }) => {
   const [Error, setError] = useState();
   const [error, seterror] = useState({}); // for valadation
   const [FileData, setFileData] = useState();
+  const [input, setInput] = useState('');
+
+
 
   const readUploadFile = e => {
+    setError('');
+    setError('');
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
-      setError('');
       const file = e.target.files[0];
+      setInput(e?.target?.value)
       const reader = new FileReader();
       reader.readAsBinaryString(file);
       reader.onload = event => {
@@ -62,28 +67,29 @@ const ImportSchemeCategory = ({ importModal, handleCancel, modaltitle }) => {
     if (validation()) {
       return;
     }
-    
     if (FileData) {
       dispatch(addSchemeCategoryInBulk(FileData));
+      setFileData(null)
+      setInput('')
       handleCancel();
     }
   };
 
   return (
     <>
-      <Col md={10}>
+      <Col md={24}>
         <Modal
           type="primary"
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
-          onCancel={handleCancel}
+          onCancel={() => { setInput(''); setError(''); seterror(''); setFileData(''); handleCancel() }}
           width={'500px'}
         >
           <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} >
               <Form.Item name="name">
-                <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                <Input placeholder="File upload" value={input} name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>

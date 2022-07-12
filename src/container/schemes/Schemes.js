@@ -347,7 +347,7 @@ const Schemes = () => {
     //   };
     const deleteSchemes = await newSchemes(formData)
     if (deleteSchemes.status === 200) {
-      toast.success("Schemes delete successfully")
+      toast.success("Scheme deleted")
     }
   }
 

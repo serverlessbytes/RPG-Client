@@ -89,18 +89,12 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const convertToJson = csv => {
     var lines = csv.split('\n');
-    console.log("lines", lines);
     var result = [];
-    console.log("result", result);
     var headers = lines[0].split(',');
-    console.log("headers", headers);
 
     for (var i = 1; i < lines.length - 1; i++) {
       var obj = {};
-      console.log("obj", obj);
       var currentline = lines[i].split(',');
-      console.log("currentline", currentline);
-
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
@@ -159,28 +153,28 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   return (
     <>
-      <Col md={16}>
+      <Col md={24}>
         <Modal
           type="primery"
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={'991px'}
+          width={'600px'}
         >
           <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} lg={24} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
-            <Col md={12} xs={24} className="mb-25">
-              {/* <Button onClick={() => {}} type="primary">
+            {/* <Col md={12} xs={24} className="mb-25"> */}
+            {/* <Button onClick={() => {}} type="primary">
                 Import
               </Button> */}
-            </Col>
+            {/* </Col> */}
             {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Scheme Category">
@@ -222,7 +216,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
           </Row>
 
           <Row>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} lg={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Select locations">
                   <Select

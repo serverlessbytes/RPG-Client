@@ -95,7 +95,6 @@ const SchemeCategory = () => {
         }
         setnameTod(true)
     }
-
     const newSchemeCategory = dataForEdit => {
         const newVal = ApiPost("scheme/editSchemeCategory", dataForEdit)
             .then((res) => {
@@ -176,10 +175,10 @@ const SchemeCategory = () => {
 
     const handleOk = () => {
         let data = form.getFieldsValue()
+        if (validation(data)) {
+            return
+        }
         if (!selectedSchemeCategory) {
-            if (validation(data)) {
-                return
-            }
             data = {
                 ...data,
                 key: uuid()
@@ -202,7 +201,6 @@ const SchemeCategory = () => {
         setnameTod(false)
         handleCancel()
     };
-
     const schemeTableColumns = [
         {
             title: 'Scheme category',
