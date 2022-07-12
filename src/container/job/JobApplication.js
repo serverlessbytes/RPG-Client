@@ -1,14 +1,11 @@
-import { Button, Checkbox, Col, Form, Row, Select, Table, Tabs } from 'antd';
+import { Button, Col, Form, Row, Select, Table, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import SampleCardSix from '../../components/cards/sampleCard/SampleCardSix';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { cardSix } from '../../demoData/sampleCards.json';
 import { getJobApplication, getJobroles, getJobcategory, updateIsSelectedJobApplication, updateIsHired } from '../../redux/jobs/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
-import FeatherIcon from 'feather-icons-react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,7 +14,6 @@ import actions from "../../redux/jobs/actions";
 const JobApplication = () => {
 
     const dispatch = useDispatch();
-    const { path } = useRouteMatch();
     const history = useHistory();
     const { addJobApplicationSuccess, addJobApplicationErr } = actions;
     const { TabPane } = Tabs;
@@ -104,7 +100,7 @@ const JobApplication = () => {
 
     useEffect(() => {
         if (getJobApplicationData && getJobApplicationData.data) {
-            setjobApplicatiobtable(getJobApplicationData?.data?.data?.map(item => {
+            setjobApplicatiobtable(getJobApplicationData?.data?.data?.map((item, i) => {
                 return ({
                     name: item.user_details.name,
                     email: item.user_details.email,
@@ -202,7 +198,7 @@ const JobApplication = () => {
         },
     ];
 
-    
+
     return (
         <>
             <PageHeader
@@ -232,8 +228,8 @@ const JobApplication = () => {
                                         <Form.Item label="Job role">
                                             <Select size="large" name="jobRole" value={jobApplication.jobRole} placeholder="Select job role" onChange={(e) => onChangeHandle(e, 'jobRole')} >
                                                 <Option value="">Select job role</Option>
-                                                {jobRolesData && jobRolesData.map((items) => (
-                                                    <Option value={items.id}>{items.name} </Option>
+                                                {jobRolesData && jobRolesData.map((items, i) => (
+                                                    <Option key={i} value={items.id}>{items.name} </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -244,8 +240,8 @@ const JobApplication = () => {
                                         <Form.Item label="Job category">
                                             <Select size="large" name="jobCategory" value={jobApplication.jobCategory} placeholder="Select Job Category" onChange={(e) => onChangeHandle(e, 'jobCategory')} >
                                                 <Option value="">Select job category</Option>
-                                                {jobcatogerydata && jobcatogerydata.data.map((items) => (
-                                                    <Option value={items.id}>{items.name} </Option>
+                                                {jobcatogerydata && jobcatogerydata.data.map((items, i) => (
+                                                    <Option key={i} value={items.id}>{items.name} </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>

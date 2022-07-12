@@ -3,16 +3,17 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import PropTypes from 'prop-types';
 import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
-import { ListButtonSizeWrapper} from '../styled';
+import { ListButtonSizeWrapper } from '../styled';
+import { ListButtonSizeWrapper } from '../styled';
 import { Col, Form, Row, Select, Tabs, Input } from 'antd';
 import JobListTable from './JobListTable';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { allJobs, getJobroles, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
+import { getJobroles, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData } from '../../redux/state/actionCreator';
 import { CSVLink } from 'react-csv';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/jobs/actions';
@@ -30,8 +31,8 @@ const JobPost = () => {
     const CSVLinkRef = useRef(null);
     const CSVLinkRefAll = useRef(null);
 
-    const [stateJob, setStateJob] = useState([]); //set data for job
-    const [stateJobAll, setStateJobAll] = useState([]); //set data for job
+    const [stateJob, setStateJob] = useState([]);
+    const [stateJobAll, setStateJobAll] = useState([]);
     const [apply, setApply] = useState(false);
     const [state, setState] = useState('');
     const [type, setType] = useState('');
@@ -42,7 +43,7 @@ const JobPost = () => {
     const [pagePer, setPagePer] = useState(20);
     const [numberOfPage, setNumberOfPage] = useState(1);
     const [importModal, setImportModal] = useState(false);
-    const [perPage, setPerPage] = useState(20); // forpagination
+    const [perPage, setPerPage] = useState(20);
     const [pageNumber, setPageNumber] = useState(1);
     const [langIds, setLangIds] = useState({
         hindi: "",
@@ -51,8 +52,7 @@ const JobPost = () => {
 
     const languageData = useSelector(state => state.language.getLanguageData);
     const jobRolesData = useSelector(state => state.job.jobRoleData);
-    const allJobsData = useSelector(state => state.job.allJobs);
-    const stateData = useSelector(state => state.state.getStateData); //state
+    const stateData = useSelector(state => state.state.getStateData);
     const filterData = useSelector(state => state.job.getJobFilterData);
     const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
 
@@ -125,52 +125,52 @@ const JobPost = () => {
 
     const onChangevalue = (e, name) => {
         if (name === 'type') {
-            setType({ ...type, type: e });
+            setType({ type: e });
         } else if (name === 'jobRole') {
-            setJobRole({ ...jobRole, jobRole: e });
+            setJobRole({ jobRole: e });
         } else if (name === 'state') {
-            setState({ ...jobRole, state: e });
+            setState({ state: e });
         } else if (name === "search") {
             setSearch(e)
         }
     };
 
-    const callback = key => {
+    const callback = (key) => {
         setStatus(key);
         setExportTog(false);
     };
 
     const allexPortJobs = () => {
         ApiPost(`job/allJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-            .then(res => {
+            .then((res) => {
                 setStateJobAll(
-                    res?.data?.data.map(item => {
+                    res && res.data && res.data.data && res.data.data.length > 0 ? res.data.data.map((item) => {
                         return {
                             ...item,
-                            jobRole: item?.jobRole?.name,
-                            district: item?.district?.name,
-                            jobType: item?.jobType?.name,
-                            shifts: item?.shifts ? item?.shifts[0] : '',
-                            state: item?.state?.name,
-                            name: item?.name?.name,
-                            application_form: item?.application_form,
-                            application_process: item?.application_process,
-                            hospital_expenses_estimation_certificate: item?.hospital_expenses_estimation_certificate,
-                            medical_superintendent: item?.medical_superintendent,
-                            recommended_and_forwarded: item?.recommended_and_forwarded,
+                            jobRole: item.jobRole?.name,
+                            district: item.district?.name,
+                            jobType: item.jobType?.name,
+                            shifts: item.shifts ? item?.shifts[0] : '',
+                            state: item.state?.name,
+                            name: item.name?.name,
+                            application_form: item.application_form,
+                            application_process: item.application_process,
+                            hospital_expenses_estimation_certificate: item.hospital_expenses_estimation_certificate,
+                            medical_superintendent: item.medical_superintendent,
+                            recommended_and_forwarded: item.recommended_and_forwarded,
                         };
-                    }),
+                    }) : [],
                 );
                 setExportTog("all");
             });
     };
 
-    const onClear = (e) => {
+    const onClear = () => {
         setType({ type: '' });
         setJobRole({ jobRole: '' });
         setState({ state: '' });
         setSearch(''),
-            setApply(!apply);
+            setApply(false);
     };
 
     const onClick = ({ key }) => {
@@ -209,8 +209,6 @@ const JobPost = () => {
                 pagePer, numberOfPage, state?.state ? state?.state : '', type?.type ? type?.type : '', jobRole?.jobRole ? jobRole?.jobRole : '', status, search, langIds.hindi, langIds.marathi),
         );
         setExportTog('single');
-
-        // CSVLinkRef?.current?.link.click()
     };
 
     useEffect(() => {
@@ -218,8 +216,7 @@ const JobPost = () => {
             toast.success("Job import")
             dispatch(addBlukJobsSuccess(null));
             dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
-        }
-        if (addJobPostModulData && addJobPostModulData.status !== 200) {
+        } else if (addJobPostModulData && addJobPostModulData.status !== 200) {
             toast.error("Somthing went wrong")
             dispatch(addBlukJobsSuccess(null))
         }
@@ -227,10 +224,8 @@ const JobPost = () => {
 
     useEffect(() => {
         dispatch(getJobroles());
-    }, []);
-
-    useEffect(() => {
-        dispatch(getStateData()); //dipatch state
+        dispatch(getStateData());
+        dispatch(allJobsSuccess(null));
     }, []);
 
     useEffect(() => {
@@ -245,11 +240,7 @@ const JobPost = () => {
         } else if (!stateJob.length && exportTog) {
             toast.success('No data for export');
         }
-    }, [exportTog]); //
-
-    useEffect(() => {
-        dispatch(allJobsSuccess(null));
-    }, []);
+    }, [exportTog]);
 
     useEffect(() => {
         if (filterData?.data?.data) {
@@ -271,7 +262,6 @@ const JobPost = () => {
                     };
                 }),
             );
-            //set a state
         }
     }, [filterData]);
 
@@ -434,7 +424,7 @@ const JobPost = () => {
 
                                 <Col md={4} xs={24} className="mb-25">
                                     <ListButtonSizeWrapper>
-                                        <Button size="small" type="primary" onClick={e => {
+                                        <Button size="small" type="primary" onClick={() => {
                                             setApply(!apply);
                                             setExportTog(false);
                                         }}>
@@ -481,11 +471,7 @@ const JobPost = () => {
                     </Row>
                 </Cards>
             </Main>
-
-            { importModal && < ImportJobPost
-                importModal={importModal}
-                handleCancel={() => setImportModal(false)}
-                modaltitle="Import Jobs" />}
+            {importModal && <ImportJobPost importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Jobs" />}
         </>
     );
 }
