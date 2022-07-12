@@ -6,7 +6,6 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { Main } from '../styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
-import { addUserSignup, editProfile, getOneUser } from '../../redux/users/actionCreator';
 import { addJobApplication, allJobs } from '../../redux/jobs/actionCreator';
 
 const AddJobApplication = () => {
@@ -54,10 +53,8 @@ const AddJobApplication = () => {
         }
         if (name === 'experience') {
             if (e.target.value > 0) {
-                console.log('e if', e.target.value)
                 setJobApplication({ ...jobApplication, [e.target.name]: e.target.value })
             } else {
-                console.log('e else', e.target.value)
                 setJobApplication({ ...jobApplication, [e.target.name]: 0 })
             }
             setError({ ...error, [e.target.name]: "" })
@@ -72,7 +69,6 @@ const AddJobApplication = () => {
             setError({ ...error, job_id: "" })
         }
     }
-
 
     const onFileSelecte = (e, name) => {
         let extensions = e.target.files[0].name?.split('.')
@@ -157,7 +153,6 @@ const AddJobApplication = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="resume_url">Resume</label>
                             <Form.Item>
-                                {/* <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onChangeValue(e)} /> */}
                                 <Input type="file" placeholder="Resume URL" name="resume_url" onChange={(e) => onFileSelecte(e, "resume_url")} />
                                 {
                                     error.resume_url && <span style={{ color: "red" }}>{error.resume_url}</span>
@@ -198,7 +193,7 @@ const AddJobApplication = () => {
                             <Form.Item >
                                 <Select
                                     size="large"
-                                    placeholder="Select Job"
+                                    placeholder="Select job"
                                     className="sDash_fullwidth-select"
                                     name="job_id"
                                     onChange={e => selectValue(e, 'job_id')}

@@ -76,7 +76,7 @@ const SuperAdmin = () => {
 
       const restoreActiveSuperAdmin = await activeSuperAdmin(id, superAdminDataForDelete);
       if (restoreActiveSuperAdmin.status === 200) {
-        toast.success("SuperAdmin Delete successful")
+        toast.success("Superadmin deleted")
       }
     }
   };
@@ -96,21 +96,21 @@ const SuperAdmin = () => {
 
     const restoreActiveSuperAdmin = await activeSuperAdmin(id, data);
     if (restoreActiveSuperAdmin.status === 200) {
-      toast.success("SuperAdmin Active successful")
+      toast.success("Superadmin actived")
     }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("SuperAdmin Update successful")
+      toast.success("Superadmin updated")
     }
   }, [editProfileData])
 
   useEffect(() => {
     if (editProfileError) {
       dispatch(editProfileErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [editProfileError])
 

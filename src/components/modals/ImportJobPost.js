@@ -36,6 +36,7 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       };
     } else {
       setError('Please select valid file');
+
     }
   };
 

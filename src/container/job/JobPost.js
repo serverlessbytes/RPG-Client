@@ -3,8 +3,8 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import PropTypes from 'prop-types';
 import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
-import { ListButtonSizeWrapper, TableWrapper } from '../styled';
-import { Col, Form, Row, Badge, Select, Tabs, Input } from 'antd';
+import { ListButtonSizeWrapper} from '../styled';
+import { Col, Form, Row, Select, Tabs, Input } from 'antd';
 import JobListTable from './JobListTable';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -18,7 +18,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/jobs/actions';
 import { toast } from 'react-toastify';
 import ImportJobPost from '../../components/modals/ImportJobPost';
-import { Menu, Dropdown, message, Space } from 'antd';
+import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 const JobPost = () => {
@@ -482,7 +482,7 @@ const JobPost = () => {
                 </Cards>
             </Main>
 
-            {< ImportJobPost
+            { importModal && < ImportJobPost
                 importModal={importModal}
                 handleCancel={() => setImportModal(false)}
                 modaltitle="Import Jobs" />}

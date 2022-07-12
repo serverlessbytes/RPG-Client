@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Col, Form, Input, Modal, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBanner, editBanner, GetBanner, getOneBanner } from '../../redux/banner/actionCreator';
 import { Main, TableWrapper } from '../styled';
@@ -59,8 +59,6 @@ const Banner = () => {
                 setFormErrors({ ...formErrors, imageUrl: "" });
             }
             else {
-                // setData({...data,
-                // })
                 setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
                 setData({ ...data, imageUrl: '' })
                 // setFileError('Please select valid document file')
@@ -78,45 +76,45 @@ const Banner = () => {
     useEffect(() => {
         if (addBulkbannerData && addBulkbannerData.status === 200) {
             dispatch(addBulkBannerSuccess(null))
-            toast.success("Import Banner successful")
+            toast.success("Import banner")
         }
         else if (addBulkbannerData && addBulkbannerData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkbannerData])
 
     useEffect(() => {
         if (addBulkbannerErr) {
             dispatch(addBulkBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkbannerErr])
 
     useEffect(() => {
         if (addBannerdata && addBannerdata.status === 200) {
             dispatch(addBannerSuccess(null))
-            toast.success("Banner added successfully")
+            toast.success("Banner added")
         }
     }, [addBannerdata])
 
     useEffect(() => {
         if (addBannerError) {
             dispatch(addBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBannerError])
 
     useEffect(() => {
         if (editBannerdata && editBannerdata.status === 200) {
             dispatch(editBannerSuccess(null))
-            toast.success("Banner updated successfully")
+            toast.success("Banner updated")
         }
     }, [editBannerdata])
 
     useEffect(() => {
         if (editBannerError) {
             dispatch(editBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editBannerError])
 
@@ -244,7 +242,7 @@ const Banner = () => {
 
             const deletebanner = await newBanner(userForDelete)
             if (deletebanner.status === 200) {
-                toast.success("Banner deleted successfully")
+                toast.success("Banner deleted")
             }
         }
     }
@@ -332,18 +330,6 @@ const Banner = () => {
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {schemeCategoryTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 

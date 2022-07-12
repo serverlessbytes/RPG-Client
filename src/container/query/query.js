@@ -54,33 +54,33 @@ const query = () => {
     useEffect(() => {
         if (addQueriesData && addQueriesData.status === 200) {
             dispatch(addQueriesSuccess(null))
-            toast.success("Query added successfully")
+            toast.success("Query added")
         }
         else if (addQueriesData && addQueriesData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addQueriesData])
 
     useEffect(() => {
         if (addQuerieError) {
             dispatch(addQueriesErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addQuerieError])
 
     useEffect(() => {
         if (editQueriesData && editQueriesData.status === 200) {
             dispatch(editQueriesSuccess(null))
-            toast.success("Query updated successfully")
+            toast.success("Query updated")
         } else if (editQueriesData && editQueriesData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editQueriesData])
 
     useEffect(() => {
         if (editQuerieError) {
             dispatch(editQueriesErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editQuerieError])
 
@@ -177,6 +177,7 @@ const query = () => {
         })
         setSelectedQuery(null)
         setNameTog(false)
+        setFormErrors("");
     };
 
     const onEdit = (id) => {
@@ -219,10 +220,10 @@ const query = () => {
 
             const deleteQuery = await newQuery(userForDelete)
             if (deleteQuery.status === 200) {
-                toast.success("Query deleted successfully")
+                toast.success("Query deleted")
             }
             else if (deletebanner.status !== 200) {
-                toast.error("Something Wrong")
+                toast.error("Something went wrong")
             }
         }
     }
@@ -243,7 +244,7 @@ const query = () => {
         const restoreQuery = await newQuery(data);
 
         if (restoreQuery.status === 200) {
-            toast.success("Query actived successfully")
+            toast.success("Query actived")
         }
     };
 
