@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Form, Input, Modal, Table } from 'antd';
@@ -20,19 +21,20 @@ const Carousel = () => {
   const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr, addBulkCarouselSuccess, addBulkCarouselErr } = actions;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [carouselTableData, setcarouselTableData] = useState();
+  const [carouselTableData, setCarouselTableData] = useState([]);
   const [selectedCarousel, setSelectedCarousel] = useState(); // for edit
   const [nameTod, setNameTod] = useState(false);
-  const [data, setData] = useState({
-    title: '',
-    imageUrl: '',
-  });
+
   const [perPage, setPerPage] = useState(20)
   const [pageNumber, setPageNumber] = useState(1)
   const [importModel, setImportModel] = useState(false);
   const [formErrors, setFormErrors] = useState();
+  const [data, setData] = useState({
+    title: '',
+    imageUrl: '',
+  });
 
-  const getCarouseldata = useSelector(state => state.carousel.getCarouselData);
+  const getCarouselData = useSelector(state => state.carousel.getCarouselData);
   const getOneCarouselData = useSelector(state => state.carousel.getOneCarouselData);
   const addCarouseldata = useSelector(state => state.carousel.addCarouselData);
   const addCarouselError = useSelector(state => state.carousel.addCarouselError);
@@ -168,7 +170,7 @@ const Carousel = () => {
   }, [getOneCarouselData]);
 
   const onEdit = id => {
-    let dataForEdit = getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.find(item => item.id === id);
+    let dataForEdit = getCarouselData && getCarouselData.data && getCarouselData.data.data.find(item => item.id === id);
     if (dataForEdit) {
       setSelectedCarousel(dataForEdit);
     }
@@ -227,7 +229,7 @@ const Carousel = () => {
   };
 
   const onDelete = async id => {
-    let dataForDelete = getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.find(item => item.id === id);
+    let dataForDelete = getCarouselData && getCarouselData.data && getCarouselData.data.data.find(item => item.id === id);
     if (dataForDelete) {
       let userForDelete = {
         id: dataForDelete.id,
@@ -276,7 +278,7 @@ const Carousel = () => {
       }),
       );
     }
-  }, [getCarouseldata]);
+  }, [getCarouselData]);
 
   const carouselTableColumns = [
     {
@@ -324,9 +326,9 @@ const Carousel = () => {
                 dataSource={carouselTableData}
                 columns={carouselTableColumns}
                 pagination={{
+                  defaultPageSize: getCarouselData?.data.per_page,
+                  total: getCarouselData?.data.page_count,
                   showSizeChanger: true,
-                  defaultPageSize: getCarouseldata?.data.per_page,
-                  total: getCarouseldata?.data.page_count,
                   onChange: (page, pageSize) => {
                     setPageNumber(page);
                     setPerPage(pageSize);
