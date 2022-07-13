@@ -7,7 +7,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addJobcategory, editJobcategory, getJobcategory, getJobroles, addJobrole, editJobrole } from '../../redux/jobs/actionCreator';
+import { getJobcategory, getJobroles, addJobrole, editJobrole } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/jobs/actions';
@@ -22,13 +22,9 @@ const JobRole = () => {
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [importModal, setImportModel] = useState(false);
-    const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [jobRolesTableData, setJobRolesTableData] = useState([]);
-    const [selectedJobRole, setSelectedJobCategory] = useState();
-    const [isDisabled, setIsDisabled] = useState(true);
+    const [selectedJobRole, setSelectedJobCategory] = useState('');
     const [nameTog, setNameTog] = useState(false)
-    const [jobCategoryId, setJobCategoryId] = useState('')
-    const [name, setName] = useState('')
     const [error, setError] = useState('')
 
     const { users } = useSelector(state => {
@@ -96,27 +92,20 @@ const JobRole = () => {
         dispatch(getJobroles());
     }, [])
 
-    useEffect(() => {
-        if (!isModalVisible) {
-            setIsDisabled(true)
-        }
-    }, [isModalVisible])
-
     const onEdit = (id) => {
         let dataForEdit = jobRolesData && jobRolesData.find((item) => item.id === id)
         if (dataForEdit) {
-            setSelectedJobCategory(dataForEdit)
+            setSelectedJobCategory(dataForEdit.id)
             form.setFieldsValue({
                 name: dataForEdit.name,
                 jobCategoryId: dataForEdit.jobType.name,
             })
             setIsModalVisible(true);
-            setIsDisabled(false);
             setNameTog(true)
         }
     }
 
-    const newJobRole = dataForDelete => {
+    const newJobRole = (dataForDelete) => {
         const newVal = ApiPost("job/editRole", dataForDelete)
             .then((res) => {
                 if (res.status === 200) {
@@ -140,19 +129,12 @@ const JobRole = () => {
                     isActive: false,
                     isDeleted: true
                 }
-            // dispatch(editJobrole(dataForDelete))
             const deleteJobRole = await newJobRole(dataForDelete)
             if (deleteJobRole.status === 200) {
                 toast.success("Job role deleted")
             }
         }
     }
-
-    useEffect(() => {
-        if (jobData && jobData.Data) {
-            setJobCategoryTableData(jobData.Data)
-        }
-    }, [])
 
     useEffect(() => {
         if (jobRolesData && jobRolesData.length > 0) {
@@ -191,12 +173,12 @@ const JobRole = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setSelectedJobCategory('')
         setNameTog(false)
         setError("")
     };
 
     const validation = (data) => {
-
         let error = {};
         let flag = false;
 
@@ -213,31 +195,27 @@ const JobRole = () => {
     }
 
     const handleOk = () => {
-
         let data = form.getFieldsValue()
+        if (validation(data)) {
+            return
+        }
         if (!selectedJobRole) {
-            if (validation(data)) {
-                return
-            }
-            setName(data.name)
-            setJobCategoryId(data.jobCategoryId)
             data = {
                 ...data,
                 key: uuid()
             }
             dispatch(addJobrole(data))
         } else {
-            delete selectedJobRole.key
             data = {
-                jobId: selectedJobRole.id,
+                jobId: selectedJobRole,
                 name: data.name,
                 isActive: true,
                 isDeleted: false
             }
             dispatch(editJobrole(data))
+            setSelectedJobCategory('')
         }
         form.resetFields()
-        setSelectedJobCategory()
         setIsModalVisible(false);
         setNameTog(false)
     };
@@ -291,7 +269,6 @@ const JobRole = () => {
             <Modal title="Job role" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-
                     <label>Job category</label>
                     <Form.Item name="jobCategoryId" className='mb-0'>
                         <Select size="large" placeholder="Select category" className="sDash_fullwidth-select">
@@ -302,20 +279,17 @@ const JobRole = () => {
                     </Form.Item>
                     {error?.jobCategoryId && <span style={{ color: "red" }}>{error.jobCategoryId}</span>}
                 </Form>
-                <Form name="login" form={form} layout="vertical" style={{marginTop:'15px'}}>
-                <label htmlFor="name" className='mt-3'>Job role name</label>
+                <Form name="login" form={form} layout="vertical" style={{ marginTop: '15px' }}>
+                    <label htmlFor="name" className='mt-3'>Job role name</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
                             placeholder="Enter job role name"
-                        // name="name"
                         />
                     </Form.Item>
                     {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
                 </Form>
             </Modal>
-
             {importModal && <ImportJobRole modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModal} />}
-
         </>
     )
 }

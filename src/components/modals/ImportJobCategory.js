@@ -1,19 +1,19 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
-import { importCourseCategory } from '../../redux/course/actionCreator';
 import { addBulkJobCategory } from '../../redux/jobs/actionCreator';
 
 const ImportJobCategory = ({ importModal, handleCancel, modaltitle }) => {
   const dispatch = useDispatch();
   const [Error, setError] = useState();
-  const [error, seterror] = useState({}); // for valadation
+  const [error, seterror] = useState({});
   const [FileData, setFileData] = useState();
 
-  const readUploadFile = e => {
+  const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      seterror('')
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);

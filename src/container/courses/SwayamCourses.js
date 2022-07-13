@@ -25,12 +25,9 @@ import moment from 'moment';
 
 const {
   getallSwayamCourseSuccess,
-  addSwayamPartnerCourseSuccess,
-  addSwayamPartnerCourseErr,
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleErr,
   addSwayamCourseModuleSuccess,
-  editSwayamCourseModule,
 } = actions;
 
 const SwayamCourses = () => {
@@ -38,18 +35,15 @@ const SwayamCourses = () => {
   const { Option } = Select;
   const history = useHistory();
   const CSVLinkRef = useRef(null);
-  const usersTableData = [];
   const { TabPane } = Tabs;
   const { path } = useRouteMatch();
 
-  const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [data, setData] = useState({
     category: '',
     mode: '',
     search: '',
   });
-  const [activeCoursetog, setActiveCourseTog] = useState(true);
-  const [perPage, setPerPage] = useState(20);// forpagination
+  const [perPage, setPerPage] = useState(20);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [SwayamCourse, setSwayamCoursetable] = useState([]);
@@ -58,8 +52,6 @@ const SwayamCourses = () => {
   const [state, setState] = useState('');
   const [exportTog, setExportTog] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false);
-  // const [searchValue, setSearchValue] = useState()
-  const [languageOneDataGet, setLanguageOneDataGet] = useState()
   const [langIds, setLangIds] = useState({
     hindi: '',
     marathi: ''
@@ -70,15 +62,12 @@ const SwayamCourses = () => {
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
-  const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
-  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
   const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
   const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
-  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
-  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError); //
+  const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError);
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
-  const allCategoryData = useSelector(state => state.category.getAllCourse);
   const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
+  const importCourseData = useSelector(state => state.category.addSwayamCourseModuleData)
 
   const header = [
     { label: 'id', key: 'id' },
@@ -89,7 +78,6 @@ const SwayamCourses = () => {
     { label: 'duration', key: 'duration' },
     { label: 'key', key: 'key' },
     { label: 'mode', key: 'mode' },
-    // { label: 'sequence', key: 'sequence' },
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
@@ -101,12 +89,18 @@ const SwayamCourses = () => {
   //   }
   // }, [courseModuleData])
 
+  // useEffect(() => {
+  //   if (importCourseData && importCourseData.status === 200) {
+  //     toast.success("Swayam course modules added");
+  //     dispatch(addSwayamCourseModuleSuccess(null));
+  //   }
+  // }, [importCourseData]);
+
   useEffect(() => {
-    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
-      toast.success("Swayam course modules added");
-      dispatch(addSwayamCourseModuleSuccess(null));
+    if (courseModuleData?.sattus === 200) {
+      { courseModuleData?.data?.isDeleted ? toast.success("course module deleted") : toast.success("course module Updated") }
     }
-  }, [addSwayamCourseModuleData]);
+  }, [courseModuleData])
 
   useEffect(() => {
     if (addSwayamCourseModuleError) {
@@ -118,7 +112,7 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     if (state.length && exportTog) {
-      CSVLinkRef?.current?.link.click(); // for export
+      CSVLinkRef?.current?.link.click();
       toast.success('Swayam course data exported');
       setExportTog(false);
     } else if (exportTog) {
@@ -128,7 +122,7 @@ const SwayamCourses = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
+      dispatch(getallSwayamCourseSuccess(null));
     };
   }, []);
 
@@ -161,7 +155,6 @@ const SwayamCourses = () => {
       //     "courseId": item.id
       //   }
       //   ApiPost('courseRating/addCourseRating',data).then((res) => {
-      //     console.log('index', i)
       //   })
       // })
       setState(courseData.data.data);
@@ -179,7 +172,6 @@ const SwayamCourses = () => {
   }, [status, perPage, pageNumber, langIds]);
 
   const onChangehandle = (e, name) => {
-    setActiveCourseTog(false);
     if (name == 'category') {
       setData({ ...data, category: e });
     } else if (name == 'mode') {
@@ -193,17 +185,6 @@ const SwayamCourses = () => {
   const onEdit = id => {
     history.push(`${path}/addcourses?id=${id}`);
   };
-
-  //  const newSawyamCourse = dt =>{
-  //    ApiPost("course/editSwayamCourse" , dt)
-  //    .then((res) =>{
-  //      if (res.status === 200) {
-  //        dispatch(getCategoryData())
-  //      }
-  //      return res
-  //    })
-  //    return newSawyamCourse
-  //  }
 
   const onDelete = async (id) => {
     const singleData = courseData.data.data.find(item => item.id === id);
@@ -226,12 +207,10 @@ const SwayamCourses = () => {
       formData.append('mode', singleData.mode);
       formData.append('isActive', false);
       formData.append('isDeleted', true);
-      console.log("state.id", singleData.id)
       dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
     }
   };
-  const activeSwayamCourses = formData => {
-    console.log("formData", formData);
+  const activeSwayamCourses = (formData) => {
     const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
       .then((res) => {
         if (res.status === 200) {
@@ -241,14 +220,9 @@ const SwayamCourses = () => {
       })
     return newVal
   }
-  useEffect(() => {
-    console.log("courseData--", courseData);
-  }, [courseData])
 
-
-  const onActive = async id => {
+  const onActive = async (id) => {
     const activeCourse = courseData.data.data.find(item => item.id === id);
-    console.log("activeCourse", activeCourse)
     if (activeCourse) {
       let formData = new FormData();
       formData.append('key', activeCourse.key);
@@ -290,6 +264,14 @@ const SwayamCourses = () => {
     })
     setLangIds(temp)
   }, [languageData])
+
+  useEffect(() => {
+    if (importCourseData && importCourseData.status === 200) {
+      dispatch(getCoursefilter('', perPage, pageNumber, '', status, "", langIds.hindi, langIds.marathi));
+      dispatch(addSwayamCourseModuleSuccess(null))
+      toast.success("Swayam course imported")
+    }
+  }, [importCourseData])
 
   const Submit = () => {
     dispatch(

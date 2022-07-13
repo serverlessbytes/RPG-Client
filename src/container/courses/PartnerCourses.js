@@ -66,9 +66,8 @@ const PartnerCourses = () => {
   const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr);
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
-  const addPartnerCourseModulData = useSelector(state => state.category.addPartnerCourseInBulkData)
+  const ImportPartnerCoursedata = useSelector(state => state.category.addPartnerCourseInBulkData);
   const addPartnerCourseModulError = useSelector(state => state.category.addPartnerCourseInBulkError)
-
 
   useEffect(() => {
     if (data.length && exportTog) {
@@ -80,7 +79,6 @@ const PartnerCourses = () => {
   }, [data]);
 
   // useEffect(() => {
-
   //   if (courseData?.data?.data) {
   //     courseData?.data?.data.map((item,i) => {
   //       let x = Math.floor((Math.random() * 5) + 1);
@@ -90,25 +88,25 @@ const PartnerCourses = () => {
   //         "courseId": item.id
   //       }
   //       ApiPost('courseRating/addCourseRating',data).then((res) => {
-  //       
   //       })
   //     })
   //   }
   // }, [courseData])
 
   useEffect(() => {
-    if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
+    if (ImportPartnerCoursedata && ImportPartnerCoursedata.status === 200) {
       toast.success("Partner course imported")
       dispatch(addPartnerCourseInBulkSuccess(null))
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, "", langIds.hindi, langIds.marathi));
     }
-  }, [addPartnerCourseModulData])
+  }, [ImportPartnerCoursedata])
 
   useEffect(() => {
     return () => {
-      // setState([])
-      dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
+      dispatch(getallSwayamCourseSuccess(null));
     };
-  }, []);
+  }, [])
+
 
   useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
@@ -689,13 +687,7 @@ const PartnerCourses = () => {
         />
       )}
 
-      {
-        <ImportPartnerCourse
-          importModal={importModal}
-          handleCancel={() => setImportModal(false)}
-          modaltitle="Import Swayam Courses"
-        />
-      }
+      {importModal && <ImportPartnerCourse importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Partner Courses" />}
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}

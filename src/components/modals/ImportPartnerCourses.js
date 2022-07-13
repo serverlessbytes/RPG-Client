@@ -1,27 +1,20 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import uuid from 'react-uuid';
 import * as XLSX from 'xlsx';
-import STORAGEKEY from '../../config/APP/app.config';
-import AuthStorage from '../../helper/AuthStorage';
 import { addPartnerCourseInBulk } from '../../redux/course/actionCreator';
 
 const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
-  const { Option } = Select;
   const dispatch = useDispatch();
-  const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
 
   const CourseCategoryFromRedux = useSelector(state => state.category.categoryData);
-  const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
-  const [error, seterror] = useState(); // for valadation 
+  const [error, seterror] = useState();
   const [FileData, setFileData] = useState();
   const [input, setInput] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
-  const [courseCategoryID, setCourseCategoryID] = useState('');
 
   //  CATEGORY
   useEffect(() => {
@@ -38,6 +31,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
       setInput(e?.target?.value)
+      seterror('')
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -50,25 +44,18 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
         });
       };
     } else {
-      // toastError(true)
       setError('Please select valid file');
-      // e.target.value = '';
     }
   };
 
   const convertToJson = csv => {
     var lines = csv.split('\n');
-    console.log("lines", lines);
     var result = [];
-    console.log("result", result);
     var headers = lines[0].split(',');
-    console.log("headers", headers);
 
     for (var i = 1; i < lines.length - 1; i++) {
       var obj = {};
-      console.log("obj", obj);
       var currentline = lines[i].split(',');
-      console.log("currentline", currentline);
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
@@ -85,7 +72,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     //   flage = true;
     // }
     if (!FileData) {
-      error.name = 'File is required';
+      error.fileData = 'File is required';
       flage = true;
     }
     seterror(error);
@@ -96,15 +83,15 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
     if (validation()) {
       return;
     }
-    if (FileData) {
-      FileData.forEach(e => {
-        // e['language'] = language;
-        // e['createdByUser'] = userData.id;
-        // e['modifiedByUser'] = userData.id;
-        // e['categoryId'] = courseCategoryID;
-        // e['key'] = uuid();
-      });
-    }
+    // if (FileData) {
+    // FileData.forEach(e => {
+    // e['language'] = language;
+    // e['createdByUser'] = userData.id;
+    // e['modifiedByUser'] = userData.id;
+    // e['categoryId'] = courseCategoryID;
+    // e['key'] = uuid();
+    // });
+    // }
     if (FileData) {
       dispatch(addPartnerCourseInBulk(FileData));
       handleCancel();
@@ -133,7 +120,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" value={input} accept="*" type="file" onChange={(e) => readUploadFile(e)} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
-                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                  error && error.fileData && <span style={{ color: 'red' }}>{error.fileData}</span>}
               </Form.Item>
             </Col>
             <Col md={24} xs={24} className="mb-25"></Col>
