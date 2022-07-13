@@ -147,7 +147,7 @@ const Carousel = () => {
       flag = true
     }
     if (!data.imageUrl) {
-      error.imageUrl = "Please select document file"
+      error.imageUrl = "Please select image"
       flag = true
     }
     setFormErrors(error);
@@ -240,7 +240,9 @@ const Carousel = () => {
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
         toast.success('Carousel deleted');
-      }
+      }else {
+        toast.error("Something went wrong")
+    }
     }
   };
 
@@ -352,11 +354,11 @@ const Carousel = () => {
               {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
             </Form.Item>
 
-            <label htmlFor="imgUrl">Image url</label>
+            <label htmlFor="imgUrl">Image</label>
             <Form.Item>
               <Input
                 type="file"
-                placeholder="Enter image url"
+                placeholder="Select image"
                 name="imageUrl"
                 defalutValue={data.imageUrl}
                 onChange={e => fileUpload(e, "imageUrl")}

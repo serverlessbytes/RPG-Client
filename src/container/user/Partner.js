@@ -57,14 +57,16 @@ const Partner = () => {
         id: partnerForDelete.id,
         isActive: false,
         isDeleted: true,
-        avatar: 'dfd',
+        avatar: partnerForDelete.avatar,
       };
       delete partnerForDelete.userTakenRatings
       const restoreActivePartner = await activePartner(id, partnerForDelete);
 
       if (restoreActivePartner.status === 200) {
         toast.success("Partner deleted")
-      }
+      }else {
+        toast.error("Something went wrong")
+    }
     }
   }
 
@@ -75,10 +77,9 @@ const Partner = () => {
       .then((res) => {
         if (res.status === 200) {
           dispatch(getAllUser(perPage, pageNumber, status, type))
-
         }
         return res
-      })
+      }).catch(error => error)
     return newVal
   }
 
@@ -98,13 +99,15 @@ const Partner = () => {
 
     if (restoreActivePartner.status === 200) {
       toast.success("Partner actived")
-    }
+    }else {
+      toast.error("Something went wrong")
+  }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("Partner Updated")
+      toast.success("Partner updated")
     }
   }, [editProfileData])
 

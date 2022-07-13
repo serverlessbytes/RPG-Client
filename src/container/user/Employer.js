@@ -58,13 +58,15 @@ const Employer = () => {
                 id: employerForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: employerForDelete.avatar,
             };
             delete employerForDelete.userTakenRatings
             const restoreActiveEmployer = await activeEmployer(id, employerForDelete);
 
             if (restoreActiveEmployer.status === 200) {
                 toast.success("Employer deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -78,7 +80,7 @@ const Employer = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -98,6 +100,8 @@ const Employer = () => {
 
         if (restoreActiveEmployer.status === 200) {
             toast.success("Employer actived")
+        }else {
+            toast.error("Something went wrong")
         }
     };
 

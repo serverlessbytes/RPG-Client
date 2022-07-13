@@ -120,10 +120,6 @@ const AddJobApplication = () => {
             error.certification_url = "Certification is required";
             flage = true;
         }
-        if (jobApplication.currently_working === "") {
-            error.currently_working = "Currently Working is required";
-            flage = true;
-        }
         if (jobApplication.job_id === "") {
             error.job_id = "Job is required";
             flage = true;
@@ -181,7 +177,7 @@ const AddJobApplication = () => {
                                 <label htmlFor="visible" className="ml-10">
                                     Currently Working
                                 </label>
-                                <Checkbox id="visible" name="currently_working" onChange={e => onChangeValue(e)}></Checkbox>
+                                <Checkbox id="visible" name="currently_working" checked = {jobApplication.currently_working}  onChange={e => onChangeValue(e)}></Checkbox>
                             </div>
                             {/* {error.currently_working && <span style={{ color: "red" }}>{error.currently_working}</span>} */}
                         </Col>

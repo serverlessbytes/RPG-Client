@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Form, Input, Modal, Table } from 'antd';
+import { Col, Form, Input, Modal, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -31,8 +31,13 @@ const article = () => {
         imageUrl: "",
         videoUrl: "",
         body: "",
-        priority: "",
+        priotity:"",
     });
+
+    useEffect(()=>{
+        console.log('articledata', articledata)
+    },[articledata])
+
     const [formErrors, setFormErrors] = useState();
     const [priotity, setPriority] = useState(false);
 
@@ -44,12 +49,6 @@ const article = () => {
     const editArticlesError = useSelector((state) => state.articles.editArticlesErr);
 
     const handleChange = (e) => {
-        // const input = document.getElementById('priorty')
-        // input.onkeydown = (e) => {
-        //     console.log('e', e)
-        //     if (e.which === 38 || e.which === 40) {
-        //         e.preventDefault();
-        //     }}
         setArticleData({ ...articledata, [e.target.name]: e.target.value })
         setFormErrors({ ...formErrors, [e.target.name]: "" });
     }
@@ -71,35 +70,30 @@ const article = () => {
     const validation = () => {
         let flag = false;
         const error = {};
-        let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+        let videoUrlReg = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})?$/
 
         if (!articledata.title) {
             error.title = "Please enter title"
             flag = true
         }
         if (!articledata.imageUrl) {
-            error.imageUrl = "Please select document file"
+            error.imageUrl = "Please select image"
             flag = true
         }
         if (!articledata.videoUrl) {
-            error.videoUrl = "Please select document file"
+            error.videoUrl = "Please enter videourl"
             flag = true
         } else if (!videoUrlReg.test(articledata.videoUrl)) {
-            error.videoUrl = 'Enter Valid Video URL';
+            error.videoUrl = 'Enter valid video url';
             flag = true;
         }
         if (!articledata.body) {
             error.body = "Please enter body"
             flag = true
         }
-        if (!articledata.priority) {
-            error.priority = "Please enter priority"
-            flag = true
-        }
         setFormErrors(error);
         return flag
     }
-
 
     useEffect(() => {
         dispatch(getArticles(perPage, pageNumber));
@@ -150,7 +144,6 @@ const article = () => {
 
     const showModal = () => {
         setIsModalVisible(true);
-        setPriority(false);
     };
 
     const handleOk = () => {
@@ -171,6 +164,7 @@ const article = () => {
             //     imageUrl: ""
             // })
             handleCancel();
+            setPriority(false);
         }
         else {
             if (validation()) {
@@ -182,7 +176,7 @@ const article = () => {
                 imageUrl: articledata.imageUrl,
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
-                priority: articledata.priority,
+                priotity : articledata.priotity,
                 isActive: true,
                 isDeleted: false,
             }
@@ -201,11 +195,9 @@ const article = () => {
         })
         setSelectedArticle(null)
         setNameTog(false)
-        setFormErrors("");
     };
 
     const onEdit = (id) => {
-        setPriority(true);
         let dataForEdit = getArticlesData && getArticlesData.data && getArticlesData.data.data.find((item) => item.id === id)
         if (dataForEdit) {
             setSelectedArticle(dataForEdit)
@@ -213,6 +205,7 @@ const article = () => {
         dispatch(getArticleById(dataForEdit.id))
         setIsModalVisible(true)
         setNameTog(true)
+        setPriority(true);
     }
 
     const newArticle = userForDelete => {
@@ -238,13 +231,17 @@ const article = () => {
                 body: dataForDelete.body,
                 imageUrl: dataForDelete.imageUrl,
                 videoUrl: dataForDelete.videoUrl,
+                priority: dataForDelete.priority,
                 isActive: false,
                 isDeleted: true,
-                priority: dataForDelete.priority,
             }
+            // dispatch(editArticles(userForDelete))
+
             const deletebanner = await newArticle(userForDelete)
             if (deletebanner.status === 200) {
                 toast.success("Article deleted")
+            }else{
+                toast.error("Something went wrong")
             }
         }
     }
@@ -257,6 +254,11 @@ const article = () => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
             setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item, id) => {
                 return {
+                    // title: (
+                    //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
+                    //         {item.title}
+                    //     </span>
+                    // ),
                     priority: item.priority,
                     srno: id + 1,
                     title: item.title,
@@ -290,8 +292,9 @@ const article = () => {
             sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
         },
+
         {
-            title: 'Srno',
+            title: 'srno',
             dataIndex: 'srno',
             sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
@@ -299,7 +302,7 @@ const article = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            sorter: (a, b) => a.title.localeCompare(b.title),
+            sorter: (a, b) => a.title.length - b.title.length,
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -386,12 +389,11 @@ const article = () => {
                             {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
 
                         </Form.Item>
-
-                        <label htmlFor="imgUrl">Image url</label>
+                        <label htmlFor="imgUrl">Image</label>
                         <Form.Item>
                             <Input
                                 type="file"
-                                placeholder="Enter image url"
+                                placeholder="Select image"
                                 name="imageUrl"
                                 defalutValue={articledata.imageUrl}
                                 onChange={(e) => fileUpload(e, "imageUrl")}
@@ -423,7 +425,7 @@ const article = () => {
                             {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
 
-                        {
+                        {/* {
                             priotity ?
                                 <>
                                     <label htmlFor="priority">Priority</label>
@@ -433,7 +435,7 @@ const article = () => {
                                             type="number"
                                             placeholder="Enter priority"
                                             name="priority"
-                                            // value={articledata.body}
+                                            value={articledata.priotity}
                                             onChange={(e) => handleChange(e, "priority")}
                                             className='experience-input'
                                             id='priority'
@@ -441,7 +443,7 @@ const article = () => {
                                         {formErrors?.priority && <span style={{ color: "red" }}>{formErrors.priority}</span>}
                                     </Form.Item>
                                 </> : ""
-                        }
+                        } */}
 
                     </Form>
                 </Modal>}

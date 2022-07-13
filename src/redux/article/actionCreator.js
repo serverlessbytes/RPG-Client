@@ -52,7 +52,7 @@ export const editArticles = (body) => async (dispatch) => {
             }
         })
         .catch((err) => {
-            return dispatch(getArticlesErr(err))
+            return dispatch(editArticlesErr(err))
         })
 }
 

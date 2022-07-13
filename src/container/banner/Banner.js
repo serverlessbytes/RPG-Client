@@ -146,7 +146,7 @@ const Banner = () => {
             flag = true
         }
         if (!data.imageUrl) {
-            error.imageUrl = "Please select document file"
+            error.imageUrl = "Please select image"
             flag = true
         }
         setFormErrors(error);
@@ -211,7 +211,6 @@ const Banner = () => {
         dispatch(getOneBanner(dataForEdit.id))
         setIsModalVisible(true);
         setNameTog(true);
-
     }
 
     const newBanner = userForDelete => {
@@ -238,11 +237,11 @@ const Banner = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            // dispatch(editBanner(userForDelete))
-
             const deletebanner = await newBanner(userForDelete)
             if (deletebanner.status === 200) {
                 toast.success("Banner deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     }
@@ -355,11 +354,11 @@ const Banner = () => {
                             {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
                         </Form.Item>
 
-                        <label htmlFor="imgUrl">Image url</label>
+                        <label htmlFor="imgUrl">Image</label>
                         <Form.Item>
                             <Input
                                 type="file"
-                                placeholder="Enter image url"
+                                placeholder="Enter image"
                                 name="imageUrl"
                                 defaultValue={data.imageUrl}
                                 onChange={(e) => fileUpload(e, "imageUrl")}
@@ -369,7 +368,7 @@ const Banner = () => {
                         {/* {fileError !== '' && <label style={{ color: 'red' }}>{fileError}</label>} */}
                     </Form>
                 </Modal>}
-            {importModel && <Importbanner modaltitle="Import Banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}
+            {importModel && <Importbanner modaltitle="Import banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }

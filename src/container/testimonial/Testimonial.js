@@ -98,7 +98,7 @@ const Testimonial = () => {
                     dispatch(getTestimonial(perPage, pageNum))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -114,10 +114,11 @@ const Testimonial = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            // dispatch(editTestimonial(userForDelete))
             const deleteTestimonial = await newTestimonial(userForDelete)
             if (deleteTestimonial.status === 200) {
                 toast.success("Testimonial deleted")
+            }else{
+                toast.error("Something went wrong")
             }
         }
     }

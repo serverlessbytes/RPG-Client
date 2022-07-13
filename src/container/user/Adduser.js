@@ -10,14 +10,14 @@ import { addUserSignup, editProfile, getOneUser } from '../../redux/users/action
 import actions from "../../redux/users/actions";
 
 const Adduser = () => {
-    
+
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id')
     let history = useHistory();
     let location = useLocation();
     const dispatch = useDispatch();
     const { Option } = Select;
-    const {getOneUserSuccess} = actions;
+    const { getOneUserSuccess } = actions;
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -29,7 +29,7 @@ const Adduser = () => {
     const [error, setError] = useState({})
 
     const getOneData = useSelector((state) => state.users.getOneUser)
-   
+
     const selectValue = (e, name) => {
         if (name === "userType") {
             setState({
@@ -39,8 +39,18 @@ const Adduser = () => {
         }
     }
 
-    const onChangeValue = (e) => {
-        setState({ ...state, [e.target.name]: e.target.value })
+    const onChangeValue = (e, name) => {
+
+        const regexphone = /^[0-9\b]+$/;
+
+        if (name === "phone") {
+            if (e.target.value === '' || regexphone.test(e.target.value)) {
+                setState({ ...state, [e.target.name]: e.target.value });
+                setError({ ...error, phone: "" });
+            } 
+        }else {
+            setState({ ...state, [e.target.name]: e.target.value })
+        }
     }
 
     const fileUpload = (e, name) => {
@@ -57,12 +67,14 @@ const Adduser = () => {
             setState({ ...state, avatar: '' })
             // setFileError('Please select valid document file')
         }
-        }
+    }
 
     const validation = () => {
-    
+
         let error = {}
         let flage = false
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
         if (state.name === "") {
             error.name = "Name is required";
             flage = true;
@@ -71,30 +83,29 @@ const Adduser = () => {
             error.email = "Email is required";
             flage = true;
         }
+        if (state.email && !state.email.match(regex)) {
+            error.email = "Please enter a valid email address";
+            flage = true;
+        }
         if (state.password === "") {
             error.password = "Password is required";
             flage = true;
         }
-        if (!state.phone.match('[0-9]{10}')) {
+        if (state.phone === "") {
             error.phone = "Phone is required";
             flage = true;
         }
-        if(!state.avatar){
+        if (state.phone && state.phone.length < 10) {
+            error.phone = 'Please enter valid phone number';
+            flage = true;
+        }
+        if (!state.avatar) {
             error.avatar = "Avatar is required";
             flage = true;
         }
 
-        //  if (state.phone === "") {
-        //     if( !(state.phone.match('[0-9]{10}')) ){
-        //         error.phone = "Phone num is required";
-        //    }else{
-        //     error.phone = "Phone is required";
-        //    }
-
-        //     flage = true;
-        // }
         if (state.userType === "") {
-            error.userType = "UserType is required";
+            error.userType = "User type is required";
             flage = true;
         }
         setError(error);
@@ -135,7 +146,7 @@ const Adduser = () => {
             oncancel()
         }
     }
-    
+
     // -- from goBAck Same Page
     const oncancel = () => {
         if (window.location.pathname.includes("partner")) {
@@ -184,7 +195,7 @@ const Adduser = () => {
     return (
         <>
             <PageHeader
-                title={id ? "Edit User" : "Add User"}
+                title={id ? "Edit user" : "Add user"}
             // buttons={[
             //     <div key="1" className="page-header-actions">
             //         <Button size="small" onClick={() => { }} type="primary">
@@ -211,7 +222,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="name">Name</label>
                             <Form.Item>
-                                <Input placeholder="User Name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="User name" value={state.name} name="name" onChange={(e) => onChangeValue(e)} />
                                 {
                                     error.name && <span style={{ color: "red" }}>{error.name}</span>
                                 }
@@ -221,15 +232,15 @@ const Adduser = () => {
                         {/* </Row>
                     <Row justify="space-between"> */}
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="category mb-4">User Type</label>
-                            <Form.Item initialValue=" Select a scheme category ">
-                                <Select size="large" placeholder="Select Category" value={state.userType} className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
-                                    <option value={""}>Select User</option>
-                                    <option value={"USER"}>USER</option>
-                                    <option value={"PARTNER"}>PARTNER</option>
-                                    <option value={"EMPLOYER"}>EMPLOYER</option>
-                                    <option value={"ADMIN"}>ADMIN</option>
-                                    <option value={"SUPERADMIN"}>SUPERADMIN</option>
+                            <label htmlFor="category mb-4">User type</label>
+                            <Form.Item>
+                                <Select size="large" placeholder="Select category" value={state.userType} className="sDash_fullwidth-select" name="userType" onChange={(e) => selectValue(e, "userType")}>
+                                    <option value={""}>Select user</option>
+                                    <option value={"USER"}>User</option>
+                                    <option value={"PARTNER"}>Partner</option>
+                                    <option value={"EMPLOYER"}>Employer</option>
+                                    <option value={"ADMIN"}>Admin</option>
+                                    <option value={"SUPERADMIN"}>Superadmin</option>
                                 </Select>
                                 {
                                     error.userType && <span style={{ color: "red" }}>{error.userType}</span>
@@ -248,7 +259,7 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="password">Password</label>
                             <Form.Item>
-                                <Input placeholder="password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Password" value={state.password} disabled={(getOneData && getOneData.data)} name="password" onChange={(e) => onChangeValue(e)} />
                                 {error.password && <span style={{ color: "red" }}>{error.password}</span>}
                             </Form.Item>
                         </Col>
@@ -268,27 +279,17 @@ const Adduser = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Phone</label>
                             <Form.Item>
-                                <Input placeholder="Phone" value={state.phone} name="phone" onChange={(e) => onChangeValue(e)} />
+                                <Input placeholder="Phone" value={state.phone} maxLength={10} name="phone" onChange={(e) => onChangeValue(e, "phone")} />
                                 {
                                     error.phone && <span style={{ color: "red" }}>{error.phone}</span>
                                 }
                             </Form.Item>
                         </Col>
 
-                        {/* <Col lg={11} md={11} sm={24}>
-                            <label htmlFor="phone">Phone</label>
-                            <Form.Item>
-                                <Input placeholder="Phone" name="phone" onChange={(e) => onChangeValue(e)} />
-                                {
-                                    error.name && <span style={{ color: "red" }}>{error.name}</span>
-                                }
-                            </Form.Item>
-                        </Col> */}
-
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="phone">Avatar</label>
                             <Form.Item>
-                                <Input type = 'file'  placeholder="Avatar" name="avatar" onChange={(e) => fileUpload(e ,"avatar")} />
+                                <Input type='file' placeholder="Avatar" name="avatar" onChange={(e) => fileUpload(e, "avatar")} />
                                 {
                                     error.avatar && <span style={{ color: "red" }}>{error.avatar}</span>
                                 }
