@@ -234,7 +234,7 @@ export const jobApproved = (id, body) => async (dispatch) => {
     .catch((err) => console.log("Error", err))
 }
 
-export const getJobApplication = (perPage, pageNumber, status, jobRole, jobId) => async (dispatch) => {
+export const getJobApplication = (perPage, pageNumber, status, jobRole, jobCategoryId) => async (dispatch) => {
   per_page = perPage, page_num = pageNumber, Status = status;
 
   let URL = `jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}${status ? `&${status}=true` : ''}`;
@@ -242,8 +242,8 @@ export const getJobApplication = (perPage, pageNumber, status, jobRole, jobId) =
   if (jobRole) {
     URL = URL.concat(`&jobRole=${jobRole}`)
   }
-  if (jobId) {
-    URL = URL.concat(`&jobId=${jobId}`)
+  if (jobCategoryId) {
+    URL = URL.concat(`&jobCategoryId=${jobCategoryId}`)
   }
 
   await ApiGet(URL)

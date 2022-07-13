@@ -27,12 +27,6 @@ const JobRole = () => {
     const [nameTog, setNameTog] = useState(false)
     const [error, setError] = useState('')
 
-    const { users } = useSelector(state => {
-        return {
-            users: state.users,
-        };
-    });
-
     const jobData = useSelector((state) => state.job.jobCatogeryData)
     const jobRolesData = useSelector((state) => state.job.jobRoleData)
     const editJobRoleData = useSelector((state) => state.job.editJobRoleData)
@@ -112,6 +106,8 @@ const JobRole = () => {
                     dispatch(getJobroles())
                 }
                 return res
+            }).catch((err) => {
+                return err;
             })
         return newVal
     }
@@ -132,6 +128,8 @@ const JobRole = () => {
             const deleteJobRole = await newJobRole(dataForDelete)
             if (deleteJobRole.status === 200) {
                 toast.success("Job role deleted")
+            }else{
+                toast.error("Something went wrong")
             }
         }
     }
@@ -272,8 +270,8 @@ const JobRole = () => {
                     <label>Job category</label>
                     <Form.Item name="jobCategoryId" className='mb-0'>
                         <Select size="large" placeholder="Select category" className="sDash_fullwidth-select">
-                            {jobData?.data && jobData?.data?.map((items) => (
-                                <Option value={items.id}>{items.name} </Option>
+                            {jobData?.data && jobData?.data?.map((items,i) => (
+                                <Option key={i} value={items.id}>{items.name} </Option>
                             ))}
                         </Select>
                     </Form.Item>

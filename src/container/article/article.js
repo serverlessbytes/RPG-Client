@@ -13,11 +13,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { addArticle, editArticles, getArticleById, getArticles } from '../../redux/article/actionCreator';
-import { useHistory } from 'react-router';
 
 const article = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -76,7 +74,7 @@ const article = () => {
             flag = true
         }
         if (!articledata.videoUrl) {
-            error.videoUrl = "Please enter videourl"
+            error.videoUrl = "Please enter video url"
             flag = true
         } else if (!videoUrlReg.test(articledata.videoUrl)) {
             error.videoUrl = 'Enter valid video url';
@@ -86,6 +84,10 @@ const article = () => {
             error.body = "Please enter body"
             flag = true
         }
+        // if (!articledata.priority) {
+        //     error.priority = "Please enter priority"
+        //     flag = true
+        // }
         setFormErrors(error);
         return flag
     }
@@ -184,6 +186,7 @@ const article = () => {
         })
         setSelectedArticle(null)
         setNameTog(false)
+        // setPriority(false);
     };
 
     const onEdit = (id) => {
@@ -194,6 +197,7 @@ const article = () => {
         dispatch(getArticleById(dataForEdit.id))
         setIsModalVisible(true)
         setNameTog(true)
+        // setPriority(true);
     }
 
     const newArticle = userForDelete => {
@@ -332,7 +336,7 @@ const article = () => {
                                 pagination={{
                                     defaultPageSize: getArticlesData?.data.per_page,
                                     total: getArticlesData?.data.page_count,
-                                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                                    // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                                     onChange: (page, pageSize) => {
                                         setPageNumber(page);
                                         setPerPage(pageSize);
@@ -371,7 +375,7 @@ const article = () => {
                                 type="file"
                                 placeholder="Select image"
                                 name="imageUrl"
-                                defalutValue={articledata.imageUrl}
+                                // defalutValue={articledata.imageUrl}
                                 onChange={(e) => fileUpload(e, "imageUrl")}
                             />
                             {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
@@ -400,8 +404,8 @@ const article = () => {
                             />
                             {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
-                    </Form>
-                </Modal>
+                    </Form >
+                </Modal >
             }
         </>
     )

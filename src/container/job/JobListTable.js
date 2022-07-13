@@ -15,9 +15,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import ConfirmModal from '../../components/modals/confirm_modal';
 
-const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search, getJobData }) => {
+const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumberOfPage, setExportTog, status, search, getJobData }) => {
   // props from JobPost
-  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr } = actions;
+  const { addJobPostSuccess,addJobPostErr, editJobPostSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
@@ -36,17 +36,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [languageIds, setLanguageIDs] = useState();
   const [ids, setIDs] = useState();
 
-
-  const { users } = useSelector(state => {
-    return {
-      users: state.users,
-    };
-  });
-
   const languageData = useSelector(state => state.language.getLanguageData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
-  const addJobPostErr = useSelector(state => state.job.addJobPostErr); //fetch for tostify from reducer for jobposterror
+  const addJobPostError = useSelector(state => state.job.addJobPostErr); //fetch for tostify from reducer for jobposterror
   const editJobPostError = useSelector(state => state.job.editJobPostErr); //fetch for tostify from reducer for jobposterror
   const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
   const addLanguageJobPost = useSelector(state => state.job.addLanguageJobPost);
@@ -62,7 +55,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi,));
         return res;
       }
-    });
+    }).catch((err)=>{
+       return err;
+    })
     return newVal;
   };
 
@@ -78,7 +73,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           setIsConfirmModal(true)
           setLanguageIDs(languageId);
           setIDs(id);
-          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
   }
@@ -127,6 +121,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
         toast.success('Job deleted');
+      }else{
+        toast.error("Something went wrong")
       }
     }
   };
@@ -158,7 +154,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
       }
       return res;
-    });
+    }).catch((err)=>{
+      return err;
+   })
     return newVal;
   };
 
@@ -198,22 +196,25 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       const restoreJobPost = await activeJobPost(data);
       if (restoreJobPost.status === 200) {
         toast.success('Job actived');
+      }else{
+        toast.error('Something went wrong')
       }
     }
   };
 
-
   useEffect(() => {
     if (addLanguageJobPostError) {
+      dispatch(addLanguageJobPostErr(null))
       toast.error('Something went wrong');
     }
   }, [addLanguageJobPostError]);
 
   useEffect(() => {
-    if (addJobPostErr) {
+    if (addJobPostError) {
+      dispatch(addJobPostErr(null))
       toast.error('Something went wrong');
     }
-  }, [addJobPostErr]);
+  }, [addJobPostError]);
 
   useEffect(() => {
     if (status && langIds.hindi && langIds.marathi) {
@@ -242,10 +243,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
 
   useEffect(() => {
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
-      // dispatch(getJobsFilterForMainSuccess(null));
       dispatch(addLanguageJobPostSuccess(null));
       toast.success('Job added');
-
     }
   }, [addLanguageJobPost]);
 
@@ -266,13 +265,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       toast.success("Job updated");
     }
   }, [editJobPostData]);
-
-  // useEffect(() => {
-  //   dispatch(getJobsFilterForMain(perPage, pageNumber));
-  //   setPagePer(perPage);
-  //   setNumberOfPage(pageNumber);
-  //   setExportTog(false);
-  // }, [perPage, pageNumber]);
 
   const onApproved = (id, isAp) => {
     if (status !== 'active') {
@@ -299,6 +291,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
       })
       .catch(err => console.log('Error', err));
   };
+  
   const onBannerSelect = (id, bannerSelected) => {
     if (status !== 'active') {
       return
@@ -332,21 +325,11 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
               {item?.name?.name}
             </span>
           ),
-          // name : item.name.name,
           email: item.email,
           company: item.description,
           position: item.jobRole?.name,
           joinDate: moment(item.startDate).format('DD-MM-YYYY'),
-          // joinDate: item.startDate,
           vacancies: item.vacancies,
-          // approved: (
-          //   <>
-          //     <div id={item.id} onClick={() => onApproved(item.id, item.isApproved)}>
-          //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-          //     </div>
-          //   </>
-          // ),
-          // status: status,
           selectLanguage: (
             <div className="">
               <div className="">
@@ -361,21 +344,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   </Button>
                   <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                     onClick={() => {
-                      // setSelectedLanguageData(item)
                       getOneJobDetailByKey(langIds?.marathi, item?.key, item?.id)
                       setSelectedLanguageData(item)
                     }}
                   >
                     MT
                   </Button>
-                  {/* <Button
-                      className="btn-icon"
-                      type="success"
-                      onClick={() => viewSwayamCoursedata(item.id)}
-                      shape="circle"
-                    >
-                      <FeatherIcon icon="eye" size={16} />
-                    </Button> */}
                 </>
               </div>
             </div>
@@ -396,9 +370,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
                     <FeatherIcon icon="trash-2" size={16} />
                   </Button>
-                  {/* <Button className="btn-icon" type="success" onClick={() => viewJobdata(item.id)} shape="circle">
-                  <FeatherIcon icon="eye" size={16} />
-                </Button> */}
                 </>
               ) : (
                 <Button className="btn-icon" type="success" onClick={() => onRestore(item.id)} shape="circle">
@@ -464,7 +435,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     {
       title: 'Join date',
       dataIndex: 'joinDate',
-      // sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
       sorter: (a, b) => sortingForDate()
     },
     {
@@ -526,34 +496,18 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             <>
               <Button size="small" type="primary" onClick={() => {
                 languageHandalCancle()
-                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
               }}>
-                {/* <FeatherIcon icon="edit" size={16} /> */}
                 No
               </Button>
               <Button size="small" type="primary" onClick={() => {
-                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
                 languageHandalOk(languageIds, ids)
               }} >
-                {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes
               </Button>
             </>}
           children={"This coures in not available in this language. You want to add?"}
         />
       )}
-      {/* <ProjectPagination>
-        
-          <Pagination
-            onChange={()=>{}}
-            showSizeChanger
-            onShowSizeChange={()=>{}}
-            pageSize={10}
-            defaultCurrent={1}
-            total={10}
-          />
-       
-      </ProjectPagination> */}
       {viewModal && (
         <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneJobPostData?.data} />
       )}

@@ -4,7 +4,7 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -70,17 +70,16 @@ const SuperAdmin = () => {
         id: superAdminDataForDelete.id,
         isActive: false,
         isDeleted: true,
-        avatar: superAdminDataForDelete.avatar ,
+        avatar: superAdminDataForDelete.avatar,
       };
       delete superAdminDataForDelete.userTakenRatings
-      console.log('superAdminDataForDelete', superAdminDataForDelete)
 
       const restoreActiveSuperAdmin = await activeSuperAdmin(id, superAdminDataForDelete);
       if (restoreActiveSuperAdmin.status === 200) {
         toast.success("Superadmin deleted")
-      }else {
+      } else {
         toast.error("Something went wrong")
-    }
+      }
     }
   };
 
@@ -100,15 +99,19 @@ const SuperAdmin = () => {
     const restoreActiveSuperAdmin = await activeSuperAdmin(id, data);
     if (restoreActiveSuperAdmin.status === 200) {
       toast.success("Superadmin actived")
-    }else {
+    } else {
       toast.error("Something went wrong")
-  }
+    }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
       toast.success("Superadmin updated")
+    }
+    else if (editProfileData && editProfileData.message === "User already exists") {
+      dispatch(editProfileSuccess(null))
+      toast.success("User already exists")
     }
   }, [editProfileData])
 
@@ -191,14 +194,6 @@ const SuperAdmin = () => {
       <PageHeader
         ghost
         title="Super admin"
-      // buttons={[
-      //     <div className="page-header-actions">
-      //         <Button size="small" type="primary" onClick={allEmployerExport}>
-      //             Export All
-      //         </Button>
-      //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-      //     </div>
-      // ]}
       />
       <Main>
         <Cards headless>

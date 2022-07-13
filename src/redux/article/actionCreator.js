@@ -4,11 +4,9 @@ import { ApiGet, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
 import actions from "./actions";
 const {
-    getArticlesBegni,
     getArticlesSuccess,
     getArticlesErr,
 
-    editArticlesBegni,
     editArticlesSuccess,
     editArticlesErr,
 
@@ -26,7 +24,7 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
     page_num = pagenum;
     await ApiGet(`article/getArticles?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perpage}&page_number=${pagenum}`)
         .then((res) => {
-           
+
             return dispatch(getArticlesSuccess(res))
         })
         .catch((err) => {
@@ -34,6 +32,7 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
         })
 }
 export const editArticles = (body) => async (dispatch) => {
+    console.log("body",body)
     const formData = new FormData();
     formData.append('body', body.body);
     formData.append('videoUrl', body.videoUrl);
@@ -43,7 +42,7 @@ export const editArticles = (body) => async (dispatch) => {
     formData.append('isActive', body.isActive);
     formData.append('isDeleted', body.isDeleted);
     formData.append('priority', body.priority);
-   
+
     await ApiPost(`article/editArticle?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
         .then((res) => {
             dispatch(editArticlesSuccess(res))

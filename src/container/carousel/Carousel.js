@@ -43,7 +43,6 @@ const Carousel = () => {
   const addBulkCarouselData = useSelector(state => state.carousel.addBulkCarouselData);
   const addBulkCarouselError = useSelector(state => state.carousel.addBulkCarouselError);
 
-
   useEffect(() => {
     if (addBulkCarouselData && addBulkCarouselData.status === 200) {
       dispatch(addBulkCarouselSuccess(null));
@@ -238,7 +237,6 @@ const Carousel = () => {
         isActive: false,
         isDeleted: true,
       };
-      // dispatch(editCarousel(userForDelete))
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
         toast.success('Carousel deleted');

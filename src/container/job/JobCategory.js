@@ -15,8 +15,8 @@ import { ApiPost } from '../../helper/API/ApiData';
 import ImportJobCategory from '../../components/modals/ImportJobCategory';
 
 const JobCategory = () => {
-    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess, addJobcategoryErr, } = actions;
-
+    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess, addJobcategoryErr, addBlukJobCategoySuccess, addBlukJobCategoyErr } = actions;
+    const [form] = Form.useForm()
     const dispatch = useDispatch()
 
     const jobData = useSelector((state) => state.job.jobCatogeryData)
@@ -25,8 +25,9 @@ const JobCategory = () => {
     const importJobCategoryError = useSelector((state) => state.job.importJobCategoryError)
     const editJobCatogeryError = useSelector((state) => state.job.editJobCatogeryError)
     const importJob = useSelector((state) => state.job.importJobCategory)
+    const addJobCatogeryError = useSelector((state) => state.job.addJobCatogeryError)
 
-    const [form] = Form.useForm()
+   
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
     const [jobEditId, setJobEditId] = useState();
@@ -42,7 +43,15 @@ const JobCategory = () => {
     }, [addJobCatogerydata])
 
     useEffect(() => {
+        if (addJobCatogeryError) {
+            dispatch(addJobcategoryErr(null))
+            toast.error("Something went wrong")
+        }
+    }, [addJobCatogeryError])
+
+    useEffect(() => {
         if (importJob && importJob.status === 200) {
+            dispatch(addBlukJobCategoySuccess(null))
             toast.success("Category imported");
         }
         else if (importJob && importJob.status !== 200) {
@@ -52,7 +61,7 @@ const JobCategory = () => {
 
     useEffect(() => {
         if (importJobCategoryError) {
-            dispatch(addJobcategoryErr(null))
+            dispatch(addBlukJobCategoyErr(null))
             toast.error("Something went wrong");
         }
     }, [importJobCategoryError])
@@ -98,6 +107,8 @@ const JobCategory = () => {
                     dispatch(getJobcategory())
                 }
                 return res
+            }).catch((err) => {
+                return err;
             })
         return newVal
     }
@@ -114,6 +125,8 @@ const JobCategory = () => {
             const deleteJobcatrgory = await newJobCategory(dataForEdit)
             if (deleteJobcatrgory.status === 200) {
                 toast.success("Job category deleted")
+            } else {
+                toast.error("Something went wrong")
             }
         }
     }
@@ -227,12 +240,6 @@ const JobCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                            {/* --- search bar --- */}
-                            {/* <Form name="sDash_select" layout="vertical">
-                                <Form.Item name="search" label="">
-                                    <Input placeholder="search" style={{ width: 200 }} />
-                                </Form.Item>
-                            </Form> */}
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={jobCategoryTableData}

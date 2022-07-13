@@ -1,5 +1,6 @@
 const protocol = 'http';
-const host = 'digiprojer.in';
+// const host = 'digiprojer.in';
+const host =  '192.168.1.2';
 const port = '5000';
 const trailUrl = 'api/v1';
 

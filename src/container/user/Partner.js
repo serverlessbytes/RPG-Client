@@ -6,7 +6,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import {getAllUser } from '../../redux/users/actionCreator';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,7 +19,7 @@ const Partner = () => {
   const dispatch = useDispatch()
 
   const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(20); // forpagination
+  const [perPage, setPerPage] = useState(20);
   const [pageNumber, setPageNumber] = useState(1);
   // const [partnerData, setPartnerData] = useState()
   const [partnertable, setPartnertable] = useState([])
@@ -36,14 +36,6 @@ const Partner = () => {
   const editProfileData = useSelector(state => state.users.editProfileData);
 
   const { editProfileSuccess } = actions;
-
-  // const getData = () => {
-  //   ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=PARTNER`)
-  //     .then((res) => {
-  //       setPartnerData(res)
-  //     })
-  //     .catch((err) => console.log(err))
-  // }
 
   const onEdit = (id) => {
     history.push(`${path}/adduser?id=${id}`);
@@ -64,9 +56,9 @@ const Partner = () => {
 
       if (restoreActivePartner.status === 200) {
         toast.success("Partner deleted")
-      }else {
+      } else {
         toast.error("Something went wrong")
-    }
+      }
     }
   }
 
@@ -99,15 +91,19 @@ const Partner = () => {
 
     if (restoreActivePartner.status === 200) {
       toast.success("Partner actived")
-    }else {
+    } else {
       toast.error("Something went wrong")
-  }
+    }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
       toast.success("Partner updated")
+    }
+    else if (editProfileData && editProfileData.message === "User already exists") {
+      dispatch(editProfileSuccess(null))
+      toast.success("User already exists")
     }
   }, [editProfileData])
 
