@@ -1,14 +1,13 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Col, Form, Input, Modal, Row } from 'antd';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { addSchemeBenefitBulk } from '../../redux/benefitsType/actionCreator';
 
 const ImportSchemeBenefits = ({ importModal, handleCancel, modaltitle }) => {
-    // const inputRef = useRef(null)
     const dispatch = useDispatch();
     const [Error, setError] = useState();
-    const [error, seterror] = useState(); // for valadation
+    const [error, seterror] = useState();
     const [FileData, setFileData] = useState();
     const [input, setInput] = useState('');
 
@@ -17,8 +16,6 @@ const ImportSchemeBenefits = ({ importModal, handleCancel, modaltitle }) => {
         setError('');
         seterror('');
         if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
-            // console.log("e+++",e)
-            // e.persist();
             const file = e.target.files[0];
             setInput(e?.target?.value)
             const reader = new FileReader();
@@ -66,15 +63,11 @@ const ImportSchemeBenefits = ({ importModal, handleCancel, modaltitle }) => {
     };
 
     const handleOk = () => {
-        console.log("FileData", FileData)
         if (validation()) {
             return;
         }
         if (FileData) {
             dispatch(addSchemeBenefitBulk(FileData));
-            // inputRef?.current?.target?.value = null
-            // inputRef.current.input.files = null
-            // console.log(inputRef.current.input.files = null)
             handleCancel();
         }
         setInput('');

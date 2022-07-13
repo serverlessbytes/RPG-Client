@@ -1,6 +1,6 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { addBulkJobs } from '../../redux/jobs/actionCreator';
 import { getDistrictData } from '../../redux/district/actionCreator';
@@ -10,15 +10,13 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
   const dispatch = useDispatch();
 
   const [Error, setError] = useState();
-  const [error, seterror] = useState({}); // for valadation
+  const [error, seterror] = useState({});
   const [fileData, setFileData] = useState();
   const [stateID, setStateID] = useState('');
 
   useEffect(() => {
     if (stateID) dispatch(getDistrictData(stateID));
   }, [stateID]);
-
-  //  CATEGORY
 
   const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
@@ -37,7 +35,6 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       };
     } else {
       setError('Please select valid file');
-
     }
   };
 
@@ -75,13 +72,12 @@ const ImportJobPost = ({ importModal, handleCancel, modaltitle }) => {
       return
     }
     if (fileData) {
-      fileData.forEach(e => {
+      let temp = fileData.filter((el) => el.name && el.key)
+      temp.forEach((e) => {
         e['vacancies'] = +e.vacancies;
         e['isActive'] = true;
       });
-    }
-    if (fileData) {
-      dispatch(addBulkJobs(fileData));
+      dispatch(addBulkJobs(temp));
       handleCancel();
       setFileData('')
     }

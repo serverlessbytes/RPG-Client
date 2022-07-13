@@ -487,7 +487,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "jobType")}
                                                     >
                                                         <Option value="">Select jobtype</Option>
-                                                        {jobData && jobData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {jobData && jobData.data.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.jobType && <span style={{ color: 'red' }}>{error.jobType}</span>}
                                                 </Form.Item>
@@ -508,7 +508,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                              
+
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -526,7 +526,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "jobRole")}
                                                     >
                                                         <Option value="">Select jobrole</Option>
-                                                        {jobRolData && jobRolData.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {jobRolData && jobRolData.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.jobRole && <span style={{ color: 'red' }}>{error.jobRole}</span>}
                                                 </Form.Item>
@@ -608,7 +608,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-            
+
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -647,7 +647,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                           
+
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -674,7 +674,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                            
+
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -731,7 +731,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-           
+
                                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -789,7 +789,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-              
+
 
                                 <Col lg={11} md={11} sm={24} xs={24} className='' style={{ marginBottom: "24px" }}>
                                     <Row align="middle" justify="space-between">

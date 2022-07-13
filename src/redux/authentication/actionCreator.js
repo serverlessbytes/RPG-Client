@@ -6,34 +6,16 @@ import actions from './actions';
 import { getLanguageByName } from '../language/actionCreator';
 
 const {
-  loginBegin,
   loginSuccess,
-  loginErr,
   logoutBegin,
   logoutSuccess,
   logoutErr,
-  signUpErr,
   signUpSuccess,
-  signUpBegin,
   getUserSuccess,
   editProfileSuccess,
   editProfileErr,
 
 } = actions;
-
-// const login = () => {
-//   return async dispatch => {
-//     try {
-//       dispatch(loginBegin());
-//       setTimeout(() => {
-//         Cookies.set('logedIn', true);
-//         return dispatch(loginSuccess(true));
-//       }, 1000);
-//     } catch (err) {
-//       dispatch(loginErr(err));
-//     }
-//   };
-// };
 
 const login = (body, keepSignIn) => async dispatch => {
   await ApiPostNoAuth('user/auth/login', body)
@@ -52,13 +34,10 @@ const login = (body, keepSignIn) => async dispatch => {
     .catch(e => {
       console.log('errpor  === ', e);
       if (e === 'incorrect password') {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
         return dispatch(loginSuccess(false));
       } else if (e === 'incorrect password') {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
         return dispatch(loginSuccess(false));
       } else {
-        // AuthStorage.setStorageData(STORAGEKEY.token, res.data)
         return dispatch(loginSuccess(false));
       }
     });

@@ -1,4 +1,4 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
@@ -9,22 +9,17 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
     const dispatch = useDispatch();
 
     const [Error, setError] = useState();
-    const [error, seterror] = useState(); // for valadation
+    const [error, seterror] = useState();
     const [FileData, setFileData] = useState();
 
     const readUploadFile = (e) => {
-        // console.log("e",e.target.value.split('.').lastIndexOf('xlsx'))
-        // console.log("e",e?.target?.value.split('.'))
-        // console.log("e",e.target.files)
 
         if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
             setError('');
             const file = e.target.files[0];
-            // console.log("file",file)
             const reader = new FileReader();
             reader.readAsBinaryString(file);
             reader.onload = event => {
-                // console.log("event",event)
                 const binaryData = event.target.result;
                 const workBook = XLSX.read(binaryData, { type: 'binary' });
                 workBook.SheetNames.forEach(sheet => {

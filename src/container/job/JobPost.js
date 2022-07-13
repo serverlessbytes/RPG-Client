@@ -391,7 +391,7 @@ const JobPost = () => {
                                                 onChange={e => onChangevalue(e, 'state')}
                                             >
                                                 <Option value="">Select state</Option>
-                                                {stateData && stateData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                {stateData && stateData.data.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                             </Select>
                                         </Form.Item>
                                     </Form>
@@ -408,7 +408,7 @@ const JobPost = () => {
                                                 onChange={e => onChangevalue(e, 'jobRole')}
                                             >
                                                 <Option value="">Select job role</Option>
-                                                {jobRolesData && jobRolesData.map(items => <Option value={items.id}>{items.name} </Option>)}
+                                                {jobRolesData && jobRolesData.map((items, i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                                             </Select>
                                         </Form.Item>
                                     </Form>
