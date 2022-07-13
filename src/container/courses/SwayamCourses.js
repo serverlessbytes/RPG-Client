@@ -44,7 +44,7 @@ const SwayamCourses = () => {
     mode: '',
     search: '',
   });
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(20);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [SwayamCourse, setSwayamCoursetable] = useState([]);
@@ -131,14 +131,7 @@ const SwayamCourses = () => {
     } else if (!state.length && exportTog) {
       toast.success("No swayam course data for export")
     }
-
-  }, [state, stateAll])
-
-  useEffect(() => {
-    console.log('stateAll', stateAll)
-    console.log('exportTog', exportTog)
-  }, [stateAll, exportTog])
-
+  }, [state, stateAll, exportTog])
 
   useEffect(() => {
     if (editSwayamCourseData && editSwayamCourseData.isActive === false) {

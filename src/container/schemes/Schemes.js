@@ -43,7 +43,7 @@ const Schemes = () => {
   const [state, setState] = useState('')
   const [stateAll, setStateAll] = useState('')
   const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(20);
   const [pageNumber, setPageNumber] = useState(1);
   const [exportTog, setExportTog] = useState(false)
   const [importModal, setImportModal] = useState(false);
@@ -94,7 +94,7 @@ const Schemes = () => {
 
   useEffect(() => {
     if (status && langIds.hindi && langIds.marathi) {
-      dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi)); //for listing
+      dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : "", langIds.hindi, langIds.marathi));
     }
   }, [perPage, pageNumber, status, langIds]);
 
@@ -367,7 +367,7 @@ const Schemes = () => {
     const newVal = ApiPost("scheme/editScheme", formData)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
+          dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : "", langIds.hindi, langIds.marathi));
         }
         return res
       })
@@ -801,6 +801,7 @@ const Schemes = () => {
                     </TableWrapper>
                   </UserTableStyleWrapper>
                 </TabPane>
+
                 <TabPane tab="Inactive schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">

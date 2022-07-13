@@ -221,7 +221,6 @@ const AddSchemes = () => {
     let error = {};
     let flage = false;
     let urlReg = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
-    // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
     let stringReg = /^[ A-Za-z]/;
     let a = stringReg.test(state.name)
 
@@ -301,10 +300,10 @@ const AddSchemes = () => {
       error.videoUrl = 'Video url is required';
       flage = true;
     }
-    // else if (!videoUrlReg.test(state.videoUrl)) {
-    //   error.videoUrl = 'Enter Valid videoUrl';
-    //   flage = true;
-    // }
+    else if (!urlReg.test(state.videoUrl)) {
+      error.videoUrl = 'Enter Valid videoUrl';
+      flage = true;
+    }
     if (!state.thumbnail) {
       error.thumbnail = 'Thumbnail is required';
       flage = true;

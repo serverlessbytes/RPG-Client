@@ -247,8 +247,8 @@ const Carousel = () => {
   };
 
   useEffect(() => {
-    if (getCarouseldata && getCarouseldata.data) {
-      setcarouselTableData(getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.map(item => {
+    if (getCarouselData && getCarouselData.data) {
+      setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map(item => {
         return {
           title: item.title,
           imageUrl: item.imageUrl,
