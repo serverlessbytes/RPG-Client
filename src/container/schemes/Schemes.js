@@ -29,8 +29,9 @@ const Schemes = () => {
   let history = useHistory();
   let dispatch = useDispatch();
   const CSVLinkRef = useRef(null)
+  const CSVLinkRefAll = useRef(null);
   const { Option } = Select;
-  // const [setUsersTableData, setsetUsersTableData] = useState()
+  const [setUsersTableData, setsetUsersTableData] = useState()
   const usersTableData = [];
 
   const [schemeCategory, setSchemeCategory] = useState({
@@ -39,9 +40,10 @@ const Schemes = () => {
     search: '',
   });
   const [viewModal, setViewModal] = useState(false);
-  const [state, setState] = useState('') //for export
+  const [state, setState] = useState('')
+  const [stateAll, setStateAll] = useState('')
   const [status, setStatus] = useState('active');
-  const [perPage, setPerPage] = useState(20);// forpagination
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [exportTog, setExportTog] = useState(false)
   const [importModal, setImportModal] = useState(false);
@@ -140,6 +142,7 @@ const Schemes = () => {
     }
     else if (schemeModulData && schemeModulData.status !== 200) {
       toast.error("Something went wrong")
+      dispatch(addSchemeInBulk(null))
     }
   }, [schemeModulData])
 
@@ -218,7 +221,36 @@ const Schemes = () => {
     { label: "isApproved", key: "isApproved" },
     { label: "type", key: "type" },
     { label: "key", key: "key" },
-    // { label: "sequence", key: "sequence" },
+    { label: "spoc", key: "spoc" },
+    { label: "thumbnail", key: "thumbnail" },
+    { label: "updatedAt", key: "updatedAt" },
+    { label: "videoUrl", key: "videoUrl" },
+    { label: "viewCount", key: "viewCount" },
+    { label: "website", key: "website" },
+    { label: 'application_form', key: 'application_form' },
+    { label: 'application_process', key: 'application_process' },
+    { label: 'hospital_expenses_estimation_certificate', key: 'hospital_expenses_estimation_certificate' },
+    { label: 'medical_superintendent', key: 'medical_superintendent' },
+    { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
+  ];
+  const headerAll = [
+    { label: "id", key: "id" },
+    { label: "name", key: "name" },
+    { label: "locations", key: "locations" },
+    { label: "schemeBenifit", key: "schemeBenifit" },
+    { label: "schemeCategory", key: "schemeCategory" },
+    { label: "benificiary", key: "benificiary" },
+    { label: "benifitLine", key: "benifitLine" },
+    { label: "createdAt", key: "createdAt" },
+    { label: "detail", key: "detail" },
+    { label: "documentation", key: "documentation" },
+    { label: "elink", key: "elink" },
+    { label: "grievanceRedress", key: "grievanceRedress" },
+    { label: "howToApply", key: "howToApply" },
+    { label: "isActive", key: "isActive" },
+    { label: "isApproved", key: "isApproved" },
+    { label: "type", key: "type" },
+    { label: "key", key: "key" },
     { label: "spoc", key: "spoc" },
     { label: "thumbnail", key: "thumbnail" },
     { label: "updatedAt", key: "updatedAt" },
@@ -247,9 +279,24 @@ const Schemes = () => {
     }
   }, [users])
 
+  // useEffect(() => {
+  //   if (users?.data) {
+  //     setStateAll(users.data.map((item) => {
+  //       return {
+  //         ...item,
+  //         locations: item?.locations?.map(item => item.name),
+  //         schemeBenifit: item?.schemeBenifit?.name,
+  //         schemeCategory: item?.schemeCategory?.name,
+  //         benifitLine: item.benifitLine,
+  //       }
+  //     })
+  //     )
+  //   }
+  // }, [users])
+
   useEffect(() => {
-    if (allschemeData?.data?.data) { //set a state for export excel
-      setState(allschemeData.data.data.map((item) => {
+    if (allschemeData?.data?.data) { //set a state for export excel+
+      setStateAll(allschemeData.data.data.map((item) => {
         return {
           ...item,
           locations: item?.locations?.map(item => item.name),
@@ -262,21 +309,29 @@ const Schemes = () => {
     }
   }, [allschemeData])
 
+
+
   useEffect(() => {
-    if (state.length && exportTog) {
+    if (state.length && exportTog === 'single') {
       CSVLinkRef?.current?.link.click()  // for export
       toast.success("Scheme data exported")
-    } else if (exportTog) {
+      setExportTog('');
+    } else if (stateAll.length && exportTog === 'all') {
+      CSVLinkRefAll?.current?.link.click();
+      toast.success('All scheme data exported');
+      setExportTog('');
+    } else if (!state.length && exportTog) {
       toast.success("No scheme data for export")
     }
+  }, [state, stateAll])
 
-  }, [state])
 
   useEffect(() => {
     return (() => {
       dispatch(getAllSchemesSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
     })
   }, [])
+
   const reDirect = () => {
     history.push(`${path}/addscheme`);
   };
@@ -325,25 +380,6 @@ const Schemes = () => {
     formData.append('isDeleted', true);
     formData.append('isPublished', userForDelete.isPublished);
     formData.append('isApproved', userForDelete.isApproved);
-    // if (userForDelete) {
-    //   delete userForDelete.key;
-    //   delete userForDelete.updatedAt;
-    //   delete userForDelete.viewCount;
-    //   delete userForDelete.createdAt;
-    //   delete userForDelete.schemeRatings;
-    //   delete userForDelete.schemeRatingSum;
-    //   delete userForDelete.bannerSelected;
-    //   delete userForDelete.saved;
-    //   delete userForDelete.enrolled;
-    //   delete userForDelete.hindi;
-    //   delete userForDelete.marathi;
-    //   userForDelete = {
-    //     ...userForDelete,
-    //     schemeBenifit: userForDelete.schemeBenifit.id,
-    //     schemeCategory: userForDelete.schemeCategory.id,
-    //     isActive: false,
-    //     isDeleted: true,
-    //   };
     const deleteSchemes = await newSchemes(formData)
     if (deleteSchemes.status === 200) {
       toast.success("Scheme deleted")
@@ -390,29 +426,7 @@ const Schemes = () => {
     formData.append('application_process', userForactive.application_process);
     formData.append('medical_superintendent', userForactive.medical_superintendent);
     formData.append('hospital_expenses_estimation_certificate', userForactive.hospital_expenses_estimation_certificate);
-    let data = {
-      // id: userForactive.id,
-      // name: userForactive.name,
-      // schemeCategory: userForactive.schemeCategory.id,
-      // schemeBenifit: userForactive.schemeBenifit.id,
-      // benifitLine: userForactive.benifitLine,
-      // benificiary: userForactive.benificiary,
-      // locations: userForactive.locations,
-      // detail: userForactive.detail,
-      // howToApply: userForactive.howToApply,
-      // documentation: userForactive.documentation,
-      // thumbnail: userForactive.thumbnail,
-      // videoUrl: userForactive.videoUrl,
-      // website: userForactive.website,
-      // type: userForactive.type,
-      // elink: userForactive.elink,
-      // grievanceRedress: userForactive.grievanceRedress,
-      // spoc: userForactive.spoc,
-      isActive: true,
-      isDeleted: false,
-      isPublished: true,
-      isApproved: true,
-    }
+
     const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
       toast.success("Scheme active")
@@ -438,11 +452,13 @@ const Schemes = () => {
   const onExportschemes = () => {
     dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
     setExportTog(true)
+    setExportTog('single');
   }
 
   const onAllExportSchemes = () => {
     dispatch(getAllSchemes(perPage, pageNumber))
     setExportTog(true)
+    setExportTog("all");
   }
 
   const clearFilter = () => {
@@ -527,9 +543,8 @@ const Schemes = () => {
   // }
 
   useEffect(() => {
-    setSchemeTableData(users?.data.map(item => {
+    setSchemeTableData(users?.data.map((item, index) => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
-
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
@@ -537,6 +552,7 @@ const Schemes = () => {
       var avg = sum / schemeratings.length;
 
       return ({
+        key: index,
         SchemeName: (
           <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>
             {item?.name}
@@ -740,7 +756,6 @@ const Schemes = () => {
       name: record.name,
     }),
   };
-
   return (
     <>
       <PageHeader
@@ -780,11 +795,17 @@ const Schemes = () => {
             </Dropdown>
 
             <CSVLink
-              // separator={";"}
-              // enclosingCharacter={`:`}
               headers={header}
               data={state}
               ref={CSVLinkRef}
+              filename="Scheme.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
+
+            <CSVLink
+              headers={headerAll}
+              data={stateAll}
+              ref={CSVLinkRefAll}
               filename="Scheme.csv"
               style={{ opacity: 0 }}
             ></CSVLink>
@@ -865,6 +886,7 @@ const Schemes = () => {
                             </Row>
                              <ActiveSchemesTable type ={type}/> */}
 
+
               <Tabs onChange={callback}>
                 <TabPane tab="Active schemes" key="active">
                   <UserTableStyleWrapper>
@@ -878,7 +900,7 @@ const Schemes = () => {
                       </Form> */}
 
                       <Table
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         dataSource={schemeTableData}
                         columns={schemeTableColumns}
                         // pagination={false}
@@ -919,7 +941,7 @@ const Schemes = () => {
                       </Form> */}
 
                       <Table
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         dataSource={schemeTableData}
                         // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
                         columns={schemeTableColumns}

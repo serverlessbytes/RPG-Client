@@ -31,6 +31,7 @@ const {
   addPartnerCourseInBulkErr,
   addSwayamCourseBegin,
   addSwayamCourseInBulkBegin,
+  addSwayamCourseInBulkSuccess,
   addSwayamCourseInBulkErr,
 
   importCourseCategoryInBulkBegin,
@@ -207,7 +208,7 @@ export const addSwayamCourseInBulk = (body) => async (dispatch) => {
   dispatch(addSwayamCourseInBulkBegin(true))
   await ApiPost(`course/addSwayamCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
-      return dispatch(addSwayamCourseModuleSuccess(res))
+      return dispatch(addSwayamCourseInBulkSuccess(res))
     }).catch(e => dispatch(addSwayamCourseInBulkErr(e)))
 }
 

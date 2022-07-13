@@ -240,7 +240,7 @@ const Banner = () => {
             const deletebanner = await newBanner(userForDelete)
             if (deletebanner.status === 200) {
                 toast.success("Banner deleted")
-            }else {
+            } else {
                 toast.error("Something went wrong")
             }
         }

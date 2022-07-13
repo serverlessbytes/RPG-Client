@@ -240,42 +240,40 @@ const Carousel = () => {
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
         toast.success('Carousel deleted');
-      }else {
+      } else {
         toast.error("Something went wrong")
-    }
+      }
     }
   };
 
   useEffect(() => {
     if (getCarouseldata && getCarouseldata.data) {
-      setcarouselTableData(
-        getCarouseldata && getCarouseldata.data &&
-        getCarouseldata.data.data.map(item => {
-          return {
-            title: item.title,
-            imageUrl: item.imageUrl,
-            action: (
-              <div className="active-schemes-table">
-                <div className="table-actions">
-                  <>
-                    <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
-                      <FeatherIcon icon="edit" size={16} />
-                    </Button>
-                    <Button
-                      className="btn-icon"
-                      type="danger"
-                      to="#"
-                      onClick={() => onDelete(item.id)}
-                      shape="circle"
-                    >
-                      <FeatherIcon icon="trash-2" size={16} />
-                    </Button>
-                  </>
-                </div>
+      setcarouselTableData(getCarouseldata && getCarouseldata.data && getCarouseldata.data.data.map(item => {
+        return {
+          title: item.title,
+          imageUrl: item.imageUrl,
+          action: (
+            <div className="active-schemes-table">
+              <div className="table-actions">
+                <>
+                  <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
+                    <FeatherIcon icon="edit" size={16} />
+                  </Button>
+                  <Button
+                    className="btn-icon"
+                    type="danger"
+                    to="#"
+                    onClick={() => onDelete(item.id)}
+                    shape="circle"
+                  >
+                    <FeatherIcon icon="trash-2" size={16} />
+                  </Button>
+                </>
               </div>
-            ),
-          };
-        }),
+            </div>
+          ),
+        };
+      }),
       );
     }
   }, [getCarouseldata]);
@@ -326,6 +324,7 @@ const Carousel = () => {
                 dataSource={carouselTableData}
                 columns={carouselTableColumns}
                 pagination={{
+                  showSizeChanger: true,
                   defaultPageSize: getCarouseldata?.data.per_page,
                   total: getCarouseldata?.data.page_count,
                   onChange: (page, pageSize) => {

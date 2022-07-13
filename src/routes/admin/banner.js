@@ -6,7 +6,7 @@ const BannerComponent = lazy(() => import('../../container/banner/Banner'));
 
 const banner = () => {
 
-    const { path } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   return (
     <Switch>

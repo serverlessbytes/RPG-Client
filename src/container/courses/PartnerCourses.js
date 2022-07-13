@@ -367,7 +367,7 @@ const PartnerCourses = () => {
   useEffect(() => {
     if (courseData && courseData.data) {
       setPartnertable(
-        courseData.data?.data?.map(item => {
+        courseData.data?.data?.map((item, index) => {
           let courseRatings = item.courseRatings.map(item => item.rating)
           var sum = 0;
 
@@ -378,6 +378,7 @@ const PartnerCourses = () => {
           var avg = sum / courseRatings.length;
 
           return {
+            key: index,
             CourseName: (
               <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
@@ -525,6 +526,12 @@ const PartnerCourses = () => {
     />
   );
 
+  const rowSelection = {
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
   return (
     <>
       <PageHeader
@@ -628,6 +635,7 @@ const PartnerCourses = () => {
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table
+                        rowSelection={rowSelection}
                         dataSource={partnertable}
                         columns={partnerCourseTableColumns}
                         pagination={{
@@ -654,7 +662,7 @@ const PartnerCourses = () => {
                       </Form> */}
 
                       <Table
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         dataSource={partnertable}
                         // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
                         columns={partnerCourseTableColumns}

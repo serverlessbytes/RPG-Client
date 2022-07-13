@@ -35,6 +35,7 @@ const SwayamCourses = () => {
   const { Option } = Select;
   const history = useHistory();
   const CSVLinkRef = useRef(null);
+  const CSVLinkRefAll = useRef(null);
   const { TabPane } = Tabs;
   const { path } = useRouteMatch();
 
@@ -43,14 +44,15 @@ const SwayamCourses = () => {
     mode: '',
     search: '',
   });
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [status, setStatus] = useState('active');
   const [SwayamCourse, setSwayamCoursetable] = useState([]);
   const [viewModal, setViewModal] = useState(false);
   const [importModal, setImportModal] = useState(false);
   const [state, setState] = useState('');
-  const [exportTog, setExportTog] = useState(false);
+  const [stateAll, setStateAll] = useState([])
+  const [exportTog, setExportTog] = useState('');
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [langIds, setLangIds] = useState({
     hindi: '',
@@ -62,12 +64,15 @@ const SwayamCourses = () => {
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
+
   const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
   const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
   const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError);
   const oneSwayamCourseData = useSelector(state => state.category.editFilterData);
   const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
-  const importCourseData = useSelector(state => state.category.addSwayamCourseModuleData)
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData)
+  const importCourseData = useSelector(state => state.category.addSwayamCourseInBulkData)
+
 
   const header = [
     { label: 'id', key: 'id' },
@@ -81,20 +86,25 @@ const SwayamCourses = () => {
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
+  const headerAll = [
+    { label: 'id', key: 'id' },
+    { label: 'name', key: 'name' },
+    { label: 'certificate', key: 'certificate' },
+    { label: 'createdAt', key: 'createdAt' },
+    { label: 'detail', key: 'detail' },
+    { label: 'duration', key: 'duration' },
+    { label: 'key', key: 'key' },
+    { label: 'mode', key: 'mode' },
+    { label: 'thumbnail', key: 'thumbnail' },
+    { label: 'viewCount', key: 'viewCount' },
+  ];
 
-  // useEffect(() => {
-  //   console.log("courseModuleData?.data?.isDeleted", courseModuleData);
-  //   if (courseModuleData?.status === 200) {
-  //     { courseModuleData?.data?.isDeleted ? toast.success("Course module deleted") : toast.success("Course module updated") }
-  //   }
-  // }, [courseModuleData])
-
-  // useEffect(() => {
-  //   if (importCourseData && importCourseData.status === 200) {
-  //     toast.success("Swayam course modules added");
-  //     dispatch(addSwayamCourseModuleSuccess(null));
-  //   }
-  // }, [importCourseData]);
+  useEffect(() => {
+    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
+      toast.success("Swayam course modules added");
+      dispatch(addSwayamCourseModuleSuccess(null));
+    }
+  }, [addSwayamCourseModuleData]);
 
   useEffect(() => {
     if (courseModuleData?.sattus === 200) {
@@ -109,22 +119,25 @@ const SwayamCourses = () => {
     }
   }, [addSwayamCourseModuleError]);
 
-
   useEffect(() => {
-    if (state.length && exportTog) {
-      CSVLinkRef?.current?.link.click();
-      toast.success('Swayam course data exported');
-      setExportTog(false);
-    } else if (exportTog) {
-      toast.success('No swayam data for export');
+    if (state.length && exportTog === 'single') {
+      CSVLinkRef?.current?.link.click()  // for export
+      toast.success("Swayam course data exported")
+      setExportTog('');
+    } else if (stateAll.length > 0 && exportTog === 'all') {
+      CSVLinkRefAll?.current?.link.click();
+      toast.success('All swayam course data exportedd');
+      setExportTog('');
+    } else if (!state.length && exportTog) {
+      toast.success("No swayam course data for export")
     }
-  }, [state]);
+
+  }, [state, stateAll])
 
   useEffect(() => {
-    return () => {
-      dispatch(getallSwayamCourseSuccess(null));
-    };
-  }, []);
+    console.log('stateAll', stateAll)
+    console.log('exportTog', exportTog)
+  }, [stateAll, exportTog])
 
 
   useEffect(() => {
@@ -143,23 +156,6 @@ const SwayamCourses = () => {
       toast.error('Something went wrong');
     }
   }, [editSwayamCourseErr]);
-
-  useEffect(() => {
-    if (courseData?.data?.data) {
-      // courseData?.data?.data.map((item,i) => {
-      //   let x = Math.floor((Math.random() * 5) + 1);
-
-      //   let data = {
-      //     "comment": "test rating",
-      //     "rating": x,
-      //     "courseId": item.id
-      //   }
-      //   ApiPost('courseRating/addCourseRating',data).then((res) => {
-      //   })
-      // })
-      setState(courseData.data.data);
-    }
-  }, [courseData]);
 
   useEffect(() => {
     dispatch(getCategoryData());
@@ -288,39 +284,23 @@ const SwayamCourses = () => {
     history.push(`/admin/courses/viewcourse?id=${id}`)
   };
 
+  useEffect(() => {
+    if (courseData?.data?.data) {
+      setState(courseData.data.data);
+    }
+  }, [courseData]);
+
   const onExportCourse = () => {
-    // dispatch(getallSwayamCourse(data.mode))
     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status, "", langIds.hindi, langIds.marathi));
-    setExportTog(true);
-    // if (state.length > 0) {
-    //   setTimeout(() => {
-    //     CSVLinkRef?.current?.link.click()
-    //   });
-    // }
-    // CSVLinkRef?.current?.link.click()
+    setExportTog('single');
   };
 
-  const onAllExportCourse = () => {
-    setExportTog(true);
-    ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then(res => {
-      setState(res?.data?.data);
+  const onAllExportCourse = async () => {
+    await ApiGet(`course/allCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`).then(res => {
+      setStateAll(res?.data?.data);
+      setExportTog('all');
     });
   };
-
-  // const onApproved = (id, isAp, key) => {
-  //   if (status !== 'active') {
-  //     return;
-  //   }
-  //   let data = {
-  //     courseId: id,
-  //     key: key,
-  //     isApproved: !isAp,
-  //   };
-  //   ApiPost(`course/updateIsApproved?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data).then(res => {
-  //     toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful');
-  //     dispatch(getCoursefilter(data.category, perPage, pageNumber, data.mode, status));
-  //   });
-  // };
 
   const callback = key => {
     setStatus(key);
@@ -346,10 +326,6 @@ const SwayamCourses = () => {
   const getOneCourseDetailByKey = async (languageId, key, id) => {
     await ApiGet(`course/getOneCourseDetailByKey?langId=${languageId}&key=${key}`)
       .then((res) => {
-        //  dispatch(editCategoryRatingSuccess(res))
-        //  if (res.status === 200) {  
-        //   return dispatch(getCourseRatingData(per_page, page_number))
-        // }
         if (res.status === 200) {
           toast.success("Course alredy exist in this language!")
         }
@@ -359,7 +335,6 @@ const SwayamCourses = () => {
           setIsConfirmModal(true);
           setLanguageID(languageId);
           setID(id);
-          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
   }
@@ -372,16 +347,16 @@ const SwayamCourses = () => {
   }
 
   const onClick = ({ key }) => {
-    if (key == 'exportCourse') {
+    if (key === 'exportCourse') {
       onExportCourse();
     }
-    if (key == 'exportAllCourse') {
+    else if (key === 'exportAllCourse') {
       onAllExportCourse();
     }
-    if (key == 'addCourse') {
+    else if (key === 'addCourse') {
       history.push(`/admin/courses/addcourses`);
     }
-    if (key == 'import') {
+    else if (key === 'import') {
       setImportModal(true);
     }
 
@@ -414,7 +389,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (courseData && courseData.data) {
       setSwayamCoursetable(
-        courseData.data?.data?.map(item => {
+        courseData.data?.data?.map((item, index) => {
           let courseRatings = item.courseRatings.map(item => item.rating)
           var sum = 0;
 
@@ -425,6 +400,7 @@ const SwayamCourses = () => {
           var avg = sum / courseRatings.length;
 
           return {
+            key: index,
             CourseName: (
               <span className='For-Underline' onClick={() => viewSwayamCoursedata(item.id)}>
                 {item?.name}
@@ -464,20 +440,10 @@ const SwayamCourses = () => {
                   </Button>
 
                   <Button size="small" type={item.marathi ? "success" : "primary"} shape='round' onClick={() => {
-                    // selectedLanguageData(item)
                     getOneCourseDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }} >
                     MT
                   </Button>
-
-                  {/* <Button
-                        className="btn-icon"
-                        type="success"
-                        onClick={() => viewSwayamCoursedata(item.id)}
-                        shape="circle"
-                      >
-                        <FeatherIcon icon="eye" size={16} />
-                      </Button> */}
                 </>
               </div>
             ),
@@ -564,6 +530,13 @@ const SwayamCourses = () => {
 
   ];
 
+  const rowSelection = {
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User',
+      name: record.name,
+    }),
+  };
+
   return (
     <>
       <PageHeader
@@ -571,31 +544,6 @@ const SwayamCourses = () => {
         title="Swayam courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            {/* <Button size="small" onClick={() => onExportCourse()} type="info">
-              Export Course
-            </Button>
-            <CSVLink
-              data={state}
-              ref={CSVLinkRef}
-              headers={header}
-              filename="SwayamCourse.csv"
-              style={{ opacity: 0 }}
-            ></CSVLink>
-            <Button size="small" type="info" onClick={() => onAllExportCourse()}>
-              Export All Course
-            </Button>
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => {
-                history.push(`/admin/courses/addcourses`);
-              }}
-            >
-              Add Course
-            </Button>
-            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
-              Import
-            </Button> */}
             <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
                 <Space>
@@ -604,10 +552,19 @@ const SwayamCourses = () => {
                 </Space>
               </a>
             </Dropdown>
+
             <CSVLink
               headers={header}
               data={state}
               ref={CSVLinkRef}
+              filename="SwayamCourse.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
+
+            <CSVLink
+              headers={headerAll}
+              data={stateAll}
+              ref={CSVLinkRefAll}
               filename="SwayamCourse.csv"
               style={{ opacity: 0 }}
             ></CSVLink>
@@ -665,7 +622,7 @@ const SwayamCourses = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="S earch" value={data.search} name='Search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                      <Input placeholder="Search" value={data.search} name='Search' onChange={e => onChangehandle(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>
@@ -697,7 +654,7 @@ const SwayamCourses = () => {
                       </Form> */}
 
                       <Table
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         dataSource={SwayamCourse}
                         columns={swayamCourseTableColumns}
                         pagination={{
@@ -721,7 +678,7 @@ const SwayamCourses = () => {
                     <TableWrapper className="table-responsive">
 
                       <Table
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         dataSource={SwayamCourse}
                         columns={swayamCourseTableColumns}
                         pagination={{
