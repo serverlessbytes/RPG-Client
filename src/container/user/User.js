@@ -18,17 +18,16 @@ const User = () => {
     const dispatch = useDispatch()
     const { path } = useRouteMatch();
     const history = useHistory()
+    const { TabPane } = Tabs;
+    const { editProfileSuccess, editProfileErr } = actions;
+
     const [status, setStatus] = useState('active');
-    const [perPage, setPerPage] = useState(20); // forpagination
+    const [perPage, setPerPage] = useState(20);
     const [pageNumber, setPageNumber] = useState(1);
-    // const [userData, setUserData] = useState()
     const [userTable, setUserTable] = useState([])
     const [type, setType] = useState("USER")
 
-    const { TabPane } = Tabs;
-
-    const { editProfileSuccess, editProfileErr } = actions;
-
+    
     const userData = useSelector(state => state.users.getAllUser)
     const editProfileData = useSelector(state => state.users.editProfileData)
     const editProfileError = useSelector(state => state.users.editProfileErr)
@@ -65,7 +64,6 @@ const User = () => {
             };
             delete userForDelete.userTakenRatings
             const restoreActiveUser = await activeUser(id, userForDelete);
-            console.log('restoreActiveUser', restoreActiveUser)
             if (restoreActiveUser.status === 200) {
                 toast.success("User deleted")
             } else {
@@ -113,6 +111,10 @@ const User = () => {
         if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
             toast.success("User updated")
+        }
+        else if(editProfileData && editProfileData.message === "User already exists"){
+            dispatch(editProfileSuccess(null))
+            toast.success("User already exists")
         }
     }, [editProfileData])
 

@@ -1,7 +1,5 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
-import { Row, Col, Skeleton, Select, Form, Input, Button } from 'antd';
-import { NavLink, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { SettingWrapper } from './overview/style';
+import React, {useEffect, useState } from 'react';
+import { Row, Col, Form, Input, Button } from 'antd';
 import { PageHeader } from '../../../components/page-headers/page-headers';
 import { Main } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
@@ -13,9 +11,7 @@ import actions from '../../../redux/authentication/actions';
 import { toast } from 'react-toastify';
 
 const MyProfile = () => {
-  const { path } = useRouteMatch();
   const dispatch = useDispatch();
-  const [form] = Form.useForm();
 
   const { editProfileSuccess, editProfileErr } = actions;
 
@@ -25,7 +21,6 @@ const MyProfile = () => {
     phone: '',
     avatar: '',
   })
-
   const [getData,setGetData] = useState({
    name : "",
    avatar : '',
@@ -43,16 +38,20 @@ const MyProfile = () => {
   }, [])
 
   useEffect(() => {
-    if (editUserData && editUserData.status === 200) {
+    // if (editUserData && editUserData.status === 200) {
+    if (editUserData && editUserData.data && editUserData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("Profile Update successfully")
+      toast.success("Profile updated")
+    }else if(editUserData && editUserData.message ===  "User already exists"){
+      dispatch(editProfileSuccess(null))
+      toast.success('User already exists')
     }
   }, [editUserData])
 
   useEffect(() => {
     if (editProfileError) {
       dispatch(editProfileErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [editProfileError])
 
@@ -99,8 +98,6 @@ const MyProfile = () => {
       setError({ ...error, avatar: "" });
     }
     else {
-      // setData({...data,
-      // })
       setError({ ...error, avatar: 'Please select valid document file' })
       setData({ ...data, avatar: '' })
     }
@@ -175,7 +172,6 @@ const MyProfile = () => {
               />
             </Col>
             <Col xxl={18} lg={16} md={14} xs={24}>
-              {/* <Form name="login" form={form} onFinish={handleSubmit} layout="vertical"> */}
               <Row align="middle" justify="space-around">
                 <Col lg={10}>
                   <label htmlFor="name">User name</label>
@@ -195,8 +191,6 @@ const MyProfile = () => {
                 <Col lg={10}>
                   <label htmlFor="email">User email</label>
                   <Form.Item>
-                    {/* rules={[{ type: 'email' }]}
-                    > */}
                     <Input placeholder="Enter email"
                       name="email"
                       onChange={(e) => onChangeHandler(e)}
@@ -223,19 +217,15 @@ const MyProfile = () => {
                 <Col lg={10}>
                   <label htmlFor="email">Avatar</label>
                   <Form.Item>
-                    {/* rules={[{ type: 'email' }]}
-                    > */}
                     <Input placeholder="Enter avatar"
                       type="file"
                       name="avatar"
                       onChange={(e) => fileUpload(e, "avatar")}
-                    // value={data.avatar}
                     />
                     {error.avatar && <span style={{ color: 'red' }}>{error.avatar}</span>}
                   </Form.Item>
                 </Col>
               </Row>
-              {/* </Form> */}
             </Col>
             <Button onClick={() => editProfile()}>Update profile</Button>
           </Row>

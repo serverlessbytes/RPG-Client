@@ -7,12 +7,11 @@ import { Main, TableWrapper } from '../styled';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import {getAllUser } from '../../redux/users/actionCreator';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import actions from '../../redux/users/actions';
-
 
 const Employer = () => {
     const dispatch = useDispatch()
@@ -65,7 +64,7 @@ const Employer = () => {
 
             if (restoreActiveEmployer.status === 200) {
                 toast.success("Employer deleted")
-            }else {
+            } else {
                 toast.error("Something went wrong")
             }
         }
@@ -100,7 +99,7 @@ const Employer = () => {
 
         if (restoreActiveEmployer.status === 200) {
             toast.success("Employer actived")
-        }else {
+        } else {
             toast.error("Something went wrong")
         }
     };
@@ -109,6 +108,10 @@ const Employer = () => {
         if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
             toast.success("Employer updated")
+        }
+        else if (editProfileData && editProfileData.message === "User already exists") {
+            dispatch(editProfileSuccess(null))
+            toast.success("User already exists")
         }
     }, [editProfileData])
 
@@ -157,10 +160,6 @@ const Employer = () => {
         }
     }, [employerData])
 
-    // useEffect(() => {
-    //     getData();
-    // }, [perPage, pageNumber, status])
-
     const employerTableColumns = [
         {
             title: 'Name',
@@ -192,14 +191,6 @@ const Employer = () => {
             <PageHeader
                 ghost
                 title="Employer"
-            // buttons={[
-            //     <div className="page-header-actions">
-            //         <Button size="small" type="primary" onClick={allEmployerExport}>
-            //             Export All
-            //         </Button>
-            //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-            //     </div>
-            // ]}
             />
             <Main>
                 <Cards headless>

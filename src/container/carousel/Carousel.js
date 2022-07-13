@@ -27,7 +27,7 @@ const Carousel = () => {
     title: '',
     imageUrl: '',
   });
-  const [perPage, setPerPage] = useState(20)
+  const [perPage, setPerPage] = useState(10)
   const [pageNumber, setPageNumber] = useState(1)
   const [importModel, setImportModel] = useState(false);
   const [formErrors, setFormErrors] = useState();
@@ -40,7 +40,6 @@ const Carousel = () => {
   const editCarouselError = useSelector(state => state.carousel.editCarouselError);
   const addBulkCarouselData = useSelector(state => state.carousel.addBulkCarouselData);
   const addBulkCarouselError = useSelector(state => state.carousel.addBulkCarouselError);
-
 
   useEffect(() => {
     if (addBulkCarouselData && addBulkCarouselData.status === 200) {
@@ -236,7 +235,6 @@ const Carousel = () => {
         isActive: false,
         isDeleted: true,
       };
-      // dispatch(editCarousel(userForDelete))
       const deleteCarousel = await newCarousel(userForDelete);
       if (deleteCarousel.status === 200) {
         toast.success('Carousel deleted');
@@ -329,10 +327,10 @@ const Carousel = () => {
                   defaultPageSize: getCarouseldata?.data.per_page,
                   total: getCarouseldata?.data.page_count,
                   onChange: (page, pageSize) => {
-                    setPageNumber(page);
-                    setPerPage(pageSize);
+                      setPageNumber(page);
+                      setPerPage(pageSize);
                   },
-                }}
+              }}
               />
             </TableWrapper>
           </UserTableStyleWrapper>

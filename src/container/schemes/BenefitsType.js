@@ -1,10 +1,10 @@
-import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
-import { Main, ProjectPagination, TableWrapper } from '../styled';
+import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editBenefitsData, getBenefitsData, postBenefitsData } from '../../redux/benefitsType/actionCreator';
@@ -16,10 +16,8 @@ import ImportSchemeBenefits from '../../components/modals/ImportSchemeBenefits';
 
 const BenefitsType = () => {
     const { editBenefitsSuccess, editBenefitsErr, postBenefitsSuccess, postBenefitsErr, addSchemeBenefitBulkSuccess, addSchemeBenefitBulkErr } = actions;
-    // const {addSchemeBenefitBulkSuccess} = actions;
     const dispatch = useDispatch();
     const [form] = Form.useForm();
-    const usersTableData = [];
 
     const [benifitsTableData, setBenifitsTableData] = useState([]);
     const [dataForEdit, setDataForEdit] = useState(); //foredit
@@ -35,17 +33,11 @@ const BenefitsType = () => {
     const editBenefitError = useSelector((state) => state.beneFit.editBenefitError)
     const addSchemeBenefitBulkData = useSelector(state => state.beneFit.addSchemeBenefitBulkData)
     const addSchemeBenefitBulkError = useSelector(state => state.beneFit.addSchemeBenefitBulkErr)
-    const { users } = useSelector(state => {
-        return {
-            users: state.users,
-        };
-    });
-    const languageData = useSelector((state) => state.language.getLanguageData);
 
     useEffect(() => {
         if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status === 200) {
             dispatch(addSchemeBenefitBulkSuccess(null))
-            toast.success("Scheme imported ");
+            toast.success("Scheme imported");
         }
     }, [addSchemeBenefitBulkData])
 
@@ -61,8 +53,6 @@ const BenefitsType = () => {
             dispatch(getBenefitsData())
             dispatch(postBenefitsSuccess(null))
             toast.success("Scheme benifit added");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [postBenefitsdata])
 
@@ -73,7 +63,7 @@ const BenefitsType = () => {
     useEffect(() => {
         if (postBenefitsError) {
             dispatch(postBenefitsErr(null))
-            toast.error("Benifit already exists");
+            toast.success("Scheme benifit already exists");
         }
     }, [postBenefitsError])
 
@@ -81,8 +71,6 @@ const BenefitsType = () => {
         if (editBenefitData && editBenefitData.status === 200) {
             dispatch(editBenefitsSuccess(null))
             toast.success("Scheme benifit updated");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [editBenefitData])
 
@@ -113,7 +101,6 @@ const BenefitsType = () => {
                 isActive: false,
                 isDeleted: true
             }
-            // dispatch(editBenefitsData(dataForDelete))
             const deleteBenifts = await newBenefites(dataForDelete)
             if (deleteBenifts.status === 200) {
                 toast.success("Scheme benifit deleted")
@@ -130,7 +117,6 @@ const BenefitsType = () => {
             })
             setNameTog(true)
         }
-        //dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
 
     }
@@ -188,21 +174,6 @@ const BenefitsType = () => {
         }
         form.resetFields()
         handleCancel()
-    };
-
-    const [state, setState] = useState({
-        projects: usersTableData,
-        current: 0,
-        pageSize: 0,
-    });
-
-    const onShowSizeChange = (current, pageSize) => {
-        setState({ ...state, current, pageSize });
-    };
-
-    const onHandleChange = (current, pageSize) => {
-        // You can create pagination in here
-        setState({ ...state, current, pageSize });
     };
 
     useEffect(() => {
@@ -263,33 +234,13 @@ const BenefitsType = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                            {/* --- search bar --- */}
-                            {/* <Form name="sDash_select" layout="vertical">
-                                <Form.Item name="search" label="">
-                                    <Input placeholder="search" style={{ width: 200 }} />
-                                </Form.Item>
-                            </Form> */}
-
                             <Table
                                 dataSource={benifitsTableData}
                                 columns={usersTableColumns}
                                 pagination={false}
                             />
-
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {usersTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
@@ -307,7 +258,6 @@ const BenefitsType = () => {
                         error.name && <span style={{ color: "red" }}>{error.name}</span>
                     }
                 </Form>
-
             </Modal>
 
             {

@@ -20,12 +20,10 @@ const AddJobPost = () => {
     const langId = searchParams.get('langid');
     let history = useHistory();
     let dispatch = useDispatch();
-    let location = useLocation();
     const { Option } = Select;
     const { TextArea } = Input;
     const {
-        getoneJobPostSuccess, // foe edit
-        addJobPostErr
+        getoneJobPostSuccess, // for edit
     } = actions;
 
     const [error, setError] = useState({}); // for valadation
@@ -69,8 +67,6 @@ const AddJobPost = () => {
     const stateData = useSelector((state) => state.state.getStateData) //state
     const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
     const getEmployerdata = useSelector((state) => state.job.getEmployerData)
-    // const addJobPostData = useSelector((state) => state.job.addJobPostData
-
     useEffect(() => {
         let temp = {
             hindi: '',
@@ -456,14 +452,6 @@ const AddJobPost = () => {
         <>
             <PageHeader
                 title={editJobsID ? "Edit job post" : "Add job post"}
-            // buttons={[
-            //     <div key="1" className="page-header-actions">
-            //         <Button size="small" onClick={() => { }} type="primary">
-            //             <FeatherIcon icon="plus" size={14} />
-            //             Add New
-            //         </Button>
-            //     </div>,
-            // ]}
             />
             <Main >
                 <HorizontalFormStyleWrap>
@@ -487,7 +475,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "jobType")}
                                                     >
                                                         <Option value="">Select jobtype</Option>
-                                                        {jobData && jobData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {jobData && jobData.data.map((item,i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.jobType && <span style={{ color: 'red' }}>{error.jobType}</span>}
                                                 </Form.Item>
@@ -581,8 +569,7 @@ const AddJobPost = () => {
                                         </Col>
                                     </Row>
                                 </Col>
-                                {/* </Row>
-                            <Row justify="space-between"> */}
+                              
                                 <Col lg={11} md={11} sm={24} xs={24}>
                                     <Row align="middle">
                                         <Col lg={8} md={9} xs={24}>
@@ -797,7 +784,7 @@ const AddJobPost = () => {
                                             <label htmlFor="name" className='mb-0'>Type of Job</label>
                                         </Col>
                                         <Col lg={16} md={15} xs={24}>
-                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
+                                           
                                             <Radio.Group name="type" value={state.type} onChange={(e) => onChangeValue(e)}>
                                                 <Space direction="vertical">
                                                     <Row>
@@ -807,7 +794,7 @@ const AddJobPost = () => {
                                                 </Space>
                                             </Radio.Group>
                                             {error.type && <span style={{ color: 'red' }}>{error.type}</span>}
-                                            {/* </Form.Item> */}
+                                          
                                         </Col>
                                     </Row>
                                 </Col>
@@ -817,8 +804,7 @@ const AddJobPost = () => {
                                         <Col lg={8} md={9} xs={24}>
                                             <label htmlFor="isactive" className='mb-0'>Type of field</label>
                                         </Col>
-                                        <Col lg={16} md={15} xs={24}>
-                                            {/* <Form.Item name="isactive" style={{marginBottom:"0px"}}> */}
+                                        <Col lg={16} md={15} xs={24}>        
                                             <Radio.Group name="extraType" value={state.extraType} onChange={(e) => onChangeValue(e)}  >
                                                 <Space direction="vertical">
                                                     <Row>
@@ -833,7 +819,6 @@ const AddJobPost = () => {
 
                                             </Radio.Group>
                                             {error.extraType && <span style={{ color: 'red' }}>{error.extraType}</span>}
-                                            {/* </Form.Item> */}
                                         </Col>
                                     </Row>
                                 </Col>

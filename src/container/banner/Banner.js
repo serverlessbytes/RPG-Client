@@ -15,8 +15,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import Importbanner from '../../components/modals/ImportBanner';
 
-//import { data, data } from 'browserslist';
-
 const Banner = () => {
     const dispatch = useDispatch();
 
@@ -61,7 +59,6 @@ const Banner = () => {
             else {
                 setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
                 setData({ ...data, imageUrl: '' })
-                // setFileError('Please select valid document file')
             }
         }
         else {
@@ -126,7 +123,6 @@ const Banner = () => {
                 imageUrl: getOneBannerdata.data.imageUrl,
             })
         }
-        //dispatch(GetBanner());
     }, [getOneBannerdata])
 
     const showModal = () => {
@@ -337,9 +333,7 @@ const Banner = () => {
                     onOk={() => handleOk()}
                     visible={isModalVisible}
                     onCancel={() => handleCancel()}
-
                     title="Banner"
-
                     okText={nameTog ? "Edit" : "Add"}
                 >
                     <Form name="banner" layout="vertical">
@@ -365,7 +359,6 @@ const Banner = () => {
                             />
                             {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
                         </Form.Item>
-                        {/* {fileError !== '' && <label style={{ color: 'red' }}>{fileError}</label>} */}
                     </Form>
                 </Modal>}
             {importModel && <Importbanner modaltitle="Import banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}

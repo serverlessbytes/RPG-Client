@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Button } from '../../components/buttons/buttons';
-import { Col, Form, Input, Modal, Pagination, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStateData, postStateData } from '../../redux/state/actionCreator';
 import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
@@ -36,8 +36,8 @@ const district = () => {
 
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
-    const postDistrictdataa = useSelector((state) => state.district.postDistrictData) //state
-    const postDistrictDataError = useSelector((state) => state.district.getStateData) //state
+    const postDistrictdataa = useSelector((state) => state.district.postDistrictData) 
+    const postDistrictDataError = useSelector((state) => state.district.getStateData) 
 
     const onstatedata = (e, name) => {
         if (name === "state") {
@@ -107,12 +107,6 @@ const district = () => {
         dispatch(getDistrictData(statedata ? statedata : ""))
     }
 
-    // useEffect(() => {
-    //     if (statedata) {
-    //         dispatch(getDistrictData(statedata))
-    //     }
-    // }, [statedata])
-
     const validation = (data) => {
 
         let error = {};
@@ -167,7 +161,6 @@ const district = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            {/* <FeatherIcon icon="plus" size={14} /> */}
                             Add District
                         </Button>
                     </div>
@@ -190,8 +183,8 @@ const district = () => {
                                     >
                                         <Option value="">Select State</Option>
                                         {
-                                            stateData && stateData.data.map((item) => (
-                                                <Option value={item.id}> {item.name} </Option>
+                                            stateData && stateData.data.map((item,i) => (
+                                                <Option key={i} value={item.id}> {item.name} </Option>
                                             ))
                                         }
                                     </Select>
@@ -239,8 +232,8 @@ const district = () => {
                         <Select placeholder="Select state" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
                             <Option value='' >Select state</Option>
                             {
-                                stateData && stateData.data.map((item) => (
-                                    <Option value={item.id}> {item.name} </Option>
+                                stateData && stateData.data.map((item,i) => (
+                                    <Option key={i} value={item.id}> {item.name} </Option>
                                 ))
                             }
 
