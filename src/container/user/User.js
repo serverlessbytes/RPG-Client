@@ -4,11 +4,11 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '../../components/buttons/buttons';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
+import { getAllUser } from '../../redux/users/actionCreator';
 import { useDispatch, useSelector } from 'react-redux';
 import StarRatings from 'react-star-ratings';
 import { toast } from 'react-toastify';
@@ -61,14 +61,15 @@ const User = () => {
                 id: userForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: userForDelete.avatar,
             };
             delete userForDelete.userTakenRatings
-            dispatch(editProfile(userForDelete));
             const restoreActiveUser = await activeUser(id, userForDelete);
-
+            console.log('restoreActiveUser', restoreActiveUser)
             if (restoreActiveUser.status === 200) {
-                toast.success("User Delete successful")
+                toast.success("User deleted")
+            } else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -83,43 +84,44 @@ const User = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
     const onActive = async id => {
         let activeData = userData && userData.data && userData.data.data.find(item => item.id === id);
-        console.log("activeData", activeData)
         if (activeData) {
             activeData = {
                 ...activeData,
                 id: activeData.id,
                 isActive: true,
                 isDeleted: false,
-                avatar: 'dfd',
+                avatar:activeData.avatar,
             };
             delete activeData.userTakenRatings
         }
         const restoreActiveUser = await activeUser(id, activeData);
 
         if (restoreActiveUser.status === 200) {
-            toast.success("User active successful")
+            toast.success("User actived")
+        } else {
+            toast.error("Something went wrong")
         }
     }
 
-    useEffect(()=>{
-        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+    useEffect(() => {
+        if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
-            toast.success("User Update successful")
+            toast.success("User updated")
         }
-    },[editProfileData])
+    }, [editProfileData])
 
     useEffect(() => {
-        if(editProfileError){
+        if (editProfileError) {
             dispatch(editProfileErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
-    },[editProfileError])
+    }, [editProfileError])
 
     useEffect(() => {
         dispatch(getAllUser(perPage, pageNumber, status, type))
@@ -177,22 +179,21 @@ const User = () => {
         }
     }, [userData])
 
-
-    // useEffect(() => {
-    //     getData()
-    // }, [perPage, pageNumber, status])
-
     const userTableColumns = [
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Email',
             dataIndex: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
-            title: 'UserRating',
+            title: 'User rating',
             dataIndex: 'userTakenRatings',
         },
         {
@@ -207,27 +208,18 @@ const User = () => {
         },
     ];
 
-
     return (
         <>
             <PageHeader
                 ghost
                 title="User"
-            // buttons={[
-            //     <div className="page-header-actions">
-            //         <Button size="small" type="primary" onClick={allEmployerExport}>
-            //             Export All
-            //         </Button>
-            //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-            //     </div>
-            // ]}
             />
             <Main>
                 <Cards headless>
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active User" key="active">
+                                <TabPane tab="Active user" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -246,7 +238,7 @@ const User = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive User" key="inactive">
+                                <TabPane tab="Inactive user" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

@@ -75,6 +75,7 @@ const Schemes = () => {
   const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
 
 
+
   const onChnageValue = (e, name) => {
     if (name === 'category') {
       setSchemeCategory({ ...schemeCategory, category: e });
@@ -111,41 +112,49 @@ const Schemes = () => {
   }, []);
 
   useEffect(() => {
+    if (status && langIds.hindi && langIds.marathi) {
+      dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi)); //for listing
+    }
+  }, [perPage, pageNumber, status, langIds]);
+
+  useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
       dispatch(editSchemeSuccess(null))
       //dispatch(getJobsFilterForMainSuccess(null))
-      toast.success("Scheme update successful");
+      toast.success("Scheme updated");
     }
   }, [editSchemedata])
 
   useEffect(() => {
     if (editSchemedata && editSchemedata.status !== 200) {
       dispatch(editSchemeErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [editSchemeError])
 
   useEffect(() => {
     if (schemeModulData && schemeModulData.status === 200) {
-      toast.success("Scheme Import sucessful")
+      toast.success("Scheme import")
       dispatch(addSchemeInBulk(null))
+      dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
     else if (schemeModulData && schemeModulData.status !== 200) {
-      toast.error("somthimg went wromg")
+      toast.error("Something went wrong")
     }
   }, [schemeModulData])
 
   useEffect(() => {
     if (schemeDataAdd && schemeDataAdd.status === 200) {
       dispatch(addSchemeSuccess(null))
-      toast.success("Scheme add successful");
+      toast.success("Scheme added");
+      dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }
   }, [schemeDataAdd])
 
   useEffect(() => {
     if (addSchemeError) {
       dispatch(addSchemeErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [addSchemeError])
 
@@ -181,7 +190,6 @@ const Schemes = () => {
         }
       })
   }
-
   const languageHandalCancle = () => {
     setIsConfirmModal(false)
   }
@@ -189,9 +197,8 @@ const Schemes = () => {
   const languageHandalOk = () => {
     history.push(`${path}/addscheme?langid=${languageIds}&key=${key}`);
   }
-
   const onApply = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : ""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : "", langIds.hindi, langIds.marathi));
   };
   const header = [
     { label: "id", key: "id" },
@@ -209,6 +216,7 @@ const Schemes = () => {
     { label: "howToApply", key: "howToApply" },
     { label: "isActive", key: "isActive" },
     { label: "isApproved", key: "isApproved" },
+    { label: "type", key: "type" },
     { label: "key", key: "key" },
     // { label: "sequence", key: "sequence" },
     { label: "spoc", key: "spoc" },
@@ -217,6 +225,11 @@ const Schemes = () => {
     { label: "videoUrl", key: "videoUrl" },
     { label: "viewCount", key: "viewCount" },
     { label: "website", key: "website" },
+    { label: 'application_form', key: 'application_form' },
+    { label: 'application_process', key: 'application_process' },
+    { label: 'hospital_expenses_estimation_certificate', key: 'hospital_expenses_estimation_certificate' },
+    { label: 'medical_superintendent', key: 'medical_superintendent' },
+    { label: 'recommended_and_forwarded', key: 'recommended_and_forwarded' },
   ];
 
   useEffect(() => {
@@ -252,7 +265,7 @@ const Schemes = () => {
   useEffect(() => {
     if (state.length && exportTog) {
       CSVLinkRef?.current?.link.click()  // for export
-      toast.success("Scheme data exported successfully")
+      toast.success("Scheme data exported")
     } else if (exportTog) {
       toast.success("No scheme data for export")
     }
@@ -272,11 +285,11 @@ const Schemes = () => {
     history.push(`${path}/addscheme?key=${key}`);
   };
 
-  const newSchemes = userForDelete => {
-    const newVal = ApiPost("scheme/editScheme", userForDelete)
+  const newSchemes = formData => {
+    const newVal = ApiPost("scheme/editScheme", formData)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getSchemeData(perPage, pageNumber, status))
+          dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
         }
         return res
       })
@@ -285,37 +298,63 @@ const Schemes = () => {
 
   const deleteSchemes = async key => {
     let userForDelete = users && users.data.find(item => item.key === key);
-    if (userForDelete) {
-      delete userForDelete.key;
-      delete userForDelete.updatedAt;
-      delete userForDelete.viewCount;
-      delete userForDelete.createdAt;
-      delete userForDelete.schemeRatings;
-      delete userForDelete.schemeRatingSum;
-      delete userForDelete.bannerSelected;
-      delete userForDelete.saved;
-      delete userForDelete.enrolled;
-
-      userForDelete = {
-        ...userForDelete,
-        schemeBenifit: userForDelete.schemeBenifit.id,
-        schemeCategory: userForDelete.schemeCategory.id,
-        isActive: false,
-        isDeleted: true,
-      };
-
-      const deleteSchemes = await newSchemes(userForDelete)
-      if (deleteSchemes.status === 200) {
-        toast.success("schemes delete successful")
-      }
+    let formData = new FormData();
+    formData.append('benifitLine', userForDelete.benifitLine.toString('markdown'));
+    formData.append('detail', userForDelete.detail.toString('markdown'));
+    formData.append('howToApply', userForDelete.howToApply.toString('markdown'));
+    formData.append('documentation', userForDelete.documentation.toString('markdown'));
+    formData.append('name', userForDelete.name);
+    formData.append('locations', JSON.stringify(userForDelete.locations));
+    formData.append('schemeCategory', userForDelete.schemeCategory.id);
+    formData.append('schemeBenifit', userForDelete.schemeBenifit.id);
+    formData.append('website', userForDelete.website);
+    formData.append('type', userForDelete.type,);
+    formData.append('benificiary', userForDelete.benificiary);
+    formData.append('grievanceRedress', userForDelete.grievanceRedress);
+    formData.append('elink', userForDelete.elink);
+    formData.append('spoc', userForDelete.spoc);
+    formData.append('isActive', false);
+    formData.append('thumbnail', userForDelete.thumbnail);
+    formData.append('application_form', userForDelete.application_form);
+    formData.append('recommended_and_forwarded', userForDelete.recommended_and_forwarded);
+    formData.append('application_process', userForDelete.application_process);
+    formData.append('medical_superintendent', userForDelete.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', userForDelete.hospital_expenses_estimation_certificate);
+    formData.append('videoUrl', userForDelete.videoUrl);
+    formData.append('id', userForDelete.id);
+    formData.append('isDeleted', true);
+    formData.append('isPublished', userForDelete.isPublished);
+    formData.append('isApproved', userForDelete.isApproved);
+    // if (userForDelete) {
+    //   delete userForDelete.key;
+    //   delete userForDelete.updatedAt;
+    //   delete userForDelete.viewCount;
+    //   delete userForDelete.createdAt;
+    //   delete userForDelete.schemeRatings;
+    //   delete userForDelete.schemeRatingSum;
+    //   delete userForDelete.bannerSelected;
+    //   delete userForDelete.saved;
+    //   delete userForDelete.enrolled;
+    //   delete userForDelete.hindi;
+    //   delete userForDelete.marathi;
+    //   userForDelete = {
+    //     ...userForDelete,
+    //     schemeBenifit: userForDelete.schemeBenifit.id,
+    //     schemeCategory: userForDelete.schemeCategory.id,
+    //     isActive: false,
+    //     isDeleted: true,
+    //   };
+    const deleteSchemes = await newSchemes(formData)
+    if (deleteSchemes.status === 200) {
+      toast.success("Scheme deleted")
     }
-  };
+  }
 
-  const activeSchemeData = data => {
-    const newVal = ApiPost("scheme/editScheme", data)
+  const activeSchemeData = formData => {
+    const newVal = ApiPost("scheme/editScheme", formData)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(getSchemeData(perPage, pageNumber, status))
+          dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
         }
         return res
       })
@@ -324,42 +363,64 @@ const Schemes = () => {
 
   const onRestore = async (key) => {
     let userForactive = users && users.data.find(item => item.key === key);
+    let formData = new FormData();
+    formData.append('benifitLine', userForactive.benifitLine.toString('markdown'));
+    formData.append('detail', userForactive.detail.toString('markdown'));
+    formData.append('howToApply', userForactive.howToApply.toString('markdown'));
+    formData.append('documentation', userForactive.documentation.toString('markdown'));
+    formData.append('id', userForactive.id);
+    formData.append('name', userForactive.name);
+    formData.append('schemeCategory', userForactive.schemeCategory.id);
+    formData.append('benificiary', userForactive.benificiary);
+    formData.append('locations', JSON.stringify(userForactive.locations));
+    formData.append('thumbnail', userForactive.thumbnail);
+    formData.append('videoUrl', userForactive.videoUrl);
+    formData.append('website', userForactive.website);
+    formData.append('schemeBenifit', userForactive.schemeBenifit.id);
+    formData.append('type', userForactive.type,);
+    formData.append('grievanceRedress', userForactive.grievanceRedress);
+    formData.append('elink', userForactive.elink);
+    formData.append('spoc', userForactive.spoc);
+    formData.append('isActive', true);
+    formData.append('isDeleted', false);
+    formData.append('isPublished', true);
+    formData.append('isApproved', true);
+    formData.append('application_form', userForactive.application_form);
+    formData.append('recommended_and_forwarded', userForactive.recommended_and_forwarded);
+    formData.append('application_process', userForactive.application_process);
+    formData.append('medical_superintendent', userForactive.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', userForactive.hospital_expenses_estimation_certificate);
     let data = {
-      id: userForactive.id,
-      // sequence: userForactive.sequence,
-      name: userForactive.name,
-      schemeCategory: userForactive.schemeCategory.id,
-      schemeBenifit: userForactive.schemeBenifit.id,
-      benifitLine: userForactive.benifitLine,
-      benificiary: userForactive.benificiary,
-      locations: userForactive.locations,
-      detail: userForactive.detail,
-      howToApply: userForactive.howToApply,
-      documentation: userForactive.documentation,
-      thumbnail: userForactive.thumbnail,
-      videoUrl: userForactive.videoUrl,
-      website: userForactive.website,
-      type: userForactive.type,
-      elink: userForactive.elink,
-      grievanceRedress: userForactive.grievanceRedress,
-      spoc: userForactive.spoc,
+      // id: userForactive.id,
+      // name: userForactive.name,
+      // schemeCategory: userForactive.schemeCategory.id,
+      // schemeBenifit: userForactive.schemeBenifit.id,
+      // benifitLine: userForactive.benifitLine,
+      // benificiary: userForactive.benificiary,
+      // locations: userForactive.locations,
+      // detail: userForactive.detail,
+      // howToApply: userForactive.howToApply,
+      // documentation: userForactive.documentation,
+      // thumbnail: userForactive.thumbnail,
+      // videoUrl: userForactive.videoUrl,
+      // website: userForactive.website,
+      // type: userForactive.type,
+      // elink: userForactive.elink,
+      // grievanceRedress: userForactive.grievanceRedress,
+      // spoc: userForactive.spoc,
       isActive: true,
       isDeleted: false,
       isPublished: true,
       isApproved: true,
-      //key:key,
     }
-    const restoreSchemeData = await activeSchemeData(data)
+    const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
-      toast.success("Schemes active successful")
-      dispatch(getSchemeData(perPage, pageNumber, status))
+      toast.success("Scheme active")
+      // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
 
 
-  useEffect(() => {
-    dispatch(getSchemeData(perPage, pageNumber, status)); //for listing
-  }, [perPage, pageNumber, status]);
   const { TabPane } = Tabs;
 
   const callback = key => {
@@ -375,7 +436,7 @@ const Schemes = () => {
   }
 
   const onExportschemes = () => {
-    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+    dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
     setExportTog(true)
   }
 
@@ -386,7 +447,7 @@ const Schemes = () => {
 
   const clearFilter = () => {
     setSchemeCategory({ ...schemeCategory, category: "", benefit: "", search: "" })
-    dispatch(getSchemeData(perPage, pageNumber, status));
+    dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
   }
   const onClick = ({ key }) => {
     if (key == 'exportSchemes') {
@@ -413,8 +474,8 @@ const Schemes = () => {
     }
     ApiPost(`scheme/updateBannerSelected`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
-        dispatch(getSchemeData(perPage, pageNumber, status));
+        toast.success(!bannerSelected ? 'Banner selected ' : 'Banner deselected');
+        dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi));
       });
   }
   const menu = (
@@ -422,15 +483,15 @@ const Schemes = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Export Schemes',
+          label: 'Export schemes',
           key: 'exportSchemes',
         },
         {
-          label: 'Export All Scheme',
+          label: 'Export all scheme',
           key: 'exportAllScheme',
         },
         {
-          label: 'Add Scheme',
+          label: 'Add scheme',
           key: 'addScheme',
         },
         {
@@ -452,8 +513,8 @@ const Schemes = () => {
 
     ApiPost(`scheme/updateIsApproved?`, data)
       .then((res) => {
-        toast.success(data.isApproved ? "Approved successful" : "Disapproved successful ")
-        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : ""));
+        toast.success(data.isApproved ? "Scheme approved" : "Scheme disapproved")
+        dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", "", langIds.hindi, langIds.marathi));
       })
       .catch((err) => console.log("Error", err))
   }
@@ -468,19 +529,20 @@ const Schemes = () => {
   useEffect(() => {
     setSchemeTableData(users?.data.map(item => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
-      
+
       var sum = 0;
       for (var i = 0; i < schemeratings.length; i++) {
         sum += parseInt(schemeratings[i], 10);
       }
       var avg = sum / schemeratings.length;
- 
+
       return ({
         SchemeName: (
           <span className='For-Underline' onClick={() => viewSchemesdata(item.key)}>
             {item?.name}
           </span>
         ),
+        SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         //  schemeRatings: item.schemeRatings.map(item => item.rating),
@@ -509,7 +571,7 @@ const Schemes = () => {
               {/* <div className="table-actions"> */}
 
               <>
-                <Button size="small" type="primary" shape='round'
+                <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                   onClick={() => {
                     setSelectedLanguageData(item)
                     getOneSchemeDetailByKey(langIds?.hindi, item?.key, item?.id)
@@ -519,7 +581,7 @@ const Schemes = () => {
                   HN
                 </Button>
 
-                <Button size="small" type="primary" shape='round'
+                <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                   onClick={() => {
                     getOneSchemeDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }}
@@ -617,38 +679,48 @@ const Schemes = () => {
 
   const schemeTableColumns = [
     {
-      title: 'Scheme Name',
+      title: 'Scheme name',
       dataIndex: 'SchemeName',
-      sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
+      // sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
+      sorter: (a, b) => a.SchemeName.localeCompare(b.SchemeName),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Type Of Benefits',
+      title: 'Type of benefits',
       dataIndex: 'TypeOfBenefits',
+      // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
+      sorter: (a, b) => a.TypeOfBenefits.localeCompare(b.TypeOfBenefits),
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Target Beneficiary',
+      title: 'Target beneficiary',
       dataIndex: 'TargetBeneficiary',
+      sorter: (a, b) => a.TargetBeneficiary.localeCompare(b.TargetBeneficiary),
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Scheme Ratings',
+      title: 'Scheme ratings',
       dataIndex: 'schemeRatings',
+      // sorter: (a, b) => a.avg - b.avg,
+      // sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Website',
+      title: 'Web site',
       dataIndex: 'Website',
+      sorter: (a, b) => a.Website.localeCompare(b.Website),
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Last Updated',
+      title: 'Last updated',
       dataIndex: 'LastUpdated',
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
     {
-      title: 'Choose banner',
+      title: 'Select banner',
       dataIndex: 'chooseBanner',
     },
 
@@ -662,7 +734,6 @@ const Schemes = () => {
       width: '90px',
     },
   ];
-
   const rowSelection = {
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -707,7 +778,10 @@ const Schemes = () => {
                 </Space>
               </a>
             </Dropdown>
+
             <CSVLink
+              // separator={";"}
+              // enclosingCharacter={`:`}
               headers={header}
               data={state}
               ref={CSVLinkRef}
@@ -724,16 +798,16 @@ const Schemes = () => {
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
-                    <Form.Item label="Scheme Category">
+                    <Form.Item label="Scheme category">
                       <Select
                         size="large"
                         className={schemeCategory.category ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         name="category"
                         value={schemeCategory.category}
                         onChange={e => onChnageValue(e, 'category')}
-                        placeholder="Select Scheme Category"
+                        placeholder="Select scheme category"
                       >
-                        <Option value="">Select Scheme Category</Option>
+                        <Option value="">Select scheme category</Option>
                         {schemeData && schemeData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
@@ -741,16 +815,16 @@ const Schemes = () => {
                 </Col>
                 <Col md={6} xs={24} className="mb-25">
                   <Form layout="vertical">
-                    <Form.Item label="Scheme Benefits">
+                    <Form.Item label="Scheme benefits">
                       <Select
                         size="large"
                         className={schemeCategory.benefit ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'}
                         value={schemeCategory.benefit}
                         name="benefits"
                         onChange={e => onChnageValue(e, 'benefits')}
-                        placeholder="Select Scheme Benefits"
+                        placeholder="Select scheme benefits"
                       >
-                        <Option value="">Select Scheme Benefits</Option>
+                        <Option value="">Select scheme benefits</Option>
                         {getBenefitData &&
                           getBenefitData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
                       </Select>
@@ -760,24 +834,11 @@ const Schemes = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" name='search' value={schemeCategory.search} onChange={e => onChnageValue(e.target.value, 'search')} />
+                      <Input placeholder="Search" name='search' value={schemeCategory.search} onChange={e => onChnageValue(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>
-                {/* <Col md={6} xs={24} className="mb-25">
-                                    <Form name="sDash_select" layout="vertical">
-                                        <Form.Item name="basic-select" label="Location">
-                                            <Select size="large" className="sDash_fullwidth-select" placeholder="Select">
-                                                <Option value="2">  All India </Option>
-                                                <Option value="3">  Andra Pradesh  </Option>
-                                                <Option value="4">  Assam  </Option>
-                                                <Option value="5">  Chandigarh  </Option>
-                                                <Option value="6">  Dadar and Nagar Haveli   </Option>
-                                                <Option value="7">   Daman and Diu   </Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Form>
-                                </Col> */}
+
                 <Col md={6} xs={24} className="mb-25">
                   <ListButtonSizeWrapper>
                     <Button size="small" type="primary"
@@ -805,7 +866,7 @@ const Schemes = () => {
                              <ActiveSchemesTable type ={type}/> */}
 
               <Tabs onChange={callback}>
-                <TabPane tab="Active Schemes" key="active">
+                <TabPane tab="Active schemes" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
 
@@ -847,7 +908,7 @@ const Schemes = () => {
                     />
                   </ProjectPagination> */}
                 </TabPane>
-                <TabPane tab="Inactive Schemes" key="inactive">
+                <TabPane tab="Inactive schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       {/* --- search bar --- */}
@@ -910,7 +971,7 @@ const Schemes = () => {
       )}
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
-      {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Schemes" />}
+      {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import schemes" />}
     </>
   );
 };

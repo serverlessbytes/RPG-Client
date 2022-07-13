@@ -1,19 +1,19 @@
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
-import { importCourseCategory } from '../../redux/course/actionCreator';
 import { addBulkJobCategory } from '../../redux/jobs/actionCreator';
 
 const ImportJobCategory = ({ importModal, handleCancel, modaltitle }) => {
   const dispatch = useDispatch();
   const [Error, setError] = useState();
-  const [error, seterror] = useState({}); // for valadation
+  const [error, seterror] = useState({});
   const [FileData, setFileData] = useState();
 
-  const readUploadFile = e => {
+  const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      seterror('')
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -64,7 +64,7 @@ const ImportJobCategory = ({ importModal, handleCancel, modaltitle }) => {
     if (validation()) {
       return;
     }
-   
+
     if (FileData) {
       dispatch(addBulkJobCategory(FileData));
       handleCancel();
@@ -82,15 +82,15 @@ const ImportJobCategory = ({ importModal, handleCancel, modaltitle }) => {
           onCancel={handleCancel}
           width={'500px'}
         >
-          <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+          {/* <Row gutter={30}> */}
+            {/* <Col md={12} xs={24} className="mb-25"> */}
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
-            </Col>
-          </Row>
+            {/* </Col> */}
+          {/* </Row> */}
         </Modal>
       </Col>
     </>

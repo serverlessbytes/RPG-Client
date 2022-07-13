@@ -16,16 +16,15 @@ import actions from '../../redux/users/actions';
 
 const Employer = () => {
     const dispatch = useDispatch()
+    const { TabPane } = Tabs;
     const { path } = useRouteMatch();
     const history = useHistory()
+
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    // const [employerData, setEmployerData] = useState()
     const [employerTable, setEmployerTable] = useState([])
     const [type, setType] = useState("EMPLOYER")
-
-    const { TabPane } = Tabs;
 
     const { editProfileSuccess, editProfileErr } = actions;
 
@@ -59,15 +58,15 @@ const Employer = () => {
                 id: employerForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: employerForDelete.avatar,
             };
             delete employerForDelete.userTakenRatings
-            // dispatch(editProfile(employerForDelete));
-            // getData();
             const restoreActiveEmployer = await activeEmployer(id, employerForDelete);
 
             if (restoreActiveEmployer.status === 200) {
-                toast.success("Employer Delete successful")
+                toast.success("Employer deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -81,7 +80,7 @@ const Employer = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -100,23 +99,25 @@ const Employer = () => {
         const restoreActiveEmployer = await activeEmployer(id, data);
 
         if (restoreActiveEmployer.status === 200) {
-            toast.success("Employer active successful")
+            toast.success("Employer actived")
+        }else {
+            toast.error("Something went wrong")
         }
     };
 
-    useEffect(()=>{
-        if(editProfileData && editProfileData.data && editProfileData.data.isActive === true){
+    useEffect(() => {
+        if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
-            toast.success("Employer Update successful")
+            toast.success("Employer updated")
         }
-    },[editProfileData])
+    }, [editProfileData])
 
     useEffect(() => {
-        if(editProfileError){
+        if (editProfileError) {
             dispatch(editProfileErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
-    },[editProfileError])
+    }, [editProfileError])
 
     useEffect(() => {
         dispatch(getAllUser(perPage, pageNumber, status, type))
@@ -164,10 +165,14 @@ const Employer = () => {
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Email',
             dataIndex: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Phone',
@@ -201,7 +206,7 @@ const Employer = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Employer" key="active">
+                                <TabPane tab="Active employer" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -220,7 +225,7 @@ const Employer = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive Employer" key="inactive">
+                                <TabPane tab="Inactive employer" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

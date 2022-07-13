@@ -25,6 +25,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import firebaseAuth from '../../redux/firebase/auth/reducers';
 
 const AddCourses = () => {
 
@@ -44,7 +45,7 @@ const AddCourses = () => {
 
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
-  const [selectKey, setSelectKey] = useState(0);
+  const [selectKey, setSelectKey] = useState(1);
   const [moduleError, setModuleError] = useState([]);
   const [defaultSelect, setDefaultSelect] = useState('1');
   const categoryData = useSelector(state => state.category.categoryData);
@@ -53,24 +54,55 @@ const AddCourses = () => {
   const userData = useSelector(state => state.auth.getUserData);
   const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
-  const addSwayamCourseDataErr = useSelector(state => state.category.addSwayamCourseDataErr);
+  const languageData = useSelector(state => state.language.getLanguageData);
+  const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
 
   const [state, setState] = useState({
-    detail: RichTextEditor.createEmptyValue(),
-    name: '',
-    categoryId: '',
-    duration: '',
-    jobCategoryIds: [],
-    certification: '',
-    sequence: '',
-    mode: '',
     key: '',
+    name: '',
+    detail: RichTextEditor.createEmptyValue(),
+    duration: '',
+    categoryId: '',
+    certification: '',
+    jobCategoryIds: [],
+    mode: '',
+    application_form: "",
+    recommended_and_forwarded: "",
+    application_process: "",
+    medical_superintendent: "",
+    hospital_expenses_estimation_certificate: "",
     thumbnail: '',
   });
 
+  const [langIds, setLangIds] = useState({
+    hindi: '',
+    marathi: ''
+  });
+  const [index, setIndex] = useState()
+
+  // useEffect(() => {
+  //   if (addSwayamCourseData.status === 200) {
+  //     console.log("addSwayamCourseData", addSwayamCourseData);
+
+  //   }
+  // }, [addSwayamCourseData])
   useEffect(() => {
-    console.log("editOneSwayamCourseData", editOneSwayamCourseData)
-  }, [editOneSwayamCourseData])
+    let temp = {
+      hindi: '',
+      marathi: ''
+    }
+
+    languageData && languageData.data && languageData.data.map((item) => {
+      if (item.name === "marathi") {
+        temp.marathi = item.id
+      } else if (item.name === "Hindi") {
+        temp.hindi = item.id
+
+      }
+    })
+    setLangIds(temp)
+  }, [languageData])
 
   const [moduleState, setModuleState] = useState([
     {
@@ -79,8 +111,7 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      // sequence: '',
-      course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
+      course: '',
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: '',
       modifiedByUser: '',
@@ -92,23 +123,26 @@ const AddCourses = () => {
     )
   }, [])
 
+
   useEffect(() => {
-    if (addSwayamCourseData && addSwayamCourseData.status === 200) {
-      toast.success("Swayam Course Modules Add successful");
-      dispatch(addSwayamPartnerCourseSuccess(null))
-    }
+    // if (addSwayamCourseModualData && addSwayamCourseModualData.status === 200) {
+    //   toast.success("Swayam Course Modules Add successful");
+    //   dispatch(addSwayamPartnerCourseSuccess(null))
+    // }
     // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
     //   dispatch(editSchemeSuccess(null))
     //   toast.success("Jobs Update successful");
     // }
+    // if (addSwayamCourseData && 'data' in addSwayamCourseData)
+    //   setModuleState({ ...moduleState, course: addSwayamCourseData.data.id })
   }, [addSwayamCourseData])
 
-  useEffect(() => {
-    if (addSwayamCourseDataErr) {
-      dispatch(addSwayamPartnerCourseErr())
-      toast.error("Something Wrong")
-    }
-  }, [addSwayamCourseDataErr])
+  // useEffect(() => {
+  //   if (addSwayamCourseDataErr) {
+  //     dispatch(addSwayamPartnerCourseErr(null))
+  //     // toast.error("Something Wrong")
+  //   }
+  // }, [addSwayamCourseDataErr])
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -144,7 +178,6 @@ const AddCourses = () => {
   }, [addSwayamCourseData]);
 
   useEffect(() => {
-    console.log("editOneSwayamCourseData", editOneSwayamCourseData);
     if (editOneSwayamCourseData && editOneSwayamCourseData.data && editOneSwayamCourseData.data.data && id) {
       setState({
         ...state,
@@ -153,11 +186,15 @@ const AddCourses = () => {
         categoryId: editOneSwayamCourseData.data.data.courseCategory?.id,
         duration: moment(editOneSwayamCourseData.data.data.duration, 'HH:mm:ss'),
         jobCategoryIds: editOneSwayamCourseData?.data?.data.jobTypes.map(item => item.id),
-        certification: editOneSwayamCourseData.data.data.certificate,
-        sequence: editOneSwayamCourseData.data.data.sequence,
-        mode: editOneSwayamCourseData.data.data.mode,
-        key: editOneSwayamCourseData.data.data.key,
         thumbnail: editOneSwayamCourseData.data.data.thumbnail,
+        mode: editOneSwayamCourseData.data.data.mode,
+        certification: editOneSwayamCourseData.data.data.certificate,
+        application_form: editOneSwayamCourseData.data.data.application_form,
+        recommended_and_forwarded: editOneSwayamCourseData.data.data.recommended_and_forwarded,
+        application_process: editOneSwayamCourseData.data.data.application_process,
+        medical_superintendent: editOneSwayamCourseData.data.data.medical_superintendent,
+        hospital_expenses_estimation_certificate: editOneSwayamCourseData.data.data.hospital_expenses_estimation_certificate,
+        key: editOneSwayamCourseData.data.data.key,
       });
     }
   }, [editOneSwayamCourseData]);
@@ -171,84 +208,126 @@ const AddCourses = () => {
   }, [id]);
 
   useEffect(() => {
-    if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
-      setSwyamModuleId(false);
-      //toast.success("Swayam Course Add successful");
-      setDefaultSelect('2');
-    }
-  }, [addSwayamCourseData]);
-
-  useEffect(() => {
     dispatch(getCategoryData());
     dispatch(getJobcategory());
     dispatch(getUser());
   }, []);
+  // useEffect(() => {
+  //   if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
+  //     setSwyamModuleId(false);
+  //     //toast.success("Swayam Course Add successful");
+  //     // setDefaultSelect('2');
+  //   }
+  // }, [addSwayamCourseData]);
 
   const onChange = (e, name) => {
     if (name === 'categoryId') {
       setState({ ...state, [name]: e });
+      setError({ ...error, categoryId: "" })
     } else if (name === 'jobCategoryIds') {
       setState({ ...state, [name]: e });
+      setError({ ...error, jobCategoryIds: "" })
     } else if (name === 'duration') {
       setState({ ...state, [name]: e });
+      setError({ ...error, duration: "" })
     } else if (name === 'mode') {
       setState({ ...state, [name]: e });
+      setError({ ...error, mode: "" })
     } else if (name === 'sequence') {
       if (e.target.value > 0) {
         setState({ ...state, [e.target.name]: e.target.value });
+        setError({ ...error, [e.target.name]: "" })
       } else {
         setState({ ...state, [e.target.name]: 0 });
+        setError({ ...error, [e.target.name]: "" })
       }
     } else {
       setState({ ...state, [e.target.name]: e.target.value });
+      setError({ ...error, [e.target.name]: "" })
     }
   };
 
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0]?.name?.split('.');
+
+    if (firsttemp) {
+      let fileexten = ['jpeg', 'jpg', 'png']
+      if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setState({ ...state, [name]: e.target.files[0] })
+        setError({ ...error, thumbnail: "" });
+      }
+      else {
+        setError({ ...error, thumbnail: 'Select valid document file' })
+        setState({ ...state, thumbnail: '' })
+      }
+    }
+    else {
+      setError({ ...error, thumbnail: 'Select document file' })
+    }
+  }
+
   const onChangesEditorDetail = (e, name) => {
     setState({ ...state, [name]: e });
+    setError({ ...error, [name]: "" })
+
   };
 
   const validation = () => {
 
     let error = {};
     let flage = false;
-    if (state.name === '') {
+    if (!state.name) {
       error.name = 'Course name is required';
       flage = true;
     }
-    if (state.categoryId === '') {
+    if (!state.categoryId) {
       error.categoryId = 'Course category is required';
       flage = true;
     }
     if (state.detail.toString('markdown').length <= 2) {
-      error.detail = 'Detail is required';
+      error.detail = 'Course detail is required';
       flage = true;
     }
-    if (state.duration === '') {
-      error.duration = 'Course duration body is required';
+    if (!state.duration) {
+      error.duration = 'Course duration is required';
       flage = true;
     }
-    if (state.jobCategoryIds === '') {
-      error.jobCategoryIds = 'Job Category is required';
+    if (!state.jobCategoryIds.length) {
+      error.jobCategoryIds = 'Job category is required';
       flage = true;
     }
-    // if (state.sequence === '') {
-    //   error.sequence = 'Senquence is required';
-    //   flage = true;
-    // }
-    if (state.certification === '') {
-      error.certification = 'Certification name is required';
+    if (state.certification === "") {
+      error.certification = 'Certification is required';
       flage = true;
     }
-    if (state.mode === '') {
-      error.mode = 'Mode name is required';
+    if (!state.mode) {
+      error.mode = 'Mode is required';
       flage = true;
     }
-    if (state.thumbnail === '') {
-      error.mode = 'Thumbnail is required';
+    if (!state.thumbnail) {
+      error.thumbnail = 'Thumbnail is required';
       flage = true;
     }
-
+    if (!state.application_form) {
+      error.application_form = 'Application form is required';
+      flage = true;
+    }
+    if (!state.recommended_and_forwarded) {
+      error.recommended_and_forwarded = 'Recommended and forwarded is required';
+      flage = true;
+    }
+    if (!state.application_process) {
+      error.application_process = 'Application process is required';
+      flage = true;
+    }
+    if (!state.medical_superintendent) {
+      error.medical_superintendent = 'Medical superintendent is required';
+      flage = true;
+    }
+    if (!state.hospital_expenses_estimation_certificate) {
+      error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
+      flage = true;
+    }
     setError(error);
     return flage;
   };
@@ -259,23 +338,23 @@ const AddCourses = () => {
     if (moduleState.length) {
       moduleState.map((item, i) => {
         if (item.name === '') {
-          error[`name${i + 1}`] = 'Please enter module name';
+          error[`name${i + 1}`] = 'Module name required';
           flage = true;
         }
         if (item.videoUrl === '') {
-          error[`videoUrl${i + 1}`] = 'Please enter video url';
+          error[`videoUrl${i + 1}`] = 'Video url required';
           flage = true;
         }
         if (item.duration === '') {
-          error[`duration${i + 1}`] = 'Please enter module duration';
+          error[`duration${i + 1}`] = 'Module duration required';
           flage = true;
         }
         if (item.sequence === '') {
-          error[`sequence${i + 1}`] = 'Please enter sequence';
+          error[`sequence${i + 1}`] = 'Squence required';
           flage = true;
         }
         if (item.detail === '') {
-          error[`detail${i + 1}`] = 'Please enter module detail';
+          error[`detail${i + 1}`] = 'Module detail required';
           flage = true;
         }
       });
@@ -288,44 +367,59 @@ const AddCourses = () => {
     if (validation()) {
       return;
     }
-    let data = {
-      key: editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),
-      detail: state.detail.toString('markdown'),
-      name: state.name,
-      categoryId: state.categoryId,
-      duration: moment(state.duration).format('HH:mm:ss'),
-      jobCategoryIds: state.jobCategoryIds,
-      certification: state.certification,
-      // sequence: parseInt(state.sequence),
-      mode: state.mode,
-      thumbnail: state.thumbnail,
-    };
-
-    dispatch(addSwayamCourse(data, langId));
-    // history.push('/admin/courses');
+    let formData = new FormData();
+    formData.append('name', state.name);
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    formData.append('categoryId', state.categoryId);
+    formData.append('certification', state.certification);
+    formData.append('jobCategoryIds', JSON.stringify(state.jobCategoryIds));
+    formData.append('mode', state.mode);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('thumbnail', state.thumbnail);
+    if (langId) {
+      formData.append('key', state.key);
+      dispatch(addSwayamCourse(langId, formData));
+    } else {
+      formData.append('key', editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),);
+      dispatch(addSwayamCourse(langId, formData));
+    }
   };
+  useEffect(() => {
+    if (addSwayamCourseData?.status === 200) {
+      setDefaultSelect('2')
+      toast.success("SwayamCoures added")
+    }
+  }, [addSwayamCourseData])
 
   const onEdit = () => {
     if (validation()) {
       return;
     }
-    let data = {
-      key: state.key,
-      courseId: id,
-      detail: state.detail.toString('markdown'),
-      name: state.name,
-      categoryId: state.categoryId,
-      duration: moment(state.duration).format('HH:mm:ss'),
-      jobCategoryIds: state.jobCategoryIds,
-      certification: state.certification,
-      // sequence: parseInt(state.sequence),
-      mode: state.mode,
-      thumbnail: state.thumbnail,
-      isActive: true,
-      isDeleted: false,
-    };
-    dispatch(editSwayamCourse(data));
-    history.push('/admin/courses');
+    let formData = new FormData();
+    formData.append('key', state.key);
+    formData.append('courseId', id);
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('name', state.name);
+    formData.append('categoryId', state.categoryId);
+    formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    formData.append('jobCategoryIds', JSON.stringify(state.jobCategoryIds));
+    formData.append('certification', state.certification);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('thumbnail', state.thumbnail);
+    formData.append('mode', state.mode);
+    formData.append('isActive', true);
+    formData.append('isDeleted', false);
+    dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
+    handalCancle()
   };
 
   const addData = () => {
@@ -336,13 +430,14 @@ const AddCourses = () => {
       detail: '',
       duration: '',
       videoUrl: '',
-      // sequence: null,
+      moduleId: "",
       course: (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) || id,
       language: AuthStorage.getStorageData(STORAGEKEY.language),
       createdByUser: userData && userData.data && userData.data.id,
       modifiedByUser: userData && userData.data && userData.data.id,
     });
     setModuleState(val);
+    setSelectKey(val.length);
   };
 
   const moduleChange = (e, i, name) => {
@@ -350,18 +445,20 @@ const AddCourses = () => {
     if (name === 'name') {
       value[i].name = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, name: "" })
     } else if (name === 'videoUrl') {
       value[i].videoUrl = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, videoUrl: "" })
     } else if (name === 'duration') {
       value[i].duration = e;
       setModuleState(value);
-    } else if (name === 'sequence') {
-      value[i].sequence = e.target.value;
-      setModuleState(value);
-    } else if (name === 'detail') {
+      setModuleError({ ...moduleError, duration: "" })
+    }
+    else if (name === 'detail') {
       value[i].detail = e.target.value;
       setModuleState(value);
+      setModuleError({ ...moduleError, detail: "" })
     }
   };
 
@@ -370,15 +467,13 @@ const AddCourses = () => {
       return;
     }
     const newData = moduleState.filter(item => !item.moduleId).map(item => {
-      console.log("item", item)
       return {
         key: item.key,
         name: item.name,
         detail: item.detail,
         duration: moment(item.duration).format('HH:mm:ss'),
         videoUrl: item.videoUrl,
-        // sequence: parseInt(item.sequence),
-        course: item.course,
+        course: id ? id : addSwayamCourseData.data.id,
         language: item.language,
         createdByUser: item.createdByUser,
         modifiedByUser: item.modifiedByUser,
@@ -387,76 +482,85 @@ const AddCourses = () => {
     dispatch(addSwayamCourseModule(newData));
     history.push('/admin/courses')
   };
-
   const onModuleEdit = () => {
     if (moduleValidation()) {
       return;
     }
-
-    const data = moduleState[selectKey];
+    const data = moduleState[selectKey - 1];
     const editData = {
+      key: data.key,
       name: data.name,
       detail: data.detail,
       duration: moment(data.duration).format('HH:mm:s'),
       videoUrl: data.videoUrl,
-      sequence: data.sequence,
-      key: data.key,
       moduleId: data.moduleId,
       isActive: true,
       isDeleted: false,
     };
     dispatch(editSwayamCourseModule(editData));
-    history.push(`/admin/courses`);
   };
 
-  const onRemoveData = () => {
-    // if (moduleState.length > 1) {
+  const onRemoveData = (itemData) => {
+    // console.log('item------', item)
     if (id) {
-      const data = moduleState[selectKey];
+      const data = moduleState[selectKey - 1];
       const deleteData = {
+        key: data.key,
         name: data.name,
         detail: data.detail,
         duration: moment(data.duration).format('HH:mm:s'),
         videoUrl: data.videoUrl,
-        sequence: data.sequence,
-        key: data.key,
         moduleId: data.moduleId,
         isActive: false,
         isDeleted: true,
       };
       dispatch(editSwayamCourseModule(deleteData));
     }
-
-    let val = [...moduleState];
-    val.splice(selectKey, 1);
-    setSelectKey(val.length - 1);
-    setModuleState(val);
-
+    let deleteModulData = moduleState.filter((item) => item.key !== itemData.key)
+    setModuleState(deleteModulData);
+    setSelectKey(selectKey - 1);
   };
+  const handalCancle = () => {
+    history.push('/admin/courses')
+  }
 
   const { TabPane } = Tabs;
 
-  const moduleCallback = key => {
+  let moduleCallback = (key) => {
     setSelectKey(key);
   };
+
   const callback = key => {
     setDefaultSelect(key);
   };
 
+  useEffect(() => {
+    console.log("courseModuleData?.data?.isDeleted", courseModuleData);
+    if (courseModuleData?.status === 200) {
+      { courseModuleData?.data?.isDeleted ? toast.success("Course module deleted") : toast.success("Course module updated") }
+    }
+  }, [courseModuleData])
+
+  useEffect(() => {
+    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
+      toast.success("Swayam course modules added");
+      dispatch(addSwayamCourseModuleSuccess(null));
+    }
+  }, [addSwayamCourseModuleData]);
   return (
     <>
       <PageHeader ghost
-        title={id ? "Edit Swayam Courses" : "Add Swayam Courses"} />
+        title={id ? "Edit swayam course" : "Add swayam course"} />
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>
-            <TabPane tab="Course Details" key="1">
+            <TabPane tab="Course details" key="1">
               <Row justify="space-between">
                 <Col lg={11} md={11} sm={24} xs={24}>
-                  <label htmlFor="name">Name of the Course</label>
+                  <label htmlFor="name">Name of the course</label>
                   <Form.Item>
                     <Input
-                      placeholder="Scheme Name"
+                      placeholder="Course name"
                       value={state.name}
                       onChange={e => {
                         onChange(e);
@@ -466,19 +570,21 @@ const AddCourses = () => {
                     {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                   </Form.Item>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item name="basic-select" label="Course Category">
+                    <Form.Item name="basic-select" label="Course category">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                        className={state.categoryId ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                         onChange={e => {
                           onChange(e, 'categoryId');
                         }}
                         value={state.categoryId}
                         name="categoryId"
-                        placeholder="Select Category"
+                        placeholder="Select course category"
                       >
+                        <Option value="">Select course category</Option>
                         {categoryData &&
                           categoryData.data &&
                           categoryData.data.map((item, i) => (
@@ -491,24 +597,26 @@ const AddCourses = () => {
                     </Form.Item>
                   </Form>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item label="Course Duration">
+                    <Form.Item label="Course duration">
                       <TimePicker
                         name="duration"
                         value={state.duration}
                         onChange={e => {
                           onChange(e, 'duration');
                         }}
-                        placeholder="Course Duration"
+                        placeholder="Course duration"
                       />
+                      {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                     </Form.Item>
-                    {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
                   </Form>
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
-                  <Form.Item label="Job Category">
+                  <label htmlFor="name">Job category</label>
+                  <Form.Item>
                     <Select
                       size="large"
                       mode="multiple"
@@ -517,7 +625,7 @@ const AddCourses = () => {
                         onChange(e, 'jobCategoryIds');
                       }}
                       className="sDash_fullwidth-select"
-                      placeholder="Select Category"
+                      placeholder="Job category"
                     >
                       {jobCategoryData &&
                         jobCategoryData.data &&
@@ -535,17 +643,19 @@ const AddCourses = () => {
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>
                     <Input
-                      type="string"
-                      value={state.thumbnail}
+                      // type="string"
+                      type="file"
+                      // value={state.thumbnail}
                       onChange={e => {
-                        onChange(e, 'thumbnail');
+                        fileUpload(e, 'thumbnail');
                       }}
                       name="thumbnail"
-                      placeholder="Enter thumbnail"
+                      placeholder="Thumbnail"
                     />
+                    {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
                   </Form.Item>
-                  {error.sequence && <span style={{ color: 'red' }}>{error.sequence}</span>}
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24}>
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Mode">
@@ -556,17 +666,18 @@ const AddCourses = () => {
                         onChange={e => {
                           onChange(e, 'mode');
                         }}
-                        className="sDash_fullwidth-select"
+                        className={state.mode ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                         placeholder="Select mode"
-                      >
+                      > <Option value="">Select mode</Option>
                         <Option value="ONLINE"> Online </Option>
                         <Option value="OFFLINE"> Offline </Option>
                         <Option value="BOTH"> Both </Option>
                       </Select>
+                      {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                     </Form.Item>
-                    {error.mode && <span style={{ color: 'red' }}>{error.mode}</span>}
                   </Form>
                 </Col>
+
                 <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
                   <label htmlFor="name" className="mb-5">
                     Certification
@@ -587,16 +698,69 @@ const AddCourses = () => {
                   </Radio.Group>
                   {error.certification && <span style={{ color: 'red' }}>{error.certification}</span>}
                 </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Application form
+                  </label>
+                  <Form.Item name="application_form">
+                    <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChange(e, "application_form")} />
+                    {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Recommended and forwarded
+                  </label>
+                  <Form.Item name="recommended_and_forwarded">
+                    <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChange(e, "recommended_and_forwarded")} />
+                    {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Application process
+                  </label>
+                  <Form.Item name="application_process">
+                    <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChange(e, "application_process")} />
+                    {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="name" className="mb-5">
+                    Medical superintendent
+                  </label>
+                  <Form.Item name="medical_superintendent">
+                    <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChange(e, "medical_superintendent")} />
+                    {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn mb-20">
+                  <label htmlFor="hospital_expenses_estimation_certificate" className="mb-5">
+                    Hospital expenses estimate certificate
+                  </label>
+                  <Form.Item name="hospital_expenses_estimation_certificate">
+                    <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChange(e, "hospital_expenses_estimation_certificate")} />
+                    {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
+                  </Form.Item>
+                </Col>
               </Row>
-              <label htmlFor="coursedetails">Course Details</label>
+
+              <label htmlFor="coursedetails">Course details</label>
               <div className="group">
                 <RichTextEditor
                   placeholder="Type your message..."
                   value={state.detail}
-                  onChange={e => onChangesEditorDetail(e, 'detail')}
-                />
-                {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
+                  onChange={e => onChangesEditorDetail(e, 'detail')} />
               </div>
+              {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
+
+
+
               <div className="sDash_form-action mt-20">
                 {id && !langId ? (
                   <Button className="btn-signin ml-10" onClick={() => onEdit()} type="primary" size="medium">
@@ -617,20 +781,21 @@ const AddCourses = () => {
                 </Button>
               </div>
             </TabPane>
+
             <TabPane tab="Modules" disabled={swyamModuleId} key="2">
-              <Tabs tabPosition={'left'} onChange={moduleCallback}>
+              <Tabs tabPosition={'left'} activeKey={selectKey.toString()} onChange={moduleCallback}>
                 {moduleState.length ? (
                   moduleState.map((item, i) => (
-                    <TabPane tab={`Module ${i + 1}`} key={`${i}`}>
+                    <TabPane tab={`Module ${i + 1}`} key={`${i + 1}`}>
                       <Row justify="space-between">
                         <Col lg={11} md={11} sm={24} xs={24}>
-                          <label htmlFor="name">Name of the Module</label>
+                          <label htmlFor="name">Name of module</label>
                           <Form.Item>
                             <Input
                               name="name"
                               value={item.name}
                               onChange={e => moduleChange(e, i, 'name')}
-                              placeholder="Name of the Module"
+                              placeholder="Name of module"
                             />
                             {moduleError && moduleError[`name${i + 1}`] && (
                               <label style={{ color: 'red' }}>{moduleError[`name${i + 1}`]}</label>
@@ -638,10 +803,10 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24}>
-                          <label htmlFor="videourl">Video URL</label>
+                          <label htmlFor="videourl">Video url</label>
                           <Form.Item>
                             <Input
-                              placeholder="Video URL"
+                              placeholder="Video url"
                               name="videoUrl"
                               onChange={e => moduleChange(e, i, 'videoUrl')}
                               value={item.videoUrl}
@@ -652,7 +817,7 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
-                          <label htmlFor="moduleduration">Module Duration</label>
+                          <label htmlFor="moduleduration">Module duration</label>
                           <Form.Item>
                             <TimePicker
                               name="duration"
@@ -665,7 +830,7 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        <Col lg={11} md={11} sm={24} xs={24}>
+                        {/* <Col lg={11} md={11} sm={24} xs={24}>
                           <label htmlFor="sequence">Sequence</label>
                           <Form.Item>
                             <Input
@@ -679,9 +844,9 @@ const AddCourses = () => {
                               <label style={{ color: 'red' }}>{moduleError[`sequence${i + 1}`]}</label>
                             )}
                           </Form.Item>
-                        </Col>
+                        </Col> */}
                         <Col lg={24}>
-                          <label htmlFor="detail">Module Detail</label>
+                          <label htmlFor="detail" className='module_detail'>Module detail</label>
                           <Form.Item>
                             <TextArea name="detail" onChange={e => moduleChange(e, i, 'detail')} value={item.detail} />
                             {moduleError && moduleError[`detail${i + 1}`] && (
@@ -690,7 +855,7 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={24}>
-                          {id && (
+                          {item.moduleId ? (
                             <Button
                               className="btn-signin ml-10"
                               onClick={() => onModuleEdit()}
@@ -699,12 +864,12 @@ const AddCourses = () => {
                             >
                               Edit
                             </Button>
-                          )}
+                          ) : ""}
                           <Button
                             className="btn-signin ml-10"
                             type="danger"
                             size="medium"
-                            onClick={() => onRemoveData()}
+                            onClick={() => onRemoveData(item, i)}
                           >
                             Delete
                           </Button>
@@ -804,14 +969,13 @@ const AddCourses = () => {
                   className="btn-signin ml-10"
                   type="light"
                   size="medium"
-                  onClick={() => history.push('/admin/courses')}
+                  onClick={() => handalCancle()}
                 >
                   Cancel
                 </Button>
               </div>
             </TabPane>
 
-            {/* ************Dont'delete this****************** */}
 
             {/* <TabPane tab="Q&A" key="3">
               <PageHeader

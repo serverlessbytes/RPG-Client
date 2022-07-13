@@ -11,9 +11,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/query/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import { useHistory } from 'react-router';
 import { addQueries, editQueries, getQueries, getQueriesFromId } from '../../redux/query/actionCreator';
 
@@ -25,7 +23,7 @@ const query = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [queryTableData, setQueryTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(5); // forpagination
+    const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuery, setSelectedQuery] = useState();//For Edit
     const [nameTog, setNameTog] = useState(false)
@@ -35,6 +33,7 @@ const query = () => {
         email: "",
         body: "",
     });
+    const [formErrors, setFormErrors] = useState();
 
     const getQueriesData = useSelector((state) => state.queries.getQueriesData);
     const addQueriesData = useSelector((state) => state.queries.addQueriesData);
@@ -45,6 +44,7 @@ const query = () => {
 
     const handleChange = (e) => {
         setQueryData({ ...queryData, [e.target.name]: e.target.value })
+        setFormErrors({...formErrors, [e.target.name]:""})
     }
 
     useEffect(() => {
@@ -54,33 +54,33 @@ const query = () => {
     useEffect(() => {
         if (addQueriesData && addQueriesData.status === 200) {
             dispatch(addQueriesSuccess(null))
-            toast.success("Query add successful")
+            toast.success("Query added")
         }
         else if (addQueriesData && addQueriesData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addQueriesData])
 
     useEffect(() => {
         if (addQuerieError) {
             dispatch(addQueriesErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addQuerieError])
 
     useEffect(() => {
         if (editQueriesData && editQueriesData.status === 200) {
             dispatch(editQueriesSuccess(null))
-            toast.success("Query update successful")
+            toast.success("Query updated")
         } else if (editQueriesData && editQueriesData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editQueriesData])
 
     useEffect(() => {
         if (editQuerieError) {
             dispatch(editQueriesErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editQuerieError])
 
@@ -106,7 +106,36 @@ const query = () => {
         // setExportTog(false);
     };
 
+    const validation = () => {
+        let flag = false;
+        const error = {};
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+        if (queryData.email === '') {
+            error.email = 'Email is required';
+            flag = true;
+        }
+        if (queryData.email && !queryData.email.match(regex)) {
+            error.email = 'Please enter a valid email address';
+            flag = true;
+        }
+        if (queryData.name === '') {
+            error.name = 'Name is required';
+            flag = true;
+        }
+        if (queryData.body === '') {
+            error.body = 'Body is required';
+            flag = true;
+        }
+
+        setFormErrors(error);
+        return flag
+    }
+
     const handleOk = () => {
+        if (validation()) {
+            return
+        }
         if (!selectedQuery) {
             let Data = {
                 name: queryData.name,
@@ -122,6 +151,9 @@ const query = () => {
             handleCancel();
         }
         else {
+            if (validation()) {
+                return
+            }
             let dataEdit = {
                 id: selectedQuery.id,
                 name: queryData.name,
@@ -131,7 +163,6 @@ const query = () => {
                 // isDeleted: false,
                 isResolved: true,
             }
-            //console.log("data",dataEdit)
             dispatch(editQueries(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -146,6 +177,7 @@ const query = () => {
         })
         setSelectedQuery(null)
         setNameTog(false)
+        setFormErrors("");
     };
 
     const onEdit = (id) => {
@@ -188,31 +220,31 @@ const query = () => {
 
             const deleteQuery = await newQuery(userForDelete)
             if (deleteQuery.status === 200) {
-                toast.success("Query delete successful")
+                toast.success("Query deleted")
             }
             else if (deletebanner.status !== 200) {
-                toast.error("Something Wrong")
+                toast.error("Something went wrong")
             }
         }
     }
 
     const onActive = async id => {
         let getActiveQueriesdata = getQueriesData && getQueriesData.data && getQueriesData.data.data.find(item => item.id === id);
-        
-            let data = {
-                id: getActiveQueriesdata.id,
-                name: getActiveQueriesdata.name,
-                body: getActiveQueriesdata.body,
-                email: getActiveQueriesdata.email,
-                isActive: true,
-                // isDeleted: true,
-                isResolved: false,
-            }
-        
+
+        let data = {
+            id: getActiveQueriesdata.id,
+            name: getActiveQueriesdata.name,
+            body: getActiveQueriesdata.body,
+            email: getActiveQueriesdata.email,
+            isActive: true,
+            // isDeleted: true,
+            isResolved: false,
+        }
+
         const restoreQuery = await newQuery(data);
 
         if (restoreQuery.status === 200) {
-            toast.success("Query active successful")
+            toast.success("Query actived")
         }
     };
 
@@ -265,17 +297,20 @@ const query = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            // sorter: (a, b) => a.getArticlesData.data.data.length - b.getArticlesData.data.data.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Email',
             dataIndex: 'email',
-
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Body',
             dataIndex: 'body',
+            sorter: (a, b) => a.body.localeCompare(b.body),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Actions',
@@ -291,7 +326,7 @@ const query = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            Add Query
+                            Add query
                         </Button>
                     </div>
                 ]}
@@ -302,7 +337,7 @@ const query = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback} >
-                                <TabPane tab="Active Query" key="active">
+                                <TabPane tab="Active query" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive pb-30">
                                             <Table
@@ -321,7 +356,7 @@ const query = () => {
                                     </UserTableStyleWrapper>
 
                                 </TabPane>
-                                <TabPane tab="Inactive Query" key="inactive">
+                                <TabPane tab="Inactive query" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -357,33 +392,36 @@ const query = () => {
                         <label htmlFor="name">Name</label>
                         <Form.Item>
                             <Input
-                                placeholder="Enter Name"
+                                placeholder="Enter name"
                                 name="name"
                                 value={queryData.name}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.name && <span style={{ color: "red" }}>{formErrors.name}</span>}
                         </Form.Item>
 
                         <label htmlFor="email">Email</label>
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Email"
+                                placeholder="Enter email"
                                 name="email"
                                 value={queryData.email}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.email && <span style={{ color: "red" }}>{formErrors.email}</span>}
                         </Form.Item>
 
                         <label htmlFor="body">Body</label>
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Body"
+                                placeholder="Enter body"
                                 name="body"
                                 value={queryData.body}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

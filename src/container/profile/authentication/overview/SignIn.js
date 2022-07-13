@@ -9,8 +9,6 @@ import { login } from '../../../../redux/authentication/actionCreator';
 import { Checkbox } from '../../../../components/checkbox/checkbox';
 import Heading from '../../../../components/heading/heading';
 import { TestimonialStyleWrapper } from '../../../pages/style';
-import { toast } from 'react-toastify';
-import AuthStorage from '../../../../helper/AuthStorage';
 
 const SignIn = () => {
   const history = useHistory();

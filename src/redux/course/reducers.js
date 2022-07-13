@@ -65,7 +65,7 @@ const {
   ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS,
   ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
 
-    //--- CourseRating --- 
+  //--- CourseRating --- 
   POST_ADD_COURSE_RATING_BEGINE,
   POST_ADD_COURSE_RATING_SUCCESS,
   POST_ADD_COURSE_RATING_ERR,
@@ -122,8 +122,8 @@ const initialState = {
   addPartnerCourseInBulkError: null,
   addSwayamCourseInBulkData: null,
   addSwayamCourseInBulkError: null,
-  importCourseCategoryData:null,
-  importCourseCategoryError:null
+  importCourseCategoryData: null,
+  importCourseCategoryError: null
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -360,170 +360,170 @@ const cateGoryReducer = (state = initialState, action) => {
         loading: false,
       };
 
-      case ADD_PARTNER_COURSE_IN_BULK_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_PARTNER_COURSE_IN_BULK_SUCCESS:
-        return {
-          ...state,
-          addPartnerCourseInBulkData: data,
-          loading: false,
-        };
-      case ADD_PARTNER_COURSE_IN_BULK_ERR:
-        return {
-          ...state,
-          addPartnerCourseInBulkError: err,
-          loading: false,
-        };
+    case ADD_PARTNER_COURSE_IN_BULK_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_PARTNER_COURSE_IN_BULK_SUCCESS:
+      return {
+        ...state,
+        addPartnerCourseInBulkData: data,
+        loading: false,
+      };
+    case ADD_PARTNER_COURSE_IN_BULK_ERR:
+      return {
+        ...state,
+        addPartnerCourseInBulkError: err,
+        loading: false,
+      };
 
-      case ADD_SWAYAM_COURSE_IN_BULK_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_SWAYAM_COURSE_IN_BULK_SUCCESS:
-        return {
-          ...state,
-          addSwayamCourseInBulkData: data,
-          loading: false,
-        };
-      case ADD_SWAYAM_COURSE_IN_BULK_ERR:
-        return {
-          ...state,
-          addSwayamCourseInBulkError: err,
-          loading: false,
-        };
-
-
-      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE:
-        return {
-          ...state,
-          loading: true,
-        };
-      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS:
-        return {
-          ...state,
-          importCourseCategoryData: data,
-          loading: false,
-        };
-      case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR:
-        return {
-          ...state,
-          importCourseCategoryError: err,
-          loading: false,
-        };
+    case ADD_SWAYAM_COURSE_IN_BULK_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_SWAYAM_COURSE_IN_BULK_SUCCESS:
+      return {
+        ...state,
+        addSwayamCourseInBulkData: data,
+        loading: false,
+      };
+    case ADD_SWAYAM_COURSE_IN_BULK_ERR:
+      return {
+        ...state,
+        addSwayamCourseInBulkError: err,
+        loading: false,
+      };
 
 
-       //--- CourseRating --- 
-        case POST_ADD_COURSE_RATING_BEGINE :
-          return{
-            ...state,
-            loading : false,
-          }
-          case POST_ADD_COURSE_RATING_SUCCESS:
-             return {
-               ...state,
-               addCourseRatingData:data,
-               loading : false ,
-             }
-             case POST_ADD_COURSE_RATING_ERR:
-              return {
-                ...state,
-                addCourseRatingError:err,
-                loading : false ,
-              }
+    case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS:
+      return {
+        ...state,
+        importCourseCategoryData: data,
+        loading: false,
+      };
+    case ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR:
+      return {
+        ...state,
+        importCourseCategoryError: err,
+        loading: false,
+      };
 
-              case GET_COURSE_RATING_BEGINE :
-                return{
-                  ...state,
-                  loading : false,
-                }
-                case GET_COURSE_RATING_SUCCESS:
-                   return {
-                     ...state,
-                     CourseRatingData:data,
-                     loading : false ,
-                   }
-                   case GET_COURSE_RATING_ERR:
-                    return {
-                      ...state,
-                    CourseRatingError:err,
-                      loading : false ,
-                    }
 
-                    case POST_COURSE_RATING_BY_ID_BEGINE :
-                      return{
-                        ...state,
-                        loading : false,
-                      }
-                      case POST_COURSE_RATING_BY_ID_SUCCESS:
-                         return {
-                           ...state,
-                          CourseRatingByIdData:data,
-                           loading : false ,
-                         }
-                         case POST_COURSE_RATING_BY_ID_ERR:
-                          return {
-                            ...state,
-                            CourseRatingByIdError:err,
-                            loading : false ,
-                          }
+    //--- CourseRating --- 
+    case POST_ADD_COURSE_RATING_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case POST_ADD_COURSE_RATING_SUCCESS:
+      return {
+        ...state,
+        addCourseRatingData: data,
+        loading: false,
+      }
+    case POST_ADD_COURSE_RATING_ERR:
+      return {
+        ...state,
+        addCourseRatingError: err,
+        loading: false,
+      }
 
-                          case GET_SPECIFIC_COURSE_RATING_BEGINE :
-                            return{
-                              ...state,
-                              loading : false,
-                            }
-                            case GET_SPECIFIC_COURSE_RATING_SUCCESS:
-                               return {
-                                 ...state,
-                                 SpecificCourseRatingData:data,
-                                 loading : false ,
-                               }
-                               case GET_SPECIFIC_COURSE_RATING_ERR:
-                                return {
-                                  ...state,
-                                  SpecificCourseRatingError:err,
-                                  loading : false ,
-                                }
+    case GET_COURSE_RATING_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case GET_COURSE_RATING_SUCCESS:
+      return {
+        ...state,
+        CourseRatingData: data,
+        loading: false,
+      }
+    case GET_COURSE_RATING_ERR:
+      return {
+        ...state,
+        CourseRatingError: err,
+        loading: false,
+      }
 
-                                case GET_SPECIFIC_USER_COURSE_RATING_BEGINE :
-                                  return{
-                                    ...state,
-                                    loading : false,
-                                  }
-                                  case GET_SPECIFIC_USER_COURSE_RATING_SUCCESS:
-                                     return {
-                                       ...state,
-                                    SpecificUserCourseRatingData:data,
-                                       loading : false ,
-                                     }
-                                     case GET_SPECIFIC_USER_COURSE_RATING_ERR:
-                                      return {
-                                        ...state,
-                                   SpecificUserCourseRatingError:err,
-                                        loading : false ,
-                                      }
+    case POST_COURSE_RATING_BY_ID_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case POST_COURSE_RATING_BY_ID_SUCCESS:
+      return {
+        ...state,
+        CourseRatingByIdData: data,
+        loading: false,
+      }
+    case POST_COURSE_RATING_BY_ID_ERR:
+      return {
+        ...state,
+        CourseRatingByIdError: err,
+        loading: false,
+      }
 
-                                      case EDIT_COURSE_RATING_BEGINE :
-                                        return{
-                                          ...state,
-                                          loading : false,
-                                        }
-                                        case EDIT_COURSE_RATING_SUCCESS:
-                                           return {
-                                             ...state,
-                                             editCategoryRatingData:data,
-                                             loading : false ,
-                                           }
-                                           case EDIT_COURSE_RATING_ERR:
-                                            return {
-                                              ...state,
-                                              editCategoryRatingError:err,
-                                              loading : false ,
-                                            }
+    case GET_SPECIFIC_COURSE_RATING_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case GET_SPECIFIC_COURSE_RATING_SUCCESS:
+      return {
+        ...state,
+        SpecificCourseRatingData: data,
+        loading: false,
+      }
+    case GET_SPECIFIC_COURSE_RATING_ERR:
+      return {
+        ...state,
+        SpecificCourseRatingError: err,
+        loading: false,
+      }
+
+    case GET_SPECIFIC_USER_COURSE_RATING_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case GET_SPECIFIC_USER_COURSE_RATING_SUCCESS:
+      return {
+        ...state,
+        SpecificUserCourseRatingData: data,
+        loading: false,
+      }
+    case GET_SPECIFIC_USER_COURSE_RATING_ERR:
+      return {
+        ...state,
+        SpecificUserCourseRatingError: err,
+        loading: false,
+      }
+
+    case EDIT_COURSE_RATING_BEGINE:
+      return {
+        ...state,
+        loading: false,
+      }
+    case EDIT_COURSE_RATING_SUCCESS:
+      return {
+        ...state,
+        editCategoryRatingData: data,
+        loading: false,
+      }
+    case EDIT_COURSE_RATING_ERR:
+      return {
+        ...state,
+        editCategoryRatingError: err,
+        loading: false,
+      }
 
 
     default:

@@ -33,7 +33,6 @@ const ProviderConfig = ({ basename }) => {
     };
   });
 
-  //useEffect(()=>{"isLoggedIn",isLoggedIn},[isLoggedIn])
   const history = useHistory();
   const route = useContext(RouterContext);
   const dispatch = useDispatch();
@@ -54,12 +53,6 @@ const ProviderConfig = ({ basename }) => {
   }, [setPath]);
 
   useEffect(() => {
-    if (loginData && loginData.data) {
-      toast.success('Login successful');
-    }
-  }, [loginData]);
-
-  useEffect(() => {
     if (AuthStorage.getToken()) {
       dispatch(loginSuccess(true));
     }
@@ -77,6 +70,13 @@ const ProviderConfig = ({ basename }) => {
       }
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (loginData && loginData.data) {
+      toast.success('Login successful');
+      history.push('/admin');
+    }
+  }, [loginData]);
 
   return (
     <ConfigProvider direction={rtl ? 'rtl' : 'ltr'}>

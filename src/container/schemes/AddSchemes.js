@@ -11,6 +11,7 @@ import {
 } from '../../redux/schemes/actionCreator';
 import uuid from 'react-uuid';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
+import TextArea from 'antd/lib/input/TextArea';
 
 const AddSchemes = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -20,45 +21,64 @@ const AddSchemes = () => {
   let history = useHistory();
   let location = useLocation();
 
-  useEffect(() => {
-    console.log("langid", langId)
-  }, [langId])
-
-  useEffect(() => {
-    console.log("ids", ids)
-  }, [ids])
-
   const dispatch = useDispatch();
   const { Option } = Select;
 
   const [state, setState] = useState({
-    benifitLine: RichTextEditor.createEmptyValue(),
-    detail: RichTextEditor.createEmptyValue(),
-    howToApply: RichTextEditor.createEmptyValue(),
-    documentation: RichTextEditor.createEmptyValue(),
+    // benifitLine: RichTextEditor.createEmptyValue(),
+    // detail: RichTextEditor.createEmptyValue(),
+    // howToApply: RichTextEditor.createEmptyValue(),
+    // documentation: RichTextEditor.createEmptyValue(),
+    // name: '',
+    // schemeCategory: '',
+    // schemeBenifit: '',
+    // locations: [],
+    // website: '',
+    // type: '',
+    // benificiary: '',
+    // grievanceRedress: '',
+    // elink: '',
+    // spoc: '',
+    // isActive: true,
+    // // sequence: '',
+    // videoUrl: '',
+    // thumbnail: '',
+    // application_form: "",
+    // recommended_and_forwarded: "",
+    // application_process: "",
+    // medical_superintendent: "",
+    // hospital_expenses_estimation_certificate: ""
+    key: '',
     name: '',
     schemeCategory: '',
     schemeBenifit: '',
-    locations: [],
+    benifitLine: RichTextEditor.createEmptyValue(),
+    benificiary: '',
+    videoUrl: '',
+    detail: RichTextEditor.createEmptyValue(),
+    howToApply: RichTextEditor.createEmptyValue(),
+    documentation: RichTextEditor.createEmptyValue(),
     website: '',
     type: '',
-    benificiary: '',
-    grievanceRedress: '',
     elink: '',
+    grievanceRedress: '',
     spoc: '',
     isActive: true,
-    // sequence: '',
-    videoUrl: '',
+    locations: [],
+    application_form: '',
+    recommended_and_forwarded: '',
+    application_process: '',
+    medical_superintendent: '',
+    hospital_expenses_estimation_certificate: '',
     thumbnail: '',
   });
+
   const [error, setError] = useState({});
 
   const scheme = useSelector(state => state.scheme.schemecatogeryData);
   const SchemeBenifits = useSelector(state => state.scheme.schemeBenefitData);
   const State = useSelector(state => state.scheme.addState);
   const getOneScHemeData = useSelector(state => state.scheme.getOneSchemeData);
-  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData);
-
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -71,209 +91,18 @@ const AddSchemes = () => {
       dispatch(getOneSchemeData(id));
     }
   }, [id]);
+  useEffect(() => {
+    console.log("getOneScHemeData", getOneScHemeData);
+  }, [getOneScHemeData])
 
   useEffect(() => {
     if (getOneScHemeData && id) {
-      console.log('getOneScHemeData', getOneScHemeData);
       setState({
         ...state,
         benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
         detail: RichTextEditor.createValueFromString(getOneScHemeData.detail, 'markdown'),
         howToApply: RichTextEditor.createValueFromString(getOneScHemeData.howToApply, 'markdown'),
         documentation: RichTextEditor.createValueFromString(getOneScHemeData.documentation, 'markdown'),
-        key: getOneScHemeData.key,
-        name: getOneScHemeData.name,
-        schemeCategory: getOneScHemeData.schemeCategory.id,//name
-        schemeBenifit: getOneScHemeData.schemeBenifit.id,//name
-        locations: getOneScHemeData.locations.map(item => item.id),
-        website: getOneScHemeData.website,
-        type: getOneScHemeData.type,
-        benificiary: getOneScHemeData.benificiary,
-        grievanceRedress: getOneScHemeData.grievanceRedress,
-        elink: getOneScHemeData.elink,
-        spoc: getOneScHemeData.spoc,
-        isActive: getOneScHemeData.isActive,
-        // sequence: getOneScHemeData.sequence,
-        videoUrl: getOneScHemeData.videoUrl,
-        thumbnail: getOneScHemeData.thumbnail,
-        id: getOneScHemeData.id,
-        isDeleted: getOneScHemeData.isDeleted,
-        isPublished: getOneScHemeData.isPublished,
-        isApproved: getOneScHemeData.isApproved,
-      });
-    }
-  }, [getOneScHemeData]);
-
-  const onChangesEditorBenifit = value => {
-    setState({ ...state, benifitLine: value });
-  };
-  const onChangesEditorSchemeSummary = value => {
-    setState({ ...state, detail: value });
-  };
-  const onChangesEditorHowToApply = value => {
-    setState({ ...state, howToApply: value });
-  };
-  const onChangesEditorDocumentation = value => {
-    setState({ ...state, documentation: value });
-  };
-
-
-  const selectValue = (e, name) => {
-    if (name === 'schemeBenifit') {
-      setState({
-        ...state,
-        schemeBenifit: e,
-      });
-    } else if (name === 'schemeCategory') {
-      setState({ ...state, schemeCategory: e });
-    } else if (name === 'type') {
-      setState({ ...state, type: e });
-    }
-    // else if (name === "locations") {
-    //     setState({ ...state, locations: [...state.locations, e ]});
-    // }
-    else if (name === 'locations') {
-      setState({ ...state, locations: e });
-    }
-  };
-
-  const onChangeValue = e => {
-    //let re = /^[0-9\b]+$/;
-    if (e.target.name === 'isActive') {
-      setState({
-        ...state,
-        [e.target.name]: e.target.checked,
-      });
-    }
-    // else if (e.target.name === 'sequence') {
-    //   if (e.target.value > 0) {
-    //     setState({ ...state, [e.target.name]: e.target.value });
-    //   } else {
-    //     setState({ ...state, [e.target.name]: 0 });
-    //   }
-    // }
-    // else if (name === "sequence") {
-
-    //     if (e.target.value === "" || re.test(e.target.value)) {
-    //         setState({ ...state, [e.target.name]: e.target.value })
-    //     }
-    // }
-    else {
-      setState({ ...state, [e.target.name]: e.target.value });
-    }
-  };
-
-  const validation = () => {
-    // console.log("(state.benifitLine).toString", (state.benifitLine).toString("markdown"))
-    let error = {};
-    let flage = false;
-    if (state.name === '') {
-      error.name = 'Scheme Name is required';
-      flage = true;
-    }
-    if (state.schemeCategory === '') {
-      error.schemeCategory = 'schemeCategory is required';
-      flage = true;
-    }
-    // if (state.sequence === '') {
-    //   error.sequence = 'sequence is required';
-    //   flage = true;
-    // }
-    if (state.schemeBenifit === '') {
-      error.schemeBenifit = 'schemeBenifit is required';
-      flage = true;
-    }
-    if (state.benifitLine.toString('markdown').length <= 2) {
-      error.benifitLine = 'benifitLine is required';
-      flage = true;
-    }
-    if (state.benificiary === '') {
-      error.benificiary = 'benificiary is required';
-      flage = true;
-    }
-    if (state.detail.toString('markdown').length <= 2) {
-      error.detail = 'detail is required';
-      flage = true;
-    }
-    if (state.howToApply.toString('markdown').length <= 2) {
-      error.howToApply = 'howToApply is required';
-      flage = true;
-    }
-    if (state.documentation.toString('markdown').length <= 2) {
-      error.documentation = 'documentation is required';
-      flage = true;
-    }
-    if (state.locations.length < 1) {
-      error.locations = 'locations is required';
-      flage = true;
-    }
-    if (state.website === '') {
-      error.website = 'website is required';
-      flage = true;
-    }
-    if (state.type === '') {
-      error.type = 'type is required';
-      flage = true;
-    }
-    if (state.grievanceRedress === '') {
-      error.grievanceRedress = 'grievanceRedress is required';
-      flage = true;
-    }
-    if (state.elink === '') {
-      error.elink = 'elink is required';
-      flage = true;
-    }
-    if (state.spoc === '') {
-      error.spoc = 'spoc is required';
-      flage = true;
-    }
-    if (state.videoUrl === '') {
-      error.videoUrl = 'VideoUrl is required';
-      flage = true;
-    }
-    if (state.thumbnail === '') {
-      error.thumbnail = 'ThumbNail is required';
-      flage = true;
-    }
-    setError(error);
-    return flage;
-  };
-
-  const onSubmit = () => {
-    if (validation()) {
-      return;
-    }
-    let data = {
-      // key: uuid(),
-      benifitLine: state.benifitLine.toString('markdown'),
-      detail: state.detail.toString('markdown'),
-      howToApply: state.howToApply.toString('markdown'),
-      documentation: state.documentation.toString('markdown'),
-      name: state.name,
-      locations: state.locations,
-      schemeCategory: state.schemeCategory,
-      schemeBenifit: state.schemeBenifit,
-      website: state.website,
-      type: state.type,
-      benificiary: state.benificiary,
-      grievanceRedress: state.grievanceRedress,
-      elink: state.elink,
-      spoc: state.spoc,
-      isActive: state.isActive,
-      videoUrl: state.videoUrl,
-      thumbnail: state.thumbnail,
-      id: state.id,
-      isDeleted: state.isDeleted,
-      isPublished: state.isPublished,
-      isApproved: state.isApproved,
-    };
-    if (langId) {
-      delete data.id
-      delete data.isDeleted
-      delete data.isPublished
-      delete data.isApproved
-      data = {
-        ...data,
         key: getOneScHemeData.key,
         name: getOneScHemeData.name,
         schemeCategory: getOneScHemeData.schemeCategory.id,
@@ -288,21 +117,270 @@ const AddSchemes = () => {
         isActive: getOneScHemeData.isActive,
         videoUrl: getOneScHemeData.videoUrl,
         thumbnail: getOneScHemeData.thumbnail,
+        id: getOneScHemeData.id,
+        isDeleted: getOneScHemeData.isDeleted,
+        isPublished: getOneScHemeData.isPublished,
+        isApproved: getOneScHemeData.isApproved,
+        application_form: getOneScHemeData.application_form,
+        application_process: getOneScHemeData.application_process,
+        hospital_expenses_estimation_certificate: getOneScHemeData.hospital_expenses_estimation_certificate,
+        medical_superintendent: getOneScHemeData.medical_superintendent,
+        recommended_and_forwarded: getOneScHemeData.recommended_and_forwarded,
+      });
+    }
+  }, [getOneScHemeData]);
+
+  const onChangesEditorBenifit = value => {
+    setState({ ...state, benifitLine: value });
+    setError({ ...error, benifitLine: "" })
+  };
+  const onChangesEditorSchemeSummary = value => {
+    setState({ ...state, detail: value });
+    setError({ ...error, detail: "" })
+  };
+  const onChangesEditorHowToApply = value => {
+    setState({ ...state, howToApply: value });
+    setError({ ...error, howToApply: "" })
+
+  };
+  const onChangesEditorDocumentation = value => {
+    setState({ ...state, documentation: value });
+    setError({ ...error, documentation: "" })
+  };
+
+
+  const selectValue = (e, name) => {
+    if (name === 'schemeBenifit') {
+      setState({
+        ...state,
+        schemeBenifit: e,
+      });
+      setError({ ...error, schemeBenifit: "" })
+    } else if (name === 'schemeCategory') {
+      setState({ ...state, schemeCategory: e });
+      setError({ ...error, schemeCategory: "" })
+    } else if (name === 'type') {
+      setState({ ...state, type: e });
+      setError({ ...error, type: "" })
+    }
+    // else if (name === "locations") {
+    //     setState({ ...state, locations: [...state.locations, e ]});
+    // }
+    else if (name === 'locations') {
+      setState({ ...state, locations: e });
+      setError({ ...error, locations: "" })
+    }
+  };
+  const onChangeValue = e => {
+    setError({ ...error, [e.target.name]: "" })
+    if (e.target.name === 'isActive') {
+      setState({
+        ...state,
+        [e.target.name]: e.target.checked
+      });
+    }
+
+    // else if (e.target.name === 'sequence') {
+    //   if (e.target.value > 0) {
+    //     setState({ ...state, [e.target.name]: e.target.value });
+    //   } else {
+    //     setState({ ...state, [e.target.name]: 0 });
+    //   }
+    // }
+    // else if (name === "sequence") {
+
+    //     if (e.target.value === "" || re.test(e.target.value)) {
+    //         setState({ ...state, [e.target.name]: e.target.value })
+    //     }
+    // }
+
+    else {
+      setState({ ...state, [e.target.name]: e.target.value });
+    }
+  };
+
+  const fileUpload = (e, name) => {
+    let firsttemp = e.target.files[0]?.name?.split('.');
+    if (firsttemp) {
+      let fileexten = ['jpeg', 'jpg', 'png']
+      if (fileexten.includes(firsttemp[firsttemp.length - 1])) {
+        setState({ ...state, [name]: e.target.files[0] })
+        setError({ ...error, thumbnail: "" });
       }
-      dispatch(addSchemeData(langId, data));
+      else {
+        setError({ ...error, thumbnail: 'Please select valid document file' })
+        setState({ ...state, thumbnail: '' })
+      }
+    }
+    else {
+      setError({ ...error, thumbnail: 'Please select document file' })
+    }
+  }
+
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    let urlReg = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+    // let videoUrlReg = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+    let stringReg = /^[ A-Za-z]/;
+    let a = stringReg.test(state.name)
+
+    if (!state.name) {
+      error.name = 'Scheme name is required';
+      flage = true;
+    }
+    else if (!stringReg.test(state.name)) {
+      error.name = 'Name must be string';
+      flage = true;
+    }
+    if (!state.schemeCategory) {
+      error.schemeCategory = 'Scheme category is required';
+      flage = true;
+    }
+    // if (state.sequence) {
+    //   error.sequence = 'sequence is required';
+    //   flage = true;
+    // }
+    if (!state.schemeBenifit) {
+      error.schemeBenifit = 'Scheme benifit is required';
+      flage = true;
+    }
+    if (state.benifitLine.toString('markdown').length <= 2) {
+      error.benifitLine = 'Benifit 1-line is required';
+      flage = true;
+    }
+    if (!state.benificiary) {
+      error.benificiary = 'Benificiary is required';
+      flage = true;
+    }
+    if (state.detail.toString('markdown').length <= 2) {
+      error.detail = 'Scheme summary is required';
+      flage = true;
+    }
+    if (state.howToApply.toString('markdown').length <= 2) {
+      error.howToApply = 'How to apply is required';
+      flage = true;
+    }
+    if (state.documentation.toString('markdown').length <= 2) {
+      error.documentation = 'Documentation is required';
+      flage = true;
+    }
+    if (state.locations.length < 1) {
+      error.locations = 'Locations is required';
+      flage = true;
+    }
+    if (!state.website) {
+      error.website = 'Website is required';
+      flage = true;
+    }
+    else if (!urlReg.test(state.website)) {
+      error.website = 'Enter valid website';
+      flage = true;
+    }
+    if (!state.type) {
+      error.type = 'Type is required';
+      flage = true;
+    }
+    if (!state.grievanceRedress) {
+      error.grievanceRedress = 'Grievance redress is required';
+      flage = true;
+    }
+    if (!state.elink) {
+      error.elink = 'E link is required';
+      flage = true;
+    }
+    else if (!urlReg.test(state.elink)) {
+      error.elink = 'Enter valid elink';
+      flage = true;
+    }
+    if (!state.spoc) {
+      error.spoc = 'SOPC is required';
+      flage = true;
+    }
+    if (!state.videoUrl) {
+      error.videoUrl = 'Video url is required';
+      flage = true;
+    }
+    // else if (!videoUrlReg.test(state.videoUrl)) {
+    //   error.videoUrl = 'Enter Valid videoUrl';
+    //   flage = true;
+    // }
+    if (!state.thumbnail) {
+      error.thumbnail = 'Thumbnail is required';
+      flage = true;
+    }
+    if (!state.application_form) {
+      error.application_form = 'Application form is required';
+      flage = true;
+    }
+    if (!state.recommended_and_forwarded) {
+      error.recommended_and_forwarded = 'Recommended and forwarded is required';
+      flage = true;
+    }
+    if (!state.application_process) {
+      error.application_process = 'Application process is required';
+      flage = true;
+    }
+    if (!state.medical_superintendent) {
+      error.medical_superintendent = 'Medical superintendent is required';
+      flage = true;
+    }
+    if (!state.hospital_expenses_estimation_certificate) {
+      error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
+      flage = true;
+    }
+    setError(error);
+    return flage;
+  };
+
+  const onSubmit = () => {
+    if (validation()) {
+      return;
+    }
+    let formData = new FormData();
+    formData.append('benifitLine', state.benifitLine.toString('markdown'));
+    formData.append('detail', state.detail.toString('markdown'));
+    formData.append('howToApply', state.howToApply.toString('markdown'));
+    formData.append('documentation', state.documentation.toString('markdown'));
+    formData.append('name', state.name);
+    formData.append('locations', JSON.stringify(state.locations));
+    formData.append('schemeCategory', state.schemeCategory);
+    formData.append('schemeBenifit', state.schemeBenifit);
+    formData.append('website', state.website);
+    formData.append('type', state.type,);
+    formData.append('benificiary', state.benificiary);
+    formData.append('grievanceRedress', state.grievanceRedress);
+    formData.append('elink', state.elink);
+    formData.append('spoc', state.spoc);
+    formData.append('isActive', state.isActive);
+    formData.append('thumbnail', state.thumbnail);
+    formData.append('application_form', state.application_form);
+    formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
+    formData.append('application_process', state.application_process);
+    formData.append('medical_superintendent', state.medical_superintendent);
+    formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
+    formData.append('videoUrl', state.videoUrl);
+    if (langId) {
+      formData.append('key', state.key);
+      dispatch(addSchemeData(langId, formData));
       history.push(`/admin/scheme`);
     }
     else {
       if (id) {
-        dispatch(editSchemeData(data));
+        formData.append('id', state.id);
+        formData.append('isDeleted', state.isDeleted);
+        formData.append('isPublished', state.isPublished);
+        formData.append('isApproved', state.isApproved);
+        dispatch(editSchemeData(formData));
         history.push(`/admin/scheme`);
       } else {
-        dispatch(addSchemeData(langId, data));
+        formData.append('key', uuid());
+        dispatch(addSchemeData(langId, formData));
         history.push(`/admin/scheme`);
       }
     }
-    onCancel();
   };
+
   //   if (!location.search) {
   //     dispatch(addSchemeData(data, langId));
   //     // history.push(`${path}/scheme`)
@@ -326,7 +404,7 @@ const AddSchemes = () => {
     <>
       <PageHeader
         ghost
-        title={id ? "Edit Scheme" : "Add Scheme"}
+        title={id ? "Edit scheme" : "Add scheme"}
       /*    buttons={[
                  // <div key="1" className="page-header-actions">
                  //     <Button size="small" type="link">
@@ -344,7 +422,6 @@ const AddSchemes = () => {
                  // </div>
              ]} */
       />
-
       <Main>
         <Cards headless>
           <Row justify="space-between">
@@ -360,26 +437,25 @@ const AddSchemes = () => {
                             </Radio.Group>
                         </Col> */}
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="name">Scheme Name</label>
+              <label htmlFor="name">Scheme name</label>
               <Form.Item>
-                <Input placeholder="Scheme Name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
+                <Input type="name" placeholder="Scheme name" value={state.name} name="name" onChange={e => onChangeValue(e)} />
                 {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
 
-            {/* </Row>
-                    <Row justify="space-between"> */}
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="category mb-4">Scheme Category</label>
+              <label htmlFor="category mb-4">Scheme category</label>
               <Form.Item initialValue=" Select a scheme category ">
                 <Select
                   size="large"
-                  placeholder="Select Category"
+                  className={state.schemeCategory ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                   value={state.schemeCategory}
-                  className="sDash_fullwidth-select"
                   name="schemeCategory"
+                  placeholder="Select scheme category"
                   onChange={e => selectValue(e, 'schemeCategory')}
                 >
+                  <Option value="">Select scheme category</Option>
                   {scheme && scheme.data.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
                 </Select>
                 {error.schemeCategory && <span style={{ color: 'red' }}>{error.schemeCategory}</span>}
@@ -387,17 +463,18 @@ const AddSchemes = () => {
             </Col>
 
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="Benefits">Type of Benefits</label>
+              <label htmlFor="Benefits">Type of benefits</label>
               <Form.Item initialValue="Type of Benefits">
                 <Select
                   size="large"
-                  placeholder="Select Benefits"
                   value={state.schemeBenifit}
-                  className="sDash_fullwidth-select"
+                  placeholder="Select scheme benefits"
+                  className={state.schemeBenifit ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                   name="schemeBenifit"
                   onChange={e => selectValue(e, 'schemeBenifit')}
                 >
-                  {SchemeBenifits && SchemeBenifits.map(items => <Option key={items.id} value={items.id}>{items.name} </Option>)}
+                  <Option value="">Select scheme benefits</Option>
+                  {SchemeBenifits && SchemeBenifits.map(items => (<> <Option key={items.id} value={items.id}>{items.name} </Option> </>))}
                 </Select>
                 {error.schemeBenifit && <span style={{ color: 'red' }}>{error.schemeBenifit}</span>}
               </Form.Item>
@@ -418,7 +495,7 @@ const AddSchemes = () => {
             </Col> */}
           </Row>
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="Benefit-1-Line">Benefit 1-Line</label>
+            <label htmlFor="Benefit-1-Line">Benefit 1-line</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
                 placeholder="Type your message..."
@@ -430,10 +507,10 @@ const AddSchemes = () => {
             {error.benifitLine && <span style={{ color: 'red' }}>{error.benifitLine}</span>}
           </div>
 
-          <label htmlFor="TargetBeneficiary">Target Beneficiary</label>
+          <label htmlFor="TargetBeneficiary">Target beneficiary</label>
           <Form.Item>
             <Input
-              placeholder="Target Beneficiary"
+              placeholder="Target beneficiary"
               value={state.benificiary}
               name="benificiary"
               onChange={e => onChangeValue(e)}
@@ -442,10 +519,10 @@ const AddSchemes = () => {
           </Form.Item>
 
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="SchemeSummary">Scheme Summary</label>
+            <label htmlFor="SchemeSummary">Scheme summary</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
-                placeholder="Scheme Summary"
+                placeholder="Scheme summary"
                 name="detail"
                 value={state.detail}
                 onChange={onChangesEditorSchemeSummary}
@@ -455,10 +532,10 @@ const AddSchemes = () => {
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="HowtoApply">How to Apply</label>
+            <label htmlFor="HowtoApply">How to apply</label>
             <div className="group" style={{ marginBottom: '0px' }}>
               <RichTextEditor
-                placeholder="How to Apply"
+                placeholder="How to apply"
                 name="howToApply"
                 value={state.howToApply}
                 onChange={onChangesEditorHowToApply}
@@ -507,7 +584,7 @@ const AddSchemes = () => {
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="Website">Website</label>
               <Form.Item>
-                <Input placeholder="Website" value={state.website} name="website" onChange={e => onChangeValue(e)} />
+                <Input type='url' placeholder=" Website" value={state.website} name="website" onChange={e => onChangeValue(e)} />
                 {error.website && <span style={{ color: 'red' }}>{error.website}</span>}
               </Form.Item>
             </Col>
@@ -520,10 +597,10 @@ const AddSchemes = () => {
                     className={state.type ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                     value={state.type}
                     name="type"
-                    placeholder="Select Type"
+                    placeholder="Select type"
                     onChange={e => selectValue(e, 'type')}
                   >
-                    <Option value="">Select Type</Option>
+                    <Option value="">Select type</Option>
                     <Option value="ONLINE">Online </Option>
                     <Option value="OFFLINE">Offline</Option>
                   </Select>
@@ -532,11 +609,12 @@ const AddSchemes = () => {
                 </Form.Item>
               </Form>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="GrievanceRedress">Grievance Redress</label>
+              <label htmlFor="GrievanceRedress">Grievance redress</label>
               <Form.Item>
                 <Input
-                  placeholder="Grievance Redress"
+                  placeholder="Grievance redress"
                   value={state.grievanceRedress}
                   name="grievanceRedress"
                   onChange={e => onChangeValue(e)}
@@ -544,13 +622,15 @@ const AddSchemes = () => {
                 {error.grievanceRedress && <span style={{ color: 'red' }}>{error.grievanceRedress}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-              <label htmlFor="E-Link">E Link</label>
+              <label htmlFor="E-Link">E link</label>
               <Form.Item>
-                <Input placeholder="E Link" name="elink" value={state.elink} onChange={e => onChangeValue(e)} />
+                <Input placeholder="E link" name="elink" value={state.elink} onChange={e => onChangeValue(e)} />
                 {error.elink && <span style={{ color: 'red' }}>{error.elink}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
               <label htmlFor="SPOC">SPOC</label>
               <Form.Item>
@@ -558,28 +638,70 @@ const AddSchemes = () => {
                 {error.spoc && <span style={{ color: 'red' }}>{error.spoc}</span>}
               </Form.Item>
             </Col>
-            {/* </Row>
 
-                    <Row justify="space-between"> */}
             <Col lg={11} md={11} sm={24} xs={24} className="d-flex f-d-cloumn">
-              <label htmlFor="videoUrl">VideoUrl</label>
+              <label htmlFor="videoUrl">video url</label>
               <Form.Item>
-                <Input placeholder="videoUrl" value={state.videoUrl} name="videoUrl" onChange={e => onChangeValue(e)} />
+                <Input placeholder="video url" value={state.videoUrl} name="videoUrl" onChange={e => onChangeValue(e)} />
                 {error.videoUrl && <span style={{ color: 'red' }}>{error.videoUrl}</span>}
               </Form.Item>
             </Col>
+
             <Col lg={11} md={11} sm={24} xs={24}>
-              <label htmlFor="thumbnail">ThumbNail</label>
+              <label htmlFor="thumbnail">Thumbnail</label>
               <Form.Item>
                 <Input
-                  placeholder="ThumbNail"
-                  value={state.thumbnail}
+                  type="file"
+                  placeholder="thumbnail"
+                  // value={state.thumbnail}
                   name="thumbnail"
-                  onChange={e => onChangeValue(e)}
+                  // onChange={e => onChangeValue(e)}
+                  onChange={e => fileUpload(e, "thumbnail")}
                 />
                 {error.thumbnail && <span style={{ color: 'red' }}>{error.thumbnail}</span>}
               </Form.Item>
             </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="application_form">Application form</label>
+              <Form.Item name="application_form">
+                <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChangeValue(e)} />
+                {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="recommended_and_forwarded">Recommended and forwarded</label>
+              <Form.Item name="recommended_and_forwarded">
+                <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangeValue(e)} />
+                {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="application_process">Application process</label>
+              <Form.Item name="application_process">
+                <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChangeValue(e)} />
+                {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="medical_superintendent">Medical superintendent</label>
+              <Form.Item name="medical_superintendent">
+                <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangeValue(e)} />
+                {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
+              </Form.Item>
+            </Col>
+
+            <Col lg={11} md={11} sm={24} xs={24}>
+              <label htmlFor="hospital_expenses_estimation_certificate">Hospital expenses estimate certificate</label>
+              <Form.Item name="hospital_expenses_estimation_certificate">
+                <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangeValue(e)} />
+                {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
+              </Form.Item>
+            </Col>
+
           </Row>
 
           {/* <div>
@@ -593,6 +715,7 @@ const AddSchemes = () => {
             <Button className="btn-signin ml-10" type="primary" size="medium" onClick={e => onSubmit(e)}>
               {id && !langId ? 'Edit' : 'Add'}
             </Button>
+
             <Button className="btn-signin" type="light" size="medium"
               onClick={() => onCancel()}>
               Cancel

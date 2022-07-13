@@ -1,9 +1,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Row, Col, Skeleton } from 'antd';
-import FeatherIcon from 'feather-icons-react';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { Cards } from '../../components/cards/frame/cards-frame';
-import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
 import { CardBarChart2, EChartCard } from './style';
 import Heading from '../../components/heading/heading';
@@ -19,7 +17,6 @@ import {
   getTopMostViewedJobs,
   getTopMostViewedSchemes,
 } from '../../redux/dashboard/actionCreator';
-import { getUser } from '../../redux/authentication/actionCreator';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 
@@ -51,9 +48,9 @@ const Dashboard = () => {
     }
   }, [topTenCourseData]);
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getUser());
+  // }, []);
 
   useEffect(() => {
     if (userProfile) {
@@ -94,12 +91,21 @@ const Dashboard = () => {
   }, [topTenJobsData]);
 
   useEffect(() => {
-    dispatch(getDashBoardCourseData());
+    // dispatch(getDashBoardCourseData());
     dispatch(getDashBoardUserData());
+    // dispatch(getTopMostViewedCourses());
+    // dispatch(getTopMostViewedSchemes());
+    // dispatch(getTopMostViewedJobs());
+  }, []);
+
+  useEffect(() => {
+    if(AuthStorage.getStorageData(STORAGEKEY.language)){
+    dispatch(getDashBoardCourseData());
     dispatch(getTopMostViewedCourses());
     dispatch(getTopMostViewedSchemes());
     dispatch(getTopMostViewedJobs());
-  }, []);
+    }
+  },[AuthStorage.getStorageData(STORAGEKEY.language)])
 
   const courseColumns = [
     {
@@ -121,7 +127,7 @@ const Dashboard = () => {
 
   const schemesColumns = [
     {
-      title: 'Schemes Name',
+      title: 'Schemes name',
       dataIndex: 'name',
       key: 'name',
     },
@@ -186,9 +192,9 @@ const Dashboard = () => {
       <Main>
         <h3>Users</h3>
 
-        <Row gutter={25}>
+        <Row gutter={25} className='justify-content-between'>
 
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -207,7 +213,7 @@ const Dashboard = () => {
             </Cards>
           </Col>
 
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -225,7 +231,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -243,7 +249,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               <EChartCard>
                 <div className="card-chunk">
@@ -261,7 +267,7 @@ const Dashboard = () => {
               </EChartCard>
             </Cards>
           </Col>
-          <Col md={8} xs={24}>
+          <Col md={4} xs={24}>
             <Cards headless>
               {/* <EChartCard> */}
               <div className="card-chunk">
@@ -420,7 +426,7 @@ const Dashboard = () => {
             >
               <SalesLeaderBoard
                 dnone={'d-none'}
-                tableheader={'Top 10 Jobs viewes'}
+                tableheader={'Top 10 jobs viewes'}
                 columns={jobColumns}
                 data={tenJobData}
               />

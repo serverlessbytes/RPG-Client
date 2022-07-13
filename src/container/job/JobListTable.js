@@ -5,8 +5,8 @@ import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { addJobPost, editJobPost, getJobPost, getJobsFilterForMain, getoneJobPost } from '../../redux/jobs/actionCreator';
-import { useHistory, useRouteMatch } from 'react-router';
+import { getJobsFilterForMain } from '../../redux/jobs/actionCreator';
+import { useHistory } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -14,21 +14,20 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import ConfirmModal from '../../components/modals/confirm_modal';
-import { jobBannerUpdate } from '../../redux/jobs/actionCreator';
 
-
-const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search }) => {
+const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, setNumberOfPage, setExportTog, search, getJobData }) => {
   // props from JobPost
-  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, updateJObBanner } = actions;
+  const { addJobPostSuccess, editJobPostSuccess, getJobsFilterForMainSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
   const [usertable, setUsertable] = useState([]); //set data
-  const [perPage, setPerPage] = useState(10); // forpagination
+  const [filterData, setFilterData] = useState([]); //set data
+  const [perPage, setPerPage] = useState(20); // forpagination
   const [pageNumber, setPageNumber] = useState(1);
-  const [approved, setApproved] = useState();
   const [viewModal, setViewModal] = useState(false);
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [isAscend, setIsAscend] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [langIds, setLangIds] = useState({
     hindi: '',
@@ -37,11 +36,13 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const [languageIds, setLanguageIDs] = useState();
   const [ids, setIDs] = useState();
 
+
   const { users } = useSelector(state => {
     return {
       users: state.users,
     };
   });
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
@@ -58,7 +59,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     delete data.id;
     const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
       if (res.status === 200) {
-        dispatch(getJobsFilterForMain(perPage, pageNumber));
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi,));
         return res;
       }
     });
@@ -89,14 +90,6 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   const languageHandalOk = (languageIds, ids) => {
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
   }
-  // const addLanguageJobPost = (body, languageID) => {
-  //   ApiPost(`job/add?langId=${languageID}`, body)
-  //     .then((res) => {
-  //       console.log("res", res);
-  //       return dispatch(addJobPostSuccess(res))
-  //     })
-  //     .catch((err) => dispatch(addJobPostErr(err)))
-  // }
 
   const onDelete = async id => {
     let courseDataDelete =
@@ -124,15 +117,20 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         endDate: courseDataDelete.endDate,
         jobRole: courseDataDelete.jobRole.id,
         jobType: courseDataDelete.jobType.id,
+        application_form: courseDataDelete.application_form,
+        recommended_and_forwarded: courseDataDelete.recommended_and_forwarded,
+        application_process: courseDataDelete.application_process,
+        medical_superintendent: courseDataDelete.medical_superintendent,
+        hospital_expenses_estimation_certificate: courseDataDelete.hospital_expenses_estimation_certificate,
         id: id,
       };
-
       const deleteJobPost = await newJobPost(data);
       if (deleteJobPost.status === 200) {
-        toast.success('Jobs delete successfully.');
+        toast.success('Job deleted');
       }
     }
   };
+
   const onEdit = id => {
     history.push(`/admin/job/new?id=${id}`);
   };
@@ -152,17 +150,17 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     setLangIds(temp)
   }, [languageData])
 
-  // const activeJobPost = data => {
-  //   let id = data.id;
-  //   delete data.id;
-  //   const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
-  //     if (res.status === 200) {
-  //       dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
-  //     }
-  //     return res;
-  //   });
-  //   return newVal;
-  // };
+  const activeJobPost = data => {
+    let id = data.id;
+    delete data.id;
+    const newVal = ApiPost(`job/update?jobId=${id}`, data).then(res => {
+      if (res.status === 200) {
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
+      }
+      return res;
+    });
+    return newVal;
+  };
 
   const onRestore = async id => {
     let jobsData =
@@ -190,37 +188,35 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         endDate: jobsData.endDate,
         jobRole: jobsData.jobRole.id,
         jobType: jobsData.jobType.id,
+        application_form: jobsData.application_form,
+        recommended_and_forwarded: jobsData.recommended_and_forwarded,
+        application_process: jobsData.application_process,
+        medical_superintendent: jobsData.medical_superintendent,
+        hospital_expenses_estimation_certificate: jobsData.hospital_expenses_estimation_certificate,
         id: id,
       };
-      delete data.id;
-      ApiPost(`job/update?jobId=${id}`, data).then(res => {
-        if (res.status === 200) {
-          dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
-        }
-      })
+      const restoreJobPost = await activeJobPost(data);
+      if (restoreJobPost.status === 200) {
+        toast.success('Job actived');
+      }
     }
-    //   const restoreJobPost = await activeJobPost(data);
-    //   if (restoreJobPost.status === 200) {
-    //     toast.success('Jobs active successfully.');
-    //   }
-
-    // }
   };
+
 
   useEffect(() => {
     if (addLanguageJobPostError) {
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addLanguageJobPostError]);
 
   useEffect(() => {
     if (addJobPostErr) {
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [addJobPostErr]);
 
   useEffect(() => {
-    if (status) {
+    if (status && langIds.hindi && langIds.marathi) {
       dispatch(
         getJobsFilterForMain(
           perPage,
@@ -228,24 +224,27 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
           state?.state ? state?.state : '',
           type?.type ? type?.type : '',
           jobRole?.jobRole ? jobRole?.jobRole : '',
-          // search.search ? search.search : '',
           status,
+          search ? search : '',
+          langIds.hindi,
+          langIds.marathi,
         ),
       );
     }
-  }, [perPage, pageNumber, apply, status]);
+  }, [perPage, pageNumber, apply, status, langIds]);
 
   useEffect(() => {
     if (addJobPostData && addJobPostData.message === 'Jobs added successfully.') {
       dispatch(addJobPostSuccess(null));
-      toast.success('Jobs Add successful');
+      toast.success('Job added');
     }
   }, [addJobPostData]);
 
   useEffect(() => {
     if (addLanguageJobPost && addLanguageJobPost.status === 200) {
-      dispatch(getJobsFilterForMainSuccess(null));
-      toast.success('Jobs Addd successful');
+      // dispatch(getJobsFilterForMainSuccess(null));
+      dispatch(addLanguageJobPostSuccess(null));
+      toast.success('Job added');
 
     }
   }, [addLanguageJobPost]);
@@ -253,18 +252,18 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
   useEffect(() => {
     if (editJobPostError) {
       dispatch(editJobPostErr(null))
-      toast.error('Something Wrong');
+      toast.error('Something went wrong');
     }
   }, [editJobPostError]);
 
   useEffect(() => {
     if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === false) {
       dispatch(editJobPostSuccess(null));
-      toast.success('Jobs Delete successful');
+      toast.success('Jobs Deleted');
     }
     else if (editJobPostData && editJobPostData.data && editJobPostData.data.isActive === true) {
       dispatch(editJobPostSuccess(null))
-      toast.success("Jobs Update successful");
+      toast.success("Job updated");
     }
   }, [editJobPostData]);
 
@@ -284,8 +283,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     };
     ApiPost(`job/updateIsApproved?jobId=${id}`, data)
       .then(res => {
-        console.log('res', res);
-        toast.success(res.data.isApproved ? 'Approved successful' : 'Disapproved successful ');
+        toast.success(res.data.isApproved ? 'Approved successfully' : 'Disapproved successfully ');
         dispatch(
           getJobsFilterForMain(
             perPage,
@@ -293,6 +291,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             state.state ? state.state : '',
             type.type ? type.type : '',
             jobRole.jobRole ? jobRole.jobRole : '',
+            "", "",
+            langIds.hindi,
+            langIds.marathi,
           ),
         );
       })
@@ -307,24 +308,36 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
     }
     ApiPost(`job/updateBannerSelected?jobId=${id}`, body)
       .then(res => {
-        toast.success(!bannerSelected ? 'Banner Selected successful' : 'Banner unSelected  successful');
-        dispatch(getJobsFilterForMain(perPage, pageNumber));
+        toast.success(!bannerSelected ? 'Banner Selected' : 'Banner deselected');
+        dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi));
       });
   }
 
   useEffect(() => {
+    if (getJobFilterData?.data?.data) {
+      setFilterData(getJobFilterData?.data?.data)
+    }
+  }, [getJobFilterData])
+
+  useEffect(() => {
+    if (filterData.length) {
+      getJobData(filterData)
+    }
     setUsertable(
-      getJobFilterData?.data?.data?.map(item => {
+      filterData.map((item, i) => {
         return {
-          user: (
+          key: i,
+          name: (
             <span className='For-Underline' onClick={() => viewJobdata(item.id)}>
               {item?.name?.name}
             </span>
           ),
+          // name : item.name.name,
           email: item.email,
           company: item.description,
           position: item.jobRole?.name,
           joinDate: moment(item.startDate).format('DD-MM-YYYY'),
+          // joinDate: item.startDate,
           vacancies: item.vacancies,
           // approved: (
           //   <>
@@ -338,7 +351,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
             <div className="">
               <div className="">
                 <>
-                  <Button size="small" type="primary" shape='round'
+                  <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                     onClick={() => {
                       getOneJobDetailByKey(langIds?.hindi, item?.key, item?.id)
                       setSelectedLanguageData(item)
@@ -346,7 +359,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                   >
                     HN
                   </Button>
-                  <Button size="small" type="primary" shape='round'
+                  <Button size="small" type={item.marathi ? "success" : "primary"} shape='round'
                     onClick={() => {
                       // setSelectedLanguageData(item)
                       getOneJobDetailByKey(langIds?.marathi, item?.key, item?.id)
@@ -397,62 +410,81 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
         };
       }),
     );
-  }, [getJobFilterData],
-  );
+  }, [filterData, isAscend]);
 
   const viewJobdata = id => {
-    // dispatch(getoneJobPost(key));
-    //setViewModal(true);
     history.push(`/admin/job/view?id=${id}`)
   };
+
+  const sorting = () => {
+    if (isAscend) {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => a.name.name.localeCompare(b.name.name)))
+    } else {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => b.name.name.localeCompare(a.name.name)))
+    }
+    setIsAscend(!isAscend)
+  }
+
+  const sortingForDate = () => {
+    if (isAscend) {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => moment(b.startDate).unix() - moment(a.startDate).unix()))
+    } else {
+      setFilterData(getJobFilterData && getJobFilterData.data && getJobFilterData.data.data.sort((a, b) => moment(a.startDate).unix() - moment(b.startDate).unix()))
+    }
+    setIsAscend(!isAscend)
+  }
 
   const usersTableColumns = [
     {
       title: 'User',
-      dataIndex: 'user',
-      // key: 'user',
-      sorter: (a, b) => a?.user?.length - b?.user?.length,
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => sorting(),
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      sorter: (a, b) => a.email.length - b.email.length,
+      sorter: (a, b) => a.email.localeCompare(b.email),
       sortDirections: ['descend', 'ascend'],
       // key: 'email',
     },
     {
-      title: 'Company',
+      title: 'Description',
       dataIndex: 'company',
-      // key: 'company',
+      sorter: (a, b) => a.company.localeCompare(b.company),
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Position',
+      title: 'Job role',
       dataIndex: 'position',
-      // key: 'position',
+      sorter: (a, b) => a.position.localeCompare(b.position),
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Join Date',
+      title: 'Join date',
       dataIndex: 'joinDate',
-      // key: 'joinDate',
+      // sorter: (a, b) => moment(a.joinDate).unix() - moment(b.joinDate).unix()
+      sorter: (a, b) => sortingForDate()
     },
     {
       title: 'Vacancies',
       dataIndex: 'vacancies',
+      sorter: (a, b) => a.vacancies - b.vacancies,
+      sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
     {
-      title: 'Choose banner',
+      title: 'Select banner',
       dataIndex: 'chooseBanner',
     },
     {
       title: 'Actions',
       dataIndex: 'action',
-      // key: 'action',
       width: '90px',
     },
   ];
@@ -481,10 +513,10 @@ const JobListTable = ({ state, type, jobRole, apply, clear, status, setPagePer, 
                 setPerPage(pageSize);
               },
             }}
-          // pagination={false}
           />
         </TableWrapper>
       </UserTableStyleWrapper>
+
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}

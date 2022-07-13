@@ -1,4 +1,5 @@
 import { async } from '@firebase/util';
+import { stringify } from 'rc-field-form/es/useWatch';
 import STORAGEKEY from '../../config/APP/app.config';
 import { ApiGet, ApiPatch, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
@@ -57,7 +58,7 @@ const {
   addUpadateSchemeErr,
 
 } = actions;
-let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, page_Num;
+let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, hindi, marathi;
 export const getSchemecategory = () => async dispatch => {
   await ApiGet(`scheme/getSchemeCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then(res => {
@@ -110,25 +111,33 @@ export const addSchemeData = (langID, data) => async dispatch => {
     .catch(err => dispatch(addSchemeErr(err)));
 };
 
-export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, searchBar) => async dispatch => {
+export const getSchemeData = (perPage, pageNumber, Status, Benifit, Category, searchBar, hindiID, marathiID) => async dispatch => {
   per_Page = perPage;
   page_number = pageNumber;
   status = Status;
   schemeBenifit = Benifit;
   schemeCategory = Category
   search = searchBar
+  hindi = hindiID
+  marathi = marathiID
   let URL = `scheme/getAllSchemes?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (Status) {
-    URL = URL.concat(`&status=${Status} `)
+    URL = URL.concat(`&status=${Status}`)
   }
   if (Benifit) {
-    URL = URL.concat(`&schemeBenifit=${Benifit} `)
+    URL = URL.concat(`&schemeBenifit=${Benifit}`)
   }
   if (Category) {
     URL = URL.concat(`&schemeCategory=${Category}`)
   }
   if (searchBar) {
     URL = URL.concat(`&search=${searchBar}`)
+  }
+  if (hindiID) {
+    URL = URL.concat(`&hindi=${hindiID}`)
+  }
+  if (marathiID) {
+    URL = URL.concat(`&marathi=${marathiID}`)
   }
 
   await ApiGet(URL)
@@ -157,12 +166,12 @@ export const editSchemeData = body => async dispatch => {
   // await ApiPost(`scheme/editScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
   await ApiPost(`scheme/editScheme`, body)
     .then(res => {
-      dispatch(editSchemeSuccess(res));
-      console.log('res', res);
-      if (res.status === 200) {
-        // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, status));
-      }
+      return dispatch(editSchemeSuccess(res));
+      // console.log('res', res);
+      // if (res.status === 200) {
+      //   // redirect after click edit button on listing call getSchemeData
+      //   // dispatch(getSchemeData(per_Page, page_Num, status));
+      // }
     })
     .catch(err => dispatch(editSchemeErr(err)));
 };
@@ -171,11 +180,10 @@ export const addSchemeInBulkImport = body => async dispatch => {
   await ApiPost(`scheme/addSchemeInBulk`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
-      console.log('res', res);
-      if (res.status === 200) {
-        // redirect after click edit button on listing call getSchemeData
-        dispatch(getSchemeData(per_Page, page_Num, status));
-      }
+      // if (res.status === 200) {
+      //   // redirect after click edit button on listing call getSchemeData
+      //   dispatch(getSchemeData(per_Page, page_Num, status));
+      // }
     })
     .catch(err => {
       let newErr = {
@@ -200,7 +208,6 @@ export const editSchemeRating = body => async dispatch => {
   await ApiPost(`schemeRating/editSchemeRating`, body)
     .then(res => {
       dispatch(editSchemeRatingSuccess(res));
-      console.log('res', res);
       if (res.status === 200) {
         return dispatch(getSchemeRating(per_Page, page_number));
       }
@@ -220,7 +227,6 @@ export const addSchemeCategoryInBulk = (body) => async (dispatch) => {
   await ApiPost(`scheme/addSchemeCategoryInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then(res => {
       dispatch(addSchemeCategoryInBulkSuccess(res));
-      console.log('res', res);
       if (res.status === 200) {
         // redirect after click edit button on listing call getSchemeData
         dispatch(getSchemecategory());

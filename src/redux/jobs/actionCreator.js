@@ -75,12 +75,12 @@ const {
 
 } = actions;
 
-let per_page, page_num, State, Status, Type, jobrole, search;
+let per_page, page_num, State, Status, Type, jobrole, search, hindi, marathi;
 
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
-     
+
       return dispatch(getJobcategorySuccess(res))
     })
     .catch((err) => dispatch(getJobcategoryErr(err)))
@@ -148,15 +148,15 @@ export const getJobPost = (perPage, pageNumber) => async (dispatch) => {
     .catch((err) => dispatch(getJobPostErr(err)))
 }
 
-export const editJobPost = (id, data) => async (dispatch) => {
+export const editJobPost = (id, data, hindiID, marathiID) => async (dispatch) => {
   // let id = data.id
   // delete data.id
   await ApiPost(`job/update?jobId=${id}`, data)
     .then((res) => {
-      dispatch(editJobPostSuccess(res))
-      if (res.status === 200) {
-        dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
-      }
+      return dispatch(editJobPostSuccess(res))
+      // if (res.status === 200) {
+      //   dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
+      // }
     })
     .catch((err) => dispatch(editJobPostErr(err)))
 }
@@ -169,13 +169,15 @@ export const getoneJobPost = (data) => async (dispatch) => {
     .catch((err) => dispatch(getoneJobPostErr(err)))
 }
 
-export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status, searchBar) => async (dispatch) => {
+export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, status, searchBar, hindiID, marathiID) => async (dispatch) => {
   per_page = perPage,
     page_num = pageNumber,
     State = state, Type = type,
     jobrole = jobRole,
     Status = status,
-    search = searchBar;
+    search = searchBar,
+    hindi = hindiID,
+    marathi = marathiID;
   let URL = `job/getJobsFilterForMain?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}`
   if (state) {
     URL = URL.concat(`&state=${state}`)
@@ -192,7 +194,12 @@ export const getJobsFilterForMain = (perPage, pageNumber, state, type, jobRole, 
   if (searchBar) {
     URL = URL.concat(`&search=${searchBar}`)
   }
-
+  if (hindiID) {
+    URL = URL.concat(`&hindi=${hindiID}`)
+  }
+  if (marathiID) {
+    URL = URL.concat(`&marathi=${marathiID}`)
+  }
   await ApiPost(URL)
     .then((res) => {
       return dispatch(getJobsFilterForMainSuccess(res))
@@ -269,7 +276,14 @@ export const updateIsHired = (id, value) => async (dispatch) => {
 }
 
 export const addJobApplication = (body) => async (dispatch) => {
-  await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
+  const formData = new FormData();
+  formData.append('resume_url', body.certification_url);
+  formData.append('certification_url', body.certification_url);
+  formData.append('experience', body.experience);
+  formData.append('job_id', body.job_id);
+  formData.append('currently_working', body.currently_working);
+
+  await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,formData)
     .then((res) => {
       return dispatch(addJobApplicationSuccess(res))
     })
@@ -321,12 +335,12 @@ export const addBulkJobRoles = (body) => async (dispatch) => {
     .catch((err) => dispatch(addBulkJobRolesErr(err)))
 }
 
-export const addLanguageJobPost = (languageID, body) => async (dispatch) => {
+export const addLanguageJobPost = (languageID, body, hindiID, marathiID) => async (dispatch) => {
   await ApiPost(`job/add?langId=${languageID}`, body)
     .then((res) => {
       dispatch(addLanguageJobPostSuccess(res))
       if (res.status === 200) {
-        return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status))
+        return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, "", hindiID, marathiID))
       }
     })
     .catch((err) => dispatch(addLanguageJobPostErr(err)))

@@ -22,7 +22,6 @@ const Admin = () => {
     const [status, setStatus] = useState('active');
     const [perPage, setPerPage] = useState(20); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
-    // const [adminData, setAdminData] = useState()
     const [adminTable, setAdminTable] = useState([])
     const [type, setType] = useState("ADMIN")
 
@@ -59,7 +58,7 @@ const Admin = () => {
                     dispatch(getAllUser(perPage, pageNumber, status, type))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -72,14 +71,15 @@ const Admin = () => {
                 id: adminDataForDelete.id,
                 isActive: false,
                 isDeleted: true,
-                avatar: 'dfd',
+                avatar: adminDataForDelete.avatar,
             };
             delete adminDataForDelete.userTakenRatings
-            // dispatch(editProfile(employerForDelete));
-            // getData();
+            console.log('adminDataForDelete',adminDataForDelete)
             const restoreActiveAdmin = await activeAdmin(id, adminDataForDelete);
             if (restoreActiveAdmin.status === 200) {
-                toast.success("Admin Delete successful")
+                toast.success("Admin deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     };
@@ -99,21 +99,23 @@ const Admin = () => {
         const restoreActiveAdmin = await activeAdmin(id, data);
 
         if (restoreActiveAdmin.status === 200) {
-            toast.success("Admin active successful")
+            toast.success("Admin actived")
+        }else {
+            toast.error("Something went wrong")
         }
     };
 
     useEffect(() => {
         if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
             dispatch(editProfileSuccess(null))
-            toast.success("Admin Update successful")
+            toast.success("Admin updated")
         }
     }, [editProfileData])
 
     useEffect(() => {
         if (editProfileError) {
             dispatch(editProfileErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editProfileError])
 
@@ -164,10 +166,14 @@ const Admin = () => {
         {
             title: 'Name',
             dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Email',
             dataIndex: 'email',
+            sorter: (a, b) => a.email.localeCompare(b.email),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Phone',
@@ -202,7 +208,7 @@ const Admin = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback}>
-                                <TabPane tab="Active Admin" key="active">
+                                <TabPane tab="Active admin" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
@@ -221,7 +227,7 @@ const Admin = () => {
                                     </UserTableStyleWrapper>
                                 </TabPane>
 
-                                <TabPane tab="Inactive Admin" key="inactive">
+                                <TabPane tab="Inactive admin" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table

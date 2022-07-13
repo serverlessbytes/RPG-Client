@@ -57,7 +57,7 @@ const SuperAdmin = () => {
           dispatch(getAllUser(perPage, pageNumber, status, type))
         }
         return res
-      })
+      }).catch(error => error)
     return newVal
   }
 
@@ -70,14 +70,17 @@ const SuperAdmin = () => {
         id: superAdminDataForDelete.id,
         isActive: false,
         isDeleted: true,
-        avatar: 'dfd',
+        avatar: superAdminDataForDelete.avatar ,
       };
       delete superAdminDataForDelete.userTakenRatings
+      console.log('superAdminDataForDelete', superAdminDataForDelete)
 
       const restoreActiveSuperAdmin = await activeSuperAdmin(id, superAdminDataForDelete);
       if (restoreActiveSuperAdmin.status === 200) {
-        toast.success("SuperAdmin Delete successful")
-      }
+        toast.success("Superadmin deleted")
+      }else {
+        toast.error("Something went wrong")
+    }
     }
   };
 
@@ -96,21 +99,23 @@ const SuperAdmin = () => {
 
     const restoreActiveSuperAdmin = await activeSuperAdmin(id, data);
     if (restoreActiveSuperAdmin.status === 200) {
-      toast.success("SuperAdmin Active successful")
-    }
+      toast.success("Superadmin actived")
+    }else {
+      toast.error("Something went wrong")
+  }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("SuperAdmin Update successful")
+      toast.success("Superadmin updated")
     }
   }, [editProfileData])
 
   useEffect(() => {
     if (editProfileError) {
       dispatch(editProfileErr(null))
-      toast.error("Something Wrong")
+      toast.error("Something went wrong")
     }
   }, [editProfileError])
 
@@ -160,10 +165,14 @@ const SuperAdmin = () => {
     {
       title: 'Name',
       dataIndex: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Email',
       dataIndex: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Phone',
@@ -177,13 +186,11 @@ const SuperAdmin = () => {
     },
   ];
 
-
-
   return (
     <>
       <PageHeader
         ghost
-        title="Super Admin"
+        title="Super admin"
       // buttons={[
       //     <div className="page-header-actions">
       //         <Button size="small" type="primary" onClick={allEmployerExport}>
@@ -198,7 +205,7 @@ const SuperAdmin = () => {
           <Row gutter={15}>
             <Col xs={24}>
               <Tabs onChange={callback}>
-                <TabPane tab="Active Super-Admin" key="active">
+                <TabPane tab="Active Super admin" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table
@@ -217,7 +224,7 @@ const SuperAdmin = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Super-Admin" key="inactive">
+                <TabPane tab="Inactive Super admin" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table

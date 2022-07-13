@@ -95,7 +95,6 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     for (var i = 1; i < lines.length - 1; i++) {
       var obj = {};
       var currentline = lines[i].split(',');
-
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
@@ -103,28 +102,28 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     }
     return result;
   };
-  const validation = () => {
-    let error = {};
-    let flage = false;
-    if (schemeCategoryID === '') {
-      error.schemeCategory = 'SchemeCategory is required';
-      flage = true;
-    }
-    if (schemeBanefitID === '') {
-      error.schemeBanefitID = 'SchemeBanefit is required';
-      flage = true;
-    }
-    if (selectedStateArray.length == 0) {
-      error.locations = 'Locations is required';
-      flage = true;
-    }
-    if (!FileData) {
-      error.name = 'File is required';
-      flage = true;
-    }
-    seterror(error);
-    return flage;
-  };
+  // const validation = () => {
+  //   let error = {};
+  //   let flage = false;
+  //   if (schemeCategoryID === '') {
+  //     error.schemeCategory = 'SchemeCategory is required';
+  //     flage = true;
+  //   }
+  //   if (schemeBanefitID === '') {
+  //     error.schemeBanefitID = 'SchemeBanefit is required';
+  //     flage = true;
+  //   }
+  //   if (selectedStateArray.length == 0) {
+  //     error.locations = 'Locations is required';
+  //     flage = true;
+  //   }
+  //   if (!FileData) {
+  //     error.name = 'File is required';
+  //     flage = true;
+  //   }
+  //   seterror(error);
+  //   return flage;
+  // };
   const handleOk = () => {
     // if (validation()) {
     //   return;
@@ -154,28 +153,28 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   return (
     <>
-      <Col md={16}>
+      <Col md={24}>
         <Modal
           type="primery"
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={'991px'}
+          width={'600px'}
         >
           <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} lg={24} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
-            <Col md={12} xs={24} className="mb-25">
-              {/* <Button onClick={() => {}} type="primary">
+            {/* <Col md={12} xs={24} className="mb-25"> */}
+            {/* <Button onClick={() => {}} type="primary">
                 Import
               </Button> */}
-            </Col>
+            {/* </Col> */}
             {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Scheme Category">
@@ -217,9 +216,9 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
           </Row>
 
           <Row>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} lg={24} className="mb-25">
               <Form layout="vertical">
-                <Form.Item label="Select Locations">
+                <Form.Item label="Select locations">
                   <Select
                     mode="multiple"
                     options={stateArray}
@@ -229,9 +228,9 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
                     onChange={e => {
                       stateSelected(e);
                     }}
-                    placeholder="Select Locations"
+                    placeholder="Select locations"
                   >
-                    <Option value="">Select Locations</Option>
+                    <Option value="">Select locations</Option>
                   </Select>
                   {error && error.locations && <span style={{ color: 'red' }}>{error.locations}</span>}
                 </Form.Item>

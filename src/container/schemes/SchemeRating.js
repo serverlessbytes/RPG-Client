@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import { Button } from '../../components/buttons/buttons';
+import { set } from 'js-cookie';
 
 
 const SchemeRating = () => {
@@ -29,6 +30,8 @@ const SchemeRating = () => {
         rating: "",
         comment: ""
     });
+    const [error, setError] = useState({})
+
 
     const schemeRatingData = useSelector((state) => state.scheme.schemeRatingData)
     const getOneSchemeRatingData = useSelector((state) => state.scheme.getOneSchemeRatingData)
@@ -41,13 +44,20 @@ const SchemeRating = () => {
     useEffect(() => {
         if (editSchemeRatingData && editSchemeRatingData.status === 200) {
             dispatch(editSchemeRatingSuccess(null))
-            toast.success('SchemeRating updated successful');
+            toast.success('Scheme rating updated ');
         }
     }, [editSchemeRatingData])
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        if (e.target.name === "rating") {
+            setError({ ...error, rating: "" })
+        }
+        if (e.target.name === "comment") {
+            setError({ ...error, comment: "" })
+        }
     }
+
 
     const newScheme = data => {
         const newVal = ApiPost(`schemeRating/editSchemeRating`, data)
@@ -63,6 +73,20 @@ const SchemeRating = () => {
         return newVal;
     };
 
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (!data.rating) {
+            error.rating = "Rating required";
+            flage = true;
+        }
+        if (!data.comment) {
+            error.comment = "Comment required";
+            flage = true;
+        }
+        setError(error);
+        return flage;
+    }
     const onDelete = async id => {
         let schemeRatingForDelete = schemeRatingData && schemeRatingData?.data && schemeRatingData?.data?.data.find((item) => item.id === id)
         if (schemeRatingForDelete) {
@@ -76,7 +100,7 @@ const SchemeRating = () => {
             // dispatch(editSchemeRating(data))
             const deleteSchemeRating = await newScheme(data);
             if (deleteSchemeRating.status === 200) {
-                toast.success('SchemeRating deleted successful');
+                toast.success('Scheme rating deleted    ');
             }
         }
     }
@@ -91,8 +115,10 @@ const SchemeRating = () => {
             dispatch(getOneSchemeRating(schemeRatingForEdit.id))
         }
     }
-
     const handleOk = () => {
+        if (validation()) {
+            return
+        }
         if (selectedSchemeRating) {
             let Data = {
                 id: selectedSchemeRating.id,
@@ -101,6 +127,7 @@ const SchemeRating = () => {
                 isActive: true,
                 isDeleted: false,
             }
+
             dispatch(editSchemeRating(Data))
             setIsModalVisible(false)
         }
@@ -108,6 +135,7 @@ const SchemeRating = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false)
+        setError('')
     }
 
 
@@ -153,20 +181,27 @@ const SchemeRating = () => {
             title: 'Scheme',
             dataIndex: 'scheme',
             // key: 'user',
-            sorter: (a, b) => a?.scheme?.length - b?.scheme?.length,
+            // sorter: (a, b) => a?.scheme?.length - b?.scheme?.length,
+            sorter: (a, b) => a.scheme.localeCompare(b.scheme),
             sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Rating',
             dataIndex: 'rating',
+            sorter: (a, b) => a?.rating - b?.rating,
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'User',
             dataIndex: 'createdByUser',
+            sorter: (a, b) => a.createdByUser.localeCompare(b.createdByUser),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Comment',
             dataIndex: 'comment',
+            sorter: (a, b) => a.comment.localeCompare(b.comment),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Action',
@@ -217,9 +252,11 @@ const SchemeRating = () => {
                             <Input
                                 placeholder="Enter Rating"
                                 name="rating"
+                                type="number"
                                 value={data.rating}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.rating && <span style={{ color: 'red' }}>{error.rating}</span>}
                         </Form.Item>
                         <label htmlFor="Comment">Comment</label>
                         <Form.Item>
@@ -230,6 +267,7 @@ const SchemeRating = () => {
                                 value={data.comment}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.comment && <span style={{ color: 'red' }}>{error.comment}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

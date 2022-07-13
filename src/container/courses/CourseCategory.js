@@ -1,10 +1,10 @@
-import { Form, Input, Modal, Pagination, Select, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/buttons/buttons';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
-import { Main, ProjectPagination, TableWrapper } from '../styled';
+import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { editCategoryData, getCategoryData, postCategoryData } from '../../redux/course/actionCreator';
@@ -35,6 +35,7 @@ const CourseCategory = () => {
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
     const [courseCategory, setCourseCategory] = useState()
+    const [error, setError] = useState('')
 
     const { users } = useSelector(state => {
         return {
@@ -54,21 +55,21 @@ const CourseCategory = () => {
     useEffect(() => {
         if (postcategorydata && postcategorydata.status === 200) {
             dispatch(postCategorySuccess(null))
-            toast.success("Category add successful");
+            toast.success("Category added");
         }
     }, [postcategorydata])
 
     useEffect(() => {
         if (postcategoryError) {
             dispatch(postCategoryDataErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [postcategoryError])
 
     useEffect(() => {
         if (editcategoryData && editcategoryData.status === 200) {
             dispatch(editCategorySuccess(null))
-            toast.success("Category updated successful");
+            toast.success("Category updated ");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -81,7 +82,7 @@ const CourseCategory = () => {
     useEffect(() => {
         if (editCategoryError) {
             dispatch(editcategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [editCategoryError])
 
@@ -89,14 +90,14 @@ const CourseCategory = () => {
         if (importCourseCategory && importCourseCategory.status === 200) {
             toast.success("Category imported");
         } else if (importCourseCategory && importCourseCategory.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [importCourseCategory])
 
     useEffect(() => {
         if (importCourseCategoryError) { //
             dispatch(importCourseCategoryInBulkErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [importCourseCategoryError])
 
@@ -110,6 +111,7 @@ const CourseCategory = () => {
         setIsModalVisible(false);
         setNameTog(false)
         setDataForEdit(null)
+        setError('')
     };
 
     const newCourseCategory = dataForDelete => {
@@ -137,15 +139,13 @@ const CourseCategory = () => {
             // dispatch(editCategoryData(dataForDelete))
             const deleteCourseCategory = await newCourseCategory(dataForDelete)
             if (deleteCourseCategory.status === 200) {
-                toast.success("Category deleted successful")
+                toast.success("Category deleted")
             }
         }
     }
 
     const onEdit = (id) => {
         let dataForEdit = getcategoryData && getcategoryData.data && getcategoryData.data.find((item) => item.id === id)
-        // useEffect(()=>{},[dataForEdit])
-        // console.log("dataForEdit",dataForEdit)
         if (dataForEdit) {
             setDataForEdit(dataForEdit)
             form.setFieldsValue({
@@ -156,6 +156,18 @@ const CourseCategory = () => {
         // dispatch(editBenefitsData(dataForEdit))
         setIsModalVisible(true)
         setNameTog(true)
+    }
+
+    const validation = (data) => {
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "Benefit type is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
     }
 
     const handleOk = () => {
@@ -173,6 +185,9 @@ const CourseCategory = () => {
             handleCancel()
         }
         else {
+            if (validation(data)) {
+                return
+            }
             data = {
                 ...data,
                 key: uuid()
@@ -254,31 +269,11 @@ const CourseCategory = () => {
         }
     }, [getcategoryData])
 
-    // getcategoryData && getcategoryData.data.map((item) => {
-    //     return usersTableData.push({
-    //         Category: item.name,
-    //         // Sequence: '7',
-    //         action: (
-    //             <div className='active-schemes-table'>
-    //                 <div className="table-actions">
-    //                     <>
-    //                         <Button className="btn-icon" type="info" onClick={() => onEdit(item.id)} to="#" shape="circle">
-    //                             <FeatherIcon icon="edit" size={16} />
-    //                         </Button>
-    //                         <Button className="btn-icon" type="danger" onClick={() => onDelete(item.id)} to="#" shape="circle">
-    //                             <FeatherIcon icon="trash-2" size={16} />
-    //                         </Button>
-    //                     </>
-    //                 </div>
-    //             </div>
-    //         ),
-    //     });
-    // });
-
     const coursetableColumns = [
         {
             title: 'Category',
             dataIndex: 'Category',
+            sorter: (a, b) => a.Category.localeCompare(b.Category),
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -301,7 +296,7 @@ const CourseCategory = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Category
+                            Add category
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={importCategory}>
                             Import
@@ -344,18 +339,21 @@ const CourseCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Course category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
 
                 okText={nameTog ? "Edit" : "Add"}
             >
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Category</label>
-                    <Form.Item name="name">
+                    <label htmlFor="name">Type of category</label>
+                    <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder=""
+                            placeholder="Type of category"
                             name="name"
                         />
                     </Form.Item>
+                    {
+                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                    }
                     {/* <label htmlFor="name">Sequence</label>
                     <Form.Item name="key">
                         <Input
@@ -370,7 +368,7 @@ const CourseCategory = () => {
             {< ImportCourseCategory
                 importModal={importModal}
                 handleCancel={() => setImportModal(false)}
-                modaltitle="Import Course Category" />}
+                modaltitle="Import course category" />}
         </>
     )
 }

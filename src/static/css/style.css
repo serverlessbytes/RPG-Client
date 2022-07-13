@@ -1681,10 +1681,10 @@ table thead tr th:first-child {
 }
 
 .table-responsive .ant-table-content .ant-table-cell {
-    white-space: nowrap;
-    max-width: 240px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Rich TextEditor  */
@@ -2885,7 +2885,7 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 
 .group {
   border: 1px solid #ddd;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .ml-10 {
@@ -2966,15 +2966,19 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .mb {
   margin-bottom: 20px !important;
 }
-.For-Underline{
+
+.For-Underline {
   cursor: pointer;
 }
-.For-Underline:hover{
+
+.For-Underline:hover {
   text-decoration: underline;
 }
-.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline >.ant-menu-submenu-title svg {
+
+.dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline>.ant-menu-submenu-title svg {
   margin-right: 10px !important
 }
+
 /* .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-title >span {
   margin-left: 10px !important;
 }
@@ -2985,3 +2989,25 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline .ant-menu-item{
   margin-left : 30px;
 } */
+
+.ejKGCx table .table-actions {
+  max-width: 100px !important;
+}
+
+.ejKGCx table tbody tr td .table-actions {
+  min-width: 90px !important;
+}
+
+.table-responsive .ant-table-content .ant-table-cell {
+  max-width: 217px;
+}
+
+.ejKGCx table thead tr th:last-child {
+  text-align: center !important;
+}
+
+.experience-input::-webkit-outer-spin-button,
+.experience-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

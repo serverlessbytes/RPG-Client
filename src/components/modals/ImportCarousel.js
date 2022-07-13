@@ -16,7 +16,7 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
         // console.log("e",e.target.value.split('.').lastIndexOf('xlsx'))
         // console.log("e",e?.target?.value.split('.'))
         // console.log("e",e.target.files)
-        
+
         if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
             setError('');
             const file = e.target.files[0];
@@ -24,7 +24,7 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
             const reader = new FileReader();
             reader.readAsBinaryString(file);
             reader.onload = event => {
-            // console.log("event",event)
+                // console.log("event",event)
                 const binaryData = event.target.result;
                 const workBook = XLSX.read(binaryData, { type: 'binary' });
                 workBook.SheetNames.forEach(sheet => {
@@ -33,7 +33,7 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
                 });
             };
         } else {
-            setError('Please select valid file'); 
+            setError('Please select valid file');
         }
     }
 
@@ -66,40 +66,36 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
         return flage;
     };
 
-const handleOk = () => {
-    if (validation()) {
-        return;
+    const handleOk = () => {
+        if (validation()) {
+            return;
+        }
+        if (FileData) {
+            dispatch(addBulkCarousel(FileData));
+        }
+        handleCancel();
     }
-    if (FileData) {
-        dispatch(addBulkCarousel(FileData));
-    }
-    handleCancel();
-}
 
-return (
-    <>
-        <Col md={16}>
-            <Modal
-                type="primery"
-                title={modaltitle}
-                visible={importModel}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                width={'991px'}
-            >
-                <Row gutter={30}>
-                    <Col md={12} xs={24} className="mb-25">
-                        <Form.Item name="name">
-                            <Input placeholder="File upload" name="name" type="file" onChange={(e) => readUploadFile(e)} />
-                            {Error ? <span style={{ color: 'red' }}>{Error}</span> :
-                                error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
-                        </Form.Item>
-                    </Col>
-                </Row>
-            </Modal>
-        </Col>
-    </>
-);
+    return (
+        <>
+            <Col md={16}>
+                <Modal
+                    type="primery"
+                    title={modaltitle}
+                    visible={importModel}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    width={'500px'}
+                >
+                    <Form.Item name="name">
+                        <Input placeholder="File upload" name="name" type="file" onChange={(e) => readUploadFile(e)} />
+                        {Error ? <span style={{ color: 'red' }}>{Error}</span> :
+                            error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                    </Form.Item>
+                </Modal>
+            </Col>
+        </>
+    );
 }
 
 export default ImportCarousel

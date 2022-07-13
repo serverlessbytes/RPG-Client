@@ -1,11 +1,11 @@
 /* eslint-disable no-shadow */
-import React, { Component, createElement, useEffect } from 'react';
+import React, { Component, createElement } from 'react';
 import { Layout, Button, Row, Col, Select, Form } from 'antd';
 import FeatherIcon from 'feather-icons-react';
 import { NavLink, Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { ThemeProvider } from 'styled-components';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import MenueItems from './MenueItems';
 import TopMenu from './TopMenu';
@@ -40,7 +40,6 @@ const ThemeLayout = WrappedComponent => {
       };
       this.updateDimensions = this.updateDimensions.bind(this);
   
-      // console.log("langData",langData)
     }
 
     // componentDidMount() {
@@ -66,17 +65,16 @@ const ThemeLayout = WrappedComponent => {
     componentDidMount() {
       const lan = "English"
       ApiGet(`language/getLanguageByName?name=${lan}`).then(res => {
+        AuthStorage.setStorageData(STORAGEKEY.language, res.data.id, true);
         this.setState({
           lang: res.data,
         });
-        AuthStorage.setStorageData(STORAGEKEY.language, res.data.id, true);
       });
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (prevState.langData !== this.state.langData) {
         let lang = this.state.langData.find(item => item.id === AuthStorage.getStorageData(STORAGEKEY.language));
-        // console.log("getStorageData(STORAGEKEY.language)",AuthStorage.getStorageData(STORAGEKEY.language));
         if (lang) {
           this.setState({ ...this.state, lang: lang.id });
         }
@@ -132,23 +130,6 @@ const ThemeLayout = WrappedComponent => {
           searchHide: !searchHide,
           hide: true,
         });
-      };
-
-      const handleChange = e => {
-        if (e) {
-          AuthStorage.setStorageData(STORAGEKEY.language, e, true);
-          this.setState({ lang: e });
-          window.location.reload(false);
-        }
-      };
-
-      const footerStyle = {
-        padding: '20px 30px 18px',
-        color: 'rgba(0, 0, 0, 0.65)',
-        fontSize: '14px',
-        background: 'rgba(255, 255, 255, .90)',
-        width: '100%',
-        boxShadow: '0 -5px 10px rgba(146,153,184, 0.05)',
       };
 
       const SideBarStyle = {

@@ -4,7 +4,7 @@ import FeatherIcon from 'feather-icons-react';
 import { Col, PageHeader, Row, Table, Tabs } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
-import { ApiGet, ApiPost } from '../../helper/API/ApiData';
+import { ApiPost } from '../../helper/API/ApiData';
 import 'react-toastify/dist/ReactToastify.css';
 import { allUser, editProfile, getAllUser } from '../../redux/users/actionCreator';
 import { Button } from '../../components/buttons/buttons';
@@ -57,16 +57,16 @@ const Partner = () => {
         id: partnerForDelete.id,
         isActive: false,
         isDeleted: true,
-        avatar: 'dfd',
+        avatar: partnerForDelete.avatar,
       };
       delete partnerForDelete.userTakenRatings
-      // dispatch(editProfile(partnerForDelete));
-      // getData();
       const restoreActivePartner = await activePartner(id, partnerForDelete);
 
       if (restoreActivePartner.status === 200) {
-        toast.success("Partner Delete successful")
-      }
+        toast.success("Partner deleted")
+      }else {
+        toast.error("Something went wrong")
+    }
     }
   }
 
@@ -76,12 +76,10 @@ const Partner = () => {
     const newVal = ApiPost(`user/auth/editProfile?id=${id}`, dt)
       .then((res) => {
         if (res.status === 200) {
-          // getData();
           dispatch(getAllUser(perPage, pageNumber, status, type))
-
         }
         return res
-      })
+      }).catch(error => error)
     return newVal
   }
 
@@ -100,14 +98,16 @@ const Partner = () => {
     const restoreActivePartner = await activePartner(id, data);
 
     if (restoreActivePartner.status === 200) {
-      toast.success("Partner active successful")
-    }
+      toast.success("Partner actived")
+    }else {
+      toast.error("Something went wrong")
+  }
   };
 
   useEffect(() => {
     if (editProfileData && editProfileData.data && editProfileData.data.isActive === true) {
       dispatch(editProfileSuccess(null))
-      toast.success("Partner Update successful")
+      toast.success("Partner updated")
     }
   }, [editProfileData])
 
@@ -151,19 +151,18 @@ const Partner = () => {
     }
   }, [partnerData])
 
-  // useEffect(() => {
-  //   getData()
-  // }, [perPage, pageNumber, status])
-
-
   const usersTableColumns = [
     {
       title: 'Name',
       dataIndex: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Email',
       dataIndex: 'email',
+      sorter: (a, b) => a.email.localeCompare(b.email),
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Phone',
@@ -182,21 +181,13 @@ const Partner = () => {
       <PageHeader
         ghost
         title="Partner"
-      // buttons={[
-      //     <div className="page-header-actions">
-      //         <Button size="small" type="primary" onClick={allEmployerExport}>
-      //             Export All
-      //         </Button>
-      //         <CSVLink data={exportEmployer} ref={CSVLinkRef} filename="Employer.csv" style={{ opacity: 0 }}></CSVLink>
-      //     </div>
-      // ]}
       />
       <Main>
         <Cards headless>
           <Row gutter={15}>
             <Col xs={24}>
               <Tabs onChange={callback}>
-                <TabPane tab="Active Partner" key="active">
+                <TabPane tab="Active partner" key="active">
                   <UserTableStyleWrapper>
 
                     <TableWrapper className="table-responsive">
@@ -216,7 +207,7 @@ const Partner = () => {
                   </UserTableStyleWrapper>
                 </TabPane>
 
-                <TabPane tab="Inactive Partner" key="inactive">
+                <TabPane tab="Inactive partner" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
                       <Table
@@ -237,7 +228,6 @@ const Partner = () => {
               </Tabs >
             </Col>
           </Row>
-
         </Cards>
       </Main>
 

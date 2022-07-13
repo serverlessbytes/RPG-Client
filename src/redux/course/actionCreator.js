@@ -3,9 +3,10 @@ import { ApiGet, ApiGetNoAuth, ApiPost } from '../../helper/API/ApiData';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 import { async } from '@firebase/util';
+import { toast } from 'react-toastify';
+
 
 const {
-
   postCategorySuccess,
   postCategoryDataErr,
   getcategorySuccess,
@@ -22,6 +23,7 @@ const {
   addSwayamCourseModuleErr,
   getSwayamCourseModuleSuccess,
   editSwayamCourseModuleSuccess,
+  editSwayamCourseModuleErr,
   getallSwayamCourseSuccess,
   addSwayamPartnerCourseErr,
   addPartnerCourseInBulkBegin,
@@ -50,7 +52,7 @@ const {
   editCategoryRatingErr,
 } = actions;
 
-let page_number, per_page, category, Inactive, Mode, search;
+let page_number, per_page, category, Inactive, Mode, search, hindi, marathi;
 export const postCategoryData = (body) => async (dispatch) => {
   await ApiPost(`course/addCategory?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
     .then((res) => {
@@ -77,22 +79,26 @@ export const editCategoryData = (body) => async (dispatch) => {
     })
 }
 
-export const addPartnerCourse = (body,langId) => async (dispatch) => {
-  await ApiPost(`course/addPartnerCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, body)
+export const addPartnerCourse = (data, languageId) => async (dispatch) => {
+  await ApiPost(`course/addPartnerCourse?langId=${languageId ? languageId : AuthStorage.getStorageData(STORAGEKEY.language)}&mode=PARTNER`, data)
     .then((res) => {
       return dispatch(addPartnerCourseSuccess(res))
-      //return dispatch(getCoursefilter(categoryId,perPage,pageNumber,mode,inactive))
+      // if (res.status === 200) {
+      //   dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, search, hindi, marathi))
+      // }
+      // return dispatch(getCoursefilter(categoryId, perPage, pageNumber, mode, inactive))
     })
     .catch((err) => dispatch(addPartnerCourseErr(err)))
 }
-export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive, searchBar) => async (dispatch) => {
-
-  category = categoryId;
-  per_page = perPage;
-  page_number = pageNumber;
-  Mode = mode;
-  Inactive = inactive;
-  search = searchBar;
+export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive, searchBar, hindiID, marathiID,) => async (dispatch) => {
+  category = categoryId
+  per_page = perPage
+  page_number = pageNumber
+  Mode = mode
+  Inactive = inactive
+  search = searchBar
+  hindi = hindiID
+  marathi = marathiID
   let URL = `course/getCoursesFilter?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}&status=${inactive}`
   if (categoryId) {
     URL = URL.concat(`&categoryId=${categoryId}`)
@@ -103,6 +109,12 @@ export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive,
   if (searchBar) {
     URL = URL.concat(`&search=${searchBar}`)
   }
+  if (hindiID) {
+    URL = URL.concat(`&hindi=${hindiID}`)
+  }
+  if (marathiID) {
+    URL = URL.concat(`&marathi=${marathiID}`)
+  }
   await ApiGet(URL)
     .then((res) => {
       return dispatch(getCoursefilterSuccess(res))
@@ -111,43 +123,44 @@ export const getCoursefilter = (categoryId, perPage, pageNumber, mode, inactive,
 
 export const getOneCoursefilter = (id) => async (dispatch) => {
   await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
-  // await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+    // await ApiGet(`course/getCourse?id=${id}&langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
     .then((res) => {
       return dispatch(editCoursefilterSuccess(res))
     })
 }
 
-export const editPartnerCoursefilter = (data, categoryId, perPage, pageNumber, mode, status) => async (dispatch) => {
+export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (dispatch) => {
   await ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       //getCoursefilter(categoryId,perPage,pageNumber,mode)
-      dispatch(editPartnerCourseSuccess(res.data))
+      dispatch(editPartnerCourseSuccess(res))
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
-        dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive))
+        dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, "", hindiID, marathiID))
       }
     })
     .catch((err) => dispatch(editPartnerCourseErr(err)))
 }
 
-export const addSwayamCourse = (data, langId) => async (dispatch) => {
-  await ApiPost(`course/addSwayamCourse?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+export const addSwayamCourse = (languageId, data) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourse?langId=${languageId ? languageId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })
     .catch((err) => dispatch(addSwayamPartnerCourseErr(err)))
 }
 
-export const editSwayamCourse = (data) => async (dispatch) => {
+export const editSwayamCourse = (data, hindiID, marathiID) => async (dispatch) => {
+
   await ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       dispatch(editSwayamPartnerCourseSuccess(res.data))
       if (res.status === 200) {  // redirect after click edit button on listing call getSchemeData
-        dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive))
+        dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, "", hindiID, marathiID))
       }
     })
 }
 
-export const addSwayamCourseModule = (data,langId) => async (dispatch) => {
+export const addSwayamCourseModule = (data, langId) => async (dispatch) => {
   await ApiPost(`course/addSwayamCourseModule?langId=${langId ? langId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSwayamCourseModuleSuccess(res))
@@ -166,7 +179,11 @@ export const getSwayamCourseModule = (id) => async (dispatch) => {
 export const editSwayamCourseModule = (data) => async (dispatch) => {
   await ApiPost(`course/editSwayamCourseModules?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
-      return dispatch(editSwayamCourseModuleSuccess(res))
+      if (res.status === 200) {
+        return dispatch(editSwayamCourseModuleSuccess(res))
+      }
+    }).catch((err) => {
+      dispatch(editSwayamCourseModuleErr(err))
     })
 }
 
@@ -180,7 +197,7 @@ export const getallSwayamCourse = (mode) => async (dispatch) => {
 export const addPartnerCourseInBulk = (body) => async (dispatch) => {
   dispatch(addPartnerCourseInBulkBegin(true))
   // await ApiPost(`course/addPartnerCourseInBulk?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
-  await ApiPost(`course/addPartnerCourse`, body)
+  await ApiPost(`course/addPartnerCourseInBulk`, body)
     .then((res) => {
       return dispatch(addPartnerCourseInBulkSuccess(res))
     }).catch(e => dispatch(addPartnerCourseInBulkErr(e)))
@@ -205,7 +222,6 @@ export const addCourseRating = (body) => async (dispatch) => {
 }
 
 export const getCourseRatingData = (perpage, pagenumber) => async (dispatch) => {
-  // console.log("page_number",page_number)
   per_page = perpage;
   page_number = pagenumber;
   await ApiGet(`courseRating/getCourseRatings?per_page=${perpage}&page_number=${pagenumber}`)

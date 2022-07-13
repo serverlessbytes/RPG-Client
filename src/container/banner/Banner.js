@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Col, Form, Input, Modal, Table } from 'antd';
+import { Form, Input, Modal, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBanner, editBanner, GetBanner, getOneBanner } from '../../redux/banner/actionCreator';
 import { Main, TableWrapper } from '../styled';
@@ -12,9 +12,7 @@ import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/banner/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { set } from 'js-cookie';
 import { ApiPost } from '../../helper/API/ApiData';
-import { async } from '@firebase/util';
 import Importbanner from '../../components/modals/ImportBanner';
 
 //import { data, data } from 'browserslist';
@@ -27,15 +25,16 @@ const Banner = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [importModel, setImportModel] = useState(false);
     const [bannerTableData, setBannerTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(20)
     const [pageNumber, setPageNumber] = useState(1)
     const [selectedBanner, setSelectedBanner] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [data, setData] = useState({
         title: "",
-        imageUrl: ""
+        imageUrl: null
     });
-
+    const [fileError, setFileError] = useState('');
+    const [formErrors, setFormErrors] = useState();
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -48,6 +47,26 @@ const Banner = () => {
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        setFormErrors({ ...formErrors, title: "" });
+    }
+
+    const fileUpload = (e, name) => {
+        let firsttemp = e.target.files[0]?.name?.split('.');
+        if (firsttemp) {
+            let fileexten = ['jpeg', 'jpg', 'png']
+            if (fileexten?.includes(firsttemp[firsttemp?.length - 1])) {
+                setData({ ...data, [name]: e.target.files[0] })
+                setFormErrors({ ...formErrors, imageUrl: "" });
+            }
+            else {
+                setFormErrors({ ...formErrors, imageUrl: 'Please select valid document file' })
+                setData({ ...data, imageUrl: '' })
+                // setFileError('Please select valid document file')
+            }
+        }
+        else {
+            setFormErrors({ ...formErrors, imageUrl: 'Please select document file' })
+        }
     }
 
     useEffect(() => {
@@ -57,51 +76,50 @@ const Banner = () => {
     useEffect(() => {
         if (addBulkbannerData && addBulkbannerData.status === 200) {
             dispatch(addBulkBannerSuccess(null))
-            toast.success("Import Banner successful")
+            toast.success("Import banner")
         }
         else if (addBulkbannerData && addBulkbannerData.status !== 200) {
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkbannerData])
 
     useEffect(() => {
         if (addBulkbannerErr) {
             dispatch(addBulkBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkbannerErr])
 
     useEffect(() => {
         if (addBannerdata && addBannerdata.status === 200) {
             dispatch(addBannerSuccess(null))
-            toast.success("Banner add successful")
+            toast.success("Banner added")
         }
     }, [addBannerdata])
 
     useEffect(() => {
         if (addBannerError) {
             dispatch(addBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBannerError])
 
     useEffect(() => {
         if (editBannerdata && editBannerdata.status === 200) {
             dispatch(editBannerSuccess(null))
-            toast.success("Banner update successful")
+            toast.success("Banner updated")
         }
     }, [editBannerdata])
 
     useEffect(() => {
         if (editBannerError) {
             dispatch(editBannerErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editBannerError])
 
     useEffect(() => {
         if (getOneBannerdata && getOneBannerdata.data) {
-            console.log("getOneBannerdata", getOneBannerdata)
             setData({
                 ...data,
                 title: getOneBannerdata.data.title,
@@ -119,7 +137,26 @@ const Banner = () => {
         setImportModel(true);
     }
 
+    const validation = () => {
+        let flag = false;
+        const error = {};
+
+        if (!data.title) {
+            error.title = "Please enter title"
+            flag = true
+        }
+        if (!data.imageUrl) {
+            error.imageUrl = "Please select image"
+            flag = true
+        }
+        setFormErrors(error);
+        return flag
+    }
+
     const handleOk = () => {
+        if (validation()) {
+            return
+        };
         if (!selectedBanner) {
             let Data = {
                 title: data.title,
@@ -133,6 +170,9 @@ const Banner = () => {
             })
         }
         else {
+            if (validation()) {
+                return
+            }
             let dataEdit = {
                 id: selectedBanner.id,
                 title: data.title,
@@ -140,7 +180,6 @@ const Banner = () => {
                 isActive: true,
                 isDeleted: false,
             }
-            //console.log("data",dataEdit)
             dispatch(editBanner(dataEdit))
             setIsModalVisible(false)
             handleCancel()
@@ -152,8 +191,10 @@ const Banner = () => {
             title: "",
             imageUrl: ""
         })
-        setSelectedBanner(null)
-        setNameTog(false)
+        setSelectedBanner(null);
+        setNameTog(false);
+        setFormErrors('');
+        setFileError('');
     };
 
     useEffect(() => {
@@ -163,16 +204,13 @@ const Banner = () => {
     }, [])
 
     const onEdit = (id) => {
-        
         let dataForEdit = getBannerData && getBannerData.data && getBannerData.data.data.find((item) => item.id === id)
-
         if (dataForEdit) {
             setSelectedBanner(dataForEdit)
         }
         dispatch(getOneBanner(dataForEdit.id))
         setIsModalVisible(true);
         setNameTog(true);
-      
     }
 
     const newBanner = userForDelete => {
@@ -199,11 +237,11 @@ const Banner = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            // dispatch(editBanner(userForDelete))
-
             const deletebanner = await newBanner(userForDelete)
             if (deletebanner.status === 200) {
-                toast.success("Banner delete successful")
+                toast.success("Banner deleted")
+            }else {
+                toast.error("Something went wrong")
             }
         }
     }
@@ -238,12 +276,14 @@ const Banner = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            // sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.title.localeCompare(b.title),
+            sortDirections: ['descend', 'ascend'],
         },
         {
-            title: 'imageUrl',
+            title: 'Image url',
             dataIndex: 'imageUrl',
+            sorter: (a, b) => a.imageUrl.localeCompare(b.imageUrl),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Actions',
@@ -260,11 +300,11 @@ const Banner = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button size="small" type="primary" onClick={showModal}>
-                            Add Banner
+                            Add banner
                         </Button>
 
                         <Button size="small" type="primary" onClick={showImportModal}>
-                            Import Banner
+                            Import banner
                         </Button>
                     </div>
                 ]}
@@ -289,18 +329,6 @@ const Banner = () => {
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {schemeCategoryTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
@@ -323,20 +351,24 @@ const Banner = () => {
                                 value={data.title}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {formErrors?.title && <span style={{ color: "red" }}>{formErrors.title}</span>}
                         </Form.Item>
-                        <label htmlFor="imgUrl">Image URL</label>
+
+                        <label htmlFor="imgUrl">Image</label>
                         <Form.Item>
                             <Input
-                                type="text"
-                                placeholder="Enter image URL"
+                                type="file"
+                                placeholder="Enter image"
                                 name="imageUrl"
-                                value={data.imageUrl}
-                                onChange={(e) => handleChange(e)}
+                                defaultValue={data.imageUrl}
+                                onChange={(e) => fileUpload(e, "imageUrl")}
                             />
+                            {formErrors?.imageUrl && <span style={{ color: "red" }}>{formErrors.imageUrl}</span>}
                         </Form.Item>
+                        {/* {fileError !== '' && <label style={{ color: 'red' }}>{fileError}</label>} */}
                     </Form>
                 </Modal>}
-            {importModel && <Importbanner modaltitle="Import Banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}
+            {importModel && <Importbanner modaltitle="Import banner" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }

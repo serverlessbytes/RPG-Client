@@ -35,7 +35,7 @@ const Employer = () => {
     useEffect(() => {
         if (exportEmployer.length && exportTog) {
             CSVLinkRef?.current?.link.click()
-            toast.success("User data exported successfully")
+            toast.success("User data exported")
         } else if (exportTog) {
             toast.success("No user data for export")
         }
@@ -64,7 +64,6 @@ const Employer = () => {
                                         <FeatherIcon icon="rotate-ccw" size={16} />
                                     </Button>
                             }
-
                         </div>
                     ),
                 });
@@ -105,7 +104,6 @@ const Employer = () => {
         },
     ]
 
-
     return (
         <>
             <PageHeader
@@ -120,7 +118,6 @@ const Employer = () => {
                     </div>
                 ]}
             />
-
             <Main >
                 <Cards headless>
 
@@ -128,13 +125,6 @@ const Employer = () => {
                         <TabPane tab="Active Users" key="active">
                             <UserTableStyleWrapper>
                                 <TableWrapper className="table-responsive">
-                                    {/* --- search bar --- */}
-                                    {/* <Form name="sDash_select" layout="vertical">
-                                                <Form.Item name="search" label="">
-                                                    <Input placeholder="search" style={{ width: 200 }} />
-                                                </Form.Item>
-                                            </Form> */}
-
                                     <Table
                                         dataSource={usertable}
                                         columns={usersTableColumns}
@@ -179,7 +169,6 @@ const Employer = () => {
                     </Tabs>
                 </Cards>
             </Main>
-
         </>
     )
 }

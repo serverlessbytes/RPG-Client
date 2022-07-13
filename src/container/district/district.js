@@ -32,6 +32,7 @@ const district = () => {
         name: '',
         stateId: ''
     })
+    const [error, setError] = useState('')
 
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
@@ -46,27 +47,27 @@ const district = () => {
 
     const onChangeHandler = (e) => {
         setState({ ...state, [e.target.name]: e.target.value })
+        setError({ ...error, [e.target.name]: "" })
     }
     const onChnageValue = (e, name) => {
         if (name === "stateId") {
             setState({ ...state, stateId: e })
+            setError({ ...error, stateId: "" })
+
         }
     }
 
     useEffect(() => {
         if (postDistrictdataa && postDistrictdataa.status === 200) {
             dispatch(postDistrictSuccess(null))
-            // dispatch(getJobsFilterForMainSuccess(null))
-            toast.success("District Add successful");
-            //toastAssetsAdd(true)
-            //onHide()
+            toast.success("District added");
         }
     }, [postDistrictdataa])
 
     useEffect(() => {
         if (postDistrictDataError) {
             dispatch(postDistrictErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [postDistrictDataError])
 
@@ -84,13 +85,18 @@ const district = () => {
         }
     }, [diStrict])
 
-    const languagesTableColumns = [
+    const districtTableColumns = [
         {
             title: 'District',
             dataIndex: 'name',
-            sorter: (a, b) => a.name.length - b.name.length,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortDirections: ['descend', 'ascend'],
-        }
+        },
+        {
+            title: '',
+            dataIndex: '',
+            width: '1px',
+        },
     ];
 
     const onApply = () => {
@@ -106,9 +112,29 @@ const district = () => {
     //         dispatch(getDistrictData(statedata))
     //     }
     // }, [statedata])
-   
+
+    const validation = (data) => {
+
+        let error = {};
+        let flag = false;
+
+        if (!state.name) {
+            error.name = "State is required";
+            flag = true;
+        }
+        if (!state.stateId) {
+            error.stateId = "District is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
+
     const handleOk = () => {
-      
+        if (validation()) {
+            return
+        }
+
         let data = {
             name: state.name,
             stateId: state.stateId,
@@ -122,6 +148,11 @@ const district = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
         form.resetFields();
+        setState({
+            name: "",
+            stateId: "",
+        })
+        setError("");
     };
 
     useEffect(() => {
@@ -145,10 +176,7 @@ const district = () => {
 
             <Main >
                 <Cards headless>
-
-
                     <Row gutter={30}>
-
                         <Col md={6} xs={24} className="mb-md-25">
                             <Form layout="vertical">
                                 <Form.Item label="State" >
@@ -182,31 +210,17 @@ const district = () => {
                         </Col>
                     </Row>
 
-
-
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
                                 //rowSelection={rowSelection}
                                 dataSource={stateTableData}
-                                columns={languagesTableColumns}
+                                columns={districtTableColumns}
                                 pagination={false}
                             />
 
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-
-                        <Pagination
-                            onChange={() => { }}
-                            showSizeChanger
-                            onShowSizeChange={() => { }}
-                            pageSize={10}
-                            defaultCurrent={1}
-                            total={10}
-                        />
-
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
             <Modal title="District" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText="Add">
@@ -214,23 +228,16 @@ const district = () => {
                     <label htmlFor="name">District</label>
                     <Form.Item name="name">
                         <Input
-                            placeholder="Enter District"
+                            placeholder="Enter district"
                             name="name"
                             //defaultValue={data.name}
                             onChange={(e) => { onChangeHandler(e) }}
                         />
+                        {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
                     </Form.Item>
-                    {/* <label htmlFor="name">Key</label>
-                    <Form.Item name="key">
-                        <Input
-                            placeholder="Enter Key"
-                            name="key"
-                            defaultValue={data.key}
-                        />
-                    </Form.Item> */}
                     <Form.Item name='stateId' label="State">
-                        <Select placeholder="Select State" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
-                            <Option value='' >Select State</Option>
+                        <Select placeholder="Select state" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
+                            <Option value='' >Select state</Option>
                             {
                                 stateData && stateData.data.map((item) => (
                                     <Option value={item.id}> {item.name} </Option>
@@ -238,6 +245,7 @@ const district = () => {
                             }
 
                         </Select>
+                        {error?.stateId && <span style={{ color: "red" }}>{error.stateId}</span>}
                     </Form.Item>
                 </Form>
 

@@ -6,24 +6,27 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, ProjectPagination, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
-import ActiveSchemesTable from './ActiveSchemesTable'
 import { useDispatch, useSelector } from 'react-redux';
 import { editBenefitsData, getBenefitsData, postBenefitsData } from '../../redux/benefitsType/actionCreator';
 import uuid from 'react-uuid';
 import { toast } from 'react-toastify';
 import actions from '../../redux/benefitsType/actions';
 import { ApiPost } from '../../helper/API/ApiData';
-import AuthStorage from '../../helper/AuthStorage';
-// import actions from '../../redux/schemes/actions';
 import ImportSchemeBenefits from '../../components/modals/ImportSchemeBenefits';
 
 const BenefitsType = () => {
     const { editBenefitsSuccess, editBenefitsErr, postBenefitsSuccess, postBenefitsErr, addSchemeBenefitBulkSuccess, addSchemeBenefitBulkErr } = actions;
     // const {addSchemeBenefitBulkSuccess} = actions;
+    const dispatch = useDispatch();
+    const [form] = Form.useForm();
     const usersTableData = [];
+
     const [benifitsTableData, setBenifitsTableData] = useState([]);
     const [dataForEdit, setDataForEdit] = useState(); //foredit
     const [importModal, setImportModal] = useState(false);
+    const [error, setError] = useState('')
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [nameTog, setNameTog] = useState(false)
 
     const getBenefitData = useSelector((state) => state.beneFit.getBenefitData)
     const editBenefitData = useSelector((state) => state.beneFit.editBenefitData)
@@ -32,16 +35,6 @@ const BenefitsType = () => {
     const editBenefitError = useSelector((state) => state.beneFit.editBenefitError)
     const addSchemeBenefitBulkData = useSelector(state => state.beneFit.addSchemeBenefitBulkData)
     const addSchemeBenefitBulkError = useSelector(state => state.beneFit.addSchemeBenefitBulkErr)
-
-    useEffect(() => {
-        console.log("addSchemeBenefitBulkData", addSchemeBenefitBulkData)
-    }, [addSchemeBenefitBulkData])
-
-    const dispatch = useDispatch();
-
-    const [form] = Form.useForm();
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [nameTog, setNameTog] = useState(false)
     const { users } = useSelector(state => {
         return {
             users: state.users,
@@ -52,16 +45,14 @@ const BenefitsType = () => {
     useEffect(() => {
         if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status === 200) {
             dispatch(addSchemeBenefitBulkSuccess(null))
-            toast.success("Scheme imported  ");
-        } else if (addSchemeBenefitBulkData && addSchemeBenefitBulkData.status !== 200) {
-            toast.error("Something wrong");
+            toast.success("Scheme imported ");
         }
     }, [addSchemeBenefitBulkData])
 
     useEffect(() => {
         if (addSchemeBenefitBulkError) {
             dispatch(addSchemeBenefitBulkErr(null))
-            toast.error("Something wrong");
+            toast.error("Benifit already exists");
         }
     }, [addSchemeBenefitBulkError])
 
@@ -69,7 +60,7 @@ const BenefitsType = () => {
         if (postBenefitsdata && postBenefitsdata.status === 200) {
             dispatch(getBenefitsData())
             dispatch(postBenefitsSuccess(null))
-            toast.success("Scheme Benifit add successful.");
+            toast.success("Scheme benifit added");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -82,14 +73,14 @@ const BenefitsType = () => {
     useEffect(() => {
         if (postBenefitsError) {
             dispatch(postBenefitsErr(null))
-            toast.error("Something wrong");
+            toast.error("Benifit already exists");
         }
     }, [postBenefitsError])
 
     useEffect(() => {
         if (editBenefitData && editBenefitData.status === 200) {
             dispatch(editBenefitsSuccess(null))
-            toast.success("Scheme Benifit update successful.");
+            toast.success("Scheme benifit updated");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -98,7 +89,7 @@ const BenefitsType = () => {
     useEffect(() => {
         if (editBenefitError) {
             dispatch(editBenefitsErr(null))
-            toast.error("Something wrong");
+            toast.error("Something went wrong");
         }
     }, [editBenefitError])
 
@@ -125,7 +116,7 @@ const BenefitsType = () => {
             // dispatch(editBenefitsData(dataForDelete))
             const deleteBenifts = await newBenefites(dataForDelete)
             if (deleteBenifts.status === 200) {
-                toast.success("Scheme Benifit delete successful.")
+                toast.success("Scheme benifit deleted")
             }
         }
     }
@@ -157,10 +148,26 @@ const BenefitsType = () => {
         setIsModalVisible(false);
         setNameTog(false)
         setDataForEdit(null)
+        setError('')
     };
+
+    const validation = (data) => {
+        let error = {};
+        let flag = false;
+
+        if (!data.name) {
+            error.name = "Benefit type is required";
+            flag = true;
+        }
+        setError(error);
+        return flag
+    }
 
     const handleOk = () => {
         let data = form.getFieldsValue() //get value from form field
+        if (validation(data)) {
+            return
+        }
         if (dataForEdit) {
             //delete data.key;
             data = {
@@ -224,9 +231,9 @@ const BenefitsType = () => {
 
     const usersTableColumns = [
         {
-            title: 'Type Of Benefit',
+            title: 'Type of benefit',
             dataIndex: 'Typeofbenefit',
-            sorter: (a, b) => a.Typeofbenefit.length - b.Typeofbenefit.length,
+            sorter: (a, b) => a.Typeofbenefit.localeCompare(b.Typeofbenefit),
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -239,11 +246,11 @@ const BenefitsType = () => {
         <>
             <PageHeader
                 ghost
-                title="Type of Benefits"
+                title="Type of benefits"
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Benefits
+                            Add benefits
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={importModel}>
                             Import
@@ -289,13 +296,16 @@ const BenefitsType = () => {
             <Modal title="Benefit Type" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
                 okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Benefit</label>
-                    <Form.Item name="name">
+                    <label htmlFor="name">Type of benefit</label>
+                    <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder=""
+                            placeholder="Type of benefit"
                             name="name"
                         />
                     </Form.Item>
+                    {
+                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                    }
                 </Form>
 
             </Modal>
@@ -303,7 +313,7 @@ const BenefitsType = () => {
             {
                 <ImportSchemeBenefits
                     importModal={importModal}
-                    modaltitle="Import Scheme-Benefits"
+                    modaltitle="Import scheme benefits"
                     handleCancel={() => setImportModal(false)}
                 />
             }

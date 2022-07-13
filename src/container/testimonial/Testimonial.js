@@ -1,11 +1,11 @@
-import { Form, Input, Table } from 'antd';
+import { Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button } from '../../components/buttons/buttons'
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers'
-import { editTestimonial, getTestimonial } from '../../redux/testimonial/actionCreator';
+import { getTestimonial } from '../../redux/testimonial/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
@@ -22,13 +22,13 @@ const Testimonial = () => {
     const { path } = useRouteMatch();
 
     const { addTestimonialSuccess, addTestimonialErr, editTestimonialSuccess,
-        editTestimonialErr,addBulkTestimonialSuccess,addBulkTestimonialErr,
+        editTestimonialErr, addBulkTestimonialSuccess, addBulkTestimonialErr,
     } = actions;
 
     const [testiMonialtable, setTestiMonial] = useState([]);
     const [perPage, setPerPage] = useState(10)
     const [pageNum, setPageNum] = useState(1)
-    const [importModel,setImportModel] = useState(false)
+    const [importModel, setImportModel] = useState(false)
 
     const getAllUsers = useSelector((state) => state.testimonial.getTestimonialData)
     const addTestimonialdata = useSelector((state) => state.testimonial.addTestimonialData)
@@ -41,47 +41,45 @@ const Testimonial = () => {
     useEffect(() => {
         if (addBulkTestimonialData && addBulkTestimonialData.status === 200) {
             dispatch(addBulkTestimonialSuccess(null))
-            toast.success("Import Testimonial successful");
+            toast.success("Import testimonial");
         }
-        else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200){
-            toast.error("Something Wrong")
+        else if (addBulkTestimonialData && addBulkTestimonialData.status !== 200) {
+            toast.error("Something went wrong")
         }
     }, [addBulkTestimonialData])
 
     useEffect(() => {
         if (addBulkTestimonialError) {
             dispatch(addBulkTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addBulkTestimonialError])
 
     useEffect(() => {
         if (addTestimonialdata && addTestimonialdata.status === 200) {
             dispatch(addTestimonialSuccess(null))
-            toast.success("Testimonial add successful");
+            toast.success("Testimonial added");
         }
     }, [addTestimonialdata])
 
     useEffect(() => {
         if (addTestimonialDataError) {
             dispatch(addTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [addTestimonialDataError])
 
     useEffect(() => {
         if (editTestimonialdata && editTestimonialdata.status === 200) {
             dispatch(editTestimonialSuccess(null))
-            toast.success("Testimonial update successful");
-            //toastAssetsAdd(true)
-            //onHide()
+            toast.success("Testimonial updated");
         }
     }, [editTestimonialdata])
 
     useEffect(() => {
         if (editTestimonialDataError) {
             dispatch(editTestimonialErr(null))
-            toast.error("Something Wrong")
+            toast.error("Something went wrong")
         }
     }, [editTestimonialDataError])
 
@@ -100,7 +98,7 @@ const Testimonial = () => {
                     dispatch(getTestimonial(perPage, pageNum))
                 }
                 return res
-            })
+            }).catch(error => error)
         return newVal
     }
 
@@ -116,10 +114,11 @@ const Testimonial = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            // dispatch(editTestimonial(userForDelete))
             const deleteTestimonial = await newTestimonial(userForDelete)
             if (deleteTestimonial.status === 200) {
-                toast.success("Testimonial delete successful")
+                toast.success("Testimonial deleted")
+            }else{
+                toast.error("Something went wrong")
             }
         }
     }
@@ -160,16 +159,20 @@ const Testimonial = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
-            // sortDirections: ['descend', 'ascend'],
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            sortDirections: ['descend', 'ascend'],
         },
         {
             title: 'Role',
             dataIndex: 'role',
+            sorter: (a, b) => a.role.localeCompare(b.role),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Message',
             dataIndex: 'message',
+            sorter: (a, b) => a.message.localeCompare(b.message),
+            sortDirections: ['descend', 'ascend']
         },
         {
             title: 'Actions',
@@ -186,10 +189,10 @@ const Testimonial = () => {
                 buttons={[
                     <div className="page-header-actions">
                         <Button onClick={reDirect} size="small" type="primary">
-                            Add Testimonial
+                            Add testimonial
                         </Button>
                         <Button onClick={reDirectModel} size="small" type="primary">
-                            Import Testimonial
+                            Import testimonial
                         </Button>
                     </div>
                 ]}
@@ -200,13 +203,6 @@ const Testimonial = () => {
 
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive">
-
-                            {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                            <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                    </Form> */}
-
                             <Table
                                 // rowSelection={rowSelection}
                                 dataSource={testiMonialtable}
@@ -219,14 +215,12 @@ const Testimonial = () => {
                                         setPerPage(pageSize)
                                     }
                                 }}
-                            // size="middle"
-                            // pagination={false}
                             />
                         </TableWrapper>
                     </UserTableStyleWrapper>
                 </Cards>
             </Main>
-            {importModel && <ImportTestimonial modaltitle="Import Testimonial" handleCancel={() => setImportModel(false)} importModel={importModel} />}
+            {importModel && <ImportTestimonial modaltitle="Import testimonial" handleCancel={() => setImportModel(false)} importModel={importModel} />}
         </>
     )
 }
