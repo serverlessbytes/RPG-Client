@@ -147,7 +147,7 @@ const AddPartnerCourses = () => {
         let flage = false;
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
         if (state.name === '') {
-            error.name = 'Course Name is required';
+            error.name = 'Course name is required';
             flage = true;
         }
         if (state.organiZation === '') {
@@ -159,7 +159,7 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.certificationBody === '') {
-            error.certificationBody = 'Certification Body is required';
+            error.certificationBody = 'Certification body is required';
             flage = true;
         }
         if (state.eligiBility === '') {
@@ -171,11 +171,11 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.contactpersonname === '') {
-            error.contactpersonname = 'Contact Person Name is required';
+            error.contactpersonname = 'Contact person name is required';
             flage = true;
         }
         if (state.contactpersonemail === '') {
-            error.contactpersonemail = 'Email is required';
+            error.contactpersonemail = 'Contact person email is required';
             flage = true;
         }
         if (state.contactpersonemail && !state.contactpersonemail.match(regex)) {
@@ -183,7 +183,7 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.contactpersonphone === '') {
-            error.contactpersonphone = 'Phone is required';
+            error.contactpersonphone = 'Contact person phone is required';
             flage = true;
         }
         if (state.contactpersonphone && state.contactpersonphone.length < 10) {
@@ -191,11 +191,11 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.pincode === '') {
-            error.pincode = 'pincode is required';
+            error.pincode = 'Pincode is required';
             flage = true;
         }
         if (state.locations === '') {
-            error.locations = 'locations is required';
+            error.locations = 'Locations is required';
             flage = true;
         }
         // if (state.sequence === '') {
@@ -207,11 +207,11 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.cateGory === '') {
-            error.cateGory = 'CategoryId is required';
+            error.cateGory = 'Categoryid is required';
             flage = true;
         }
         if (state.state === '') {
-            error.state = 'state is required';
+            error.state = 'State is required';
             flage = true;
         }
         if (state.district === '') {
@@ -230,23 +230,23 @@ const AddPartnerCourses = () => {
             flage = true;
         }
         if (state.application_form === '') {
-            error.application_form = 'Application Form is required';
+            error.application_form = 'Application form is required';
             flage = true;
         }
         if (state.recommended_and_forwarded === '') {
-            error.recommended_and_forwarded = 'Recommended and Forwarded is required';
+            error.recommended_and_forwarded = 'Recommended and forwarded is required';
             flage = true;
         }
         if (state.application_process === '') {
-            error.application_process = 'Application Process is required';
+            error.application_process = 'Application process is required';
             flage = true;
         }
         if (state.medical_superintendent === '') {
-            error.medical_superintendent = 'Medical Superintendent is required';
+            error.medical_superintendent = 'Medical superintendent is required';
             flage = true;
         }
         if (state.hospital_expenses_estimation_certificate === '') {
-            error.hospital_expenses_estimation_certificate = 'Hospital Expenses Estimate Certificate is required';
+            error.hospital_expenses_estimation_certificate = 'Hospital expenses estimate certificate is required';
             flage = true;
         }
 
@@ -283,33 +283,6 @@ const AddPartnerCourses = () => {
         formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
         formData.append('medical_superintendent', state.medical_superintendent);
         formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
-        // let data = {
-        //     key: uuid(),
-        //     name: state.name,
-        //     detail: state.detail,
-        //     duration: moment(state.duration).format('hh:mm:ss'),
-        //     categoryId: state.cateGory,
-        //     certificationBody: state.certificationBody,
-        //     certification: state.Certification,
-        //     organization: state.organiZation,
-        //     eligibility: state.eligiBility,
-        //     component: state.component,
-        //     contactPersonName: state.contactpersonname,
-        //     contactPersonEmail: state.contactpersonemail,
-        //     contactPersonPhone: state.contactpersonphone,
-        //     state: state.state,
-        //     district: state.district,
-        //     pincode: state.pincode,
-        //     location: state.locations,
-        //     // sequence: parseInt(state.sequence),
-        //     mode: state.mode,
-        //     thumbnail: state.thumbnail,
-        //     application_form: state.application_form,
-        //     recommended_and_forwarded: state.recommended_and_forwarded,
-        //     application_process: state.application_process,
-        //     medical_superintendent: state.medical_superintendent,
-        //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-        // };
         if (!langid) {
             dispatch(addPartnerCourse(formData));
         }
@@ -339,43 +312,9 @@ const AddPartnerCourses = () => {
             formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
             formData.append('medical_superintendent', state.medical_superintendent);
             formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
-
-            // let selectLanguageAddData = {
-            //     key: editOneFilterData.data.data.key,
-            //     name: state.name,
-            //     organization: state.organiZation,
-            //     detail: state.detail,
-            //     certificationBody: state.certificationBody,
-            //     eligibility: state.eligiBility,
-            //     component: state.component,
-            //     contactPersonName: state.contactpersonname,
-            //     contactPersonEmail: state.contactpersonemail,
-            //     contactPersonPhone: state.contactpersonphone,
-            //     pincode: state.pincode,
-            //     location: state.locations,
-            //     duration: moment(state.duration).format('hh:mm:ss'),
-            //     categoryId: editOneFilterData.data.data.courseCategory.id,
-            //     state: state.state,
-            //     district: state.district,
-            //     mode: state.mode,
-            //     certification: state.Certification,
-            //     thumbnail: state.thumbnail,
-            //     application_form: state.application_form,
-            //     recommended_and_forwarded: state.recommended_and_forwarded,
-            //     application_process: state.application_process,
-            //     medical_superintendent: state.medical_superintendent,
-            //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-            // };
             dispatch(addPartnerCourse(formData, langid));
         }
     };
-
-
-    // useEffect(() => {
-    //     if () {
-    //         handalCancle()
-    //     }
-    // }, [editPartnerCourseData])
 
     const onEdit = () => {
         let formData = new FormData();
@@ -406,38 +345,8 @@ const AddPartnerCourses = () => {
         formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
         formData.append('medical_superintendent', state.medical_superintendent);
         formData.append('recommended_and_forwarded', state.recommended_and_forwarded);
-        // let data = {
-        //     courseId: id,
-        //     key: state.key,
-        //     name: state.name,
-        //     organization: state.organiZation,
-        //     detail: state.detail,
-        //     certificationBody: state.certificationBody,
-        //     eligibility: state.eligiBility,
-        //     component: state.component,
-        //     contactPersonName: state.contactpersonname,
-        //     contactPersonEmail: state.contactpersonemail,
-        //     contactPersonPhone: state.contactpersonphone,
-        //     pincode: state.pincode,
-        //     location: state.locations,
-        //     duration: moment(state.duration).format('hh:mm:ss'),
-        //     categoryId: state.cateGory,
-        //     state: state.state,
-        //     district: state.district,
-        //     mode: state.mode,
-        //     certification: state.Certification,
-        //     thumbnail: state.thumbnail,
-        //     isActive: true,
-        //     isDeleted: false,
-        //     application_form: state.application_form,
-        //     recommended_and_forwarded: state.recommended_and_forwarded,
-        //     application_process: state.application_process,
-        //     medical_superintendent: state.medical_superintendent,
-        //     hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-        // }
         dispatch(editPartnerCoursefilter(formData, langIds.hindi, langIds.marathi));
     }
-
     // For -- After Add and Edit partnerCourse redirect page 
     useEffect(() => {
         if (postPartnerCourseData && postPartnerCourseData.status === 200 || editPartnerCourseData && editPartnerCourseData.status === 200) {
@@ -492,14 +401,6 @@ const AddPartnerCourses = () => {
             setState({ ...state, mode: e });
             setError({ ...error, mode: "" });
         }
-        //  else if (name === 'sequence') {
-        //     if (e.target.value > 0) {
-        //         setState({ ...state, [e.target.name]: e.target.value });
-        //     } 
-        //     else {
-        //         setState({ ...state, [e.target.name]: 0 });
-        //     }
-        // }
     };
 
     const fileUpload = (e, name) => {
@@ -512,19 +413,19 @@ const AddPartnerCourses = () => {
                 setError({ ...error, thumbnail: "" });
             }
             else {
-                setError({ ...error, thumbnail: 'Please select valid document file' })
+                setError({ ...error, thumbnail: 'Select valid document file' })
                 setState({ ...state, thumbnail: '' })
             }
         }
         else {
-            setError({ ...error, thumbnail: 'Please select document file' })
+            setError({ ...error, thumbnail: 'Select document file' })
         }
     }
 
     return (
         <>
             <PageHeader ghost
-                title={id ? "Edit Partner Courses" : "Add Partner Courses"} />
+                title={id ? "Edit partner courses" : "Add partner courses"} />
             <Main>
                 <Cards headless>
                     <Row justify="space-between">
@@ -547,16 +448,17 @@ const AddPartnerCourses = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="categoryId">CategoryId</label>
+                            <label htmlFor="categoryId">Categoryid</label>
                             <Form.Item name="categoryId">
                                 <Select
                                     value={state.cateGory}
                                     size="large"
-                                    placeholder="Select categoryId"
-                                    className="sDash_fullwidth-select"
+                                    placeholder="Select category id"
+                                    className={state.cateGory ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                     name="cateGory"
                                     onChange={e => onSelect(e, 'cateGory')}
                                 >
+                                    <Option value="">Select categoryid</Option>
                                     {catdata && catdata.data.map(items => <Option value={items.id}>{items.name} </Option>)}
                                 </Select>
                                 {error.cateGory && <span style={{ color: 'red' }}>{error.cateGory}</span>}
@@ -567,7 +469,7 @@ const AddPartnerCourses = () => {
                             <label htmlFor="organization">Organization</label>
                             <Form.Item name="organization">
                                 <Input
-                                    placeholder="organization"
+                                    placeholder="Organization"
                                     name="organiZation"
                                     value={state.organiZation}
                                     onChange={e => onChangevalue(e)}
@@ -579,15 +481,15 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="detail">Detail</label>
                             <Form.Item>
-                                <TextArea name="detail" value={state.detail} onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Detail' name="detail" value={state.detail} onChange={e => onChangevalue(e)} />
                                 {error.detail && <span style={{ color: 'red' }}>{error.detail}</span>}
                             </Form.Item>
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="certification">Certification Body</label>
+                            <label htmlFor="certification">Certification body</label>
                             <Form.Item>
-                                <TextArea value={state.certificationBody} name="certificationBody" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Certification body' value={state.certificationBody} name="certificationBody" onChange={e => onChangevalue(e)} />
                                 {error.certificationBody && <span style={{ color: 'red' }}>{error.certificationBody}</span>}
                             </Form.Item>
                         </Col>
@@ -597,7 +499,7 @@ const AddPartnerCourses = () => {
                             <Form.Item name="eligibility">
                                 <Input
                                     value={state.eligiBility}
-                                    placeholder="eligibility"
+                                    placeholder="Eligibility"
                                     name="eligiBility"
                                     onChange={e => onChangevalue(e)}
                                 />
@@ -610,7 +512,7 @@ const AddPartnerCourses = () => {
                             <Form.Item name="component">
                                 <Input
                                     value={state.component}
-                                    placeholder="component"
+                                    placeholder="Component"
                                     name="component"
                                     onChange={e => onChangevalue(e)}
                                 />
@@ -619,11 +521,11 @@ const AddPartnerCourses = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="contactpersonname">Contact Person Name</label>
+                            <label htmlFor="contactpersonname">Contact person name</label>
                             <Form.Item name="contactpersonname">
                                 <Input
                                     value={state.contactpersonname}
-                                    placeholder="contactperson name"
+                                    placeholder="Contact person name"
                                     name="contactpersonname"
                                     onChange={e => onChangevalue(e)}
                                 />
@@ -632,12 +534,12 @@ const AddPartnerCourses = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="contactpersonemail">Contact Person Email</label>
+                            <label htmlFor="contactpersonemail">Contact person email</label>
                             <Form.Item name="contactpersonemail" >
                                 <Input
                                     type="email"
                                     value={state.contactpersonemail}
-                                    placeholder="contactperson email"
+                                    placeholder="Contact person email"
                                     name="contactpersonemail"
                                     onChange={e => onChangevalue(e)}
                                 />
@@ -646,11 +548,11 @@ const AddPartnerCourses = () => {
                         </Col>
 
                         <Col lg={11} md={11} sm={24} xs={24}>
-                            <label htmlFor="contactpersonphone">Contact Person Phone</label>
+                            <label htmlFor="contactpersonphone">Contact person phone</label>
                             <Form.Item name="contactpersonphone">
                                 <Input
                                     value={state.contactpersonphone}
-                                    placeholder="contactperson phone"
+                                    placeholder="Contact person phone"
                                     name="contactpersonphone"
                                     onChange={e => onChangevalue(e, "contactpersonphone")}
                                     maxLength={10}
@@ -664,12 +566,13 @@ const AddPartnerCourses = () => {
                             <Form.Item name="state">
                                 <Select
                                     size="large"
-                                    className="sDash_fullwidth-select"
+                                    className={state.state ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                     name="state"
                                     value={state.state}
-                                    placeholder="Select State"
+                                    placeholder="Select state"
                                     onChange={(e) => onSelect(e, "state")}
                                 >
+                                    <Option value="">Select state</Option>
                                     {
                                         stateData && stateData.data.map((item) => (
                                             <Option value={item.id}> {item.name} </Option>
@@ -686,12 +589,13 @@ const AddPartnerCourses = () => {
                             <Form.Item name="district">
                                 <Select
                                     size="large"
-                                    className="sDash_fullwidth-select"
+                                    className={state.district ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                                     name="district"
                                     value={state.district}
-                                    placeholder="Select District"
+                                    placeholder="Select district"
                                     onChange={(e) => onSelect(e, "district")}
                                 >
+                                    <Option value="">Select district</Option>
                                     {
                                         diStrictdata && diStrictdata.data.map((item) => (
                                             <Option value={item.id}> {item.name} </Option>
@@ -706,7 +610,7 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             <label htmlFor="pincode">Pincode</label>
                             <Form.Item name="pincode">
-                                <Input value={state.pincode} placeholder="pincode" name="pincode" maxLength={6} onChange={e => onChangevalue(e, "pincode")} />
+                                <Input value={state.pincode} placeholder="Pincode" name="pincode" minLength={6} maxLength={6} onChange={e => onChangevalue(e, "pincode")} />
                                 {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>}
                             </Form.Item>
                         </Col>
@@ -739,7 +643,7 @@ const AddPartnerCourses = () => {
                             <Form.Item name="location">
                                 <Input
                                     value={state.locations}
-                                    placeholder="location"
+                                    placeholder="Location"
                                     name="locations"
                                     onChange={e => onChangevalue(e)}
                                 />
@@ -750,11 +654,11 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             {/* <Row align="middle" justify="space-between"> */}
                             {/* <Col lg={8} md={9} xs={24}> */}
-                            <label htmlFor="application_form">Application Form</label>
+                            <label htmlFor="application_form">Application form</label>
                             {/* </Col> */}
                             {/* <Col lg={16} md={15} xs={24}> */}
                             <Form.Item name="application_form">
-                                <TextArea placeholder='Application Form' value={state.application_form} name="application_form" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Application form' value={state.application_form} name="application_form" onChange={e => onChangevalue(e)} />
                                 {error.application_form && <span style={{ color: 'red' }}>{error.application_form}</span>}
                             </Form.Item>
                             {/* </Col> */}
@@ -764,11 +668,11 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             {/* <Row align="middle" justify="space-between"> */}
                             {/* <Col lg={8} md={9} xs={24}> */}
-                            <label htmlFor="recommended_and_forwarded">Recommended and Forwarded</label>
+                            <label htmlFor="recommended_and_forwarded">Recommended and forwarded</label>
                             {/* </Col> */}
                             {/* <Col lg={16} md={15} xs={24}> */}
                             <Form.Item name="recommended_and_forwarded">
-                                <TextArea placeholder='Recommended and Forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Recommended and forwarded' value={state.recommended_and_forwarded} name="recommended_and_forwarded" onChange={e => onChangevalue(e)} />
                                 {error.recommended_and_forwarded && <span style={{ color: 'red' }}>{error.recommended_and_forwarded}</span>}
                             </Form.Item>
                             {/* </Col> */}
@@ -778,11 +682,11 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             {/* <Row align="middle" justify="space-between"> */}
                             {/* <Col lg={8} md={9} xs={24}> */}
-                            <label htmlFor="application_process">Application Process</label>
+                            <label htmlFor="application_process">Application process</label>
                             {/* </Col> */}
                             {/* <Col lg={16} md={15} xs={24}> */}
                             <Form.Item name="application_process">
-                                <TextArea placeholder='Application Process' value={state.application_process} name="application_process" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Application process' value={state.application_process} name="application_process" onChange={e => onChangevalue(e)} />
                                 {error.application_process && <span style={{ color: 'red' }}>{error.application_process}</span>}
                             </Form.Item>
                             {/* </Col> */}
@@ -792,11 +696,11 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             {/* <Row align="middle" justify="space-between"> */}
                             {/* <Col lg={8} md={9} xs={24}> */}
-                            <label htmlFor="medical_superintendent">Medical Superintendent</label>
+                            <label htmlFor="medical_superintendent">Medical superintendent</label>
                             {/* </Col> */}
                             {/* <Col lg={16} md={15} xs={24}> */}
                             <Form.Item name="medical_superintendent">
-                                <TextArea placeholder='Medical Superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Medical superintendent' value={state.medical_superintendent} name="medical_superintendent" onChange={e => onChangevalue(e)} />
                                 {error.medical_superintendent && <span style={{ color: 'red' }}>{error.medical_superintendent}</span>}
                             </Form.Item>
                             {/* </Col> */}
@@ -806,11 +710,11 @@ const AddPartnerCourses = () => {
                         <Col lg={11} md={11} sm={24} xs={24}>
                             {/* <Row align="middle" justify="space-between"> */}
                             {/* <Col lg={8} md={9} xs={24}> */}
-                            <label htmlFor="hospital_expenses_estimation_certificate">Hospital Expenses Estimate Certificate</label>
+                            <label htmlFor="hospital_expenses_estimation_certificate">Hospital expenses estimate certificate</label>
                             {/* </Col> */}
                             {/* <Col lg={16} md={15} xs={24}> */}
                             <Form.Item name="hospital_expenses_estimation_certificate">
-                                <TextArea placeholder='Hospital Expenses Estimate Certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangevalue(e)} />
+                                <TextArea placeholder='Hospital expenses estimate certificate' value={state.hospital_expenses_estimation_certificate} name="hospital_expenses_estimation_certificate" onChange={e => onChangevalue(e)} />
                                 {error.hospital_expenses_estimation_certificate && <span style={{ color: 'red' }}>{error.hospital_expenses_estimation_certificate}</span>}
                             </Form.Item>
                             {/* </Col> */}

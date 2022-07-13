@@ -27,7 +27,7 @@ const Carousel = () => {
     title: '',
     imageUrl: '',
   });
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [pageNumber, setPageNumber] = useState(1)
   const [importModel, setImportModel] = useState(false);
   const [formErrors, setFormErrors] = useState();
@@ -311,7 +311,7 @@ const Carousel = () => {
             <Button size="small" type="primary" onClick={showImportModal}>
               Import carousel
             </Button>
-          </div>,
+          </div>
         ]}
       />
 
@@ -366,7 +366,6 @@ const Carousel = () => {
           </Form>
         </Modal>
       )}
-
       {importModel && <ImportCarousel modaltitle="Import carousel" handleCancel={() => setImportModel(false)} importModel={importModel} />}
     </>
   );

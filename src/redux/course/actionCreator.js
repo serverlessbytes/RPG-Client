@@ -141,8 +141,8 @@ export const editPartnerCoursefilter = (data, hindiID, marathiID) => async (disp
     .catch((err) => dispatch(editPartnerCourseErr(err)))
 }
 
-export const addSwayamCourse = (data) => async (dispatch) => {
-  await ApiPost(`course/addSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
+export const addSwayamCourse = (languageId, data) => async (dispatch) => {
+  await ApiPost(`course/addSwayamCourse?langId=${languageId ? languageId : AuthStorage.getStorageData(STORAGEKEY.language)}`, data)
     .then((res) => {
       return dispatch(addSwayamPartnerCourseSuccess(res))
     })

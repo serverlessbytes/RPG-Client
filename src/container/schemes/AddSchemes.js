@@ -360,74 +360,7 @@ const AddSchemes = () => {
     formData.append('medical_superintendent', state.medical_superintendent);
     formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
     formData.append('videoUrl', state.videoUrl);
-    // formData.append('isDeleted', state.isDeleted);
-    // formData.append('isPublished', state.isPublished);
-    // formData.append('isApproved', state.isApproved);
-    // let data = {
-    //   // key: uuid(),
-    //   benifitLine: state.benifitLine.toString('markdown'),
-    //   detail: state.detail.toString('markdown'),
-    //   howToApply: state.howToApply.toString('markdown'),
-    //   documentation: state.documentation.toString('markdown'),
-    //   name: state.name,
-    //   locations: state.locations,
-    //   schemeCategory: state.schemeCategory,
-    //   schemeBenifit: state.schemeBenifit,
-    //   website: state.website,
-    //   type: state.type,
-    //   benificiary: state.benificiary,
-    //   grievanceRedress: state.grievanceRedress,
-    //   elink: state.elink,
-    //   spoc: state.spoc,
-    //   isActive: state.isActive,
-    //   videoUrl: state.videoUrl,
-    //   thumbnail: state.thumbnail,
-    //   id: state.id,
-    //   isDeleted: state.isDeleted,
-    //   isPublished: state.isPublished,
-    //   isApproved: state.isApproved,
-    //   application_form: state.application_form,
-    //   recommended_and_forwarded: state.recommended_and_forwarded,
-    //   application_process: state.application_process,
-    //   medical_superintendent: state.medical_superintendent,
-    //   hospital_expenses_estimation_certificate: state.hospital_expenses_estimation_certificate,
-    // };
     if (langId) {
-      // formData.append('name', getOneScHemeData.name);
-      // formData.append('schemeCategory', getOneScHemeData.schemeCategory.id);
-      // formData.append('schemeBenifit', getOneScHemeData.schemeBenifit.id);
-      // formData.append('locations', getOneScHemeData.locations.map(item => item.id));
-      // formData.append('website', getOneScHemeData.website);
-      // formData.append('type', getOneScHemeData.type);
-      // formData.append('benificiary', getOneScHemeData.benificiary);
-      // formData.append('grievanceRedress', getOneScHemeData.grievanceRedress);
-      // formData.append('elink', getOneScHemeData.elink);
-      // formData.append('spoc', getOneScHemeData.spoc);
-      // formData.append('isActive', getOneScHemeData.isActive);
-      // formData.append('videoUrl', getOneScHemeData.videoUrl);
-      // formData.append('thumbnail', getOneScHemeData.thumbnail);
-
-      // delete data.id
-      // delete data.isDeleted
-      // delete data.isPublished
-      // delete data.isApproved
-      // data = {
-      //   ...data,
-      //   key: getOneScHemeData.key,
-      //   name: getOneScHemeData.name,
-      //   schemeCategory: getOneScHemeData.schemeCategory.id,
-      //   schemeBenifit: getOneScHemeData.schemeBenifit.id,
-      //   locations: getOneScHemeData.locations.map(item => item.id),
-      //   website: getOneScHemeData.website,
-      //   type: getOneScHemeData.type,
-      //   benificiary: getOneScHemeData.benificiary,
-      //   grievanceRedress: getOneScHemeData.grievanceRedress,
-      //   elink: getOneScHemeData.elink,
-      //   spoc: getOneScHemeData.spoc,
-      //   isActive: getOneScHemeData.isActive,
-      //   videoUrl: getOneScHemeData.videoUrl,
-      //   thumbnail: getOneScHemeData.thumbnail,
-      // }
       formData.append('key', state.key);
       dispatch(addSchemeData(langId, formData));
       history.push(`/admin/scheme`);

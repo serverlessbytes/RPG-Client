@@ -75,9 +75,10 @@ const ImportSchemeBenefits = ({ importModal, handleCancel, modaltitle }) => {
             // inputRef?.current?.target?.value = null
             // inputRef.current.input.files = null
             // console.log(inputRef.current.input.files = null)
-            setInput('')
             handleCancel();
         }
+        setInput('');
+        setFileData('')
     };
 
     return (

@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import { Button } from '../../components/buttons/buttons';
+import { set } from 'js-cookie';
 
 
 const SchemeRating = () => {
@@ -49,7 +50,14 @@ const SchemeRating = () => {
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        if (e.target.name === "rating") {
+            setError({ ...error, rating: "" })
+        }
+        if (e.target.name === "comment") {
+            setError({ ...error, comment: "" })
+        }
     }
+
 
     const newScheme = data => {
         const newVal = ApiPost(`schemeRating/editSchemeRating`, data)
@@ -69,11 +77,11 @@ const SchemeRating = () => {
         let error = {};
         let flage = false;
         if (!data.rating) {
-            error.rating = "rating is required";
+            error.rating = "Rating required";
             flage = true;
         }
         if (!data.comment) {
-            error.comment = " comment is required";
+            error.comment = "Comment required";
             flage = true;
         }
         setError(error);
@@ -108,7 +116,9 @@ const SchemeRating = () => {
         }
     }
     const handleOk = () => {
-
+        if (validation()) {
+            return
+        }
         if (selectedSchemeRating) {
             let Data = {
                 id: selectedSchemeRating.id,
@@ -117,7 +127,7 @@ const SchemeRating = () => {
                 isActive: true,
                 isDeleted: false,
             }
-            const [error, setError] = useState({});
+
             dispatch(editSchemeRating(Data))
             setIsModalVisible(false)
         }
@@ -125,6 +135,7 @@ const SchemeRating = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false)
+        setError('')
     }
 
 
@@ -241,6 +252,7 @@ const SchemeRating = () => {
                             <Input
                                 placeholder="Enter Rating"
                                 name="rating"
+                                type="number"
                                 value={data.rating}
                                 onChange={(e) => handleChange(e)}
                             />

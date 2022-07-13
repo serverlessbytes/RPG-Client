@@ -55,21 +55,21 @@ const CourseCategory = () => {
     useEffect(() => {
         if (postcategorydata && postcategorydata.status === 200) {
             dispatch(postCategorySuccess(null))
-            toast.success("Category add successful");
+            toast.success("Category added");
         }
     }, [postcategorydata])
 
     useEffect(() => {
         if (postcategoryError) {
             dispatch(postCategoryDataErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [postcategoryError])
 
     useEffect(() => {
         if (editcategoryData && editcategoryData.status === 200) {
             dispatch(editCategorySuccess(null))
-            toast.success("Category updated successful");
+            toast.success("Category updated ");
             //toastAssetsAdd(true)
             //onHide()
         }
@@ -82,7 +82,7 @@ const CourseCategory = () => {
     useEffect(() => {
         if (editCategoryError) {
             dispatch(editcategoryErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [editCategoryError])
 
@@ -90,14 +90,14 @@ const CourseCategory = () => {
         if (importCourseCategory && importCourseCategory.status === 200) {
             toast.success("Category imported");
         } else if (importCourseCategory && importCourseCategory.status !== 200) {
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [importCourseCategory])
 
     useEffect(() => {
         if (importCourseCategoryError) { //
             dispatch(importCourseCategoryInBulkErr(null))
-            toast.error("Something wrong");
+            toast.error("Somthing went wrong");
         }
     }, [importCourseCategoryError])
 
@@ -139,7 +139,7 @@ const CourseCategory = () => {
             // dispatch(editCategoryData(dataForDelete))
             const deleteCourseCategory = await newCourseCategory(dataForDelete)
             if (deleteCourseCategory.status === 200) {
-                toast.success("Category deleted successful")
+                toast.success("Category deleted")
             }
         }
     }
@@ -163,7 +163,7 @@ const CourseCategory = () => {
         let flag = false;
 
         if (!data.name) {
-            error.name = "Benefit Type is required";
+            error.name = "Benefit type is required";
             flag = true;
         }
         setError(error);
@@ -296,7 +296,7 @@ const CourseCategory = () => {
                 buttons={[
                     <div key="1" className="page-header-actions">
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={showModal}>
-                            Add Category
+                            Add category
                         </Button>
                         <Button className="btn-signin ml-10" type="primary" size="medium" onClick={importCategory}>
                             Import
@@ -339,15 +339,15 @@ const CourseCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Course Category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
+            <Modal title="Course category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
 
                 okText={nameTog ? "Edit" : "Add"}
             >
                 <Form name="login" form={form} layout="vertical">
-                    <label htmlFor="name">Type of Category</label>
+                    <label htmlFor="name">Type of category</label>
                     <Form.Item name="name" className='mb-0'>
                         <Input
-                            placeholder="Type of Category"
+                            placeholder="Type of category"
                             name="name"
                         />
                     </Form.Item>
@@ -368,7 +368,7 @@ const CourseCategory = () => {
             {< ImportCourseCategory
                 importModal={importModal}
                 handleCancel={() => setImportModal(false)}
-                modaltitle="Import Course Category" />}
+                modaltitle="Import course category" />}
         </>
     )
 }

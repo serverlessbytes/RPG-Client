@@ -55,8 +55,8 @@ const AddCourses = () => {
   const getSwayamCourseData = useSelector(state => state.category.getSwayamCourseModuleData);
   const addSwayamCourseData = useSelector(state => state.category.addSwayamCourseData);
   const languageData = useSelector(state => state.language.getLanguageData);
-
-
+  const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
+  const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData); //
 
   const [state, setState] = useState({
     key: '',
@@ -296,7 +296,7 @@ const AddCourses = () => {
       error.jobCategoryIds = 'Job category is required';
       flage = true;
     }
-    if (!state.certification) {
+    if (state.certification === "") {
       error.certification = 'Certification is required';
       flage = true;
     }
@@ -368,7 +368,6 @@ const AddCourses = () => {
       return;
     }
     let formData = new FormData();
-    formData.append('key', editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),);
     formData.append('name', state.name);
     formData.append('detail', state.detail.toString('markdown'));
     formData.append('duration', moment(state.duration).format('HH:mm:ss'));
@@ -382,7 +381,13 @@ const AddCourses = () => {
     formData.append('medical_superintendent', state.medical_superintendent);
     formData.append('hospital_expenses_estimation_certificate', state.hospital_expenses_estimation_certificate);
     formData.append('thumbnail', state.thumbnail);
-    dispatch(addSwayamCourse(formData, addSwayamCourse));
+    if (langId) {
+      formData.append('key', state.key);
+      dispatch(addSwayamCourse(langId, formData));
+    } else {
+      formData.append('key', editOneSwayamCourseData?.data?.data.key ? editOneSwayamCourseData?.data?.data.key : uuid(),);
+      dispatch(addSwayamCourse(langId, formData));
+    }
   };
   useEffect(() => {
     if (addSwayamCourseData?.status === 200) {
@@ -477,7 +482,6 @@ const AddCourses = () => {
     dispatch(addSwayamCourseModule(newData));
     history.push('/admin/courses')
   };
-
   const onModuleEdit = () => {
     if (moduleValidation()) {
       return;
@@ -516,19 +520,11 @@ const AddCourses = () => {
     setModuleState(deleteModulData);
     setSelectKey(selectKey - 1);
   };
-  useEffect(() => {
-    console.log("moduleState.key", moduleState.key);
-  }, [moduleState.key])
-
   const handalCancle = () => {
     history.push('/admin/courses')
   }
 
   const { TabPane } = Tabs;
-  useEffect(() => {
-    console.log("selectKey", selectKey);
-  }, [selectKey])
-
 
   let moduleCallback = (key) => {
     setSelectKey(key);
@@ -538,10 +534,23 @@ const AddCourses = () => {
     setDefaultSelect(key);
   };
 
+  useEffect(() => {
+    console.log("courseModuleData?.data?.isDeleted", courseModuleData);
+    if (courseModuleData?.status === 200) {
+      { courseModuleData?.data?.isDeleted ? toast.success("Course module deleted") : toast.success("Course module updated") }
+    }
+  }, [courseModuleData])
+
+  useEffect(() => {
+    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
+      toast.success("Swayam course modules added");
+      dispatch(addSwayamCourseModuleSuccess(null));
+    }
+  }, [addSwayamCourseModuleData]);
   return (
     <>
       <PageHeader ghost
-        title={id ? "Edit swayam courses" : "Add swayam courses"} />
+        title={id ? "Edit swayam course" : "Add swayam course"} />
       <Main>
         <Cards headless>
           <Tabs activeKey={defaultSelect} onChange={callback}>
@@ -606,7 +615,8 @@ const AddCourses = () => {
                 </Col>
 
                 <Col lg={11} md={11} sm={24} xs={24} className="multiselect">
-                  <Form.Item label="Job category">
+                  <label htmlFor="name">Job category</label>
+                  <Form.Item>
                     <Select
                       size="large"
                       mode="multiple"
@@ -845,7 +855,7 @@ const AddCourses = () => {
                           </Form.Item>
                         </Col>
                         <Col lg={24}>
-                          {id && (
+                          {item.moduleId ? (
                             <Button
                               className="btn-signin ml-10"
                               onClick={() => onModuleEdit()}
@@ -854,7 +864,7 @@ const AddCourses = () => {
                             >
                               Edit
                             </Button>
-                          )}
+                          ) : ""}
                           <Button
                             className="btn-signin ml-10"
                             type="danger"

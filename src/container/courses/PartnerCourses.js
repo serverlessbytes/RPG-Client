@@ -67,20 +67,20 @@ const PartnerCourses = () => {
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
   const addPartnerCourseModulData = useSelector(state => state.category.addPartnerCourseInBulkData)
-
+  const addPartnerCourseModulError = useSelector(state => state.category.addPartnerCourseInBulkError)
 
 
   useEffect(() => {
     if (data.length && exportTog) {
       CSVLinkRef?.current?.link.click(); //
-      toast.success('Partner course data exported successfully');
+      toast.success('Partner course data exported');
     } else if (exportTog) {
       toast.success('No Partner course data for export');
     }
   }, [data]);
 
   // useEffect(() => {
-  //   console.log("courseData", courseData)
+
   //   if (courseData?.data?.data) {
   //     courseData?.data?.data.map((item,i) => {
   //       let x = Math.floor((Math.random() * 5) + 1);
@@ -90,7 +90,7 @@ const PartnerCourses = () => {
   //         "courseId": item.id
   //       }
   //       ApiPost('courseRating/addCourseRating',data).then((res) => {
-  //         console.log('index', i)
+  //       
   //       })
   //     })
   //   }
@@ -98,7 +98,7 @@ const PartnerCourses = () => {
 
   useEffect(() => {
     if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
-      toast.success("Add PartnerCourse Import uccessful")
+      toast.success("Partner course imported")
       dispatch(addPartnerCourseInBulkSuccess(null))
     }
   }, [addPartnerCourseModulData])
@@ -113,9 +113,16 @@ const PartnerCourses = () => {
   useEffect(() => {
     if (postPartnerCourseData && postPartnerCourseData.status === 200) {
       dispatch(addPartnerCourseSuccess(null));
-      toast.success('Partner Course Add successful');
+      toast.success('Partner course added');
     }
   }, [postPartnerCourseData]);
+
+  useEffect(() => {
+    if (addPartnerCourseModulError) {
+      toast.error('Somthing went wrong');
+    }
+  }, [addPartnerCourseModulError])
+
 
   useEffect(() => {
     if (postPartnerCourseDataerr) {
@@ -127,10 +134,10 @@ const PartnerCourses = () => {
   useEffect(() => {
     if (editPartnerCourseData && editPartnerCourseData.data.isDeleted === false) {
       dispatch(editPartnerCourseSuccess(null));
-      toast.success('Partner Course Update successful');
+      toast.success('Partner course updated');
     } else if (editPartnerCourseData && editPartnerCourseData.data.isDeleted === true) {
       dispatch(editPartnerCourseSuccess(null));
-      toast.success('Partner Course Delete successful');
+      toast.success('Partner course deleted');
     }
   }, [editPartnerCourseData]);
 
@@ -230,7 +237,6 @@ const PartnerCourses = () => {
   ];
   useEffect(() => {
     if (allCategortData?.data?.data) {
-      //set a state for export excel
       setData(allCategortData?.data?.data);
     }
   }, [allCategortData]);
@@ -308,7 +314,6 @@ const PartnerCourses = () => {
   const activePartnerCourses = dt => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
-        console.log();
         if (res.status === 200) {
           dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status, "", langIds.hindi, langIds.marathi));
         }
@@ -356,7 +361,7 @@ const PartnerCourses = () => {
       // dispatch(editPartnerCoursefilter(activedata));
       const restorePartnerCourses = await activePartnerCourses(activedata);
       if (restorePartnerCourses.status === 200) {
-        toast.success("PartnerCourse active successful")
+        toast.success("Partner course active")
       }
     }
   };
@@ -378,6 +383,7 @@ const PartnerCourses = () => {
             CourseName: (
               <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
+            CourseName: item.name,
             CourseCategory: item.courseCategory?.name,
             courseRatings: (
               <StarRatings
@@ -468,28 +474,28 @@ const PartnerCourses = () => {
 
   const partnerCourseTableColumns = [
     {
-      title: 'Course Name',
+      title: 'Course name',
       dataIndex: 'CourseName',
-      // sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
-      sorter: (a, b) => a.CourseName.length - b.CourseName.length,
+      sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
+      // sorter: (a, b) => a.CourseName.length - b.CourseName.length,
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Course Category',
+      title: 'Course category',
       dataIndex: 'CourseCategory',
       sorter: (a, b) => a.CourseCategory.localeCompare(b.CourseCategory),
       sortDirections: ['descend', 'ascend'],
     },
     {
-      title: 'Course Ratings',
+      title: 'Course ratings',
       dataIndex: 'courseRatings',
     },
     {
-      title: 'Course Type',
+      title: 'Course type',
       dataIndex: 'CourseType',
     },
     {
-      title: 'Select Language',
+      title: 'Select language',
       dataIndex: 'selectLanguage',
       width: '90px',
     },
@@ -506,11 +512,11 @@ const PartnerCourses = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Export Courses',
+          label: 'Export courses',
           key: 'exportCourses',
         },
         {
-          label: 'Add Courses',
+          label: 'Add courses',
           key: 'addCourses',
         },
         {
@@ -584,13 +590,13 @@ const PartnerCourses = () => {
               <Row gutter={30}>
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
-                    <Form.Item label="Course Category">
+                    <Form.Item label="Course category">
                       <Select
                         size="large"
-                        className="sDash_fullwidth-select"
+                        className={state.category ? 'sDash_fullwidth-select' : 'select-option-typ-placeholder'}
                         name="category"
                         value={state.category}
-                        placeholder="Select Category"
+                        placeholder="Select category"
                         onChange={e => onChangehandle(e, 'category')}
                       >
                         <Option value="">Select Category</Option>
@@ -603,7 +609,7 @@ const PartnerCourses = () => {
                 <Col md={6} xs={24} className="mb-25">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Search">
-                      <Input placeholder="search" value={state.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
+                      <Input placeholder="Search" value={state.search} name='search' onChange={e => onChangehandle(e.target.value, 'search')} />
                     </Form.Item>
                   </Form>
                 </Col>

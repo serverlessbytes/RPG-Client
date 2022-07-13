@@ -94,19 +94,19 @@ const SwayamCourses = () => {
     { label: 'viewCount', key: 'viewCount' },
   ];
 
-  useEffect(() => {
-    console.log("courseModuleData?.data?.isDeleted", courseModuleData);
-    if (courseModuleData?.status === 200) {
-      { courseModuleData?.data?.isDeleted ? toast.success("course module deleted") : toast.success("course module Updated") }
-    }
-  }, [courseModuleData])
-
   // useEffect(() => {
-  //   if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
-  //     toast.success("Swayam course modules add successful");
-  //     dispatch(addSwayamCourseModuleSuccess(null));
+  //   console.log("courseModuleData?.data?.isDeleted", courseModuleData);
+  //   if (courseModuleData?.status === 200) {
+  //     { courseModuleData?.data?.isDeleted ? toast.success("Course module deleted") : toast.success("Course module updated") }
   //   }
-  // }, [addSwayamCourseModuleData]);
+  // }, [courseModuleData])
+
+  useEffect(() => {
+    if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
+      toast.success("Swayam course modules added");
+      dispatch(addSwayamCourseModuleSuccess(null));
+    }
+  }, [addSwayamCourseModuleData]);
 
   useEffect(() => {
     if (addSwayamCourseModuleError) {
@@ -449,6 +449,7 @@ const SwayamCourses = () => {
               </span>
             ),
             CourseCategory: item.courseCategory?.name,
+            CourseName: item.name,
             courseRatings: (
               <StarRatings
                 rating={avg ? avg : 0}
@@ -458,7 +459,6 @@ const SwayamCourses = () => {
                 starDimension="13px"
               />
             ),
-            // CourseName: item.name,
             CourseDuration: item.duration,
             Certification: item.certificate ? 'Yes' : 'No',
             bannerSelected: (
@@ -538,12 +538,12 @@ const SwayamCourses = () => {
       );
     }
   }, [courseData]);
-
   const swayamCourseTableColumns = [
     {
       title: 'Course name',
       dataIndex: 'CourseName',
-      sorter: (a, b) => a.SchemeCategory?.length - b.SchemeCategory?.length,
+      sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
+      // sorter: (a, b) => a.SchemeCategory?.length - b.SchemeCategory?.length,
       sortDirections: ['descend', 'ascend'],
     },
     {

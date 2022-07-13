@@ -1,6 +1,6 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { importCourseCategory } from '../../redux/course/actionCreator';
 
@@ -9,10 +9,13 @@ const ImportCourseCategory = ({ importModal, handleCancel, modaltitle }) => {
   const [Error, setError] = useState();
   const [error, seterror] = useState({}); // for valadation
   const [FileData, setFileData] = useState();
+  const [input, setInput] = useState();
+
 
   const readUploadFile = e => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      setInput(e?.target?.value)
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -62,12 +65,12 @@ const ImportCourseCategory = ({ importModal, handleCancel, modaltitle }) => {
     if (validation()) {
       return;
     }
-    
     if (FileData) {
       dispatch(importCourseCategory(FileData));
       handleCancel();
     }
-    
+    setInput('');
+    setFileData('')
   };
 
   return (
@@ -78,13 +81,13 @@ const ImportCourseCategory = ({ importModal, handleCancel, modaltitle }) => {
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
-          onCancel={handleCancel}
+          onCancel={() => { setFileData(''); seterror(''); setInput(''); setError(''); handleCancel() }}
           width={'500px'}
         >
           <Row gutter={30}>
             <Col md={12} xs={24} className="mb-25">
               <Form.Item name="name">
-                <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
+                <Input placeholder="File upload" value={input} name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>

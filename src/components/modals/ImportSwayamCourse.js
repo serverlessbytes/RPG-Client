@@ -27,6 +27,10 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
   const [courseCategoryID, setCourseCategoryID] = useState('');
   const [jobCategoryID, setJobCategoryID] = useState();
+  useEffect(() => {
+    console.log("jobCategoryID", jobCategoryID);
+  }, [jobCategoryID])
+
 
   //  CATEGORY
   useEffect(() => {
@@ -99,7 +103,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
     //   error.courseCategoryID = 'CourseCategory is required';
     //   flage = true;
     // }
-    if (jobCategoryID.length == 0) {
+    console.log("jobCategoryID", jobCategoryID);
+    if (!jobCategoryID) {
       error.jobCategoryID = 'JobCategory is required';
       flage = true;
     }
@@ -132,25 +137,25 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
 
   return (
     <>
-      <Col md={16}>
+      <Col md={24}>
         <Modal
           type="primery"
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={'991px'}
+          width={'600px'}
         >
           <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} className="mb-25">
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
-            <Col md={12} xs={24} className="mb-25"></Col>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} className="mb-25"></Col>
+            <Col md={24} xs={24} className="mb-25">
               <Form layout="vertical">
                 {/* <Form.Item label="Course Category">
                   <Select
@@ -175,10 +180,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                     size="large"
                     className="sDash_fullwidth-select "
                     name="jobCategoryID"
-                    onChange={e => {
-                      // setJobCategoryID([...jobCategoryID, e]);
-                      setJobCategoryID(e);
-                    }}
+                    onChange={(e) => setJobCategoryID(e)}
+                    // setJobCategoryID([...jobCategoryID, e]);
                     placeholder="Select job Category"
                   >
                     <Option value="">Select job category</Option>

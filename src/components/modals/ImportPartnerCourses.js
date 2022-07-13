@@ -9,9 +9,7 @@ import { addPartnerCourseInBulk } from '../../redux/course/actionCreator';
 
 const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
   const { Option } = Select;
-
   const dispatch = useDispatch();
-
   const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
 
   const CourseCategoryFromRedux = useSelector(state => state.category.categoryData);
@@ -20,6 +18,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
   const [Error, setError] = useState();
   const [error, seterror] = useState(); // for valadation 
   const [FileData, setFileData] = useState();
+  const [input, setInput] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
   const [courseCategoryID, setCourseCategoryID] = useState('');
@@ -38,6 +37,7 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
   const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      setInput(e?.target?.value)
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -109,6 +109,8 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
       dispatch(addPartnerCourseInBulk(FileData));
       handleCancel();
     }
+    setInput('');
+    setFileData('')
     // if (FileData && courseCategoryID) {
     //   dispatch(addPartnerCourseInBulk(FileData));
     //   handleCancel();
@@ -117,24 +119,24 @@ const ImportPartnerCourse = ({ importModal, handleCancel, modaltitle }) => {
 
   return (
     <>
-      <Col md={16}>
+      <Col md={24}>
         <Modal
           type="primery"
           title={modaltitle}
           visible={importModal}
           onOk={handleOk}
-          onCancel={handleCancel}
-          width={'991px'}
+          onCancel={() => { setFileData(''); seterror(''); setInput(''); setError(''); handleCancel() }}
+          width={'600px'}
         >
           <Row gutter={30}>
-            <Col md={12} xs={24} className="mb-25">
+            <Col md={24} xs={24} className="mb-25">
               <Form.Item name="name">
-                <Input placeholder="File upload" name="name" accept="*" type="file" onChange={(e) => readUploadFile(e)} />
+                <Input placeholder="File upload" name="name" value={input} accept="*" type="file" onChange={(e) => readUploadFile(e)} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
                   error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
               </Form.Item>
             </Col>
-            <Col md={12} xs={24} className="mb-25"></Col>
+            <Col md={24} xs={24} className="mb-25"></Col>
             {/* <Col md={12} xs={24} className="mb-25">
               <Form layout="vertical">
                 <Form.Item label="Course Category">

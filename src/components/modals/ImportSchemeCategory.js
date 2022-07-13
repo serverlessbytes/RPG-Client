@@ -70,9 +70,10 @@ const ImportSchemeCategory = ({ importModal, handleCancel, modaltitle }) => {
     if (FileData) {
       dispatch(addSchemeCategoryInBulk(FileData));
       setFileData(null)
-      setInput('')
       handleCancel();
     }
+    setInput('');
+    setFileData('')
   };
 
   return (

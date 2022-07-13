@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import { toast } from 'react-toastify';
 import { Button } from '../../components/buttons/buttons';
+import { number } from 'prop-types';
 
 
 const CourseRating = () => {
@@ -30,6 +31,7 @@ const CourseRating = () => {
         rating: "",
         comment: ""
     })
+    const [error, setError] = useState({})
 
     const CourseRatingData = useSelector((state) => state.category.CourseRatingData)
     const CourseRatingByIdData = useSelector((state) => state.category.CourseRatingByIdData)
@@ -38,10 +40,25 @@ const CourseRating = () => {
     useEffect(() => {
         if (editCategoryRatingData && editCategoryRatingData.status === 200) {
             dispatch(editCategoryRatingSuccess(null))
-            toast.success('CourseRating updated successful');
+            toast.success('Course rating updated');
         }
     }, [editCategoryRatingData])
 
+    const validation = () => {
+        let error = {};
+        let flage = false;
+        if (!data.rating.length) {
+            error.rating = "Rating required";
+            flage = true;
+        }
+        console.log("data.comment.length", data.comment.length);
+        if (!data.comment.length) {
+            error.comment = "Comment required";
+            flage = true;
+        }
+        setError(error);
+        return flage;
+    }
 
     useEffect(() => {
         dispatch(getCourseRatingData(per_Page, pageNumber))
@@ -73,7 +90,7 @@ const CourseRating = () => {
             }
             const deleteCourseRating = await newCourse(data);
             if (deleteCourseRating.status === 200) {
-                toast.success('CourseRating deleted successful');
+                toast.success('Course rating deleted');
             }
             // dispatch((editCategoryRating(data)))
         }
@@ -96,7 +113,9 @@ const CourseRating = () => {
     }
 
     const handleOk = () => {
-        setIsModalVisible(false)
+        if (validation()) {
+            return
+        }
         if (selectedCourseRating) {
             let Data = {
                 id: selectedCourseRating.id,
@@ -106,11 +125,18 @@ const CourseRating = () => {
                 isDeleted: false,
             }
             dispatch(editCategoryRating(Data))
+            setIsModalVisible(false)
         }
     }
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
+        if (e.target.name === "rating") {
+            setError({ ...error, rating: "" })
+        }
+        if (e.target.name === "comment") {
+            setError({ ...error, comment: "" })
+        }
     }
 
     useEffect(() => {
@@ -221,21 +247,24 @@ const CourseRating = () => {
                         <label htmlFor="rating">Rating</label>
                         <Form.Item>
                             <Input
-                                placeholder="Enter Rating"
+                                placeholder="Enter rating"
                                 name="rating"
+                                type="number"
                                 value={data.rating}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.rating && <span style={{ color: 'red' }}>{error.rating}</span>}
                         </Form.Item>
                         <label htmlFor="Comment">Comment</label>
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Comment"
+                                placeholder="Enter comment"
                                 name="comment"
                                 value={data.comment}
                                 onChange={(e) => handleChange(e)}
                             />
+                            {error.comment && <span style={{ color: 'red' }}>{error.comment}</span>}
                         </Form.Item>
                     </Form>
                 </Modal>}

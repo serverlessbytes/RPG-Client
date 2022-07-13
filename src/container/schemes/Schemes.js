@@ -542,6 +542,7 @@ const Schemes = () => {
             {item?.name}
           </span>
         ),
+        SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         //  schemeRatings: item.schemeRatings.map(item => item.rating),
@@ -680,7 +681,8 @@ const Schemes = () => {
     {
       title: 'Scheme name',
       dataIndex: 'SchemeName',
-      sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
+      // sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
+      sorter: (a, b) => a.SchemeName.localeCompare(b.SchemeName),
       sortDirections: ['descend', 'ascend'],
     },
     {

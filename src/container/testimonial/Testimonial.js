@@ -1,11 +1,11 @@
-import {Table } from 'antd';
+import { Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button } from '../../components/buttons/buttons'
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers'
-import {getTestimonial } from '../../redux/testimonial/actionCreator';
+import { getTestimonial } from '../../redux/testimonial/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
