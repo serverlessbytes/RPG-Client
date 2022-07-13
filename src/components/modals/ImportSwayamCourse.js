@@ -13,25 +13,16 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
 
   const dispatch = useDispatch();
 
-  const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
-
   const CourseCategoryFromRedux = useSelector(state => state.category.categoryData);
   const jobCategoryData = useSelector(state => state.job.jobCatogeryData);
-  const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
   const [error, seterror] = useState();
   const [fileData, setFileData] = useState();
 
-  const [courseCategoryArray, setCourseCategoryArray] = useState([]);
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
   const [jobCategoryID, setJobCategoryID] = useState();
-  useEffect(() => {
-    console.log("jobCategoryID", jobCategoryID);
-  }, [jobCategoryID])
 
-
-  //  CATEGORY
   useEffect(() => {
     if (CourseCategoryFromRedux && 'data' in CourseCategoryFromRedux) {
       CourseCategoryFromRedux.data.forEach(element => {

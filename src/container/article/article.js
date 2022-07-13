@@ -21,8 +21,8 @@ const article = () => {
     const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [articleTableData, setarticleTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(20); // forpagination
+    const [articleTableData, setarticleTableData] = useState([]);
+    const [perPage, setPerPage] = useState(20);
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedArticle, setSelectedArticle] = useState();
     const [nameTog, setNameTog] = useState(false)
@@ -31,15 +31,10 @@ const article = () => {
         imageUrl: "",
         videoUrl: "",
         body: "",
-        priotity:"",
+        priotity: "",
     });
 
-    useEffect(()=>{
-        console.log('articledata', articledata)
-    },[articledata])
-
     const [formErrors, setFormErrors] = useState();
-    const [priotity, setPriority] = useState(false);
 
     const getArticlesData = useSelector((state) => state.articles.getArticlesData);
     const getArticleByIdData = useSelector((state) => state.articles.getArticleByIdData);
@@ -139,7 +134,6 @@ const article = () => {
                 body: getArticleByIdData.data.body,
             })
         }
-        //dispatch(GetBanner());
     }, [getArticleByIdData])
 
     const showModal = () => {
@@ -159,12 +153,7 @@ const article = () => {
             }
             dispatch(addArticle(Data));
             setIsModalVisible(false)
-            // setArticleData({
-            //     title: "",
-            //     imageUrl: ""
-            // })
             handleCancel();
-            setPriority(false);
         }
         else {
             if (validation()) {
@@ -176,7 +165,7 @@ const article = () => {
                 imageUrl: articledata.imageUrl,
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
-                priotity : articledata.priotity,
+                priotity: articledata.priotity,
                 isActive: true,
                 isDeleted: false,
             }
@@ -205,7 +194,6 @@ const article = () => {
         dispatch(getArticleById(dataForEdit.id))
         setIsModalVisible(true)
         setNameTog(true)
-        setPriority(true);
     }
 
     const newArticle = userForDelete => {
@@ -235,30 +223,20 @@ const article = () => {
                 isActive: false,
                 isDeleted: true,
             }
-            // dispatch(editArticles(userForDelete))
 
             const deletebanner = await newArticle(userForDelete)
             if (deletebanner.status === 200) {
                 toast.success("Article deleted")
-            }else{
+            } else {
                 toast.error("Something went wrong")
             }
         }
     }
 
-    // const viewArticle = (id) => {
-    //     history.push(`/admin/article/articleview?id=${id}`)
-    // }
-
     useEffect(() => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
             setarticleTableData(getArticlesData && getArticlesData.data && getArticlesData.data.data.map((item, id) => {
                 return {
-                    // title: (
-                    //     <span className='For-Underline' onClick={() => viewArticle(item.id)}>
-                    //         {item.title}
-                    //     </span>
-                    // ),
                     priority: item.priority,
                     srno: id + 1,
                     title: item.title,
@@ -349,10 +327,8 @@ const article = () => {
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
-                                // rowSelection={rowSelection}
                                 dataSource={articleTableData}
                                 columns={articleTableColumns}
-                                // pagination={false}
                                 pagination={{
                                     defaultPageSize: getArticlesData?.data.per_page,
                                     total: getArticlesData?.data.page_count,
@@ -424,29 +400,9 @@ const article = () => {
                             />
                             {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
-
-                        {/* {
-                            priotity ?
-                                <>
-                                    <label htmlFor="priority">Priority</label>
-                                    <Form.Item>
-                                        <Input
-                                            // type="text"
-                                            type="number"
-                                            placeholder="Enter priority"
-                                            name="priority"
-                                            value={articledata.priotity}
-                                            onChange={(e) => handleChange(e, "priority")}
-                                            className='experience-input'
-                                            id='priority'
-                                        />
-                                        {formErrors?.priority && <span style={{ color: "red" }}>{formErrors.priority}</span>}
-                                    </Form.Item>
-                                </> : ""
-                        } */}
-
                     </Form>
-                </Modal>}
+                </Modal>
+            }
         </>
     )
 }

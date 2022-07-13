@@ -61,17 +61,16 @@ const Schemes = () => {
     marathi: "",
   })
 
-  // const [state, setState] = useState({ visible: false, modalType: 'primary', colorModal: false });
   const languageData = useSelector(state => state.language.getLanguageData);
   const users = useSelector(state => state.scheme.getAllSchemeData);
   const getBenefitData = useSelector(state => state.beneFit.getBenefitData);
   const schemeData = useSelector(state => state.scheme.schemecatogeryData);
   const getOneScheme = useSelector((state) => state.scheme.getOneSchemeData);
-  const allschemeData = useSelector(state => state.scheme.allSchemeData); // export 
-  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData); // export addSchemeData 
-  const editSchemedata = useSelector((state) => state.scheme.editSchemeData); // export  editSchemeData for toastify
-  const editSchemeError = useSelector((state) => state.scheme.editSchemeErr); // export  editSchemeData for toastify
-  const addSchemeError = useSelector((state) => state.scheme.addSchemeErr); // export  editSchemeData for toastifycons
+  const allschemeData = useSelector(state => state.scheme.allSchemeData);
+  const schemeDataAdd = useSelector(state => state.scheme.addSchemeData);
+  const editSchemedata = useSelector((state) => state.scheme.editSchemeData);
+  const editSchemeError = useSelector((state) => state.scheme.editSchemeErr);
+  const addSchemeError = useSelector((state) => state.scheme.addSchemeErr);
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
   const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
@@ -83,30 +82,10 @@ const Schemes = () => {
       setSchemeCategory({ ...schemeCategory, category: e });
     } else if (name === 'benefits') {
       setSchemeCategory({ ...schemeCategory, benefit: e });
-    } else if (name === "search") [
+    } else if (name === "search") {
       setSchemeCategory({ ...schemeCategory, search: e })
-    ]
+    }
   };
-  // useEffect(() => {
-  //   dispatch(upadteBanner())
-  // }, [])
-
-  // useEffect(() => {
-  //   if (users?.data) {
-  //     users?.data.map((item,i) => {
-  //       let x = Math.floor((Math.random() * 5) + 1);
-
-  //       let data = {
-  //         "comment": "test rating",
-  //         "rating": x,
-  //         "schemeId": item.id
-  //       }
-  //       ApiPost('schemeRating/addSchemeRating',data).then((res) => {
-  //         console.log('index', i)
-  //       })
-  //     })
-  //   }
-  // }, [users]);
 
   useEffect(() => {
     dispatch(getSchemecategory());
@@ -122,7 +101,6 @@ const Schemes = () => {
   useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
       dispatch(editSchemeSuccess(null))
-      //dispatch(getJobsFilterForMainSuccess(null))
       toast.success("Scheme updated");
     }
   }, [editSchemedata])
@@ -189,7 +167,6 @@ const Schemes = () => {
           setLanguageIds(languageId);
           setId(id)
           setKey(key)
-          // history.push(`${path}/addcourses?langId=${languageId}?key=${key}`)
         }
       })
   }
@@ -265,7 +242,7 @@ const Schemes = () => {
   ];
 
   useEffect(() => {
-    if (users?.data) { //set a state for export excel
+    if (users?.data) {
       setState(users.data.map((item) => {
         return {
           ...item,
@@ -328,7 +305,7 @@ const Schemes = () => {
 
   useEffect(() => {
     return (() => {
-      dispatch(getAllSchemesSuccess(null)) //FOR CLEAR A STATE OF A EXPORT
+      dispatch(getAllSchemesSuccess(null))
     })
   }, [])
 
@@ -426,11 +403,15 @@ const Schemes = () => {
     formData.append('application_process', userForactive.application_process);
     formData.append('medical_superintendent', userForactive.medical_superintendent);
     formData.append('hospital_expenses_estimation_certificate', userForactive.hospital_expenses_estimation_certificate);
-
+    let data = {
+      isActive: true,
+      isDeleted: false,
+      isPublished: true,
+      isApproved: true,
+    }
     const restoreSchemeData = await activeSchemeData(formData)
     if (restoreSchemeData.status === 200) {
       toast.success("Scheme active")
-      // dispatch(getSchemeData(perPage, pageNumber, status, "", "", "", langIds.hindi, langIds.marathi))
     }
   }
 
@@ -444,8 +425,6 @@ const Schemes = () => {
   };
 
   const viewSchemesdata = (key) => {
-    // dispatch(getOneSchemeData(key))
-    // setViewModal(true)
     history.push(`/admin/scheme/view?key=${key}`)
   }
 
@@ -535,13 +514,6 @@ const Schemes = () => {
       .catch((err) => console.log("Error", err))
   }
 
-  const onChange = (checked) => {
-
-  };
-  // const onApprovedBanner = (id, isAp) => {
-  //   dispatch(upadteBanner({ id: id, bannerSelected: isAp }))
-  // }
-
   useEffect(() => {
     setSchemeTableData(users?.data.map((item, index) => {
       let schemeratings = item.schemeRatings.map(item => item.rating)
@@ -561,7 +533,6 @@ const Schemes = () => {
         SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
-        //  schemeRatings: item.schemeRatings.map(item => item.rating),
         schemeRatings: (
           <StarRatings
             rating={avg ? avg : 0}
@@ -582,10 +553,7 @@ const Schemes = () => {
         ),
         selectLanguage: (
           <div className="">
-            {/* <div className="active-schemes-table"> */}
             <div className="languageBtn">
-              {/* <div className="table-actions"> */}
-
               <>
                 <Button size="small" type={item.hindi ? "success" : "primary"} shape='round'
                   onClick={() => {
@@ -593,7 +561,6 @@ const Schemes = () => {
                     getOneSchemeDetailByKey(langIds?.hindi, item?.key, item?.id)
                   }}
                 >
-                  {/* <FeatherIcon icon="edit" size={16} /> */}
                   HN
                 </Button>
 
@@ -602,18 +569,8 @@ const Schemes = () => {
                     getOneSchemeDetailByKey(langIds?.marathi, item?.key, item?.id)
                   }}
                 >
-                  {/* <FeatherIcon icon="edit" size={16} /> */}
                   MT
                 </Button>
-
-                {/* <Button
-                    className="btn-icon"
-                    type="success"
-                    onClick={() => viewSwayamCoursedata(item.id)}
-                    shape="circle"
-                  >
-                    <FeatherIcon icon="eye" size={16} />
-                  </Button> */}
               </>
             </div>
           </div>
@@ -623,23 +580,7 @@ const Schemes = () => {
           }>
             <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
           </div>
-          // {
-          //         <div onClick={() => onBannerSelect(item.id, item.key, item.bannerSelected)}>
-          //           <Switch checked={item.bannerSelected} disabled={status === 'active' ? false : true}></Switch>
-          //         </div>
-          //       }
         ),
-
-
-        //     status === "active" ?  <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-        //     <Switch checked={item.isApproved}></Switch>
-        //   </div> :
-        //    <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-        //  </div>
-        //   } */}
-        //     <div onClick={() => onApproved(item.id, item.isApproved, item.key)}>
-        //       <Switch checked={item.isApproved} disabled={status === 'active' ? false : true}></Switch>
-        //     </div>
         action: (
           <div className="active-schemes-table">
             <div className="table-actions">
@@ -665,9 +606,6 @@ const Schemes = () => {
                     >
                       <FeatherIcon icon="trash-2" size={16} />
                     </Button>
-                    {/* <Button className="btn-icon" to="#" type="success" onClick={() => viewSchemesdata(item.key)} shape="circle">
-                      <FeatherIcon icon="eye" size={16} />
-                    </Button> */}
                   </> : <Button
                     className="btn-icon"
                     type="warning"
@@ -683,8 +621,6 @@ const Schemes = () => {
                   <FeatherIcon icon="star" size={16} />
                 </Button>
               )}
-
-
             </div>
           </div>
         ),
@@ -697,14 +633,12 @@ const Schemes = () => {
     {
       title: 'Scheme name',
       dataIndex: 'SchemeName',
-      // sorter: (a, b) => a.SchemeName?.length - b.SchemeName?.length,
       sorter: (a, b) => a.SchemeName.localeCompare(b.SchemeName),
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Type of benefits',
       dataIndex: 'TypeOfBenefits',
-      // sorter: (a, b) => a.SchemeName.length - b.SchemeName.length,
       sorter: (a, b) => a.TypeOfBenefits.localeCompare(b.TypeOfBenefits),
       sortDirections: ['descend', 'ascend'],
     },
@@ -717,8 +651,6 @@ const Schemes = () => {
     {
       title: 'Scheme ratings',
       dataIndex: 'schemeRatings',
-      // sorter: (a, b) => a.avg - b.avg,
-      // sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Web site',
@@ -739,11 +671,6 @@ const Schemes = () => {
       title: 'Select banner',
       dataIndex: 'chooseBanner',
     },
-
-    // {
-    //   title: 'Approved',
-    //   dataIndex: 'approved',
-    // },
     {
       title: 'Actions',
       dataIndex: 'action',
@@ -752,7 +679,7 @@ const Schemes = () => {
   ];
   const rowSelection = {
     getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      disabled: record.name === 'Disabled User',
       name: record.name,
     }),
   };
@@ -762,28 +689,6 @@ const Schemes = () => {
         ghost
         title="Schemes"
         buttons={[
-          //   <div className="page-header-actions">
-          //     <Button size="small" onClick={() => onExportschemes()} type="info">
-          //       Export Schemes
-          //     </Button>
-          //     <Button size="small" onClick={() => onAllExportSchemes()} type="info">
-          //       Export All Scheme
-          //     </Button>
-          //     <CSVLink data={state} ref={CSVLinkRef} headers={header} filename="Scheme.csv" style={{ opacity: 0 }}></CSVLink>
-          //     {/* <Button size="small" type="light">
-          //                     Import Schemes
-          //                 </Button> */}
-          //     <Button onClick={reDirect} size="small" type="primary">
-          //       Add Scheme
-          //     </Button>
-          //     <Button onClick={() => setImportModal(true)} size="small" type="primary">
-          //       Import
-          //     </Button>
-
-          //     {/* <Button size="small" type="warning">
-          //                     Deactivate All Schemes
-          //                 </Button> */}
-          //   </div>,
           <div key="1" className="page-header-actions">
             <Dropdown overlay={menu} trigger='click'>
               <a onClick={e => e.preventDefault()}>
@@ -829,7 +734,7 @@ const Schemes = () => {
                         placeholder="Select scheme category"
                       >
                         <Option value="">Select scheme category</Option>
-                        {schemeData && schemeData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
+                        {schemeData && schemeData.data?.map((items, i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
@@ -876,96 +781,50 @@ const Schemes = () => {
                   </ListButtonSizeWrapper>
                 </Col>
               </Row>
-              {/* <Row className="mb-25">
-                                <Button size="small" type={type === "Active" ? "primary" : "light"} onClick={() => setType("Active")}>
-                                    Active Schemes
-                                </Button>
-                                <Button size="small" type={type === "Inactive" ? "primary" : "light"} onClick={() => setType("Inactive")}>
-                                    Inactive Schemes
-                                </Button>
-                            </Row>
-                             <ActiveSchemesTable type ={type}/> */}
-
-
               <Tabs onChange={callback}>
                 <TabPane tab="Active schemes" key="active">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive pb-30">
-
-                      {/* --- search bar --- */}
-                      {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                       <Table
                         rowSelection={rowSelection}
                         dataSource={schemeTableData}
                         columns={schemeTableColumns}
-                        // pagination={false}
                         pagination={{
                           defaultPageSize: users?.per_page,
                           total: users?.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                           },
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
-                  {/* <ProjectPagination>
-                    <Pagination
-                      onChange={() => { }}
-                      showSizeChanger
-                      onShowSizeChange={() => { }}
-                      pageSize={10}
-                      defaultCurrent={1}
-                      total={10}
-                    />
-                  </ProjectPagination> */}
                 </TabPane>
                 <TabPane tab="Inactive schemes" key="inactive">
                   <UserTableStyleWrapper>
                     <TableWrapper className="table-responsive">
-                      {/* --- search bar --- */}
-                      {/* <Form name="sDash_select" layout="vertical">
-                        <Form.Item name="search" label="">
-                          <Input placeholder="search" style={{ width: 200 }} />
-                        </Form.Item>
-                      </Form> */}
-
                       <Table
                         rowSelection={rowSelection}
                         dataSource={schemeTableData}
-                        // columns={usersTableColumns.filter(item => item.title !== 'Actions')}
                         columns={schemeTableColumns}
                         pagination={{
                           defaultPageSize: users?.per_page,
                           total: users?.page_count,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                           onChange: (page, pageSize) => {
                             setPageNumber(page);
                             setPerPage(pageSize);
                           },
-                          // defaultPageSize: 5,
-                          // total: usersTableData.length,
-                          // showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
                       />
                     </TableWrapper>
                   </UserTableStyleWrapper>
                 </TabPane>
               </Tabs>
-            </Col>
-          </Row>
-        </Cards>
-      </Main>
+            </Col >
+          </Row >
+        </Cards >
+      </Main >
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}
@@ -975,16 +834,12 @@ const Schemes = () => {
             <>
               <Button size="small" type="primary" onClick={() => {
                 languageHandalCancle()
-                // getOneCourseDetailByKey(langIds?.hindi, item?.key)
               }}>
-                {/* <FeatherIcon icon="edit" size={16} /> */}
                 No
               </Button>
               <Button size="small" type="primary" onClick={() => {
-                // getOneCourseDetailByKey(langIds?.marathi, item?.key)
                 languageHandalOk(languageIds, key)
               }} >
-                {/* <FeatherIcon icon="edit" size={16} /> */}
                 Yes
               </Button>
             </>}

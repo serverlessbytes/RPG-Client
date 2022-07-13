@@ -1,4 +1,4 @@
-import { Checkbox, Col, Form, Input, Pagination, Radio, Row, Select, Space, Table, Tabs, TimePicker } from 'antd';
+import { Col, Form, Input, Radio, Row, Select, Space, Tabs, TimePicker } from 'antd';
 import React, { useEffect, useState } from 'react';
 import RichTextEditor from 'react-rte';
 import { Button } from '../../components/buttons/buttons';
@@ -25,29 +25,25 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import firebaseAuth from '../../redux/firebase/auth/reducers';
 
 const AddCourses = () => {
 
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
   const langId = searchParams.get('langid');
-  const key = searchParams.get('key');
   const history = useHistory();
   const { Option } = Select;
   const { TextArea } = Input;
   const dispatch = useDispatch();
 
-  const {
-    addSwayamPartnerCourseSuccess,
-    addSwayamPartnerCourseErr,
-  } = actions;
+  const { addSwayamPartnerCourseSuccess } = actions;
 
   const [error, setError] = useState({});
   const [swyamModuleId, setSwyamModuleId] = useState(true);
   const [selectKey, setSelectKey] = useState(1);
   const [moduleError, setModuleError] = useState([]);
   const [defaultSelect, setDefaultSelect] = useState('1');
+
   const categoryData = useSelector(state => state.category.categoryData);
   const jobCategoryData = useSelector(state => state.job.jobCatogeryData);
   const editOneSwayamCourseData = useSelector(state => state.category.editFilterData);
@@ -79,14 +75,7 @@ const AddCourses = () => {
     hindi: '',
     marathi: ''
   });
-  const [index, setIndex] = useState()
 
-  // useEffect(() => {
-  //   if (addSwayamCourseData.status === 200) {
-  //     console.log("addSwayamCourseData", addSwayamCourseData);
-
-  //   }
-  // }, [addSwayamCourseData])
   useEffect(() => {
     let temp = {
       hindi: '',
@@ -119,30 +108,9 @@ const AddCourses = () => {
   ]);
 
   useEffect(() => {
-    return (() => { dispatch(addSwayamPartnerCourseSuccess(null)) } //for clear a Modules
+    return (() => { dispatch(addSwayamPartnerCourseSuccess(null)) }
     )
   }, [])
-
-
-  useEffect(() => {
-    // if (addSwayamCourseModualData && addSwayamCourseModualData.status === 200) {
-    //   toast.success("Swayam Course Modules Add successful");
-    //   dispatch(addSwayamPartnerCourseSuccess(null))
-    // }
-    // else if(editSchemedata && editSchemedata.data && editSchemedata.data.isActive === true){
-    //   dispatch(editSchemeSuccess(null))
-    //   toast.success("Jobs Update successful");
-    // }
-    // if (addSwayamCourseData && 'data' in addSwayamCourseData)
-    //   setModuleState({ ...moduleState, course: addSwayamCourseData.data.id })
-  }, [addSwayamCourseData])
-
-  // useEffect(() => {
-  //   if (addSwayamCourseDataErr) {
-  //     dispatch(addSwayamPartnerCourseErr(null))
-  //     // toast.error("Something Wrong")
-  //   }
-  // }, [addSwayamCourseDataErr])
 
   useEffect(() => {
     if (getSwayamCourseData && getSwayamCourseData.data && id) {
@@ -166,7 +134,6 @@ const AddCourses = () => {
 
   useEffect(() => {
     if (userData && userData.data && userData.data.id && !id) {
-      // setModuleState([{...moduleState,createdByUser:userData.data.id,modifiedByUser:userData.data.id}])
       (moduleState[0].createdByUser = userData.data.id), (moduleState[0].modifiedByUser = userData.data.id);
     }
   }, [userData]);
@@ -212,13 +179,6 @@ const AddCourses = () => {
     dispatch(getJobcategory());
     dispatch(getUser());
   }, []);
-  // useEffect(() => {
-  //   if (addSwayamCourseData && addSwayamCourseData.data && addSwayamCourseData.data.id) {
-  //     setSwyamModuleId(false);
-  //     //toast.success("Swayam Course Add successful");
-  //     // setDefaultSelect('2');
-  //   }
-  // }, [addSwayamCourseData]);
 
   const onChange = (e, name) => {
     if (name === 'categoryId') {
@@ -349,10 +309,6 @@ const AddCourses = () => {
           error[`duration${i + 1}`] = 'Module duration required';
           flage = true;
         }
-        if (item.sequence === '') {
-          error[`sequence${i + 1}`] = 'Squence required';
-          flage = true;
-        }
         if (item.detail === '') {
           error[`detail${i + 1}`] = 'Module detail required';
           flage = true;
@@ -441,24 +397,21 @@ const AddCourses = () => {
   };
 
   const moduleChange = (e, i, name) => {
+    setModuleError({ ...moduleError, [`${name}${i + 1}`]: "" })
     let value = [...moduleState];
     if (name === 'name') {
       value[i].name = e.target.value;
       setModuleState(value);
-      setModuleError({ ...moduleError, name: "" })
     } else if (name === 'videoUrl') {
       value[i].videoUrl = e.target.value;
       setModuleState(value);
-      setModuleError({ ...moduleError, videoUrl: "" })
     } else if (name === 'duration') {
       value[i].duration = e;
       setModuleState(value);
-      setModuleError({ ...moduleError, duration: "" })
     }
     else if (name === 'detail') {
       value[i].detail = e.target.value;
       setModuleState(value);
-      setModuleError({ ...moduleError, detail: "" })
     }
   };
 
@@ -466,7 +419,7 @@ const AddCourses = () => {
     if (moduleValidation()) {
       return;
     }
-    const newData = moduleState.filter(item => !item.moduleId).map(item => {
+    const newData = moduleState.filter(item => !item.moduleId).map((item) => {
       return {
         key: item.key,
         name: item.name,
@@ -501,7 +454,6 @@ const AddCourses = () => {
   };
 
   const onRemoveData = (itemData) => {
-    // console.log('item------', item)
     if (id) {
       const data = moduleState[selectKey - 1];
       const deleteData = {
@@ -535,7 +487,6 @@ const AddCourses = () => {
   };
 
   useEffect(() => {
-    console.log("courseModuleData?.data?.isDeleted", courseModuleData);
     if (courseModuleData?.status === 200) {
       { courseModuleData?.data?.isDeleted ? toast.success("Course module deleted") : toast.success("Course module updated") }
     }
@@ -643,9 +594,7 @@ const AddCourses = () => {
                   <label htmlFor="name">Thumbnail</label>
                   <Form.Item>
                     <Input
-                      // type="string"
                       type="file"
-                      // value={state.thumbnail}
                       onChange={e => {
                         fileUpload(e, 'thumbnail');
                       }}
@@ -830,21 +779,6 @@ const AddCourses = () => {
                             )}
                           </Form.Item>
                         </Col>
-                        {/* <Col lg={11} md={11} sm={24} xs={24}>
-                          <label htmlFor="sequence">Sequence</label>
-                          <Form.Item>
-                            <Input
-                              placeholder="Sequence"
-                              name="sequence"
-                              onChange={e => moduleChange(e, i, 'sequence')}
-                              value={item.sequence}
-                              type="number"
-                            />
-                            {moduleError && moduleError[`sequence${i + 1}`] && (
-                              <label style={{ color: 'red' }}>{moduleError[`sequence${i + 1}`]}</label>
-                            )}
-                          </Form.Item>
-                        </Col> */}
                         <Col lg={24}>
                           <label htmlFor="detail" className='module_detail'>Module detail</label>
                           <Form.Item>
@@ -881,81 +815,8 @@ const AddCourses = () => {
                   <></>
                 )}
 
-                {/* <TabPane tab="Module 2" key="2">
-                                    <Row justify="space-between">
-                                        <Col lg={11}>
-                                            <label htmlFor="name">Name of the Module</label>
-                                            <Form.Item name="name">
-                                                <Input placeholder="Name of the Module" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11}>
-                                            <label htmlFor="videourl">Video URL</label>
-                                            <Form.Item name="navideourlme">
-                                                <Input placeholder="Video URL" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11} className="addpartnercourses">
-                                            <label htmlFor="moduleduration">Module Duration</label>
-                                            <Form.Item name="moduleduration" initialValue={moment('00:00:00', 'HH:mm:ss')}>
-                                                <TimePicker />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11}>
-                                            <label htmlFor="sequence">Sequence</label>
-                                            <Form.Item name="sequence">
-                                                <Input placeholder="Sequence" type="number" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={24}>
-                                            <label htmlFor="detail">Module Detail</label>
-                                            <Form.Item name="detail">
-                                                <TextArea />
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </TabPane>
-                                <TabPane tab="Module 3" key="3">
-                                    <Row justify="space-between">
-                                        <Col lg={11}>
-                                            <label htmlFor="name">Name of the Module</label>
-                                            <Form.Item name="name">
-                                                <Input placeholder="Name of the Module" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11}>
-                                            <label htmlFor="videourl">Video URL</label>
-                                            <Form.Item name="navideourlme">
-                                                <Input placeholder="Video URL" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11} className="addpartnercourses">
-                                            <label htmlFor="moduleduration">Module Duration</label>
-                                            <Form.Item name="moduleduration" initialValue={moment('00:00:00', 'HH:mm:ss')}>
-                                                <TimePicker />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={11}>
-                                            <label htmlFor="sequence">Sequence</label>
-                                            <Form.Item name="sequence">
-                                                <Input placeholder="Sequence" type="number" />
-                                            </Form.Item>
-                                        </Col>
-                                        <Col lg={24}>
-                                            <label htmlFor="detail">Module Detail</label>
-                                            <Form.Item name="detail">
-                                                <TextArea />
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </TabPane> */}
               </Tabs>
               <div className="sDash_form-action mt-20">
-                {/* {id && getSwayamCourseData && getSwayamCourseData.data && getSwayamCourseData.data.length>0 ?<Button className="btn-signin ml-10" onClick={() => onModuleEdit()} type="primary" size="medium">
-                  Edit
-                </Button>:<Button className="btn-signin ml-10" onClick={() => onModuleSubmit()} type="primary" size="medium">
-                  Submit
-                </Button>} */}
                 {
                   <Button className="btn-signin ml-10" type="primary" size="medium" onClick={() => addData()}>
                     Add
@@ -975,95 +836,6 @@ const AddCourses = () => {
                 </Button>
               </div>
             </TabPane>
-
-
-            {/* <TabPane tab="Q&A" key="3">
-              <PageHeader
-                ghost
-                title="Q&A Details"
-                className="mb-25"
-                buttons={[
-                  <div key="1" className="page-header-actions">
-                    <Button size="small" type="primary">
-                      Import Questions
-                    </Button>
-                  </div>,
-                ]}
-              />
-              <Row justify="space-between">
-                <Col lg={24}>
-                  <label htmlFor="Question">Question 1</label>
-                  <Form.Item name="Question">
-                    <TextArea />
-                  </Form.Item>
-                </Col>
-                <Col lg={24}>
-                  <Row justify="space-between" align="middle">
-                    <Col lg={11}>
-                      <label htmlFor="choice">Choice 1</label>
-                      <Form.Item name="choice">
-                        <Input placeholder="Choice" />
-                      </Form.Item>
-                    </Col>
-                    <Col lg={11}>
-                      <Row>
-                        <Button className="btn-signin ml-10" type="primary" size="medium">
-                          Add
-                        </Button>
-                        <Button className="btn-signin" type="light" size="medium">
-                          Delete
-                        </Button>
-                      </Row>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col lg={11}>
-                  <Form name="answer" layout="vertical">
-                    <Form.Item name="answer" label="Answer">
-                      <Select size="large" className="sDash_fullwidth-select" placeholder="Select Answer">
-                        <Option value="Choice1"> Choice 1 </Option>
-                        <Option value="Choice2">Choice 2 </Option>
-                        <Option value="Choice3">Choice 3 </Option>
-                        <Option value="Choice4">Choice 4 </Option>
-                      </Select>
-                    </Form.Item>
-                  </Form>
-                </Col>
-                <Col lg={11}>
-                  <Form name="sequence" layout="vertical">
-                    <Form.Item name="sequence" label="Sequence">
-                      <Select size="large" className="sDash_fullwidth-select" placeholder="Select Sequence">
-                        <Option value="1"> 1 </Option>
-                        <Option value="2"> 2 </Option>
-                        <Option value="3"> 3 </Option>
-                        <Option value="4"> 4 </Option>
-                      </Select>
-                    </Form.Item>
-                  </Form>
-                </Col>
-                <Col lg={11}>
-                  <Row>
-                    <Button className="btn-signin ml-10" type="primary" size="medium">
-                      Add Question
-                    </Button>
-                    <Button className="btn-signin" type="light" size="medium">
-                      Delete Question
-                    </Button>
-                  </Row>
-                </Col>
-                <Col lg={24} align="middle" className="mb-25 mt-25">
-                  <Pagination defaultCurrent={1} total={10} />
-                </Col>
-              </Row>
-              <div className="sDash_form-action mt-20">
-                <Button className="btn-signin ml-10" type="primary" size="medium">
-                  Update
-                </Button>
-                <Button className="btn-signin" type="light" size="medium">
-                  Cancel
-                </Button>
-              </div>
-            </TabPane> */}
           </Tabs>
         </Cards>
       </Main>

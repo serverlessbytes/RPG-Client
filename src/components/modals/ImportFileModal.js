@@ -69,6 +69,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
   const readUploadFile = e => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      seterror({ ...error, fileData: '' })
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -81,9 +82,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
         });
       };
     } else {
-      // toastError(true)
       setError('Please select valid file');
-      // e.target.value = '';
     }
   };
 
@@ -102,53 +101,40 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     }
     return result;
   };
-  // const validation = () => {
-  //   let error = {};
-  //   let flage = false;
-  //   if (schemeCategoryID === '') {
-  //     error.schemeCategory = 'SchemeCategory is required';
-  //     flage = true;
-  //   }
-  //   if (schemeBanefitID === '') {
-  //     error.schemeBanefitID = 'SchemeBanefit is required';
-  //     flage = true;
-  //   }
-  //   if (selectedStateArray.length == 0) {
-  //     error.locations = 'Locations is required';
-  //     flage = true;
-  //   }
-  //   if (!FileData) {
-  //     error.name = 'File is required';
-  //     flage = true;
-  //   }
-  //   seterror(error);
-  //   return flage;
-  // };
+
+  const validation = () => {
+    let error = {};
+    let flage = false;
+    if (selectedStateArray.length == 0) {
+      error.locations = 'Locations is required';
+      flage = true;
+    }
+    if (!FileData) {
+      error.fileData = 'File is required';
+      flage = true;
+    }
+    seterror(error);
+    return flage;
+  };
+
   const handleOk = () => {
-    // if (validation()) {
-    //   return;
-    // }
+    if (validation()) {
+      return;
+    }
     if (FileData) {
-      FileData.forEach(e => {
-        // e['language'] = language;
-        // e['createdByUser'] = userData.id;
-        // e['modifiedByUser'] = userData.id;
-        // e['schemeCategory'] = schemeCategoryID;
-        // e['schemeBenifit'] = schemeBanefitID;
+      let temp = FileData.filter((el) => el.key && el.name)
+      temp.forEach(e => {
         e['locations'] = selectedStateArray;
         e['isActive'] = true;
-        // e['key'] = uuid();
       });
-    }
-
-    if (FileData) {
-      dispatch(addSchemeInBulkImport(FileData));
+      dispatch(addSchemeInBulkImport(temp));
       handleCancel();
     }
   };
 
-  const stateSelected = event => {
+  const stateSelected = (event) => {
     setSelectedStateArray(event);
+    seterror({ ...error, locations: '' })
   };
 
   return (
@@ -167,7 +153,7 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
-                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                  error && error.fileData && <span style={{ color: 'red' }}>{error.fileData}</span>}
               </Form.Item>
             </Col>
             {/* <Col md={12} xs={24} className="mb-25"> */}

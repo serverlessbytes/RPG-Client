@@ -10,13 +10,7 @@ import EmailSent from './overview/crm/EmailSent';
 import SalesLeaderBoard from './overview/crm/SalesLeaderboard';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import {
-  getDashBoardCourseData,
-  getDashBoardUserData,
-  getTopMostViewedCourses,
-  getTopMostViewedJobs,
-  getTopMostViewedSchemes,
-} from '../../redux/dashboard/actionCreator';
+import { getDashBoardCourseData, getDashBoardUserData, getTopMostViewedCourses, getTopMostViewedJobs, getTopMostViewedSchemes } from '../../redux/dashboard/actionCreator';
 import AuthStorage from '../../helper/AuthStorage';
 import STORAGEKEY from '../../config/APP/app.config';
 
@@ -47,10 +41,6 @@ const Dashboard = () => {
       );
     }
   }, [topTenCourseData]);
-
-  // useEffect(() => {
-  //   dispatch(getUser());
-  // }, []);
 
   useEffect(() => {
     if (userProfile) {
@@ -91,21 +81,17 @@ const Dashboard = () => {
   }, [topTenJobsData]);
 
   useEffect(() => {
-    // dispatch(getDashBoardCourseData());
     dispatch(getDashBoardUserData());
-    // dispatch(getTopMostViewedCourses());
-    // dispatch(getTopMostViewedSchemes());
-    // dispatch(getTopMostViewedJobs());
   }, []);
 
   useEffect(() => {
-    if(AuthStorage.getStorageData(STORAGEKEY.language)){
-    dispatch(getDashBoardCourseData());
-    dispatch(getTopMostViewedCourses());
-    dispatch(getTopMostViewedSchemes());
-    dispatch(getTopMostViewedJobs());
+    if (AuthStorage.getStorageData(STORAGEKEY.language)) {
+      dispatch(getDashBoardCourseData());
+      dispatch(getTopMostViewedCourses());
+      dispatch(getTopMostViewedSchemes());
+      dispatch(getTopMostViewedJobs());
     }
-  },[AuthStorage.getStorageData(STORAGEKEY.language)])
+  }, [AuthStorage.getStorageData(STORAGEKEY.language)])
 
   const courseColumns = [
     {
@@ -201,12 +187,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{userData?.data?.all}</Heading>
                     <span>No.of all users</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -220,12 +200,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{userData?.data?.users}</Heading>
                     <span>No.of users </span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -238,12 +212,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{userData?.data?.admin}</Heading>
                     <span>No.of admins</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -256,12 +224,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{userData?.data?.partner}</Heading>
                     <span>No.of partners </span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -269,20 +231,12 @@ const Dashboard = () => {
           </Col>
           <Col md={4} xs={24}>
             <Cards headless>
-              {/* <EChartCard> */}
               <div className="card-chunk">
                 <CardBarChart2>
                   <Heading as="h1">{userData?.data?.employer}</Heading>
                   <span>No.of employers</span>
-                  {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                 </CardBarChart2>
               </div>
-              {/* </EChartCard> */}
             </Cards>
           </Col>
         </Row>
@@ -295,12 +249,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{coursesData?.data?.all_courses}</Heading>
                     <span>No.of total courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -313,12 +261,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{coursesData?.data?.online_coueses}</Heading>
                     <span>No.of online courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -331,12 +273,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{coursesData?.data?.offline_courses}</Heading>
                     <span>No.of offline courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -349,12 +285,6 @@ const Dashboard = () => {
                   <CardBarChart2>
                     <Heading as="h1">{coursesData?.data?.partner_courses}</Heading>
                     <span>No.of partner courses</span>
-                    {/* <p>
-                      <span className="growth-upward">
-                        25%
-                      </span>
-                      <span>Since last week</span>
-                    </p> */}
                   </CardBarChart2>
                 </div>
               </EChartCard>
@@ -364,35 +294,6 @@ const Dashboard = () => {
 
         <Row gutter={25}>
           <Col md={12} xs={24}>
-            {/* <Row gutter={25}>
-              <Col md={12}  xs={24}>
-                <Cards headless>
-                  <EChartCard>
-                    <div className="card-chunk">
-                      <CardBarChart2>
-                        <Heading as="h1">100</Heading>
-                        <span>No.of courses</span>
-                        
-                      </CardBarChart2>
-                    </div>
-
-                  </EChartCard>
-                </Cards>
-              </Col>
-              <Col md={12}  xs={24}>
-                <Cards headless>
-                  <EChartCard>
-                    <div className="card-chunk">
-                      <CardBarChart2>
-                        <Heading as="h1">10,000</Heading>
-                        <span>No.of courses</span>
-                      </CardBarChart2>
-                    </div>
-
-                  </EChartCard>
-                </Cards>
-              </Col>
-            </Row> */}
             <Suspense
               fallback={
                 <Cards headless>
