@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Button } from '../../components/buttons/buttons';
 import { Main } from '../styled';
 import { ListButtonSizeWrapper } from '../styled';
-import { ListButtonSizeWrapper } from '../styled';
 import { Col, Form, Row, Select, Tabs, Input } from 'antd';
 import JobListTable from './JobListTable';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';

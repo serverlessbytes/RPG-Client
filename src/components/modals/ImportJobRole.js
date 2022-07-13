@@ -12,19 +12,14 @@ function ImportJobRole({ modaltitle, handleCancel, importModel }) {
     const [error, seterror] = useState(); // for valadation
     const [FileData, setFileData] = useState();
 
-    useEffect(() => {
-        console.log("FileData", FileData)
-    }, [FileData])
-
     const readUploadFile = (e) => {
         if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
             setError('');
+            seterror('');
             const file = e.target.files[0];
-            // console.log("file",file)
             const reader = new FileReader();
             reader.readAsBinaryString(file);
             reader.onload = event => {
-                // console.log("event",event)
                 const binaryData = event.target.result;
                 const workBook = XLSX.read(binaryData, { type: 'binary' });
                 workBook.SheetNames.forEach(sheet => {

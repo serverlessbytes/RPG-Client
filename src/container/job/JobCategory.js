@@ -15,8 +15,7 @@ import { ApiPost } from '../../helper/API/ApiData';
 import ImportJobCategory from '../../components/modals/ImportJobCategory';
 
 const JobCategory = () => {
-    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess,
-        addJobcategoryErr, } = actions;
+    const { editJobcategorySuccess, editJobcategoryErr, addJobcategorySuccess, addJobcategoryErr, } = actions;
 
     const dispatch = useDispatch()
 
@@ -30,24 +29,15 @@ const JobCategory = () => {
     const [form] = Form.useForm()
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [jobCategoryTableData, setJobCategoryTableData] = useState([]);
-    const [selectedJobCategory, setSelectedJobCategory] = useState();
+    const [jobEditId, setJobEditId] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [importModal, setImportModal] = useState(false);
     const [error, setError] = useState('')
-    const [data, setData] = useState('')
-
-    const { users } = useSelector(state => {
-        return {
-            users: state.users,
-        };
-    });
 
     useEffect(() => {
         if (addJobCatogerydata && addJobCatogerydata.status === 200) {
             dispatch(addJobcategorySuccess(null))
             toast.success("Job category added");
-            //toastAssetsAdd(true)
-            //onHide()
         }
     }, [addJobCatogerydata])
 
@@ -91,7 +81,7 @@ const JobCategory = () => {
     const onEdit = (id) => {
         let dataForEdit = jobData && jobData.data && jobData.data.find((item) => item.id === id)
         if (dataForEdit) {
-            setSelectedJobCategory(dataForEdit)
+            setJobEditId(dataForEdit.id)
             form.setFieldsValue({
                 ...dataForEdit,
                 name: dataForEdit.name
@@ -101,7 +91,7 @@ const JobCategory = () => {
         setNameTog(true)
     }
 
-    const newJobCategory = dataForEdit => {
+    const newJobCategory = (dataForEdit) => {
         const newVal = ApiPost("job/editCategory", dataForEdit)
             .then((res) => {
                 if (res.status === 200) {
@@ -121,7 +111,6 @@ const JobCategory = () => {
                 isActive: false,
                 isDeleted: true
             }
-            // dispatch(editJobcategory(dataForEdit))
             const deleteJobcatrgory = await newJobCategory(dataForEdit)
             if (deleteJobcatrgory.status === 200) {
                 toast.success("Job category deleted")
@@ -161,6 +150,7 @@ const JobCategory = () => {
     const handleCancel = () => {
         form.resetFields()
         setIsModalVisible(false);
+        setJobEditId('')
         setNameTog(false)
         setError("")
     };
@@ -178,32 +168,27 @@ const JobCategory = () => {
     }
 
     const handleOk = () => {
-        // if (validation) {
-        //     return;
-        // }
         let data = form.getFieldsValue()
-        if (!selectedJobCategory) {
-            if (validation(data)) {
-                return
-            }
-            setData(data.name)
+        if (validation(data)) {
+            return
+        }
+        if (!jobEditId) {
             data = {
                 ...data,
                 key: uuid()
             }
             dispatch(addJobcategory(data))
         } else {
-            delete selectedJobCategory.key
             data = {
-                id: selectedJobCategory.id,
+                id: jobEditId,
                 name: data.name,
                 isActive: true,
                 isDeleted: false
             }
             dispatch(editJobcategory(data))
+            setJobEditId('')
         }
         form.resetFields()
-        setSelectedJobCategory()
         setIsModalVisible(false);
         setNameTog(false)
     };
@@ -259,8 +244,7 @@ const JobCategory = () => {
                 </Cards>
             </Main>
 
-            <Modal title="Job category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()}
-                okText={nameTog ? "Edit" : "Add"}>
+            <Modal title="Job category" visible={isModalVisible} onOk={() => handleOk()} onCancel={() => handleCancel()} okText={nameTog ? "Edit" : "Add"}>
                 <Form name="login" form={form} layout="vertical">
                     <label htmlFor="name">Type of category</label>
                     <Form.Item name="name" className='mb-0'>
@@ -270,15 +254,12 @@ const JobCategory = () => {
                         />
                     </Form.Item>
                     {
-                        error.name && <span style={{ color: "red" }}>{error.name}</span>
+                        error?.name && <span style={{ color: "red" }}>{error.name}</span>
                     }
                 </Form>
             </Modal>
 
-            {< ImportJobCategory
-                importModal={importModal}
-                handleCancel={() => setImportModal(false)}
-                modaltitle="Import job category" />}
+            {importModal && <ImportJobCategory importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import job category" />}
         </>
     )
 }

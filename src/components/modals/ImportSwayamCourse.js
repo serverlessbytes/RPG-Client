@@ -20,12 +20,11 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
-  const [error, seterror] = useState(); // for valadation
+  const [error, seterror] = useState();
   const [fileData, setFileData] = useState();
 
   const [courseCategoryArray, setCourseCategoryArray] = useState([]);
   const [jobCategoryArray, setJobCategoryArray] = useState([]);
-  const [courseCategoryID, setCourseCategoryID] = useState('');
   const [jobCategoryID, setJobCategoryID] = useState();
 
   //  CATEGORY
@@ -50,13 +49,13 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   }, [jobCategoryData]);
 
   useEffect(() => {
-    // dispatch(getCategoryData());
     dispatch(getJobcategory());
   }, []);
 
-  const readUploadFile = e => {
+  const readUploadFile = (e) => {
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
       setError('');
+      seterror({ ...error, fileData: '' })
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -69,9 +68,8 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         });
       };
     } else {
-      // toastError(true)
       setError('Please select valid file');
-      // e.target.value = '';
+      e.target.value = '';
     }
   };
 
@@ -95,16 +93,12 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const validation = () => {
     let error = {};
     let flage = false;
-    // if (courseCategoryID === '') {
-    //   error.courseCategoryID = 'CourseCategory is required';
-    //   flage = true;
-    // }
-    if (jobCategoryID.length == 0) {
+    if (!jobCategoryID) {
       error.jobCategoryID = 'JobCategory is required';
       flage = true;
     }
     if (!fileData) {
-      error.name = 'File is required';
+      error.fileData = 'File is required';
       flage = true;
     }
     seterror(error);
@@ -146,7 +140,7 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
               <Form.Item name="name">
                 <Input placeholder="File upload" name="name" type="file" onChange={readUploadFile} />
                 {Error ? <span style={{ color: 'red' }}>{Error}</span> :
-                  error && error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+                  error && error.fileData && <span style={{ color: 'red' }}>{error.fileData}</span>}
               </Form.Item>
             </Col>
             <Col md={12} xs={24} className="mb-25"></Col>
@@ -175,9 +169,9 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
                     size="large"
                     className="sDash_fullwidth-select "
                     name="jobCategoryID"
-                    onChange={e => {
-                      // setJobCategoryID([...jobCategoryID, e]);
+                    onChange={(e) => {
                       setJobCategoryID(e);
+                      seterror({ ...error, jobCategoryID: '' })
                     }}
                     placeholder="Select job Category"
                   >

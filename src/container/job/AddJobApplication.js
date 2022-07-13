@@ -22,7 +22,7 @@ const AddJobApplication = () => {
         resume_url: "",
         certification_url: "",
         experience: "",
-        currently_working: "",
+        currently_working: false,
         job_id: "",
     });
     const [error, setError] = useState({})
@@ -207,15 +207,8 @@ const AddJobApplication = () => {
                     </Row>
 
                     <div className="sDash_form-action mt-20">
-                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>
-                            {/* {id?"Edit":"Add"} */}Add
-                        </Button>
-                        <Button className="btn-signin" type="light" size="medium"
-                            //    onClick={() => history.push(`/admin/user`)}
-                            onClick={(e) => oncancel(e)}
-                        >
-                            Cancel
-                        </Button>
+                        <Button className="btn-signin ml-10" type="primary" size="medium" onClick={(e) => onSubmit(e)}>Add</Button>
+                        <Button className="btn-signin" type="light" size="medium" onClick={(e) => oncancel(e)} >Cancel</Button>
                     </div>
                 </Cards>
             </Main>

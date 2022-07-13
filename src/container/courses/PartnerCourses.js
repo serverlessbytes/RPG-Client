@@ -66,8 +66,7 @@ const PartnerCourses = () => {
   const postPartnerCourseDataerr = useSelector(state => state.category.postPartnerCourseDataerr);
   const editPartnerCourseData = useSelector(state => state.category.editPartnerCourseData);
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
-  const addPartnerCourseModulData = useSelector(state => state.category.addPartnerCourseInBulkData)
-
+  const ImportPartnerCoursedata = useSelector(state => state.category.addPartnerCourseInBulkData);
 
 
   useEffect(() => {
@@ -80,7 +79,6 @@ const PartnerCourses = () => {
   }, [data]);
 
   // useEffect(() => {
-  //   console.log("courseData", courseData)
   //   if (courseData?.data?.data) {
   //     courseData?.data?.data.map((item,i) => {
   //       let x = Math.floor((Math.random() * 5) + 1);
@@ -90,23 +88,22 @@ const PartnerCourses = () => {
   //         "courseId": item.id
   //       }
   //       ApiPost('courseRating/addCourseRating',data).then((res) => {
-  //         console.log('index', i)
   //       })
   //     })
   //   }
   // }, [courseData])
 
   useEffect(() => {
-    if (addPartnerCourseModulData && addPartnerCourseModulData.status === 200) {
-      toast.success("Add PartnerCourse Import uccessful")
+    if (ImportPartnerCoursedata && ImportPartnerCoursedata.status === 200) {
+      toast.success("Add partner course import successful")
       dispatch(addPartnerCourseInBulkSuccess(null))
+      dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode ? state.mode : '', status, "", langIds.hindi, langIds.marathi));
     }
-  }, [addPartnerCourseModulData])
+  }, [ImportPartnerCoursedata])
 
   useEffect(() => {
     return () => {
-      // setState([])
-      dispatch(getallSwayamCourseSuccess(null)); //FOR CLEAR A STATE OF A EXPORT
+      dispatch(getallSwayamCourseSuccess(null));
     };
   }, []);
 
@@ -308,7 +305,6 @@ const PartnerCourses = () => {
   const activePartnerCourses = dt => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
       .then((res) => {
-        console.log();
         if (res.status === 200) {
           dispatch(getCoursefilter(state.category, perPage, pageNumber, state.mode, status, "", langIds.hindi, langIds.marathi));
         }
@@ -683,13 +679,7 @@ const PartnerCourses = () => {
         />
       )}
 
-      {
-        <ImportPartnerCourse
-          importModal={importModal}
-          handleCancel={() => setImportModal(false)}
-          modaltitle="Import Swayam Courses"
-        />
-      }
+      {importModal && <ImportPartnerCourse importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Partner Courses" />}
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}
