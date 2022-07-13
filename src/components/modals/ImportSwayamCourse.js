@@ -1,10 +1,7 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import uuid from 'react-uuid';
 import * as XLSX from 'xlsx';
-import STORAGEKEY from '../../config/APP/app.config';
-import AuthStorage from '../../helper/AuthStorage';
 import { addSwayamCourseInBulk } from '../../redux/course/actionCreator';
 import { getJobcategory } from '../../redux/jobs/actionCreator';
 
@@ -109,10 +106,6 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
         e['jobCategoryIds'] = [jobCategoryID];
       });
     }
-    // if (fileData && courseCategoryID && jobCategoryID.length > 0) {
-    //   dispatch(addSwayamCourseInBulk(fileData));
-    //   handleCancel();
-    // }
     if (fileData) {
       dispatch(addSwayamCourseInBulk(fileData));
       handleCancel();
@@ -141,25 +134,9 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
             <Col md={24} xs={24} className="mb-25"></Col>
             <Col md={24} xs={24} className="mb-25">
               <Form layout="vertical">
-                {/* <Form.Item label="Course Category">
-                  <Select
-                    options={courseCategoryArray}
-                    size="large"
-                    className="sDash_fullwidth-select "
-                    name="courseCategoryID"
-                    onChange={e => {
-                      setCourseCategoryID(e);
-                    }}
-                    placeholder="Select Course Category"
-                  >
-                    <Option value="">Select course category</Option>
-                  </Select>
-                  {error && error.courseCategoryID && <span style={{ color: 'red' }}>{error.courseCategoryID}</span>}
-                </Form.Item> */}
 
                 <Form.Item label="Job Category">
                   <Select
-                    // mode="multiple"
                     options={jobCategoryArray}
                     size="large"
                     className="sDash_fullwidth-select "
