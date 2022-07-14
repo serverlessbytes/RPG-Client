@@ -15,6 +15,12 @@ const {
 
     addArticleSuccess,
     addArticleErr,
+
+    addBulkArticleSuccess,
+    addBulkArticleErr,
+
+    getExportArticlesSuccess,
+    getExportArticlesErr,
 } = actions
 
 let per_page, page_num;
@@ -32,7 +38,6 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
         })
 }
 export const editArticles = (body) => async (dispatch) => {
-    console.log("body",body)
     const formData = new FormData();
     formData.append('body', body.body);
     formData.append('videoUrl', body.videoUrl);
@@ -83,3 +88,27 @@ export const addArticle = (body) => async (dispatch) => {
             return dispatch(addArticleErr(err))
         })
 }
+
+export const addBulkArticle = (body) => async (dispatch) => {
+    await ApiPost(`article/addBulkArticle`, body)
+        .then((res) => {
+            dispatch(addBulkArticleSuccess(res))
+            if (res.status === 200) {
+                return dispatch(getArticles(per_page, page_num))
+            }
+        })
+        .catch((err) => {
+            return dispatch(addBulkArticleErr(err))
+        })
+}
+
+export const getExportArticles = () => async (dispatch) => {
+    await ApiGet(`article/getExportArticles?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+        .then((res) => {
+            return dispatch(getExportArticlesSuccess(res))
+        })
+        .catch((err) => {
+            return dispatch(getExportArticlesErr(err))
+        })
+}
+

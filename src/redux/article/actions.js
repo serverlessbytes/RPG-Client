@@ -15,6 +15,13 @@ const actions = {
     ADD_ARTICLES_SUCCESS: "ADD_ARTICLES_SUCCESS ",
     ADD_ARTICLES_ERR: "ADD_ARTICLES_ERR",
 
+    ADD_BULK_ARTICLE_BEGIN: "ADD_BULK_ARTICLE_BEGIN",
+    ADD_BULK_ARTICLE_SUCCESS: "ADD_BULK_ARTICLE_SUCCESS",
+    ADD_BULK_ARTICLE_ERR: "ADD_BULK_ARTICLE_ERR",
+
+    GET_EXPORT_ARTICLES_BEGIN: "GET_EXPORT_ARTICLES_BEGIN",
+    GET_EXPORT_ARTICLES_SUCCESS: "GET_EXPORT_ARTICLES_SUCCESS",
+    GET_EXPORT_ARTICLES_ERR: "GET_EXPORT_ARTICLES_ERR",
 
     getArticlesBegin: () => {
         return {
@@ -46,7 +53,6 @@ const actions = {
         }
     },
     editArticlesErr: (err) => {
-        console.log("eee",err)
         return {
             type: actions.EDIT_ARTICLES_ERR,
             err,
@@ -88,6 +94,43 @@ const actions = {
             err,
         }
     },
+
+    addBulkArticleBegin: () => {
+        return {
+            type: actions.ADD_BULK_ARTICLE_BEGIN,
+        }
+    },
+    addBulkArticleSuccess: (data) => {
+        return {
+            type: actions.ADD_BULK_ARTICLE_SUCCESS,
+            data,
+        }
+    },
+    addBulkArticleErr: (err) => {
+        return {
+            type: actions.ADD_BULK_ARTICLE_ERR,
+            err,
+        }
+    },
+
+    getExportArticlesBegin: () => {
+        return {
+            type: actions.GET_EXPORT_ARTICLES_BEGIN,
+        }
+    },
+
+    getExportArticlesSuccess: (data) => {
+        return {
+            type: actions.GET_EXPORT_ARTICLES_SUCCESS,
+            data,
+        }
+    },
+    getExportArticlesErr: (err) => {
+        return {
+            type: actions.GET_EXPORT_ARTICLES_ERR,
+            err,
+        }
+    }
 
 }
 export default actions

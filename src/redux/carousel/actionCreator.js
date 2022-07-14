@@ -1,6 +1,6 @@
 import { async } from "@firebase/util";
 import STORAGEKEY from "../../config/APP/app.config";
-import { ApiGet, ApiPatch, ApiPost } from "../../helper/API/ApiData";
+import { ApiGet, ApiPost } from "../../helper/API/ApiData";
 import AuthStorage from "../../helper/AuthStorage";
 import actions from "./actions";
 
@@ -19,6 +19,9 @@ const {
 
   addBulkCarouselSuccess,
   addBulkCarouselErr,
+
+  getExportCarouselsSuccess,
+  getExportCarouselsErr,
 
 } = actions;
 
@@ -84,4 +87,11 @@ export const addBulkCarousel = (body) => async (dispatch) => {
       }
     })
     .catch((err) => dispatch(addBulkCarouselErr(err)))
+}
+export const getExportCarousels = () => async (dispatch) => {
+ await ApiGet(`carousel/getExportCarousels?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
+ .then((res)=>{
+   dispatch(getExportCarouselsSuccess(res))
+ })
+ .catch((err) => dispatch(getExportCarouselsErr(err)))
 }

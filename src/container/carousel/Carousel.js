@@ -1,30 +1,31 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Form, Input, Modal, Table } from 'antd';
+import { Dropdown, Form, Input, Menu, Modal, Space, Table } from 'antd';
 import { Main, TableWrapper } from '../styled';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCarousel, editCarousel, getCarousel, getOneCarousel } from '../../redux/carousel/actionCreator';
+import { addCarousel, editCarousel, getCarousel, getExportCarousels, getOneCarousel } from '../../redux/carousel/actionCreator';
 import FeatherIcon from 'feather-icons-react';
 import actions from '../../redux/carousel/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import ImportCarousel from '../../components/modals/ImportCarousel';
+import { DownOutlined } from '@ant-design/icons';
+import { CSVLink } from 'react-csv';
 
 const Carousel = () => {
   const dispatch = useDispatch();
-
-  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr, addBulkCarouselSuccess, addBulkCarouselErr } = actions;
+  const CSVLinkRef = useRef(null);
+  const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr, addBulkCarouselSuccess, addBulkCarouselErr, getExportCarouselsSuccess } = actions;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [carouselTableData, setCarouselTableData] = useState([]);
   const [selectedCarousel, setSelectedCarousel] = useState(); // for edit
   const [nameTod, setNameTod] = useState(false);
-
   const [perPage, setPerPage] = useState(20)
   const [pageNumber, setPageNumber] = useState(1)
   const [importModel, setImportModel] = useState(false);
@@ -33,6 +34,8 @@ const Carousel = () => {
     title: '',
     imageUrl: '',
   });
+  const [exportCarousel, setExportCarousel] = useState([]);
+  const [exportTog, setExportTog] = useState(false);
 
   const getCarouselData = useSelector(state => state.carousel.getCarouselData);
   const getOneCarouselData = useSelector(state => state.carousel.getOneCarouselData);
@@ -42,6 +45,8 @@ const Carousel = () => {
   const editCarouselError = useSelector(state => state.carousel.editCarouselError);
   const addBulkCarouselData = useSelector(state => state.carousel.addBulkCarouselData);
   const addBulkCarouselError = useSelector(state => state.carousel.addBulkCarouselError);
+  const getExportCarouselData = useSelector(state => state.carousel.getExportCarouselData);
+
 
   useEffect(() => {
     if (addBulkCarouselData && addBulkCarouselData.status === 200) {
@@ -246,6 +251,51 @@ const Carousel = () => {
     }
   };
 
+  const header = [
+    { label: 'createdAt', key: 'createdAt' },
+    { label: 'id', key: 'id' },
+    { label: 'imageUrl', key: 'imageUrl' },
+    { label: 'isActive', key: 'isActive' },
+    { label: 'isDeleted', key: 'isDeleted' },
+    { label: 'title', key: 'title' },
+    { label: 'updatedAt', key: 'updatedAt' },
+];
+
+  const exportBanner = () => {
+    dispatch(getExportCarousels())
+  }
+  useEffect(() => {
+    if (exportCarousel?.length && exportTog) {
+        CSVLinkRef?.current?.link.click();
+        toast.success('Carousel exported');
+        setExportTog(false);
+        dispatch(getExportCarouselsSuccess(null))
+    }
+    else if (!exportCarousel.length && exportTog) {
+        toast.success('No data for export');
+    }
+}, [exportTog, exportCarousel])
+
+  useEffect(() => {
+    if (getExportCarouselData?.data) {
+      setExportCarousel(
+        getExportCarouselData?.data.map(item => {
+          return {
+            ...item,
+            createdAt: item.createdAt,
+            id: item.id,
+            imageUrl: item.imageUrl,
+            isActive: item.isActive,
+            isDeleted: item.isDeleted,
+            title: item.title,
+            updatedAt: item.updatedAt,
+          }
+        })
+      )
+      setExportTog(true);
+    }
+  }, [getExportCarouselData])
+
   useEffect(() => {
     if (getCarouselData && getCarouselData.data) {
       setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map(item => {
@@ -298,6 +348,38 @@ const Carousel = () => {
     },
   ];
 
+  const onClick = ({ key }) => {
+    if (key == 'addCarousel') {
+      showModal();
+    }
+    if (key === 'importCarousel') {
+      showImportModal();
+    }
+    if (key === 'exportCarousel') {
+      exportBanner();
+    }
+  }
+
+  const menu = (
+    <Menu
+      onClick={onClick}
+      items={[
+        {
+          label: 'Import carousel',
+          key: 'importCarousel',
+        },
+        {
+          label: 'Add carousel',
+          key: 'addCarousel',
+        },
+        {
+          label: 'Export carousel',
+          key: 'exportCarousel',
+        }
+      ]}
+    />
+  );
+
   return (
     <>
       <PageHeader
@@ -305,12 +387,27 @@ const Carousel = () => {
         title="Carousel"
         buttons={[
           <div key="1" className="page-header-actions">
-            <Button size="small" type="primary" onClick={showModal}>
+            {/* <Button size="small" type="primary" onClick={showModal}>
               Add carousel
             </Button>
             <Button size="small" type="primary" onClick={showImportModal}>
               Import carousel
-            </Button>
+            </Button> */}
+            <Dropdown overlay={menu} trigger='click'>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  Actions
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+            <CSVLink
+              headers={header}
+              data={exportCarousel}
+              ref={CSVLinkRef}
+              filename="Carousel.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
           </div>
         ]}
       />

@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Col, Form, Input, Modal, Row, Table, Tabs } from 'antd';
+import { Col, Dropdown, Form, Input, Modal, Row, Space, Table, Tabs, Menu } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -12,14 +12,16 @@ import actions from '../../redux/query/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
-import { useHistory } from 'react-router';
-import { addQueries, editQueries, getQueries, getQueriesFromId } from '../../redux/query/actionCreator';
+import { addQueries, editQueries, getExportQueries, getQueries, getQueriesFromId } from '../../redux/query/actionCreator';
+import { DownOutlined } from '@ant-design/icons';
+import { CSVLink } from 'react-csv';
 
 const query = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const { TabPane } = Tabs;
-    const { addQueriesSuccess, addQueriesErr, editQueriesSuccess, editQueriesErr } = actions;
+    const CSVLinkRef = useRef(null);
+
+    const { addQueriesSuccess, addQueriesErr, editQueriesSuccess, editQueriesErr, getExportQueriesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [queryTableData, setQueryTableData] = useState([]); // for table
@@ -34,6 +36,8 @@ const query = () => {
         body: "",
     });
     const [formErrors, setFormErrors] = useState();
+    const [exportQueries, setExportQueries] = useState([]);
+    const [exportTog, setExportTog] = useState(false);
 
     const getQueriesData = useSelector((state) => state.queries.getQueriesData);
     const addQueriesData = useSelector((state) => state.queries.addQueriesData);
@@ -41,10 +45,12 @@ const query = () => {
     const getQueriesById = useSelector((state) => state.queries.getQueriesById);
     const editQueriesData = useSelector((state) => state.queries.editQueriesData);
     const editQuerieError = useSelector((state) => state.queries.editQuerieErr);
+    const getExportQueriesData = useSelector((state) => state.queries.getExportQueriesData);
+    const getExportQueriesError = useSelector((state) => state.queries.getExportQueriesError);
 
     const handleChange = (e) => {
         setQueryData({ ...queryData, [e.target.name]: e.target.value })
-        setFormErrors({...formErrors, [e.target.name]:""})
+        setFormErrors({ ...formErrors, [e.target.name]: "" })
     }
 
     useEffect(() => {
@@ -95,6 +101,38 @@ const query = () => {
         }
         //dispatch(GetBanner());
     }, [getQueriesById])
+
+    useEffect(() => {
+        if (exportQueries?.length && exportTog) {
+            CSVLinkRef?.current?.link.click();
+            toast.success('Query exported');
+            setExportTog(false);
+            dispatch(getExportQueriesSuccess(null))
+        }
+        else if (!exportQueries.length && exportTog) {
+            toast.success('No data for export');
+        }
+    }, [exportTog, exportQueries])
+
+    useEffect(() => {
+        if (getExportQueriesData?.data) {
+            setExportQueries(
+                getExportQueriesData?.data.map(item => {
+                    return {
+                        ...item,
+                        body: item.body,
+                        createdAt: item.createdAt,
+                        email: item.email,
+                        id: item.id,
+                        isActive: item.isActive,
+                        isResolved: item.isResolved,
+                        name: item.name,
+                    }
+                })
+            )
+            setExportTog(true)
+        }
+    }, [getExportQueriesData])
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -228,6 +266,29 @@ const query = () => {
         }
     }
 
+    const onClick = ({ key }) => {
+        if (key == 'addQuery') {
+            showModal();
+        }
+        if (key === 'exportQuery') {
+            exportQuery();
+        }
+    }
+
+    const exportQuery = () => {
+        dispatch(getExportQueries())
+    }
+
+    const header = [
+        { label: 'body', key: 'body' },
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'email', key: 'email' },
+        { label: 'id', key: 'id' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isResolved', key: 'isResolved' },
+        { label: 'name', key: 'name' },
+    ];
+
     const onActive = async id => {
         let getActiveQueriesdata = getQueriesData && getQueriesData.data && getQueriesData.data.data.find(item => item.id === id);
 
@@ -318,6 +379,22 @@ const query = () => {
         },
     ];
 
+    const menu = (
+        <Menu
+            onClick={onClick}
+            items={[
+                {
+                    label: 'Export query',
+                    key: 'exportQuery',
+                },
+                {
+                    label: 'Add query',
+                    key: 'addQuery',
+                },
+            ]}
+        />
+    );
+
     return (
         <>
             <PageHeader
@@ -325,9 +402,21 @@ const query = () => {
                 title="Query"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary" onClick={showModal}>
-                            Add query
-                        </Button>
+                        <Dropdown overlay={menu} trigger='click'>
+                            <a onClick={e => e.preventDefault()}>
+                                <Space>
+                                    Actions
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        <CSVLink
+                            headers={header}
+                            data={exportQueries}
+                            ref={CSVLinkRef}
+                            filename="Queries.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
                     </div>
                 ]}
             />

@@ -21,6 +21,10 @@ const {
   ADD_BULK_CAROUSEL_SUCCESS,
   ADD_BULK_CAROUSEL_ERR,
 
+  GET_EXPORT_CAROUSEL_BEGINE,
+  GET_EXPORT_CAROUSEL_SUCCESS,
+  GET_EXPORT_CAROUSEL_ERR,
+
 } = actions;
 
 const initialState = {
@@ -36,6 +40,8 @@ const initialState = {
   editCarouselError: null,
   addBulkCarouselData : null,
   addBulkCarouselError : null,
+  getExportCarouselData: null,
+  getExportCarouselError: null,
 };
 
 const carouselReducer = (state = initialState, action) => {
@@ -130,6 +136,24 @@ const carouselReducer = (state = initialState, action) => {
         addBulkCarouselError: err,
         loading: false,
       };
+
+      case GET_EXPORT_CAROUSEL_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case GET_EXPORT_CAROUSEL_SUCCESS:
+        return {
+          ...state,
+          getExportCarouselData: data,
+          loading: false,
+        };
+      case GET_EXPORT_CAROUSEL_ERR:
+        return {
+          ...state,
+          getExportCarouselError: err,
+          loading: false,
+        };
 
 
     default:

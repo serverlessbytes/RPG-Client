@@ -60,7 +60,7 @@ const JobApplication = () => {
             dispatch(getJobApplication(perPage, pageNumber, status, jobApplication.jobRole, jobApplication.jobCategory))
         }
         else {
-            if (jobApplication.jobRole && jobApplication.jobCategory) {
+            if (jobApplication.jobRole || jobApplication.jobCategory) {
                 dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
             } else {
                 dispatch(getJobApplication(perPage, pageNumber))
@@ -77,11 +77,34 @@ const JobApplication = () => {
     }, [])
 
     const onselect = (id, selected) => {
-        dispatch(updateIsSelectedJobApplication(id, !selected))
+        if (status !== 'all') {
+            dispatch(getJobApplication(perPage, pageNumber, status, jobApplication.jobRole, jobApplication.jobCategory))
+            dispatch(updateIsSelectedJobApplication(id, !selected))
+
+        } else {
+            if (jobApplication.jobRole || jobApplication.jobCategory) {
+                dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
+                dispatch(updateIsSelectedJobApplication(id, !selected))
+
+            } else {
+                dispatch(updateIsSelectedJobApplication(id, !selected))
+            }
+        }
     }
 
     const onHired = (id, hired) => {
-        dispatch(updateIsHired(id, !hired))
+        if (status !== 'all') {
+            dispatch(getJobApplication(perPage, pageNumber, status, jobApplication.jobRole, jobApplication.jobCategory))
+            dispatch(updateIsHired(id, !hired))
+        }
+        else {
+            if (jobApplication.jobRole || jobApplication.jobCategory) {
+                dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
+                dispatch(updateIsHired(id, !hired))
+            } else {
+                dispatch(updateIsHired(id, !hired))
+            }
+        }
     }
 
     const onApply = () => {

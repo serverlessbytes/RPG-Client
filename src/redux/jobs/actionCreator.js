@@ -75,7 +75,7 @@ const {
 
 } = actions;
 
-let per_page, page_num, State, Status, Type, jobrole, search, hindi, marathi;
+let per_page, page_num, State, Status, Type, jobrole, search, hindi, marathi, jobcategory;
 
 export const getJobcategory = () => async (dispatch) => {
   await ApiGet(`job/getCategories?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`)
@@ -235,7 +235,7 @@ export const jobApproved = (id, body) => async (dispatch) => {
 }
 
 export const getJobApplication = (perPage, pageNumber, status, jobRole, jobCategoryId) => async (dispatch) => {
-  per_page = perPage, page_num = pageNumber, Status = status;
+  per_page = perPage, page_num = pageNumber, Status = status, jobrole = jobRole, jobcategory = jobCategoryId;
 
   let URL = `jobApplication/getAllJobApplications?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&per_page=${perPage}&page_number=${pageNumber}${status ? `&${status}=true` : ''}`;
 
@@ -257,7 +257,10 @@ export const updateIsSelectedJobApplication = (id, value) => async (dispatch) =>
   await ApiPost(`jobApplication/updateIsSelected?id=${id}&selected=${value}`)
     .then((res) => {
       dispatch(updateIsSelectedJobApplicationSuccess(res))
-      if (res.status === 200) {
+      if (res.status === 200 && jobrole || jobcategory) {
+        return dispatch(getJobApplication(per_page, page_num, Status, jobrole, jobcategory))
+      }
+      else{
         return dispatch(getJobApplication(per_page, page_num, Status))
       }
     })
@@ -268,7 +271,10 @@ export const updateIsHired = (id, value) => async (dispatch) => {
   await ApiPost(`jobApplication/updateIsHired?id=${id}&hired=${value}`)
     .then((res) => {
       dispatch(updateIsHiredSuccess(res))
-      if (res.status === 200) {
+      if (res.status === 200 && jobrole || jobcategory) {
+        return dispatch(getJobApplication(per_page, page_num, Status, jobrole, jobcategory))
+      }
+      else{
         return dispatch(getJobApplication(per_page, page_num, Status))
       }
     })
@@ -302,7 +308,7 @@ export const addBulkJobs = (body) => async (dispatch) => {
         message: "Somthing went wrong",
         status: 500
       }
-      dispatch(addBlukJobsBegin(newError))
+      dispatch(addBlukJobsErr(newError))
     }
     )
 }
@@ -318,7 +324,6 @@ export const addBulkJobCategory = (body) => async (dispatch) => {
       }
     })
     .catch(err => {
-      console.log("ERR", err);
       dispatch(addBlukJobCategoyErr(err))
     }
     )

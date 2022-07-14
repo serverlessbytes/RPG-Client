@@ -17,6 +17,10 @@ const {
 
     getQueriesFromIdSuccess,
     getQueriesFromIdErr,
+
+    getExportQueriesSuccess,
+    getExportQueriesErr,
+    
 } = actions
 
 let per_page, page_num, Status;
@@ -39,7 +43,7 @@ export const editQueries = (body) => async (dispatch) => {
         .then((res) => {
             dispatch(editQueriesSuccess(res))
             if (res.status === 200) {
-                return dispatch(getQueries(per_page, page_num,Status))
+                return dispatch(getQueries(per_page, page_num, Status))
             }
         })
         .catch((err) => {
@@ -60,12 +64,22 @@ export const addQueries = (body) => async (dispatch) => {
         })
 }
 
-export const getQueriesFromId = (id) =>async (dispatch) => {
+export const getQueriesFromId = (id) => async (dispatch) => {
     await ApiGet(`query/getQuery?id=${id}`)
-    .then ((res)=>{
-       return dispatch(getQueriesFromIdSuccess(res))
+        .then((res) => {
+            return dispatch(getQueriesFromIdSuccess(res))
+        })
+        .catch((err) => {
+            return dispatch(getQueriesFromIdErr(err))
+        })
+}
+
+export const getExportQueries = () => async (dispatch) => {
+    await ApiGet(`query/getExportQueries`)
+    .then((res)=>{
+        return dispatch(getExportQueriesSuccess(res))
     })
     .catch((err)=>{
-        return dispatch(getQueriesFromIdErr(err))
+       return dispatch(getExportQueriesErr(err))
     })
 }

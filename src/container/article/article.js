@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Col, Form, Input, Modal, Table } from 'antd';
+import { Col, Dropdown, Form, Input, Menu, Modal, Space, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
@@ -12,11 +12,15 @@ import actions from '../../redux/article/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
-import { addArticle, editArticles, getArticleById, getArticles } from '../../redux/article/actionCreator';
+import { addArticle, editArticles, getArticleById, getArticles, getExportArticles } from '../../redux/article/actionCreator';
+import { DownOutlined } from '@ant-design/icons';
+import ImportArticle from '../../components/modals/ImportArticle';
+import { CSVLink } from 'react-csv';
 
 const article = () => {
     const dispatch = useDispatch();
-    const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr } = actions;
+    const CSVLinkRef = useRef(null);
+    const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr, addBulkArticleSuccess, addBulkArticleErr, getExportArticlesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [articleTableData, setarticleTableData] = useState([]);
@@ -29,10 +33,13 @@ const article = () => {
         imageUrl: "",
         videoUrl: "",
         body: "",
-        priotity: "",
+        priority: "",
     });
-
+    const [priority, setPriority] = useState(false);
     const [formErrors, setFormErrors] = useState();
+    const [importModal, setImportModal] = useState(false);
+    const [exportArticle, setExportArticle] = useState([])
+    const [exportTog, setExportTog] = useState(false);
 
     const getArticlesData = useSelector((state) => state.articles.getArticlesData);
     const getArticleByIdData = useSelector((state) => state.articles.getArticleByIdData);
@@ -40,6 +47,22 @@ const article = () => {
     const addArticleError = useSelector((state) => state.articles.addArticleErr);
     const editArticlesData = useSelector((state) => state.articles.editArticlesData);
     const editArticlesError = useSelector((state) => state.articles.editArticlesErr);
+    const addBulkArticleData = useSelector((state) => state.articles.addBulkArticleData);
+    const addBulkArticleError = useSelector((state) => state.articles.addBulkArticleError);
+    const getExportArticleData = useSelector((state) => state.articles.getExportArticleData);
+
+    const header = [
+        { label: 'body', key: 'body' },
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'id', key: 'id' },
+        { label: 'imageUrl', key: 'imageUrl' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isDeleted', key: 'isDeleted' },
+        { label: 'priority', key: 'priority' },
+        { label: 'title', key: 'title' },
+        { label: 'updatedAt', key: 'updatedAt' },
+        { label: 'videoUrl', key: 'videoUrl' },
+    ];
 
     const handleChange = (e) => {
         setArticleData({ ...articledata, [e.target.name]: e.target.value })
@@ -95,6 +118,20 @@ const article = () => {
     useEffect(() => {
         dispatch(getArticles(perPage, pageNumber));
     }, [perPage, pageNumber])
+
+    useEffect(() => {
+        if (addBulkArticleData && addBulkArticleData.status === 200) {
+            dispatch(addBulkArticleSuccess(null))
+            toast.success("Import article")
+        }
+    }, [addBulkArticleData])
+
+    useEffect(() => {
+        if (addBulkArticleError) {
+            dispatch(addBulkArticleErr(null))
+            toast.error("Something went wrong")
+        }
+    }, [addBulkArticleError])
 
     useEffect(() => {
         if (addArticleData && addArticleData.status === 200) {
@@ -156,6 +193,7 @@ const article = () => {
             dispatch(addArticle(Data));
             setIsModalVisible(false)
             handleCancel();
+            setPriority(false);
         }
         else {
             if (validation()) {
@@ -167,7 +205,7 @@ const article = () => {
                 imageUrl: articledata.imageUrl,
                 videoUrl: articledata.videoUrl,
                 body: articledata.body,
-                priotity: articledata.priotity,
+                priority: articledata.priority,
                 isActive: true,
                 isDeleted: false,
             }
@@ -186,7 +224,7 @@ const article = () => {
         })
         setSelectedArticle(null)
         setNameTog(false)
-        // setPriority(false);
+        setPriority(false);
     };
 
     const onEdit = (id) => {
@@ -197,7 +235,7 @@ const article = () => {
         dispatch(getArticleById(dataForEdit.id))
         setIsModalVisible(true)
         setNameTog(true)
-        // setPriority(true);
+        setPriority(true);
     }
 
     const newArticle = userForDelete => {
@@ -234,6 +272,57 @@ const article = () => {
             } else {
                 toast.error("Something went wrong")
             }
+        }
+    }
+
+    const exportArticles = () => {
+        dispatch(getExportArticles())
+    }
+
+    useEffect(() => {
+        if (exportArticle?.length && exportTog) {
+            CSVLinkRef?.current?.link.click();
+            toast.success('Article exported');
+            setExportTog(false);
+            dispatch(getExportArticlesSuccess(null))
+        }
+        else if (!exportArticle.length && exportTog) {
+            toast.success('No data for export');
+        }
+    }, [exportTog, exportArticle])
+
+    useEffect(() => {
+        if (getExportArticleData?.data.length) {
+            setExportArticle(
+                getExportArticleData?.data.map(item => {
+                    return {
+                        ...item,
+                        body: item.body,
+                        createdAt: item.createdAt,
+                        id: item.id,
+                        imageUrl: item.imageUrl,
+                        isActive: item.isActive,
+                        isDeleted: item.isDeleted,
+                        priority: item.priority,
+                        title: item.title,
+                        updatedAt: item.updatedAt,
+                        videoUrl: item.videoUrl,
+                    }
+                })
+            )
+            setExportTog(true)
+        }
+    }, [getExportArticleData])
+
+    const onClick = ({ key }) => {
+        if (key == 'addArticle') {
+            showModal();
+        }
+        if (key === 'import') {
+            setImportModal(true);
+        }
+        if (key === 'exportArticle') {
+            exportArticles()
         }
     }
 
@@ -312,6 +401,26 @@ const article = () => {
         },
     ];
 
+    const menu = (
+        <Menu
+            onClick={onClick}
+            items={[
+                {
+                    label: 'Export article',
+                    key: 'exportArticle',
+                },
+                {
+                    label: 'Add article',
+                    key: 'addArticle',
+                },
+                {
+                    label: 'Import article',
+                    key: 'import',
+                },
+            ]}
+        />
+    );
+
     return (
         <>
             <PageHeader
@@ -319,9 +428,24 @@ const article = () => {
                 title="Article"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary" onClick={showModal}>
+                        {/* <Button size="small" type="primary" onClick={showModal}>
                             Add article
-                        </Button>
+                        </Button> */}
+                        <Dropdown overlay={menu} trigger='click'>
+                            <a onClick={e => e.preventDefault()}>
+                                <Space>
+                                    Actions
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        <CSVLink
+                            headers={header}
+                            data={exportArticle}
+                            ref={CSVLinkRef}
+                            filename="Article.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
                     </div>
                 ]}
             />
@@ -347,6 +471,10 @@ const article = () => {
                     </UserTableStyleWrapper>
                 </Cards>
             </Main>
+
+            {
+                importModal && <ImportArticle importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import article" />
+            }
 
             {isModalVisible &&
                 <Modal
@@ -404,6 +532,27 @@ const article = () => {
                             />
                             {formErrors?.body && <span style={{ color: "red" }}>{formErrors.body}</span>}
                         </Form.Item>
+
+                        {
+                            priority ?
+                                <>
+                                    <label htmlFor="priority">Priority</label>
+                                    <Form.Item>
+                                        <Input
+                                            // type="text"
+                                            type="number"
+                                            placeholder="Enter priority"
+                                            name="priority"
+                                            value={articledata.priority}
+                                            onChange={(e) => handleChange(e, "priority")}
+                                            className='experience-input'
+                                            id='priority'
+                                        />
+                                        {formErrors?.priority && <span style={{ color: "red" }}>{formErrors.priority}</span>}
+                                    </Form.Item>
+                                </> : ""
+                        }
+
                     </Form >
                 </Modal >
             }
