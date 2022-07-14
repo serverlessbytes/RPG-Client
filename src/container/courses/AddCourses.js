@@ -498,7 +498,7 @@ const AddCourses = () => {
 
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
-      toast.success("Swayam course modules added");
+      toast.success("Swayam course module added");
       dispatch(addSwayamCourseModuleSuccess(null));
     }
   }, [addSwayamCourseModuleData]);

@@ -250,7 +250,7 @@ const SchemeRating = () => {
                         <label htmlFor="rating">Rating</label>
                         <Form.Item>
                             <Input
-                                placeholder="Enter Rating"
+                                placeholder="Enter rating"
                                 name="rating"
                                 type="number"
                                 value={data.rating}
@@ -262,7 +262,7 @@ const SchemeRating = () => {
                         <Form.Item>
                             <Input
                                 type="text"
-                                placeholder="Enter Comment"
+                                placeholder="Enter comment"
                                 name="comment"
                                 value={data.comment}
                                 onChange={(e) => handleChange(e)}
