@@ -19,8 +19,8 @@ const JobApplication = () => {
     const { TabPane } = Tabs;
 
     const [status, setStatus] = useState('all');
-    const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]); //set data
-    const [perPage, setPerPage] = useState(20) // forpagination
+    const [jobApplicatiobtable, setjobApplicatiobtable] = useState([]);
+    const [perPage, setPerPage] = useState(20);
     const [pageNumber, setPageNumber] = useState(1)
     const [jobApplication, setJobApplication] = useState({
         jobCategory: "",
@@ -57,10 +57,14 @@ const JobApplication = () => {
 
     useEffect(() => {
         if (status !== "all") {
-            dispatch(getJobApplication(perPage, pageNumber, status))
+            dispatch(getJobApplication(perPage, pageNumber, status, jobApplication.jobRole, jobApplication.jobCategory))
         }
         else {
-            dispatch(getJobApplication(perPage, pageNumber))
+            if (jobApplication.jobRole && jobApplication.jobCategory) {
+                dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
+            } else {
+                dispatch(getJobApplication(perPage, pageNumber))
+            }
         }
     }, [perPage, pageNumber, status])
 
@@ -81,12 +85,20 @@ const JobApplication = () => {
     }
 
     const onApply = () => {
-        dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
+        if (status !== 'all') {
+            dispatch(getJobApplication(perPage, pageNumber, status, jobApplication.jobRole, jobApplication.jobCategory))
+        } else {
+            dispatch(getJobApplication(perPage, pageNumber, "", jobApplication.jobRole, jobApplication.jobCategory))
+        }
     }
 
     const clearFilter = () => {
         setJobApplication({ ...jobApplication, jobCategory: "", jobRole: "" })
-        dispatch(getJobApplication(perPage, pageNumber, ""))
+        if (status !== 'all') {
+            dispatch(getJobApplication(perPage, pageNumber, status))
+        } else {
+            dispatch(getJobApplication(perPage, pageNumber, ""))
+        }
     }
 
     const onChangeHandle = (e, name) => {

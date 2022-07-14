@@ -51,7 +51,6 @@ const CourseRating = () => {
             error.rating = "Rating required";
             flage = true;
         }
-        console.log("data.comment.length", data.comment.length);
         if (!data.comment.length) {
             error.comment = "Comment required";
             flage = true;
