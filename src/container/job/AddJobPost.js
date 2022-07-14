@@ -5,7 +5,7 @@ import { Cards } from '../../components/cards/frame/cards-frame';
 import { HorizontalFormStyleWrap } from '../forms/overview/Style';
 import { PageHeader } from '../../components/page-headers/page-headers';
 import moment from 'moment';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { addJobPost, addLanguageJobPost, editJobPost, getEmployerData, getJobcategory, getJobroles, getoneJobPost } from '../../redux/jobs/actionCreator';
 import uuid from 'react-uuid';
@@ -23,10 +23,10 @@ const AddJobPost = () => {
     const { Option } = Select;
     const { TextArea } = Input;
     const {
-        getoneJobPostSuccess, // for edit
+        getoneJobPostSuccess,
     } = actions;
 
-    const [error, setError] = useState({}); // for valadation
+    const [error, setError] = useState({});
     const [editJobsID, seteditJobsID] = useState();
     const [langIds, setLangIds] = useState();
     const [state, setState] = useState({
@@ -44,7 +44,6 @@ const AddJobPost = () => {
         jobType: "",
         isActive: true,
         shifts: "",
-        // shifts:[],
         email: "",
         phone: "",
         type: "",
@@ -61,11 +60,11 @@ const AddJobPost = () => {
     });
 
     const languageData = useSelector(state => state.language.getLanguageData);
-    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)  // for fetch a single data
-    const jobData = useSelector((state) => state.job.jobCatogeryData) //job category
-    const jobRolData = useSelector((state) => state.job.jobRoleData)  //job rol
-    const stateData = useSelector((state) => state.state.getStateData) //state
-    const diStrictdata = useSelector((state) => state.district.getDistrictData) // district  
+    const getOneJobPostData = useSelector((state) => state.job.getOneJobPostData)
+    const jobData = useSelector((state) => state.job.jobCatogeryData)
+    const jobRolData = useSelector((state) => state.job.jobRoleData)
+    const stateData = useSelector((state) => state.state.getStateData)
+    const diStrictdata = useSelector((state) => state.district.getDistrictData)
     const getEmployerdata = useSelector((state) => state.job.getEmployerData)
     useEffect(() => {
         let temp = {
@@ -90,21 +89,11 @@ const AddJobPost = () => {
     }, [id])
 
     useEffect(() => {
-        dispatch(getJobcategory()) //dispatch job category
+        dispatch(getJobcategory())
+        dispatch(getJobroles())
+        dispatch(getStateData())
+        dispatch(getEmployerData())
     }, [])
-
-    useEffect(() => {
-        dispatch(getJobroles()) //dispatch job rol
-    }, [])
-
-    useEffect(() => {
-        dispatch(getStateData()) //dipatch state 
-    }, []);
-
-    useEffect(() => {
-        dispatch(getEmployerData()) //dipatch getEmployerData
-    }, []);
-
 
     useEffect(() => {
         if (getOneJobPostData && getOneJobPostData?.data && getOneJobPostData?.data?.data) {
@@ -113,7 +102,6 @@ const AddJobPost = () => {
                 key: getOneJobPostData.data.data.key,
                 salary: getOneJobPostData.data.data.salary,
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
-                //  benifitLine: RichTextEditor.createValueFromString(getOneScHemeData.benifitLine, 'markdown'),
                 name: getOneJobPostData?.data?.data.name?.id,
                 state: getOneJobPostData?.data?.data.state?.id,
                 district: getOneJobPostData?.data?.data.district?.id,
@@ -278,13 +266,11 @@ const AddJobPost = () => {
             if (e.target.value === '' || regexpincode.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
                 setError({ ...error, pincode: "" });
-
             }
         } else if (e.target.name === "salary") {
             if (e.target.value === '' || regexphone.test(e.target.value)) {
                 setState({ ...state, [e.target.name]: e.target.value });
                 setError({ ...error, salary: "" });
-
             }
         }
         else {
@@ -345,7 +331,7 @@ const AddJobPost = () => {
 
     useEffect(() => {
         if (state.state) {
-            dispatch(getDistrictData(state.state)) //dipatch district
+            dispatch(getDistrictData(state.state))
         }
     }, [state.state]);
 
@@ -354,8 +340,6 @@ const AddJobPost = () => {
             return;
         }
         let data = {
-            // key: langId ? getOneJobPostData.data.key : uuid(),
-            // key: uuid(),
             name: state.name,
             state: state.state,
             district: state.district,
@@ -395,7 +379,6 @@ const AddJobPost = () => {
 
             }
             dispatch(addLanguageJobPost(langId, data, langIds.hindi, langIds.marathi))
-            // addLanguageJobPost(langId, data)
         }
         else {
             data = { ...data, key: uuid() }
@@ -406,7 +389,6 @@ const AddJobPost = () => {
 
     const onEdit = () => {
         let data = {
-            // id: editJobsID,
             name: state.name,
             state: state.state,
             district: state.district,
@@ -421,7 +403,6 @@ const AddJobPost = () => {
             type: state.type,
             extraType: state.extraType,
             isActive: true,
-            // shifts: [state.shifts],
             shifts: state.shifts,
             email: state.email,
             phone: state.phone,
