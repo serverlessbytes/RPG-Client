@@ -15,6 +15,10 @@ const actions = {
     GET_QUERIES_BY_ID_SUCCESS: "GET_QUERIES_BY_ID_SUCCESS ",
     GET_QUERIES_BY_ID_ERR: "GET_QUERIES_BY_ID_ERR ",
 
+    GET_EXPORT_QUERIES_BEGIN : "GET_EXPORT_QUERIES_BEGIN",
+    GET_EXPORT_QUERIES_SUCCESS : "GET_EXPORT_QUERIES_SUCCESS",
+    GET_EXPORT_QUERIES_ERR : "GET_EXPORT_QUERIES_ERR",
+
 
     getQueriesBegin: () => {
         return {
@@ -92,6 +96,24 @@ const actions = {
             err,
         }
     },
+
+    getExportQueriesBegin : () => {
+     return {
+        type : actions.GET_EXPORT_QUERIES_BEGIN,
+     }
+    },
+    getExportQueriesSuccess: (data) => {
+        return {
+            type : actions.GET_EXPORT_QUERIES_SUCCESS,
+            data,
+        }
+    },
+    getExportQueriesErr: (err) => {
+        return {
+           type : actions.GET_EXPORT_QUERIES_ERR,
+           err,
+        }
+    }
 
 
 }

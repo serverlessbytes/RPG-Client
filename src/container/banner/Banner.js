@@ -1,10 +1,10 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button } from '../../components/buttons/buttons';
 import { PageHeader } from '../../components/page-headers/page-headers';
-import { Form, Input, Modal, Table } from 'antd';
+import { Dropdown, Form, Input, Menu, Modal, Space, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBanner, editBanner, GetBanner, getOneBanner } from '../../redux/banner/actionCreator';
+import { addBanner, editBanner, GetBanner, getExportBanners, getOneBanner } from '../../redux/banner/actionCreator';
 import { Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
@@ -14,11 +14,13 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import Importbanner from '../../components/modals/ImportBanner';
+import { DownOutlined } from '@ant-design/icons';
+import { CSVLink } from 'react-csv';
 
 const Banner = () => {
     const dispatch = useDispatch();
-
-    const { getOneBannerSuccess, addBannerSuccess, addBannerErr, editBannerSuccess, editBannerErr, addBulkBannerSuccess, addBulkBannerErr } = actions;
+    const CSVLinkRef = useRef(null);
+    const { getOneBannerSuccess, addBannerSuccess, addBannerErr, editBannerSuccess, editBannerErr, addBulkBannerSuccess, addBulkBannerErr, getExportBannersSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [importModel, setImportModel] = useState(false);
@@ -33,6 +35,8 @@ const Banner = () => {
     });
     const [fileError, setFileError] = useState('');
     const [formErrors, setFormErrors] = useState();
+    const [exportBannerData, setExportBannerData] = useState([]);
+    const [exportTog, setExportTog] = useState(false);
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -42,6 +46,8 @@ const Banner = () => {
     const editBannerError = useSelector((state) => state.banner.editBannerError);
     const addBulkbannerData = useSelector((state) => state.banner.addBulkbannerData);
     const addBulkbannerErr = useSelector((state) => state.banner.addBulkbannerErr);
+    const getExportBannerData = useSelector((state) => state.banner.getExportBannerData);
+
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
@@ -125,6 +131,16 @@ const Banner = () => {
         }
     }, [getOneBannerdata])
 
+    const header = [
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'id', key: 'id' },
+        { label: 'imageUrl', key: 'imageUrl' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isDeleted', key: 'isDeleted' },
+        { label: 'title', key: 'title' },
+        { label: 'updatedAt', key: 'updatedAt' },
+    ];
+
     const showModal = () => {
         setIsModalVisible(true);
     };
@@ -181,6 +197,7 @@ const Banner = () => {
             handleCancel()
         }
     };
+
     const handleCancel = () => {
         setIsModalVisible(false);
         setData({
@@ -242,6 +259,42 @@ const Banner = () => {
         }
     }
 
+    const exportBanner = () => {
+        dispatch(getExportBanners())
+    }
+
+    useEffect(() => {
+        if (exportBannerData?.length && exportTog) {
+            CSVLinkRef?.current?.link.click();
+            toast.success('Banner exported');
+            setExportTog(false);
+            dispatch(getExportBannersSuccess(null))
+        }
+        else if (!exportBannerData.length && exportTog) {
+            toast.success('No data for export');
+        }
+    }, [exportTog, exportBannerData])
+
+    useEffect(() => {
+        if (getExportBannerData?.data) {
+            setExportBannerData(
+                getExportBannerData?.data.map(item => {
+                    return {
+                        ...item,
+                        createdAt: item.createdAt,
+                        id: item.id,
+                        imageUrl: item.imageUrl,
+                        isActive: item.isActive,
+                        isDeleted: item.isDeleted,
+                        title: item.title,
+                        updatedAt: item.updatedAt,
+                    }
+                })
+            )
+            setExportTog(true);
+        }
+    }, [getExportBannerData])
+
     useEffect(() => {
         if (getBannerData && getBannerData.data) {
             setBannerTableData(getBannerData && getBannerData.data && getBannerData.data.data.map((item, i) => {
@@ -288,6 +341,38 @@ const Banner = () => {
         },
     ];
 
+    const onClick = ({ key }) => {
+        if (key == 'addBanner') {
+            showModal();
+        }
+        if (key === 'importBanner') {
+            showImportModal();
+        }
+        if (key === 'exportBanner') {
+            exportBanner();
+        }
+    }
+
+    const menu = (
+        <Menu
+            onClick={onClick}
+            items={[
+                {
+                    label: 'Import banner',
+                    key: 'importBanner',
+                },
+                {
+                    label: 'Add banner',
+                    key: 'addBanner',
+                },
+                {
+                    label: 'Export banner',
+                    key: 'exportBanner',
+                }
+            ]}
+        />
+    );
+    
     return (
         <>
             <PageHeader
@@ -295,13 +380,28 @@ const Banner = () => {
                 title="Banner"
                 buttons={[
                     <div key="1" className="page-header-actions">
-                        <Button size="small" type="primary" onClick={showModal}>
+                        {/* <Button size="small" type="primary" onClick={showModal}>
                             Add banner
                         </Button>
 
                         <Button size="small" type="primary" onClick={showImportModal}>
                             Import banner
-                        </Button>
+                        </Button> */}
+                        <Dropdown overlay={menu} trigger='click'>
+                            <a onClick={e => e.preventDefault()}>
+                                <Space>
+                                    Actions
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        <CSVLink
+                            headers={header}
+                            data={exportBannerData}
+                            ref={CSVLinkRef}
+                            filename="Banner.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
                     </div>
                 ]}
             />

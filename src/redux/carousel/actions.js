@@ -19,6 +19,9 @@ const actions = {
   ADD_BULK_CAROUSEL_SUCCESS: "ADD_BULK_CAROUSEL_SUCCESS",
   ADD_BULK_CAROUSEL_ERR: "ADD_BULK_CAROUSEL_ERR",
 
+  GET_EXPORT_CAROUSEL_BEGINE: "GET_EXPORT_CAROUSEL_BEGINE",
+  GET_EXPORT_CAROUSEL_SUCCESS: "GET_EXPORT_CAROUSEL_SUCCESS",
+  GET_EXPORT_CAROUSEL_ERR: "GET_EXPORT_CAROUSEL_ERR",
 
   addCarouselBegin: () => {
     return {
@@ -116,6 +119,26 @@ const actions = {
   addBulkCarouselErr: err => {
     return {
       type: actions.ADD_BULK_CAROUSEL_ERR,
+      err,
+    };
+  },
+
+  getExportCarouselsBegin: () => {
+    return {
+      type: actions.GET_EXPORT_CAROUSEL_BEGINE,
+    };
+  },
+
+  getExportCarouselsSuccess: data => {
+    return {
+      type: actions.GET_EXPORT_CAROUSEL_SUCCESS,
+      data,
+    };
+  },
+
+  getExportCarouselsErr: err => {
+    return {
+      type: actions.GET_EXPORT_CAROUSEL_ERR,
       err,
     };
   },

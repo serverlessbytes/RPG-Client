@@ -17,6 +17,10 @@ const {
     GET_QUERIES_BY_ID_SUCCESS,
     GET_QUERIES_BY_ID_ERR,
 
+    GET_EXPORT_QUERIES_BEGIN,
+    GET_EXPORT_QUERIES_SUCCESS,
+    GET_EXPORT_QUERIES_ERR,
+
 } = actions
 
 const initialState = {
@@ -24,10 +28,12 @@ const initialState = {
     getQueriesErr: null,
     editQueriesData: null,
     editQuerieErr: null,
-    addQueriesData : null,
-    addQuerieErr : null,
-    getQueriesById : null,
-    getQueriesByIdErr : null,
+    addQueriesData: null,
+    addQuerieErr: null,
+    getQueriesById: null,
+    getQueriesByIdErr: null,
+    getExportQueriesError: null,
+    getExportQueriesData : null,
 }
 
 
@@ -71,44 +77,62 @@ const queriesReducer = (state = initialState, action) => {
                 loading: false
             }
 
-            case ADD_QUERIES_BEGIN:
-                return {
-                    ...state,
-                    loading: true,
-                }
-    
-            case ADD_QUERIES_SUCCESS:
-                return {
-                    ...state,
-                    addQueriesData: data,
-                    loading: false
-                }
-            case ADD_QUERIES_ERR:
-                return {
-                    ...state,
-                    addQuerieErr: err,
-                    loading: false
-                }
+        case ADD_QUERIES_BEGIN:
+            return {
+                ...state,
+                loading: true,
+            }
 
-                case GET_QUERIES_BY_ID_BEGIN:
-                    return {
-                        ...state,
-                        loading: true,
-                    }
-        
-                case GET_QUERIES_BY_ID_SUCCESS:
-                    return {
-                        ...state,
-                        getQueriesById: data,
-                        loading: false
-                    }
-                case GET_QUERIES_BY_ID_ERR:
-                    return {
-                        ...state,
-                        getQueriesByIdErr: err,
-                        loading: false
-                    }
+        case ADD_QUERIES_SUCCESS:
+            return {
+                ...state,
+                addQueriesData: data,
+                loading: false
+            }
+        case ADD_QUERIES_ERR:
+            return {
+                ...state,
+                addQuerieErr: err,
+                loading: false
+            }
 
+        case GET_QUERIES_BY_ID_BEGIN:
+            return {
+                ...state,
+                loading: true,
+            }
+
+        case GET_QUERIES_BY_ID_SUCCESS:
+            return {
+                ...state,
+                getQueriesById: data,
+                loading: false
+            }
+        case GET_QUERIES_BY_ID_ERR:
+            return {
+                ...state,
+                getQueriesByIdErr: err,
+                loading: false
+            }
+
+        case GET_EXPORT_QUERIES_BEGIN:
+            return {
+                ...state,
+                loading: true,
+            }
+
+        case GET_EXPORT_QUERIES_SUCCESS:
+            return {
+                ...state,
+                getExportQueriesData: data,
+                loading: false
+            }
+        case GET_EXPORT_QUERIES_ERR:
+            return {
+                ...state,
+                getExportQueriesError: err,
+                loading: false
+            }
 
         default:
             return state

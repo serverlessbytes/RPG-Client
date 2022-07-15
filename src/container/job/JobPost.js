@@ -22,7 +22,7 @@ import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 const JobPost = () => {
-    const { allJobsSuccess, addBlukJobsSuccess } = actions;
+    const { allJobsSuccess, addBlukJobsSuccess, addBlukJobsErr } = actions;
     const { Option } = Select;
     const dispatch = useDispatch();
     const history = useHistory();
@@ -54,6 +54,7 @@ const JobPost = () => {
     const stateData = useSelector(state => state.state.getStateData);
     const filterData = useSelector(state => state.job.getJobFilterData);
     const addJobPostModulData = useSelector(state => state.job.addBulkJobsData)
+    const addBulkJobsError = useSelector(state => state.job.addBulkJobsError)
 
     const header = [
         { label: 'id', key: 'id' },
@@ -222,6 +223,13 @@ const JobPost = () => {
     }, [addJobPostModulData]);
 
     useEffect(() => {
+        if (addBulkJobsError) {
+            dispatch(addBlukJobsErr(null))
+            toast.error("Something went wrong")
+        }
+    }, [addBulkJobsError])
+
+    useEffect(() => {
         dispatch(getJobroles());
         dispatch(getStateData());
         dispatch(allJobsSuccess(null));
@@ -295,39 +303,6 @@ const JobPost = () => {
                 title="Job"
 
                 buttons={[
-                    //   <div key="1" className="page-header-actions">
-                    //     <Button size="small" onClick={() => onExportJobs()} type="info">
-                    //       Export Jobs
-                    //     </Button>
-                    //     <Button onClick={allexPortJobs} size="small" type="info">
-                    //       Export All Jobs
-                    //     </Button>
-                    //     <Button
-                    //       size="small"
-                    //       onClick={() => {
-                    //         history.push('new');
-                    //       }}
-                    //       type="primary"
-                    //     >
-                    //       Add Job Post
-                    //     </Button>
-                    //     <Button
-                    //       size="small"
-                    //       onClick={() => {
-                    //         setImportModal(true);
-                    //       }}
-                    //       type="primary"
-                    //     >
-                    //       Import
-                    //     </Button>
-                    //     <CSVLink
-                    //       headers={header}
-                    //       data={stateJob}
-                    //       ref={CSVLinkRef}
-                    //       filename="Job.csv"
-                    //       style={{ opacity: 0 }}
-                    //     ></CSVLink>
-                    //   </div>,
                     <div key="1" className="page-header-actions">
                         <Dropdown overlay={menu} trigger='click'>
                             <a onClick={e => e.preventDefault()}>
