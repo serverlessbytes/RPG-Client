@@ -235,34 +235,13 @@ const SchemeCategory = () => {
                 <Cards headless>
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
-                            {/* --- search bar --- */}
-                            {/* <Form name="sDash_select" layout="vertical">
-                                <Form.Item name="search" label="">
-                                    <Input placeholder="search" style={{ width: 200 }} />
-                                </Form.Item>
-                            </Form> */}
-
                             <Table
-                                // rowSelection={rowSelection}
                                 dataSource={schemeCategoryTableData}
                                 columns={schemeTableColumns}
                                 pagination={false}
                             />
-
                         </TableWrapper>
                     </UserTableStyleWrapper>
-                    {/* <ProjectPagination>
-                        {schemeCategoryTableData.length ? (
-                            <Pagination
-                                onChange={onHandleChange}
-                                showSizeChanger
-                                onShowSizeChange={onShowSizeChange}
-                                pageSize={10}
-                                defaultCurrent={1}
-                                total={10}
-                            />
-                        ) : null}
-                    </ProjectPagination> */}
                 </Cards>
             </Main>
 
@@ -280,11 +259,7 @@ const SchemeCategory = () => {
                 </Form>
             </Modal>
 
-
-            {< ImportSchemeCategory
-                importModal={importModal}
-                handleCancel={() => setImportModal(false)}
-                modaltitle="Import scheme category" />}
+            {importModal && <ImportSchemeCategory importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import scheme category" />}
         </>
     )
 }

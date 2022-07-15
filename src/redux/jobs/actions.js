@@ -95,7 +95,6 @@ const actions = {
   },
 
   getJobcategorySuccess: data => {
-    // console.log("getJobcategorySuccess=====data",data);
     return {
       type: actions.GET_JOBCATEGOTRY_SUCCESS,
       data,
@@ -279,7 +278,6 @@ const actions = {
   },
 
   getoneJobPostSuccess: data => {
-    // console.log("dataa",data)
     return {
       type: actions.GETONE_JOBPOST_SUCCESS,
       data,
@@ -380,7 +378,6 @@ const actions = {
   },
 
   updateIsSelectedJobApplicationSuccess: data => {
-    // console.log("data____",data)
     return {
       type: actions.UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS,
       data,

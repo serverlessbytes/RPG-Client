@@ -248,7 +248,7 @@ const article = () => {
                     imageUrl: item.imageUrl,
                     videoUrl: item.videoUrl,
                     action: (
-                        <div className='active-schemes-table'>
+                        <div className='active-schemes-table' key={id}>
                             <div className="table-actions">
                                 <>
                                     <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">

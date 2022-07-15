@@ -31,14 +31,6 @@ const SuperAdmin = () => {
   const editProfileData = useSelector(state => state.users.editProfileData)
   const editProfileError = useSelector(state => state.users.editProfileErr)
 
-  // const getData = () => {
-  //   ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=SUPERADMIN`)
-  //     .then((res) => {
-  //       setSuperAdminData(res)
-  //     })
-  //     .catch((err) => console.log(err))
-  // }
-
   const callback = key => {
     setStatus(key),
       setPageNumber(1)

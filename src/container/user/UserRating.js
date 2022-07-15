@@ -33,10 +33,6 @@ const UserRating = () => {
     const getOneUserRatingData = useSelector((state) => state.users.getOneUserRatingData)
     const editUserRatingdata = useSelector((state) => state.users.editUserRatingData)
 
-    // useEffect(()=>{
-    //     console.log("editUserRatingdata",editUserRatingdata)
-    // },[editUserRatingdata])
-
     useEffect(() => {
         if (editUserRatingdata && editUserRatingdata.status === 200) {
             dispatch(edituserRatingSuccess(null));

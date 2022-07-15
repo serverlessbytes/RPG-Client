@@ -91,9 +91,6 @@ const AddSchemes = () => {
       dispatch(getOneSchemeData(id));
     }
   }, [id]);
-  useEffect(() => {
-    console.log("getOneScHemeData", getOneScHemeData);
-  }, [getOneScHemeData])
 
   useEffect(() => {
     if (getOneScHemeData && id) {

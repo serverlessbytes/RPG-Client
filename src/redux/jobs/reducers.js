@@ -140,7 +140,6 @@ const jobReducer = (state = initialState, action) => {
         loading: true,
       };
     case GET_JOBCATEGOTRY_SUCCESS:
-      // console.log("datareducer",data)
       return {
         ...state,
         jobCatogeryData: data,

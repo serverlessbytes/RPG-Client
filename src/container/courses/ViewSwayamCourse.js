@@ -15,7 +15,6 @@ const ViewSwayamCourse = ({ viewModal, type, setViewModal, data }) => {
   };
 
   const onEdit = (id) => {
-    // console.log("key",key)
     history.push(`${path}/addcourses?id=${id}`);
   }
 

@@ -84,7 +84,6 @@ const deleteAddActiveClass = paths => {
       dispatch(fmDataBegin());
       initialState.map(value => {
         if (value.path === paths) {
-          console.log(paths);
           value.className = value.className === 'active' ? '' : 'active';
         }
         return value.folder.length && DeleteFolder(value.folder, paths);

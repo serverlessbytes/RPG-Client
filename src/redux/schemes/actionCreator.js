@@ -163,15 +163,9 @@ export const getAllSchemes = () => async dispatch => {
 };
 
 export const editSchemeData = body => async dispatch => {
-  // await ApiPost(`scheme/editScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, body)
   await ApiPost(`scheme/editScheme`, body)
     .then(res => {
       return dispatch(editSchemeSuccess(res));
-      // console.log('res', res);
-      // if (res.status === 200) {
-      //   // redirect after click edit button on listing call getSchemeData
-      //   // dispatch(getSchemeData(per_Page, page_Num, status));
-      // }
     })
     .catch(err => dispatch(editSchemeErr(err)));
 };
@@ -180,10 +174,6 @@ export const addSchemeInBulkImport = body => async dispatch => {
   await ApiPost(`scheme/addSchemeInBulk`, body)
     .then(res => {
       dispatch(addSchemeInBulk(res));
-      // if (res.status === 200) {
-      //   // redirect after click edit button on listing call getSchemeData
-      //   dispatch(getSchemeData(per_Page, page_Num, status));
-      // }
     })
     .catch(err => {
       let newErr = {
@@ -228,7 +218,6 @@ export const addSchemeCategoryInBulk = (body) => async (dispatch) => {
     .then(res => {
       dispatch(addSchemeCategoryInBulkSuccess(res));
       if (res.status === 200) {
-        // redirect after click edit button on listing call getSchemeData
         dispatch(getSchemecategory());
       }
     })

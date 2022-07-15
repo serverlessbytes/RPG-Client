@@ -197,34 +197,6 @@ const CourseCategory = () => {
         }
 
     };
-    // const handleOk = () => {
-    //     if (dataForEdit) {
-    //         let data = form.getFieldsValue() //get value from form field
-    //         //console.log("========>data<==========", data);
-    //         //delete data.key;
-    //         data = {
-    //             ...data, 
-    //             id: dataForEdit.id, 
-    //             "isActive": true,
-    //             "isDeleted": false
-    //         }
-    //         dispatch(editBenefitsData(data))
-    //         console.log("data",data) 
-    //     }
-    //     else {
-    //         let data = form.getFieldsValue()
-    //         //console.log("========>data<==========", data);
-    //         data = {
-    //             ...data,
-    //             key: uuid()
-    //         }
-    //         dispatch(postBenefitsData(data))
-    //         console.log("data", data)
-    //     }
-    //     form.resetFields()
-    //     setIsModalVisible(false);
-
-    // };
     const [state, setState] = useState({
         projects: usersTableData,
         current: 0,

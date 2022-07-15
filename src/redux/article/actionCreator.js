@@ -32,7 +32,6 @@ export const getArticles = (perpage, pagenum) => async (dispatch) => {
         })
 }
 export const editArticles = (body) => async (dispatch) => {
-    console.log("body",body)
     const formData = new FormData();
     formData.append('body', body.body);
     formData.append('videoUrl', body.videoUrl);

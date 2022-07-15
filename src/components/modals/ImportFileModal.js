@@ -1,10 +1,7 @@
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import uuid from 'react-uuid';
 import * as XLSX from 'xlsx';
-import STORAGEKEY from '../../config/APP/app.config';
-import AuthStorage from '../../helper/AuthStorage';
 import { addSchemeInBulkImport } from '../../redux/schemes/actionCreator';
 import { getStateData } from '../../redux/state/actionCreator';
 
@@ -13,45 +10,32 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
 
   const dispatch = useDispatch();
 
-  const userData = AuthStorage.getStorageJsonData(STORAGEKEY.userData);
-
   const SchemeCategoryFromRedux = useSelector(state => state.scheme.schemecatogeryData?.data);
   const SchemeBenefitDataFromRedux = useSelector(state => state.beneFit.getBenefitData?.data);
   const stateData = useSelector(state => state.state.getStateData?.data);
-  const language = localStorage.getItem('language');
 
   const [Error, setError] = useState();
-  const [error, seterror] = useState(); // for valadation
+  const [error, seterror] = useState();
   const [FileData, setFileData] = useState();
 
-  const [schemeCategoryArray, setSchemeCategoryArray] = useState([]);
-  const [schemeBanefitArray, setSchemeBanefitArray] = useState([]);
 
   const [stateArray, setStateArray] = useState([]);
   const [selectedStateArray, setSelectedStateArray] = useState([]);
 
-  const [schemeCategoryID, setSchemeCategoryID] = useState('');
-  const [schemeBanefitID, setSchemeBanefitID] = useState('');
-
-  //   SCHEME CATEGORY
   useEffect(() => {
     SchemeCategoryFromRedux.forEach(element => {
       element['label'] = element.name;
       element['value'] = element.id;
     });
-    setSchemeCategoryArray(SchemeCategoryFromRedux);
   }, [SchemeCategoryFromRedux]);
 
-  //   SCHEME BENEFITS
   useEffect(() => {
     SchemeBenefitDataFromRedux.forEach(element => {
       element['label'] = element.name;
       element['value'] = element.id;
     });
-    setSchemeBanefitArray(SchemeBenefitDataFromRedux);
   }, [SchemeBenefitDataFromRedux]);
 
-  // SETTING STATE
   useEffect(() => {
     if (stateData) {
       stateData.forEach(ele => {
@@ -61,7 +45,6 @@ const ImportFileModal = ({ importModal, handleCancel, modaltitle }) => {
     }
   }, [stateData]);
 
-  // GET STATE
   useEffect(() => {
     dispatch(getStateData());
   }, []);

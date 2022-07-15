@@ -44,14 +44,12 @@ const ThemeLayout = WrappedComponent => {
 
     // componentDidMount() {
     //   const ls = localStorage.getItem('language');
-    //   console.log("ls",ls)
     //   if (ls) {
     //     this.setState({ ...this.state, lang: ls });
     //   }
     //   window.addEventListener('resize', this.updateDimensions);
     //   this.updateDimensions();
     //   ApiGet(`language/getLanguage`).then(res => {
-    //     console.log("res",res)
     //     this.setState({
     //       langData: res.data,
     //     });

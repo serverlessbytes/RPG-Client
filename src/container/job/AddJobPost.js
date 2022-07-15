@@ -529,7 +529,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "name")}
                                                     >
                                                         <Option value="">Select name</Option>
-                                                        {getEmployerdata && getEmployerdata.data && getEmployerdata.data?.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {getEmployerdata && getEmployerdata.data && getEmployerdata.data?.data.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
                                                 </Form.Item>
@@ -568,7 +568,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "state")}
                                                     >
                                                         <Option value="">Select state</Option>
-                                                        {stateData && stateData.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {stateData && stateData.data.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.state && <span style={{ color: 'red' }}>{error.state}</span>}
                                                 </Form.Item>
@@ -594,7 +594,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "district")}
                                                     >
                                                         <Option value="">Select district</Option>
-                                                        {diStrictdata && diStrictdata.data.map(item => <Option value={item.id}> {item.name} </Option>)}
+                                                        {diStrictdata && diStrictdata.data.map((item,i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                                                 </Form.Item>

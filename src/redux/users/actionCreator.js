@@ -38,7 +38,6 @@ let Type;
 export const addUserSignup = (data) => async (dispatch) => {
   await ApiPost(`user/auth/signup`, data)
     .then((res) => {
-      //console.log("res",res)
       return dispatch(addUserSignupSuccess(res))
     })
     .catch((err) => dispatch(addUserSignupErr(err)))
@@ -122,7 +121,6 @@ export const edituserRating = (body) => async (dispatch) => {
 export const getOneUserRating = (id) => async (dispatch) => {
   await ApiGet(`userRating/getUserRating?id=${id}`)
     .then((res) => {
-      // console.log("res",res)
       return dispatch(getOneUserRatingSuccess(res))
     })
     .catch((err) => dispatch(getOneUserRatingErr(err)))

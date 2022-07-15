@@ -14,9 +14,9 @@ const ImportSchemeCategory = ({ importModal, handleCancel, modaltitle }) => {
 
 
   const readUploadFile = e => {
-    setError('');
-    setError('');
     if (e?.target?.value.split('.').lastIndexOf('xlsx') === 1) {
+      setError('');
+      seterror('');
       const file = e.target.files[0];
       setInput(e?.target?.value)
       const reader = new FileReader();

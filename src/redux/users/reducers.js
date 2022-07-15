@@ -186,7 +186,6 @@ const userReducer = (state = initialState, action) => {
         loading: true,
       };
     case EDIT_USER_RATING_SUCCESS:
-      console.log("dataaa", data)
       return {
         ...state,
         editUserRatingData: data,

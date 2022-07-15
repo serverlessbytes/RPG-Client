@@ -139,9 +139,6 @@ const User = () => {
   const onDelete = async id => {
     let userForDelete = getAllUsers && getAllUsers.data && getAllUsers.data.data.find(item => item.id === id);
     if (userForDelete) {
-      //delete userForDelete.key
-      //delete userForDelete.updatedAt
-      //delete userForDelete.avatar,
       userForDelete = {
         ...userForDelete,
 
@@ -150,7 +147,6 @@ const User = () => {
         isDeleted: true,
         avatar: 'dfd',
       };
-      console.log('userForDelete', userForDelete);
       dispatch(editProfile(userForDelete));
       const deleteUser = await newUser(userForDelete);
       if (deleteUser.status === 200) {

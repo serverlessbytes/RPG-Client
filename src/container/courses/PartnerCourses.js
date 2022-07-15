@@ -605,7 +605,7 @@ const PartnerCourses = () => {
                         onChange={e => onChangehandle(e, 'category')}
                       >
                         <Option value="">Select Category</Option>
-                        {catdata && catdata.data.map(items => <Option value={items.id}>{items.name} </Option>)}
+                        {catdata && catdata.data.map((items,i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>

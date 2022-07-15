@@ -472,9 +472,6 @@ const AddCourses = () => {
     setModuleState(deleteModulData);
     setSelectKey(selectKey == 1 ? 1 : (selectKey - 1));
   };
-  useEffect(() => {
-    console.log("selectKey", selectKey);
-  }, [selectKey])
 
   const handalCancle = () => {
     history.push('/admin/courses')

@@ -19,7 +19,6 @@ const Signup = () => {
     const signUpdata = useSelector((state) => state.auth.signup)
 
     const handleSubmit = () => {
-        console.log("form ==== form", form.getFieldsValue());
         const data = form.getFieldsValue()
         let dt = {
             email: data.email,

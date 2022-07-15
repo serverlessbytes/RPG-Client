@@ -248,12 +248,12 @@ const Carousel = () => {
 
   useEffect(() => {
     if (getCarouselData && getCarouselData.data) {
-      setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map(item => {
+      setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map((item, i) => {
         return {
           title: item.title,
           imageUrl: item.imageUrl,
           action: (
-            <div className="active-schemes-table">
+            <div className="active-schemes-table" key={i}>
               <div className="table-actions">
                 <>
                   <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">

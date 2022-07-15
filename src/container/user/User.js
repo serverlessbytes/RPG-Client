@@ -37,14 +37,6 @@ const User = () => {
         setPageNumber(1);
     };
 
-    // const getData = () => {
-    //     ApiGet(`user/auth/getAllUsers?per_page=${perPage}&page_number=${pageNumber}&status=${status}&type=USER`)
-    //         .then((res) => {
-    //             setUserData(res)
-    //         })
-    //         .catch((err) => console.log(err))
-    // }
-
     const onEdit = (id) => {
         history.push(`${path}/adduser?id=${id}`);
     }

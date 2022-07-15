@@ -79,7 +79,6 @@ const Posts = ({ postId, from, time, img, like, comment, content, author }) => {
     listType: 'picture-card',
     onChange(info) {
       if (info.file.status !== 'uploading') {
-        // console.log(info.file, info.fileList);
         setState({
           ...state,
           fileList: info.fileList,
@@ -101,7 +100,6 @@ const Posts = ({ postId, from, time, img, like, comment, content, author }) => {
     },
     onChange(info) {
       if (info.file.status !== 'uploading') {
-        // console.log(info.file, info.fileList);
         setState({
           ...state,
           fileList2: info.fileList,

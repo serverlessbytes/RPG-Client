@@ -26,10 +26,6 @@ function PartnerCourseView() {
     const getPartnerCourseData = useSelector(state => state.category.editFilterData)
 
     useEffect(() => {
-        console.log("getPartnerCourseData", getPartnerCourseData)
-    }, [getPartnerCourseData])
-
-    useEffect(() => {
         if (id) {
             dispatch(getOneCoursefilter(id));
         }
@@ -39,7 +35,6 @@ function PartnerCourseView() {
     }, [id])
 
     const onEdit = (id) => {
-        // history.push(`${path}/addpartnercourses?id=${id}`);
         history.push(`/admin/courses/partnercourses/addpartnercourses?id=${id}`);
     }
 

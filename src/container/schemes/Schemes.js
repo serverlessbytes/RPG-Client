@@ -752,7 +752,7 @@ const Schemes = () => {
                       >
                         <Option value="">Select scheme benefits</Option>
                         {getBenefitData &&
-                          getBenefitData.data?.map(items => <Option value={items.id}>{items.name} </Option>)}
+                          getBenefitData.data?.map((items,i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>

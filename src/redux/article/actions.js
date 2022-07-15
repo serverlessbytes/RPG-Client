@@ -46,7 +46,6 @@ const actions = {
         }
     },
     editArticlesErr: (err) => {
-        console.log("eee",err)
         return {
             type: actions.EDIT_ARTICLES_ERR,
             err,

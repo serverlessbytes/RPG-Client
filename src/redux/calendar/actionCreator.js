@@ -110,7 +110,6 @@ const updateCurrentEvent = (events, event, id) => {
         }
         return item;
       });
-      // console.log(events);
       dispatch(calendarReadSuccess(events));
     } catch (err) {
       dispatch(calendarReadErr(err));

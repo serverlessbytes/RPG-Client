@@ -24,10 +24,6 @@ function JobPostPage({ data }) {
     const getOneJobPostData = useSelector(state => state.job.getOneJobPostData);
 
     useEffect(() => {
-        console.log("getOneJobPostData", getOneJobPostData)
-    }, [getOneJobPostData])
-
-    useEffect(() => {
         if (id) {
             dispatch(getoneJobPost(id));
         } else {
@@ -59,15 +55,11 @@ function JobPostPage({ data }) {
     }
 
     const onApproved = (id, isAp) => {
-        console.log('id', id)
-        // console.log('isAp', isAp)
         let data = {
             isApproved: !isAp,
         };
-        console.log("data",data)
         ApiPost(`job/updateIsApproved?jobId=${id}`,data)
             .then(res => {
-                console.log("res",res)
                 dispatch(getoneJobPost(id));
                 toast.success(data.isApproved ? 'Approved successful' : 'Disapproved successful ');
             })
@@ -84,7 +76,6 @@ function JobPostPage({ data }) {
                 isApproved: !isAp,
                 remark: remark,
             };
-            console.log("data", data)
 
             ApiPost(`job/updateIsApproved?jobId=${id}`, data)
                 .then(res => {

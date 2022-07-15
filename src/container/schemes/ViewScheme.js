@@ -25,8 +25,6 @@ function ViewScheme() {
 
     const getOneSchemedata = useSelector(state => state.scheme.getOneSchemeData);
 
-    // useEffect(()=>{console.log("remark=====",remark)},[remark])
-
     useEffect(() => {
         if (id) {
             dispatch(getOneSchemeData(id));

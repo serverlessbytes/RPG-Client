@@ -32,7 +32,6 @@ const login = (body, keepSignIn) => async dispatch => {
       }
     })
     .catch(e => {
-      console.log('errpor  === ', e);
       if (e === 'incorrect password') {
         return dispatch(loginSuccess(false));
       } else if (e === 'incorrect password') {

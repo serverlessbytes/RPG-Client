@@ -15,7 +15,6 @@ const ViewModal = ({ viewModal, type, setViewModal, data }) => {
     };
 
     const onEdit = (key) => {
-        // console.log("key",key)
         history.push(`${path}/addscheme?key=${key}`);
     }
 

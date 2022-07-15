@@ -4,8 +4,8 @@ import { PageHeader } from '../../components/page-headers/page-headers';
 import { Button } from '../../components/buttons/buttons';
 import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getStateData, postStateData } from '../../redux/state/actionCreator';
-import { ListButtonSizeWrapper, Main, ProjectPagination, TableWrapper } from '../styled';
+import { getStateData } from '../../redux/state/actionCreator';
+import { ListButtonSizeWrapper, Main, TableWrapper } from '../styled';
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { UserTableStyleWrapper } from '../pages/style';
 import uuid from 'react-uuid';
@@ -13,13 +13,12 @@ import { getDistrictData, postDistrictData } from '../../redux/district/actionCr
 import actions from '../../redux/district/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const { getDistrictSuccess } = actions;
 
 const district = () => {
     const dispatch = useDispatch()
     const { Option } = Select;
-    const {
-        postDistrictSuccess, postDistrictErr,
-    } = actions;
+    const { postDistrictSuccess, postDistrictErr } = actions;
     const [form] = Form.useForm()
     const showModal = () => {
         setIsModalVisible(true);
@@ -36,8 +35,12 @@ const district = () => {
 
     const diStrict = useSelector((state) => state.district.getDistrictData) // district
     const stateData = useSelector((state) => state.state.getStateData) //state
-    const postDistrictdataa = useSelector((state) => state.district.postDistrictData) 
-    const postDistrictDataError = useSelector((state) => state.district.getStateData) 
+    const postDistrictdataa = useSelector((state) => state.district.postDistrictData)
+    const postDistrictDataError = useSelector((state) => state.district.getStateData)
+
+    useEffect(() => {
+        dispatch(getStateData())
+    }, []);
 
     const onstatedata = (e, name) => {
         if (name === "state") {
@@ -49,11 +52,11 @@ const district = () => {
         setState({ ...state, [e.target.name]: e.target.value })
         setError({ ...error, [e.target.name]: "" })
     }
+
     const onChnageValue = (e, name) => {
         if (name === "stateId") {
             setState({ ...state, stateId: e })
             setError({ ...error, stateId: "" })
-
         }
     }
 
@@ -70,14 +73,6 @@ const district = () => {
             toast.error("Something went wrong")
         }
     }, [postDistrictDataError])
-
-    useEffect(() => {
-        if (stateData && stateData.data) {
-            setStateData(stateData?.data[0]?.id)
-            dispatch(getDistrictData(stateData?.data[0]?.id))
-        }
-    }, [stateData]);
-
 
     useEffect(() => {
         if (diStrict && diStrict.data) {
@@ -102,12 +97,13 @@ const district = () => {
     const onApply = () => {
         dispatch(getDistrictData(statedata ? statedata : ""))
     }
+
     const clearFilter = () => {
-        setStateData({ statedata: "" })
-        dispatch(getDistrictData(statedata ? statedata : ""))
+        dispatch(getDistrictSuccess(null))
+        setStateData("")
     }
 
-    const validation = (data) => {
+    const validation = () => {
 
         let error = {};
         let flag = false;
@@ -149,10 +145,6 @@ const district = () => {
         setError("");
     };
 
-    useEffect(() => {
-        dispatch(getStateData())
-    }, []);
-
     return (
         <>
             <PageHeader
@@ -183,7 +175,7 @@ const district = () => {
                                     >
                                         <Option value="">Select State</Option>
                                         {
-                                            stateData && stateData.data.map((item,i) => (
+                                            stateData && stateData.data.map((item, i) => (
                                                 <Option key={i} value={item.id}> {item.name} </Option>
                                             ))
                                         }
@@ -193,7 +185,7 @@ const district = () => {
                         </Col>
                         <Col md={6} xs={24} className="mb-25">
                             <ListButtonSizeWrapper>
-                                <Button size="small" type="primary" onClick={e => onApply(e)}>
+                                <Button size="small" type="primary" onClick={() => onApply()}>
                                     Apply
                                 </Button>
                                 <Button size="small" type="light" onClick={() => clearFilter()}>
@@ -206,7 +198,6 @@ const district = () => {
                     <UserTableStyleWrapper>
                         <TableWrapper className="table-responsive pb-30">
                             <Table
-                                //rowSelection={rowSelection}
                                 dataSource={stateTableData}
                                 columns={districtTableColumns}
                                 pagination={false}
@@ -223,7 +214,6 @@ const district = () => {
                         <Input
                             placeholder="Enter district"
                             name="name"
-                            //defaultValue={data.name}
                             onChange={(e) => { onChangeHandler(e) }}
                         />
                         {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
@@ -232,7 +222,7 @@ const district = () => {
                         <Select placeholder="Select state" className={state.stateId ? "sDash_fullwidth-select" : 'select-option-typ-placeholder'} style={{ height: "50px" }} size="large" value={state.stateId} name="stateId" onChange={(e) => { onChnageValue(e, "stateId") }} >
                             <Option value='' >Select state</Option>
                             {
-                                stateData && stateData.data.map((item,i) => (
+                                stateData && stateData.data.map((item, i) => (
                                     <Option key={i} value={item.id}> {item.name} </Option>
                                 ))
                             }

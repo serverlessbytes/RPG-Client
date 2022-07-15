@@ -25,10 +25,6 @@ const Language = () => {
     const postLanguagedata = useSelector((state) => state.language.postLanguageData);
     const LanguageError = useSelector((state) => state.language.LanguageError);
 
-    useEffect(() => {
-       console.log("postLanguagedata",postLanguagedata)
-    }, [postLanguagedata])
-
     const dispatch = useDispatch()
 
     const [form] = Form.useForm()
