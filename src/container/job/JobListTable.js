@@ -562,17 +562,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear, setPagePer, setNumbe
       {showAlert &&
         <SweetAlert
           danger
-          // showCancel
-          // confirmBtnText="Multiple delete"
-          // cancelBtnText="Cancel"
-          // confirmBtnBsStyle="danger"
+          cancelBtnText="Cancel"
+          confirmBtnBsStyle="danger"
           title="Are you sure?"
-          // onConfirm={() => onDelete(idForDelete, keyForDelete, typeForDelete)}
-        // onCancel={() => { setShowAlert(false) }}
-        // focusCancelBtn
         >
           You want to delete job.
-          <div style={{marginTop:'20px', display:"flex", gap:"5px", justifyContent:"center"}}>
+          <div style={{ marginTop: '20px', display: "flex", gap: "5px", justifyContent: "center" }}>
             <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
               Single delete
             </Button>

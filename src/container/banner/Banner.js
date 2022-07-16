@@ -335,8 +335,7 @@ const Banner = () => {
 
     useEffect(() => {
         if (getBannerData && getBannerData.data) {
-            setBannerTableData(getBannerData && getBannerData.data && getBannerData.data.data.map((item) => {
-                // setBannerTableData(getBannerData && getBannerData.data && getBannerData.data.data.map((item, i) => {
+            setBannerTableData(getBannerData && getBannerData.data && getBannerData.data.data.map((item, i) => {
                 return {
                     title: item.title,
                     imageUrl: item.imageUrl,

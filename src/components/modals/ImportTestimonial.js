@@ -64,8 +64,9 @@ function ImportTestimonial({ modaltitle, handleCancel, importModel }) {
         if (validation()) {
             return;
         }
+        let temp = FileData.filter((el) => el.name)
         if (FileData) {
-            dispatch(addBulkTestimonial(FileData));
+            dispatch(addBulkTestimonial(temp));
         }
         handleCancel();
     }

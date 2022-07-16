@@ -21,16 +21,6 @@ const ImportSwayamCourse = ({ importModal, handleCancel, modaltitle }) => {
   const [jobCategoryID, setJobCategoryID] = useState();
 
   useEffect(() => {
-    if (CourseCategoryFromRedux && 'data' in CourseCategoryFromRedux) {
-      CourseCategoryFromRedux.data.forEach(element => {
-        element['label'] = element.name;
-        element['value'] = element.id;
-      });
-      setCourseCategoryArray(CourseCategoryFromRedux.data);
-    }
-  }, [CourseCategoryFromRedux]);
-
-  useEffect(() => {
     if (jobCategoryData && 'data' in jobCategoryData) {
       jobCategoryData.data.forEach(element => {
         element['label'] = element.name;

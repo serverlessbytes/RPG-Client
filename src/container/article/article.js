@@ -83,6 +83,25 @@ const article = () => {
         setFormErrors({ ...formErrors, [e.target.name]: "" });
     }
 
+    const onHandleChange = (e, name) => {
+        const input = document.getElementById('priority')
+        input.onkeydown = (e) => {
+            if (e.which === 38 || e.which === 40) {
+                e.preventDefault();
+            }
+        }
+        if (name === "priority") {
+            if (e.target.value > 0) {
+                setArticleData({ ...articledata, [e.target.name]: e.target.value })
+            }
+            else {
+                setArticleData({ ...articledata, [e.target.name]: 0 })
+            }
+            setFormErrors({ ...formErrors, [e.target.name]: "" });
+
+        }
+    }
+
     const fileUpload = (e, name) => {
         let firsttemp = e.target.files[0].name?.split('.');
         let fileexten = ['jpeg', 'jpg', 'png']
@@ -121,10 +140,10 @@ const article = () => {
             error.body = "Please enter body"
             flag = true
         }
-        // if (!articledata.priority) {
-        //     error.priority = "Please enter priority"
-        //     flag = true
-        // }
+        if (!articledata.priority) {
+            error.priority = "Please enter priority"
+            flag = true
+        }
         setFormErrors(error);
         return flag
     }
@@ -240,6 +259,7 @@ const article = () => {
         setSelectedArticle(null)
         setNameTog(false)
         setPriority(false);
+        setFormErrors('');
     };
 
     const onEdit = (id) => {
@@ -306,7 +326,7 @@ const article = () => {
             setExportTog('');
             dispatch(getExportArticlesSuccess(null))
         }
-        else if(exportsingleArticle?.length && exportTog === 'single'){
+        else if (exportsingleArticle?.length && exportTog === 'single') {
             CSVLinkRefSingle?.current?.link.click();
             toast.success('Article exported');
             setExportTog('');
@@ -422,7 +442,7 @@ const article = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            sorter: (a, b) => a.title.length - b.title.length,
+            sorter: (a, b) => a.title.localeCompare(b.title),
             sortDirections: ['descend', 'ascend'],
         },
         {
@@ -605,7 +625,7 @@ const article = () => {
                                             placeholder="Enter priority"
                                             name="priority"
                                             value={articledata.priority}
-                                            onChange={(e) => handleChange(e, "priority")}
+                                            onChange={(e) => onHandleChange(e, "priority")}
                                             className='experience-input'
                                             id='priority'
                                         />

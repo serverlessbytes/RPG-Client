@@ -59,6 +59,7 @@ const Schemes = () => {
   const [idForDelete, setIdForDelete] = useState('')
   const [typeForDelete, setTypeForDelete] = useState('single')
   const [typeForMultipleDelete, setTypeForMultipleDelete] = useState('multiple')
+  const [isAscend, setIsAscend] = useState(false);
 
   const [langIds, setLangIds] = useState({
     hindi: "",
@@ -79,6 +80,10 @@ const Schemes = () => {
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
   const deleteSchemeData = useSelector((state) => state.scheme.deleteSchemeData)
   const deleteSchemeError = useSelector((state) => state.scheme.deleteSchemeError)
+
+  useEffect(()=>{
+    console.log("users",users)
+  },[users])
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -561,7 +566,6 @@ const Schemes = () => {
             {item?.name}
           </span>
         ),
-        SchemeName: item.name,
         TypeOfBenefits: item.schemeBenifit.name,
         TargetBeneficiary: item.benificiary,
         schemeRatings: (
@@ -658,13 +662,31 @@ const Schemes = () => {
       });
     })
     )
-  }, [users])
+  }, [users, isAscend])
 
+const sorting = () => {
+   if(isAscend){
+     users && users.data.sort((a,b) => a.name.localeCompare(b.name))
+   }
+   else{
+    users && users.data.sort((a,b) => b.name.localeCompare(a.name))
+   }
+   setIsAscend(!isAscend)
+}
+
+const sortingDate = () => {
+  if(isAscend){
+    users && users.data.sort((a,b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix())
+  }else{
+    users && users.data.sort((a,b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix())
+  }
+  setIsAscend(!isAscend)
+}
   const schemeTableColumns = [
     {
       title: 'Scheme name',
       dataIndex: 'SchemeName',
-      sorter: (a, b) => a.SchemeName.localeCompare(b.SchemeName),
+      sorter: (a, b) => sorting(),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -692,6 +714,7 @@ const Schemes = () => {
     {
       title: 'Last updated',
       dataIndex: 'LastUpdated',
+      sorter: (a,b) => sortingDate(),
     },
     {
       title: 'Select language',
@@ -894,14 +917,14 @@ const Schemes = () => {
           title="Are you sure?"
         >
            You want to delete scheme.
-          <div>
-            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+          <div style={{ marginTop: '20px', display: "flex", gap: "5px", justifyContent: "center" }}>
+            <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
               Single delete
             </Button>
-            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+            <Button className="ant-btn-delete" variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
               All delete
             </Button>
-            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+            <Button className="ant-btn-light"  variant="danger" onClick={() => setShowAlert(false)}  >
               Cancel
             </Button>
           </div>

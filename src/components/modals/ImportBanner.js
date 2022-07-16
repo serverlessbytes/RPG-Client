@@ -68,8 +68,9 @@ function ImportBanner({ modaltitle, handleCancel, importModel }) {
         if (validation()) {
             return;
         }
+        let temp = FileData.filter((el) => el.title)
         if (FileData) {
-            dispatch(addBulkBanner(FileData));
+            dispatch(addBulkBanner(temp));
         }
         handleCancel();
     }

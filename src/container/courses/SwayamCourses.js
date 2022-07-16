@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdow
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { deleteCourses, editSwayamCourse, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { deleteCourses, editSwayamCourse, getCategoryData, getCoursefilter, specificCourseRatings } from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -62,7 +62,7 @@ const SwayamCourses = () => {
   });
   const [languageId, setLanguageID] = useState()
   const [id, setID] = useState()
-
+  const [isAscend, setIsAscend] = useState(false);
   const [showAlert, setShowAlert] = useState(false)
   const [idForDelete, setIdForDelete] = useState('')
   const [keyForDelete, setKeyForDelete] = useState('')
@@ -445,7 +445,6 @@ const SwayamCourses = () => {
               </span>
             ),
             CourseCategory: item.courseCategory?.name,
-            CourseName: item.name,
             courseRatings: (
               <StarRatings
                 rating={avg ? avg : 0}
@@ -513,12 +512,23 @@ const SwayamCourses = () => {
         }),
       );
     }
-  }, [courseData]);
+  }, [courseData,isAscend]);
+
+  const sorting = () => {
+    if(isAscend){
+      courseData && courseData.data && courseData.data.data.sort((a,b) => a.name.localeCompare(b.name))
+    }
+    else{
+      courseData && courseData.data && courseData.data.data.sort((a,b) => b.name.localeCompare(a.name))
+    }
+    setIsAscend(!isAscend)
+ }
+
   const swayamCourseTableColumns = [
     {
       title: 'Course name',
       dataIndex: 'CourseName',
-      sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
+      sorter: (a, b) => sorting(),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -761,14 +771,14 @@ const SwayamCourses = () => {
           title="Are you sure?"
         >
           You want to delete course.
-          <div>
-            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+          <div style={{ marginTop: '20px', display: "flex", gap: "5px", justifyContent: "center" }}>
+            <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
               Single delete
             </Button>
-            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+            <Button className="ant-btn-delete" variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
               All delete
             </Button>
-            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+            <Button className="ant-btn-light" variant="danger" onClick={() => setShowAlert(false)}  >
               Cancel
             </Button>
           </div>

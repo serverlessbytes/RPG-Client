@@ -24,7 +24,6 @@ import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
-
 const PartnerCourses = () => {
   const { addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr, addPartnerCourseInBulkSuccess, deleteCourseSuccess,
     deleteCourseErr, } = actions;
@@ -40,7 +39,6 @@ const PartnerCourses = () => {
     mode: 'PARTNER',
     search: ''
   });
-
   const [importModal, setImportModal] = useState(false);
   const [data, setData] = useState([]);
   const [partnertable, setPartnertable] = useState([]); //set data
@@ -55,10 +53,9 @@ const PartnerCourses = () => {
     hindi: '',
     marathi: ''
   });
-
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
-
+  const [isAscend, setIsAscend] = useState(false);
   const [showAlert, setShowAlert] = useState(false)
   const [idForDelete, setIdForDelete] = useState('')
   const [keyForDelete, setKeyForDelete] = useState('')
@@ -427,7 +424,6 @@ const PartnerCourses = () => {
             CourseName: (
               <span className='For-Underline' onClick={() => viewPartnerCoursedata(item.id)}>{item.name}</span>
             ),
-            CourseName: item.name,
             CourseCategory: item.courseCategory?.name,
             courseRatings: (
               <StarRatings
@@ -514,14 +510,23 @@ const PartnerCourses = () => {
         }),
       );
     }
-  }, [courseData]);
+  }, [courseData, isAscend]);
+
+  const sorting = () => {
+    if(isAscend){
+      courseData && courseData.data && courseData.data.data.sort((a,b) => a.name.localeCompare(b.name))
+    }
+    else{
+      courseData && courseData.data && courseData.data.data.sort((a,b) => b.name.localeCompare(a.name))
+    }
+    setIsAscend(!isAscend)
+ }
 
   const partnerCourseTableColumns = [
     {
       title: 'Course name',
       dataIndex: 'CourseName',
-      sorter: (a, b) => a.CourseName.localeCompare(b.CourseName),
-      // sorter: (a, b) => a.CourseName.length - b.CourseName.length,
+      sorter: (a, b) => sorting(),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -745,14 +750,14 @@ const PartnerCourses = () => {
           title="Are you sure?"
         >
           You want to delete course.
-          <div>
-            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+          <div style={{ marginTop: '20px', display: "flex", gap: "5px", justifyContent: "center" }}>
+            <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
               Single delete
             </Button>
-            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+            <Button className="ant-btn-delete" variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
               All delete
             </Button>
-            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+            <Button className="ant-btn-light" variant="danger" onClick={() => setShowAlert(false)}  >
               Cancel
             </Button>
           </div>

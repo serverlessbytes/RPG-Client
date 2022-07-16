@@ -65,8 +65,9 @@ function ImportCarousel({ modaltitle, handleCancel, importModel }) {
         if (validation()) {
             return;
         }
+        let temp = FileData.filter((el) => el.title)
         if (FileData) {
-            dispatch(addBulkCarousel(FileData));
+            dispatch(addBulkCarousel(temp));
         }
         handleCancel();
     }

@@ -14,6 +14,7 @@ const AuthLayout = WraperContent => {
               <img src={require('../../../static/img/auth/bottomShape.png')} alt="" className="bottomShape" />
               <Content>
                 {/* <img style={{ width: '150px' }} src={require('../../../static/img/Logo_Dark.svg')} alt="" /> */}
+                <img style={{ width: '150px' }} src={require('../../../static/img/Header_Logo.png')} alt="" />
                 <br />
                 <br />
                 <Heading as="h1">
@@ -21,8 +22,10 @@ const AuthLayout = WraperContent => {
                   Web Application
                 </Heading>
                 <img
+                  
                   className="auth-content-figure"
-                  src={require('../../../static/img/auth/Illustration.png')}
+                  // src={require('../../../static/img/auth/Illustration.png')}
+                  src={require('../../../static/img/auth/Logo_White.png')}
                   alt=""
                 />
               </Content>
