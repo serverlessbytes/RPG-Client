@@ -73,6 +73,9 @@ const {
   addUpdateJobBannerSuccess,
   addUpdateJobBannerErr,
 
+  deleteJobsSuccess,
+  deleteJobsErr,
+
 } = actions;
 
 let per_page, page_num, State, Status, Type, jobrole, search, hindi, marathi, jobcategory;
@@ -357,4 +360,15 @@ export const jobBannerUpdate = (id, body) => async (dispatch) => {
       dispatch(addUpdateJobBannerSuccess(res))
     })
     .catch((err) => dispatch(addUpdateJobBannerErr(err)))
+}
+
+export const deleteJobs = (id, key, type) => async (dispatch) => {
+  await ApiPost(`job/deleteJobs?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&jobId=${id}&key=${key}&type=${type}`)
+  .then((res) => {
+     dispatch(deleteJobsSuccess(res))
+     if(res.status === 200){
+      return dispatch(getJobsFilterForMain(per_page, page_num, State, Type, jobrole, Status, search, hindi, marathi))
+     }
+  })
+  .catch((err)=> dispatch(deleteJobsErr(err)))
 }

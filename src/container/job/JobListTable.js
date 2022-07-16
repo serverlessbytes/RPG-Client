@@ -5,7 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 import { UserTableStyleWrapper } from '../pages/style';
 import { TableWrapper } from '../styled';
 import { Button } from '../../components/buttons/buttons';
-import { getJobsFilterForMain } from '../../redux/jobs/actionCreator';
+import { deleteJobs, getJobsFilterForMain } from '../../redux/jobs/actionCreator';
 import { useHistory } from 'react-router';
 import ViewJobPost from './ViewJobPost';
 import moment from 'moment';
@@ -14,10 +14,11 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import actions from '../../redux/jobs/actions';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
-const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumberOfPage, setExportTog, status, search, getJobData }) => {
+const JobListTable = ({ state, type, jobRole, apply, clear, setPagePer, setNumberOfPage, setExportTog, status, search, getJobData }) => {
   // props from JobPost
-  const { addJobPostSuccess,addJobPostErr, editJobPostSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr } = actions;
+  const { addJobPostSuccess, addJobPostErr, editJobPostSuccess, addLanguageJobPostSuccess, addLanguageJobPostErr, editJobPostErr, deleteJobsSuccess, deleteJobsErr } = actions;
   let history = useHistory();
   let dispatch = useDispatch();
 
@@ -36,6 +37,12 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
   const [languageIds, setLanguageIDs] = useState();
   const [ids, setIDs] = useState();
 
+  const [showAlert, setShowAlert] = useState(false)
+  const [idForDelete, setIdForDelete] = useState('')
+  const [keyForDelete, setKeyForDelete] = useState('')
+  const [typeForDelete, setTypeForDelete] = useState('single')
+  const [typeForMultipleDelete, setTypeForMultipleDelete] = useState('multiple')
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const getJobFilterData = useSelector(state => state.job.getJobFilterData); //for filter
   const editJobPostData = useSelector(state => state.job.editJobPostData); // fetch for tostify from reducer for edit/delete
@@ -46,6 +53,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
   const addLanguageJobPostError = useSelector(state => state.job.addLanguageJobPostErr);
   const addJobPostData = useSelector(state => state.job.addJobPostData); //fetch for tostify from reducer
   const upadteJobBenner = useSelector(state => state.job.upadteJobBannerData); //fetch for tostify from reducer
+  const deleteJobData = useSelector(state => state.job.deleteJobData);
+  const deleteJobError = useSelector(state => state.job.deleteJobError);
 
   const newJobPost = data => {
     let id = data.id;
@@ -55,8 +64,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "", "", langIds.hindi, langIds.marathi,));
         return res;
       }
-    }).catch((err)=>{
-       return err;
+    }).catch((err) => {
+      return err;
     })
     return newVal;
   };
@@ -85,47 +94,69 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
     history.push(`/admin/job/new?langid=${languageIds}&id=${ids}`);
   }
 
-  const onDelete = async id => {
-    let courseDataDelete =
-      getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find(item => item.id === id);
-    if (courseDataDelete) {
-      let data = {
-        name: courseDataDelete.name.id,
-        state: courseDataDelete.state.id,
-        district: courseDataDelete.district.id,
-        town: courseDataDelete.town,
-        pincode: courseDataDelete.pincode,
-        description: courseDataDelete.description,
-        vacancies: courseDataDelete.vacancies,
-        reqExperience: courseDataDelete.reqExperience,
-        salary: courseDataDelete.salary,
-        benifits: courseDataDelete.benifits,
-        requirements: courseDataDelete.requirements,
-        type: courseDataDelete.type,
-        isActive: false,
-        extraType: courseDataDelete.extraType,
-        shifts: courseDataDelete?.shifts ? courseDataDelete?.shifts : '',
-        email: courseDataDelete.email,
-        phone: courseDataDelete.phone,
-        startDate: courseDataDelete.startDate,
-        endDate: courseDataDelete.endDate,
-        jobRole: courseDataDelete.jobRole.id,
-        jobType: courseDataDelete.jobType.id,
-        application_form: courseDataDelete.application_form,
-        recommended_and_forwarded: courseDataDelete.recommended_and_forwarded,
-        application_process: courseDataDelete.application_process,
-        medical_superintendent: courseDataDelete.medical_superintendent,
-        hospital_expenses_estimation_certificate: courseDataDelete.hospital_expenses_estimation_certificate,
-        id: id,
-      };
-      const deleteJobPost = await newJobPost(data);
-      if (deleteJobPost.status === 200) {
-        toast.success('Job deleted');
-      }else{
-        toast.error("Something went wrong")
-      }
-    }
-  };
+  const Delete = (id, key) => {
+    setShowAlert(true);
+    setKeyForDelete(key)
+    setIdForDelete(id)
+    // dispatch(deleteJobs(id,key,"multiple"))
+  }
+
+  const onDelete = (idForDelete, keyForDelete, typeForDelete) => {
+    dispatch(deleteJobs(idForDelete, keyForDelete, typeForDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  const onDeleteAll = (idForDelete, keyForDelete, typeForMultipleDelete) => {
+    dispatch(deleteJobs(idForDelete, keyForDelete, typeForMultipleDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  // const onDelete = async (id) => {
+
+  //   let courseDataDelete =
+  //     getJobFilterData && getJobFilterData?.data && getJobFilterData?.data?.data.find(item => item.id === id);
+  //   if (courseDataDelete) {
+  //     let data = {
+  //       name: courseDataDelete.name.id,
+  //       state: courseDataDelete.state.id,
+  //       district: courseDataDelete.district.id,
+  //       town: courseDataDelete.town,
+  //       pincode: courseDataDelete.pincode,
+  //       description: courseDataDelete.description,
+  //       vacancies: courseDataDelete.vacancies,
+  //       reqExperience: courseDataDelete.reqExperience,
+  //       salary: courseDataDelete.salary,
+  //       benifits: courseDataDelete.benifits,
+  //       requirements: courseDataDelete.requirements,
+  //       type: courseDataDelete.type,
+  //       isActive: false,
+  //       extraType: courseDataDelete.extraType,
+  //       shifts: courseDataDelete?.shifts ? courseDataDelete?.shifts : '',
+  //       email: courseDataDelete.email,
+  //       phone: courseDataDelete.phone,
+  //       startDate: courseDataDelete.startDate,
+  //       endDate: courseDataDelete.endDate,
+  //       jobRole: courseDataDelete.jobRole.id,
+  //       jobType: courseDataDelete.jobType.id,
+  //       application_form: courseDataDelete.application_form,
+  //       recommended_and_forwarded: courseDataDelete.recommended_and_forwarded,
+  //       application_process: courseDataDelete.application_process,
+  //       medical_superintendent: courseDataDelete.medical_superintendent,
+  //       hospital_expenses_estimation_certificate: courseDataDelete.hospital_expenses_estimation_certificate,
+  //       id: id,
+  //     };
+  //     const deleteJobPost = await newJobPost(data);
+  //     if (deleteJobPost.status === 200) {
+  //       toast.success('Job deleted');
+  //     }else{
+  //       toast.error("Something went wrong")
+  //     }
+  //   }
+  // };
 
   const onEdit = id => {
     history.push(`/admin/job/new?id=${id}`);
@@ -154,9 +185,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
         dispatch(getJobsFilterForMain(perPage, pageNumber, "", "", "", "inactive"));
       }
       return res;
-    }).catch((err)=>{
+    }).catch((err) => {
       return err;
-   })
+    })
     return newVal;
   };
 
@@ -196,11 +227,25 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
       const restoreJobPost = await activeJobPost(data);
       if (restoreJobPost.status === 200) {
         toast.success('Job actived');
-      }else{
+      } else {
         toast.error('Something went wrong')
       }
     }
   };
+
+  useEffect(() => {
+    if (deleteJobData && deleteJobData.status === 200) {
+      dispatch(deleteJobsSuccess(null))
+      toast.success('Job deleted');
+    }
+  }, [deleteJobData])
+
+  useEffect(() => {
+    if (deleteJobError) {
+      dispatch(deleteJobsErr(null))
+      toast.error('Something went wrong');
+    }
+  }, [deleteJobError])
 
   useEffect(() => {
     if (addLanguageJobPostError) {
@@ -291,7 +336,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
       })
       .catch(err => console.log('Error', err));
   };
-  
+
   const onBannerSelect = (id, bannerSelected) => {
     if (status !== 'active') {
       return
@@ -367,7 +412,8 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
                   <Button className="btn-icon" type="info" to="#" onClick={() => onEdit(item.id)} shape="circle">
                     <FeatherIcon icon="edit" size={16} />
                   </Button>
-                  <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle">
+                  {/* <Button className="btn-icon" type="danger" to="#" onClick={() => onDelete(item.id)} shape="circle"> */}
+                  <Button className="btn-icon" type="danger" to="#" onClick={() => Delete(item.id, item.key)} shape="circle">
                     <FeatherIcon icon="trash-2" size={16} />
                   </Button>
                 </>
@@ -508,9 +554,37 @@ const JobListTable = ({ state, type, jobRole, apply, clear,setPagePer, setNumber
           children={"This coures in not available in this language. You want to add?"}
         />
       )}
+
       {viewModal && (
         <ViewJobPost viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneJobPostData?.data} />
       )}
+
+      {showAlert &&
+        <SweetAlert
+          danger
+          // showCancel
+          // confirmBtnText="Multiple delete"
+          // cancelBtnText="Cancel"
+          // confirmBtnBsStyle="danger"
+          title="Are you sure?"
+          // onConfirm={() => onDelete(idForDelete, keyForDelete, typeForDelete)}
+        // onCancel={() => { setShowAlert(false) }}
+        // focusCancelBtn
+        >
+          You want to delete job.
+          <div style={{marginTop:'20px', display:"flex", gap:"5px", justifyContent:"center"}}>
+            <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+              Single delete
+            </Button>
+            <Button className="ant-btn-delete" variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+              All delete
+            </Button>
+            <Button className="ant-btn-light" variant="danger" onClick={() => setShowAlert(false)}  >
+              Cancel
+            </Button>
+          </div>
+        </SweetAlert>
+      }
     </>
   );
 };

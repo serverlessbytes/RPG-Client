@@ -20,6 +20,7 @@ import { CSVLink } from 'react-csv';
 const Banner = () => {
     const dispatch = useDispatch();
     const CSVLinkRef = useRef(null);
+    const CSVLinkRefSingle = useRef(null);
     const { getOneBannerSuccess, addBannerSuccess, addBannerErr, editBannerSuccess, editBannerErr, addBulkBannerSuccess, addBulkBannerErr, getExportBannersSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,7 +37,8 @@ const Banner = () => {
     const [fileError, setFileError] = useState('');
     const [formErrors, setFormErrors] = useState();
     const [exportBannerData, setExportBannerData] = useState([]);
-    const [exportTog, setExportTog] = useState(false);
+    const [exportBannerSingleData, setExportBannerSingleData] = useState([]);
+    const [exportTog, setExportTog] = useState('');
 
     const getBannerData = useSelector((state) => state.banner.getBannerData);
     const getOneBannerdata = useSelector((state) => state.banner.getOneBannerData);
@@ -47,7 +49,6 @@ const Banner = () => {
     const addBulkbannerData = useSelector((state) => state.banner.addBulkbannerData);
     const addBulkbannerErr = useSelector((state) => state.banner.addBulkbannerErr);
     const getExportBannerData = useSelector((state) => state.banner.getExportBannerData);
-
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
@@ -139,6 +140,15 @@ const Banner = () => {
         { label: 'isDeleted', key: 'isDeleted' },
         { label: 'title', key: 'title' },
         { label: 'updatedAt', key: 'updatedAt' },
+    ];
+
+    const headerSingle = [
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'id', key: 'id' },
+        { label: 'imageUrl', key: 'imageUrl' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isDeleted', key: 'isDeleted' },
+        { label: 'title', key: 'title' },
     ];
 
     const showModal = () => {
@@ -263,12 +273,22 @@ const Banner = () => {
         dispatch(getExportBanners())
     }
 
+    const exportSingleBanner = () => {
+        dispatch(GetBanner(perPage, pageNumber))
+        setExportTog('single');
+    }
+
     useEffect(() => {
-        if (exportBannerData?.length && exportTog) {
+        if (exportBannerData?.length && exportTog === "all") {
             CSVLinkRef?.current?.link.click();
             toast.success('Banner exported');
-            setExportTog(false);
+            setExportTog('');
             dispatch(getExportBannersSuccess(null))
+        }
+        else if (exportBannerSingleData?.length && exportTog === 'single') {
+            CSVLinkRefSingle?.current?.link.click();
+            toast.success('Banner exported');
+            setExportTog('');
         }
         else if (!exportBannerData.length && exportTog) {
             toast.success('No data for export');
@@ -291,9 +311,26 @@ const Banner = () => {
                     }
                 })
             )
-            setExportTog(true);
+            setExportTog('all');
         }
     }, [getExportBannerData])
+
+    useEffect(() => {
+        if (getBannerData && getBannerData.data) {
+            setExportBannerSingleData(getBannerData && getBannerData.data && getBannerData.data.data.map(item => {
+                return {
+                    ...item,
+                    createdAt: item.createdAt,
+                    id: item.id,
+                    imageUrl: item.imageUrl,
+                    isActive: item.isActive,
+                    isDeleted: item.isDeleted,
+                    title: item.title,
+                    updatedAt: item.updatedAt,
+                }
+            }))
+        }
+    }, [getBannerData])
 
     useEffect(() => {
         if (getBannerData && getBannerData.data) {
@@ -351,6 +388,9 @@ const Banner = () => {
         if (key === 'exportBanner') {
             exportBanner();
         }
+        if (key === 'importBannerSingle') {
+            exportSingleBanner();
+        }
     }
 
     const menu = (
@@ -358,21 +398,26 @@ const Banner = () => {
             onClick={onClick}
             items={[
                 {
-                    label: 'Import banner',
-                    key: 'importBanner',
-                },
-                {
                     label: 'Add banner',
                     key: 'addBanner',
                 },
                 {
-                    label: 'Export banner',
+                    label: 'Export all banner',
                     key: 'exportBanner',
-                }
+                },      
+                {
+                    label: "Export banner",
+                    key: 'importBannerSingle'
+                },
+                {
+                    label: 'Import banner',
+                    key: 'importBanner',
+                },
+               
             ]}
         />
     );
-    
+
     return (
         <>
             <PageHeader
@@ -399,6 +444,13 @@ const Banner = () => {
                             headers={header}
                             data={exportBannerData}
                             ref={CSVLinkRef}
+                            filename="Banner.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
+                        <CSVLink
+                            headers={headerSingle}
+                            data={exportBannerSingleData}
+                            ref={CSVLinkRefSingle}
                             filename="Banner.csv"
                             style={{ opacity: 0 }}
                         ></CSVLink>

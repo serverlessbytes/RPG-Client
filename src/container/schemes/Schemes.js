@@ -9,7 +9,7 @@ import { UserTableStyleWrapper } from '../pages/style';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData, upadteBanner } from '../../redux/schemes/actionCreator';
+import { editSchemeData, getAllSchemes, getOneSchemeData, getSchemecategory, getSchemeData, addSchemeData, upadteBanner, deleteScheme } from '../../redux/schemes/actionCreator';
 import moment from 'moment';
 import { getBenefitsData } from '../../redux/benefitsType/actionCreator';
 import ViewModal from './ViewModal';
@@ -22,17 +22,17 @@ import ImportFileModal from '../../components/modals/ImportFileModal';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 const Schemes = () => {
-  const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk } = actions;
+  const { getAllSchemesSuccess, addSchemeSuccess, editSchemeSuccess, editSchemeErr, addSchemeErr, addSchemeInBulk, deleteSchemeSuccess, deleteSchemeErr } = actions;
   const { path } = useRouteMatch();
   let history = useHistory();
   let dispatch = useDispatch();
   const CSVLinkRef = useRef(null)
   const CSVLinkRefAll = useRef(null);
   const { Option } = Select;
-  const [setUsersTableData, setsetUsersTableData] = useState()
-  const usersTableData = [];
+  const { TabPane } = Tabs;
 
   const [schemeCategory, setSchemeCategory] = useState({
     category: '',
@@ -51,10 +51,14 @@ const Schemes = () => {
   const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [selectedLanguageData, setSelectedLanguageData] = useState()
   const [languageIds, setLanguageIds] = useState();
-  const [bannerChaked, setBannerChaked] = useState();
   const [id, setId] = useState();
   const [key, setKey] = useState();
 
+  const [showAlert, setShowAlert] = useState(false)
+  const [keyForDelete, setKeyForDelete] = useState('')
+  const [idForDelete, setIdForDelete] = useState('')
+  const [typeForDelete, setTypeForDelete] = useState('single')
+  const [typeForMultipleDelete, setTypeForMultipleDelete] = useState('multiple')
 
   const [langIds, setLangIds] = useState({
     hindi: "",
@@ -73,9 +77,8 @@ const Schemes = () => {
   const addSchemeError = useSelector((state) => state.scheme.addSchemeErr);
   const schemeModulData = useSelector((state) => state.scheme.addSchemeInBulk)
   const schemeModulDataErr = useSelector((state) => state.scheme.addSchemeInBulkErr)
-  const schemeBannerData = useSelector((state) => state.scheme.upadteBannerData)
-
-
+  const deleteSchemeData = useSelector((state) => state.scheme.deleteSchemeData)
+  const deleteSchemeError = useSelector((state) => state.scheme.deleteSchemeError)
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -97,6 +100,20 @@ const Schemes = () => {
       dispatch(getSchemeData(perPage, pageNumber, status, schemeCategory.benefit ? schemeCategory.benefit : "", schemeCategory.category ? schemeCategory.category : "", schemeCategory.search ? schemeCategory.search : "", langIds.hindi, langIds.marathi));
     }
   }, [perPage, pageNumber, status, langIds]);
+
+  useEffect(() => {
+    if(deleteSchemeData && deleteSchemeData.status === 200){
+      dispatch(deleteSchemeSuccess(null))
+      toast.success("Scheme deleted");
+    }
+  },[deleteSchemeData])
+
+  useEffect(() => {
+    if(deleteSchemeError){
+      dispatch(deleteSchemeErr(null))
+      toast.error("Something went wrong")
+    }
+  },[deleteSchemeError])
 
   useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
@@ -286,8 +303,6 @@ const Schemes = () => {
     }
   }, [allschemeData])
 
-
-
   useEffect(() => {
     if (state.length && exportTog === 'single') {
       CSVLinkRef?.current?.link.click()  // for export
@@ -301,7 +316,6 @@ const Schemes = () => {
       toast.success("No scheme data for export")
     }
   }, [state, stateAll])
-
 
   useEffect(() => {
     return (() => {
@@ -328,40 +342,40 @@ const Schemes = () => {
     return newVal
   }
 
-  const deleteSchemes = async key => {
-    let userForDelete = users && users.data.find(item => item.key === key);
-    let formData = new FormData();
-    formData.append('benifitLine', userForDelete.benifitLine.toString('markdown'));
-    formData.append('detail', userForDelete.detail.toString('markdown'));
-    formData.append('howToApply', userForDelete.howToApply.toString('markdown'));
-    formData.append('documentation', userForDelete.documentation.toString('markdown'));
-    formData.append('name', userForDelete.name);
-    formData.append('locations', JSON.stringify(userForDelete.locations));
-    formData.append('schemeCategory', userForDelete.schemeCategory.id);
-    formData.append('schemeBenifit', userForDelete.schemeBenifit.id);
-    formData.append('website', userForDelete.website);
-    formData.append('type', userForDelete.type,);
-    formData.append('benificiary', userForDelete.benificiary);
-    formData.append('grievanceRedress', userForDelete.grievanceRedress);
-    formData.append('elink', userForDelete.elink);
-    formData.append('spoc', userForDelete.spoc);
-    formData.append('isActive', false);
-    formData.append('thumbnail', userForDelete.thumbnail);
-    formData.append('application_form', userForDelete.application_form);
-    formData.append('recommended_and_forwarded', userForDelete.recommended_and_forwarded);
-    formData.append('application_process', userForDelete.application_process);
-    formData.append('medical_superintendent', userForDelete.medical_superintendent);
-    formData.append('hospital_expenses_estimation_certificate', userForDelete.hospital_expenses_estimation_certificate);
-    formData.append('videoUrl', userForDelete.videoUrl);
-    formData.append('id', userForDelete.id);
-    formData.append('isDeleted', true);
-    formData.append('isPublished', userForDelete.isPublished);
-    formData.append('isApproved', userForDelete.isApproved);
-    const deleteSchemes = await newSchemes(formData)
-    if (deleteSchemes.status === 200) {
-      toast.success("Scheme deleted")
-    }
-  }
+  // const deleteSchemes = async key => {
+  //   let userForDelete = users && users.data.find(item => item.key === key);
+  //   let formData = new FormData();
+  //   formData.append('benifitLine', userForDelete.benifitLine.toString('markdown'));
+  //   formData.append('detail', userForDelete.detail.toString('markdown'));
+  //   formData.append('howToApply', userForDelete.howToApply.toString('markdown'));
+  //   formData.append('documentation', userForDelete.documentation.toString('markdown'));
+  //   formData.append('name', userForDelete.name);
+  //   formData.append('locations', JSON.stringify(userForDelete.locations));
+  //   formData.append('schemeCategory', userForDelete.schemeCategory.id);
+  //   formData.append('schemeBenifit', userForDelete.schemeBenifit.id);
+  //   formData.append('website', userForDelete.website);
+  //   formData.append('type', userForDelete.type,);
+  //   formData.append('benificiary', userForDelete.benificiary);
+  //   formData.append('grievanceRedress', userForDelete.grievanceRedress);
+  //   formData.append('elink', userForDelete.elink);
+  //   formData.append('spoc', userForDelete.spoc);
+  //   formData.append('isActive', false);
+  //   formData.append('thumbnail', userForDelete.thumbnail);
+  //   formData.append('application_form', userForDelete.application_form);
+  //   formData.append('recommended_and_forwarded', userForDelete.recommended_and_forwarded);
+  //   formData.append('application_process', userForDelete.application_process);
+  //   formData.append('medical_superintendent', userForDelete.medical_superintendent);
+  //   formData.append('hospital_expenses_estimation_certificate', userForDelete.hospital_expenses_estimation_certificate);
+  //   formData.append('videoUrl', userForDelete.videoUrl);
+  //   formData.append('id', userForDelete.id);
+  //   formData.append('isDeleted', true);
+  //   formData.append('isPublished', userForDelete.isPublished);
+  //   formData.append('isApproved', userForDelete.isApproved);
+  //   const deleteSchemes = await newSchemes(formData)
+  //   if (deleteSchemes.status === 200) {
+  //     toast.success("Scheme deleted")
+  //   }
+  // }
 
   const activeSchemeData = formData => {
     const newVal = ApiPost("scheme/editScheme", formData)
@@ -415,14 +429,31 @@ const Schemes = () => {
     }
   }
 
-
-  const { TabPane } = Tabs;
-
   const callback = key => {
     setStatus(key);
     setPageNumber(1);
     setExportTog(false);
   };
+
+  const deleteSchemes = (id, key) => {
+    setShowAlert(true);
+    setKeyForDelete(key)
+    setIdForDelete(id)
+  }
+
+  const onDelete = (idForDelete, keyForDelete, typeForDelete) => {
+    dispatch(deleteScheme(idForDelete, keyForDelete, typeForDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  const onDeleteAll = (idForDelete, keyForDelete, typeForMultipleDelete) => {
+    dispatch(deleteScheme(idForDelete, keyForDelete, typeForMultipleDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
 
   const viewSchemesdata = (key) => {
     history.push(`/admin/scheme/view?key=${key}`)
@@ -601,7 +632,7 @@ const Schemes = () => {
                       className="btn-icon"
                       type="warning"
                       to="#"
-                      onClick={() => deleteSchemes(item.key)}
+                      onClick={() => deleteSchemes(item.id,item.key)}
                       shape="circle"
                     >
                       <FeatherIcon icon="trash-2" size={16} />
@@ -677,12 +708,14 @@ const Schemes = () => {
       width: '90px',
     },
   ];
+
   const rowSelection = {
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User',
       name: record.name,
     }),
   };
+
   return (
     <>
       <PageHeader
@@ -717,6 +750,7 @@ const Schemes = () => {
           </div>
         ]}
       />
+
       <Main>
         <Cards headless>
           <Row gutter={15}>
@@ -826,6 +860,7 @@ const Schemes = () => {
           </Row >
         </Cards >
       </Main >
+
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}
@@ -850,6 +885,29 @@ const Schemes = () => {
 
       {viewModal && <ViewModal viewModal={viewModal} type="primary" setViewModal={setViewModal} data={getOneScheme} />}
       {importModal && <ImportFileModal importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import schemes" />}
+
+      {showAlert &&
+        <SweetAlert
+          danger
+          cancelBtnText="Cancel"
+          confirmBtnBsStyle="danger"
+          title="Are you sure?"
+        >
+           You want to delete scheme.
+          <div>
+            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+              Single delete
+            </Button>
+            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+              All delete
+            </Button>
+            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+              Cancel
+            </Button>
+          </div>
+        </SweetAlert>
+      }
+
     </>
   );
 };

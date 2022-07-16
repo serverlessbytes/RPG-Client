@@ -91,6 +91,10 @@ const actions = {
   EDIT_COURSE_RATING_SUCCESS: 'EDIT_COURSE_RATING_SUCCESS',
   EDIT_COURSE_RATING_ERR: 'EDIT_COURSE_RATING_ERR',
 
+  DELETE_COURSE_BEGINE: "DELETE_COURSE_BEGINE",
+  DELETE_COURSE_SUCCESS: "DELETE_COURSE_SUCCESS",
+  DELETE_COURSE_ERR: "DELETE_COURSE_ERR",
+
   postCategoryBegin: () => {
     return {
       type: actions.POST_CATEGORY_BEGINE,
@@ -504,21 +508,36 @@ const actions = {
       type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_BEGINE
     }
   },
-
   importCourseCategoryInBulkSuccess: (data) => {
     return {
       type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS,
       data
     }
   },
-
   importCourseCategoryInBulkErr: (err) => {
     return {
       type: actions.ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
       err,
     }
-  }
+  },
 
+  deleteCourseSuccessBegin: () => {
+    return {
+      type: actions.DELETE_COURSE_BEGINE
+    }
+  },
+  deleteCourseSuccess: (data) => {
+    return {
+      type: actions.DELETE_COURSE_SUCCESS,
+      data
+    }
+  },
+  deleteCourseErr: (err) => {
+    return {
+      type: actions.DELETE_COURSE_ERR,
+      err,
+    }
+  },
 
 };
 

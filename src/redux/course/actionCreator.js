@@ -33,8 +33,9 @@ const {
   addSwayamCourseInBulkBegin,
   addSwayamCourseInBulkSuccess,
   addSwayamCourseInBulkErr,
+  deleteCourseSuccess,
+  deleteCourseErr,
 
-  importCourseCategoryInBulkBegin,
   importCourseCategoryInBulkSuccess,
   importCourseCategoryInBulkErr,
 
@@ -276,4 +277,15 @@ export const importCourseCategory = (body) => async (dispatch) => {
       }
     })
     .catch(e => dispatch(importCourseCategoryInBulkErr(e)))
+}
+
+export const deleteCourses = (id, key, type) => async (dispatch) => {
+  await ApiGet(`course/deleteCourses?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&courseId=${id}&key=${key}&type=${type}`)
+    .then((res) => {
+      dispatch(deleteCourseSuccess(res))
+      if (res.status === 200) {
+        return dispatch(getCoursefilter(category, per_page, page_number, Mode, Inactive, search, hindi, marathi))
+      }
+    })
+    .catch(e => dispatch(deleteCourseErr(e)))
 }

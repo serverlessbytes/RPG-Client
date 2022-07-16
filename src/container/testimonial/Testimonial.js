@@ -1,11 +1,11 @@
-import { Table } from 'antd';
-import React, { useEffect, useState } from 'react'
+import { Dropdown, Menu, Space, Table } from 'antd';
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button } from '../../components/buttons/buttons'
 import { Cards } from '../../components/cards/frame/cards-frame';
 import { PageHeader } from '../../components/page-headers/page-headers'
-import { getTestimonial } from '../../redux/testimonial/actionCreator';
+import { getExportTestimonials, getTestimonial } from '../../redux/testimonial/actionCreator';
 import { UserTableStyleWrapper } from '../pages/style';
 import { Main, TableWrapper } from '../styled';
 import FeatherIcon from 'feather-icons-react';
@@ -14,21 +14,29 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApiPost } from '../../helper/API/ApiData';
 import ImportTestimonial from '../../components/modals/ImportTestimonial';
+import { DownOutlined } from '@ant-design/icons';
+import { CSVLink } from 'react-csv';
 
 const Testimonial = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
     const { path } = useRouteMatch();
+    const CSVLinkRefAll = useRef(null);
+    const CSVLinkRef = useRef(null);
 
     const { addTestimonialSuccess, addTestimonialErr, editTestimonialSuccess,
         editTestimonialErr, addBulkTestimonialSuccess, addBulkTestimonialErr,
+        getExportTestimonialsSuccess, 
     } = actions;
 
     const [testiMonialtable, setTestiMonial] = useState([]);
     const [perPage, setPerPage] = useState(10)
     const [pageNum, setPageNum] = useState(1)
     const [importModel, setImportModel] = useState(false)
+    const [exportAlltestimonial, setExportAllTestimonial] = useState([])
+    const [exportTestimonial, setExportTestimonial] = useState([])
+    const [exportTog, setExportTog] = useState('');
 
     const getAllUsers = useSelector((state) => state.testimonial.getTestimonialData)
     const addTestimonialdata = useSelector((state) => state.testimonial.addTestimonialData)
@@ -37,6 +45,7 @@ const Testimonial = () => {
     const editTestimonialDataError = useSelector((state) => state.testimonial.editTestimonialDataError)
     const addBulkTestimonialData = useSelector((state) => state.testimonial.addBulkTestimonialData)
     const addBulkTestimonialError = useSelector((state) => state.testimonial.addBulkTestimonialErr)
+    const getExportTestimonialData = useSelector((state) => state.testimonial.getExportTestimonialData)
 
     useEffect(() => {
         if (addBulkTestimonialData && addBulkTestimonialData.status === 200) {
@@ -117,7 +126,7 @@ const Testimonial = () => {
             const deleteTestimonial = await newTestimonial(userForDelete)
             if (deleteTestimonial.status === 200) {
                 toast.success("Testimonial deleted")
-            }else{
+            } else {
                 toast.error("Something went wrong")
             }
         }
@@ -147,6 +156,99 @@ const Testimonial = () => {
             )
         }
     }, [getAllUsers])
+
+    useEffect(() => {
+        if(getAllUsers && getAllUsers.data && getAllUsers.data.data){
+            setExportTestimonial(getAllUsers && getAllUsers.data && getAllUsers.data.data.map(item => {
+                return{
+                    ...item,
+                    createdAt: item.createdAt,
+                    id: item.id,
+                    imageUrl: item.imageUrl,
+                    isActive: item.isActive,
+                    isDeleted: item.isDeleted,
+                    message: item.message,
+                    name: item.name,
+                    role: item.role,
+                    videoUrl: item.videoUrl,
+                }
+            }))
+        }
+    },[getAllUsers])
+
+    useEffect(() => {
+        if (getExportTestimonialData?.data) {
+            setExportAllTestimonial(
+                getExportTestimonialData?.data.map(item => {
+                    return {
+                        ...item,
+                        createdAt: item.createdAt,
+                        id: item.id,
+                        imageUrl: item.imageUrl,
+                        isActive: item.isActive,
+                        isDeleted: item.isDeleted,
+                        message: item.message,
+                        name: item.name,
+                        role: item.role,
+                        updatedAt: item.updatedAt,
+                        videoUrl: item.videoUrl,
+                    }
+                })
+            )
+            setExportTog("all");
+        }
+    }, [getExportTestimonialData])
+
+    useEffect(() => {
+        if (exportAlltestimonial.length && exportTog === 'all') {
+            CSVLinkRefAll?.current?.link.click();
+            toast.success('Testimonial exported');
+            setExportTog('');
+            dispatch(getExportTestimonialsSuccess(null))
+        } 
+        else if (exportTestimonial.length && exportTog === 'single') {
+            CSVLinkRef?.current?.link.click();
+            toast.success('Testimonial exported');
+            setExportTog('');
+        } 
+        else if (!exportAlltestimonial.length && exportTog) {
+            toast.success('No data for export');
+        }
+    }, [exportTog]);
+
+    const headerAll = [
+        {label: 'createdAt', key:'createdAt'},
+        {label: 'id', key:'id'},
+        {label: 'imageUrl', key:'imageUrl'},
+        {label: 'isActive', key:'isActive'},
+        {label: 'isDeleted', key:'isDeleted'},
+        {label: 'message', key:'message'},
+        {label: 'name', key:'name'},
+        {label: 'role', key:'role'},
+        {label: 'updatedAt', key:'updatedAt'},
+        {label: 'videoUrl', key:'videoUrl'},
+    ];
+
+    const header = [
+        {label: 'createdAt', key:'createdAt'},
+        {label: 'id', key:'id'},
+        {label: 'imageUrl', key:'imageUrl'},
+        {label: 'isActive', key:'isActive'},
+        {label: 'isDeleted', key:'isDeleted'},
+        {label: 'message', key:'message'},
+        {label: 'name', key:'name'},
+        {label: 'role', key:'role'},
+        {label: 'videoUrl', key:'videoUrl'},
+    ];
+
+    const onExportTestimonial = () => {
+        dispatch(getTestimonial(perPage, pageNum))
+        setExportTog('single');
+    }
+
+    const exportAllTestimonial = () => {
+        dispatch(getExportTestimonials())
+    }
 
     const reDirect = () => {
         history.push(`${path}/addtestimonial`);
@@ -181,6 +283,45 @@ const Testimonial = () => {
         },
 
     ];
+    const onClick = ({ key }) => {
+        if (key == 'exportTestimonial') {
+            onExportTestimonial()
+        }
+        if (key == 'exportAllTestimonial') {
+            exportAllTestimonial()
+        }
+        if (key == 'addTestimonial') {
+            reDirect();
+        }
+        if (key == 'import') {
+            reDirectModel()
+        }
+    }
+
+    const menu = (
+        <Menu
+            onClick={onClick}
+            items={[
+                {
+                    label: 'Add testimonial',
+                    key: 'addTestimonial',
+                },
+                {
+                    label: 'Export all testimonial',
+                    key: 'exportAllTestimonial',
+                },
+                {
+                    label: 'Export testimonial',
+                    key: 'exportTestimonial',
+                },
+                {
+                    label: 'Import testimonial',
+                    key: 'import',
+                },
+            ]}
+        />
+    );
+
     return (
         <>
             <PageHeader
@@ -188,12 +329,35 @@ const Testimonial = () => {
                 title="Testimonial"
                 buttons={[
                     <div className="page-header-actions">
-                        <Button onClick={reDirect} size="small" type="primary">
+                        {/* <Button onClick={reDirect} size="small" type="primary">
                             Add testimonial
                         </Button>
                         <Button onClick={reDirectModel} size="small" type="primary">
                             Import testimonial
-                        </Button>
+                        </Button> */}
+
+                        <Dropdown overlay={menu} trigger='click'>
+                            <a onClick={e => e.preventDefault()}>
+                                <Space>
+                                    Actions
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        <CSVLink
+                            headers={headerAll}
+                            data={exportAlltestimonial}
+                            ref={CSVLinkRefAll}
+                            filename="Testimonial.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
+                         <CSVLink
+                            headers={header}
+                            data={exportTestimonial}
+                            ref={CSVLinkRef}
+                            filename="Testimonial.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
                     </div>
                 ]}
             />

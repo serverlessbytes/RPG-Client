@@ -87,6 +87,10 @@ const actions = {
   ADD_UPADTE_JOB_BANNER_SUCCESS: 'ADD_UPADTE_JOB_BANNER_SUCCESS',
   ADD_UPADTE_JOB_BANNER_ERR: 'ADD_UPADTE_JOB_BANNER_ERR',
 
+  DELETE_JOBS_BEGINE:"DELETE_JOBS_BEGINE",
+  DELETE_JOBS_SUCCESS:"DELETE_JOBS_SUCCESS",
+  DELETE_JOBS_ERR:"DELETE_JOBS_ERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -95,7 +99,6 @@ const actions = {
   },
 
   getJobcategorySuccess: data => {
-    // console.log("getJobcategorySuccess=====data",data);
     return {
       type: actions.GET_JOBCATEGOTRY_SUCCESS,
       data,
@@ -279,7 +282,6 @@ const actions = {
   },
 
   getoneJobPostSuccess: data => {
-    // console.log("dataa",data)
     return {
       type: actions.GETONE_JOBPOST_SUCCESS,
       data,
@@ -380,7 +382,6 @@ const actions = {
   },
 
   updateIsSelectedJobApplicationSuccess: data => {
-    // console.log("data____",data)
     return {
       type: actions.UPDATE_IS_SELECTED_JOB_APPLICATION_SUCCESS,
       data,
@@ -528,6 +529,24 @@ const actions = {
   addUpdateJobBannerErr: err => {
     return {
       type: actions.ADD_UPADTE_JOB_BANNER_ERR,
+      err,
+    };
+  },
+
+  deleteJobsBegin: () => {
+    return {
+      type: actions.DELETE_JOBS_BEGINE,
+    };
+  },
+  deleteJobsSuccess: data => {
+    return {
+      type: actions.DELETE_JOBS_SUCCESS,
+      data,
+    };
+  },
+  deleteJobsErr: err => {
+    return {
+      type: actions.DELETE_JOBS_ERR,
       err,
     };
   },
