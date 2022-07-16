@@ -63,6 +63,10 @@ const actions = {
   ADD_UPADTE_BANNER_SUCCESS: 'ADD_UPADTE_BANNER_SUCCESS',
   ADD_UPADTE_BANNER_ERR: 'ADD_UPADTE_BANNER_ERR',
 
+  DELETE_SCHEME_BEGINE: " DELETE_SCHEME_BEGINE",
+  DELETE_SCHEME_SUCCESS: " DELETE_SCHEME_SUCCESS",
+  DELETE_SCHEME_ERR: " DELETE_SCHEME_ERR",
+
   getSchemecategoryBegin: () => {
     return {
       type: actions.GET_SCHEMECATEGOTRY_BEGINE,
@@ -373,5 +377,24 @@ const actions = {
       err
     }
   },
+
+  deleteSchemeBegin: () => {
+    return {
+      type: actions.DELETE_SCHEME_BEGINE
+    }
+  },
+  deleteSchemeSuccess: (data) => {
+    return {
+      type: actions.DELETE_SCHEME_SUCCESS,
+      data
+    }
+  },
+  deleteSchemeErr: (err) => {
+    return {
+      type: actions.DELETE_SCHEME_ERR,
+      err
+    }
+  },
+
 };
 export default actions;

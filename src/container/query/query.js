@@ -20,12 +20,13 @@ const query = () => {
     const dispatch = useDispatch();
     const { TabPane } = Tabs;
     const CSVLinkRef = useRef(null);
+    const CSVLinkRefSingle = useRef(null);
 
     const { addQueriesSuccess, addQueriesErr, editQueriesSuccess, editQueriesErr, getExportQueriesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [queryTableData, setQueryTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(20); // forpagination
+    const [perPage, setPerPage] = useState(10); // forpagination
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuery, setSelectedQuery] = useState();//For Edit
     const [nameTog, setNameTog] = useState(false)
@@ -37,7 +38,8 @@ const query = () => {
     });
     const [formErrors, setFormErrors] = useState();
     const [exportQueries, setExportQueries] = useState([]);
-    const [exportTog, setExportTog] = useState(false);
+    const [exportSingleQueries, setExportSingleQueries] = useState([]);
+    const [exportTog, setExportTog] = useState('');
 
     const getQueriesData = useSelector((state) => state.queries.getQueriesData);
     const addQueriesData = useSelector((state) => state.queries.addQueriesData);
@@ -103,11 +105,16 @@ const query = () => {
     }, [getQueriesById])
 
     useEffect(() => {
-        if (exportQueries?.length && exportTog) {
+        if (exportQueries?.length && exportTog === "all") {
             CSVLinkRef?.current?.link.click();
             toast.success('Query exported');
-            setExportTog(false);
+            setExportTog('');
             dispatch(getExportQueriesSuccess(null))
+        }
+        else if(exportSingleQueries?.length && exportTog === 'single'){
+            CSVLinkRefSingle?.current?.link.click();
+            toast.success('Query exported');
+            setExportTog('');
         }
         else if (!exportQueries.length && exportTog) {
             toast.success('No data for export');
@@ -130,9 +137,26 @@ const query = () => {
                     }
                 })
             )
-            setExportTog(true)
+            setExportTog('all')
         }
     }, [getExportQueriesData])
+
+    useEffect(() => {
+        if (getQueriesData && getQueriesData.data && getQueriesData.data.data) {
+            setExportSingleQueries(getQueriesData && getQueriesData.data && getQueriesData.data.data.map(item => {
+                return {
+                    ...item,
+                    body: item.body,
+                    createdAt: item.createdAt,
+                    email: item.email,
+                    id: item.id,
+                    isActive: item.isActive,
+                    isResolved: item.isResolved,
+                    name: item.name,
+                }
+            }))
+        }
+    }, [getQueriesData])
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -273,13 +297,31 @@ const query = () => {
         if (key === 'exportQuery') {
             exportQuery();
         }
+        if (key === 'exportSingleQuery') {
+            exportSingleQuery();
+        }
     }
 
     const exportQuery = () => {
         dispatch(getExportQueries())
     }
 
+    const exportSingleQuery = () => {
+        dispatch(getQueries(perPage, pageNumber, status))
+        setExportTog('single');
+    }
+
     const header = [
+        { label: 'body', key: 'body' },
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'email', key: 'email' },
+        { label: 'id', key: 'id' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isResolved', key: 'isResolved' },
+        { label: 'name', key: 'name' },
+    ];
+
+    const headerSingle = [
         { label: 'body', key: 'body' },
         { label: 'createdAt', key: 'createdAt' },
         { label: 'email', key: 'email' },
@@ -384,13 +426,18 @@ const query = () => {
             onClick={onClick}
             items={[
                 {
-                    label: 'Export query',
-                    key: 'exportQuery',
-                },
-                {
                     label: 'Add query',
                     key: 'addQuery',
                 },
+                {
+                    label: 'Export all query',
+                    key: 'exportQuery',
+                },
+                {
+                    label: 'Export query',
+                    key: 'exportSingleQuery',
+                },
+             
             ]}
         />
     );
@@ -414,6 +461,14 @@ const query = () => {
                             headers={header}
                             data={exportQueries}
                             ref={CSVLinkRef}
+                            filename="Queries.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
+
+                        <CSVLink
+                            headers={headerSingle}
+                            data={exportSingleQueries}
+                            ref={CSVLinkRefSingle}
                             filename="Queries.csv"
                             style={{ opacity: 0 }}
                         ></CSVLink>

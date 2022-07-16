@@ -87,6 +87,10 @@ const actions = {
   ADD_UPADTE_JOB_BANNER_SUCCESS: 'ADD_UPADTE_JOB_BANNER_SUCCESS',
   ADD_UPADTE_JOB_BANNER_ERR: 'ADD_UPADTE_JOB_BANNER_ERR',
 
+  DELETE_JOBS_BEGINE:"DELETE_JOBS_BEGINE",
+  DELETE_JOBS_SUCCESS:"DELETE_JOBS_SUCCESS",
+  DELETE_JOBS_ERR:"DELETE_JOBS_ERR",
+
 
   getJobcategoryBegin: () => {
     return {
@@ -525,6 +529,24 @@ const actions = {
   addUpdateJobBannerErr: err => {
     return {
       type: actions.ADD_UPADTE_JOB_BANNER_ERR,
+      err,
+    };
+  },
+
+  deleteJobsBegin: () => {
+    return {
+      type: actions.DELETE_JOBS_BEGINE,
+    };
+  },
+  deleteJobsSuccess: data => {
+    return {
+      type: actions.DELETE_JOBS_SUCCESS,
+      data,
+    };
+  },
+  deleteJobsErr: err => {
+    return {
+      type: actions.DELETE_JOBS_ERR,
       err,
     };
   },

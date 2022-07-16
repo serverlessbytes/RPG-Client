@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch } from 'antd';
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { addPartnerCourse, editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter, } from '../../redux/course/actionCreator';
+import { addPartnerCourse, deleteCourses, editPartnerCoursefilter, getallSwayamCourse, getCategoryData, getCoursefilter, getOneCoursefilter, } from '../../redux/course/actionCreator';
 import ViewPartnerCourse from './ViewPartnerCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -22,10 +22,12 @@ import { Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 const PartnerCourses = () => {
-  const { addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr, addPartnerCourseInBulkSuccess } = actions;
+  const { addPartnerCourseSuccess, addPartnerCourseErr, getallSwayamCourseSuccess, editPartnerCourseSuccess, editPartnerCourseErr, addPartnerCourseInBulkSuccess, deleteCourseSuccess,
+    deleteCourseErr, } = actions;
   const history = useHistory();
   let dispatch = useDispatch();
   const { path } = useRouteMatch();
@@ -57,6 +59,12 @@ const PartnerCourses = () => {
   const [languageID, setLanguageIds] = useState();
   const [id, setID] = useState();
 
+  const [showAlert, setShowAlert] = useState(false)
+  const [idForDelete, setIdForDelete] = useState('')
+  const [keyForDelete, setKeyForDelete] = useState('')
+  const [typeForDelete, setTypeForDelete] = useState('single')
+  const [typeForMultipleDelete, setTypeForMultipleDelete] = useState('multiple')
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const courseData = useSelector(state => state.category.courseFilterData);
   const catdata = useSelector(state => state.category.categoryData);
@@ -68,6 +76,8 @@ const PartnerCourses = () => {
   const editPartnerCourseError = useSelector(state => state.category.editPartnerCourseError);
   const ImportPartnerCoursedata = useSelector(state => state.category.addPartnerCourseInBulkData);
   const addPartnerCourseModulError = useSelector(state => state.category.addPartnerCourseInBulkError)
+  const deleteCourseData = useSelector(state => state.category.deleteCourseData)
+  const deleteCourseError = useSelector(state => state.category.deleteCourseError)
 
   useEffect(() => {
     if (data.length && exportTog) {
@@ -92,6 +102,20 @@ const PartnerCourses = () => {
   //     })
   //   }
   // }, [courseData])
+
+  useEffect(() => {
+    if (deleteCourseData && deleteCourseData.status === 200) {
+      dispatch(deleteCourseSuccess(null))
+      toast.success("Swayam course deleted");
+    }
+  }, [deleteCourseData])
+
+  useEffect(() => {
+    if (deleteCourseError) {
+      dispatch(deleteCourseErr(null))
+      toast.error('Something went wrong');
+    }
+  }, [deleteCourseError])
 
   useEffect(() => {
     if (ImportPartnerCoursedata && ImportPartnerCoursedata.status === 200) {
@@ -155,6 +179,27 @@ const PartnerCourses = () => {
         }
       })
   }
+
+  const deleteCourse = (id, key) => {
+    setShowAlert(true);
+    setKeyForDelete(key)
+    setIdForDelete(id)
+  }
+
+  const onDelete = (idForDelete, keyForDelete, typeForDelete) => {
+    dispatch(deleteCourses(idForDelete, keyForDelete, typeForDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  const onDeleteAll = (idForDelete, keyForDelete, typeForMultipleDelete) => {
+    dispatch(deleteCourses(idForDelete, keyForDelete, typeForMultipleDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
   useEffect(() => {
     let temp = {
       hindi: '',
@@ -278,36 +323,36 @@ const PartnerCourses = () => {
   const viewPartnerCoursedata = id => {
     history.push(`/admin/courses/viewpartnercourse?id=${id}`)
   };
-  const onDelete = id => {
-    let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
-    let certification = activeCourseDelete.certificate;
-    let categoryId = activeCourseDelete.courseCategory.id;
-    if (activeCourseDelete) {
-      delete activeCourseDelete.id;
-      delete activeCourseDelete.certificate;
-      delete activeCourseDelete.jobTypes;
-      delete activeCourseDelete.courseCategory;
-      delete activeCourseDelete.viewCount;
-      delete activeCourseDelete.isApproved;
-      delete activeCourseDelete.createdAt;
-      delete activeCourseDelete.courseRatings;
-      delete activeCourseDelete.courseRatingSum;
-      delete activeCourseDelete.bannerSelected;
-      delete activeCourseDelete.saved;
-      delete activeCourseDelete.enrolled;
-      delete activeCourseDelete.hindi;
-      delete activeCourseDelete.marathi;
-      activeCourseDelete = {
-        ...activeCourseDelete,
-        isActive: false,
-        isDeleted: true,
-        courseId: id,
-        categoryId: categoryId,
-        certification: certification,
-      };
-      dispatch(editPartnerCoursefilter(activeCourseDelete, langIds.hindi, langIds.marathi));
-    }
-  };
+  // const onDelete = id => {
+  //   let activeCourseDelete = courseData && courseData.data && courseData.data.data.find(item => item.id === id);
+  //   let certification = activeCourseDelete.certificate;
+  //   let categoryId = activeCourseDelete.courseCategory.id;
+  //   if (activeCourseDelete) {
+  //     delete activeCourseDelete.id;
+  //     delete activeCourseDelete.certificate;
+  //     delete activeCourseDelete.jobTypes;
+  //     delete activeCourseDelete.courseCategory;
+  //     delete activeCourseDelete.viewCount;
+  //     delete activeCourseDelete.isApproved;
+  //     delete activeCourseDelete.createdAt;
+  //     delete activeCourseDelete.courseRatings;
+  //     delete activeCourseDelete.courseRatingSum;
+  //     delete activeCourseDelete.bannerSelected;
+  //     delete activeCourseDelete.saved;
+  //     delete activeCourseDelete.enrolled;
+  //     delete activeCourseDelete.hindi;
+  //     delete activeCourseDelete.marathi;
+  //     activeCourseDelete = {
+  //       ...activeCourseDelete,
+  //       isActive: false,
+  //       isDeleted: true,
+  //       courseId: id,
+  //       categoryId: categoryId,
+  //       certification: certification,
+  //     };
+  //     dispatch(editPartnerCoursefilter(activeCourseDelete, langIds.hindi, langIds.marathi));
+  //   }
+  // };
 
   const activePartnerCourses = dt => {
     const newVal = ApiPost(`course/editPartnerCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, dt)
@@ -437,7 +482,7 @@ const PartnerCourses = () => {
                       <Button
                         className="btn-icon"
                         type="danger"
-                        onClick={() => onDelete(item.id)}
+                        onClick={() => deleteCourse(item.id, item.key)}
                         to="#"
                         shape="circle"
                       >
@@ -532,6 +577,7 @@ const PartnerCourses = () => {
       name: record.name,
     }),
   };
+
   return (
     <>
       <PageHeader
@@ -539,37 +585,6 @@ const PartnerCourses = () => {
         title="Partner Courses"
         buttons={[
           <div key="1" className="page-header-actions">
-            {/* <Button
-              size="small"
-              type="info"
-              onClick={() => {
-                onePartnercourseData();
-              }}
-            >
-              Export Courses
-            </Button>
-            <CSVLink
-              data={data}
-              ref={CSVLinkRef}
-              headers={header}
-              filename="Partner.csv"
-              style={{ opacity: 0 }}
-            ></CSVLink> */}
-            {/* <Button size="small" type="info" onClick={() => onAllPartnerCourse()}>
-              Export All Course
-            </Button> */}
-            {/* <Button
-              size="small"
-              type="primary"
-              onClick={() => {
-                history.push(`${path}/addpartnercourses`);
-              }}
-            >
-              Add Courses
-            </Button>
-            <Button size="small" type="primary" onClick={() => setImportModal(true)}>
-              Import
-            </Button> */}
             <Dropdown overlay={menu} trigger="click">
               <a onClick={e => e.preventDefault()}>
                 <Space>
@@ -696,6 +711,7 @@ const PartnerCourses = () => {
       )}
 
       {importModal && <ImportPartnerCourse importModal={importModal} handleCancel={() => setImportModal(false)} modaltitle="Import Partner Courses" />}
+
       {isConfirmModal && (
         <ConfirmModal
           onOk={() => { setIsConfirmModal(false) }}
@@ -720,6 +736,29 @@ const PartnerCourses = () => {
           children={"This coures in not available in this language. You want to add?"}
         />
       )}
+
+      {showAlert &&
+        <SweetAlert
+          danger
+          cancelBtnText="Cancel"
+          confirmBtnBsStyle="danger"
+          title="Are you sure?"
+        >
+          You want to delete course.
+          <div>
+            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+              Single delete
+            </Button>
+            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+              All delete
+            </Button>
+            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+              Cancel
+            </Button>
+          </div>
+        </SweetAlert>
+      }
+
     </>
   );
 };

@@ -20,6 +20,7 @@ import { CSVLink } from 'react-csv';
 const Carousel = () => {
   const dispatch = useDispatch();
   const CSVLinkRef = useRef(null);
+  const CSVLinkRefSingle = useRef(null);
   const { getOneCarouselSuccess, addCarouselSuccess, addCarouselErr, editCarouselSuccess, editCarouselErr, addBulkCarouselSuccess, addBulkCarouselErr, getExportCarouselsSuccess } = actions;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,7 +36,8 @@ const Carousel = () => {
     imageUrl: '',
   });
   const [exportCarousel, setExportCarousel] = useState([]);
-  const [exportTog, setExportTog] = useState(false);
+  const [exportCarouselsingle, setExportCarouselSingle] = useState([]);
+  const [exportTog, setExportTog] = useState('');
 
   const getCarouselData = useSelector(state => state.carousel.getCarouselData);
   const getOneCarouselData = useSelector(state => state.carousel.getOneCarouselData);
@@ -141,7 +143,6 @@ const Carousel = () => {
     else {
       setFormErrors({ ...formErrors, imageUrl: 'Please select document file' })
     }
-
   }
 
   const validation = () => {
@@ -259,22 +260,43 @@ const Carousel = () => {
     { label: 'isDeleted', key: 'isDeleted' },
     { label: 'title', key: 'title' },
     { label: 'updatedAt', key: 'updatedAt' },
-];
+  ];
 
-  const exportBanner = () => {
+  const headerSingle = [
+    { label: 'createdAt', key: 'createdAt' },
+    { label: 'id', key: 'id' },
+    { label: 'imageUrl', key: 'imageUrl' },
+    { label: 'isActive', key: 'isActive' },
+    { label: 'isDeleted', key: 'isDeleted' },
+    { label: 'title', key: 'title' },
+  ];
+
+
+  const exportCarouselAll = () => {
     dispatch(getExportCarousels())
   }
+
+  const exportCarouselSingle = () => {
+    dispatch(getCarousel(perPage, pageNumber));
+    setExportTog('single')
+  }
+
   useEffect(() => {
-    if (exportCarousel?.length && exportTog) {
-        CSVLinkRef?.current?.link.click();
-        toast.success('Carousel exported');
-        setExportTog(false);
-        dispatch(getExportCarouselsSuccess(null))
+    if (exportCarousel?.length && exportTog === "all") {
+      CSVLinkRef?.current?.link.click();
+      toast.success('Carousel exported');
+      setExportTog('');
+      dispatch(getExportCarouselsSuccess(null))
+    }
+    else if (exportCarouselsingle.length && exportTog === 'single') {
+      CSVLinkRefSingle?.current?.link.click();
+      toast.success('Carousel exported');
+      setExportTog('');
     }
     else if (!exportCarousel.length && exportTog) {
-        toast.success('No data for export');
+      toast.success('No data for export');
     }
-}, [exportTog, exportCarousel])
+  }, [exportTog, exportCarousel])
 
   useEffect(() => {
     if (getExportCarouselData?.data) {
@@ -292,13 +314,32 @@ const Carousel = () => {
           }
         })
       )
-      setExportTog(true);
+      setExportTog('all');
     }
   }, [getExportCarouselData])
 
   useEffect(() => {
     if (getCarouselData && getCarouselData.data) {
+
+      setExportCarouselSingle(getCarouselData && getCarouselData.data && getCarouselData.data.data.map(item => {
+        return {
+          ...item,
+          createdAt: item.createdAt,
+          id: item.id,
+          imageUrl: item.imageUrl,
+          isActive: item.isActive,
+          isDeleted: item.isDeleted,
+          title: item.title,
+          updatedAt: item.updatedAt,
+        }
+      }))
+    }
+  }, [getCarouselData])
+
+  useEffect(() => {
+    if (getCarouselData && getCarouselData.data) {
       setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map((item, i) => {
+        // setCarouselTableData(getCarouselData && getCarouselData.data && getCarouselData.data.data.map(item => {
         return {
           title: item.title,
           imageUrl: item.imageUrl,
@@ -356,7 +397,10 @@ const Carousel = () => {
       showImportModal();
     }
     if (key === 'exportCarousel') {
-      exportBanner();
+      exportCarouselAll();
+    }
+    if (key === 'exportCarouselSingle') {
+      exportCarouselSingle();
     }
   }
 
@@ -365,17 +409,21 @@ const Carousel = () => {
       onClick={onClick}
       items={[
         {
-          label: 'Import carousel',
-          key: 'importCarousel',
-        },
-        {
           label: 'Add carousel',
           key: 'addCarousel',
         },
         {
-          label: 'Export carousel',
+          label: 'Export all carousel',
           key: 'exportCarousel',
-        }
+        },
+        {
+          label: 'Export carousel',
+          key: 'exportCarouselSingle',
+        },
+        {
+          label: 'Import carousel',
+          key: 'importCarousel',
+        },
       ]}
     />
   );
@@ -405,6 +453,13 @@ const Carousel = () => {
               headers={header}
               data={exportCarousel}
               ref={CSVLinkRef}
+              filename="Carousel.csv"
+              style={{ opacity: 0 }}
+            ></CSVLink>
+            <CSVLink
+              headers={headerSingle}
+              data={exportCarouselsingle}
+              ref={CSVLinkRefSingle}
               filename="Carousel.csv"
               style={{ opacity: 0 }}
             ></CSVLink>

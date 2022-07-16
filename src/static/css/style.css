@@ -3011,3 +3011,12 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.sweet-alert p {
+  display: none !important;
+}
+
+.ant-btn-delete {
+  background-color: #d9534f !important;
+  color: #fff !important;
+}

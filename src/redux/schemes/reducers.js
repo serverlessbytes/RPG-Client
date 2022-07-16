@@ -65,6 +65,10 @@ const {
   ADD_UPADTE_BANNER_SUCCESS,
   ADD_UPADTE_BANNER_ERR,
 
+  DELETE_SCHEME_BEGINE,
+  DELETE_SCHEME_SUCCESS,
+  DELETE_SCHEME_ERR,
+
 } = actions;
 
 const initialState = {
@@ -88,15 +92,15 @@ const initialState = {
   schemeRatingData: null,
   editSchemeRatingData: null,
   getOneSchemeRatingData: null,
-
   importSchemeCategoryBegin: null,
   importSchemeCategoryData: null,
   importSchemeCategoryError: null,
   addSchemeBenefitBulkData: null,
   getBenefitData: null,
-
   upadteBannerData: null,
   upadteBannerError: null,
+  deleteSchemeData: null,
+  deleteSchemeError: null,
 };
 
 const schemeReducer = (state = initialState, action) => {
@@ -417,6 +421,24 @@ const schemeReducer = (state = initialState, action) => {
         upadteBannerError: err,
         loading: false,
       }
+
+      case DELETE_SCHEME_BEGINE:
+        return {
+          ...state,
+          loading: true
+        }
+      case DELETE_SCHEME_SUCCESS:
+        return {
+          ...state,
+          deleteSchemeData: data,
+          loading: false,
+        }
+      case DELETE_SCHEME_ERR:
+        return {
+          ...state,
+          deleteSchemeError: err,
+          loading: false,
+        }
 
     default:
       return state;

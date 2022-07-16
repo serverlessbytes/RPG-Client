@@ -20,6 +20,7 @@ import { CSVLink } from 'react-csv';
 const article = () => {
     const dispatch = useDispatch();
     const CSVLinkRef = useRef(null);
+    const CSVLinkRefSingle = useRef(null);
     const { addArticleSuccess, addArticleErr, editArticlesSuccess, editArticlesErr, addBulkArticleSuccess, addBulkArticleErr, getExportArticlesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -39,7 +40,8 @@ const article = () => {
     const [formErrors, setFormErrors] = useState();
     const [importModal, setImportModal] = useState(false);
     const [exportArticle, setExportArticle] = useState([])
-    const [exportTog, setExportTog] = useState(false);
+    const [exportsingleArticle, setExportSingleArticle] = useState([])
+    const [exportTog, setExportTog] = useState('');
 
     const getArticlesData = useSelector((state) => state.articles.getArticlesData);
     const getArticleByIdData = useSelector((state) => state.articles.getArticleByIdData);
@@ -52,6 +54,18 @@ const article = () => {
     const getExportArticleData = useSelector((state) => state.articles.getExportArticleData);
 
     const header = [
+        { label: 'body', key: 'body' },
+        { label: 'createdAt', key: 'createdAt' },
+        { label: 'id', key: 'id' },
+        { label: 'imageUrl', key: 'imageUrl' },
+        { label: 'isActive', key: 'isActive' },
+        { label: 'isDeleted', key: 'isDeleted' },
+        { label: 'priority', key: 'priority' },
+        { label: 'title', key: 'title' },
+        { label: 'updatedAt', key: 'updatedAt' },
+        { label: 'videoUrl', key: 'videoUrl' },
+    ];
+    const headerSingle = [
         { label: 'body', key: 'body' },
         { label: 'createdAt', key: 'createdAt' },
         { label: 'id', key: 'id' },
@@ -214,6 +228,7 @@ const article = () => {
             handleCancel()
         }
     };
+
     const handleCancel = () => {
         setIsModalVisible(false);
         setArticleData({
@@ -279,12 +294,22 @@ const article = () => {
         dispatch(getExportArticles())
     }
 
+    const exportSingleArticle = () => {
+        dispatch(getArticles(perPage, pageNumber))
+        setExportTog('single');
+    }
+
     useEffect(() => {
-        if (exportArticle?.length && exportTog) {
+        if (exportArticle?.length && exportTog === 'all') {
             CSVLinkRef?.current?.link.click();
             toast.success('Article exported');
-            setExportTog(false);
+            setExportTog('');
             dispatch(getExportArticlesSuccess(null))
+        }
+        else if(exportsingleArticle?.length && exportTog === 'single'){
+            CSVLinkRefSingle?.current?.link.click();
+            toast.success('Article exported');
+            setExportTog('');
         }
         else if (!exportArticle.length && exportTog) {
             toast.success('No data for export');
@@ -310,7 +335,7 @@ const article = () => {
                     }
                 })
             )
-            setExportTog(true)
+            setExportTog('all')
         }
     }, [getExportArticleData])
 
@@ -324,7 +349,31 @@ const article = () => {
         if (key === 'exportArticle') {
             exportArticles()
         }
+        if (key === 'exportSingleArticle') {
+            exportSingleArticle()
+        }
     }
+
+
+    useEffect(() => {
+        if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
+            setExportSingleArticle(getArticlesData && getArticlesData.data && getArticlesData.data.data.map(item => {
+                return {
+                    ...item,
+                    body: item.body,
+                    createdAt: item.createdAt,
+                    id: item.id,
+                    imageUrl: item.imageUrl,
+                    isActive: item.isActive,
+                    isDeleted: item.isDeleted,
+                    priority: item.priority,
+                    title: item.title,
+                    updatedAt: item.updatedAt,
+                    videoUrl: item.videoUrl,
+                }
+            }))
+        }
+    }, [getArticlesData])
 
     useEffect(() => {
         if (getArticlesData && getArticlesData.data && getArticlesData.data.data) {
@@ -406,12 +455,16 @@ const article = () => {
             onClick={onClick}
             items={[
                 {
-                    label: 'Export article',
+                    label: 'Add article',
+                    key: 'addArticle',
+                },
+                {
+                    label: 'Export all article',
                     key: 'exportArticle',
                 },
                 {
-                    label: 'Add article',
-                    key: 'addArticle',
+                    label: 'Export article',
+                    key: 'exportSingleArticle',
                 },
                 {
                     label: 'Import article',
@@ -443,6 +496,14 @@ const article = () => {
                             headers={header}
                             data={exportArticle}
                             ref={CSVLinkRef}
+                            filename="Article.csv"
+                            style={{ opacity: 0 }}
+                        ></CSVLink>
+
+                        <CSVLink
+                            headers={headerSingle}
+                            data={exportsingleArticle}
+                            ref={CSVLinkRefSingle}
                             filename="Article.csv"
                             style={{ opacity: 0 }}
                         ></CSVLink>

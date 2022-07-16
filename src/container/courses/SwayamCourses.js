@@ -8,7 +8,7 @@ import { Col, Form, Input, Row, Select, Table, Tabs, Switch, Pagination, Dropdow
 import { UserTableStyleWrapper } from '../pages/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
-import { editSwayamCourse, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
+import { deleteCourses, editSwayamCourse, getCategoryData, getCoursefilter } from '../../redux/course/actionCreator';
 import ViewSwayamCourse from './ViewSwayamCourse';
 import { CSVLink } from 'react-csv';
 import { ApiGet, ApiPost } from '../../helper/API/ApiData';
@@ -21,13 +21,15 @@ import ImportSwayamCourse from '../../components/modals/ImportSwayamCourse';
 import { DownOutlined } from '@ant-design/icons';
 import StarRatings from 'react-star-ratings';
 import ConfirmModal from '../../components/modals/confirm_modal';
-import moment from 'moment';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 const {
   getallSwayamCourseSuccess,
   editSwayamPartnerCourseSuccess,
   addSwayamCourseModuleErr,
   addSwayamCourseModuleSuccess,
+  deleteCourseSuccess,
+  deleteCourseErr,
 } = actions;
 
 const SwayamCourses = () => {
@@ -61,10 +63,15 @@ const SwayamCourses = () => {
   const [languageId, setLanguageID] = useState()
   const [id, setID] = useState()
 
+  const [showAlert, setShowAlert] = useState(false)
+  const [idForDelete, setIdForDelete] = useState('')
+  const [keyForDelete, setKeyForDelete] = useState('')
+  const [typeForDelete, setTypeForDelete] = useState('single')
+  const [typeForMultipleDelete, setTypeForMultipleDelete] = useState('multiple')
+
   const languageData = useSelector(state => state.language.getLanguageData);
   const categoryData = useSelector(state => state.category.categoryData);
   const courseData = useSelector(state => state.category.courseFilterData);
-
   const editSwayamCourseData = useSelector(state => state.category.editSwayamCourseData);
   const editSwayamCourseErr = useSelector(state => state.category.editSwayamCourseErr);
   const addSwayamCourseModuleError = useSelector(state => state.category.addSwayamCourseModuleError);
@@ -72,7 +79,8 @@ const SwayamCourses = () => {
   const courseModuleData = useSelector(state => state.category.editSwayamCourseModuleData);
   const addSwayamCourseModuleData = useSelector(state => state.category.addSwayamCourseModuleData)
   const importCourseData = useSelector(state => state.category.addSwayamCourseInBulkData)
-
+  const deleteCourseData = useSelector(state => state.category.deleteCourseData)
+  const deleteCourseError = useSelector(state => state.category.deleteCourseError)
 
   const header = [
     { label: 'id', key: 'id' },
@@ -98,6 +106,20 @@ const SwayamCourses = () => {
     { label: 'thumbnail', key: 'thumbnail' },
     { label: 'viewCount', key: 'viewCount' },
   ];
+
+  useEffect(() => {
+    if (deleteCourseData && deleteCourseData.status === 200) {
+      dispatch(deleteCourseSuccess(null))
+      toast.success("Swayam course deleted");
+    }
+  }, [deleteCourseData])
+
+  useEffect(() => {
+    if (deleteCourseError) {
+      dispatch(deleteCourseErr(null))
+      toast.error('Something went wrong');
+    }
+  }, [deleteCourseError])
 
   useEffect(() => {
     if (addSwayamCourseModuleData && addSwayamCourseModuleData.status === 200) {
@@ -176,30 +198,51 @@ const SwayamCourses = () => {
     history.push(`${path}/addcourses?id=${id}`);
   };
 
-  const onDelete = async (id) => {
-    const singleData = courseData.data.data.find(item => item.id === id);
-    if (singleData) {
-      let formData = new FormData();
-      formData.append('key', singleData.key);
-      formData.append('courseId', id);
-      formData.append('detail', singleData.detail.toString('markdown'));
-      formData.append('name', singleData.name);
-      formData.append('categoryId', singleData.courseCategory.id);
-      formData.append('duration', moment(singleData.duration).format('HH:mm:ss'));
-      formData.append('jobCategoryIds', JSON.stringify(singleData.jobTypes.map(item => item.id)));
-      formData.append('certification', singleData.certificate);
-      formData.append('application_form', singleData.application_form);
-      formData.append('recommended_and_forwarded', singleData.recommended_and_forwarded);
-      formData.append('application_process', singleData.application_process);
-      formData.append('medical_superintendent', singleData.medical_superintendent);
-      formData.append('hospital_expenses_estimation_certificate', singleData.hospital_expenses_estimation_certificate);
-      formData.append('thumbnail', singleData.thumbnail);
-      formData.append('mode', singleData.mode);
-      formData.append('isActive', false);
-      formData.append('isDeleted', true);
-      dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
-    }
-  };
+  const deleteCourse = (id, key) => {
+    setShowAlert(true);
+    setKeyForDelete(key)
+    setIdForDelete(id)
+  }
+
+  const onDelete = (idForDelete, keyForDelete, typeForDelete) => {
+    dispatch(deleteCourses(idForDelete, keyForDelete, typeForDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  const onDeleteAll = (idForDelete, keyForDelete, typeForMultipleDelete) => {
+    dispatch(deleteCourses(idForDelete, keyForDelete, typeForMultipleDelete))
+    setKeyForDelete('')
+    setIdForDelete('')
+    setShowAlert(false)
+  }
+
+  // const onDelete = async (id) => {
+  //   const singleData = courseData.data.data.find(item => item.id === id);
+  //   if (singleData) {
+  //     let formData = new FormData();
+  //     formData.append('key', singleData.key);
+  //     formData.append('courseId', id);
+  //     formData.append('detail', singleData.detail.toString('markdown'));
+  //     formData.append('name', singleData.name);
+  //     formData.append('categoryId', singleData.courseCategory.id);
+  //     formData.append('duration', moment(singleData.duration).format('HH:mm:ss'));
+  //     formData.append('jobCategoryIds', JSON.stringify(singleData.jobTypes.map(item => item.id)));
+  //     formData.append('certification', singleData.certificate);
+  //     formData.append('application_form', singleData.application_form);
+  //     formData.append('recommended_and_forwarded', singleData.recommended_and_forwarded);
+  //     formData.append('application_process', singleData.application_process);
+  //     formData.append('medical_superintendent', singleData.medical_superintendent);
+  //     formData.append('hospital_expenses_estimation_certificate', singleData.hospital_expenses_estimation_certificate);
+  //     formData.append('thumbnail', singleData.thumbnail);
+  //     formData.append('mode', singleData.mode);
+  //     formData.append('isActive', false);
+  //     formData.append('isDeleted', true);
+  //     dispatch(editSwayamCourse(formData, langIds.hindi, langIds.marathi));
+  //   }
+  // };
+
   const activeSwayamCourses = (formData) => {
     const newVal = ApiPost(`course/editSwayamCourse?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`, formData)
       .then((res) => {
@@ -423,10 +466,8 @@ const SwayamCourses = () => {
                 }
               </>
             ),
-
             selectLanguage: (
               <div className="">
-
                 <>
                   <Button size="small" type={item.hindi ? "success" : "primary"} shape='round' onClick={() => {
                     getOneCourseDetailByKey(langIds?.hindi, item?.key, item?.id)
@@ -454,7 +495,7 @@ const SwayamCourses = () => {
                         className="btn-icon"
                         type="danger"
                         to="#"
-                        onClick={() => onDelete(item.id)}
+                        onClick={() => deleteCourse(item.id, item.key)}
                         shape="circle"
                       >
                         <FeatherIcon icon="trash-2" size={16} />
@@ -711,6 +752,29 @@ const SwayamCourses = () => {
           children={"This coures in not available in this language. You want to add?"}
         />
       )}
+
+      {showAlert &&
+        <SweetAlert
+          danger
+          cancelBtnText="Cancel"
+          confirmBtnBsStyle="danger"
+          title="Are you sure?"
+        >
+          You want to delete course.
+          <div>
+            <Button variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
+              Single delete
+            </Button>
+            <Button variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
+              All delete
+            </Button>
+            <Button variant="danger" onClick={() => setShowAlert(false)}  >
+              Cancel
+            </Button>
+          </div>
+        </SweetAlert>
+      }
+
     </>
   );
 };

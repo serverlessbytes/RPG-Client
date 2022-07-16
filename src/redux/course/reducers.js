@@ -65,6 +65,10 @@ const {
   ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_SUCCESS,
   ADD_SWAYAM_COURSE_CATEGORY_IN_BULK_ERR,
 
+  DELETE_COURSE_BEGINE,
+  DELETE_COURSE_SUCCESS,
+  DELETE_COURSE_ERR,
+
   //--- CourseRating --- 
   POST_ADD_COURSE_RATING_BEGINE,
   POST_ADD_COURSE_RATING_SUCCESS,
@@ -123,7 +127,9 @@ const initialState = {
   addSwayamCourseInBulkData: null,
   addSwayamCourseInBulkError: null,
   importCourseCategoryData: null,
-  importCourseCategoryError: null
+  importCourseCategoryError: null,
+  deleteCourseData: null,
+  deleteCourseError: null,
 };
 
 const cateGoryReducer = (state = initialState, action) => {
@@ -525,6 +531,23 @@ const cateGoryReducer = (state = initialState, action) => {
         loading: false,
       }
 
+      case DELETE_COURSE_BEGINE:
+        return {
+          ...state,
+          loading: false,
+        }
+      case DELETE_COURSE_SUCCESS:
+        return {
+          ...state,
+          deleteCourseData: data,
+          loading: false,
+        }
+      case DELETE_COURSE_ERR:
+        return {
+          ...state,
+          deleteCourseError: err,
+          loading: false,
+        }
 
     default:
       return state;

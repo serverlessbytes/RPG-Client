@@ -89,6 +89,10 @@ const {
   ADD_UPADTE_JOB_BANNER_SUCCESS,
   ADD_UPADTE_JOB_BANNER_ERR,
 
+  DELETE_JOBS_BEGINE,
+  DELETE_JOBS_SUCCESS,
+  DELETE_JOBS_ERR,
+
 } = actions;
 
 const initialState = {
@@ -125,10 +129,10 @@ const initialState = {
   addLanguageJobPost: null,
   addLanguageJobPostErr: null,
   addJobsApplicationErr: null,
-
   upadteJobBannerData: null,
   upadteJObBannerError: null,
-
+  deleteJobData: null,
+  deleteJobError: null,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -532,6 +536,25 @@ const jobReducer = (state = initialState, action) => {
         upadteJObBannerError: err,
         loading: false,
       };
+
+      case DELETE_JOBS_BEGINE:
+        return {
+          ...state,
+          loading: true,
+        };
+      case DELETE_JOBS_SUCCESS:
+        return {
+          ...state,
+          deleteJobData: data,
+          loading: false,
+        };
+      case DELETE_JOBS_ERR:
+        return {
+          ...state,
+          deleteJobError: err,
+          loading: false,
+        };
+    
     default:
       return state;
   }

@@ -26,6 +26,7 @@
     "peity-react": "0.0.7",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
+    "react-bootstrap-sweetalert": "^5.2.0",
     "react-calendar": "^3.6.0",
     "react-chartjs-2": "^2.11.1",
     "react-countdown": "^2.3.2",

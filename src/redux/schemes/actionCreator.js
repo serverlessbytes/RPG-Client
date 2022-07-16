@@ -57,6 +57,9 @@ const {
   addUpadateSchemeSuccess,
   addUpadateSchemeErr,
 
+  deleteSchemeSuccess,
+  deleteSchemeErr,
+
 } = actions;
 let langId, per_Page, page_number, status, schemeBenifit, schemeCategory, search, hindi, marathi;
 export const getSchemecategory = () => async dispatch => {
@@ -234,4 +237,17 @@ export const upadteBanner = (body) => async (dispatch) => {
     .catch(err => {
       dispatch(addUpadateSchemeErr(err))
     })
+}
+
+export const deleteScheme = (id, key, type) => async (dispatch) => {
+  await ApiPost(`scheme/deleteScheme?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}&schemeId=${id}&key=${key}&type=${type}`)
+  .then(res => {
+    dispatch(deleteSchemeSuccess(res))
+    if(res.status === 200){
+    return dispatch(getSchemeData(per_Page, page_number, status, schemeBenifit, schemeCategory, search, hindi, marathi))
+    }
+  })
+  .catch(err => {
+    dispatch(deleteSchemeErr(err))
+  })
 }
