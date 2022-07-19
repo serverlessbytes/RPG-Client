@@ -56,6 +56,7 @@ const JobListTable = ({ state, type, jobRole, apply, clear, setPagePer, setNumbe
   const deleteJobData = useSelector(state => state.job.deleteJobData);
   const deleteJobError = useSelector(state => state.job.deleteJobError);
 
+
   const newJobPost = data => {
     let id = data.id;
     delete data.id;
@@ -168,9 +169,9 @@ const JobListTable = ({ state, type, jobRole, apply, clear, setPagePer, setNumbe
       marathi: ''
     }
     languageData && languageData.data && languageData.data.map((item) => {
-      if (item.name === "marathi") {
+      if (item.name.toLowerCase() === "marathi") {
         temp.marathi = item.id
-      } else if (item.name === "Hindi") {
+      } else if (item.name.toLowerCase() === "hindi") {
         temp.hindi = item.id
       }
     })

@@ -213,10 +213,10 @@ const article = () => {
     };
 
     const handleOk = () => {
+        if (validation()) {
+            return
+        }
         if (!selectedArticle) {
-            if (validation()) {
-                return
-            }
             let Data = {
                 title: articledata.title,
                 imageUrl: articledata.imageUrl,
