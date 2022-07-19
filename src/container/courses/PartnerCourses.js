@@ -203,9 +203,9 @@ const PartnerCourses = () => {
       marathi: ''
     }
     languageData && languageData.data && languageData.data.map((item) => {
-      if (item.name === "marathi") {
+      if (item.name.toLowerCase() === "marathi") {
         temp.marathi = item.id
-      } else if (item.name === "Hindi") {
+      } else if (item.name.toLowerCase() === "hindi") {
         temp.hindi = item.id
       }
     })
@@ -513,14 +513,14 @@ const PartnerCourses = () => {
   }, [courseData, isAscend]);
 
   const sorting = () => {
-    if(isAscend){
-      courseData && courseData.data && courseData.data.data.sort((a,b) => a.name.localeCompare(b.name))
+    if (isAscend) {
+      courseData && courseData.data && courseData.data.data.sort((a, b) => a.name.localeCompare(b.name))
     }
-    else{
-      courseData && courseData.data && courseData.data.data.sort((a,b) => b.name.localeCompare(a.name))
+    else {
+      courseData && courseData.data && courseData.data.data.sort((a, b) => b.name.localeCompare(a.name))
     }
     setIsAscend(!isAscend)
- }
+  }
 
   const partnerCourseTableColumns = [
     {
@@ -625,7 +625,7 @@ const PartnerCourses = () => {
                         onChange={e => onChangehandle(e, 'category')}
                       >
                         <Option value="">Select Category</Option>
-                        {catdata && catdata.data.map((items,i) => <Option key={i} value={items.id}>{items.name} </Option>)}
+                        {catdata && catdata.data.map((items, i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>

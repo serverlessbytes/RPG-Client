@@ -288,9 +288,9 @@ const SwayamCourses = () => {
       marathi: ''
     }
     languageData && languageData.data && languageData.data.map((item) => {
-      if (item.name === "marathi") {
+      if (item.name.toLowerCase() === "marathi") {
         temp.marathi = item.id
-      } else if (item.name === "Hindi") {
+      } else if (item.name.toLowerCase() === "hindi") {
         temp.hindi = item.id
 
       }
@@ -512,17 +512,17 @@ const SwayamCourses = () => {
         }),
       );
     }
-  }, [courseData,isAscend]);
+  }, [courseData, isAscend]);
 
   const sorting = () => {
-    if(isAscend){
-      courseData && courseData.data && courseData.data.data.sort((a,b) => a.name.localeCompare(b.name))
+    if (isAscend) {
+      courseData && courseData.data && courseData.data.data.sort((a, b) => a.name.localeCompare(b.name))
     }
-    else{
-      courseData && courseData.data && courseData.data.data.sort((a,b) => b.name.localeCompare(a.name))
+    else {
+      courseData && courseData.data && courseData.data.data.sort((a, b) => b.name.localeCompare(a.name))
     }
     setIsAscend(!isAscend)
- }
+  }
 
   const swayamCourseTableColumns = [
     {
