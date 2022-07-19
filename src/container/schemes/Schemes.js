@@ -81,9 +81,9 @@ const Schemes = () => {
   const deleteSchemeData = useSelector((state) => state.scheme.deleteSchemeData)
   const deleteSchemeError = useSelector((state) => state.scheme.deleteSchemeError)
 
-  useEffect(()=>{
-    console.log("users",users)
-  },[users])
+  useEffect(() => {
+    console.log("users", users)
+  }, [users])
 
   const onChnageValue = (e, name) => {
     if (name === 'category') {
@@ -107,18 +107,18 @@ const Schemes = () => {
   }, [perPage, pageNumber, status, langIds]);
 
   useEffect(() => {
-    if(deleteSchemeData && deleteSchemeData.status === 200){
+    if (deleteSchemeData && deleteSchemeData.status === 200) {
       dispatch(deleteSchemeSuccess(null))
       toast.success("Scheme deleted");
     }
-  },[deleteSchemeData])
+  }, [deleteSchemeData])
 
   useEffect(() => {
-    if(deleteSchemeError){
+    if (deleteSchemeError) {
       dispatch(deleteSchemeErr(null))
       toast.error("Something went wrong")
     }
-  },[deleteSchemeError])
+  }, [deleteSchemeError])
 
   useEffect(() => {
     if (editSchemedata && editSchemedata.status === 200) {
@@ -167,9 +167,9 @@ const Schemes = () => {
       marathi: "",
     }
     languageData && languageData.data && languageData.data.map((item) => {
-      if (item.name === "marathi") {
+      if (item.name.toLowerCase() === "marathi") {
         temp.marathi = item.id
-      } else if (item.name === "Hindi") {
+      } else if (item.name.toLowerCase() === "hindi") {
         temp.hindi = item.id
       }
     })
@@ -636,7 +636,7 @@ const Schemes = () => {
                       className="btn-icon"
                       type="warning"
                       to="#"
-                      onClick={() => deleteSchemes(item.id,item.key)}
+                      onClick={() => deleteSchemes(item.id, item.key)}
                       shape="circle"
                     >
                       <FeatherIcon icon="trash-2" size={16} />
@@ -664,24 +664,24 @@ const Schemes = () => {
     )
   }, [users, isAscend])
 
-const sorting = () => {
-   if(isAscend){
-     users && users.data.sort((a,b) => a.name.localeCompare(b.name))
-   }
-   else{
-    users && users.data.sort((a,b) => b.name.localeCompare(a.name))
-   }
-   setIsAscend(!isAscend)
-}
-
-const sortingDate = () => {
-  if(isAscend){
-    users && users.data.sort((a,b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix())
-  }else{
-    users && users.data.sort((a,b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix())
+  const sorting = () => {
+    if (isAscend) {
+      users && users.data.sort((a, b) => a.name.localeCompare(b.name))
+    }
+    else {
+      users && users.data.sort((a, b) => b.name.localeCompare(a.name))
+    }
+    setIsAscend(!isAscend)
   }
-  setIsAscend(!isAscend)
-}
+
+  const sortingDate = () => {
+    if (isAscend) {
+      users && users.data.sort((a, b) => moment(b.updatedAt).unix() - moment(a.updatedAt).unix())
+    } else {
+      users && users.data.sort((a, b) => moment(a.updatedAt).unix() - moment(b.updatedAt).unix())
+    }
+    setIsAscend(!isAscend)
+  }
   const schemeTableColumns = [
     {
       title: 'Scheme name',
@@ -714,7 +714,7 @@ const sortingDate = () => {
     {
       title: 'Last updated',
       dataIndex: 'LastUpdated',
-      sorter: (a,b) => sortingDate(),
+      sorter: (a, b) => sortingDate(),
     },
     {
       title: 'Select language',
@@ -809,7 +809,7 @@ const sortingDate = () => {
                       >
                         <Option value="">Select scheme benefits</Option>
                         {getBenefitData &&
-                          getBenefitData.data?.map((items,i) => <Option key={i} value={items.id}>{items.name} </Option>)}
+                          getBenefitData.data?.map((items, i) => <Option key={i} value={items.id}>{items.name} </Option>)}
                       </Select>
                     </Form.Item>
                   </Form>
@@ -916,7 +916,7 @@ const sortingDate = () => {
           confirmBtnBsStyle="danger"
           title="Are you sure?"
         >
-           You want to delete scheme.
+          You want to delete scheme.
           <div style={{ marginTop: '20px', display: "flex", gap: "5px", justifyContent: "center" }}>
             <Button className="ant-btn-delete" variant="success" onClick={() => onDelete(idForDelete, keyForDelete, typeForDelete)}  >
               Single delete
@@ -924,7 +924,7 @@ const sortingDate = () => {
             <Button className="ant-btn-delete" variant="danger" onClick={() => onDeleteAll(idForDelete, keyForDelete, typeForMultipleDelete)} >
               All delete
             </Button>
-            <Button className="ant-btn-light"  variant="danger" onClick={() => setShowAlert(false)}  >
+            <Button className="ant-btn-light" variant="danger" onClick={() => setShowAlert(false)}  >
               Cancel
             </Button>
           </div>
