@@ -104,7 +104,7 @@ const AddJobPost = () => {
                 benifits: RichTextEditor.createValueFromString(getOneJobPostData?.data?.data.benifits, 'markdown'),
                 name: getOneJobPostData?.data?.data.name?.id,
                 state: getOneJobPostData?.data?.data.state?.id,
-                district: getOneJobPostData?.data?.data.district?.id,
+                // district: getOneJobPostData?.data?.data.district?.id,
                 town: getOneJobPostData.data.data.town,
                 pincode: getOneJobPostData.data.data.pincode,
                 description: getOneJobPostData.data.data.description,
@@ -594,7 +594,7 @@ const AddJobPost = () => {
                                                         onChange={e => onChnageHandle(e, "district")}
                                                     >
                                                         <Option value="">Select district</Option>
-                                                        {diStrictdata && diStrictdata.data.map((item,i) => <Option key={i} value={item.id}> {item.name} </Option>)}
+                                                        {diStrictdata && diStrictdata.data.map((item, i) => <Option key={i} value={item.id}> {item.name} </Option>)}
                                                     </Select>
                                                     {error.district && <span style={{ color: 'red' }}>{error.district}</span>}
                                                 </Form.Item>

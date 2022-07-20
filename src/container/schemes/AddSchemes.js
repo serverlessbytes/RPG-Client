@@ -225,18 +225,10 @@ const AddSchemes = () => {
       error.name = 'Scheme name is required';
       flage = true;
     }
-    else if (!stringReg.test(state.name)) {
-      error.name = 'Name must be string';
-      flage = true;
-    }
     if (!state.schemeCategory) {
       error.schemeCategory = 'Scheme category is required';
       flage = true;
     }
-    // if (state.sequence) {
-    //   error.sequence = 'sequence is required';
-    //   flage = true;
-    // }
     if (!state.schemeBenifit) {
       error.schemeBenifit = 'Scheme benifit is required';
       flage = true;

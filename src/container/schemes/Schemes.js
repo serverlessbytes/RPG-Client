@@ -136,7 +136,7 @@ const Schemes = () => {
 
   useEffect(() => {
     if (schemeModulData && schemeModulData.status === 200) {
-      toast.success("Scheme import")
+      toast.success("Scheme imported")
       dispatch(addSchemeInBulk(null))
       dispatch(getSchemeData(perPage, pageNumber, "", "", "", "", langIds.hindi, langIds.marathi))
     }

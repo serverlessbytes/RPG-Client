@@ -30,6 +30,7 @@ const {
   addSwayamCourseModuleSuccess,
   deleteCourseSuccess,
   deleteCourseErr,
+  addSwayamCourseInBulkSuccess,
 } = actions;
 
 const SwayamCourses = () => {
@@ -302,7 +303,7 @@ const SwayamCourses = () => {
   useEffect(() => {
     if (importCourseData && importCourseData.status === 200) {
       dispatch(getCoursefilter('', perPage, pageNumber, '', status, "", langIds.hindi, langIds.marathi));
-      dispatch(addSwayamCourseModuleSuccess(null))
+      dispatch(addSwayamCourseInBulkSuccess(null))
       toast.success("Swayam course imported")
     }
   }, [importCourseData])
