@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { getOneSchemeData } from '../../redux/schemes/actionCreator';
 // import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
 import FeatherIcon from 'feather-icons-react';
+import ReactPlayer from 'react-player'
 
 function ViewScheme() {
     const searchParams = new URLSearchParams(window.location.search);
@@ -128,10 +129,17 @@ function ViewScheme() {
 
                         <Row gutter={10}>
                             <Col lg={12} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                                <ReactPlayer
+                                    className='react-player'
+                                    url={getOneSchemedata?.videoUrl}
+                                    width='100%'
+                                    height='100%'
+                                />
                                 {/* <label style={{fontWeight:'bold'}}>VideoUrl:</label> */}
                                 {/* <iframe width="100%" height="345" src={getOneSchemedata?.videoUrl}></iframe> */}
-                                <img width="100%" height="345" src={getOneSchemedata?.videoUrl} />
+                                {/* <img width="100%" height="345" src={getOneSchemedata?.videoUrl} /> */}
                             </Col>
+
                             <Col lg={12} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                                 {/* <label style={{fontWeight:'bold'}}>Thumbnail:</label> */}
                                 <img width="100%" height="345" src={getOneSchemedata?.thumbnail}
@@ -139,13 +147,13 @@ function ViewScheme() {
                                 />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme Name:</label> {getOneSchemedata?.name}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme name:</label> {getOneSchemedata?.name}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme Category:</label> {getOneSchemedata?.schemeCategory?.name}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Scheme category:</label> {getOneSchemedata?.schemeCategory?.name}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Type of Benefits:</label> {getOneSchemedata?.schemeBenifit?.name}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Type of benefits:</label> {getOneSchemedata?.schemeBenifit?.name}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -159,30 +167,30 @@ function ViewScheme() {
                             </Col>
 
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Grievance Redress:</label> {getOneSchemedata?.grievanceRedress}</span><br />
+                                <span><label className='pr' style={{ fontWeight: 'bold' }} >Grievance redress:</label> {getOneSchemedata?.grievanceRedress}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >E Link:</label> {getOneSchemedata?.elink}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >E link:</label> {getOneSchemedata?.elink}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >SPOC:</label> {getOneSchemedata?.spoc}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Visible to User:</label> {getOneSchemedata?.isActive == true ? 'Yes' : 'No'}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Visible to user:</label> {getOneSchemedata?.isActive == true ? 'Yes' : 'No'}</span><br />
                             </Col>
 
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Benefit 1-Line:</label> {getOneSchemedata?.benifitLine}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Benefit 1-line:</label> {getOneSchemedata?.benifitLine}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Target Beneficiary:</label> {getOneSchemedata?.benificiary}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Target beneficiary:</label> {getOneSchemedata?.benificiary}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >Documentation:</label> {getOneSchemedata?.documentation}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Scheme Summary:</label> {getOneSchemedata?.detail}</span><br />
+                                <span> <label className='pr' style={{ fontWeight: 'bold' }} >Scheme summary:</label> {getOneSchemedata?.detail}</span><br />
                             </Col>
                             <Col lg={8} className="mb" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                                 <span> <label className='pr' style={{ fontWeight: 'bold' }} >Location:</label> {getOneSchemedata?.locations.map((item, i) => (item.name)).join(',')}</span><br />
