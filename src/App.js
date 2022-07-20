@@ -8,7 +8,6 @@ import { ConfigProvider } from 'antd';
 import store from './redux/store';
 import Admin from './routes/admin';
 import Auth from './routes/auth';
-import './static/css/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import config from './config/config';
 import ProtectedRoute from './components/utilities/protectedRoute';
@@ -20,6 +19,7 @@ import { RouterContext, RouterProvider } from './utility/routerContext';
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { getUser } from './redux/authentication/actionCreator';
+import './static/css/style.css';
 
 const { theme } = config;
 

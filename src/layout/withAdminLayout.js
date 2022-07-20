@@ -188,6 +188,7 @@ const ThemeLayout = WrappedComponent => {
               style={{
                 position: 'fixed',
                 width: '100%',
+                background:'#082979',
                 top: 0,
                 [!rtl ? 'left' : 'right']: 0,
               }}

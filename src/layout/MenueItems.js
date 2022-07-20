@@ -42,6 +42,7 @@ const MenuItems = ({ darkMode, toggleCollapsed, topMenu }) => {
       defaultOpenKeys={!topMenu ? [`${mainPathSplit.length > 2 ? mainPathSplit[1] : 'dashboard'}`] : []}
       overflowedIndicator={<FeatherIcon icon="more-vertical" />}
       openKeys={openKeys}
+      className='temp'
     >
 
       <Menu.Item key="home" icon={!topMenu && <FeatherIcon icon="grid" />}>

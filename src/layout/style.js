@@ -13,7 +13,7 @@ const Div = Styled.div`
 
         .ant-btn-link{
             ${({ darkMode }) =>
-              darkMode ? `background: #272B41;border-color: #272B41;color: #7D808D !important` : ''};
+        darkMode ? `background: #272B41;border-color: #272B41;color: #7D808D !important` : ''};
         }
 
         .head-example{
@@ -22,7 +22,7 @@ const Div = Styled.div`
         .ant-menu-sub.ant-menu-vertical{
             .ant-menu-item{
                 a{
-                    color: ${({ theme }) => theme['gray-color']};
+                    color: #FFFFFF;
                 }
             }
         }
@@ -58,7 +58,7 @@ const Div = Styled.div`
                         font-style: normal;
                         ${({ theme }) => (theme.rtl ? 'margin-right' : 'margin-left')}: 6px;
                         &:after{
-                            color: ${({ darkMode }) => (darkMode ? `#ffffff90;` : '#9299B8')};
+                            color: #FFFFFF;
                             content: '\f107';
                             background-color: transparent;
                         }
@@ -223,7 +223,7 @@ const Div = Styled.div`
     }
     .certain-category-search-wrapper{
         ${({ darkMode, theme }) =>
-          darkMode ? `${!theme.rtl ? 'border-right' : 'border-left'}: 1px solid #272B41;` : ''};
+        darkMode ? `${!theme.rtl ? 'border-right' : 'border-left'}: 1px solid #272B41;` : ''};
          @media only screen and (max-width: 767px){
             padding: 0 15px;
         }
@@ -262,7 +262,7 @@ const Div = Styled.div`
             display: none;
         }
         &.ant-layout-sider-dark{
-            background: ${({ theme }) => theme['dark-color']};
+            background: ${({ theme }) => theme['dark-color']} !important;
             .ant-layout-sider-children{
                 .ant-menu{
                     .ant-menu-submenu-inline{
@@ -285,8 +285,10 @@ const Div = Styled.div`
 
             .ant-menu{
                 overflow-x: hidden;
+                background-color: #082979;
+                color: #FFFFFF;
                 .ant-menu-sub.ant-menu-inline{
-                    background-color: #fff;
+                    background-color: #082979;
                 }
                 ${({ theme }) => (theme.rtl ? 'border-left' : 'border-right')}: 0 none;
                 .ant-menu-submenu, .ant-menu-item{
@@ -298,7 +300,7 @@ const Div = Styled.div`
                     }
                     span{
                         display: inline-block;
-                        color: ${({ theme }) => theme['dark-color']};
+                        color: #9caacb;
                         transition: 0.3s ease;
                         a{
                             ${({ theme }) => (!theme.rtl ? 'padding-left' : 'padding-right')}: 0px;
@@ -328,6 +330,11 @@ const Div = Styled.div`
                 .ant-menu-submenu-title{
                     a{
                         position: relative;
+                        color:#9caacb;
+
+                        &:active{
+                            color:#FFFFFF;
+                        }
                     }
                     >span{
                         width: 100%;
@@ -353,6 +360,11 @@ const Div = Styled.div`
                         }
                         &.badge-success{
                             background-color: ${({ theme }) => theme['success-color']};
+                        }
+                    }
+                    &:active{
+                        a{
+                          color:#FFFFFF;
                         }
                     }
                 }
@@ -385,16 +397,16 @@ const Div = Styled.div`
                             &:after,
                             &:before{
                                 width: 7px;
-                                background: #868EAE;
+                                background: #FFFFFF;
                                 height: 1.25px;
                             }
                             &:before{
                                 transform: rotate(45deg) ${({ theme }) =>
-                                  !theme.rtl ? 'translateY(-3.3px)' : 'translateY(3.3px)'};
+        !theme.rtl ? 'translateY(-3.3px)' : 'translateY(3.3px)'};
                             }
                             &:after{
                                 transform: rotate(-45deg) ${({ theme }) =>
-                                  theme.rtl ? 'translateY(-3.3px)' : 'translateY(3.3px)'};
+        theme.rtl ? 'translateY(-3.3px)' : 'translateY(3.3px)'};
                             }
                         }
                     }
@@ -434,7 +446,7 @@ const Div = Styled.div`
                         align-items: center;
                         .feather{
                             width: 16px;
-                            color: ${({ theme }) => theme['extra-light-color']};
+                            color: #FFFFFF;
                         }
                         span{
                             ${({ theme }) => (!theme.rtl ? 'padding-left' : 'padding-right')}: 20px;
@@ -445,7 +457,7 @@ const Div = Styled.div`
                     &.ant-menu-item-selected{
                         svg,
                         i{
-                            color: ${({ theme }) => theme['primary-color']};
+                            color: #FFFFFF;
                         }
                     }
                 }
@@ -455,13 +467,14 @@ const Div = Styled.div`
                     
                     &.ant-menu-item-selected{
                         border-radius: 4px;
+                        bacground: #000 !important;
                         &:after{
                             content: none;
                         }
                     }
                     &.ant-menu-submenu-active{
                         border-radius: 4px;
-                        ${({ darkMode }) => (darkMode ? `background-color: rgba(255, 255, 255, .05);` : '')};
+                        bacground-color: #000 !important;
                     }
                 }
                 .sidebar-nav-title{
@@ -524,7 +537,7 @@ const Div = Styled.div`
 
     .atbd-main-layout{
         ${({ theme }) => (!theme.rtl ? 'margin-left' : 'margin-right')}: ${({ theme }) =>
-  theme.topMenu ? 0 : '280px'};
+        theme.topMenu ? 0 : '280px'};
         margin-top: 64px;
         transition: 0.3s ease;
         @media only screen and (max-width: 1150px){
