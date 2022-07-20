@@ -25,10 +25,10 @@ const query = () => {
     const { addQueriesSuccess, addQueriesErr, editQueriesSuccess, editQueriesErr, getExportQueriesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [queryTableData, setQueryTableData] = useState([]); // for table
-    const [perPage, setPerPage] = useState(10); // forpagination
+    const [queryTableData, setQueryTableData] = useState([]); 
+    const [perPage, setPerPage] = useState(20); 
     const [pageNumber, setPageNumber] = useState(1);
-    const [selectedQuery, setSelectedQuery] = useState();//For Edit
+    const [selectedQuery, setSelectedQuery] = useState();
     const [nameTog, setNameTog] = useState(false)
     const [status, setStatus] = useState('active')
     const [queryData, setQueryData] = useState({
@@ -213,9 +213,6 @@ const query = () => {
             handleCancel();
         }
         else {
-            if (validation()) {
-                return
-            }
             let dataEdit = {
                 id: selectedQuery.id,
                 name: queryData.name,
