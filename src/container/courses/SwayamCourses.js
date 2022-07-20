@@ -134,6 +134,7 @@ const SwayamCourses = () => {
     }
   }, [courseModuleData])
 
+
   useEffect(() => {
     if (addSwayamCourseModuleError) {
       dispatch(addSwayamCourseModuleErr(null));

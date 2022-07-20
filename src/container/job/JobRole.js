@@ -287,7 +287,7 @@ const JobRole = () => {
                     {error?.name && <span style={{ color: "red" }}>{error.name}</span>}
                 </Form>
             </Modal>
-            {importModal && <ImportJobRole modaltitle="Import Carousel" handleCancel={() => setImportModel(false)} importModel={importModal} />}
+            {importModal && <ImportJobRole modaltitle="Import Role" handleCancel={() => setImportModel(false)} importModel={importModal} />}
         </>
     )
 }

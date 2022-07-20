@@ -31,7 +31,7 @@ const Testimonial = () => {
     } = actions;
 
     const [testiMonialtable, setTestiMonial] = useState([]);
-    const [perPage, setPerPage] = useState(10)
+    const [perPage, setPerPage] = useState(20)
     const [pageNum, setPageNum] = useState(1)
     const [importModel, setImportModel] = useState(false)
     const [exportAlltestimonial, setExportAllTestimonial] = useState([])

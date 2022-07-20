@@ -140,10 +140,13 @@ const article = () => {
             error.body = "Please enter body"
             flag = true
         }
-        if (!articledata.priority) {
-            error.priority = "Please enter priority"
-            flag = true
+        if (selectedArticle) {
+            if (!articledata.priority) {
+                error.priority = "Please enter priority"
+                flag = true
+            }
         }
+
         setFormErrors(error);
         return flag
     }
@@ -214,7 +217,7 @@ const article = () => {
 
     const handleOk = () => {
         if (validation()) {
-            return
+            return;
         }
         if (!selectedArticle) {
             let Data = {
@@ -229,9 +232,6 @@ const article = () => {
             setPriority(false);
         }
         else {
-            if (validation()) {
-                return
-            }
             let dataEdit = {
                 id: selectedArticle.id,
                 title: articledata.title,

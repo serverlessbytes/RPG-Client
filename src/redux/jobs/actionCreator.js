@@ -294,7 +294,10 @@ export const addJobApplication = (body) => async (dispatch) => {
 
   await ApiPost(`jobApplication/addJobApplication?langId=${AuthStorage.getStorageData(STORAGEKEY.language)}`,formData)
     .then((res) => {
-      return dispatch(addJobApplicationSuccess(res))
+       dispatch(addJobApplicationSuccess(res))
+      if(res.status === 200){
+        return dispatch(getJobApplication(per_page, page_num, Status, jobrole, jobcategory))
+      }
     })
     .catch((err) => dispatch(addJobApplicationErr(err)))
 }
