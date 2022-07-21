@@ -414,21 +414,21 @@ ul {
 }
 
 .ant-btn-link {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: #082979;
+  border-color: #082979;
   color: #5f63f2;
 }
 
 .ant-btn-link:hover {
-  border-color: #fff;
-  background: #fff;
+  border-color: #082979;
+  background: #082979;
 }
 
 .ant-btn-light,
 .ant-btn-light:hover,
 .ant-btn-link:hover,
 .ant-btn-dashed {
-  color: #5a5f7d !important;
+  color: #ffffff !important;
 }
 
 .ant-btn-light {
@@ -1796,9 +1796,12 @@ table thead tr th:first-child {
 }
 
 .ant-menu-sub.ant-menu-vertical .ant-menu-item a {
-  color: #5a5f7d;
+  color: #FFFFFF;
 }
 
+.ant-menu-sub.ant-menu-vertical .ant-menu-item a:active{
+  color: #FFFFFF !important;
+}
 /* page heading */
 
 .ant-page-header {
@@ -2201,7 +2204,7 @@ html[dir='rtl'] .sDash_task-details .ant-modal-body .sDash_checklist-row .sDash_
 
 .ant-menu-dark .ant-menu-item a {
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.65) !important;
+  color: #FFFFFF !important;
 }
 
 .ant-menu-dark .ant-menu-item a:hover {
@@ -2209,11 +2212,29 @@ html[dir='rtl'] .sDash_task-details .ant-modal-body .sDash_checklist-row .sDash_
 }
 
 .ant-menu-dark .ant-menu-submenu span {
-  color: rgba(255, 255, 255, 0.65) !important;
+  color: #FFFFFF !important;
 }
 
-.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: rgba(255, 255, 255, 0.05);
+.ant-menu-item:active{
+  background: transparent !important;
+}
+
+/* .temp .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: transparent !important;
+} */
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+  background-color: transparent !important;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected:focus{
+  background-color: transparent !important;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected:active{
+  background-color: transparent !important;
+}
+.ant-menu-item-selected a{
+  color: #FFFFFF !important;
 }
 
 .ant-menu-inline-collapsed-tooltip a {
@@ -2458,6 +2479,7 @@ html[dir='rtl'] .sDash_task-details .ant-modal-body .sDash_checklist-row .sDash_
 
   .ant-layout-header {
     height: auto;
+    background: rgb(8 41 121) !important;
   }
 
   .ant-card-head {
@@ -2977,6 +2999,11 @@ html[dir='rtl'] .ant-menu-vertical .ant-menu-submenu-title {
 
 .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-inline>.ant-menu-submenu-title svg {
   margin-right: 10px !important
+}
+
+.ant-layout-sider-light {
+  background-color: #082979 !important;
+  color: #FFFFFF !important;
 }
 
 /* .dUreZz .ant-layout-sider .ant-layout-sider-children .ant-menu .ant-menu-submenu-title >span {
