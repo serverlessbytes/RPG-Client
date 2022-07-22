@@ -25,8 +25,8 @@ const query = () => {
     const { addQueriesSuccess, addQueriesErr, editQueriesSuccess, editQueriesErr, getExportQueriesSuccess } = actions;
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [queryTableData, setQueryTableData] = useState([]); 
-    const [perPage, setPerPage] = useState(20); 
+    const [queryTableData, setQueryTableData] = useState([]);
+    const [perPage, setPerPage] = useState(20);
     const [pageNumber, setPageNumber] = useState(1);
     const [selectedQuery, setSelectedQuery] = useState();
     const [nameTog, setNameTog] = useState(false)
@@ -111,7 +111,7 @@ const query = () => {
             setExportTog('');
             dispatch(getExportQueriesSuccess(null))
         }
-        else if(exportSingleQueries?.length && exportTog === 'single'){
+        else if (exportSingleQueries?.length && exportTog === 'single') {
             CSVLinkRefSingle?.current?.link.click();
             toast.success('Query exported');
             setExportTog('');
@@ -434,7 +434,7 @@ const query = () => {
                     label: 'Export query',
                     key: 'exportSingleQuery',
                 },
-             
+
             ]}
         />
     );
@@ -478,7 +478,7 @@ const query = () => {
                     <Row gutter={15}>
                         <Col xs={24}>
                             <Tabs onChange={callback} >
-                                <TabPane tab="Active query" key="active">
+                                <TabPane tab="New query" key="active">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive pb-30">
                                             <Table
@@ -497,7 +497,7 @@ const query = () => {
                                     </UserTableStyleWrapper>
 
                                 </TabPane>
-                                <TabPane tab="Inactive query" key="inactive">
+                                <TabPane tab="Resolved query" key="inactive">
                                     <UserTableStyleWrapper>
                                         <TableWrapper className="table-responsive">
                                             <Table
