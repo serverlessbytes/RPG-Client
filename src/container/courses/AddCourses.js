@@ -25,6 +25,7 @@ import STORAGEKEY from '../../config/APP/app.config';
 import actions from '../../redux/course/actions';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Timepicker from '../../components/timePicker/Timepicker';
 
 const AddCourses = () => {
 
@@ -151,7 +152,8 @@ const AddCourses = () => {
         detail: RichTextEditor.createValueFromString(editOneSwayamCourseData.data.data.detail, 'markdown'),
         name: editOneSwayamCourseData.data.data.name,
         categoryId: editOneSwayamCourseData.data.data.courseCategory?.id,
-        duration: moment(editOneSwayamCourseData.data.data.duration, 'HH:mm:ss'),
+        // duration: moment(editOneSwayamCourseData.data.data.duration, 'HH:mm:ss'),
+        duration: editOneSwayamCourseData.data.data.duration,
         jobCategoryIds: editOneSwayamCourseData?.data?.data.jobTypes.map(item => item.id),
         thumbnail: editOneSwayamCourseData.data.data.thumbnail,
         mode: editOneSwayamCourseData.data.data.mode,
@@ -326,7 +328,8 @@ const AddCourses = () => {
     let formData = new FormData();
     formData.append('name', state.name);
     formData.append('detail', state.detail.toString('markdown'));
-    formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    // formData.append('duration', moment(state.duration).format('HH:mm:ss'));
+    formData.append('duration', state.duration);
     formData.append('categoryId', state.categoryId);
     formData.append('certification', state.certification);
     formData.append('jobCategoryIds', JSON.stringify(state.jobCategoryIds));
@@ -553,7 +556,7 @@ const AddCourses = () => {
                 <Col lg={11} md={11} sm={24} xs={24} className="addpartnercourses">
                   <Form name="sDash_select" layout="vertical">
                     <Form.Item label="Course duration">
-                      <TimePicker
+                      {/* <TimePicker
                         name="duration"
                         value={state.duration}
                         onChange={e => {
@@ -561,7 +564,9 @@ const AddCourses = () => {
                         }}
                         placeholder="Course duration"
                       />
-                      {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>}
+                      {error.duration && <span style={{ color: 'red' }}>{error.duration}</span>} */}
+                      <Timepicker name="duration" value={state.duration} getdata={(e) => onChange(e, "duration")}
+                      />
                     </Form.Item>
                   </Form>
                 </Col>

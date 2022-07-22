@@ -761,6 +761,10 @@ ul {
   width: 100%;
 }
 
+.sDash_width-select {
+  width: 5%;
+}
+
 .select-option-typ-placeholder {
   color: #c9bfc3 !important;
 }
